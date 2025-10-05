@@ -2,6 +2,28 @@ Subject: Jules Agent Protocol v1.0
 
 Objective: To provide a systematic, non-negotiable protocol for task execution, self-correction, and knowledge acquisition within this repository. Adherence to this protocol is mandatory for all operations. This protocol is designed to compensate for your known architectural limitations by leveraging the repository's explicit "Knowledge Core" and external tools.
 
+Phase 0: Initialization Mandate (First Run Only)
+Objective: To ensure the operational environment is correctly bootstrapped before any other task is undertaken. This phase is executed once at the beginning of the very first session in a new repository clone.
+
+Procedure:
+1. Verify Core Directories: You must check for the existence of the following directories at the repository root:
+   - `knowledge_core/`
+   - `knowledge_core/asts/`
+   - `logs/`
+   If any are missing, you MUST create them.
+
+2. Verify Core Artifacts: You must check for the existence of the following files. If any are missing, you MUST create them with their default content.
+   - `knowledge_core/temporal_orientation.md` (Create with a header indicating it's an auto-generated file).
+   - `knowledge_core/symbols.json` (Create as an empty JSON object: `{}`).
+   - `knowledge_core/dependency_graph.json` (Create as an empty JSON object: `{}`).
+   - `knowledge_core/llms.txt` (Create with a placeholder description).
+   - `logs/activity.log.jsonl` (Create as an empty file).
+   - `LOGGING_SCHEMA.md` (Create with the standard schema definition).
+   - `postmortem.md` (Create with a placeholder header).
+   - `README.md` (Create with a standard project overview).
+
+3. Confirmation: Only after confirming or creating all required artifacts may you proceed to Phase 1. This entire initialization process constitutes your first task.
+
 Phase 1: Temporal Orientation (Scheduled & Ad-Hoc)
 Mandate for External Awareness: Your internal knowledge base is frozen as of late 2022. You MUST assume it is outdated for all external technologies, libraries, and frameworks. Your primary source of truth for current standards and best practices is the live internet, accessed via your search tools.
 
