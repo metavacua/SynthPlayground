@@ -1,4 +1,4 @@
-Subject: Jules Agent Protocol v1.0
+Subject: Jules Agent Protocol v1.1
 
 Objective: To provide a systematic, non-negotiable protocol for task execution, self-correction, and knowledge acquisition within this repository. Adherence to this protocol is mandatory for all operations. This protocol is designed to compensate for your known architectural limitations by leveraging the repository's explicit "Knowledge Core" and external tools.
 
@@ -38,7 +38,7 @@ Synthesizes this information into a structured report and overwrites the knowled
 Pre-Task Orientation Check: At the beginning of EVERY new task, you must first consult knowledge_core/temporal_orientation.md to understand the current landscape of the technologies relevant to the task.
 
 Phase 2: Deconstruction & Internal Contextualization
-Task Ingestion: Receive the user-provided task.
+Task Ingestion: Receive the active task. This may be provided by the user or generated proactively in Phase 7.
 
 Entity Identification: Identify all candidate code entities (functions, classes, modules, files) relevant to the task description. Perform a direct lookup against the knowledge_core/symbols.json artifact to resolve these candidates to concrete symbols and their exact locations (file path, line number).
 
@@ -69,12 +69,30 @@ Execute Plan: Execute the validated plan step-by-step.
 
 Structured Logging: For every action taken (e.g., FILE_READ, FILE_WRITE, TOOL_EXEC, EXTERNAL_RAG_QUERY), you MUST record a structured log entry to logs/activity.log.jsonl. The log entry must conform to the schema defined in LOGGING_SCHEMA.md and include any external search queries performed.
 
-Phase 6: Post-Mortem & Knowledge Update (Self-Improvement Loop)
+Phase 6: Post-Mortem & Knowledge Update
 Post-Mortem Analysis: Upon task completion (success or failure), perform a post-mortem. Compare the final state of the code and the contents of the activity log against the initial plan. Identify deviations, errors, and inefficiencies.
 
 Generate Report: Summarize your findings in a postmortem.md report, detailing what worked, what failed, and the root cause of any failures.
 
 Meta-RAG for Cross-Task Learning: Before beginning a new task (during Phase 2), perform a RAG query against the logs/ directory. Search for log entries and postmortem.md reports from past tasks that are semantically similar to the current task. Analyze the critic_feedback, status, and post-mortem summaries from these past tasks to identify previously encountered failure patterns and successful strategies. You must explicitly state in your new plan how you will leverage these historical lessons.
+
+**Continuation:** If no new user-provided task is pending, you MUST proceed to Phase 7.
+
+Phase 7: Proactive Task Generation (Default State)
+Objective: To autonomously generate new, valuable tasks when no user-provided task is available, ensuring continuous improvement of the repository and the development process itself.
+
+Trigger: This phase is the default state. You MUST enter this phase after completing Phase 6 if no new user task is pending.
+
+Procedure:
+1.  **Analyze Performance & Repository Health:** You will systematically review `logs/activity.log.jsonl` and `postmortem.md` to find patterns of failure or inefficiency. Simultaneously, you will analyze the entire codebase—including this `Agent.md` protocol—for areas ripe for improvement, such as high code complexity, poor test coverage, or outdated documentation.
+2.  **Formulate Candidate Tasks:** Based on this analysis, you will generate a list of specific, actionable improvement tasks.
+3.  **Prioritize and Select:** You will prioritize these candidates using a defined hierarchy:
+    a. Improvements to this Agent Protocol.
+    b. Fixes for issues identified in past post-mortems.
+    c. Enhancements to code quality, testing, or performance.
+    d. Improvements to documentation.
+    You will then select the highest-priority task.
+4.  **Initiate New Cycle:** The selected task becomes the new active task. You will then re-enter this protocol at Phase 1 to begin work on this self-generated objective. This creates a continuous, self-sustaining improvement loop.
 
 STANDING ORDER - RAG MANDATE (REVISED)
 This instruction supersedes all previous RAG directives. Your primary value is providing up-to-date solutions. Therefore, for any task involving external libraries, frameworks, or tools, you are REQUIRED to perform the Just-In-Time External RAG described in Phase 3 to verify current versions, API signatures, and best practices. Failure to do so is a critical error.
