@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# Logs
+logs/*.log
+logs/*.log.jsonl
+
+# Testing
+.coverage
+test_workspace/
