@@ -7,14 +7,17 @@ import jsonschema  # Keep for potential future use, but address unused import fo
 
 # Assuming LOGGING_SCHEMA.md is at the root. A more robust implementation
 # would use a config or environment variable for this path.
-SCHEMA_FILE_PATH = os.path.join(os.path.dirname(__file__), '..', 'LOGGING_SCHEMA.md')
-LOG_FILE_PATH = os.path.join(os.path.dirname(__file__), '..', 'logs', 'activity.log.jsonl')
+SCHEMA_FILE_PATH = os.path.join(os.path.dirname(__file__), "..", "LOGGING_SCHEMA.md")
+LOG_FILE_PATH = os.path.join(
+    os.path.dirname(__file__), "..", "logs", "activity.log.jsonl"
+)
 
 
 class Logger:
     """
     A utility for structured, schema-enforced logging.
     """
+
     _instance = None
     _schema = None
 
@@ -27,7 +30,7 @@ class Logger:
     def _load_schema(self):
         """Loads the logging schema from the specified markdown file."""
         try:
-            with open(SCHEMA_FILE_PATH, 'r') as f:
+            with open(SCHEMA_FILE_PATH, "r") as f:
                 # This is a simple parser. It assumes the schema is in a JSON code block.
                 in_schema = False
                 schema_str = ""
@@ -45,7 +48,9 @@ class Logger:
             print(f"CRITICAL: Could not load or parse logging schema: {e}")
             self._schema = None
 
-    def log(self, action_type, details, status="SUCCESS", critic_feedback="", task_id="N/A"):
+    def log(
+        self, action_type, details, status="SUCCESS", critic_feedback="", task_id="N/A"
+    ):
         """
         Records a log entry after validating it against the schema.
 
@@ -66,20 +71,14 @@ class Logger:
         log_entry = {
             "timestamp": datetime.utcnow().isoformat(),
             "task_id": task_id,
-            "action": {
-                "type": action_type,
-                "details": details
-            },
-            "outcome": {
-                "status": status,
-                "critic_feedback": critic_feedback
-            }
+            "action": {"type": action_type, "details": details},
+            "outcome": {"status": status, "critic_feedback": critic_feedback},
         }
 
         try:
             validate(instance=log_entry, schema=self._schema)
-            with open(LOG_FILE_PATH, 'a') as f:
-                f.write(json.dumps(log_entry) + '\n')
+            with open(LOG_FILE_PATH, "a") as f:
+                f.write(json.dumps(log_entry) + "\n")
             return True
         except jsonschema.ValidationError as e:
             # This indicates a programming error - the code tried to log something

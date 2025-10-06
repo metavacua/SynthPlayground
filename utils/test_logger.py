@@ -28,22 +28,22 @@ class TestLogger(unittest.TestCase):
                     "type": "object",
                     "properties": {
                         "type": {"type": "string"},
-                        "details": {"type": "object"}
+                        "details": {"type": "object"},
                     },
-                    "required": ["type", "details"]
+                    "required": ["type", "details"],
                 },
                 "outcome": {
                     "type": "object",
                     "properties": {
                         "status": {"type": "string"},
-                        "critic_feedback": {"type": "string"}
+                        "critic_feedback": {"type": "string"},
                     },
-                    "required": ["status"]
-                }
+                    "required": ["status"],
+                },
             },
-            "required": ["timestamp", "action", "outcome"]
+            "required": ["timestamp", "action", "outcome"],
         }
-        with open(self.SCHEMA_FILE, 'w') as f:
+        with open(self.SCHEMA_FILE, "w") as f:
             f.write("```json\n")
             f.write(json.dumps(dummy_schema, indent=2))
             f.write("\n```")
@@ -72,15 +72,13 @@ class TestLogger(unittest.TestCase):
         """Test a successful log write."""
         logger = Logger()
         result = logger.log(
-            action_type="TEST_ACTION",
-            details={"key": "value"},
-            status="SUCCESS"
+            action_type="TEST_ACTION", details={"key": "value"}, status="SUCCESS"
         )
         self.assertTrue(result)
         self.assertTrue(os.path.exists(self.LOG_FILE))
-        with open(self.LOG_FILE, 'r') as f:
+        with open(self.LOG_FILE, "r") as f:
             log_entry = json.loads(f.readline())
-            self.assertEqual(log_entry['action']['type'], "TEST_ACTION")
+            self.assertEqual(log_entry["action"]["type"], "TEST_ACTION")
 
     def test_log_validation_failure(self):
         """Test that a log fails validation if it doesn't match the schema."""
@@ -88,11 +86,11 @@ class TestLogger(unittest.TestCase):
         # 'details' is missing, which is required by our dummy schema
         result = logger.log(
             action_type="INVALID_ACTION",
-            details=None  # This will cause a validation error
+            details=None,  # This will cause a validation error
         )
         self.assertFalse(result)
         self.assertFalse(os.path.exists(self.LOG_FILE))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

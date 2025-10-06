@@ -8,4 +8,4 @@ def get_user_name(user_data):
     """
     # This is the most direct way to get the name.
     # It will fail if 'name' is not in user_data.
-    return user_data['name']
+    return user_data["name"]
