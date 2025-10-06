@@ -7,7 +7,9 @@
     "DONE"
   ],
   "alphabet": [
-    "process_op",
+    "plan_op",
+    "step_op",
+    "submit_op",
     "read_op",
     "write_op",
     "delete_op",
@@ -17,13 +19,13 @@
   ],
   "transitions": {
     "IDLE": {
-      "process_op": "PLANNING"
+      "plan_op": "PLANNING"
     },
     "PLANNING": {
-      "process_op": "EXECUTING"
+      "step_op": "EXECUTING"
     },
     "EXECUTING": {
-      "process_op": "EXECUTING",
+      "step_op": "EXECUTING",
       "read_op": "EXECUTING",
       "write_op": "EXECUTING",
       "delete_op": "EXECUTING",
@@ -32,7 +34,7 @@
       "close_op": "POST_MORTEM"
     },
     "POST_MORTEM": {
-      "process_op": "DONE"
+      "submit_op": "DONE"
     }
   },
   "start_state": "IDLE",

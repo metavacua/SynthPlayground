@@ -14,7 +14,9 @@ LOG_FILE_PATH = os.path.join(ROOT_DIR, 'logs', 'activity.log.jsonl')
 FSM_DEF_PATH = os.path.join(ROOT_DIR, 'tooling', 'fdc_fsm.json')
 
 ACTION_TYPE_MAP = {
-    "set_plan": "process_op", "plan_step_complete": "process_op", "submit": "process_op",
+    "set_plan": "plan_op",
+    "plan_step_complete": "step_op",
+    "submit": "submit_op",
     "create_file_with_block": "write_op", "overwrite_file_with_block": "write_op", "replace_with_git_merge_diff": "write_op",
     "read_file": "read_op", "list_files": "read_op", "grep": "read_op",
     "delete_file": "delete_op", "rename_file": "move_op",
@@ -135,8 +137,17 @@ def validate_plan(plan_filepath):
         with open(plan_filepath, 'r') as f: lines = [(i, line.rstrip('\n')) for i, line in enumerate(f) if line.strip()]
     except FileNotFoundError as e: print(f"Error: Could not find file {e.filename}", file=sys.stderr); sys.exit(1)
 
-    print(f"Starting validation...")
-    final_state, _, _ = _validate_plan_recursive(lines, 0, 0, fsm["start_state"], set(), {}, fsm)
+    # Initialize the simulated file system with the actual state of the repository
+    simulated_fs = set()
+    for root, dirs, files in os.walk('.'):
+        # Exclude .git directory from the walk
+        if '.git' in dirs:
+            dirs.remove('.git')
+        for name in files:
+            simulated_fs.add(os.path.join(root, name).replace('./', ''))
+
+    print(f"Starting validation with {len(simulated_fs)} files pre-loaded...")
+    final_state, _, _ = _validate_plan_recursive(lines, 0, 0, fsm["start_state"], simulated_fs, {}, fsm)
 
     if final_state in fsm["accept_states"]:
         print(f"\nValidation successful! Plan is syntactically and semantically valid.")
@@ -144,35 +155,43 @@ def validate_plan(plan_filepath):
         print(f"\nValidation failed. Plan ends in non-accepted state: '{final_state}'", file=sys.stderr); sys.exit(1)
 
 def analyze_plan(plan_filepath):
-    """Analyzes a plan file to determine its complexity class."""
+    """Analyzes a plan file to determine its complexity class and modality."""
     try:
         with open(plan_filepath, 'r') as f:
-            plan_lines = f.readlines()
+            plan_lines_with_indent = f.readlines()
+        plan_lines = [line.strip() for line in plan_lines_with_indent if line.strip()]
     except FileNotFoundError:
-        print(f"Error: Plan file not found at {plan_filepath}", file=sys.stderr)
-        sys.exit(1)
+        print(f"Error: Plan file not found at {plan_filepath}", file=sys.stderr); sys.exit(1)
 
-    max_indent = -1  # Use -1 to signify no loops found yet
-
-    for line in plan_lines:
+    # --- Complexity Analysis ---
+    loop_indents = []
+    for line in plan_lines_with_indent:
         if line.strip().startswith("for_each_file"):
             indent = len(line) - len(line.lstrip(' '))
-            if max_indent == -1:
-                max_indent = indent
-            else:
-                max_indent = max(max_indent, indent)
+            loop_indents.append(indent)
 
-    # Assuming 2-space indentation:
-    # A nested loop will have an indent of at least 2.
-    # A single, top-level loop will have an indent of 0.
-    if max_indent >= 2:
-        complexity = "Exponential (EXPTIME-Class)"
-    elif max_indent >= 0:
-        complexity = "Polynomial (P-Class)"
-    else:
+    if not loop_indents:
         complexity = "Constant (O(1))"
+    elif max(loop_indents) > min(loop_indents):
+        complexity = "Exponential (EXPTIME-Class)"
+    else:
+        complexity = "Polynomial (P-Class)"
 
-    print(f"Plan Complexity Analysis:\n  Result: {complexity}")
+    # --- Modality Analysis ---
+    has_write_op = False
+    write_ops = {"write_op", "delete_op", "move_op"}
+    for line in plan_lines:
+        command = line.split()[0]
+        action_type = ACTION_TYPE_MAP.get(command)
+        if action_type in write_ops:
+            has_write_op = True
+            break
+
+    modality = "Construction (Read-Write)" if has_write_op else "Analysis (Read-Only)"
+
+    print(f"Plan Analysis Results:")
+    print(f"  - Complexity: {complexity}")
+    print(f"  - Modality:   {modality}")
 
 def main():
     parser = argparse.ArgumentParser(description="A tool to manage the Finite Development Cycle (FDC).")

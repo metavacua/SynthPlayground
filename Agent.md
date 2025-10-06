@@ -26,6 +26,11 @@ A Finite Development Cycle can only serve as a meta-process for a project of a s
 - To manage a **Polynomial (P-Class)** project, the FDC must be at least **EXPTIME-Class**.
 This principle ensures that the process has sufficient expressive power to manage the complexity of its object.
 
+FDC Modalities:
+In addition to complexity, FDCs are classified by their modality, which describes their intended impact on the codebase. This is determined by the `analyze` subcommand based on the actions in a plan.
+- **Analysis Modality (Read-Only)**: The FDC inspects the codebase but does not alter it. It contains only `read_op` and `tool_exec` actions. Its primary output is knowledge (e.g., a report, log entries).
+- **Construction Modality (Read-Write)**: The FDC alters the codebase. It contains `write_op`, `delete_op`, or `move_op` actions. Its primary output is a change to the repository's state.
+
 Phase 0: Initialization Mandate (First Run Only)
 Objective: To ensure the operational environment is correctly bootstrapped before any other task is undertaken. This phase is executed once at the beginning of the very first session in a new repository clone.
 
@@ -101,9 +106,9 @@ This command performs two levels of validation:
 
 The plan is only considered valid if this command exits successfully. You must not proceed with an invalid plan.
 
-Plan Analysis: After successful validation, you MUST analyze the plan's complexity. Run the following command:
+Plan Analysis: After successful validation, you MUST analyze the plan's properties. Run the following command:
 `python tooling/fdc_cli.py analyze plan.txt`
-You must state the resulting complexity class (e.g., "Constant (O(1))", "Polynomial (P-Class)") in your reasoning before proceeding to execution.
+You must state the resulting **Complexity Class** (e.g., "Constant (O(1))", "Polynomial (P-Class)") and **Modality** (e.g., "Analysis (Read-Only)", "Construction (Read-Write)") in your reasoning before proceeding to execution.
 
 Meta-Process Analysis: If the current FDC is a meta-process (i.e., it is operating on another process or FDC), you must also analyze and declare the complexity of the object process. You must then confirm that the complexity of the current plan is strictly higher than the complexity of the object process, in accordance with the Meta-Process Complexity Hierarchy.
 
