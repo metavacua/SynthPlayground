@@ -1,5 +1,6 @@
 import json
 import uuid
+import os
 from datetime import datetime, timezone
 from jsonschema import validate, ValidationError
 
@@ -19,6 +20,9 @@ class Logger:
         self.log_path = log_path
         self.schema = self._load_schema(schema_path)
         self.session_id = str(uuid.uuid4())
+        # Ensure the log directory exists
+        os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
+
 
     def _load_schema(self, schema_path):
         """
@@ -32,15 +36,17 @@ class Logger:
         Returns:
             dict: The loaded JSON schema.
         """
-        with open(schema_path, 'r') as f:
-            content = f.read()
-
-        # Extract the JSON part from the Markdown code block
         try:
+            with open(schema_path, 'r') as f:
+                content = f.read()
+
+            # Extract the JSON part from the Markdown code block
             json_str = content.split('```json\n')[1].split('\n```')[0]
             return json.loads(json_str)
-        except (IndexError, json.JSONDecodeError) as e:
-            raise IOError(f"Could not extract or parse the JSON schema from {schema_path}. Error: {e}")
+        except (FileNotFoundError, IndexError, json.JSONDecodeError) as e:
+            # If schema doesn't exist or is malformed, operate without validation
+            print(f"Warning: Could not load or parse schema from {schema_path}. Logger will operate without schema validation. Error: {e}")
+            return None
 
     def log(self, phase, task_id, plan_step, action_type, action_details, outcome_status, outcome_message="", error_details=None, evidence=""):
         """
@@ -83,8 +89,13 @@ class Logger:
         if error_details and outcome_status == "FAILURE":
             log_entry["outcome"]["error"] = error_details
 
-        # This will raise ValidationError if the entry is invalid
-        validate(instance=log_entry, schema=self.schema)
+        if self.schema:
+            validate(instance=log_entry, schema=self.schema)
+
+        # Ensure the log directory exists before writing
+        log_dir = os.path.dirname(self.log_path)
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
 
         with open(self.log_path, 'a') as f:
             f.write(json.dumps(log_entry) + '\n')

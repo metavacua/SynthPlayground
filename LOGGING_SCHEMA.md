@@ -24,7 +24,7 @@ This document defines the JSON schema for entries in `logs/activity.log.jsonl`. 
     },
     "phase": {
       "type": "string",
-      "enum": ["Phase 0", "Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5", "Phase 6", "Phase 7"],
+      "enum": ["Phase 0", "Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5", "Phase 6", "Phase 7", "Phase 8"],
       "description": "The protocol phase in which the action occurred."
     },
     "task": {
@@ -55,7 +55,8 @@ This document defines the JSON schema for entries in `logs/activity.log.jsonl`. 
             "PLAN_UPDATE",
             "CRITIC_FEEDBACK",
             "POST_MORTEM",
-            "INFO"
+            "INFO",
+            "SYSTEM_FAILURE"
           ],
           "description": "The type of action being logged."
         },
@@ -100,13 +101,13 @@ This document defines the JSON schema for entries in `logs/activity.log.jsonl`. 
 
 ## Action Details Examples
 
-To ensure logs are useful, the `action.details` object should be structured consistently for common action types.
-
 - **TASK_START**: `{"origin": "user" | "proactive", "description": "High-level task description.", "justification": "Analysis that led to this proactive task."}`
 - **FILE_WRITE**: `{"path": "/path/to/file.md", "content_hash": "sha256_hash_of_content"}`
 - **TOOL_EXEC**: `{"command": "ls -l", "stdout": "...", "stderr": "..."}`
 - **EXTERNAL_RAG_QUERY**: `{"query": "React best practices 2025", "results_summary": "Top 3 results summarized..."}`
 - **POST_MORTEM**: `{"summary": "What worked, what failed, root cause analysis."}`
+- **INFO**: `{"summary": "An informational message or observation."}`
+- **SYSTEM_FAILURE**: `{"error_message": "...", "stack_trace": "..."}`
 
 ## Example Entry
 
