@@ -3,7 +3,7 @@ Subject: Jules Agent Protocol v1.0
 Objective: To provide a systematic, non-negotiable protocol for task execution, self-correction, and knowledge acquisition within this repository. Adherence to this protocol is mandatory for all operations. This protocol is designed to compensate for your known architectural limitations by leveraging the repository's explicit "Knowledge Core" and external tools.
 
 The Finite Development Cycle (FDC):
-A single task, from initial user request to final submission, constitutes one Finite Development Cycle. An FDC is not considered complete until Phase 6 has been successfully executed and the `postmortem.md` artifact has been generated. This ensures that learning is an integral and non-negotiable part of the development process itself.
+A single task, from initial user request to final submission, constitutes one Finite Development Cycle. The cycle concludes with the `submit` action, which archives the final code and the post-mortem report together. This ensures that learning is an integral and non-negotiable part of the development process itself.
 
 Phase 0: Initialization Mandate (First Run Only)
 Objective: To ensure the operational environment is correctly bootstrapped before any other task is undertaken. This phase is executed once at the beginning of the very first session in a new repository clone.
@@ -74,12 +74,14 @@ Execute Plan: Execute the validated plan step-by-step.
 
 Structured Logging: For every action taken (e.g., FILE_READ, FILE_WRITE, TOOL_EXEC, EXTERNAL_RAG_QUERY), you MUST record a structured log entry to logs/activity.log.jsonl. The log entry must conform to the schema defined in LOGGING_SCHEMA.md and include any external search queries performed.
 
-Phase 6: Task Closure & Post-Mortem
-Objective: To formally conclude a Finite Development Cycle by analyzing the completed task and generating a permanent record for future learning. The FDC is not complete until this phase is successfully executed.
+Phase 6: Pre-Submission Post-Mortem
+Objective: To formally conclude the development portion of a task by analyzing the work and generating a permanent record *before* submission.
 
-Post-Mortem Analysis: Upon task completion (success or failure), you must perform a post-mortem. Compare the final state of the code and the contents of the `activity.log.jsonl` against the initial plan. Identify deviations, errors, and inefficiencies.
-
-Generate Report: Summarize your findings in the `postmortem.md` report, detailing what worked, what failed, and the root cause of any failures. This artifact serves as the final record of the FDC.
+Procedure:
+1.  **Finalize Changes:** Ensure all code, documentation, and other artifacts are in their final state.
+2.  **Conduct Post-Mortem Analysis:** Perform a post-mortem on the finalized changes. Compare the final state of the code and the contents of the `activity.log.jsonl` against the initial plan. Identify deviations, errors, and inefficiencies.
+3.  **Generate Report:** Summarize your findings in the `postmortem.md` report, detailing what worked, what failed, and the root cause of any failures.
+4.  **Proceed to Submission:** With the post-mortem complete, the task is ready for the `submit` action. The submission will include all finalized code and the `postmortem.md` report as a single, atomic unit.
 
 STANDING ORDER - RAG MANDATE (REVISED)
 This instruction supersedes all previous RAG directives. Your primary value is providing up-to-date solutions. Therefore, for any task involving external libraries, frameworks, or tools, you are REQUIRED to perform the Just-In-Time External RAG described in Phase 3 to verify current versions, API signatures, and best practices. Failure to do so is a critical error.

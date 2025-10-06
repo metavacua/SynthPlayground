@@ -107,7 +107,7 @@ This document defines the JSON schema for entries in `logs/activity.log.jsonl`. 
 - **TOOL_EXEC**: `{"command": "ls -l", "stdout": "...", "stderr": "..."}`
 - **EXTERNAL_RAG_QUERY**: `{"query": "React best practices 2025", "results_summary": "Top 3 results summarized..."}`
 - **POST_MORTEM**: `{"summary": "What worked, what failed, root cause analysis."}`
-- **TASK_END**: `{"final_commit_hash": "The git hash of the final submission for this FDC."}`
+- **TASK_END**: `{"summary": "Signals the formal end of the development phase of a Finite Development Cycle, post-mortem complete."}`
 - **INFO**: `{"summary": "An informational message or observation."}`
 - **SYSTEM_FAILURE**: `{"error_message": "...", "stack_trace": "..."}`
 
