@@ -1,0 +1,8 @@
+{
+  "versions": {
+    "version-A": "prototype/version-A/logic.py",
+    "version-B": "prototype/version-B/logic.py"
+  },
+  "resolved_path": "prototype/resolved/logic.py",
+  "resolve_with_stance": "Completeness"
+}

@@ -1,0 +1,76 @@
+name: Link Dialetheic Pair
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  link-prs:
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/link-dialetheic-pair')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Link Dialetheic Pair
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const currentPrNumber = context.issue.number;
+            const commentBody = context.event.comment.body;
+            const commentAuthor = context.event.comment.user.login;
+
+            // Simple permission check: only repo owner or collaborators can run this.
+            // A more robust implementation might use a permissions API or team checks.
+            const { data: collaborator } = await github.rest.repos.checkCollaborator({
+              owner,
+              repo,
+              username: commentAuthor,
+            });
+
+            if (collaborator.status !== 204) {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: currentPrNumber,
+                body: `User @${commentAuthor} does not have permission to link dialetheic pairs.`,
+              });
+              return;
+            }
+
+            const match = commentBody.match(/\/link-dialetheic-pair\s+#(\d+)/);
+            if (!match) {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: currentPrNumber,
+                body: "Invalid command format. Please use `/link-dialetheic-pair #<PR_NUMBER>`.",
+              });
+              return;
+            }
+
+            const linkedPrNumber = parseInt(match[1], 10);
+            const label = "Dialetheic-Pair";
+            const prsToUpdate = [currentPrNumber, linkedPrNumber];
+
+            for (const prNumber of prsToUpdate) {
+              // Add label
+              await github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number: prNumber,
+                labels: [label],
+              });
+
+              // Add comment
+              const otherPr = prsToUpdate.find(p => p !== prNumber);
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: prNumber,
+                body: `🔗 **Dialetheic Pair Linked:** This PR has been formally linked with **#${otherPr}** as a constructive contradiction. Both represent mutually exclusive solutions to the same problem. Merging one will require closing the other.`,
+              });
+            }
+
+            console.log(`Successfully linked PR #${currentPrNumber} and PR #${linkedPrNumber} as a dialetheic pair.`);

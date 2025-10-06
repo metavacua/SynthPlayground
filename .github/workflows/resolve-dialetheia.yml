@@ -1,0 +1,89 @@
+name: Resolve Dialetheic Pair
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  resolve-dialetheia:
+    if: github.event.issue.pull_request && startsWith(github.event.comment.body, '/resolve-dialetheia choose-this')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Resolve Dialetheic Pair
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const winningPrNumber = context.issue.number;
+            const commentAuthor = context.event.comment.user.login;
+            const label = "Dialetheic-Pair";
+
+            // Permission Check
+            const { data: collaborator } = await github.rest.repos.checkCollaborator({
+              owner,
+              repo,
+              username: commentAuthor,
+            });
+            if (collaborator.status !== 204) {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: winningPrNumber,
+                body: `User @${commentAuthor} does not have permission to resolve dialetheic pairs.`,
+              });
+              return;
+            }
+
+            // Check if the current PR has the label
+            const { data: winningPr } = await github.rest.pulls.get({ owner, repo, pull_number: winningPrNumber });
+            if (!winningPr.labels.some(l => l.name === label)) {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: winningPrNumber,
+                body: `This PR is not part of a dialetheic pair. Cannot resolve.`,
+              });
+              return;
+            }
+
+            // Find the losing PR number from the link comment
+            const { data: comments } = await github.rest.issues.listComments({ owner, repo, issue_number: winningPrNumber });
+            const linkComment = comments.find(c => c.body.includes("Dialetheic Pair Linked"));
+            if (!linkComment) {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: winningPrNumber,
+                body: `Could not find the linking comment to identify the other PR. Resolution failed.`,
+              });
+              return;
+            }
+
+            const match = linkComment.body.match(/linked with\s+**#(\d+)/);
+            if (!match) {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: winningPrNumber,
+                body: `Could not parse the losing PR number from the link comment. Resolution failed.`,
+              });
+              return;
+            }
+            const losingPrNumber = parseInt(match[1], 10);
+
+            // Close the losing PR with an explanation
+            await github.rest.issues.createComment({
+              owner, repo, issue_number: losingPrNumber,
+              body: `**Dialetheia Resolved:** This PR represents one side of a constructive contradiction. The alternative approach in **#${winningPrNumber}** has been chosen for implementation. As such, this PR is now being closed. Thank you for the exploration.`
+            });
+            await github.rest.pulls.update({
+              owner, repo, pull_number: losingPrNumber,
+              state: 'closed'
+            });
+
+            // Post confirmation on the winning PR and remove the label
+            await github.rest.issues.createComment({
+              owner, repo, issue_number: winningPrNumber,
+              body: `✅ **Dialetheia Resolved:** The competing PR **#${losingPrNumber}** has been automatically closed. This PR is now the chosen path forward.`
+            });
+            await github.rest.issues.removeLabel({
+              owner, repo, issue_number: winningPrNumber,
+              name: label
+            });
+
+            console.log(`Resolved dialetheic pair: chose #${winningPrNumber}, closed #${losingPrNumber}.`);

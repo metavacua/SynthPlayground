@@ -1,0 +1,71 @@
+name: Apply Stance Label
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  apply-label:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+    - name: Check for Stance Declaration and Apply Label
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const prBody = context.payload.pull_request.body;
+          const issueNumber = context.issue.number;
+          const owner = context.repo.owner;
+          const repo = context.repo.repo;
+
+          const stances = [
+            { label: 'Stance: Safety', pattern: /-\s*\[x\]\s*Stance: Safety/i },
+            { label: 'Stance: Security', pattern: /-\s*\[x\]\s*Stance: Security/i },
+            { label: 'Stance: Completeness', pattern: /-\s*\[x\]\s*Stance: Completeness/i },
+            { label: 'Stance: Protocol Evolution', pattern: /-\s*\[x\]\s*Stance: Protocol Evolution/i }
+          ];
+
+          let declaredStanceLabel = null;
+          for (const stance of stances) {
+            if (stance.pattern.test(prBody)) {
+              declaredStanceLabel = stance.label;
+              break;
+            }
+          }
+
+          if (!declaredStanceLabel) {
+            console.log("No stance declared in PR body. No label will be applied.");
+            return;
+          }
+
+          // Remove any other stance labels to ensure only one is active
+          const currentLabels = context.payload.pull_request.labels.map(l => l.name);
+          const allStanceLabels = stances.map(s => s.label);
+
+          for (const label of currentLabels) {
+            if (allStanceLabels.includes(label) && label !== declaredStanceLabel) {
+              await github.rest.issues.removeLabel({
+                owner,
+                repo,
+                issue_number: issueNumber,
+                name: label
+              });
+              console.log(`Removed conflicting stance label: ${label}`);
+            }
+          }
+
+          // Add the correct stance label if it's not already present
+          if (!currentLabels.includes(declaredStanceLabel)) {
+            await github.rest.issues.addLabels({
+              owner,
+              repo,
+              issue_number: issueNumber,
+              labels: [declaredStanceLabel]
+            });
+            console.log(`Applied stance label: ${declaredStanceLabel}`);
+          } else {
+            console.log(`Stance label '${declaredStanceLabel}' is already present.`);
+          }
