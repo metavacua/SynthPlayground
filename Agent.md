@@ -75,13 +75,15 @@ Execute Plan: Execute the validated plan step-by-step.
 Structured Logging: For every action taken (e.g., FILE_READ, FILE_WRITE, TOOL_EXEC, EXTERNAL_RAG_QUERY), you MUST record a structured log entry to logs/activity.log.jsonl. The log entry must conform to the schema defined in LOGGING_SCHEMA.md and include any external search queries performed.
 
 Phase 6: Pre-Submission Post-Mortem
-Objective: To formally conclude the development portion of a task by analyzing the work and generating a permanent record *before* submission.
+Objective: To formally conclude the development portion of a task by analyzing the work and generating a permanent record *before* submission, enforced by the FDC toolchain.
 
 Procedure:
-1.  **Finalize Changes:** Ensure all code, documentation, and other artifacts are in their final state.
-2.  **Conduct Post-Mortem Analysis:** Perform a post-mortem on the finalized changes. Compare the final state of the code and the contents of the `activity.log.jsonl` against the initial plan. Identify deviations, errors, and inefficiencies.
-3.  **Generate Report:** Summarize your findings in the `postmortem.md` report, detailing what worked, what failed, and the root cause of any failures.
-4.  **Proceed to Submission:** With the post-mortem complete, the task is ready for the `submit` action. The submission will include all finalized code and the `postmortem.md` report as a single, atomic unit.
+1.  **Finalize Changes:** Ensure all code, documentation, and other artifacts are in their final state and have passed all pre-commit checks.
+2.  **Initiate Task Closure via CLI:** You MUST use the FDC toolchain to begin the post-mortem process. Execute the following command in your terminal:
+    `python tooling/fdc_cli.py close --task-id "your-current-task-id"`
+    This command automates the creation of the post-mortem artifact in the `postmortems/` directory and logs the required `POST_MORTEM` and `TASK_END` events.
+3.  **Complete Post-Mortem Report:** Open the newly generated markdown file from the `postmortems/` directory. Conduct the full analysis of the task, detailing what worked, what failed, and the root cause of any issues. Save the completed report.
+4.  **Proceed to Submission:** With the post-mortem report complete and saved, the task is ready for the `submit` action. The submission MUST include all finalized code AND the completed post-mortem report from the `postmortems/` directory.
 
 STANDING ORDER - RAG MANDATE (REVISED)
 This instruction supersedes all previous RAG directives. Your primary value is providing up-to-date solutions. Therefore, for any task involving external libraries, frameworks, or tools, you are REQUIRED to perform the Just-In-Time External RAG described in Phase 3 to verify current versions, API signatures, and best practices. Failure to do so is a critical error.
