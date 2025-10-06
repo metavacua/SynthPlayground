@@ -7,24 +7,32 @@
     "DONE"
   ],
   "alphabet": [
-    "set_plan",
-    "plan_step_complete",
-    "run:fdc_cli.py close",
-    "submit"
+    "process_op",
+    "read_op",
+    "write_op",
+    "delete_op",
+    "move_op",
+    "tool_exec",
+    "close_op"
   ],
   "transitions": {
     "IDLE": {
-      "set_plan": "PLANNING"
+      "process_op": "PLANNING"
     },
     "PLANNING": {
-      "plan_step_complete": "EXECUTING"
+      "process_op": "EXECUTING"
     },
     "EXECUTING": {
-      "plan_step_complete": "EXECUTING",
-      "run:fdc_cli.py close": "POST_MORTEM"
+      "process_op": "EXECUTING",
+      "read_op": "EXECUTING",
+      "write_op": "EXECUTING",
+      "delete_op": "EXECUTING",
+      "move_op": "EXECUTING",
+      "tool_exec": "EXECUTING",
+      "close_op": "POST_MORTEM"
     },
     "POST_MORTEM": {
-      "submit": "DONE"
+      "process_op": "DONE"
     }
   },
   "start_state": "IDLE",

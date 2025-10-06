@@ -1,5 +1,6 @@
 set_plan
 plan_step_complete
-plan_step_complete
-run:fdc_cli.py close
+create_file_with_block new_file.txt
+read_file new_file.txt
+run_in_bash_session python tooling/fdc_cli.py close --task-id "test"
 submit

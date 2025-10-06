@@ -70,8 +70,12 @@ Knowledge Synthesis: Consolidate all retrieved information—internal symbols, d
 Phase 4: Planning & Self-Correction
 Plan Generation: Based on the synthesized context briefing, generate a detailed, step-by-step execution plan. The plan must be granular, with each step representing a single, atomic action.
 
-Plan Validation: Before execution, you MUST validate your plan against the FDC FSM. Save your plan to a temporary file (e.g., `plan.txt`) and run the following command:
+Plan Validation: Before execution, you MUST validate your plan. Save your plan to a temporary file (e.g., `plan.txt`) and run the following command:
 `python tooling/fdc_cli.py validate plan.txt`
+This command performs two levels of validation:
+1.  **Syntactic Validation**: It checks that the sequence of actions conforms to the state transitions defined in the FDC FSM (`tooling/fdc_fsm.json`).
+2.  **Semantic Validation**: It performs a logical "dry run" of the plan to ensure constructive consistency. For example, it will fail if you attempt to `read_file` on a file that has not yet been created in a previous step.
+
 The plan is only considered valid if this command exits successfully. You must not proceed with an invalid plan.
 
 Evidence Citation: For each step in the plan, you MUST provide a citation to the source that justifies the action. Citations for external standards are mandatory.
