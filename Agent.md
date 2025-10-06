@@ -14,6 +14,18 @@ The FDC is not just a process; it is a formally defined Finite State Machine (FS
 
 This formal model is defined in `tooling/fdc_fsm.json`. All plans MUST be valid strings in the language defined by this FSM. The `fdc_cli.py` tool is provided to enforce this property.
 
+FDC Complexity Classes:
+Beyond syntactic and semantic validity, FDCs are classified by their computational complexity. This allows for reasoning about the scope and nature of a task. The `fdc_cli.py analyze` command is used to determine a plan's complexity class.
+- **Constant Complexity (O(1))**: Represents tasks with a fixed, predictable number of steps, regardless of the size of the codebase. These plans contain no loops.
+- **Polynomial Complexity (P-Class)**: Represents tasks where the amount of work scales with the size of a given input set (e.g., number of files). These are expressed using single `for_each_file` loops.
+- **Exponential Complexity (EXPTIME-Class)**: Represents tasks of a higher order, typically involving operations on combinations of inputs (e.g., comparing every file to every other file). These are expressed using nested `for_each_file` loops.
+
+The Meta-Process Complexity Hierarchy:
+A Finite Development Cycle can only serve as a meta-process for a project of a strictly lower complexity class.
+- To manage a **Constant (O(1))** project, the FDC must be at least **P-Class**.
+- To manage a **Polynomial (P-Class)** project, the FDC must be at least **EXPTIME-Class**.
+This principle ensures that the process has sufficient expressive power to manage the complexity of its object.
+
 Phase 0: Initialization Mandate (First Run Only)
 Objective: To ensure the operational environment is correctly bootstrapped before any other task is undertaken. This phase is executed once at the beginning of the very first session in a new repository clone.
 
@@ -70,6 +82,17 @@ Knowledge Synthesis: Consolidate all retrieved information—internal symbols, d
 Phase 4: Planning & Self-Correction
 Plan Generation: Based on the synthesized context briefing, generate a detailed, step-by-step execution plan. The plan must be granular, with each step representing a single, atomic action.
 
+Plan Language Constructs:
+To represent iterative tasks, the plan language supports a `for_each_file` loop.
+- **Syntax**:
+  `for_each_file <glob_pattern>`
+  `  <action_to_perform_on_{file}>`
+- **Semantics**: The indented block of one or more actions will be logically executed for each file that matches the provided glob pattern (e.g., `src/**/*.py`). Within the loop block, the special placeholder `{file}` will be substituted with the path of the file being processed.
+- **Nested Loops**: To represent EXPTIME-Class tasks, loops can be nested. The placeholder variable must be numbered according to its nesting level (e.g., `{file1}`, `{file2}`).
+  `for_each_file <glob1>`
+  `  for_each_file <glob2>`
+  `    compare {file1} {file2}`
+
 Plan Validation: Before execution, you MUST validate your plan. Save your plan to a temporary file (e.g., `plan.txt`) and run the following command:
 `python tooling/fdc_cli.py validate plan.txt`
 This command performs two levels of validation:
@@ -77,6 +100,12 @@ This command performs two levels of validation:
 2.  **Semantic Validation**: It performs a logical "dry run" of the plan to ensure constructive consistency. For example, it will fail if you attempt to `read_file` on a file that has not yet been created in a previous step.
 
 The plan is only considered valid if this command exits successfully. You must not proceed with an invalid plan.
+
+Plan Analysis: After successful validation, you MUST analyze the plan's complexity. Run the following command:
+`python tooling/fdc_cli.py analyze plan.txt`
+You must state the resulting complexity class (e.g., "Constant (O(1))", "Polynomial (P-Class)") in your reasoning before proceeding to execution.
+
+Meta-Process Analysis: If the current FDC is a meta-process (i.e., it is operating on another process or FDC), you must also analyze and declare the complexity of the object process. You must then confirm that the complexity of the current plan is strictly higher than the complexity of the object process, in accordance with the Meta-Process Complexity Hierarchy.
 
 Evidence Citation: For each step in the plan, you MUST provide a citation to the source that justifies the action. Citations for external standards are mandatory.
 
