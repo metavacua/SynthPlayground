@@ -167,6 +167,16 @@ Procedure:
 2.  **Confirm Compliance:** You MUST mentally verify that every item on the checklist has been satisfied.
 3.  **Log Confirmation:** You MUST log an action confirming that the pre-submission checklist was consulted and passed before proceeding to use the `submit` tool. This creates an auditable record of compliance.
 
+STANDING ORDER: CODE REVIEW PROCEDURE
+Objective: To ensure the `request_code_review` tool is invoked in a stable and reliable manner.
+
+Trigger: This protocol MUST be invoked when a code review is required as part of a pre-commit process.
+
+Procedure:
+1.  **Do Not Call Directly:** You MUST NOT call the `request_code_review` tool directly without first executing the wrapper script.
+2.  **Execute Wrapper:** You MUST first execute the `toolchain/run_code_review.sh` script using `run_in_bash_session`.
+3.  **Request Review:** Immediately following the successful execution of the wrapper script, you MUST call the `request_code_review` tool. This two-step process is mandatory to work around the tool's known state-dependency bug.
+
 Paraconsistent Development Models
 
 This section defines the two models of paraconsistent development this protocol acknowledges.
