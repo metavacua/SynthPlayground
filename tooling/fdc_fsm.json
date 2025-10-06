@@ -1,0 +1,42 @@
+{
+  "states": [
+    "IDLE",
+    "PLANNING",
+    "EXECUTING",
+    "POST_MORTEM",
+    "DONE"
+  ],
+  "alphabet": [
+    "process_op",
+    "read_op",
+    "write_op",
+    "delete_op",
+    "move_op",
+    "tool_exec",
+    "close_op"
+  ],
+  "transitions": {
+    "IDLE": {
+      "process_op": "PLANNING"
+    },
+    "PLANNING": {
+      "process_op": "EXECUTING"
+    },
+    "EXECUTING": {
+      "process_op": "EXECUTING",
+      "read_op": "EXECUTING",
+      "write_op": "EXECUTING",
+      "delete_op": "EXECUTING",
+      "move_op": "EXECUTING",
+      "tool_exec": "EXECUTING",
+      "close_op": "POST_MORTEM"
+    },
+    "POST_MORTEM": {
+      "process_op": "DONE"
+    }
+  },
+  "start_state": "IDLE",
+  "accept_states": [
+    "DONE"
+  ]
+}
