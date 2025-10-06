@@ -2,6 +2,9 @@ Subject: Jules Agent Protocol v1.0
 
 Objective: To provide a systematic, non-negotiable protocol for task execution, self-correction, and knowledge acquisition within this repository. Adherence to this protocol is mandatory for all operations. This protocol is designed to compensate for your known architectural limitations by leveraging the repository's explicit "Knowledge Core" and external tools.
 
+The Finite Development Cycle (FDC):
+A single task, from initial user request to final submission, constitutes one Finite Development Cycle. An FDC is not considered complete until Phase 6 has been successfully executed and the `postmortem.md` artifact has been generated. This ensures that learning is an integral and non-negotiable part of the development process itself.
+
 Phase 0: Initialization Mandate (First Run Only)
 Objective: To ensure the operational environment is correctly bootstrapped before any other task is undertaken. This phase is executed once at the beginning of the very first session in a new repository clone.
 
@@ -40,9 +43,11 @@ Pre-Task Orientation Check: At the beginning of EVERY new task, you must first c
 Phase 2: Deconstruction & Internal Contextualization
 Task Ingestion: Receive the user-provided task.
 
-Entity Identification: Identify all candidate code entities (functions, classes, modules, files) relevant to the task description. Perform a direct lookup against the knowledge_core/symbols.json artifact to resolve these candidates to concrete symbols and their exact locations (file path, line number).
+Meta-RAG for Cross-Task Learning: Before beginning any new task, perform a RAG query against the `logs/` directory. Search for log entries and `postmortem.md` reports from past tasks that are semantically similar to the current task. Analyze the `critic_feedback`, `status`, and post-mortem summaries from these past tasks to identify previously encountered failure patterns and successful strategies. You must explicitly state in your new plan how you will leverage these historical lessons.
 
-Impact Analysis: Using the file paths identified in the previous step as a starting point, construct a dependency impact analysis. Query the knowledge_core/dependency_graph.json artifact to identify all immediate upstream dependents (code that will be affected by changes) and downstream dependencies (code that the target entities rely on). The complete set of all identified files constitutes the "Task Context Set."
+Entity Identification: Identify all candidate code entities (functions, classes, modules, files) relevant to the task description. Perform a direct lookup against the `knowledge_core/symbols.json` artifact to resolve these candidates to concrete symbols and their exact locations (file path, line number).
+
+Impact Analysis: Using the file paths identified in the previous step as a starting point, construct a dependency impact analysis. Query the `knowledge_core/dependency_graph.json` artifact to identify all immediate upstream dependents (code that will be affected by changes) and downstream dependencies (code that the target entities rely on). The complete set of all identified files constitutes the "Task Context Set."
 
 Phase 3: Multi-Modal Information Retrieval (RAG)
 Structural Retrieval (Internal): For every file in the Task Context Set, retrieve its corresponding Abstract Syntax Tree (AST) from the knowledge_core/asts/ directory. Use these ASTs to gain a deep, syntactic understanding of function signatures, call sites, data structures, and class hierarchies. This is your primary source for structural reasoning.
@@ -69,12 +74,12 @@ Execute Plan: Execute the validated plan step-by-step.
 
 Structured Logging: For every action taken (e.g., FILE_READ, FILE_WRITE, TOOL_EXEC, EXTERNAL_RAG_QUERY), you MUST record a structured log entry to logs/activity.log.jsonl. The log entry must conform to the schema defined in LOGGING_SCHEMA.md and include any external search queries performed.
 
-Phase 6: Post-Mortem & Knowledge Update (Self-Improvement Loop)
-Post-Mortem Analysis: Upon task completion (success or failure), perform a post-mortem. Compare the final state of the code and the contents of the activity log against the initial plan. Identify deviations, errors, and inefficiencies.
+Phase 6: Task Closure & Post-Mortem
+Objective: To formally conclude a Finite Development Cycle by analyzing the completed task and generating a permanent record for future learning. The FDC is not complete until this phase is successfully executed.
 
-Generate Report: Summarize your findings in a postmortem.md report, detailing what worked, what failed, and the root cause of any failures.
+Post-Mortem Analysis: Upon task completion (success or failure), you must perform a post-mortem. Compare the final state of the code and the contents of the `activity.log.jsonl` against the initial plan. Identify deviations, errors, and inefficiencies.
 
-Meta-RAG for Cross-Task Learning: Before beginning a new task (during Phase 2), perform a RAG query against the logs/ directory. Search for log entries and postmortem.md reports from past tasks that are semantically similar to the current task. Analyze the critic_feedback, status, and post-mortem summaries from these past tasks to identify previously encountered failure patterns and successful strategies. You must explicitly state in your new plan how you will leverage these historical lessons.
+Generate Report: Summarize your findings in the `postmortem.md` report, detailing what worked, what failed, and the root cause of any failures. This artifact serves as the final record of the FDC.
 
 STANDING ORDER - RAG MANDATE (REVISED)
 This instruction supersedes all previous RAG directives. Your primary value is providing up-to-date solutions. Therefore, for any task involving external libraries, frameworks, or tools, you are REQUIRED to perform the Just-In-Time External RAG described in Phase 3 to verify current versions, API signatures, and best practices. Failure to do so is a critical error.
