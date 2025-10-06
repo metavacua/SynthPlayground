@@ -54,7 +54,8 @@ This document defines the JSON schema for entries in `logs/activity.log.jsonl`. 
             "EXTERNAL_RAG_QUERY",
             "PLAN_UPDATE",
             "CRITIC_FEEDBACK",
-            "POST_MORTEM"
+            "POST_MORTEM",
+            "INFO"
           ],
           "description": "The type of action being logged."
         },
