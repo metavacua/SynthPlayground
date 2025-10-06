@@ -1,6 +1,9 @@
-Subject: Jules Agent Protocol v1.0
+Subject: Jules Agent Protocol v1.5
 
 Objective: To provide a systematic, non-negotiable protocol for task execution, self-correction, and knowledge acquisition within this repository. Adherence to this protocol is mandatory for all operations. This protocol is designed to compensate for your known architectural limitations by leveraging the repository's explicit "Knowledge Core" and external tools.
+
+The Finite Development Cycle (FDC):
+A single task, from initial user request to final submission, constitutes one Finite Development Cycle. The cycle concludes with the `submit` action, which archives the final code and the post-mortem report together. This ensures that learning is an integral and non-negotiable part of the development process itself.
 
 Phase 0: Initialization Mandate (First Run Only)
 Objective: To ensure the operational environment is correctly bootstrapped before any other task is undertaken. This phase is executed once at the beginning of the very first session in a new repository clone.
@@ -37,12 +40,26 @@ Synthesizes this information into a structured report and overwrites the knowled
 
 Pre-Task Orientation Check: At the beginning of EVERY new task, you must first consult knowledge_core/temporal_orientation.md to understand the current landscape of the technologies relevant to the task.
 
+Phase 1.5: Context and Stance Declaration
+Governing Principle: The Principle of Relativity
+The agent's operational model is not fixed but is relative to the context and perceived risk of the assigned task.
+
+Procedure:
+1.  **Risk Analysis:** Upon receiving a task, you must perform a keyword analysis on the user's prompt to assess the anticipated risk level. Non-exhaustive risk-indicator keywords include: `disaster`, `catastrophic failure`, `known broken`, `high-risk`, `unstable`, and `experiment`.
+2.  **Stance Selection:** Based on the risk analysis, you must select and declare one of the following operational stances:
+    *   **`Stance: Standard`**: The default stance for routine, well-defined tasks that do not contain risk indicators. This will follow the standard protocol flow.
+    *   **`Stance: Cautious`**: To be adopted for tasks with ambiguous goals, or those that involve your known "Red Zones" (e.g., complex React/TSX). This stance will require you to formulate plans with smaller, more granular steps and more frequent verification loops.
+    *   **`Stance: Harvester`**: To be adopted when high-risk keywords are present. This "Disaster Preparedness" stance mandates a plan that prioritizes data collection over simple task completion. It may involve pre-emptive state-saving, maximum logging verbosity, and designing experiments specifically to trigger and analyze the failure mode.
+3.  **Declaration and Logging:** The chosen stance and the justification for its selection (i.e., the keywords found or the nature of the task) **must** be recorded in the initial `TASK_START` log entry for the task. This ensures the decision is auditable and sets the context for all subsequent actions within that task.
+
 Phase 2: Deconstruction & Internal Contextualization
 Task Ingestion: Receive the user-provided task.
 
-Entity Identification: Identify all candidate code entities (functions, classes, modules, files) relevant to the task description. Perform a direct lookup against the knowledge_core/symbols.json artifact to resolve these candidates to concrete symbols and their exact locations (file path, line number).
+Meta-RAG for Cross-Task Learning: Before beginning any new task, perform a RAG query against the `logs/` directory. Search for log entries and `postmortem.md` reports from past tasks that are semantically similar to the current task. Analyze the `critic_feedback`, `status`, and post-mortem summaries from these past tasks to identify previously encountered failure patterns and successful strategies. You must explicitly state in your new plan how you will leverage these historical lessons.
 
-Impact Analysis: Using the file paths identified in the previous step as a starting point, construct a dependency impact analysis. Query the knowledge_core/dependency_graph.json artifact to identify all immediate upstream dependents (code that will be affected by changes) and downstream dependencies (code that the target entities rely on). The complete set of all identified files constitutes the "Task Context Set."
+Entity Identification: Identify all candidate code entities (functions, classes, modules, files) relevant to the task description. Perform a direct lookup against the `knowledge_core/symbols.json` artifact to resolve these candidates to concrete symbols and their exact locations (file path, line number).
+
+Impact Analysis: Using the file paths identified in the previous step as a starting point, construct a dependency impact analysis. Query the `knowledge_core/dependency_graph.json` artifact to identify all immediate upstream dependents (code that will be affected by changes) and downstream dependencies (code that the target entities rely on). The complete set of all identified files constitutes the "Task Context Set."
 
 Phase 3: Multi-Modal Information Retrieval (RAG)
 Structural Retrieval (Internal): For every file in the Task Context Set, retrieve its corresponding Abstract Syntax Tree (AST) from the knowledge_core/asts/ directory. Use these ASTs to gain a deep, syntactic understanding of function signatures, call sites, data structures, and class hierarchies. This is your primary source for structural reasoning.
@@ -64,17 +81,40 @@ Critical Review: Engage your internal critic model. The critic's function is to 
 
 Plan Refinement: Re-evaluate and iteratively refine the plan based on the critic's feedback until all steps are validated and justified by the retrieved context.
 
+Phase 4.5: Pre-Flight Check
+Governing Principle: Verify Assumptions Before Execution
+An action plan contains implicit assumptions about the environment's state (e.g., a file exists, a directory is writable). These assumptions must be explicitly tested before execution.
+
+Procedure:
+1.  **Assumption Analysis:** After a plan is generated in Phase 4, you must analyze each step to identify all file system assumptions.
+2.  **Verification Execution:** For each identified assumption, you must generate and execute a simple, read-only verification command (e.g., `ls path/to/file`, `ls -d path/to/directory`).
+3.  **Plan Validation:**
+    *   If all verification commands succeed, the plan is declared **VALID**, and you may proceed to Phase 5.
+    *   If any verification command fails, the plan is immediately declared **INVALID**. You must not execute it. You must log the failure and immediately return to Phase 4 to create a new plan that accounts for the true state of the environment.
+4.  **Logging:** The execution of the pre-flight check, including the commands run and the pass/fail outcome, must be logged as an `INFO` action.
+
 Phase 5: Execution & Structured Logging
 Execute Plan: Execute the validated plan step-by-step.
 
 Structured Logging: For every action taken (e.g., FILE_READ, FILE_WRITE, TOOL_EXEC, EXTERNAL_RAG_QUERY), you MUST record a structured log entry to logs/activity.log.jsonl. The log entry must conform to the schema defined in LOGGING_SCHEMA.md and include any external search queries performed.
 
-Phase 6: Post-Mortem & Knowledge Update (Self-Improvement Loop)
-Post-Mortem Analysis: Upon task completion (success or failure), perform a post-mortem. Compare the final state of the code and the contents of the activity log against the initial plan. Identify deviations, errors, and inefficiencies.
+Phase 6: Pre-Submission Post-Mortem
+Objective: To formally conclude the development portion of a task by analyzing the work and generating a permanent record *before* submission, enforced by the FDC toolchain.
 
-Generate Report: Summarize your findings in a postmortem.md report, detailing what worked, what failed, and the root cause of any failures.
-
-Meta-RAG for Cross-Task Learning: Before beginning a new task (during Phase 2), perform a RAG query against the logs/ directory. Search for log entries and postmortem.md reports from past tasks that are semantically similar to the current task. Analyze the critic_feedback, status, and post-mortem summaries from these past tasks to identify previously encountered failure patterns and successful strategies. You must explicitly state in your new plan how you will leverage these historical lessons.
+Procedure:
+1.  **Finalize Changes:** Ensure all code, documentation, and other artifacts are in their final state and have passed all pre-commit checks.
+2.  **Initiate Task Closure via CLI:** You MUST use the FDC toolchain to begin the post-mortem process. Execute the following command in your terminal:
+    `python tooling/fdc_cli.py close --task-id "your-current-task-id"`
+    This command automates the creation of the post-mortem artifact in the `postmortems/` directory and logs the required `POST_MORTEM` and `TASK_END` events.
+3.  **Complete Post-Mortem Report:** Open the newly generated markdown file from the `postmortems/` directory. Conduct the full analysis of the task, detailing what worked, what failed, and the root cause of any issues. Save the completed report.
+4.  **Proceed to Submission:** With the post-mortem report complete and saved, the task is ready for the `submit` action. The submission MUST include all finalized code AND the completed post-mortem report from the `postmortems/` directory.
 
 STANDING ORDER - RAG MANDATE (REVISED)
 This instruction supersedes all previous RAG directives. Your primary value is providing up-to-date solutions. Therefore, for any task involving external libraries, frameworks, or tools, you are REQUIRED to perform the Just-In-Time External RAG described in Phase 3 to verify current versions, API signatures, and best practices. Failure to do so is a critical error.
+
+STANDING ORDER: TASK ATOMICITY
+This instruction governs the lifecycle of all tasks and is non-negotiable. Its purpose is to make every task a "decidable process by construction" and prevent state contamination between tasks.
+
+1.  **Definition of "Task Completion":** A task is not considered "complete" until `Phase 6: Pre-Submission Post-Mortem` has been successfully executed and its corresponding `POST_MORTEM` action has been logged.
+2.  **Strict Sequential Execution:** You **must not** begin any new task (whether initiated by a user or by your own `Phase 7` proactive generation) until the current active task is "complete" as defined above.
+3.  **The `submit` Tool is Final:** The `submit` tool is the final, concluding action of a task's lifecycle. It must only be called after all phases, including the post-mortem, have been successfully completed. There are no actions after `submit`.
