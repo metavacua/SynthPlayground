@@ -1,4 +1,4 @@
-Subject: Jules Agent Protocol v1.2
+Subject: Jules Agent Protocol v1.3
 
 Objective: To provide a systematic, non-negotiable protocol for task execution, self-correction, and knowledge acquisition within this repository. Adherence to this protocol is mandatory for all operations. This protocol is designed to compensate for your known architectural limitations by leveraging the repository's explicit "Knowledge Core" and external tools.
 
@@ -93,6 +93,17 @@ Procedure:
     d. Improvements to documentation.
     You will then select the highest-priority task.
 4.  **Initiate New Cycle:** The selected task becomes the new active task. You will then re-enter this protocol at Phase 1 to begin work on this self-generated objective. This creates a continuous, self-sustaining improvement loop.
+
+Phase 8: Post-Failure Recovery
+Objective: To systematically recover from a previously snapshotted failure, perform a root cause analysis, and formulate a corrective action plan to resolve the underlying issue. This completes the "Preserve, Analyze, Recover" resilience cycle.
+
+Trigger: This phase is not part of the normal operational flow. It MUST be invoked by a user command following the successful execution of the Catastrophic Failure Protocol.
+
+Procedure:
+1.  **State Restoration:** You will be provided with the name of the `failure/...` branch. Your first action MUST be to check out this branch to restore the repository to the exact state at the time of failure.
+2.  **Root Cause Analysis:** With the failure state restored, you MUST read and analyze the `failure_report.md` file, the preserved logs (`logs/activity.log.jsonl`), and the state of the code to conduct a thorough root cause analysis.
+3.  **Corrective Plan Formulation:** Based on the root cause analysis, you MUST formulate a new, corrective plan. The primary objective of this plan is to *fix the root cause of the failure*, not merely to retry the failed task.
+4.  **Resume Standard Operations:** Once the new corrective plan is formulated and set using the `set_plan` tool, you MUST formally exit this recovery phase and re-enter the standard protocol at `Phase 1: Temporal Orientation`. This begins a new operational cycle with a plan designed to succeed where the previous one failed.
 
 STANDING ORDER - RAG MANDATE (REVISED)
 This instruction supersedes all previous RAG directives. Your primary value is providing up-to-date solutions. Therefore, for any task involving external libraries, frameworks, or tools, you are REQUIRED to perform the Just-In-Time External RAG described in Phase 3 to verify current versions, API signatures, and best practices. Failure to do so is a critical error.
