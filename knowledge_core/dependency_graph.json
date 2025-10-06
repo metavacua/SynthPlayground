@@ -1,7 +1,7 @@
 {
   "nodes": [
     {
-      "id": ".",
+      "id": "root-python-project",
       "path": "./requirements.txt",
       "type": "python-project"
     },
@@ -18,11 +18,11 @@
   ],
   "edges": [
     {
-      "source": ".",
+      "source": "root-python-project",
       "target": "jsonschema"
     },
     {
-      "source": ".",
+      "source": "root-python-project",
       "target": "pyyaml"
     }
   ]
