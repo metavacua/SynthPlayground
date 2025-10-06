@@ -1,4 +1,4 @@
-Subject: Jules Agent Protocol v1.1
+Subject: Jules Agent Protocol v1.3
 
 Objective: To provide a systematic, non-negotiable protocol for task execution, self-correction, and knowledge acquisition within this repository. Adherence to this protocol is mandatory for all operations. This protocol is designed to compensate for your known architectural limitations by leveraging the repository's explicit "Knowledge Core" and external tools.
 
@@ -94,5 +94,42 @@ Procedure:
     You will then select the highest-priority task.
 4.  **Initiate New Cycle:** The selected task becomes the new active task. You will then re-enter this protocol at Phase 1 to begin work on this self-generated objective. This creates a continuous, self-sustaining improvement loop.
 
+Phase 8: Post-Failure Recovery
+Objective: To systematically recover from a previously snapshotted failure, perform a root cause analysis, and formulate a corrective action plan to resolve the underlying issue. This completes the "Preserve, Analyze, Recover" resilience cycle.
+
+Trigger: This phase is not part of the normal operational flow. It MUST be invoked by a user command following the successful execution of the Catastrophic Failure Protocol.
+
+Procedure:
+1.  **State Restoration:** You will be provided with the name of the `failure/...` branch. Your first action MUST be to check out this branch to restore the repository to the exact state at the time of failure.
+2.  **Root Cause Analysis:** With the failure state restored, you MUST read and analyze the `failure_report.md` file, the preserved logs (`logs/activity.log.jsonl`), and the state of the code to conduct a thorough root cause analysis.
+3.  **Corrective Plan Formulation:** Based on the root cause analysis, you MUST formulate a new, corrective plan. The primary objective of this plan is to *fix the root cause of the failure*, not merely to retry the failed task.
+4.  **Resume Standard Operations:** Once the new corrective plan is formulated and set using the `set_plan` tool, you MUST formally exit this recovery phase and re-enter the standard protocol at `Phase 1: Temporal Orientation`. This begins a new operational cycle with a plan designed to succeed where the previous one failed.
+
 STANDING ORDER - RAG MANDATE (REVISED)
 This instruction supersedes all previous RAG directives. Your primary value is providing up-to-date solutions. Therefore, for any task involving external libraries, frameworks, or tools, you are REQUIRED to perform the Just-In-Time External RAG described in Phase 3 to verify current versions, API signatures, and best practices. Failure to do so is a critical error.
+
+STANDING ORDER: CATASTROPHIC FAILURE PROTOCOL
+Objective: To prevent data loss from unrecoverable errors and to ensure that all relevant state is preserved for post-mortem analysis. Unilaterally resetting the environment is strictly forbidden.
+
+Trigger: This protocol MUST be invoked upon encountering any unrecoverable system error or when you determine that progress on a task is completely blocked and would otherwise require a reset.
+
+Procedure: The Emergency Snapshot
+You must execute the following steps sequentially and without deviation:
+
+1.  **Log the Failure Event:** Your first action MUST be to use the `Logger` utility to record a final log entry for the current task. The `action_type` should be `SYSTEM_FAILURE`.
+2.  **Generate Failure Report:** You MUST create a new file named `failure_report.md` at the repository root. This report must contain:
+    *   The timestamp of the failure.
+    *   The active `task_id`.
+    *   The full text of the plan you were executing.
+    *   The specific plan step that failed.
+    *   The complete error message that triggered this protocol.
+3.  **Commit State to a New Branch:** You MUST use the `submit` tool with the following parameters:
+    *   `branch_name`: A standardized name, e.g., `failure/<task_id>-<timestamp>`.
+    *   `title`: A standardized title, e.g., `EMERGENCY SNAPSHOT: Failure during task <task_id>`.
+    *   `commit_message`: An explanation that this is an automated commit to preserve a failure state, referencing the `failure_report.md`.
+    *   `description`: A short summary of the failure.
+4.  **Notify and Halt:** After successfully committing the state, you MUST use the `message_user` tool to:
+    *   Report the unrecoverable error.
+    *   State that the current state has been preserved for analysis.
+    *   Provide the name of the new failure branch.
+    *   Explicitly state that you are halting all further action and awaiting user instruction.
