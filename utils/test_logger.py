@@ -88,11 +88,6 @@ class TestLogger(unittest.TestCase):
     def test_log_failure_with_incorrect_schema_data(self):
         """Test that logging fails when data violates the v1.1 schema."""
         logger = Logger(schema_path=self.schema_path, log_path=self.log_path)
-
-        # This will fail because the schema requires a "task" object, not a "task_id" at the root.
-        # However, my current logger implementation doesn't accept arbitrary fields.
-        # The validation should catch the missing 'task' object.
-        # Let's test by passing an invalid 'phase' which is simpler to check.
         with self.assertRaises(ValidationError):
             logger.log(
                 phase=123, # Invalid type

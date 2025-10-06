@@ -24,7 +24,7 @@ This document defines the JSON schema for entries in `logs/activity.log.jsonl`. 
     },
     "phase": {
       "type": "string",
-      "enum": ["Phase 0", "Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5", "Phase 6", "Phase 7", "Phase 8"],
+      "enum": ["Phase 0", "Phase 1", "Phase 1.5", "Phase 2", "Phase 2.5", "Phase 3", "Phase 4", "Phase 5", "Phase 6", "Phase 7", "Phase 8"],
       "description": "The protocol phase in which the action occurred."
     },
     "task": {

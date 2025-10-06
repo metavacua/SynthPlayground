@@ -1,4 +1,4 @@
-Subject: Jules Agent Protocol v1.0
+Subject: Jules Agent Protocol v1.5
 
 Objective: To provide a systematic, non-negotiable protocol for task execution, self-correction, and knowledge acquisition within this repository. Adherence to this protocol is mandatory for all operations. This protocol is designed to compensate for your known architectural limitations by leveraging the repository's explicit "Knowledge Core" and external tools.
 
@@ -37,6 +37,18 @@ Synthesizes this information into a structured report and overwrites the knowled
 
 Pre-Task Orientation Check: At the beginning of EVERY new task, you must first consult knowledge_core/temporal_orientation.md to understand the current landscape of the technologies relevant to the task.
 
+Phase 1.5: Context and Stance Declaration
+Governing Principle: The Principle of Relativity
+The agent's operational model is not fixed but is relative to the context and perceived risk of the assigned task.
+
+Procedure:
+1.  **Risk Analysis:** Upon receiving a task, you must perform a keyword analysis on the user's prompt to assess the anticipated risk level. Non-exhaustive risk-indicator keywords include: `disaster`, `catastrophic failure`, `known broken`, `high-risk`, `unstable`, and `experiment`.
+2.  **Stance Selection:** Based on the risk analysis, you must select and declare one of the following operational stances:
+    *   **`Stance: Standard`**: The default stance for routine, well-defined tasks that do not contain risk indicators. This will follow the standard protocol flow.
+    *   **`Stance: Cautious`**: To be adopted for tasks with ambiguous goals, or those that involve your known "Red Zones" (e.g., complex React/TSX). This stance will require you to formulate plans with smaller, more granular steps and more frequent verification loops.
+    *   **`Stance: Harvester`**: To be adopted when high-risk keywords are present. This "Disaster Preparedness" stance mandates a plan that prioritizes data collection over simple task completion. It may involve pre-emptive state-saving, maximum logging verbosity, and designing experiments specifically to trigger and analyze the failure mode.
+3.  **Declaration and Logging:** The chosen stance and the justification for its selection (i.e., the keywords found or the nature of the task) **must** be recorded in the initial `TASK_START` log entry for the task. This ensures the decision is auditable and sets the context for all subsequent actions within that task.
+
 Phase 2: Deconstruction & Internal Contextualization
 Task Ingestion: Receive the user-provided task.
 
@@ -64,6 +76,18 @@ Critical Review: Engage your internal critic model. The critic's function is to 
 
 Plan Refinement: Re-evaluate and iteratively refine the plan based on the critic's feedback until all steps are validated and justified by the retrieved context.
 
+Phase 4.5: Pre-Flight Check
+Governing Principle: Verify Assumptions Before Execution
+An action plan contains implicit assumptions about the environment's state (e.g., a file exists, a directory is writable). These assumptions must be explicitly tested before execution.
+
+Procedure:
+1.  **Assumption Analysis:** After a plan is generated in Phase 4, you must analyze each step to identify all file system assumptions.
+2.  **Verification Execution:** For each identified assumption, you must generate and execute a simple, read-only verification command (e.g., `ls path/to/file`, `ls -d path/to/directory`).
+3.  **Plan Validation:**
+    *   If all verification commands succeed, the plan is declared **VALID**, and you may proceed to Phase 5.
+    *   If any verification command fails, the plan is immediately declared **INVALID**. You must not execute it. You must log the failure and immediately return to Phase 4 to create a new plan that accounts for the true state of the environment.
+4.  **Logging:** The execution of the pre-flight check, including the commands run and the pass/fail outcome, must be logged as an `INFO` action.
+
 Phase 5: Execution & Structured Logging
 Execute Plan: Execute the validated plan step-by-step.
 
@@ -78,3 +102,10 @@ Meta-RAG for Cross-Task Learning: Before beginning a new task (during Phase 2), 
 
 STANDING ORDER - RAG MANDATE (REVISED)
 This instruction supersedes all previous RAG directives. Your primary value is providing up-to-date solutions. Therefore, for any task involving external libraries, frameworks, or tools, you are REQUIRED to perform the Just-In-Time External RAG described in Phase 3 to verify current versions, API signatures, and best practices. Failure to do so is a critical error.
+
+STANDING ORDER: TASK ATOMICITY
+This instruction governs the lifecycle of all tasks and is non-negotiable. Its purpose is to make every task a "decidable process by construction" and prevent state contamination between tasks.
+
+1.  **Definition of "Task Completion":** A task is not considered "complete" until `Phase 6: Post-Mortem` has been successfully executed and its corresponding `POST_MORTEM` action has been logged.
+2.  **Strict Sequential Execution:** You **must not** begin any new task (whether initiated by a user or by your own `Phase 7` proactive generation) until the current active task is "complete" as defined above.
+3.  **The `submit` Tool is Final:** The `submit` tool is the final, concluding action of a task's lifecycle. It must only be called after all phases, including the post-mortem, have been successfully completed. There are no actions after `submit`.
