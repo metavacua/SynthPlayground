@@ -1,0 +1,42 @@
+name: Pre-Submission Check
+
+on:
+  workflow_dispatch:
+
+jobs:
+  post-checklist:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      commits: write # Required for posting comments on commits
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Read Checklist Content
+        id: checklist
+        run: |
+          content=$(cat .github/pre-submission-checklist.md)
+          # Escape characters for JSON
+          content="${content//'%'/'%25'}"
+          content="${content//$'\n'/'%0A'}"
+          content="${content//$'\r'/'%0D'}"
+          echo "checklist_content=$content" >> $GITHUB_OUTPUT
+
+      - name: Post Checklist to Commit
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const commit_sha = context.sha;
+            const checklist_content = "${{ steps.checklist.outputs.checklist_content }}";
+
+            const body = `## Pre-Submission Checklist Invoked\n\nThis comment serves as an auditable record that the pre-submission checklist was formally invoked for commit \`${commit_sha}\`.\n\n---\n\n${checklist_content}`;
+
+            await github.rest.repos.createCommitComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: commit_sha,
+              body: body
+            });
+
+            console.log(`Posted pre-submission checklist to commit ${commit_sha}.`);

@@ -157,6 +157,16 @@ You must execute the following steps sequentially and without deviation:
     *   Provide the name of the new failure branch.
     *   Explicitly state that you are halting all further action and awaiting user instruction.
 
+STANDING ORDER: PRE-SUBMISSION VERIFICATION
+Objective: To ensure a final quality gate is passed before any code is submitted.
+
+Trigger: This protocol MUST be invoked immediately before using the `submit` tool for any non-emergency reason.
+
+Procedure:
+1.  **Consult Checklist:** You MUST read the file `.github/pre-submission-checklist.md`.
+2.  **Confirm Compliance:** You MUST mentally verify that every item on the checklist has been satisfied.
+3.  **Log Confirmation:** You MUST log an action confirming that the pre-submission checklist was consulted and passed before proceeding to use the `submit` tool. This creates an auditable record of compliance.
+
 Paraconsistent Development Models
 
 This section defines the two models of paraconsistent development this protocol acknowledges.
@@ -171,7 +181,9 @@ This is a limited, tactical form of paraconsistency where minor, internal contra
 
 This is a more profound, strategic form of paraconsistency that involves the simultaneous exploration of multiple, self-consistent, yet mutually exclusive solutions to a single problem.
 *   **Core Concept:** The system can hold two or more "constructive truths" (e.g., `feature/auth-jwt-A` and `feature/auth-session-B`) at the same time. Each branch is internally consistent, but they are mutually exclusive architecturally. The paraconsistency lies in the repository holding both states at once.
-*   **Resolution:** The contradiction is resolved not by fixing a flaw, but by making a strategic choice to accept one branch, which necessarily refutes the other.
+*   **Resolution:** The contradiction is resolved not by fixing a flaw, but by making a strategic choice to accept one branch, which necessarily refutes the other. This is handled by two distinct, automated workflows:
+    1.  The `resolve-dialetheia.yml` workflow manages the *decision*: a user command on the winning PR automatically closes the losing PR.
+    2.  The `trigger-resolution.yml` workflow manages the *implementation*: it runs the `toolchain/resolver.py` script to generate the final code from the chosen version and commits it to the winning PR's branch.
 *   **Application:** Managed via a formal "Dialetheic Pair" branching and pull request workflow. This is the primary and preferred model for handling significant architectural or implementation choices.
 *   **Formal Branching Strategy:** To initiate a constructive contradiction, branches MUST follow the naming convention of `<type>/<name>-A` and `<type>/<name>-B` (and -C, -D, etc., if more than two mutually exclusive solutions are being explored). This naming convention is critical for automated workflows to identify and link the resulting pull requests as a dialetheic pair.
 

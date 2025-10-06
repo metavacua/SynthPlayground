@@ -1,0 +1,50 @@
+name: Trigger Paraconsistent Resolution
+
+on:
+  workflow_dispatch:
+    inputs:
+      stance:
+        description: 'The stance to resolve with (Safety or Completeness)'
+        required: true
+        type: choice
+        options:
+        - Safety
+        - Completeness
+
+jobs:
+  resolve-and-commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required to commit back to the branch
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          # We need to check out the specific ref (branch) the workflow is running on
+          ref: ${{ github.ref }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Run Resolver Tool
+        run: |
+          python toolchain/resolver.py --stance ${{ github.event.inputs.stance }}
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Commit the resolved file
+        run: |
+          git add prototype/resolved/logic.py
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Automated Resolution: Apply '${{ github.event.inputs.stance }}' stance"
+            git push
+            echo "Committed and pushed the resolved file."
+          fi

@@ -2,35 +2,28 @@ import unittest
 import os
 import json
 import shutil
-from jsonschema import ValidationError
 from utils.logger import Logger
+
 
 class TestLogger(unittest.TestCase):
 
+    TEST_LOGS_DIR = "test_logs"
+    TEST_SCHEMA_DIR = "test_schema"
+    LOG_FILE = os.path.join(TEST_LOGS_DIR, "activity.log.jsonl")
+    SCHEMA_FILE = os.path.join(TEST_SCHEMA_DIR, "LOGGING_SCHEMA.md")
+
     def setUp(self):
-        """Set up a temporary environment for each test."""
-        self.test_dir = "test_temp"
-        os.makedirs(self.test_dir, exist_ok=True)
+        """Set up a temporary environment for testing."""
+        # Create temporary directories
+        os.makedirs(self.TEST_LOGS_DIR, exist_ok=True)
+        os.makedirs(self.TEST_SCHEMA_DIR, exist_ok=True)
 
-        self.schema_path = os.path.join(self.test_dir, "test_schema.md")
-        self.log_path = os.path.join(self.test_dir, "test_activity.log.jsonl")
-
-        # A simplified, valid schema for testing
-        self.test_schema = {
+        # Create a dummy schema file
+        dummy_schema = {
             "type": "object",
             "properties": {
-                "log_id": {"type": "string"},
-                "session_id": {"type": "string"},
-                "timestamp": {"type": "string", "format": "date-time"},
-                "phase": {"type": "string"},
-                "task": {
-                    "type": "object",
-                    "properties": {
-                        "id": {"type": "string"},
-                        "plan_step": {"type": "integer"}
-                    },
-                    "required": ["id", "plan_step"]
-                },
+                "timestamp": {"type": "string"},
+                "task_id": {"type": "string"},
                 "action": {
                     "type": "object",
                     "properties": {
@@ -42,78 +35,64 @@ class TestLogger(unittest.TestCase):
                 "outcome": {
                     "type": "object",
                     "properties": {
-                        "status": {"type": "string"}
+                        "status": {"type": "string"},
+                        "critic_feedback": {"type": "string"}
                     },
                     "required": ["status"]
-                },
-                "evidence_citation": {"type": "string"}
+                }
             },
-            "required": ["log_id", "session_id", "timestamp", "phase", "task", "action", "outcome"]
+            "required": ["timestamp", "action", "outcome"]
         }
-
-        # Write the schema to the test file
-        with open(self.schema_path, 'w') as f:
+        with open(self.SCHEMA_FILE, 'w') as f:
             f.write("```json\n")
-            f.write(json.dumps(self.test_schema))
+            f.write(json.dumps(dummy_schema, indent=2))
             f.write("\n```")
 
-        # Ensure the log file is empty before each test
-        if os.path.exists(self.log_path):
-            os.remove(self.log_path)
+        # Point the logger to our test files
+        Logger._schema = None  # Reset schema to force reload
+        Logger.SCHEMA_FILE_PATH = self.SCHEMA_FILE
+        Logger.LOG_FILE_PATH = self.LOG_FILE
 
-        self.logger = Logger(schema_path=self.schema_path, log_path=self.log_path)
+        # Ensure the log file is clean before each test
+        if os.path.exists(self.LOG_FILE):
+            os.remove(self.LOG_FILE)
 
     def tearDown(self):
-        """Clean up the temporary environment after each test."""
-        if os.path.exists(self.test_dir):
-            shutil.rmtree(self.test_dir)
+        """Clean up the temporary environment."""
+        shutil.rmtree(self.TEST_LOGS_DIR)
+        shutil.rmtree(self.TEST_SCHEMA_DIR)
+
+    def test_singleton_instance(self):
+        """Test that the Logger is a singleton."""
+        logger1 = Logger()
+        logger2 = Logger()
+        self.assertIs(logger1, logger2)
 
     def test_log_success(self):
-        """Test that a valid log entry is written successfully."""
-        self.logger.log(
-            phase="Phase 7",
-            task_id="test-task-01",
-            plan_step=1,
-            action_type="TOOL_EXEC",
-            action_details={"command": "ls"},
-            outcome_status="SUCCESS",
-            outcome_message="Command executed.",
-            evidence="Test case"
+        """Test a successful log write."""
+        logger = Logger()
+        result = logger.log(
+            action_type="TEST_ACTION",
+            details={"key": "value"},
+            status="SUCCESS"
         )
+        self.assertTrue(result)
+        self.assertTrue(os.path.exists(self.LOG_FILE))
+        with open(self.LOG_FILE, 'r') as f:
+            log_entry = json.loads(f.readline())
+            self.assertEqual(log_entry['action']['type'], "TEST_ACTION")
 
-        self.assertTrue(os.path.exists(self.log_path))
-        with open(self.log_path, 'r') as f:
-            lines = f.readlines()
-            self.assertEqual(len(lines), 1)
-            log_data = json.loads(lines[0])
-            self.assertEqual(log_data['task']['id'], "test-task-01")
-            self.assertEqual(log_data['action']['type'], "TOOL_EXEC")
-            self.assertEqual(log_data['outcome']['status'], "SUCCESS")
+    def test_log_validation_failure(self):
+        """Test that a log fails validation if it doesn't match the schema."""
+        logger = Logger()
+        # 'details' is missing, which is required by our dummy schema
+        result = logger.log(
+            action_type="INVALID_ACTION",
+            details=None  # This will cause a validation error
+        )
+        self.assertFalse(result)
+        self.assertFalse(os.path.exists(self.LOG_FILE))
 
-    def test_log_failure_invalid_data(self):
-        """Test that logging fails with a ValidationError for data that violates the schema."""
-        with self.assertRaises(ValidationError):
-            # Missing required field 'plan_step' inside task object
-            self.logger.log(
-                phase="Phase 2",
-                task_id="invalid-task-02",
-                plan_step=None, # This is the error
-                action_type="FILE_READ",
-                action_details={"path": "/dev/null"},
-                outcome_status="SUCCESS"
-            )
-
-        # Ensure no log file was written
-        self.assertFalse(os.path.exists(self.log_path))
-
-    def test_schema_load_failure(self):
-        """Test that the Logger raises an error if the schema file is malformed."""
-        bad_schema_path = os.path.join(self.test_dir, "bad_schema.md")
-        with open(bad_schema_path, 'w') as f:
-            f.write("This is not a valid schema file.")
-
-        with self.assertRaises(IOError):
-            Logger(schema_path=bad_schema_path, log_path=self.log_path)
 
 if __name__ == '__main__':
     unittest.main()

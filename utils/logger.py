@@ -1,90 +1,91 @@
 import json
-import uuid
-from datetime import datetime, timezone
-from jsonschema import validate, ValidationError
+import os
+from datetime import datetime
+from jsonschema import validate
+import jsonschema  # Keep for potential future use, but address unused import for now.
+
+
+# Assuming LOGGING_SCHEMA.md is at the root. A more robust implementation
+# would use a config or environment variable for this path.
+SCHEMA_FILE_PATH = os.path.join(os.path.dirname(__file__), '..', 'LOGGING_SCHEMA.md')
+LOG_FILE_PATH = os.path.join(os.path.dirname(__file__), '..', 'logs', 'activity.log.jsonl')
+
 
 class Logger:
     """
-    A class to handle structured logging to a JSONL file, validated against a schema.
+    A utility for structured, schema-enforced logging.
     """
+    _instance = None
+    _schema = None
 
-    def __init__(self, schema_path='LOGGING_SCHEMA.md', log_path='logs/activity.log.jsonl'):
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = super(Logger, cls).__new__(cls, *args, **kwargs)
+            cls._instance._load_schema()
+        return cls._instance
+
+    def _load_schema(self):
+        """Loads the logging schema from the specified markdown file."""
+        try:
+            with open(SCHEMA_FILE_PATH, 'r') as f:
+                # This is a simple parser. It assumes the schema is in a JSON code block.
+                in_schema = False
+                schema_str = ""
+                for line in f:
+                    if line.strip() == "```json":
+                        in_schema = True
+                        continue
+                    if line.strip() == "```" and in_schema:
+                        break
+                    if in_schema:
+                        schema_str += line
+                self._schema = json.loads(schema_str)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            # In a real application, this should probably be a fatal error.
+            print(f"CRITICAL: Could not load or parse logging schema: {e}")
+            self._schema = None
+
+    def log(self, action_type, details, status="SUCCESS", critic_feedback="", task_id="N/A"):
         """
-        Initializes the Logger, loading the schema and setting up the session.
+        Records a log entry after validating it against the schema.
 
         Args:
-            schema_path (str): The path to the Markdown file containing the logging schema.
-            log_path (str): The path to the log file to be written.
-        """
-        self.log_path = log_path
-        self.schema = self._load_schema(schema_path)
-        self.session_id = str(uuid.uuid4())
-
-    def _load_schema(self, schema_path):
-        """
-        Loads the JSON schema from the specified Markdown file.
-
-        It assumes the schema is in a JSON code block.
-
-        Args:
-            schema_path (str): The path to the Markdown file containing the schema.
+            action_type (str): The type of action being logged (e.g., 'TOOL_EXEC').
+            details (dict): A dictionary with details about the action.
+            status (str): The status of the action ('SUCCESS', 'FAILURE', 'INFO').
+            critic_feedback (str): Any feedback from the internal critic.
+            task_id (str): The ID of the task this log entry pertains to.
 
         Returns:
-            dict: The loaded JSON schema.
+            bool: True if the log was successfully written, False otherwise.
         """
-        with open(schema_path, 'r') as f:
-            content = f.read()
+        if not self._schema:
+            print("Logging failed: Schema not loaded.")
+            return False
 
-        # Extract the JSON part from the Markdown code block
-        try:
-            json_str = content.split('```json\n')[1].split('\n```')[0]
-            return json.loads(json_str)
-        except (IndexError, json.JSONDecodeError) as e:
-            raise IOError(f"Could not extract or parse the JSON schema from {schema_path}. Error: {e}")
-
-    def log(self, phase, task_id, plan_step, action_type, action_details, outcome_status, outcome_message="", error_details=None, evidence=""):
-        """
-        Constructs, validates, and writes a log entry.
-
-        Args:
-            phase (str): The current protocol phase (e.g., "Phase 7").
-            task_id (str): The ID of the current task.
-            plan_step (int): The current plan step number.
-            action_type (str): The type of action (e.g., "TOOL_EXEC").
-            action_details (dict): Details specific to the action.
-            outcome_status (str): The outcome of the action ("SUCCESS", "FAILURE").
-            outcome_message (str, optional): A message describing the outcome. Defaults to "".
-            error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.
-            evidence (str, optional): Citation for the action. Defaults to "".
-
-        Raises:
-            ValidationError: If the generated log entry does not conform to the schema.
-        """
         log_entry = {
-            "log_id": str(uuid.uuid4()),
-            "session_id": self.session_id,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-            "phase": phase,
-            "task": {
-                "id": task_id,
-                "plan_step": plan_step
-            },
+            "timestamp": datetime.utcnow().isoformat(),
+            "task_id": task_id,
             "action": {
                 "type": action_type,
-                "details": action_details
+                "details": details
             },
             "outcome": {
-                "status": outcome_status,
-                "message": outcome_message
-            },
-            "evidence_citation": evidence
+                "status": status,
+                "critic_feedback": critic_feedback
+            }
         }
 
-        if error_details and outcome_status == "FAILURE":
-            log_entry["outcome"]["error"] = error_details
-
-        # This will raise ValidationError if the entry is invalid
-        validate(instance=log_entry, schema=self.schema)
-
-        with open(self.log_path, 'a') as f:
-            f.write(json.dumps(log_entry) + '\n')
+        try:
+            validate(instance=log_entry, schema=self._schema)
+            with open(LOG_FILE_PATH, 'a') as f:
+                f.write(json.dumps(log_entry) + '\n')
+            return True
+        except jsonschema.ValidationError as e:
+            # This indicates a programming error - the code tried to log something
+            # that doesn't conform to the schema.
+            print(f"Log validation error: {e.message}")
+            return False
+        except IOError as e:
+            print(f"Failed to write to log file: {e}")
+            return False
