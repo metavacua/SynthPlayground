@@ -1,0 +1,5 @@
+set_plan
+plan_step_complete
+plan_step_complete
+run:fdc_cli.py close
+submit

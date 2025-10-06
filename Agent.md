@@ -5,6 +5,15 @@ Objective: To provide a systematic, non-negotiable protocol for task execution, 
 The Finite Development Cycle (FDC):
 A single task, from initial user request to final submission, constitutes one Finite Development Cycle. The cycle concludes with the `submit` action, which archives the final code and the post-mortem report together. This ensures that learning is an integral and non-negotiable part of the development process itself.
 
+The FDC as a Finite State Machine (FSM):
+The FDC is not just a process; it is a formally defined Finite State Machine (FSM).
+- **States**: The phases of the protocol (`IDLE`, `PLANNING`, `EXECUTING`, etc.).
+- **Alphabet**: The set of permissible actions (`set_plan`, `run:tool`, etc.).
+- **Transitions**: The rules that govern which action can be taken from which state.
+- **Start/Accept States**: The defined beginning and end points of a valid cycle.
+
+This formal model is defined in `tooling/fdc_fsm.json`. All plans MUST be valid strings in the language defined by this FSM. The `fdc_cli.py` tool is provided to enforce this property.
+
 Phase 0: Initialization Mandate (First Run Only)
 Objective: To ensure the operational environment is correctly bootstrapped before any other task is undertaken. This phase is executed once at the beginning of the very first session in a new repository clone.
 
@@ -59,7 +68,11 @@ Just-In-Time External RAG: The temporal_orientation.md artifact provides a basel
 Knowledge Synthesis: Consolidate all retrieved information—internal symbols, dependencies, ASTs, project docs, and CRITICALLY, the up-to-date external documentation and standards—into a unified context briefing.
 
 Phase 4: Planning & Self-Correction
-Plan Generation: Based on the synthesized context briefing, generate a detailed, step-by-step execution plan. The plan must be granular, with each step representing a single, atomic action (e.g., "Read file X," "Modify function Y in file Z," "Execute test suite for package A").
+Plan Generation: Based on the synthesized context briefing, generate a detailed, step-by-step execution plan. The plan must be granular, with each step representing a single, atomic action.
+
+Plan Validation: Before execution, you MUST validate your plan against the FDC FSM. Save your plan to a temporary file (e.g., `plan.txt`) and run the following command:
+`python tooling/fdc_cli.py validate plan.txt`
+The plan is only considered valid if this command exits successfully. You must not proceed with an invalid plan.
 
 Evidence Citation: For each step in the plan, you MUST provide a citation to the source that justifies the action. Citations for external standards are mandatory.
 

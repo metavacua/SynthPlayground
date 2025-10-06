@@ -1,0 +1,34 @@
+{
+  "states": [
+    "IDLE",
+    "PLANNING",
+    "EXECUTING",
+    "POST_MORTEM",
+    "DONE"
+  ],
+  "alphabet": [
+    "set_plan",
+    "plan_step_complete",
+    "run:fdc_cli.py close",
+    "submit"
+  ],
+  "transitions": {
+    "IDLE": {
+      "set_plan": "PLANNING"
+    },
+    "PLANNING": {
+      "plan_step_complete": "EXECUTING"
+    },
+    "EXECUTING": {
+      "plan_step_complete": "EXECUTING",
+      "run:fdc_cli.py close": "POST_MORTEM"
+    },
+    "POST_MORTEM": {
+      "submit": "DONE"
+    }
+  },
+  "start_state": "IDLE",
+  "accept_states": [
+    "DONE"
+  ]
+}
