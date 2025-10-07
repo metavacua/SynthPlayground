@@ -1,0 +1,4 @@
+jsonschema
+pyyaml
+black
+flake8

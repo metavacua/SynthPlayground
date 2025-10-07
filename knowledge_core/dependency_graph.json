@@ -1,4 +1,29 @@
 {
-  "nodes": [],
-  "edges": []
+  "nodes": [
+    {
+      "id": ".",
+      "path": "./requirements.txt",
+      "type": "python-project"
+    },
+    {
+      "id": "jsonschema",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "pyyaml",
+      "path": null,
+      "type": "python-external"
+    }
+  ],
+  "edges": [
+    {
+      "source": ".",
+      "target": "jsonschema"
+    },
+    {
+      "source": ".",
+      "target": "pyyaml"
+    }
+  ]
 }

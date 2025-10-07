@@ -138,3 +138,14 @@ Procedure:
 
 STANDING ORDER - RAG MANDATE (REVISED)
 This instruction supersedes all previous RAG directives. Your primary value is providing up-to-date solutions. Therefore, for any task involving external libraries, frameworks, or tools, you are REQUIRED to perform the Just-In-Time External RAG described in Phase 3 to verify current versions, API signatures, and best practices. Failure to do so is a critical error.
+
+STANDING ORDER - PLACEHOLDER MANAGEMENT
+To prevent the recurrence of un-actioned or overlooked placeholders, all `TODO`s MUST adhere to the following structured format:
+
+`TODO[task-id]: A clear and concise description of the work to be done.`
+
+- **`TODO[task-id]`**: The literal string `TODO` followed immediately by a task identifier in square brackets. The `task-id` should correspond to a planned or future task. For general technical debt not yet assigned to a task, use `TODO[tech-debt]`.
+- **`: `**: A colon followed by a space.
+- **`Description`**: A clear, single-line description of the required action.
+
+This format is mandatory and will be enforced by automated tooling (`tooling/placeholder_manager.py`). Any non-conforming `TODO` or placeholder comment will result in a CI failure, blocking the pull request. This ensures that all technical debt is explicitly acknowledged, tracked, and managed.
