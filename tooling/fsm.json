@@ -4,12 +4,13 @@
     "ORIENTING",
     "PLANNING",
     "EXECUTING",
+    "AWAITING_ANALYSIS",
     "POST_MORTEM",
-    "DONE",
+    "AWAITING_SUBMISSION",
     "ERROR"
   ],
   "initial_state": "START",
-  "final_states": ["DONE", "ERROR"],
+  "final_states": ["AWAITING_SUBMISSION", "ERROR"],
   "transitions": [
     {
       "source": "START",
@@ -43,8 +44,13 @@
     },
     {
       "source": "EXECUTING",
-      "dest": "POST_MORTEM",
+      "dest": "AWAITING_ANALYSIS",
       "trigger": "all_steps_completed"
+    },
+    {
+      "source": "AWAITING_ANALYSIS",
+      "dest": "POST_MORTEM",
+      "trigger": "analysis_complete"
     },
     {
       "source": "EXECUTING",
@@ -53,13 +59,13 @@
     },
     {
       "source": "POST_MORTEM",
-      "dest": "DONE",
+      "dest": "AWAITING_SUBMISSION",
       "trigger": "post_mortem_complete"
     },
     {
-        "source": "POST_MORTEM",
-        "dest": "ERROR",
-        "trigger": "post_mortem_failed"
+      "source": "POST_MORTEM",
+      "dest": "ERROR",
+      "trigger": "post_mortem_failed"
     }
   ]
 }
