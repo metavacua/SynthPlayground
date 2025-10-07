@@ -32,3 +32,13 @@ The repository is organized to support the agent's protocol:
 - **`postmortem.md`**: A template for the agent's post-task self-analysis reports.
 
 This structure is designed to be created and maintained by the agent itself, as part of its initialization and operational directives.
+
+## The FDC Toolchain (`tooling/fdc_cli.py`)
+
+A key component of this repository is the Finite Development Cycle (FDC) toolchain. Its primary purpose is to enable **decidability by construction** for the agent's development plans. Before execution, any plan can be formally analyzed by the `fdc_cli.py` tool to determine its properties:
+
+- **Validation:** Ensures the plan is syntactically and semantically correct according to the protocol's state machine.
+- **Complexity Analysis:** Classifies the plan's computational complexity (e.g., Constant, Polynomial). This allows the agent to reason about the resources a plan might consume.
+- **Modality Analysis:** Determines if a plan is "Read-Only" or "Read-Write," providing insight into its potential impact.
+
+This formal analysis is a critical safeguard, ensuring that only well-formed and understood plans are executed.

@@ -1,3 +1,11 @@
+"""
+A command-line tool to manage the Finite Development Cycle (FDC).
+
+This tool provides subcommands to enforce the agent's protocol, ensuring that
+development plans are valid, their properties are understood, and tasks are
+formally closed. It is a key part of ensuring "decidability by construction"
+for the agent's development cycles.
+"""
 import argparse
 import datetime
 import json
@@ -13,6 +21,7 @@ POSTMORTEMS_DIR = os.path.join(ROOT_DIR, 'postmortems')
 LOG_FILE_PATH = os.path.join(ROOT_DIR, 'logs', 'activity.log.jsonl')
 FSM_DEF_PATH = os.path.join(ROOT_DIR, 'tooling', 'fdc_fsm.json')
 
+# A mapping from agent tool commands to their logical action type for FSM validation.
 ACTION_TYPE_MAP = {
     "set_plan": "plan_op",
     "plan_step_complete": "step_op",
@@ -49,7 +58,13 @@ def _create_log_entry(task_id, action_type, details):
     }
 
 def close_task(task_id):
-    """Automates the closing of a Finite Development Cycle."""
+    """
+    Automates the closing of a Finite Development Cycle.
+
+    This function creates a new post-mortem file from the template and logs the
+    `POST_MORTEM` and `TASK_END` events to the activity log, formally concluding
+    the development phase of a task.
+    """
     if not task_id: print("Error: --task-id is required.", file=sys.stderr); sys.exit(1)
     safe_task_id = "".join(c for c in task_id if c.isalnum() or c in ('-', '_'))
     new_path = os.path.join(POSTMORTEMS_DIR, f"{datetime.date.today()}-{safe_task_id}.md")
@@ -65,7 +80,7 @@ def close_task(task_id):
     print(f"Logged POST_MORTEM and TASK_END events for task: {task_id}")
 
 def _validate_action(line_num, line_content, state, fsm, fs, placeholders):
-    """Validates a single, non-loop action."""
+    """Validates a single, non-loop action against the FSM and a simulated filesystem."""
     # Substitute placeholders like {file1}, {file2}
     for key, val in placeholders.items(): line_content = line_content.replace(key, val)
 
@@ -74,18 +89,18 @@ def _validate_action(line_num, line_content, state, fsm, fs, placeholders):
     if command == "run_in_bash_session" and "close" in args: action_type = "close_op"
     if not action_type: print(f"Error on line {line_num+1}: Unknown command '{command}'.", file=sys.stderr); sys.exit(1)
 
-    # Syntactic check
+    # 1. Syntactic Validation: Check if the transition is allowed by the FSM.
     transitions = fsm["transitions"].get(state)
     if action_type not in (transitions or {}):
         print(f"Error on line {line_num+1}: Invalid FSM transition. Cannot perform '{action_type}' from state '{state}'.", file=sys.stderr); sys.exit(1)
 
-    # Semantic check
+    # 2. Semantic Validation: Check if the action is logically valid (e.g., can't read a non-existent file).
     if command == "create_file_with_block" and args[0] in fs:
         print(f"Error on line {line_num+1}: Semantic error. Cannot create '{args[0]}' because it already exists.", file=sys.stderr); sys.exit(1)
     if command in ["read_file", "delete_file", "replace_with_git_merge_diff"] and args[0] not in fs:
         print(f"Error on line {line_num+1}: Semantic error. Cannot access '{args[0]}' because it does not exist.", file=sys.stderr); sys.exit(1)
 
-    # Apply state changes
+    # Apply state changes to the simulated filesystem for subsequent checks.
     if command == "create_file_with_block": fs.add(args[0])
     if command == "delete_file": fs.remove(args[0])
 
@@ -94,7 +109,7 @@ def _validate_action(line_num, line_content, state, fsm, fs, placeholders):
     return next_state, fs
 
 def _validate_plan_recursive(lines, start_index, indent_level, state, fs, placeholders, fsm):
-    """Recursively validates a block of a plan."""
+    """Recursively validates a block of a plan, handling nested loops."""
     i = start_index
     while i < len(lines):
         line_num, line_content = lines[i]
@@ -132,6 +147,18 @@ def _validate_plan_recursive(lines, start_index, indent_level, state, fs, placeh
     return state, fs, i
 
 def validate_plan(plan_filepath):
+    """
+    Validates a plan file against the FDC FSM for syntactic and semantic correctness.
+
+    This function performs a dry run of the plan, checking two things:
+    1.  **Syntactic Correctness:** Ensures the sequence of actions conforms to the
+        state transitions defined in `tooling/fdc_fsm.json`.
+    2.  **Semantic Correctness:** Simulates filesystem operations to ensure logical
+        consistency (e.g., a file is not read before it is created).
+
+    Args:
+        plan_filepath (str): The path to the plan file to validate.
+    """
     try:
         with open(FSM_DEF_PATH, 'r') as f: fsm = json.load(f)
         with open(plan_filepath, 'r') as f: lines = [(i, line.rstrip('\n')) for i, line in enumerate(f) if line.strip()]
@@ -155,7 +182,18 @@ def validate_plan(plan_filepath):
         print(f"\nValidation failed. Plan ends in non-accepted state: '{final_state}'", file=sys.stderr); sys.exit(1)
 
 def analyze_plan(plan_filepath):
-    """Analyzes a plan file to determine its complexity class and modality."""
+    """
+    Analyzes a plan file to determine its complexity class and modality.
+
+    - **Complexity Class:** Determines if the plan is Constant (O(1)),
+      Polynomial (P-Class), or Exponential (EXPTIME-Class) based on the
+      presence and nesting of `for_each_file` loops.
+    - **Modality:** Determines if the plan is Analysis (Read-Only) or
+      Construction (Read-Write) based on the presence of file modification actions.
+
+    Args:
+        plan_filepath (str): The path to the plan file to analyze.
+    """
     try:
         with open(plan_filepath, 'r') as f:
             plan_lines_with_indent = f.readlines()
@@ -163,7 +201,7 @@ def analyze_plan(plan_filepath):
     except FileNotFoundError:
         print(f"Error: Plan file not found at {plan_filepath}", file=sys.stderr); sys.exit(1)
 
-    # --- Complexity Analysis ---
+    # --- Complexity Analysis: Based on nesting of for_each_file loops ---
     loop_indents = []
     for line in plan_lines_with_indent:
         if line.strip().startswith("for_each_file"):
@@ -173,11 +211,11 @@ def analyze_plan(plan_filepath):
     if not loop_indents:
         complexity = "Constant (O(1))"
     elif max(loop_indents) > min(loop_indents):
-        complexity = "Exponential (EXPTIME-Class)"
+        complexity = "Exponential (EXPTIME-Class)" # Nested loops have different indents
     else:
-        complexity = "Polynomial (P-Class)"
+        complexity = "Polynomial (P-Class)" # All loops have the same indent
 
-    # --- Modality Analysis ---
+    # --- Modality Analysis: Based on presence of write/delete operations ---
     has_write_op = False
     write_ops = {"write_op", "delete_op", "move_op"}
     for line in plan_lines:
@@ -194,6 +232,7 @@ def analyze_plan(plan_filepath):
     print(f"  - Modality:   {modality}")
 
 def main():
+    """Main entry point for the FDC command-line interface."""
     parser = argparse.ArgumentParser(description="A tool to manage the Finite Development Cycle (FDC).")
     subparsers = parser.add_subparsers(dest="command", help="Available subcommands", required=True)
 
