@@ -1,0 +1,65 @@
+{
+  "states": [
+    "START",
+    "ORIENTING",
+    "PLANNING",
+    "EXECUTING",
+    "POST_MORTEM",
+    "DONE",
+    "ERROR"
+  ],
+  "initial_state": "START",
+  "final_states": ["DONE", "ERROR"],
+  "transitions": [
+    {
+      "source": "START",
+      "dest": "ORIENTING",
+      "trigger": "begin_task"
+    },
+    {
+      "source": "ORIENTING",
+      "dest": "PLANNING",
+      "trigger": "orientation_succeeded"
+    },
+    {
+      "source": "ORIENTING",
+      "dest": "ERROR",
+      "trigger": "orientation_failed"
+    },
+    {
+      "source": "PLANNING",
+      "dest": "EXECUTING",
+      "trigger": "plan_is_set"
+    },
+    {
+      "source": "PLANNING",
+      "dest": "ERROR",
+      "trigger": "planning_failed"
+    },
+    {
+      "source": "EXECUTING",
+      "dest": "EXECUTING",
+      "trigger": "step_succeeded"
+    },
+    {
+      "source": "EXECUTING",
+      "dest": "POST_MORTEM",
+      "trigger": "all_steps_completed"
+    },
+    {
+      "source": "EXECUTING",
+      "dest": "ERROR",
+      "trigger": "execution_failed"
+    },
+    {
+      "source": "POST_MORTEM",
+      "dest": "DONE",
+      "trigger": "post_mortem_complete"
+    },
+    {
+        "source": "POST_MORTEM",
+        "dest": "ERROR",
+        "trigger": "post_mortem_failed"
+    }
+  ]
+}
