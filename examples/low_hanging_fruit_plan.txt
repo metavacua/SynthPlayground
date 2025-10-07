@@ -1,0 +1,8 @@
+# META
+# value: Bug-Fix
+# END META
+set_plan
+plan_step_complete
+overwrite_file_with_block config.yml
+run_in_bash_session python tooling/fdc_cli.py close --task-id "hvac-bug-fix"
+submit
