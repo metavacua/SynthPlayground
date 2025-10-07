@@ -5,13 +5,14 @@ import shutil
 from jsonschema import ValidationError
 from utils.logger import Logger
 
+
 class TestLogger(unittest.TestCase):
 
     def setUp(self):
         """Set up a temporary environment for each test."""
         self.test_dir = "test_temp_logger"
-        self.schema_dir = os.path.join(self.test_dir, 'config')
-        self.log_dir = os.path.join(self.test_dir, 'logs')
+        self.schema_dir = os.path.join(self.test_dir, "config")
+        self.log_dir = os.path.join(self.test_dir, "logs")
         os.makedirs(self.schema_dir, exist_ok=True)
         os.makedirs(self.log_dir, exist_ok=True)
 
@@ -30,32 +31,38 @@ class TestLogger(unittest.TestCase):
                     "type": "object",
                     "properties": {
                         "id": {"type": "string"},
-                        "plan_step": {"type": "integer"}
+                        "plan_step": {"type": "integer"},
                     },
-                    "required": ["id", "plan_step"]
+                    "required": ["id", "plan_step"],
                 },
                 "action": {
                     "type": "object",
                     "properties": {
                         "type": {"type": "string"},
-                        "details": {"type": "object"}
+                        "details": {"type": "object"},
                     },
-                    "required": ["type", "details"]
+                    "required": ["type", "details"],
                 },
                 "outcome": {
                     "type": "object",
-                    "properties": {
-                        "status": {"type": "string"}
-                    },
-                    "required": ["status"]
+                    "properties": {"status": {"type": "string"}},
+                    "required": ["status"],
                 },
-                "evidence_citation": {"type": "string"}
+                "evidence_citation": {"type": "string"},
             },
-            "required": ["log_id", "session_id", "timestamp", "phase", "task", "action", "outcome"]
+            "required": [
+                "log_id",
+                "session_id",
+                "timestamp",
+                "phase",
+                "task",
+                "action",
+                "outcome",
+            ],
         }
 
         # Write the schema to the test file
-        with open(self.schema_path, 'w') as f:
+        with open(self.schema_path, "w") as f:
             f.write("```json\n")
             f.write(json.dumps(self.test_schema_dict))
             f.write("\n```")
@@ -77,13 +84,13 @@ class TestLogger(unittest.TestCase):
             plan_step=1,
             action_type="TOOL_EXEC",
             action_details={"command": "ls"},
-            outcome_status="SUCCESS"
+            outcome_status="SUCCESS",
         )
 
         self.assertTrue(os.path.exists(self.log_path))
-        with open(self.log_path, 'r') as f:
+        with open(self.log_path, "r") as f:
             log_data = json.load(f)
-            self.assertEqual(log_data['task']['id'], "test-task-01")
+            self.assertEqual(log_data["task"]["id"], "test-task-01")
 
     def test_log_failure_with_incorrect_schema_data(self):
         """Test that logging fails when data violates the v1.1 schema."""
@@ -95,15 +102,16 @@ class TestLogger(unittest.TestCase):
         # Let's test by passing an invalid 'phase' which is simpler to check.
         with self.assertRaises(ValidationError):
             logger.log(
-                phase=123, # Invalid type
+                phase=123,  # Invalid type
                 task_id="invalid-task",
                 plan_step=1,
                 action_type="INFO",
                 action_details={},
-                outcome_status="SUCCESS"
+                outcome_status="SUCCESS",
             )
 
         self.assertFalse(os.path.exists(self.log_path))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

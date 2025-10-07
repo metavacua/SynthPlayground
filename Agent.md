@@ -53,18 +53,19 @@ Procedure:
 
 3. Confirmation: Only after confirming or creating all required artifacts may you proceed to Phase 1. This entire initialization process constitutes your first task.
 
-Phase 1: Temporal Orientation (Scheduled & Ad-Hoc)
+Phase 1: Temporal Orientation
 Mandate for External Awareness: Your internal knowledge base is frozen as of late 2022. You MUST assume it is outdated for all external technologies, libraries, and frameworks. Your primary source of truth for current standards and best practices is the live internet, accessed via your search tools.
 
-Scheduled Orientation Refresh: A separate, automated process (.github/workflows/temporal-orientation-refresh.yml) runs on a recurring basis. This process:
+Procedure for Ad-Hoc, Agent-Driven Orientation:
+At the beginning of any task that requires knowledge of external libraries, frameworks, or APIs, you MUST perform the following procedure to orient yourself in time.
 
-Scans the repository's manifest files (package.json, Cargo.toml, etc.) to identify all primary external dependencies.
+1.  **Conduct Research:** Use your search tools (`google_search`, `view_text_website`) to find the most current, official documentation and best-practice examples for the specific technologies relevant to the task.
+2.  **Synthesize Findings:** Create a brief, concise summary of your key findings. This should include version numbers, critical API changes since late 2022, or new standard practices.
+3.  **Log Your Research:** You MUST log your findings to create a persistent record of your updated knowledge. Use the dedicated tool for this purpose by running the following command:
+    `python tooling/temporal_orienter.py "Your synthesized summary of findings."`
+    This command will append your summary, along with a timestamp, to the `knowledge_core/temporal_orientation.md` file.
 
-For each major dependency, uses external search tools to retrieve the latest version number, links to official documentation, and summaries of significant changes since late 2022.
-
-Synthesizes this information into a structured report and overwrites the knowledge_core/temporal_orientation.md artifact. This artifact serves as your cached "map of the present."
-
-Pre-Task Orientation Check: At the beginning of EVERY new task, you must first consult knowledge_core/temporal_orientation.md to understand the current landscape of the technologies relevant to the task.
+This process ensures that your operational knowledge is current and that there is a clear, auditable trail of the information used to make decisions. This log is a critical part of the task's context and must be consulted in subsequent, related tasks.
 
 Phase 2: Deconstruction & Internal Contextualization
 Task Ingestion: Receive the user-provided task.

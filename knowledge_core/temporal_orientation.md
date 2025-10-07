@@ -1,9 +1,5 @@
-# Temporal Orientation
+# Temporal Orientation Log
 
-This document is a cache of the current state of external technologies relevant to this repository. It is automatically generated and updated by the `temporal-orientation-refresh.yml` GitHub workflow.
-
-**Last Updated:** 2025-10-05 14:39:44 UTC
+This document is a manual log of the agent's pre-task research. It is used to overcome the agent's knowledge cutoff by explicitly recording the findings of external RAG queries. Each entry is timestamped and appended by the agent at the start of a new task using the `tooling/temporal_orienter.py` script.
 
 ---
-
-*This file is machine-generated. Do not edit manually.*
