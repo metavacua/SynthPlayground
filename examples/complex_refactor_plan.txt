@@ -1,0 +1,9 @@
+# META
+# value: Toolchain-Enhancement
+# END META
+set_plan
+plan_step_complete
+for_each_file tooling/*.py
+  replace_with_git_merge_diff {file1}
+run_in_bash_session python tooling/fdc_cli.py close --task-id "refactor-toolchain"
+submit
