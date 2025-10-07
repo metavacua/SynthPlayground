@@ -2,6 +2,7 @@ import json
 import sys
 import time
 import os
+import subprocess
 
 # Add tooling directory to path to import other tools
 sys.path.insert(0, './tooling')
@@ -58,11 +59,11 @@ class MasterControlGraph:
 
     def do_planning(self, agent_state: AgentState) -> str:
         """
-        Waits for the agent to provide a plan via a file.
+        Waits for the agent to provide a plan, validates it, and transitions.
 
-        This node will poll the filesystem for a `plan.txt` file. Once the
-        file is detected, it reads the plan, updates the agent's state,
-        deletes the file, and transitions to the next state.
+        This node polls for `plan.txt`, validates it using `fdc_cli.py`,
+        and on success, loads the plan into the state and transitions.
+        On failure, it enters an error state.
         """
         print("[MasterControl] State: PLANNING")
         plan_file = "plan.txt"
@@ -70,17 +71,30 @@ class MasterControlGraph:
         # Wait for the agent to create the plan file
         print(f"  - Waiting for agent to create '{plan_file}'...")
         while not os.path.exists(plan_file):
-            time.sleep(1) # Poll every second
+            time.sleep(1)  # Poll every second
 
-        print(f"  - Detected '{plan_file}'. Reading plan...")
+        print(f"  - Detected '{plan_file}'. Reading and validating plan...")
+
+        # Validate the plan using the fdc_cli.py tool
+        validation_cmd = ["python3", "tooling/fdc_cli.py", "validate", plan_file]
+        result = subprocess.run(validation_cmd, capture_output=True, text=True)
+
+        if result.returncode != 0:
+            error_message = f"Plan validation failed:\n{result.stderr}"
+            agent_state.error = error_message
+            print(f"[MasterControl] {error_message}")
+            # Note: We don't delete the plan file on failure so it can be inspected.
+            return self.get_trigger("PLANNING", "ERROR")
+
+        print("  - Plan validation successful.")
         with open(plan_file, 'r') as f:
             plan = f.read()
 
         agent_state.plan = plan
-        agent_state.messages.append({"role": "system", "content": f"Plan has been set from {plan_file}."})
+        agent_state.messages.append({"role": "system", "content": f"Validated plan has been set from {plan_file}."})
         print("[MasterControl] Planning Complete.")
 
-        # Clean up the plan file
+        # Clean up the plan file after successful validation
         os.remove(plan_file)
         print(f"  - Cleaned up '{plan_file}'.")
 
@@ -129,10 +143,27 @@ class MasterControlGraph:
             return self.get_trigger("EXECUTING", "POST_MORTEM")
 
     def do_post_mortem(self, agent_state: AgentState) -> str:
-        """Simulates the post-mortem phase."""
+        """
+        Automates the post-mortem process by calling the fdc_cli tool.
+        """
         print("[MasterControl] State: POST_MORTEM")
-        agent_state.final_report = f"Final report for task: {agent_state.task}. All steps completed successfully."
+        task_id = agent_state.task
+        close_cmd = ["python3", "tooling/fdc_cli.py", "close", "--task-id", task_id]
+
+        print(f"  - Closing task '{task_id}' using fdc_cli...")
+        result = subprocess.run(close_cmd, capture_output=True, text=True)
+
+        if result.returncode != 0:
+            error_message = f"Post-mortem generation failed:\n{result.stderr}"
+            agent_state.error = error_message
+            print(f"[MasterControl] {error_message}")
+            return self.get_trigger("POST_MORTEM", "ERROR")
+
+        report_message = f"Post-mortem successfully generated for task: {task_id}.\n{result.stdout}"
+        agent_state.final_report = report_message
+        agent_state.messages.append({"role": "system", "content": report_message})
         print("[MasterControl] Post-Mortem Complete.")
+
         return self.get_trigger("POST_MORTEM", "DONE")
 
     def run(self, initial_agent_state: AgentState):
