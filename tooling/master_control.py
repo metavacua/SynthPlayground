@@ -1,6 +1,7 @@
 import json
 import sys
 import time
+import os
 
 # Add tooling directory to path to import other tools
 sys.path.insert(0, './tooling')
@@ -56,14 +57,33 @@ class MasterControlGraph:
             return self.get_trigger("ORIENTING", "ERROR")
 
     def do_planning(self, agent_state: AgentState) -> str:
-        """Simulates the planning phase."""
+        """
+        Waits for the agent to provide a plan via a file.
+
+        This node will poll the filesystem for a `plan.txt` file. Once the
+        file is detected, it reads the plan, updates the agent's state,
+        deletes the file, and transitions to the next state.
+        """
         print("[MasterControl] State: PLANNING")
-        # In a real scenario, this node would wait for the agent (me) to call set_plan.
-        # For this simulation, we will create a mock plan.
-        if not agent_state.plan:
-            agent_state.plan = "1. *Step 1:* Do the first thing.\n2. *Step 2:* Do the second thing."
-            agent_state.messages.append({"role": "system", "content": "Plan has been set."})
+        plan_file = "plan.txt"
+
+        # Wait for the agent to create the plan file
+        print(f"  - Waiting for agent to create '{plan_file}'...")
+        while not os.path.exists(plan_file):
+            time.sleep(1) # Poll every second
+
+        print(f"  - Detected '{plan_file}'. Reading plan...")
+        with open(plan_file, 'r') as f:
+            plan = f.read()
+
+        agent_state.plan = plan
+        agent_state.messages.append({"role": "system", "content": f"Plan has been set from {plan_file}."})
         print("[MasterControl] Planning Complete.")
+
+        # Clean up the plan file
+        os.remove(plan_file)
+        print(f"  - Cleaned up '{plan_file}'.")
+
         return self.get_trigger("PLANNING", "EXECUTING")
 
     def do_execution(self, agent_state: AgentState) -> str:
