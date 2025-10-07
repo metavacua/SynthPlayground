@@ -18,6 +18,7 @@ class AgentState:
     # Research & Execution
     current_step_index: int = 0
     research_findings: Dict[str, Any] = field(default_factory=dict)
+    draft_postmortem_path: Optional[str] = None
 
     # Final Output
     final_report: Optional[str] = None
@@ -34,6 +35,7 @@ class AgentState:
             "vm_capability_report": self.vm_capability_report,
             "current_step_index": self.current_step_index,
             "research_findings": self.research_findings,
+            "draft_postmortem_path": self.draft_postmortem_path,
             "final_report": self.final_report,
             "error": self.error,
         }

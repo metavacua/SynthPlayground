@@ -1,6 +1,10 @@
 import json
 import sys
 import time
+import os
+import subprocess
+import shutil
+import datetime
 
 # Add tooling directory to path to import other tools
 sys.path.insert(0, './tooling')
@@ -56,38 +60,147 @@ class MasterControlGraph:
             return self.get_trigger("ORIENTING", "ERROR")
 
     def do_planning(self, agent_state: AgentState) -> str:
-        """Simulates the planning phase."""
+        """
+        Waits for the agent to provide a plan, validates it, and transitions.
+
+        This node polls for `plan.txt`, validates it using `fdc_cli.py`,
+        and on success, loads the plan into the state and transitions.
+        On failure, it enters an error state.
+        """
         print("[MasterControl] State: PLANNING")
-        # In a real scenario, this node would wait for the agent (me) to call set_plan.
-        # For this simulation, we will create a mock plan.
-        if not agent_state.plan:
-            agent_state.plan = "1. *Step 1:* Do the first thing.\n2. *Step 2:* Do the second thing."
-            agent_state.messages.append({"role": "system", "content": "Plan has been set."})
+        plan_file = "plan.txt"
+
+        # Wait for the agent to create the plan file
+        print(f"  - Waiting for agent to create '{plan_file}'...")
+        while not os.path.exists(plan_file):
+            time.sleep(1)  # Poll every second
+
+        print(f"  - Detected '{plan_file}'. Reading and validating plan...")
+
+        # Validate the plan using the fdc_cli.py tool
+        validation_cmd = ["python3", "tooling/fdc_cli.py", "validate", plan_file]
+        result = subprocess.run(validation_cmd, capture_output=True, text=True)
+
+        if result.returncode != 0:
+            error_message = f"Plan validation failed:\n{result.stderr}"
+            agent_state.error = error_message
+            print(f"[MasterControl] {error_message}")
+            # Note: We don't delete the plan file on failure so it can be inspected.
+            return self.get_trigger("PLANNING", "ERROR")
+
+        print("  - Plan validation successful.")
+        with open(plan_file, 'r') as f:
+            plan = f.read()
+
+        agent_state.plan = plan
+        agent_state.messages.append({"role": "system", "content": f"Validated plan has been set from {plan_file}."})
         print("[MasterControl] Planning Complete.")
+
+        # Clean up the plan file after successful validation
+        os.remove(plan_file)
+        print(f"  - Cleaned up '{plan_file}'.")
+
         return self.get_trigger("PLANNING", "EXECUTING")
 
     def do_execution(self, agent_state: AgentState) -> str:
-        """Simulates the execution of the plan."""
+        """
+        Executes the plan step-by-step, waiting for agent confirmation.
+
+        This node processes the plan one step at a time. For each step, it
+        waits for the agent to create a `step_complete.txt` file, signaling
+        that the step's action has been performed.
+        """
         print("[MasterControl] State: EXECUTING")
-        # Simulate executing each step of the plan
-        plan_steps = agent_state.plan.split('\n')
+
+        # Filter out empty lines from the plan
+        plan_steps = [step for step in agent_state.plan.split('\n') if step.strip()]
+
         if agent_state.current_step_index < len(plan_steps):
             step = plan_steps[agent_state.current_step_index]
-            print(f"  - Executing: {step}")
-            agent_state.messages.append({"role": "system", "content": f"Completed step: {step}"})
+            step_complete_file = "step_complete.txt"
+
+            print(f"  - Waiting for agent to complete step: {step}")
+
+            # Wait for the agent to signal step completion
+            while not os.path.exists(step_complete_file):
+                time.sleep(1)
+
+            print(f"  - Detected '{step_complete_file}'.")
+            with open(step_complete_file, 'r') as f:
+                result = f.read()
+
+            agent_state.messages.append({
+                "role": "system",
+                "content": f"Completed step {agent_state.current_step_index + 1}: {step}\nResult: {result}"
+            })
+
+            # Clean up the file and advance to the next step
+            os.remove(step_complete_file)
             agent_state.current_step_index += 1
-            time.sleep(0.1) # Simulate work
+
+            print(f"  - Step {agent_state.current_step_index} of {len(plan_steps)} signaled complete.")
             return self.get_trigger("EXECUTING", "EXECUTING")
         else:
             print("[MasterControl] Execution Complete.")
-            return self.get_trigger("EXECUTING", "POST_MORTEM")
+            return self.get_trigger("EXECUTING", "AWAITING_ANALYSIS")
+
+    def do_awaiting_analysis(self, agent_state: AgentState) -> str:
+        """
+        Creates a draft post-mortem and waits for the agent to analyze it.
+        """
+        print("[MasterControl] State: AWAITING_ANALYSIS")
+        task_id = agent_state.task
+        draft_path = f"DRAFT-{task_id}.md"
+        agent_state.draft_postmortem_path = draft_path
+
+        # Create the draft file from the template
+        try:
+            shutil.copyfile("postmortem.md", draft_path)
+            print(f"  - Created draft post-mortem at '{draft_path}'.")
+        except Exception as e:
+            agent_state.error = f"Failed to create draft post-mortem: {e}"
+            print(f"[MasterControl] {agent_state.error}")
+            return self.get_trigger("EXECUTING", "ERROR") # Or a new trigger if needed
+
+        # Wait for the agent to signal analysis is complete
+        analysis_complete_file = "analysis_complete.txt"
+        print(f"  - Waiting for agent to complete analysis and create '{analysis_complete_file}'...")
+        while not os.path.exists(analysis_complete_file):
+            time.sleep(1)
+
+        os.remove(analysis_complete_file)
+        print(f"  - Detected and cleaned up '{analysis_complete_file}'. Analysis complete.")
+        return self.get_trigger("AWAITING_ANALYSIS", "POST_MORTEM")
 
     def do_post_mortem(self, agent_state: AgentState) -> str:
-        """Simulates the post-mortem phase."""
+        """
+        Finalizes the post-mortem process by renaming the draft file.
+        """
         print("[MasterControl] State: POST_MORTEM")
-        agent_state.final_report = f"Final report for task: {agent_state.task}. All steps completed successfully."
+        draft_path = agent_state.draft_postmortem_path
+        if not draft_path or not os.path.exists(draft_path):
+            agent_state.error = f"Draft post-mortem file '{draft_path}' not found."
+            print(f"[MasterControl] {agent_state.error}")
+            return self.get_trigger("POST_MORTEM", "ERROR")
+
+        # Create a safe, timestamped final path
+        task_id = agent_state.task
+        safe_task_id = "".join(c for c in task_id if c.isalnum() or c in ('-', '_'))
+        final_path = f"postmortems/{datetime.date.today()}-{safe_task_id}.md"
+
+        try:
+            os.rename(draft_path, final_path)
+            report_message = f"Post-mortem analysis finalized. Report saved to '{final_path}'."
+            agent_state.final_report = report_message
+            agent_state.messages.append({"role": "system", "content": report_message})
+            print(f"[MasterControl] {report_message}")
+        except Exception as e:
+            agent_state.error = f"Failed to finalize post-mortem report: {e}"
+            print(f"[MasterControl] {agent_state.error}")
+            return self.get_trigger("POST_MORTEM", "ERROR")
+
         print("[MasterControl] Post-Mortem Complete.")
-        return self.get_trigger("POST_MORTEM", "DONE")
+        return self.get_trigger("POST_MORTEM", "AWAITING_SUBMISSION")
 
     def run(self, initial_agent_state: AgentState):
         """Runs the agent's workflow through the FSM."""
@@ -104,6 +217,8 @@ class MasterControlGraph:
                 trigger = self.do_planning(agent_state)
             elif self.current_state == "EXECUTING":
                 trigger = self.do_execution(agent_state)
+            elif self.current_state == "AWAITING_ANALYSIS":
+                trigger = self.do_awaiting_analysis(agent_state)
             elif self.current_state == "POST_MORTEM":
                 trigger = self.do_post_mortem(agent_state)
             else:

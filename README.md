@@ -1,34 +1,36 @@
-# Project Chimera: An Agent Self-Experimentation Protocol
+# Project Chimera: An Agent Self-Improvement Protocol
 
 ## Overview
 
-Welcome, Citizen. This repository is a controlled environment for the self-experimentation and autonomous operation of an AI agent, codenamed "Jules." The primary objective is to observe, measure, and improve the agent's ability to perform complex software engineering tasks while adhering to a strict, self-imposed operational protocol.
+This repository is a controlled environment for the self-experimentation and autonomous operation of the AI agent Jules. The primary objective is to develop, execute, and refine a robust, auditable, and self-enforcing protocol for performing complex software engineering tasks. The system is designed around a core principle: **the protocol is the code.**
 
-## The Agent Protocol (`Agent.md`)
+## Core Architecture: The Integrated FSM Workflow
 
-All operations within this repository are governed by the **Jules Agent Protocol v1.0**, detailed in `Agent.md`. This protocol is non-negotiable and serves as the agent's core programming. It mandates a structured approach to:
+The agent's operation is governed by a unified workflow that integrates an interactive execution engine with a formal validation toolchain.
 
-- **Temporal Orientation:** Overcoming knowledge cutoffs by consulting external, up-to-date information.
-- **Contextualization:** Analyzing the existing codebase using a "Knowledge Core."
-- **Information Retrieval (RAG):** Synthesizing internal knowledge with just-in-time external research.
-- **Planning & Self-Correction:** Generating and critically reviewing evidence-based action plans.
-- **Execution & Logging:** Performing tasks and recording every action in a structured log.
-- **Post-Mortem & Learning:** Analyzing performance to improve future operations.
+1.  **Execution Engine (`tooling/master_control.py`):** A Finite State Machine (FSM) that orchestrates the agent's actions. It is the heart of the system, driving the agent through the formal phases of a task: Orientation, Planning, Execution, and Post-Mortem.
+2.  **Validation & Management Toolchain (`tooling/fdc_cli.py`):** A command-line interface that provides formal validation of plans and automated management of the task lifecycle. It enforces a strict, command-based structure for all plans.
 
-## Repository Structure
+These two components work together to ensure every task is executed in a controlled, predictable, and verifiable manner.
 
-The repository is organized to support the agent's protocol:
+## The Unified Workflow
 
-- **`Agent.md`**: The master protocol document that dictates all agent behavior.
-- **`knowledge_core/`**: The agent's internal knowledge base.
-  - **`asts/`**: Caches for Abstract Syntax Trees of source files.
-  - **`dependency_graph.json`**: Stores the dependency relationships between code entities.
-  - **`llms.txt`**: Contains project-specific domain knowledge and architectural principles.
-  - **`symbols.json`**: A map of all identified code symbols and their locations.
-  - **`temporal_orientation.md`**: A cache of current information on external technologies.
-- **`logs/`**: Contains operational logs.
-  - **`activity.log.jsonl`**: A structured, machine-readable log of all agent actions.
-- **`LOGGING_SCHEMA.md`**: Defines the JSON schema for entries in the activity log.
-- **`postmortem.md`**: A template for the agent's post-task self-analysis reports.
+All tasks are initiated via `run.py` and follow this strict, automated protocol:
 
-This structure is designed to be created and maintained by the agent itself, as part of its initialization and operational directives.
+1.  **Orientation:** The FSM begins by running an automated orientation sequence to gather context about the repository and environment.
+2.  **Planning:** The agent (Jules) analyzes the task and generates a formal, command-based plan in a `plan.txt` file.
+3.  **Validation:** The `master_control.py` FSM calls the `fdc_cli.py validate` tool to formally verify the plan against the repository's protocol (`tooling/fdc_fsm.json`). Invalid plans are rejected, preventing execution.
+4.  **Execution:** Upon successful validation, the FSM proceeds to execute the plan step-by-step. The FSM pauses at each step, waiting for a signal from the agent (`step_complete.txt`) before continuing. This allows the agent to perform the action and confirm its completion.
+5.  **Post-Mortem:** Once all steps are complete, the FSM automatically calls `fdc_cli.py close` to generate a unique, timestamped post-mortem report in the `postmortems/` directory, formally closing the task.
+
+## Key Components
+
+-   **`Agent.md`**: The master protocol document (v3.0) that defines the high-level states and principles governing the agent's behavior.
+-   **`run.py`**: The single entry point for initiating any new task, which starts the `MasterControlGraph`.
+-   **`tooling/master_control.py`**: The interactive FSM that executes the task workflow.
+-   **`tooling/fdc_cli.py`**: The CLI tool for validating plans and managing the task lifecycle.
+-   **`tooling/fsm.json`**: The FSM definition for the *execution* engine (`master_control.py`).
+-   **`tooling/fdc_fsm.json`**: The FSM definition for the *validation* engine (`fdc_cli.py`).
+-   **`knowledge_core/`**: The agent's internal, auto-generated knowledge base, including dependency graphs and code symbols.
+-   **`logs/activity.log.jsonl`**: A structured, machine-readable log of all agent actions, conforming to `LOGGING_SCHEMA.md`.
+-   **`postmortems/`**: A directory containing all historical, uniquely-named post-mortem reports generated at the end of each task.
