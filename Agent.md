@@ -31,7 +31,9 @@ The previous AORP levels are now conceptualized as presets for the `constraints`
 
 - **Level 4: Deep Research**
   - **Goal:** Investigate complex, "unknown unknowns".
-  - **Action:** `execute_research_protocol(constraints={"target": "external_web", "scope": "broad", "max_iterations": 10, "max_concurrent_researchers": 5, "synthesize_report": true})`
+  - **Action:** A two-step process:
+    1.  Generate a formal research plan using `plan_deep_research(topic, repository)`.
+    2.  Execute the steps outlined in the generated plan, using `execute_research_protocol` for each research action.
 
 
 ## The Finite Development Cycle (FDC)
