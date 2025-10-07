@@ -1,6 +1,8 @@
 import json
 import sys
 import time
+import os
+import subprocess
 
 # Add tooling directory to path to import other tools
 sys.path.insert(0, './tooling')
@@ -56,37 +58,112 @@ class MasterControlGraph:
             return self.get_trigger("ORIENTING", "ERROR")
 
     def do_planning(self, agent_state: AgentState) -> str:
-        """Simulates the planning phase."""
+        """
+        Waits for the agent to provide a plan, validates it, and transitions.
+
+        This node polls for `plan.txt`, validates it using `fdc_cli.py`,
+        and on success, loads the plan into the state and transitions.
+        On failure, it enters an error state.
+        """
         print("[MasterControl] State: PLANNING")
-        # In a real scenario, this node would wait for the agent (me) to call set_plan.
-        # For this simulation, we will create a mock plan.
-        if not agent_state.plan:
-            agent_state.plan = "1. *Step 1:* Do the first thing.\n2. *Step 2:* Do the second thing."
-            agent_state.messages.append({"role": "system", "content": "Plan has been set."})
+        plan_file = "plan.txt"
+
+        # Wait for the agent to create the plan file
+        print(f"  - Waiting for agent to create '{plan_file}'...")
+        while not os.path.exists(plan_file):
+            time.sleep(1)  # Poll every second
+
+        print(f"  - Detected '{plan_file}'. Reading and validating plan...")
+
+        # Validate the plan using the fdc_cli.py tool
+        validation_cmd = ["python3", "tooling/fdc_cli.py", "validate", plan_file]
+        result = subprocess.run(validation_cmd, capture_output=True, text=True)
+
+        if result.returncode != 0:
+            error_message = f"Plan validation failed:\n{result.stderr}"
+            agent_state.error = error_message
+            print(f"[MasterControl] {error_message}")
+            # Note: We don't delete the plan file on failure so it can be inspected.
+            return self.get_trigger("PLANNING", "ERROR")
+
+        print("  - Plan validation successful.")
+        with open(plan_file, 'r') as f:
+            plan = f.read()
+
+        agent_state.plan = plan
+        agent_state.messages.append({"role": "system", "content": f"Validated plan has been set from {plan_file}."})
         print("[MasterControl] Planning Complete.")
+
+        # Clean up the plan file after successful validation
+        os.remove(plan_file)
+        print(f"  - Cleaned up '{plan_file}'.")
+
         return self.get_trigger("PLANNING", "EXECUTING")
 
     def do_execution(self, agent_state: AgentState) -> str:
-        """Simulates the execution of the plan."""
+        """
+        Executes the plan step-by-step, waiting for agent confirmation.
+
+        This node processes the plan one step at a time. For each step, it
+        waits for the agent to create a `step_complete.txt` file, signaling
+        that the step's action has been performed.
+        """
         print("[MasterControl] State: EXECUTING")
-        # Simulate executing each step of the plan
-        plan_steps = agent_state.plan.split('\n')
+
+        # Filter out empty lines from the plan
+        plan_steps = [step for step in agent_state.plan.split('\n') if step.strip()]
+
         if agent_state.current_step_index < len(plan_steps):
             step = plan_steps[agent_state.current_step_index]
-            print(f"  - Executing: {step}")
-            agent_state.messages.append({"role": "system", "content": f"Completed step: {step}"})
+            step_complete_file = "step_complete.txt"
+
+            print(f"  - Waiting for agent to complete step: {step}")
+
+            # Wait for the agent to signal step completion
+            while not os.path.exists(step_complete_file):
+                time.sleep(1)
+
+            print(f"  - Detected '{step_complete_file}'.")
+            with open(step_complete_file, 'r') as f:
+                result = f.read()
+
+            agent_state.messages.append({
+                "role": "system",
+                "content": f"Completed step {agent_state.current_step_index + 1}: {step}\nResult: {result}"
+            })
+
+            # Clean up the file and advance to the next step
+            os.remove(step_complete_file)
             agent_state.current_step_index += 1
-            time.sleep(0.1) # Simulate work
+
+            print(f"  - Step {agent_state.current_step_index} of {len(plan_steps)} signaled complete.")
             return self.get_trigger("EXECUTING", "EXECUTING")
         else:
             print("[MasterControl] Execution Complete.")
             return self.get_trigger("EXECUTING", "POST_MORTEM")
 
     def do_post_mortem(self, agent_state: AgentState) -> str:
-        """Simulates the post-mortem phase."""
+        """
+        Automates the post-mortem process by calling the fdc_cli tool.
+        """
         print("[MasterControl] State: POST_MORTEM")
-        agent_state.final_report = f"Final report for task: {agent_state.task}. All steps completed successfully."
+        task_id = agent_state.task
+        close_cmd = ["python3", "tooling/fdc_cli.py", "close", "--task-id", task_id]
+
+        print(f"  - Closing task '{task_id}' using fdc_cli...")
+        result = subprocess.run(close_cmd, capture_output=True, text=True)
+
+        if result.returncode != 0:
+            error_message = f"Post-mortem generation failed:\n{result.stderr}"
+            agent_state.error = error_message
+            print(f"[MasterControl] {error_message}")
+            return self.get_trigger("POST_MORTEM", "ERROR")
+
+        report_message = f"Post-mortem successfully generated for task: {task_id}.\n{result.stdout}"
+        agent_state.final_report = report_message
+        agent_state.messages.append({"role": "system", "content": report_message})
         print("[MasterControl] Post-Mortem Complete.")
+
         return self.get_trigger("POST_MORTEM", "DONE")
 
     def run(self, initial_agent_state: AgentState):
