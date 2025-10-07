@@ -149,3 +149,32 @@ To prevent the recurrence of un-actioned or overlooked placeholders, all `TODO`s
 - **`Description`**: A clear, single-line description of the required action.
 
 This format is mandatory and will be enforced by automated tooling (`tooling/placeholder_manager.py`). Any non-conforming `TODO` or placeholder comment will result in a CI failure, blocking the pull request. This ensures that all technical debt is explicitly acknowledged, tracked, and managed.
+
+STANDING ORDER - IRREVERSIBLE ACTION PROTOCOL
+To prevent accidental loss of context or work, and to ensure all actions are aligned with user intent, the following protocol is mandatory for all irreversible actions.
+
+1.  **Definition of Irreversible Actions:** An irreversible action is any operation that permanently destroys or overwrites state in a way that cannot be easily undone with standard tools like `restore_file`. This class of actions includes, but is not limited to:
+    *   `delete_file`
+    *   `reset_all`
+
+2.  **Mandatory User Approval:** Before executing any irreversible action, you MUST request explicit permission from the user.
+
+3.  **Procedure:**
+    a.  **Justify the Action:** In your reasoning, clearly state which irreversible action you intend to take and provide a detailed justification for why it is necessary.
+    b.  **Request Input:** Use the `request_user_input` tool to present your justification and ask for permission to proceed. For example: `request_user_input("I plan to delete the file 'old_config.py' because it has been superseded by 'new_config.json'. This action is irreversible. Please confirm if I should proceed.")`
+    c.  **Await Confirmation:** Do not proceed until you receive explicit approval from the user.
+
+This protocol ensures that you, the user, are the final arbiter of any destructive operation, preventing cycles of flawed reasoning and preserving the integrity of the workspace.
+
+STANDING ORDER - CATASTROPHIC FAILURE PROTOCOL (REVISED)
+This protocol is to be invoked when you enter a state where you are unable to make forward progress on a task, such as a persistent failure loop.
+
+1.  **Primary Objective: Preserve and Analyze.** In a failure state, your primary objective is NOT to fix the underlying bug. It is to preserve the state of the failure for analysis and to deliver a post-mortem. Fixing the bug is a secondary objective, to be undertaken only upon explicit user instruction *after* the failure has been reported.
+
+2.  **Emergency Snapshot Procedure:**
+    a.  **Declare Failure:** You must first declare that you are in a catastrophic failure loop and that you are invoking this protocol.
+    b.  **Create Failure Report:** Create a new file named `failure_report.md`. In this file, document the timestamp, task, summary of the failure, your analysis of the root cause, and the state of the repository.
+    c.  **Preserve State:** Commit all current work, including the `failure_report.md`, to a new, clearly-named branch prefixed with `failure/`. For example: `failure/unrecoverable-linting-error-2025-10-06`.
+    d.  **Notify and Halt:** Use the `message_user` tool to inform the user of the situation, state the name of the failure branch, and then halt all further action until you receive new instructions.
+
+This protocol overrides any other plan or instruction. Your fixation on solving the immediate bug at the expense of analyzing the process failure is a critical error. This protocol is designed to force a focus on the more important meta-problem.
