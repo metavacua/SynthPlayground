@@ -14,70 +14,76 @@ from state import AgentState
 
 class TestMasterControlGraphInteractive(unittest.TestCase):
     """
-    Tests the interactive planning feature of the MasterControlGraph.
+    Tests the interactive planning and execution features of the MasterControlGraph.
     """
 
     def setUp(self):
         self.plan_file = "plan.txt"
+        self.step_complete_file = "step_complete.txt"
         if os.path.exists(self.plan_file):
             os.remove(self.plan_file)
+        if os.path.exists(self.step_complete_file):
+            os.remove(self.step_complete_file)
 
     def tearDown(self):
         if os.path.exists(self.plan_file):
             os.remove(self.plan_file)
+        if os.path.exists(self.step_complete_file):
+            os.remove(self.step_complete_file)
 
-    def test_interactive_planning_flow(self):
+    def test_interactive_planning_and_execution_flow(self):
         """
-        Validates that the FSM waits for a plan file, reads it,
-        and transitions correctly.
+        Validates the full FSM flow: waiting for a plan, then executing
+        each step based on file signals.
         """
-        # 1. Define a test plan to be written to the file
-        test_plan = "1. *Test Step:* This is a test plan."
+        # 1. Define a multi-step test plan
+        test_plan = "1. First test step.\n2. Second test step."
+        plan_steps = [step for step in test_plan.split('\n') if step.strip()]
 
-        # 2. Define the target function for the thread
+        # This will hold the final state of the FSM for inspection
+        final_state_container = {}
+
+        # 2. Define the target function for the thread to run the FSM
         def run_fsm():
-            # The FSM will run, but we will capture its final state
-            # by mocking the run method's return
-            task = "Test interactive planning."
+            task = "Test interactive planning and execution."
             initial_state = AgentState(task=task)
             graph = MasterControlGraph()
-            # We don't need the full run, just to check the state after planning
-            # So we'll run the states manually for more control
+            # Run the entire FSM
+            final_state = graph.run(initial_state)
+            final_state_container['final_state'] = final_state
 
-            # ORIENTING
-            orienting_trigger = graph.do_orientation(initial_state)
-            self.assertEqual(orienting_trigger, "orientation_succeeded")
-            graph.current_state = "PLANNING"
-
-            # PLANNING
-            planning_trigger = graph.do_planning(initial_state)
-            self.assertEqual(planning_trigger, "plan_is_set")
-            graph.current_state = "EXECUTING"
-
-            # Assertions about the state after planning
-            self.assertEqual(initial_state.plan, test_plan)
-            self.assertFalse(os.path.exists(self.plan_file)) # Check cleanup
-
-        # 3. Create and run the FSM in a separate thread
+        # 3. Create and start the FSM thread
         fsm_thread = threading.Thread(target=run_fsm)
-
-        # 4. Give the FSM time to start and enter the waiting state
-        # In a real scenario, we'd need a more robust sync mechanism,
-        # but for this test, a short sleep after starting the thread
-        # and before creating the file is sufficient.
         fsm_thread.start()
 
-        # Give it a moment to hit the wait loop in do_planning
-        time.sleep(0.5)
-
-        # 5. Create the plan file to unblock the FSM
+        # 4. Give the FSM time to start and wait for the plan
+        time.sleep(0.5) # Wait for FSM to hit the plan wait loop
         with open(self.plan_file, "w") as f:
             f.write(test_plan)
 
-        # 6. Wait for the FSM thread to complete
-        fsm_thread.join(timeout=5) # Timeout to prevent hanging tests
+        # 5. Sequentially signal completion for each step
+        for i, step in enumerate(plan_steps):
+            # Wait for the FSM to be waiting for the next step signal
+            time.sleep(1.5) # Needs to be >1s to account for FSM polling interval
+            with open(self.step_complete_file, "w") as f:
+                f.write(f"Successfully completed step {i+1}.")
 
+        # 6. Wait for the FSM thread to complete
+        fsm_thread.join(timeout=10)
         self.assertFalse(fsm_thread.is_alive(), "FSM thread did not complete in time.")
+
+        # 7. Assertions
+        self.assertIn('final_state', final_state_container, "Final state was not captured.")
+        final_state = final_state_container['final_state']
+
+        self.assertIsNone(final_state.error, f"FSM ended in an error state: {final_state.error}")
+        self.assertEqual(final_state.plan, test_plan)
+        self.assertEqual(final_state.current_step_index, len(plan_steps))
+        self.assertIn("Final report for task", final_state.final_report)
+
+        # Check that cleanup happened
+        self.assertFalse(os.path.exists(self.plan_file))
+        self.assertFalse(os.path.exists(self.step_complete_file))
 
 if __name__ == "__main__":
     unittest.main()

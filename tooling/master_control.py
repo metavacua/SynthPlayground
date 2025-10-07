@@ -87,16 +87,42 @@ class MasterControlGraph:
         return self.get_trigger("PLANNING", "EXECUTING")
 
     def do_execution(self, agent_state: AgentState) -> str:
-        """Simulates the execution of the plan."""
+        """
+        Executes the plan step-by-step, waiting for agent confirmation.
+
+        This node processes the plan one step at a time. For each step, it
+        waits for the agent to create a `step_complete.txt` file, signaling
+        that the step's action has been performed.
+        """
         print("[MasterControl] State: EXECUTING")
-        # Simulate executing each step of the plan
-        plan_steps = agent_state.plan.split('\n')
+
+        # Filter out empty lines from the plan
+        plan_steps = [step for step in agent_state.plan.split('\n') if step.strip()]
+
         if agent_state.current_step_index < len(plan_steps):
             step = plan_steps[agent_state.current_step_index]
-            print(f"  - Executing: {step}")
-            agent_state.messages.append({"role": "system", "content": f"Completed step: {step}"})
+            step_complete_file = "step_complete.txt"
+
+            print(f"  - Waiting for agent to complete step: {step}")
+
+            # Wait for the agent to signal step completion
+            while not os.path.exists(step_complete_file):
+                time.sleep(1)
+
+            print(f"  - Detected '{step_complete_file}'.")
+            with open(step_complete_file, 'r') as f:
+                result = f.read()
+
+            agent_state.messages.append({
+                "role": "system",
+                "content": f"Completed step {agent_state.current_step_index + 1}: {step}\nResult: {result}"
+            })
+
+            # Clean up the file and advance to the next step
+            os.remove(step_complete_file)
             agent_state.current_step_index += 1
-            time.sleep(0.1) # Simulate work
+
+            print(f"  - Step {agent_state.current_step_index} of {len(plan_steps)} signaled complete.")
             return self.get_trigger("EXECUTING", "EXECUTING")
         else:
             print("[MasterControl] Execution Complete.")
