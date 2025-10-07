@@ -2,6 +2,14 @@
   "symbols": [
     {
       "_type": "tag",
+      "name": "main",
+      "path": "./run.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "Logger",
       "path": "./utils/logger.py",
       "language": "Python",
@@ -158,6 +166,118 @@
       "path": "./tooling/symbol_map_generator.py",
       "language": "Python",
       "line": 87,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "MasterControlGraph",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "get_trigger",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "do_orientation",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "do_planning",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 58,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "do_execution",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 69,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "do_post_mortem",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 85,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "run",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 92,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "AgentState",
+      "path": "./tooling/state.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "to_json",
+      "path": "./tooling/state.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "probe_filesystem",
+      "path": "./tooling/environmental_probe.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "probe_network",
+      "path": "./tooling/environmental_probe.py",
+      "language": "Python",
+      "line": 38,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "probe_environment_variables",
+      "path": "./tooling/environmental_probe.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/environmental_probe.py",
+      "language": "Python",
+      "line": 74,
       "kind": "function"
     },
     {
@@ -322,6 +442,14 @@
     },
     {
       "_type": "tag",
+      "name": "execute_research_protocol",
+      "path": "./tooling/research.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "TestDependencyGraphGenerator",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
@@ -374,6 +502,14 @@
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
       "line": 84,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "plan_deep_research",
+      "path": "./tooling/research_planner.py",
+      "language": "Python",
+      "line": 8,
       "kind": "function"
     }
   ]
