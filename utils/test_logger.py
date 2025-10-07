@@ -18,7 +18,7 @@ class TestLogger(unittest.TestCase):
         self.schema_path = os.path.join(self.schema_dir, "LOGGING_SCHEMA.md")
         self.log_path = os.path.join(self.log_dir, "activity.log.jsonl")
 
-        # The correct v1.1 schema for testing
+        # The correct v1.1 schema for testing, now with enum
         self.test_schema_dict = {
             "type": "object",
             "properties": {
@@ -37,7 +37,22 @@ class TestLogger(unittest.TestCase):
                 "action": {
                     "type": "object",
                     "properties": {
-                        "type": {"type": "string"},
+                        "type": {
+                            "type": "string",
+                            "enum": [
+                                "TASK_START",
+                                "FILE_READ",
+                                "FILE_WRITE",
+                                "TOOL_EXEC",
+                                "EXTERNAL_RAG_QUERY",
+                                "PLAN_UPDATE",
+                                "CRITIC_FEEDBACK",
+                                "POST_MORTEM",
+                                "TASK_END",
+                                "INFO",
+                                "SYSTEM_FAILURE"
+                            ]
+                        },
                         "details": {"type": "object"}
                     },
                     "required": ["type", "details"]
@@ -104,6 +119,39 @@ class TestLogger(unittest.TestCase):
             )
 
         self.assertFalse(os.path.exists(self.log_path))
+
+    def test_log_failure_on_invalid_action_type(self):
+        """Test that logging fails if the action type is not in the schema's enum."""
+        logger = Logger(schema_path=self.schema_path, log_path=self.log_path)
+        with self.assertRaises(ValidationError):
+            logger.log(
+                phase="Phase 5",
+                task_id="test-task-02",
+                plan_step=1,
+                action_type="INVALID_ACTION_TYPE", # Not in enum
+                action_details={"details": "some details"},
+                outcome_status="SUCCESS"
+            )
+        self.assertFalse(os.path.exists(self.log_path))
+
+    def test_log_task_end_event(self):
+        """Test that a TASK_END event can be logged successfully."""
+        logger = Logger(schema_path=self.schema_path, log_path=self.log_path)
+        logger.log(
+            phase="Phase 6",
+            task_id="test-task-final",
+            plan_step=3,
+            action_type="TASK_END",
+            action_details={"summary": "Task formally concluded."},
+            outcome_status="SUCCESS"
+        )
+
+        self.assertTrue(os.path.exists(self.log_path))
+        with open(self.log_path, 'r') as f:
+            log_data = json.load(f)
+            self.assertEqual(log_data['action']['type'], "TASK_END")
+            self.assertEqual(log_data['task']['id'], "test-task-final")
+
 
 if __name__ == '__main__':
     unittest.main()
