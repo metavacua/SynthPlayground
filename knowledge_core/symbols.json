@@ -173,7 +173,7 @@
       "name": "MasterControlGraph",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 10,
+      "line": 14,
       "kind": "class"
     },
     {
@@ -181,7 +181,7 @@
       "name": "__init__",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 16,
+      "line": 20,
       "kind": "function"
     },
     {
@@ -189,7 +189,7 @@
       "name": "get_trigger",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 21,
+      "line": 25,
       "kind": "function"
     },
     {
@@ -197,7 +197,7 @@
       "name": "do_orientation",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 28,
+      "line": 32,
       "kind": "function"
     },
     {
@@ -205,7 +205,7 @@
       "name": "do_planning",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 58,
+      "line": 62,
       "kind": "function"
     },
     {
@@ -213,7 +213,15 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 69,
+      "line": 105,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "do_awaiting_analysis",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 147,
       "kind": "function"
     },
     {
@@ -221,7 +229,7 @@
       "name": "do_post_mortem",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 85,
+      "line": 175,
       "kind": "function"
     },
     {
@@ -229,7 +237,7 @@
       "name": "run",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 92,
+      "line": 205,
       "kind": "function"
     },
     {
@@ -245,7 +253,7 @@
       "name": "to_json",
       "path": "./tooling/state.py",
       "language": "Python",
-      "line": 28,
+      "line": 29,
       "kind": "function"
     },
     {
@@ -502,6 +510,54 @@
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
       "line": 84,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "TestMasterControlGraphFullWorkflow",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 38,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "cleanup_files",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_full_atomic_workflow_with_analysis",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "run_fsm",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 73,
       "kind": "function"
     },
     {
