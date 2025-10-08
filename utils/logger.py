@@ -2,7 +2,7 @@ import json
 import uuid
 import os
 from datetime import datetime, timezone
-from jsonschema import validate, ValidationError
+from jsonschema import validate
 
 
 class Logger:

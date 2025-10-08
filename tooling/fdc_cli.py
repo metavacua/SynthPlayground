@@ -239,7 +239,7 @@ def validate_plan(plan_filepath):
     )
 
     if final_state in fsm["accept_states"]:
-        print(f"\nValidation successful! Plan is syntactically and semantically valid.")
+        print("\nValidation successful! Plan is syntactically and semantically valid.")
     else:
         print(
             f"\nValidation failed. Plan ends in non-accepted state: '{final_state}'",
@@ -284,7 +284,7 @@ def analyze_plan(plan_filepath):
 
     modality = "Construction (Read-Write)" if has_write_op else "Analysis (Read-Only)"
 
-    print(f"Plan Analysis Results:")
+    print("Plan Analysis Results:")
     print(f"  - Complexity: {complexity}")
     print(f"  - Modality:   {modality}")
 

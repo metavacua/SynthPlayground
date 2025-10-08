@@ -1,7 +1,7 @@
 import unittest
 import os
 import shutil
-from tooling.temporal_orienter import log_orientation_entry, LOG_FILE_PATH
+from tooling.temporal_orienter import log_orientation_entry
 from unittest.mock import patch
 
 

@@ -48,7 +48,7 @@ def generate_symbols_with_ctags(root_dir="."):
 
         with open(output_path, "w") as f:
             json.dump(symbols_data, f, indent=2)
-        print(f"Formatted symbols.json successfully.")
+        print("Formatted symbols.json successfully.")
         return True
 
     except (subprocess.CalledProcessError, FileNotFoundError) as e:

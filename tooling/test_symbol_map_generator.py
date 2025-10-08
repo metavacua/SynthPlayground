@@ -5,10 +5,8 @@ import shutil
 import subprocess
 from unittest.mock import patch
 from tooling.symbol_map_generator import (
-    has_ctags,
     generate_symbols_with_ctags,
     generate_symbols_with_ast,
-    main as symbol_main,
 )
 
 

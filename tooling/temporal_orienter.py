@@ -19,7 +19,7 @@ def log_orientation_entry(summary_text):
     )
 
     # Format the entry in a structured markdown format for clarity and consistency.
-    log_entry = f"## Entry: {timestamp}\n\n{summary_text}\n\n---\n\n"
+    log_entry = f"\n## Entry: {timestamp}\n\n{summary_text}\n\n---\n"
 
     # Append the new entry to the log file.
     try:
@@ -37,7 +37,8 @@ def main():
     Main function to parse the command-line arguments and run the logger.
     """
     parser = argparse.ArgumentParser(
-        description="A tool to log timestamped research findings to the temporal orientation file."
+        description="A tool to log timestamped research findings to the temporal "
+        "orientation file."
     )
     parser.add_argument(
         "summary",
