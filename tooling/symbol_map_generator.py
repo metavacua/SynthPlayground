@@ -1,104 +1,135 @@
 import os
-import json
-import glob
 import subprocess
+import json
 import ast
+import shutil
 
-def has_ctags():
-    """Check if Universal Ctags is installed and available in the PATH."""
+OUTPUT_DIR = "knowledge_core"
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, "symbols.json")
+SCAN_DIRECTORIES = ["tooling", "utils", "projects", "packages"]
+
+def is_ctags_available():
+    """Check if Universal Ctags is installed and available."""
+    if not shutil.which("ctags"):
+        return False
     try:
-        subprocess.run(['ctags', '--version'], check=True, capture_output=True)
-        return True
-    except (subprocess.CalledProcessError, FileNotFoundError):
+        result = subprocess.run(['ctags', '--version'], capture_output=True, text=True, check=True)
+        return 'Universal Ctags' in result.stdout
+    except (FileNotFoundError, subprocess.CalledProcessError):
         return False
 
-def generate_symbols_with_ctags(root_dir='.'):
-    """Generates a symbol map using Universal Ctags."""
+def generate_symbols_with_ctags():
+    """Generate a symbol map using Universal Ctags."""
     print("Attempting to generate symbols with Universal Ctags...")
-    output_path = os.path.join('knowledge_core', 'symbols.json')
+    temp_output_file = OUTPUT_FILE + ".tmp"
 
-    # The command as specified in the documentation
+    # Filter for directories that actually exist to prevent ctags errors
+    existing_dirs_to_scan = [d for d in SCAN_DIRECTORIES if os.path.isdir(d)]
+    if not existing_dirs_to_scan:
+        print("No scannable directories found.")
+        return False
+
     command = [
         'ctags',
         '-R',
-        '--languages=python,javascript', # Limiting for now for simplicity
+        '--languages=python',
         '--output-format=json',
         '--fields=+nKzSl',
-        '-f', output_path
-    ]
+        '-f', temp_output_file,
+    ] + existing_dirs_to_scan
 
     try:
         subprocess.run(command, check=True, capture_output=True, text=True)
-        print(f"ctags ran successfully. Symbol map generated at {output_path}")
-        # ctags output is not a single JSON object, but one per line. We need to wrap it.
-        with open(output_path, 'r') as f:
+
+        with open(temp_output_file, 'r') as f:
             lines = f.readlines()
 
-        # Check if the file is empty
-        if not lines:
-            # Create a valid empty JSON object if no symbols were found
-            symbols_data = {"symbols": []}
-        else:
-            # Parse each line as JSON and wrap in a list
-            json_lines = [json.loads(line) for line in lines]
-            symbols_data = {"symbols": json_lines}
+        symbols = [json.loads(line) for line in lines if line.strip()]
 
-        with open(output_path, 'w') as f:
-            json.dump(symbols_data, f, indent=2)
-        print(f"Formatted symbols.json successfully.")
+        with open(OUTPUT_FILE, 'w') as f:
+            json.dump(symbols, f, indent=4)
+
+        print(f"ctags ran successfully. Symbol map generated at '{OUTPUT_FILE}'")
         return True
+    except subprocess.CalledProcessError as e:
+        print(f"Error running ctags: {e.stderr}")
+        return False
+    except (IOError, json.JSONDecodeError) as e:
+        print(f"Error processing ctags output: {e}")
+        return False
+    finally:
+        if os.path.exists(temp_output_file):
+            os.remove(temp_output_file)
 
-    except (subprocess.CalledProcessError, FileNotFoundError) as e:
-        print(f"Warning: ctags command failed or ctags is not installed. Error: {e}")
+class SymbolVisitor(ast.NodeVisitor):
+    """AST visitor to extract function and class symbols."""
+    def __init__(self, filepath):
+        self.symbols = []
+        self.filepath = filepath
+
+    def _add_symbol(self, node, kind):
+        self.symbols.append({
+            "name": node.name,
+            "kind": kind,
+            "path": self.filepath,
+            "line": node.lineno,
+            "_type": "tag"
+        })
+        self.generic_visit(node)
+
+    def visit_FunctionDef(self, node):
+        self._add_symbol(node, "function")
+
+    def visit_AsyncFunctionDef(self, node):
+        self._add_symbol(node, "function")
+
+    def visit_ClassDef(self, node):
+        self._add_symbol(node, "class")
+
+def generate_symbols_with_ast():
+    """Generate a basic symbol map using Python's AST module as a fallback."""
+    print("Falling back to AST-based symbol generation for Python files...")
+    all_symbols = []
+    for directory in SCAN_DIRECTORIES:
+        if not os.path.isdir(directory):
+            continue
+        for root, _, files in os.walk(directory):
+            for file in files:
+                if file.endswith('.py'):
+                    filepath = os.path.join(root, file)
+                    try:
+                        with open(filepath, 'r', encoding='utf-8') as f:
+                            source_code = f.read()
+                        tree = ast.parse(source_code)
+                        visitor = SymbolVisitor(filepath)
+                        visitor.visit(tree)
+                        all_symbols.extend(visitor.symbols)
+                    except (SyntaxError, UnicodeDecodeError, ValueError) as e:
+                        print(f"Could not parse {filepath}: {e}")
+
+    try:
+        with open(OUTPUT_FILE, 'w') as f:
+            json.dump(all_symbols, f, indent=4)
+        print(f"AST-based symbol map successfully generated at '{OUTPUT_FILE}'")
+        return True
+    except Exception as e:
+        print(f"Error writing AST-based symbol map: {e}")
         return False
 
-def generate_symbols_with_ast(root_dir='.'):
-    """Fallback to generate a symbol map for Python files using the AST module."""
-    print("Falling back to AST-based symbol generation for Python files...")
-    symbols = []
+def generate_symbol_map():
+    """
+    Generates a symbol map for the codebase.
+    It tries Universal Ctags first and falls back to a Python AST parser.
+    """
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    for filepath in glob.glob(os.path.join(root_dir, '**', '*.py'), recursive=True):
-        path_components = filepath.split(os.sep)
-        if 'node_modules' in path_components or 'test' in path_components or 'tests' in path_components:
-            continue
-
-        try:
-            with open(filepath, 'r') as f:
-                content = f.read()
-
-            tree = ast.parse(content)
-
-            for node in ast.walk(tree):
-                if isinstance(node, ast.FunctionDef) or isinstance(node, ast.ClassDef):
-                    symbol_entry = {
-                        "_type": "tag",
-                        "name": node.name,
-                        "path": filepath,
-                        "language": "Python",
-                        "line": node.lineno,
-                        "kind": "function" if isinstance(node, ast.FunctionDef) else "class"
-                    }
-                    symbols.append(symbol_entry)
-        except Exception as e:
-            print(f"Warning: Could not parse {filepath}. Error: {e}")
-
-    return {"symbols": symbols}
-
-def main():
-    """Main function to generate and save the symbol map."""
-    print("Generating symbol map...")
-
-    if has_ctags():
-        generate_symbols_with_ctags()
+    if is_ctags_available():
+        if not generate_symbols_with_ctags():
+            print("ctags failed. Falling back to AST parser.")
+            generate_symbols_with_ast()
     else:
-        symbols_data = generate_symbols_with_ast()
-        output_path = os.path.join('knowledge_core', 'symbols.json')
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        print("Warning: Universal Ctags not found.")
+        generate_symbols_with_ast()
 
-        with open(output_path, 'w') as f:
-            json.dump(symbols_data, f, indent=2)
-
-        print(f"AST-based symbol map successfully generated at {output_path}")
-
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    generate_symbol_map()

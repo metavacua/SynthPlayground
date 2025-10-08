@@ -1,90 +1,91 @@
 import unittest
 import os
 import json
-import shutil
-import subprocess
-from unittest.mock import patch
-from tooling.symbol_map_generator import has_ctags, generate_symbols_with_ctags, generate_symbols_with_ast, main as symbol_main
+import ast
+from unittest.mock import patch, MagicMock
+
+# Import the functions to be tested
+from tooling.symbol_map_generator import generate_symbol_map, is_ctags_available, generate_symbols_with_ctags, generate_symbols_with_ast
 
 class TestSymbolMapGenerator(unittest.TestCase):
 
     def setUp(self):
-        """Set up a temporary directory structure for testing."""
-        self.test_dir = "temp_symbol_test_repo"
-        self.knowledge_core_dir = os.path.join(self.test_dir, 'knowledge_core')
-        os.makedirs(self.knowledge_core_dir, exist_ok=True)
+        """Set up the test environment."""
+        self.output_dir = "knowledge_core"
+        self.output_file = os.path.join(self.output_dir, "symbols.json")
 
-        self.py_file_path = os.path.join(self.test_dir, 'module.py')
-        with open(self.py_file_path, 'w') as f:
-            f.write("class MyClass:\n    def my_method(self):\n        pass\n\ndef my_function():\n    pass")
+        # Create a dummy file to be scanned by the AST parser
+        self.test_py_file_path = "test_temp_file.py"
+        with open(self.test_py_file_path, "w") as f:
+            f.write("def sample_function():\n    pass\n\nclass SampleClass:\n    pass\n")
 
-        # Mock the output path to be within the test directory
-        self.symbols_output_path = os.path.join(self.knowledge_core_dir, 'symbols.json')
+        # Clean up any old output files
+        if os.path.exists(self.output_file):
+            os.remove(self.output_file)
+        if not os.path.exists(self.output_dir):
+            os.makedirs(self.output_dir)
 
     def tearDown(self):
-        """Clean up the temporary directory."""
-        if os.path.exists(self.test_dir):
-            shutil.rmtree(self.test_dir)
+        """Clean up after tests."""
+        if os.path.exists(self.output_file):
+            os.remove(self.output_file)
+        if os.path.exists(self.test_py_file_path):
+            os.remove(self.test_py_file_path)
 
-    @patch('tooling.symbol_map_generator.subprocess.run')
-    def test_generate_with_ctags_success(self, mock_subprocess_run):
-        """Test successful symbol generation using a mocked ctags call."""
+    @patch('shutil.which', return_value='/usr/bin/ctags')
+    @patch('subprocess.run')
+    def test_ctags_availability(self, mock_run, mock_which):
+        """Tests that the script correctly identifies when ctags is available."""
+        mock_run.return_value = MagicMock(stdout="Universal Ctags", returncode=0)
+        self.assertTrue(is_ctags_available())
 
-        # Mock the ctags command to "create" a file with dummy JSON-lines output
-        def side_effect(*args, **kwargs):
-            ctags_output_path = args[0][args[0].index('-f') + 1]
-            with open(ctags_output_path, 'w') as f:
-                f.write('{"_type": "tag", "name": "MyClass", "path": "module.py", "kind": "class"}\n')
-                f.write('{"_type": "tag", "name": "my_method", "path": "module.py", "kind": "method"}\n')
-            return subprocess.CompletedProcess(args=args, returncode=0)
+    @patch('shutil.which', return_value=None)
+    def test_ctags_unavailability(self, mock_which):
+        """Tests that the script correctly identifies when ctags is not available."""
+        self.assertFalse(is_ctags_available())
 
-        mock_subprocess_run.side_effect = side_effect
+    @patch('tooling.symbol_map_generator.is_ctags_available', return_value=True)
+    @patch('tooling.symbol_map_generator.generate_symbols_with_ctags', return_value=True)
+    def test_main_function_uses_ctags_when_available(self, mock_gen_ctags, mock_is_available):
+        """Ensures the main function calls the ctags generator when available."""
+        generate_symbol_map()
+        mock_gen_ctags.assert_called_once()
 
-        original_cwd = os.getcwd()
-        os.chdir(self.test_dir)
-        try:
-            result = generate_symbols_with_ctags('.')
-            self.assertTrue(result)
-            self.assertTrue(os.path.exists('knowledge_core/symbols.json'))
+    @patch('tooling.symbol_map_generator.is_ctags_available', return_value=False)
+    @patch('tooling.symbol_map_generator.generate_symbols_with_ast', return_value=True)
+    def test_main_function_falls_back_to_ast_when_ctags_unavailable(self, mock_gen_ast, mock_is_available):
+        """Ensures the main function falls back to the AST generator."""
+        generate_symbol_map()
+        mock_gen_ast.assert_called_once()
 
-            with open('knowledge_core/symbols.json', 'r') as f:
+    @patch('tooling.symbol_map_generator.SCAN_DIRECTORIES', new=["."])
+    def test_ast_symbol_generation(self):
+        """Tests the AST-based symbol generation with a known temporary file."""
+        # Override the scan directories to only include the current dir where the temp file is
+        with patch('tooling.symbol_map_generator.SCAN_DIRECTORIES', [os.path.dirname(self.test_py_file_path)]):
+             # To avoid scanning other files, we will create a temp dir
+            temp_dir = "temp_test_dir_for_ast"
+            os.makedirs(temp_dir, exist_ok=True)
+            temp_file_path = os.path.join(temp_dir, "test_file.py")
+            with open(temp_file_path, "w") as f:
+                f.write("def my_func(): pass\nclass MyClass: pass")
+
+            with patch('tooling.symbol_map_generator.SCAN_DIRECTORIES', [temp_dir]):
+                generate_symbols_with_ast()
+
+            self.assertTrue(os.path.exists(self.output_file))
+
+            with open(self.output_file, 'r') as f:
                 data = json.load(f)
 
-            self.assertIn('symbols', data)
-            self.assertEqual(len(data['symbols']), 2)
-            self.assertEqual(data['symbols'][0]['name'], 'MyClass')
-        finally:
-            os.chdir(original_cwd)
+            symbol_names = {item['name'] for item in data}
+            self.assertIn("my_func", symbol_names)
+            self.assertIn("MyClass", symbol_names)
+            self.assertEqual(len(data), 2)
 
-    def test_generate_with_ast_fallback(self):
-        """Test the AST-based fallback for Python files."""
-        symbols_data = generate_symbols_with_ast(self.test_dir)
-        self.assertIn('symbols', symbols_data)
-        self.assertEqual(len(symbols_data['symbols']), 3) # class, method, function
+            # Cleanup
+            os.remove(temp_file_path)
+            os.rmdir(temp_dir)
 
-        names = {s['name'] for s in symbols_data['symbols']}
-        self.assertEqual(names, {'MyClass', 'my_method', 'my_function'})
-
-        my_class_symbol = next(s for s in symbols_data['symbols'] if s['name'] == 'MyClass')
-        self.assertEqual(my_class_symbol['kind'], 'class')
-        self.assertEqual(my_class_symbol['path'], self.py_file_path)
-
-    @patch('tooling.symbol_map_generator.has_ctags', return_value=False)
-    def test_main_with_ast_fallback(self, mock_has_ctags):
-        """Test that main function uses the AST fallback when ctags is not present."""
-        original_cwd = os.getcwd()
-        os.chdir(self.test_dir)
-        try:
-            from tooling import symbol_map_generator
-            symbol_map_generator.main()
-
-            self.assertTrue(os.path.exists('knowledge_core/symbols.json'))
-            with open('knowledge_core/symbols.json', 'r') as f:
-                data = json.load(f)
-            self.assertEqual(len(data['symbols']), 3)
-        finally:
-            os.chdir(original_cwd)
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

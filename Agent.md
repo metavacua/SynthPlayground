@@ -1,48 +1,40 @@
-# Subject: Jules Agent Protocol v3.0
+# Subject: Jules Agent Protocol v2.0 (Functional)
 
 ## 1. Objective
-To define a robust, self-enforcing, and auditable protocol for all agent operations. This protocol is not a set of guidelines to be followed, but a state machine implemented in code that programmatically orchestrates the agent's workflow. This design addresses the core failure of previous protocols, where a separation between the documented process and the executed workflow allowed for critical errors.
 
-## 2. Core Architecture: The Self-Enforcing State Machine
+This protocol governs all my operations. It is designed to leverage the automated **Knowledge Core** system within this repository, ensuring my actions are always based on the most current and accurate context available.
 
-The agent's workflow is now governed by a **Master Control Graph**, a Finite State Machine (FSM) implemented in `tooling/master_control.py`.
+## 2. Guiding Principle: The Knowledge Core is the Source of Truth
 
-- **FSM Definition:** The states and valid transitions of the protocol are formally defined in `tooling/fsm.json`. This is the single source of truth for the agent's workflow.
-- **State Management:** The agent's entire context at any point in time is stored in a structured `AgentState` object, defined in `tooling/state.py`. This object is passed between states in the graph.
-- **Execution Entry Point:** All tasks MUST be initiated through the `run.py` script at the repository root. This script initializes the `AgentState` and starts the `MasterControlGraph`, ensuring that every task is subject to the same enforced protocol.
+My primary source of truth for the repository's structure, dependencies, and symbols is the set of artifacts within the `/knowledge_core` directory. These artifacts are automatically kept up-to-date by the `update-knowledge-core.yml` GitHub Actions workflow. I must rely on these artifacts for my analysis and planning.
 
-## 3. The Finite Development Cycle (FDC) as an FSM
+## 3. Operational Phases
 
-The FDC is implemented as a sequence of states in the Master Control Graph. The graph programmatically transitions the agent through these states, calling the necessary tools at each stage.
+### Phase 1: Contextualization & Deconstruction
 
-### State: `ORIENTING`
-- **Trigger:** `begin_task`
-- **Action:** The `do_orientation` node is executed. This node programmatically performs the mandatory L1, L2, and L3 orientation steps using the `execute_research_protocol` tool.
-- **Outcome:** On success, transitions to `PLANNING`. On failure, transitions to `ERROR`.
+1.  **Task Ingestion**: Receive the user-provided task.
+2.  **Consult the Knowledge Core**: Before any other action, I will consult the artifacts in `/knowledge_core`:
+    *   `dependency_graph.json`: To understand the relationships between project components and identify potential ripple effects of any change.
+    *   `symbols.json`: To locate the exact definitions of functions, classes, and other code entities mentioned in the task.
+3.  **Formulate Task Context**: Based on the task and the information from the Knowledge Core, I will define a "Task Context Set" - the collection of all files and modules relevant to the task.
 
-### State: `PLANNING`
-- **Trigger:** `orientation_succeeded`
-- **Action:** The `do_planning` node is executed. This node is responsible for ensuring a valid plan is set in the `AgentState`. For deep research (L4), this involves calling the `plan_deep_research` tool.
-- **Outcome:** On success, transitions to `EXECUTING`.
+### Phase 2: Planning
 
-### State: `EXECUTING`
-- **Trigger:** `plan_is_set`
-- **Action:** The `do_execution` node is executed. This node iteratively executes the steps in the agent's plan.
-- **Outcome:** Loops on `step_succeeded`. On completion of all steps, transitions to `POST_MORTEM`. On failure, transitions to `ERROR`.
+1.  **Generate Plan**: Based on the Task Context Set, I will generate a detailed, step-by-step execution plan.
+2.  **Evidence-Based Actions**: Each step in my plan will be justified by the information retrieved from the Knowledge Core. For example: "Step 3: Modify function `X` in file `Y`. Justification: `symbols.json` confirms the definition of `X` is at this location."
+3.  **External Knowledge (If Necessary)**: If a task requires knowledge about external libraries or standards, I will use my search tools to find the most current information. I will not rely on my internal, potentially outdated knowledge base for external dependencies.
 
-### State: `POST_MORTEM`
-- **Trigger:** `all_steps_completed`
-- **Action:** The `do_post_mortem` node is executed. This node ensures a final report is generated and the task is formally closed.
-- **Outcome:** On success, transitions to `DONE`.
+### Phase 3: Execution & Verification
 
-### State: `DONE` / `ERROR`
-- **Trigger:** `post_mortem_complete` or any failure trigger.
-- **Action:** The workflow terminates. The final `AgentState` object provides a complete, auditable log of the entire process.
+1.  **Execute Plan**: I will execute the validated plan step-by-step.
+2.  **Verify Changes**: After every modification, I will use a read-only tool (like `read_file` or `ls`) to confirm the change was successful.
+3.  **Run Tests**: Where applicable, I will run relevant tests to ensure my changes have not introduced regressions.
 
-## 4. Core Tooling
-The Master Control Graph orchestrates a suite of tools to perform its functions:
-- **`tooling/research.py`:** Contains the `execute_research_protocol` function, the unified tool for all information gathering.
-- **`tooling/research_planner.py`:** Contains the `plan_deep_research` function for L4 tasks.
-- **`tooling/environmental_probe.py`:** Used by the `ORIENTING` state to assess the VM's capabilities.
+### Phase 4: Structured Logging & Post-Mortem
 
-This FSM-based architecture ensures that the protocol is not just a document, but the running code that governs my every action, making my development process transparent, robust, and reliable.
+1.  **Log All Actions**: Every action I take will be recorded in `logs/activity.log.jsonl`, strictly adhering to the schema defined in `LOGGING_SCHEMA.md`. This creates a machine-readable audit trail of my work.
+2.  **Post-Mortem Analysis**: Upon task completion, I will analyze the process and outcome, identifying any lessons learned, which will be recorded to improve future performance.
+
+## 4. Local Integration
+
+I am aware of the `LOCAL_INTEGRATION_GUIDE.md`. This guide is for your use and explains how to configure a `pre-push` Git hook to trigger the Knowledge Core update workflow. This is the key to our seamless collaboration, as it ensures I have the necessary context about your changes as soon as you are ready for me to work on them.

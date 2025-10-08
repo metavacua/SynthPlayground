@@ -1,16 +1,33 @@
+# This workflow is the functional heart of the Symbiont Architecture.
+# It automatically generates and updates the Knowledge Core artifacts
+# to ensure the agent's awareness of the codebase is always current.
+
 name: Update Knowledge Core
 
 on:
-  push:
-    branches: [ "main" ]
+  # Allow manual triggering from the GitHub UI or via the API/CLI
   workflow_dispatch:
 
-permissions:
-  contents: write
+  # Trigger on pushes to the main branch
+  push:
+    branches:
+      - main
+    paths:
+      # Only run if source code files are changed, not documentation
+      - 'tooling/**.py'
+      - 'utils/**.py'
+      - 'projects/**'
+      - 'packages/**'
+      - 'requirements.txt'
 
 jobs:
-  update-knowledge:
+  update-artifacts:
     runs-on: ubuntu-latest
+
+    # Grant the workflow permission to write back to the repository
+    permissions:
+      contents: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -21,22 +38,24 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
 
-      - name: Install Dependencies
-        run: pip install jsonschema
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-      - name: Run Dependency Graph Generator
-        run: python tooling/dependency_graph_generator.py
+      - name: Generate Knowledge Core Artifacts
+        run: |
+          python3 tooling/dependency_graph_generator.py
+          python3 tooling/symbol_map_generator.py
 
-      - name: Run Symbol Map Generator
-        run: python tooling/symbol_map_generator.py
-
-      - name: Commit and push changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore(knowledge): Automatically update Knowledge Core artifacts"
-          commit_options: '--no-verify'
-          file_pattern: 'knowledge_core/dependency_graph.json knowledge_core/symbols.json'
-          repository: .
-          commit_user_name: Jules Agent
-          commit_user_email: jules.agent@example.com
-          commit_author: Jules Agent <jules.agent@example.com>
+      - name: Commit updated artifacts
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          # Use 'git status --porcelain' to see if there are changes
+          if [[ -n $(git status --porcelain knowledge_core/) ]]; then
+            git add knowledge_core/dependency_graph.json knowledge_core/symbols.json
+            git commit -m "chore(knowledge-core): Auto-update Knowledge Core artifacts"
+            git push
+            echo "Knowledge Core artifacts were updated and pushed."
+          else
+            echo "No changes to Knowledge Core artifacts."
+          fi
