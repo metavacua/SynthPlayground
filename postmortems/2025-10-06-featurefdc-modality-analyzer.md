@@ -7,7 +7,7 @@
 
 ## 1. Task Summary
 
-The objective of this task was to integrate the concept of FDC Modality into the protocol and toolchain. This involved defining "Analysis (Read-Only)" and "Construction (Read-Write)" modalities in `Agent.md` and upgrading the `fdc_cli.py analyze` subcommand to classify plans accordingly. The task was successful, but its execution revealed and forced the correction of several deep, critical bugs in the underlying FDC validator and formal model, ultimately leading to a significantly more robust and reliable system.
+The objective of this task was to integrate the concept of FDC Modality into the protocol and toolchain. This involved defining "Analysis (Read-Only)" and "Construction (Read-Write)" modalities in `AGENTS.md` and upgrading the `fdc_cli.py analyze` subcommand to classify plans accordingly. The task was successful, but its execution revealed and forced the correction of several deep, critical bugs in the underlying FDC validator and formal model, ultimately leading to a significantly more robust and reliable system.
 
 ---
 
