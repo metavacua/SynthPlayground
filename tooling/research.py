@@ -1,7 +1,7 @@
-import json
 import os
 import requests
 from typing import Dict, Any
+
 
 def execute_research_protocol(constraints: Dict[str, Any]) -> str:
     """
@@ -28,7 +28,7 @@ def execute_research_protocol(constraints: Dict[str, Any]) -> str:
     if target == "local_filesystem" and scope == "file":
         if path and os.path.exists(path):
             try:
-                with open(path, 'r') as f:
+                with open(path, "r") as f:
                     return f.read()
             except Exception as e:
                 return f"Error reading file {path}: {e}"
@@ -42,7 +42,9 @@ def execute_research_protocol(constraints: Dict[str, Any]) -> str:
                 return f"Directory listing for '{path}':\n" + "\n".join(files)
             except Exception as e:
                 return f"Error listing directory {path}: {e}"
-        return f"Error: Path '{path}' not specified or is not a directory for L2 research."
+        return (
+            f"Error: Path '{path}' not specified or is not a directory for L2 research."
+        )
 
     # Level 3: Targeted RAG
     elif target == "external_web" and scope == "narrow":
@@ -63,7 +65,9 @@ def execute_research_protocol(constraints: Dict[str, Any]) -> str:
 
     # New Level: Meta-Research on External Repository
     elif target == "external_repository":
-        repo_base_url = "https://raw.githubusercontent.com/metavacua/open_deep_research_jules/main/"
+        repo_base_url = (
+            "https://raw.githubusercontent.com/metavacua/open_deep_research_jules/main/"
+        )
         if path:
             file_url = f"{repo_base_url}{path}"
             try:
@@ -75,4 +79,6 @@ def execute_research_protocol(constraints: Dict[str, Any]) -> str:
         return "Error: Path not specified for external_repository research."
 
     else:
-        return "Error: The provided constraints do not map to a recognized research level."
+        return (
+            "Error: The provided constraints do not map to a recognized research level."
+        )

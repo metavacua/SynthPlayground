@@ -1,3 +1,5 @@
 jsonschema
 pyyaml
 requests
+black
+flake8
