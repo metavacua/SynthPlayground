@@ -40,7 +40,7 @@ In addition to complexity, FDCs are classified by their modality, which describe
 FDC Value Categories:
 The final dimension of an FDC is its value, which allows for strategic prioritization. This is declared via metadata in the plan file.
 - **Value Categories**:
-  - `Protocol-Improvement`: Enhances `Agent.md` or the FSM.
+  - `Protocol-Improvement`: Enhances `AGENTS.md` or the FSM.
   - `Toolchain-Enhancement`: Improves the `fdc_cli.py` or other tooling.
   - `Bug-Fix`: Corrects a demonstrable error in code or process.
   - `Feature-Implementation`: Adds a new capability to the system.
