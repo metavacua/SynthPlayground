@@ -40,6 +40,7 @@ def generate_html(latex_filepath, output_dir="."):
         f.write(html_content)
 
     print(f"Successfully generated {output_filepath}")
+    return document.title, output_filename
 
 if __name__ == '__main__':
     # Convert IdentityCalculus.tex as a test case
