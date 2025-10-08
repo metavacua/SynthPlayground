@@ -6,52 +6,37 @@ def generate_with_model(system_prompt: str, platform_model: str) -> str:
     """
     MOCK IMPLEMENTATION of a function that interacts with an LLM.
 
-    This has been updated to be "smarter". It inspects the system prompt
-    to determine which tool is likely calling it and returns an appropriately
-    structured mock JSON response.
+    This has been updated to return a detailed, structured JSON object that
+    conforms to the new data models defined in `data_models.py`.
     """
     print(f"--- MOCK LLM: Generating response for model {platform_model} ---")
 
-    # Determine the context based on keywords in the prompt. These checks are now
-    # more robust and don't break on newlines.
-    if "optimizing a research topic" in system_prompt:
-        # This is for the `optimize_research` tool
-        mock_response = {
-            "query": "comprehensive analysis of AI-driven software development workflows",
-            "optimizedPrompt": "Provide a detailed analysis of the impact of AI on modern software development lifecycles, including code generation, testing, and deployment.",
-            "explanation": "The optimized query focuses on specific, high-impact areas of the software development lifecycle to yield more relevant and technical results.",
-            "suggestedStructure": [
-                "Introduction: The Rise of AI in Software Engineering",
-                "AI-Powered Code Generation and Completion Tools",
-                "Automated Testing and Bug Detection with AI",
-                "AI in CI/CD and DevOps Pipelines",
-                "Future Trends and Challenges"
-            ]
-        }
-    elif "report based on multiple sources" in system_prompt:
-        # This is for the `generate_final_report` tool
-        mock_response = {
-            "title": "Meta-Analysis of the FSM Toolchain Development Process",
-            "summary": "The development process involved identifying a key architectural pattern (FSM), constructing a new toolchain based on it, and then using that toolchain to integrate further capabilities. The process was iterative, involving bug fixes and refactoring based on testing and code reviews, demonstrating a robust, self-correcting development loop.",
-            "sections": [
-                {
-                    "title": "Initial Problem and Objective",
-                    "content": "The initial objective was to analyze an external repository to find useful concepts for improving our own agentic development toolchain. The core problem was the lack of a reliable, enforceable protocol for development tasks."
-                },
-                {
-                    "title": "Implemented Solution: The FSM Toolchain",
-                    "content": "The implemented solution is a Finite State Machine (FSM) that orchestrates the entire development workflow. Key components include the FSM engine (`master_control.py`), a state definition file (`fsm.json`), and a mandatory entry point (`run_task.py`) that ensures all tasks are governed by the protocol. This provides a robust and auditable system."
-                },
-                {
-                    "title": "Integration and Self-Correction",
-                    "content": "The toolchain was then used to integrate a 'research suite'. This process revealed and led to the correction of several bugs, including a critical recursion error in the FSM and a logging issue in the test suite. This demonstrates the toolchain's value in enforcing a structured process that catches errors early."
-                }
-            ],
-            "usedSources": [1, 2]
-        }
-    else:
-        # A default fallback response
-        mock_response = {"error": "Mock response for this prompt is not implemented."}
+    # This single mock response is designed for the `generate_final_report` tool,
+    # as it's the primary producer of the complex Report object.
+    mock_response = {
+        "title": "Dual-Use Output Architecture Analysis",
+        "summary": "This report outlines a new architecture for producing dual-use (human- and machine-readable) outputs from the research suite.",
+        "sections": [
+            {
+                "title": "Core Data Model",
+                "content": "The new architecture is built on a set of core dataclasses (`Report`, `Section`, `Source`, `Entity`) that provide a structured representation of the research findings. This model is the single source of truth.",
+                "entities": [
+                    {"name": "FSM", "type": "Concept", "description": "Finite State Machine"},
+                    {"name": "JSON-LD", "type": "Standard", "description": "JSON for Linking Data"}
+                ]
+            },
+            {
+                "title": "Serialization Layer",
+                "content": "The data model includes serializer methods (`to_markdown`, `to_json_ld`) to convert the structured data into different output formats. This decouples the data from its presentation.",
+                "entities": []
+            }
+        ],
+        "sources": [
+            {"id": "source-1", "name": "Developer Plan", "url": "local://plan.txt"},
+            {"id": "source-2", "name": "TOOLCHAIN_README.md", "url": "local://TOOLCHAIN_README.md"}
+        ],
+        "used_sources": [1, 2]
+    }
 
     # Return it as a JSON string, similar to a real API response
     return f"```json\n{json.dumps(mock_response, indent=2)}\n```"
