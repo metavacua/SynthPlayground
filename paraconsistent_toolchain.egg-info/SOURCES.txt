@@ -1,0 +1,12 @@
+LICENSE
+README.md
+setup.py
+paraconsistent_toolchain.egg-info/PKG-INFO
+paraconsistent_toolchain.egg-info/SOURCES.txt
+paraconsistent_toolchain.egg-info/dependency_links.txt
+paraconsistent_toolchain.egg-info/requires.txt
+paraconsistent_toolchain.egg-info/top_level.txt
+tests/test_decider.py
+tests/test_logic.py
+tests/test_plang_runtime.py
+tests/test_transpiler.py

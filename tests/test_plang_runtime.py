@@ -1,9 +1,4 @@
-import os
-import sys
 import unittest
-
-# This path manipulation MUST come before the local import to satisfy E402.
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from toolchain.plang_runtime import ParaconsistentVariable
 

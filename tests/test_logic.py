@@ -1,6 +1,4 @@
 import unittest
-import sys
-import os
 import importlib.util
 
 
@@ -12,25 +10,18 @@ def import_from_path(module_name, file_path):
             f"Could not load spec for module {module_name} from {file_path}"
         )
     module = importlib.util.module_from_spec(spec)
-    sys.modules[module_name] = module
     spec.loader.exec_module(module)
     return module
 
 
-# Get the absolute path to the project root
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-
-# Import the two contradictory versions of the logic module
-logic_a = import_from_path(
-    "logic_a", os.path.join(project_root, "prototype/version-A/logic.py")
-)
-logic_b = import_from_path(
-    "logic_b", os.path.join(project_root, "prototype/version-B/logic.py")
-)
+# We can now import these directly as they are part of the installed package.
+# However, for this specific test's purpose (testing two files with the same name),
+# dynamic import remains the cleanest approach, but without the sys.path hack.
+logic_a = import_from_path("logic_a", "prototype/version-A/logic.py")
+logic_b = import_from_path("logic_b", "prototype/version-B/logic.py")
 
 
 class TestParaconsistentLogic(unittest.TestCase):
-
     def test_version_a_completeness_success(self):
         """
         Tests that Version A (Completeness) works with valid data.
