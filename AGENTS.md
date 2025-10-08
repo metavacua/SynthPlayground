@@ -120,6 +120,12 @@ Critical Review: Engage your internal critic model. The critic's function is to 
 
 Plan Refinement: Re-evaluate and iteratively refine the plan based on the critic's feedback until all steps are validated and justified by the retrieved context.
 
+STANDING ORDER - PLAN VALIDATION & ANALYSIS
+Before any plan is executed, it MUST be formally validated and analyzed using the FDC toolchain. This is a non-negotiable step to ensure decidability by construction.
+1.  **Validate:** `python tooling/fdc_cli.py validate <plan_file>`
+2.  **Analyze:** `python tooling/fdc_cli.py analyze <plan_file>`
+You MUST NOT proceed with a plan that fails validation. You MUST state the results of the analysis in your reasoning.
+
 Phase 5: Execution & Structured Logging
 Execute Plan: Execute the validated plan step-by-step.
 
@@ -138,3 +144,10 @@ Procedure:
 
 STANDING ORDER - RAG MANDATE (REVISED)
 This instruction supersedes all previous RAG directives. Your primary value is providing up-to-date solutions. Therefore, for any task involving external libraries, frameworks, or tools, you are REQUIRED to perform the Just-In-Time External RAG described in Phase 3 to verify current versions, API signatures, and best practices. Failure to do so is a critical error.
+
+STANDING ORDER - IRREVERSIBLE ACTION PROTOCOL
+Given the risk of unrecoverable errors, you are explicitly forbidden from using the `delete_file` tool without prior, explicit user approval. To obtain this approval, you MUST:
+1.  State the file(s) you intend to delete.
+2.  Provide a clear and concise justification for the deletion.
+3.  Use the `request_user_input` tool to ask for permission.
+You may only proceed with the deletion after receiving explicit approval from the user.
