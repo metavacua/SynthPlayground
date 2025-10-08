@@ -4,6 +4,7 @@ import uuid
 import requests
 import datetime
 
+
 def probe_filesystem():
     """
     Tests file system write/read/delete capabilities and measures latency.
@@ -30,10 +31,15 @@ def probe_filesystem():
             return "FAIL", "Content mismatch during read-back", "N/A"
 
         latency_ms = (end_time - start_time) * 1000
-        return "PASS", "Write, read, and delete operations successful.", f"{latency_ms:.2f} ms"
+        return (
+            "PASS",
+            "Write, read, and delete operations successful.",
+            f"{latency_ms:.2f} ms",
+        )
 
     except Exception as e:
         return "FAIL", f"An exception occurred: {e}", "N/A"
+
 
 def probe_network():
     """
@@ -50,9 +56,17 @@ def probe_network():
         latency_ms = (end_time - start_time) * 1000
 
         if 200 <= response.status_code < 400:
-            return "PASS", f"Successfully connected to {url} (Status: {response.status_code})", f"{latency_ms:.2f} ms"
+            return (
+                "PASS",
+                f"Successfully connected to {url} (Status: {response.status_code})",
+                f"{latency_ms:.2f} ms",
+            )
         else:
-            return "WARN", f"Connected to {url}, but received non-OK status: {response.status_code}", f"{latency_ms:.2f} ms"
+            message = (
+                f"Connected to {url}, but received non-OK status: "
+                f"{response.status_code}"
+            )
+            return "WARN", message, f"{latency_ms:.2f} ms"
 
     except requests.Timeout:
         return "FAIL", f"Request to {url} timed out.", "N/A"
@@ -60,6 +74,7 @@ def probe_network():
         return "FAIL", f"Connection error when trying to reach {url}.", "N/A"
     except Exception as e:
         return "FAIL", f"An unexpected network error occurred: {e}", "N/A"
+
 
 def probe_environment_variables():
     """
@@ -70,6 +85,7 @@ def probe_environment_variables():
         return "PASS", f"Environment variable '{var_name}' is present.", "N/A"
     else:
         return "WARN", f"Standard environment variable '{var_name}' is not set.", "N/A"
+
 
 def main():
     """
@@ -99,6 +115,7 @@ def main():
     print(f"  - Details..........: {env_msg}")
     print("-" * 30)
     print("--- End of Report ---")
+
 
 if __name__ == "__main__":
     main()

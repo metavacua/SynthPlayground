@@ -1,0 +1,5 @@
+[flake8]
+# Set the max line length to 88 to be compatible with black
+max-line-length = 88
+# Ignore these warnings, as they are not compatible with black
+extend-ignore = E203, W503

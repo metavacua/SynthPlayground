@@ -3,9 +3,9 @@ import os
 from tooling.knowledge_compiler import (
     extract_lessons_from_postmortem,
     extract_metadata_from_postmortem,
-    format_lesson_entry,
     main as compile_main,
 )
+
 
 class TestKnowledgeCompiler(unittest.TestCase):
 
@@ -40,7 +40,7 @@ multi-line action.
 ---
 """
         self.test_postmortem_path = "test_postmortem.md"
-        with open(self.test_postmortem_path, 'w') as f:
+        with open(self.test_postmortem_path, "w") as f:
             f.write(self.mock_postmortem_content)
 
         self.lessons_learned_path = "knowledge_core/lessons_learned.md"
@@ -48,9 +48,8 @@ multi-line action.
         if os.path.exists(self.lessons_learned_path):
             os.rename(self.lessons_learned_path, self.lessons_learned_path + ".bak")
         # Create a blank one for the test
-        with open(self.lessons_learned_path, 'w') as f:
+        with open(self.lessons_learned_path, "w") as f:
             f.write("# Lessons Learned\n\n")
-
 
     def tearDown(self):
         if os.path.exists(self.test_postmortem_path):
@@ -78,21 +77,25 @@ multi-line action.
     def test_main_compiler_function(self):
         # The main function takes command line args, so we'll simulate that
         import sys
+
         original_argv = sys.argv
         sys.argv = ["knowledge_compiler.py", self.test_postmortem_path]
 
         compile_main()
 
-        sys.argv = original_argv # Restore original argv
+        sys.argv = original_argv  # Restore original argv
 
-        with open(self.lessons_learned_path, 'r') as f:
+        with open(self.lessons_learned_path, "r") as f:
             content = f.read()
 
         self.assertIn("Insight:** This is the first lesson.", content)
         self.assertIn("Actionable Guidance:** This is the first action.", content)
         self.assertIn("Insight:** This is the second, multi-line lesson.", content)
-        self.assertIn("Actionable Guidance:** This is the second, multi-line action.", content)
+        self.assertIn(
+            "Actionable Guidance:** This is the second, multi-line action.", content
+        )
         self.assertIn("Task ID:** test/sample-task-01", content)
+
 
 if __name__ == "__main__":
     unittest.main()
