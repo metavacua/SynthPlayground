@@ -12,7 +12,15 @@ def parse_prooftree_content_final(content):
         # This regex captures the rule name (optional) and the conclusion text.
         infer_match = re.search(r"\\infer\d*(?:\[(.*?)\])?\{(.*?)\}\s*$", content.strip(), re.DOTALL)
         if not infer_match:
-            return None
+            # If no infer is found, it's likely a malformed tree.
+            # We can still try to extract hypos if they exist.
+            hypotheses = re.findall(r"\\hypo\{(.*?)\}", content, re.DOTALL)
+            return {
+                "type": "prooftree",
+                "hypotheses": [{"type": "hypo", "content": h.strip()} for h in hypotheses],
+                "conclusion": "UNPARSED CONCLUSION",
+                "rule_name": "UNPARSED RULE",
+            }
 
         rule_name, conclusion = infer_match.groups()
         rule_name = rule_name.strip() if rule_name else "Unknown Rule"

@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Order Multiplicative-Additive Linear Logic</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 20px auto; padding: 0 10px; }
+        h1, h2, h3, h4 { color: #333; }
+        .author { color: #555; text-align: center; margin-bottom: 2em; }
+        .prooftree {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .prooftree .rule {
+            border-top: 1px solid #000;
+            padding-top: 10px;
+            margin-top: 10px;
+            font-style: italic;
+            text-align: right;
+            font-size: 0.9em;
+            color: #444;
+        }
+        .prooftree .conclusion { font-weight: bold; }
+        .hypotheses { margin-bottom: 10px; padding-bottom: 10px; display: flex; justify-content: space-around; }
+        .hypothesis { display: inline-block; vertical-align: top; margin: 0 10px; }
+        .hypothesis .sequent { display: block; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+
+
+
+    <h1>Order Multiplicative-Additive Linear Logic</h1>
+
+        <p class="author">James Martin, Ian D.L.N. Mclean</p>
+
+
+
+
+            <p>A sequent system that preserves the law of excluded middle and non-contradiction, but not generally ECQ and EQN?</p>
+
+
+
+            <h3>Structural Rules</h3>
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Id</div>
+                <span>\(A ⊢ A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ A\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Δ, A, Π ⊢ C\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">CutL</div>
+                <span>\(Δ, Γ, Π ⊢ C\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, A, Φ ⊢ C\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(C ⊢ Δ, A, Ψ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Cut</div>
+                <span>\(Γ, Φ ⊢ Δ, Ψ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(C ⊢ Π, A, Δ\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A ⊢ Γ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">CutR</div>
+                <span>\(C ⊢ Π, Γ, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+            <h3>Unit Rules</h3>
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ_{L\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ_{L}, 1, Γ_{R} ⊢ C\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(C ⊢ Δ_{L\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(C ⊢ Δ_{L}, ⊥, Δ_{R}\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(⊥ ⊢\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(⊢ 1\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ_{L}, 0, Γ_{R} ⊢ C\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(0 ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ ⊤\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(C ⊢ Δ_{L}, ⊤, Δ_{R}\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ_{L}, 0, Γ_{R} ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ Δ_{L}, ⊤, Δ_{R}\)</span>
+            </div>
+        </div>
+
+
+
+
+            <h3>Operational Rules</h3>
+
+
+
+            <h4>Negations</h4>
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, Φ ⊢ Δ, A, Ψ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, ¬ A, Φ ⊢ Δ, Ψ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Φ, A, Γ ⊢ Ψ, Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Φ, Γ ⊢ Ψ, ¬ A, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, Φ ⊢ Δ, A, Ψ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, ¬ A, Φ ⊢ Δ, Ψ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Φ, A, Γ ⊢ Ψ, Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Φ, Γ ⊢ Ψ, ¬ A, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ Δ, A\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, ¬ A ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A, Γ ⊢ Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ ¬ A, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ A\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(¬ A, Γ ⊢\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ A\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, ¬ A⊢\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A, Γ ⊢\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ ¬ A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, A ⊢\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ ¬ A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(⊢ A, Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(¬ A ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(⊢ Δ, A\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(¬ A⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A ⊢ Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(⊢ ¬ A, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A ⊢ Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(⊢ Δ, ¬ A\)</span>
+            </div>
+        </div>
+
+
+
+
+            <h4>Additives</h4>
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, A, Φ ⊢ Δ\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, B, Φ ⊢ Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, A ⊕ B, Φ ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ Δ, A, Ψ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ Δ, A ⊕ B, Ψ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ Δ, B, Ψ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ Δ, A ⊕ B, Ψ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, A, Φ ⊢ Ψ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, A \& B, Φ ⊢ Ψ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, B, Φ ⊢ Ψ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, A \& B, Φ ⊢ Ψ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ Δ, B, Ψ\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ Δ, A, Ψ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ Δ, B \& A, Ψ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, A, Φ ⊢ C\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, B, Φ ⊢ C\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, A ⊕ B, Φ ⊢ C\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ A\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ A ⊕ B\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ B\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ A ⊕ B\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A ⊢ Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A \& B ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(B ⊢ Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A \& B ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(C ⊢ Ψ, B, Δ\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(C ⊢ Ψ, A, Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(C ⊢ Ψ, B \& A, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, A, Φ ⊢ C\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, A \& B, Φ ⊢ C\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, B, Φ ⊢ C\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, A \& B, Φ ⊢ C\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ A\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ B\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ A \& B\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(B ⊢ Δ\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A ⊢ Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(B ⊕ A ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(C ⊢ Ψ, A, Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(C ⊢ Ψ, B ⊕ A, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(C ⊢ Ψ, B, Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(C ⊢ Ψ, B ⊕ A, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, Φ ⊢ C, A\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, Φ ⊢ C, B\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, ¬ A ⊕ ¬ B, Φ ⊢ C\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A, Γ ⊢\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ ¬ A ⊕ ¬ B\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(B, Γ ⊢\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ ¬ A ⊕ ¬ B\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(⊢ Δ, A\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(¬ B \& ¬ A ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(⊢ Δ, B\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(¬ B \& ¬ A ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(B, C ⊢ Ψ, Δ\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A, C ⊢ Ψ, Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(C ⊢ Ψ, ¬ B \& ¬ A, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, Φ ⊢ C, A\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, ¬ A \& ¬ B, Φ ⊢ C\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, Φ ⊢ C, B\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, ¬ A \& ¬ B, Φ ⊢ C\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A, Γ ⊢\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(B, Γ ⊢\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ ¬ A \& ¬ B\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(⊢ Δ, B\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(⊢ Δ, A\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(¬ B ⊕ ¬ A ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A, C ⊢ Ψ, Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(C ⊢ Ψ, ¬ B ⊕ ¬ A, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(B, C ⊢ Ψ, Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(C ⊢ Ψ, ¬ B ⊕ ¬ A, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+            <h4>Multiplicatives</h4>
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, A, B, Φ ⊢ C\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, A ⊗ B, Φ ⊢ C\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ A\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Φ ⊢ B\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, Φ ⊢ A ⊗ B\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(B ⊢ Ψ\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A ⊢ Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(B ⅋ A ⊢ Ψ, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(C ⊢ Ψ, B, A, Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(C ⊢ Ψ, B ⅋ A, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, B, A, Φ ⊢ C\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ, B ⊗ A, Φ ⊢ C\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Φ ⊢ B\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ A\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Φ, Γ ⊢ B ⊗ A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A ⊢ Δ\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(B ⊢ Ψ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⅋ B ⊢ Δ, Ψ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(C ⊢ Ψ, A, B, Δ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(C ⊢ Ψ, A ⅋ B, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ A\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Φ, B, Θ ⊢ C\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Φ, Γ, A → B, Θ ⊢ C\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A, Γ ⊢ B\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ A → B\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(B ⊢ Δ, A\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ↚ B ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A ⊢ Δ\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(C ⊢ Λ, B, Ψ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(C ⊢ Λ, A ↚ B, Ψ, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ ⊢ A\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Φ, B, Θ ⊢ C\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Φ, Γ, B ← A, Θ ⊢ C\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(Γ, A ⊢ B\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(Γ ⊢ B ← A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(B ⊢ A, Ψ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ↛ B ⊢ Ψ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(A ⊢ Δ\) </span>
+
+                    </div>
+
+                    <div class="hypothesis">
+
+                            <span class="sequent"> \(C ⊢ Λ, B, Ψ\) </span>
+
+                    </div>
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(C ⊢ Λ, B ↛ A, Ψ, Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+            <h2>Theorems</h2>
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{1, A ⊢ A}
+		\infer1{1 ⊢ A, ¬ A}
+		\infer1{1 ⊢ A ⅋ ¬ A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{A, 1 ⊢ A}
+		\infer1{A ⊗ 1 ⊢ A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A, 0 ⊢ A}
+		\infer1{A ⊗ 0 ⊢ A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(0 ⊢ A ⅋ ¬ A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{A ⊢ A, ⊥}
+		\infer1{A, ¬ A ⊢ ⊥}
+		\infer1{A ⊗ ¬ A ⊢ ⊥\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{A ⊢ A, ⊥}
+		\infer1{A ⊢ A ⅋ ⊥\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A, ⊤}
+		\infer1{A ⊢ A ⅋ ⊤\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊗ ¬ A ⊢ ⊤\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(⊥ ⊢ }
+		\infer1{⊥ ⊢ ⊥}
+		\infer1{⊥, ¬ ⊥ ⊢ }
+		\infer1{⊥ ⊗ ¬ ⊥ ⊢\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{A ⊢ A, ⊥}
+		\infer1{A, ¬ ⊥ ⊢ A}
+		\infer1{A ⊗ ¬ ⊥ ⊢ A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(⊢ 1}
+		\infer1{1 ⊢ 1}
+		\infer1{1, ¬ 1 ⊢ }
+		\infer1{1 ⊗ ¬ 1 ⊢\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{A, 1 ⊢ A}
+		\infer1{1, ¬ A ⊢ ¬ A}
+		\infer1{1 ⊗ ¬ A ⊢ ¬ A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(0 ⊢ Δ, A}
+		\infer1{0, ¬ A ⊢ Δ}
+		\infer1{0 ⊗ ¬ A ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ Δ, ⊤}
+		\infer1{A, ¬ ⊤ ⊢ Δ}
+		\infer1{A ⊗ ¬ ⊤ ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{¬A ⊢ ¬A}
+		\infer1{¬A ⊢ ¬A,  ⊥}
+		\infer1{¬A ⊢ ¬A ⅋ ⊥\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{1, A ⊢ A}
+		\infer1{A ⊢ A, ¬1}
+		\infer1{A ⊢ A ⅋ ¬1\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(0, Γ ⊢ A}
+		\infer1{Γ ⊢ A, ¬0}
+		\infer1{Γ ⊢ A ⅋ ¬0\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A, Γ ⊢ ⊤}
+		\infer1{ Γ⊢ ⊤, ¬A}
+		\infer1{Γ ⊢ ⊤ ⅋ ¬A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(⊥ ⊢ }
+		\infer1{⊥ ⊢ ⊥}
+		\infer1{⊥, ¬ ⊥ ⊢ }
+		\infer1{⊢ ⊥ ⅋ ¬ ⊥\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(⊢ 1}
+		\infer1{1 ⊢ 1}
+		\infer1{1, ¬ 1 ⊢ }
+		\infer1{1 ⊗ ¬ 1 ⊢\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(0 ⊢ Δ, A}
+		\infer1{0, ¬ A ⊢ Δ}
+		\infer1{0 ⊗ ¬ A ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ Δ, ⊤}
+		\infer1{A, ¬ ⊤ ⊢ Δ}
+		\infer1{A ⊗ ¬ ⊤ ⊢ Δ\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{A ⊢ A ⊕ ¬A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{ ¬ A \& A ⊢ A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{¬ A, A ⊢}
+		\infer1{ ¬ A ⊗ A ⊢\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{¬ A, A ⊢}
+		\infer1{A ⊗ ¬ A ⊢}
+		\infer1{⊢¬ (A ⊗ ¬ A)\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{⊢ A, ¬ A}
+		\infer1{⊢ A ⅋ ¬ A\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer1{⊢ A, ¬ A}
+		\infer1{⊢ A ⅋ ¬ A}
+		\infer1{¬ (A ⅋ ¬ A) ⊢\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(⊥ ⊢}
+		\infer1{A \& ⊥ ⊢\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(0 ⊢}
+		\infer1{A \& 0 ⊢\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer0{A ⊢ ⊤}
+		\infer2{A ⊢ A \& ⊤\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(⊢ 1}
+		\infer1{⊢ A ⊕ 1\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(⊢ ⊤}
+		\infer1{⊢ A ⊕ ⊤\)</span>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="prooftree">
+            <div class="hypotheses">
+
+            </div>
+            <div class="conclusion">
+                <div class="rule">Unknown Rule</div>
+                <span>\(A ⊢ A}
+		\infer0{0 ⊢ A}
+		\infer2{A ⊕ 0 ⊢ A\)</span>
+            </div>
+        </div>
+
+
+
+
+</body>
+</html>
