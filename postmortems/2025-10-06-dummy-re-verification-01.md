@@ -15,7 +15,7 @@ This task's objective was to iteratively refine the Finite Development Cycle (FD
 
 ### What Went Well
 *   **Rapid Iteration:** I was able to quickly process user feedback, identify the logical flaws in previous protocol versions, and formulate new, corrective plans in response.
-*   **Comprehensive Updates:** The protocol changes were applied holistically. Each refinement correctly triggered corresponding updates to `Agent.md`, the `postmortem.md` template, and `LOGGING_SCHEMA.md`.
+*   **Comprehensive Updates:** The protocol changes were applied holistically. Each refinement correctly triggered corresponding updates to `AGENTS.md`, the `postmortem.md` template, and `LOGGING_SCHEMA.md`.
 *   **Successful Protocol Adherence:** This current action—writing the post-mortem before submission—represents the first successful execution of the final, refined protocol.
 
 ### What Could Be Improved
