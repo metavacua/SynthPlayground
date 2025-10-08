@@ -5,6 +5,7 @@ import os
 import shutil
 import sys
 import uuid
+import subprocess
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -63,6 +64,45 @@ def close_task(task_id):
     _log_event(_create_log_entry(task_id, "TASK_END", {"summary": f"Development phase for FDC task '{task_id}' formally closed."}))
 
     print(f"Logged POST_MORTEM and TASK_END events for task: {task_id}")
+
+def start_task(task_id):
+    """Initiates a new FDC by running the AORP orientation cascade."""
+    if not task_id:
+        print("Error: --task-id is required.", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"--- Initiating FDC for task: {task_id} ---")
+
+    # Run the `make orient` command to perform the AORP cascade
+    try:
+        result = subprocess.run(
+            ["make", "orient"],
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=ROOT_DIR
+        )
+        print(result.stdout)
+        if result.stderr:
+            print(result.stderr, file=sys.stderr)
+
+    except FileNotFoundError:
+        print("Error: 'make' command not found. Is make installed and in your PATH?", file=sys.stderr)
+        sys.exit(1)
+    except subprocess.CalledProcessError as e:
+        print(f"Error during orientation cascade for task '{task_id}':", file=sys.stderr)
+        print(e.stdout, file=sys.stderr)
+        print(e.stderr, file=sys.stderr)
+        print("Orientation failed. Aborting task start.", file=sys.stderr)
+        sys.exit(1)
+
+    # Log the TASK_START event
+    log_entry = _create_log_entry(task_id, "TASK_START", {"summary": f"AORP Orientation complete. FDC task '{task_id}' initiated."})
+    log_entry["phase"] = "Phase 0" # Override default phase
+    _log_event(log_entry)
+
+    print(f"\nSuccessfully initiated task: {task_id}")
+    print("You may now proceed with planning and execution.")
 
 def _validate_action(line_num, line_content, state, fsm, fs, placeholders):
     """Validates a single, non-loop action."""
@@ -197,6 +237,9 @@ def main():
     parser = argparse.ArgumentParser(description="A tool to manage the Finite Development Cycle (FDC).")
     subparsers = parser.add_subparsers(dest="command", help="Available subcommands", required=True)
 
+    start_parser = subparsers.add_parser("start", help="Starts a new task, running the AORP orientation cascade.")
+    start_parser.add_argument("--task-id", required=True, help="The unique identifier for the new task.")
+
     close_parser = subparsers.add_parser("close", help="Closes a task, initiating the post-mortem process.")
     close_parser.add_argument("--task-id", required=True, help="The unique identifier for the task.")
 
@@ -207,7 +250,8 @@ def main():
     analyze_parser.add_argument("plan_file", help="The path to the plan file to analyze.")
 
     args = parser.parse_args()
-    if args.command == "close": close_task(args.task_id)
+    if args.command == "start": start_task(args.task_id)
+    elif args.command == "close": close_task(args.task_id)
     elif args.command == "validate": validate_plan(args.plan_file)
     elif args.command == "analyze": analyze_plan(args.plan_file)
 
