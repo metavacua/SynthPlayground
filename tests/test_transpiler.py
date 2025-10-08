@@ -38,12 +38,14 @@ x = resolve config with "StanceA"
         with open(output_path, "r") as f:
             transpiled_code = f.read()
 
-            # Check that the transpiled code is what we expect
+            # Check that the transpiled code is what we expect.
+            # We check for the structure, tolerant of formatting changes.
+            # Black formatter will use double quotes.
             self.assertIn(
-                "config = {'StanceA': {'value': 1}, 'StanceB': {'value': 2}}",
+                'config = {"StanceA": {"value": 1}, "StanceB": {"value": 2}}',
                 transpiled_code,
             )
-            self.assertIn("x = config['StanceA']", transpiled_code)
+            self.assertIn('x = config["StanceA"]', transpiled_code)
 
     def test_transpile_invalid_syntax_in_block(self):
         """Test that the transpiler raises an error for invalid syntax inside a dialetheia block."""

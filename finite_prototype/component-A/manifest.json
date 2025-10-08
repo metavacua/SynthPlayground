@@ -1,0 +1,5 @@
+{
+  "stance": "Completeness",
+  "provides": "logic.py",
+  "verification_command": "bash verify.sh"
+}

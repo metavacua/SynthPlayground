@@ -43,7 +43,11 @@ dialetheia <variable_name>:
 
 ### 3.3. The `resolve` Statement
 
-This is the operator that collapses a paraconsistent state into a classical one.
+This is the operator that collapses a paraconsistent state into a classical one. P-Lang supports two modes of resolution:
+
+#### 3.3.1. Stance-Based Resolution (Manual)
+
+This is the manual form of resolution where the desired outcome is explicitly stated.
 
 **Syntax:**
 ```plang
@@ -51,10 +55,24 @@ This is the operator that collapses a paraconsistent state into a classical one.
 ```
 
 **Semantics:**
--   The `resolve` statement is an expression that evaluates to a single, classical value.
--   It takes a `<paraconsistent_variable>` (one that was defined in a `dialetheia` block).
 -   The `<stance_expression>` must evaluate to a string that matches one of the `<stance_name>` keys within the `dialetheia` block.
--   The `resolve` expression returns the corresponding `<value>` for the chosen stance. After this statement, `<resolved_variable>` is a standard, classical variable.
+-   The `resolve` expression returns the corresponding `<value>` for the chosen stance.
+
+#### 3.3.2. Policy-Based Resolution (Decidable / Automated)
+
+This is the advanced form of resolution that triggers the finite, automated decision cycle.
+
+**Syntax:**
+```plang
+<resolved_variable> = resolve <paraconsistent_variable> with policy <policy_path_expression>
+```
+
+**Semantics:**
+-   This statement invokes the "Decider" engine.
+-   The `<paraconsistent_variable>` is interpreted as a directory containing multiple "Decidable Components".
+-   The `<policy_path_expression>` must evaluate to a string that is a path to a `resolution_policy.json` file.
+-   The Decider engine verifies each component and uses the policy to deterministically select a winner.
+-   The `resolve` expression returns the value of the `provides` artifact from the winning component.
 
 ## 4. Example
 
