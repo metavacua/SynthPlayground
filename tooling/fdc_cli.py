@@ -5,6 +5,7 @@ import os
 import shutil
 import sys
 import uuid
+import subprocess
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -64,6 +65,45 @@ def close_task(task_id):
 
     print(f"Logged POST_MORTEM and TASK_END events for task: {task_id}")
 
+def start_task(task_id):
+    """Initiates a new FDC by running the AORP orientation cascade."""
+    if not task_id:
+        print("Error: --task-id is required.", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"--- Initiating FDC for task: {task_id} ---")
+
+    # Run the `make orient` command to perform the AORP cascade
+    try:
+        result = subprocess.run(
+            ["make", "orient"],
+            capture_output=True,
+            text=True,
+            check=True,
+            cwd=ROOT_DIR
+        )
+        print(result.stdout)
+        if result.stderr:
+            print(result.stderr, file=sys.stderr)
+
+    except FileNotFoundError:
+        print("Error: 'make' command not found. Is make installed and in your PATH?", file=sys.stderr)
+        sys.exit(1)
+    except subprocess.CalledProcessError as e:
+        print(f"Error during orientation cascade for task '{task_id}':", file=sys.stderr)
+        print(e.stdout, file=sys.stderr)
+        print(e.stderr, file=sys.stderr)
+        print("Orientation failed. Aborting task start.", file=sys.stderr)
+        sys.exit(1)
+
+    # Log the TASK_START event
+    log_entry = _create_log_entry(task_id, "TASK_START", {"summary": f"AORP Orientation complete. FDC task '{task_id}' initiated."})
+    log_entry["phase"] = "Phase 0" # Override default phase
+    _log_event(log_entry)
+
+    print(f"\nSuccessfully initiated task: {task_id}")
+    print("You may now proceed with planning and execution.")
+
 def _validate_action(line_num, line_content, state, fsm, fs, placeholders):
     """Validates a single, non-loop action."""
     # Substitute placeholders like {file1}, {file2}
@@ -90,7 +130,7 @@ def _validate_action(line_num, line_content, state, fsm, fs, placeholders):
     if command == "delete_file": fs.remove(args[0])
 
     next_state = transitions[action_type]
-    print(f"  Line {line_num+1}: OK. Action '{command}' ({action_type}) transitions from {state} -> {next_state}")
+    # print(f"  Line {line_num+1}: OK. Action '{command}' ({action_type}) transitions from {state} -> {next_state}")
     return next_state, fs
 
 def _validate_plan_recursive(lines, start_index, indent_level, state, fs, placeholders, fsm):
@@ -192,24 +232,88 @@ def analyze_plan(plan_filepath):
     print(f"Plan Analysis Results:")
     print(f"  - Complexity: {complexity}")
     print(f"  - Modality:   {modality}")
+    return complexity, modality
+
+def lint_plan(plan_filepath):
+    """Runs a comprehensive suite of checks on a plan file."""
+    print(f"--- Linting plan: {plan_filepath} ---")
+    errors_found = False
+
+    # 1. Validation
+    print("\n[1/3] Running FSM Validation...")
+    try:
+        with open(FSM_DEF_PATH, 'r') as f: fsm = json.load(f)
+        with open(plan_filepath, 'r') as f: lines = [(i, line.rstrip('\n')) for i, line in enumerate(f) if line.strip()]
+
+        simulated_fs = set()
+        for root, dirs, files in os.walk('.'):
+            if '.git' in dirs: dirs.remove('.git')
+            for name in files: simulated_fs.add(os.path.join(root, name).replace('./', ''))
+
+        final_state, _, _ = _validate_plan_recursive(lines, 0, 0, fsm["start_state"], simulated_fs, {}, fsm)
+
+        if final_state in fsm["accept_states"]:
+            print("Validation successful!")
+        else:
+            print(f"Validation FAILED. Plan ends in non-accepted state: '{final_state}'", file=sys.stderr)
+            errors_found = True
+    except SystemExit as e:
+        # Catch sys.exit from validation function to continue linting
+        errors_found = True
+    except Exception as e:
+        print(f"An unexpected error occurred during validation: {e}", file=sys.stderr)
+        errors_found = True
+
+    # 2. Analysis
+    print("\n[2/3] Running Plan Analysis...")
+    try:
+        analyze_plan(plan_filepath)
+    except SystemExit:
+        errors_found = True
+
+    # 3. Protocol Compliance Checks
+    print("\n[3/3] Running Protocol Compliance Checks...")
+    with open(plan_filepath, 'r') as f:
+        plan_content = f.read()
+
+    # Check for pre-commit step (which is the 'close' command)
+    has_close_op = False
+    for line in plan_content.splitlines():
+        if line.strip().startswith("run_in_bash_session") and "close" in line:
+            has_close_op = True
+            break
+
+    if not has_close_op:
+        print("Protocol FAILED: Plan does not contain a `fdc_cli.py close` command, which is the required pre-commit/closing step.", file=sys.stderr)
+        errors_found = True
+    else:
+        print("Protocol check passed: Pre-commit step (close operation) found.")
+
+    # Final result
+    print("\n--- Linting Complete ---")
+    if errors_found:
+        print("Result: Linter found errors. Please fix the plan file.", file=sys.stderr)
+        sys.exit(1)
+    else:
+        print("Result: All checks passed. Plan is valid and compliant.")
 
 def main():
     parser = argparse.ArgumentParser(description="A tool to manage the Finite Development Cycle (FDC).")
     subparsers = parser.add_subparsers(dest="command", help="Available subcommands", required=True)
 
+    start_parser = subparsers.add_parser("start", help="Starts a new task, running the AORP orientation cascade.")
+    start_parser.add_argument("--task-id", required=True, help="The unique identifier for the new task.")
+
+    lint_parser = subparsers.add_parser("lint", help="Lints a plan file for validation, analysis, and protocol compliance.")
+    lint_parser.add_argument("plan_file", help="The path to the plan file to lint.")
+
     close_parser = subparsers.add_parser("close", help="Closes a task, initiating the post-mortem process.")
     close_parser.add_argument("--task-id", required=True, help="The unique identifier for the task.")
 
-    validate_parser = subparsers.add_parser("validate", help="Validates a plan file against the FDC FSM.")
-    validate_parser.add_argument("plan_file", help="The path to the plan file to validate.")
-
-    analyze_parser = subparsers.add_parser("analyze", help="Analyzes a plan to determine its complexity class.")
-    analyze_parser.add_argument("plan_file", help="The path to the plan file to analyze.")
-
     args = parser.parse_args()
-    if args.command == "close": close_task(args.task_id)
-    elif args.command == "validate": validate_plan(args.plan_file)
-    elif args.command == "analyze": analyze_plan(args.plan_file)
+    if args.command == "start": start_task(args.task_id)
+    elif args.command == "lint": lint_plan(args.plan_file)
+    elif args.command == "close": close_task(args.task_id)
 
 if __name__ == "__main__":
     main()

@@ -14,6 +14,16 @@
       "id": "pyyaml",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "black",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "flake8",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
@@ -24,6 +34,14 @@
     {
       "source": "root-python-project",
       "target": "pyyaml"
+    },
+    {
+      "source": "root-python-project",
+      "target": "black"
+    },
+    {
+      "source": "root-python-project",
+      "target": "flake8"
     }
   ]
 }
