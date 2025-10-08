@@ -7,7 +7,7 @@
 
 ## 1. Task Summary
 
-The objective of this task was to evolve the FDC toolchain to understand and manage a hierarchy of complexity classes. This involved introducing the concept of EXPTIME-Class FDCs, which are necessary to manage P-Class projects. The toolchain was successfully upgraded to parse nested `for_each_file` loops, analyze plans for EXPTIME complexity, and the `Agent.md` protocol was updated to formalize the Meta-Process Complexity Hierarchy. The task was successful and included several crucial, protocol-driven debugging and correction cycles that ultimately resulted in a more robust and reliable system.
+The objective of this task was to evolve the FDC toolchain to understand and manage a hierarchy of complexity classes. This involved introducing the concept of EXPTIME-Class FDCs, which are necessary to manage P-Class projects. The toolchain was successfully upgraded to parse nested `for_each_file` loops, analyze plans for EXPTIME complexity, and the `AGENTS.md` protocol was updated to formalize the Meta-Process Complexity Hierarchy. The task was successful and included several crucial, protocol-driven debugging and correction cycles that ultimately resulted in a more robust and reliable system.
 
 ---
 

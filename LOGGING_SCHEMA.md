@@ -114,5 +114,5 @@ This document defines the JSON schema for entries in `logs/activity.log.jsonl`. 
 ## Example Entry
 
 ```json
-{"log_id":"...","session_id":"...","timestamp":"2025-10-05T18:00:00Z","phase":"Phase 2","task":{"id":"improve-logging-01","plan_step":3},"action":{"type":"FILE_WRITE","details":{"path":"LOGGING_SCHEMA.md","content_hash":"..."}},"outcome":{"status":"SUCCESS","message":"Updated logging schema to v1.1."},"evidence_citation":"Agent.md, Phase 7 analysis"}
+{"log_id":"...","session_id":"...","timestamp":"2025-10-05T18:00:00Z","phase":"Phase 2","task":{"id":"improve-logging-01","plan_step":3},"action":{"type":"FILE_WRITE","details":{"path":"LOGGING_SCHEMA.md","content_hash":"..."}},"outcome":{"status":"SUCCESS","message":"Updated logging schema to v1.1."},"evidence_citation":"AGENTS.md, Phase 7 analysis"}
 ```

@@ -24,7 +24,7 @@ def plan_deep_research(topic: str, repository: Literal['local', 'external'] = 'l
     workflow_content_snippet = ""
 
     if repository == 'local':
-        workflow_file_path = "Agent.md"
+        workflow_file_path = "AGENTS.md"
         with open(workflow_file_path, 'r') as f:
             workflow_content_snippet = f.read(500) + "..."
     elif repository == 'external':

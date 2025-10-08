@@ -25,7 +25,7 @@ All tasks are initiated via `run.py` and follow this strict, automated protocol:
 
 ## Key Components
 
--   **`Agent.md`**: The master protocol document (v3.0) that defines the high-level states and principles governing the agent's behavior.
+-   **`AGENTS.md`**: The master protocol document (v3.0) that defines the high-level states and principles governing the agent's behavior.
 -   **`run.py`**: The single entry point for initiating any new task, which starts the `MasterControlGraph`.
 -   **`tooling/master_control.py`**: The interactive FSM that executes the task workflow.
 -   **`tooling/fdc_cli.py`**: The CLI tool for validating plans and managing the task lifecycle.
