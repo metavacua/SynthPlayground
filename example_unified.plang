@@ -1,0 +1,48 @@
+# This is a sample program for the Unified P-Lang Toolchain.
+# It demonstrates the fully automated, policy-based resolution.
+
+import importlib.util
+import sys
+import os
+
+print("--- P-Lang Unified Resolution Example ---")
+
+# 1. Define the components and policy locations.
+#    In a real system, these would likely be well-known paths.
+components_dir = "finite_prototype"
+policy_file = "resolution_policy.json"
+
+print(f"Resolving components in '{components_dir}' with policy '{policy_file}'...")
+
+# 2. Resolve the contradiction using the policy.
+#    This invokes the decider.py engine as a subprocess during transpilation.
+#    The result, `winning_artifact_path`, will be a string literal of the
+#    path to the chosen logic.py file (e.g., 'finite_prototype/component-B/logic.py').
+winning_artifact_path = resolve components_dir with policy policy_file
+
+print(f"Decider has chosen artifact: {winning_artifact_path}")
+
+# 3. Dynamically import and use the winning module.
+#    The transpiled Python code will use this standard technique to load
+#    the module whose path was determined at transpile-time.
+def import_from_path(module_name, file_path):
+    """Dynamically imports a module from a given file path."""
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"Could not load spec for module {module_name} from {file_path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    return module
+
+print("Importing the winning logic module...")
+winning_logic = import_from_path("winning_logic", winning_artifact_path)
+
+# 4. Use the resolved, winning function.
+#    We expect this to be Component B's logic, as it has higher test
+#    coverage and "Safety" is the highest priority in the policy.
+user_data = {} # Using invalid data to test the 'Safety' component's robustness
+resolved_name = winning_logic.get_user_name(user_data)
+
+print(f"Resolved name for empty user data: '{resolved_name}'")
+print("--- Unified Resolution Complete ---")

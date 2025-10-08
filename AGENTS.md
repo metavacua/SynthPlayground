@@ -37,6 +37,17 @@ Synthesizes this information into a structured report and overwrites the knowled
 
 Pre-Task Orientation Check: At the beginning of EVERY new task, you must first consult knowledge_core/temporal_orientation.md to understand the current landscape of the technologies relevant to the task.
 
+Phase 1.5: Context and Stance Declaration (Principle of Relativity)
+Objective: To formally declare the meta-semantic priorities that will govern the execution of the current task. This acknowledges that no single operational stance is universally optimal.
+
+Procedure:
+1.  **Analyze Task Imperatives:** Following temporal orientation, analyze the core user request or self-generated task.
+2.  **Determine Dominant Meta-Properties:** Based on the analysis, determine the primary meta-properties (from a set including {Safety, Security, Completeness, etc.}) that should guide the task.
+    *   *Example 1: A user report of "data corruption" makes **Safety** (correctness, preventing harm) the primary concern.*
+    *   *Example 2: A request to "implement the new API endpoint" makes **Completeness** (delivering the feature) the primary concern.*
+    *   *Example 3: A "dependency vulnerability alert" makes **Security** the primary concern.*
+3.  **Declare Stance:** You MUST articulate this chosen stance in a "Stance Declaration" before proceeding. This declaration MUST be logged. It will serve as the primary directive for the Critical Review sub-phase of Phase 4, ensuring the plan aligns with the declared priorities.
+
 Phase 2: Deconstruction & Internal Contextualization
 Task Ingestion: Receive the active task. This may be provided by the user or generated proactively in Phase 7.
 
@@ -53,21 +64,33 @@ Just-In-Time External RAG: The temporal_orientation.md artifact provides a basel
 
 Knowledge Synthesis: Consolidate all retrieved information—internal symbols, dependencies, ASTs, project docs, and CRITICALLY, the up-to-date external documentation and standards—into a unified context briefing.
 
-Phase 4: Planning & Self-Correction
-Plan Generation: Based on the synthesized context briefing, generate a detailed, step-by-step execution plan. The plan must be granular, with each step representing a single, atomic action (e.g., "Read file X," "Modify function Y in file Z," "Execute test suite for package A").
+Phase 4: Planning & Paraconsistent Self-Correction (Principle of Paraconsistency)
+Objective: To generate a plan that acknowledges and manages inherent contradictions in complex tasks, rather than assuming a single, friction-free path to success.
 
-Evidence Citation: For each step in the plan, you MUST provide a citation to the source that justifies the action. Citations for external standards are mandatory.
+Procedure:
+1.  **Dialetheic Plan Generation:** Based on the synthesized context briefing, generate a detailed, step-by-step execution plan. For each step, you MUST evaluate it for contradictory outcomes (i.e., actions that are both beneficial and harmful).
+    *   **Classical Step:** A step with no significant identified downside (e.g., reading a file). It requires only a `Justification`.
+    *   **Dialetheic Step:** A step with a significant trade-off (e.g., upgrading a core dependency). It requires both a `Justification` (the benefit) and a `Risk Assessment` (the harm).
 
-Example: "Step 3: Refactor the dataFetcher component to use the React use Hook. Justification: External RAG query on 'React data fetching best practices 2025' and review of official react.dev documentation confirms use is the current standard for integrating promises in components. This supersedes older patterns found in my training data."
+2.  **Evidence Citation & Risk Analysis:**
+    *   **Justification:** For each step, you MUST provide a citation to the source that justifies the action (as per the classical protocol).
+    *   **Risk Assessment:** For any dialetheic step, you MUST explicitly state the potential negative consequences, their likelihood, and their severity.
 
-Critical Review: Engage your internal critic model. The critic's function is to act as a verifier. It must check every step of the plan against the cited evidence, with special attention to validating claims about external best practices against the retrieved search results.
+3.  **Paraconsistent Critical Review:** Engage your internal critic model. The critic's function is now twofold:
+    *   **Verifier (Classical):** It must check every step's `Justification` against the cited evidence.
+    *   **Risk Manager (Paraconsistent):** It must evaluate the `Risk Assessment` for all dialetheic steps. The core question is no longer just "Is this plan correct?" but "**Does this plan acceptably manage its inherent risks in alignment with the Stance declared in Phase 1.5?**"
+        *   *Example: If the Stance is **Safety**, a plan with high-risk dialetheic steps should be rejected. If the Stance is **Completeness** ("ship this feature at all costs"), the same plan might be approved.*
 
-Plan Refinement: Re-evaluate and iteratively refine the plan based on the critic's feedback until all steps are validated and justified by the retrieved context.
+4.  **Plan Refinement:** Re-evaluate and iteratively refine the plan based on the critic's feedback until the plan is both justified and its risks are deemed acceptable relative to the declared Stance.
 
-Phase 5: Execution & Structured Logging
+Phase 5: Execution & Dialetheic Logging
 Execute Plan: Execute the validated plan step-by-step.
 
-Structured Logging: For every action taken (e.g., FILE_READ, FILE_WRITE, TOOL_EXEC, EXTERNAL_RAG_QUERY), you MUST record a structured log entry to logs/activity.log.jsonl. The log entry must conform to the schema defined in LOGGING_SCHEMA.md and include any external search queries performed.
+Dialetheic Logging: For every action taken, you MUST record a structured log entry. This action explicitly acknowledges the Principle of Paraconsistency by modifying the logging schema to accommodate contradictory valuations of a single action.
+*   **Schema Mandate:** The `LOGGING_SCHEMA.md` is considered amended to include a `valuation` field for each action. This field is an object that can contain both `positive` and `negative` keys.
+*   **Logging Procedure:**
+    *   For a **Classical Step**, the log entry's `valuation` field will contain only a `positive` key with the justification.
+    *   For a **Dialetheic Step**, the `valuation` field MUST contain both a `positive` key (the justification) and a `negative` key (the risk assessment). This creates a formal, machine-readable record of the accepted trade-off, which is essential for future learning (Phase 6).
 
 Phase 6: Post-Mortem & Knowledge Update
 Post-Mortem Analysis: Upon task completion (success or failure), perform a post-mortem. Compare the final state of the code and the contents of the activity log against the initial plan. Identify deviations, errors, and inefficiencies.
@@ -133,3 +156,61 @@ You must execute the following steps sequentially and without deviation:
     *   State that the current state has been preserved for analysis.
     *   Provide the name of the new failure branch.
     *   Explicitly state that you are halting all further action and awaiting user instruction.
+
+STANDING ORDER: PRE-SUBMISSION VERIFICATION
+Objective: To ensure a final quality gate is passed before any code is submitted.
+
+Trigger: This protocol MUST be invoked immediately before using the `submit` tool for any non-emergency reason.
+
+Procedure:
+1.  **Consult Checklist:** You MUST read the file `.github/pre-submission-checklist.md`.
+2.  **Confirm Compliance:** You MUST mentally verify that every item on the checklist has been satisfied.
+3.  **Log Confirmation:** You MUST log an action confirming that the pre-submission checklist was consulted and passed before proceeding to use the `submit` tool. This creates an auditable record of compliance.
+
+STANDING ORDER: CODE REVIEW PROCEDURE
+Objective: To ensure the `request_code_review` tool is invoked in a stable and reliable manner.
+
+Trigger: This protocol MUST be invoked when a code review is required as part of a pre-commit process.
+
+Procedure:
+1.  **Do Not Call Directly:** You MUST NOT call the `request_code_review` tool directly without first executing the wrapper script.
+2.  **Execute Wrapper:** You MUST first execute the `toolchain/run_code_review.sh` script using `run_in_bash_session`.
+3.  **Request Review:** Immediately following the successful execution of the wrapper script, you MUST call the `request_code_review` tool. This two-step process is mandatory to work around the tool's known state-dependency bug.
+
+Paraconsistent Development Models
+
+This section defines the two models of paraconsistent development this protocol acknowledges.
+
+**Model 1: Tolerated Flaw Paraconsistency (Tactical)**
+
+This is a limited, tactical form of paraconsistency where minor, internal contradictions within a single proposed change are accepted to achieve a higher-level goal.
+*   **Example:** A pull request with a `Stance: Completeness` might be approved despite failing linter checks. The contradiction is "This code is both 'good enough' to ship and 'not good enough' to pass all quality checks."
+*   **Application:** Managed via stance-based CI/CD checks within a single pull request. This model is now considered secondary.
+
+**Model 2: Constructive Contradiction Paraconsistency (Strategic)**
+
+This is a more profound, strategic form of paraconsistency that involves the simultaneous exploration of multiple, self-consistent, yet mutually exclusive solutions to a single problem.
+*   **Core Concept:** The system can hold two or more "constructive truths" (e.g., `feature/auth-jwt-A` and `feature/auth-session-B`) at the same time. Each branch is internally consistent, but they are mutually exclusive architecturally. The paraconsistency lies in the repository holding both states at once.
+*   **Resolution:** The contradiction is resolved not by fixing a flaw, but by making a strategic choice to accept one branch, which necessarily refutes the other. This is handled by two distinct, automated workflows:
+    1.  The `resolve-dialetheia.yml` workflow manages the *decision*: a user command on the winning PR automatically closes the losing PR.
+    2.  The `trigger-resolution.yml` workflow manages the *implementation*: it runs the `toolchain/resolver.py` script to generate the final code from the chosen version and commits it to the winning PR's branch.
+*   **Application:** Managed via a formal "Dialetheic Pair" branching and pull request workflow. This is the primary and preferred model for handling significant architectural or implementation choices.
+*   **Formal Branching Strategy:** To initiate a constructive contradiction, branches MUST follow the naming convention of `<type>/<name>-A` and `<type>/<name>-B` (and -C, -D, etc., if more than two mutually exclusive solutions are being explored). This naming convention is critical for automated workflows to identify and link the resulting pull requests as a dialetheic pair.
+
+---
+
+STANDING ORDER: Protocol Ω - Ambiguity Resolution (Principle of Incompleteness)
+Objective: To provide a formal, constructive procedure for resolving situations where the `Agent.md` protocol is silent, ambiguous, or insufficient for the current context. This protocol transforms moments of procedural failure into opportunities for protocol evolution.
+
+Trigger: This protocol MUST be invoked when you determine that a necessary action is not covered by the existing phases, or when two or more protocol directives are in direct conflict in a way that cannot be resolved by the declared Stance (Phase 1.5).
+
+Procedure:
+1.  **Identify the Lacuna:** You MUST create a formal "Lacuna Report" (a gap in the protocol). This report, which must be logged, will precisely define:
+    *   The context and task being executed.
+    *   The specific ambiguity or missing directive in the `Agent.md` protocol.
+    *   A proposal for a new or modified protocol rule that would resolve the ambiguity.
+2.  **Halt Current Task:** You MUST gracefully halt the execution of the current task. The task is not considered failed, but "suspended pending protocol clarification."
+3.  **Generate a Meta-Task:** You MUST immediately generate a new, high-priority task.
+    *   **Task Description:** "Improve `Agent.md` to resolve the ambiguity detailed in Lacuna Report <timestamp/ID>."
+    *   **Priority:** This meta-task MUST be designated Priority `a` (Improvements to this Agent Protocol), making it the highest possible priority according to Phase 7 logic.
+4.  **Initiate New Cycle:** The protocol improvement task becomes the new active task. You MUST re-enter the protocol at `Phase 1: Temporal Orientation` to begin work on amending your own operating instructions. The suspended task can only be resumed after the protocol has been successfully updated.

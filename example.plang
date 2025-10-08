@@ -1,0 +1,39 @@
+# This is a sample program written in P-Lang.
+# It demonstrates how to manage contradictory configurations for different environments.
+
+print("--- P-Lang Configuration Example ---")
+
+# 1. Define a paraconsistent variable 'db_config'.
+# This variable holds two mutually exclusive, self-consistent states simultaneously.
+# Note the stricter syntax: keys are quoted strings and entries are comma-separated.
+dialetheia db_config:
+    "Production": {
+        "host": "prod.db.internal",
+        "user": "prod_user",
+        "timeout": 30
+    },
+    "Development": {
+        "host": "localhost",
+        "user": "dev_user",
+        "timeout": 5
+    }
+
+# 2. Define a stance for resolution.
+# This might come from an environment variable or config file.
+current_stance = "Production"
+print(f"Current resolution stance is: {current_stance}")
+
+# 3. Resolve the contradiction based on the stance.
+# The 'active_config' variable will now hold a single, classical dictionary.
+active_config = resolve db_config with current_stance
+
+# 4. Use the resolved, classical variable.
+print(f"Connecting to database at: {active_config['host']}")
+print("------------------------------------")
+
+# Let's resolve it again with a different stance
+current_stance = "Development"
+print(f"Current resolution stance is: {current_stance}")
+active_config = resolve db_config with current_stance
+print(f"Connecting to database at: {active_config['host']}")
+print("------------------------------------")

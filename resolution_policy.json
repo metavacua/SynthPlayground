@@ -1,0 +1,12 @@
+{
+  "priority_of_stances": [
+    "Safety",
+    "Security",
+    "Performance",
+    "Completeness"
+  ],
+  "quality_gates": {
+    "min_test_coverage": 0.90,
+    "max_critical_vulnerabilities": 0
+  }
+}
