@@ -1,0 +1,554 @@
+
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{ebproof}
+\usepackage{fullpage}
+\usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
+\usepackage{stix}
+
+\newunicodechar{Γ}{\Gamma}
+\newunicodechar{Δ}{\Delta}
+\newunicodechar{Π}{\Pi}
+\newunicodechar{Λ}{\Lambda}
+\newunicodechar{Θ}{\Theta}
+
+\newunicodechar{⊢}{\vdash}
+
+\newunicodechar{⊕}{\oplus}
+\newunicodechar{¬}{\neg}
+
+\newunicodechar{⊥}{\bot}
+\newunicodechar{⊤}{\top}
+
+\setlength{\parindent}{0em}
+
+\author{James Martin, Ian D.L.N. Mclean}
+\title{Order Basic Sequent Calculus}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+\end{abstract}
+
+\section{Structural Rules}
+
+\begin{center}
+	\[
+	\begin{prooftree}
+	\infer0[Id]{A ⊢ A}
+	\end{prooftree}
+	\]
+	
+	\[
+	\begin{prooftree}
+	\hypo{Γ ⊢ A}
+	\hypo{A ⊢ Δ}
+	\infer2[cut]{Γ ⊢ Δ}
+	\end{prooftree}
+	\]
+\end{center}
+
+\section{Unit Rules}
+\begin{center}
+	\[
+	\begin{prooftree}
+	\infer0{0 ⊢ A}
+	\end{prooftree}
+	\quad
+	\begin{prooftree}
+	\infer0{A ⊢ ⊤}
+	\end{prooftree}
+	\]
+\end{center}
+
+\newpage
+\section{Operational Rules}
+\begin{center}
+	\subsection{Negations}
+	\begin{center}	\[
+		\begin{prooftree}
+		\hypo{ ⊢ A }
+		\infer1{ ¬ A ⊢ }
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{ A ⊢ }
+		\infer1{ ⊢ ¬ A}
+		\end{prooftree}
+		\]
+	\end{center}
+
+	\subsection{Additives}
+	\begin{center}
+		\subsubsection{Junctions}
+			\begin{center}
+				
+				\[
+				\begin{prooftree}
+				\hypo{A ⊢ Δ}
+				\hypo{B ⊢ Δ}
+				\infer2{A ⊕ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A}
+				\infer1{Γ ⊢ A ⊕ B}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ B}
+				\infer1{Γ ⊢ A ⊕ B}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{B ⊢ Δ}
+				\hypo{A ⊢ Δ}
+				\infer2{B ⊕ A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A}
+				\infer1{Γ ⊢ B ⊕ A}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ B}
+				\infer1{Γ ⊢ B ⊕ A}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{A ⊢ Δ}
+				\infer1{A \& B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{B ⊢ Δ}
+				\infer1{A \& B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A}
+				\hypo{Γ ⊢ B}
+				\infer2{Γ ⊢ A \& B}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{A ⊢ Δ}
+				\infer1{B \& A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{B ⊢ Δ}
+				\infer1{B \& A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ B}
+				\hypo{Γ ⊢ A}
+				\infer2{Γ ⊢ B \& A}
+				\end{prooftree}
+				\]
+			\end{center}
+		
+		\subsubsection{Implications}
+			\begin{center}
+				\[
+				\begin{prooftree}
+				\hypo{ ⊢ A}
+				\hypo{B ⊢ Δ}
+				\infer2{¬ A ⊕ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{A ⊢ }
+				\infer1{ ⊢ ¬A ⊕ B}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ B}
+				\infer1{Γ ⊢ ¬A ⊕ B}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{B ⊢ Δ}
+				\hypo{ ⊢ A}
+				\infer2{B ⊕ ¬A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{A ⊢ }
+				\infer1{⊢ B ⊕ ¬A}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ B}
+				\infer1{Γ ⊢ B ⊕ ¬A}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{⊢ A}
+				\infer1{¬ A \& B ⊢ }
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{B ⊢ Δ}
+				\infer1{¬A \& B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{A ⊢ }
+				\hypo{Γ ⊢ B}
+				\infer2{Γ ⊢ ¬A \& B}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{ ⊢ A}
+				\infer1{B \& ¬ A ⊢}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{B ⊢ Δ}
+				\infer1{B \& ¬A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ B}
+				\hypo{A ⊢ }
+				\infer2{Γ ⊢ B \& ¬A}
+				\end{prooftree}
+				\]
+			\end{center}
+		
+		\subsubsection{NAND and NOR}
+			\begin{center}
+				\[
+				\begin{prooftree}
+				\hypo{ ⊢ A}
+				\hypo{ ⊢ B}
+				\infer2{¬ A ⊕ ¬B ⊢}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{A ⊢ }
+				\infer1{ ⊢ ¬A ⊕ ¬B}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{B ⊢ }
+				\infer1{⊢ ¬A ⊕ ¬B}
+				\end{prooftree}
+				\]
+				
+				
+				
+				\[
+				\begin{prooftree}
+				\hypo{ ⊢ B}
+				\hypo{ ⊢ A}
+				\infer2{¬B ⊕ ¬A ⊢ }
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{A ⊢ }
+				\infer1{⊢ ¬B ⊕ ¬A}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{B ⊢ }
+				\infer1{⊢ ¬B ⊕ ¬A}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{⊢ A}
+				\infer1{¬ A \& ¬B ⊢ }
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{⊢ B}
+				\infer1{¬A \& ¬B ⊢ }
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{A ⊢ }
+				\hypo{B ⊢ }
+				\infer2{⊢ ¬A \& ¬B}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{ ⊢ A}
+				\infer1{¬B \& ¬ A ⊢}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{⊢ B}
+				\infer1{¬B \& ¬A ⊢}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{B ⊢ }
+				\hypo{A ⊢ }
+				\infer2{⊢ ¬B \& ¬A}
+				\end{prooftree}
+				\]
+			\end{center}
+	\end{center}
+\end{center}
+
+\part{Theorems}
+	\begin{center}
+
+		\[
+		\begin{prooftree}
+		\infer0{ ⊢ A ⊕ ¬A}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{ ⊢ ¬A ⊕ A}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{A \& ¬A ⊢ }
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{¬A \& A ⊢ }
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\infer0{0 ⊢ C}
+		\infer1{0 \& ¬ A ⊢ C}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{C ⊢ ⊤}
+		\infer1{C ⊢ ⊤ ⊕ ¬ A}
+		\end{prooftree}		
+		\]
+		
+		\[
+		\begin{prooftree}
+		\infer0{0 ⊢ A}
+		\infer1{0 ⊢ A ⊕ ¬ A}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{0 ⊢ ¬ A}
+		\infer1{0 ⊢ A ⊕ ¬ A}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{0 ⊢ }
+		\infer1{⊢ A ⊕ ¬ 0}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{C ⊢ ⊤}
+		\infer1{C ⊢ ⊤ ⊕ A}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\infer0{A ⊢ ⊤}
+		\infer1{A \& ¬ A ⊢ ⊤}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{¬ A ⊢ ⊤}
+		\infer1{A \& ¬ A ⊢ ⊤}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\infer0{1 ⊢ 1}
+		\infer1{1 ⊢ 1 ⊕ ¬ 1}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{0 ⊢ 1 ⊕ ¬ 1}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{⊥ ⊢ 1 ⊕ ¬ 1}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{⊤ ⊢ 1 ⊕ ¬ 1}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\infer0{⊥⊢}
+		\infer1{⊢ ¬ ⊥}
+		\infer1{⊢ ⊥ ⊕ ¬ ⊥}
+		\infer1{1 ⊢ ⊥ ⊕ ¬ ⊥}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{0 ⊢ ⊥ ⊕ ¬ ⊥}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{⊥ ⊢ ⊥}
+		\infer1{⊥ ⊢ ⊥ ⊕ ¬ ⊥}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{⊤ ⊢ ⊥ ⊕ ¬ ⊥}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\infer0{0 ⊢}
+		\infer1{⊢ ¬ 0}
+		\infer1{⊢ 0 ⊕ ¬ 0}
+		\infer1{1 ⊢ 0 ⊕ ¬ 0}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{0 ⊢ 0 ⊕ ¬ 0}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{⊥ ⊢ 0 ⊕ ¬ 0}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{⊤ ⊢ 0 ⊕ ¬ 0}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\infer0{⊢ ⊤}
+		\infer1{⊢ ⊤ ⊕ ¬ ⊤}
+		\infer1{1 ⊢ ⊤ ⊕ ¬ ⊤}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{0 ⊢ ⊤ ⊕ ¬ ⊤}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{⊥ ⊢ ⊤}
+		\infer1{⊥ ⊢ ⊤ ⊕ ¬ ⊤}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{⊤ ⊢ ⊤}
+		\infer1{⊤ ⊢ ⊤ ⊕ ¬ ⊤}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\infer0{1 ⊢ 1}
+		\infer1{1 \&  ¬ 1⊢ 1}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{1 \&  ¬ 1⊢ 0}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{⊢ 1}
+		\infer1{¬ 1⊢ }
+		\infer1{1 \&  ¬ 1⊢ }
+		\infer1{1 \&  ¬ 1⊢ ⊥}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{1 \&  ¬ 1 ⊢ ⊤}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\infer0{0 ⊢ 1}
+		\infer1{0 \&  ¬ 0 ⊢ 1}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{0 ⊢ 0}
+		\infer1{0 \&  ¬ 0 ⊢ 0}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{0 ⊢ ⊥}
+		\infer1{0 \&  ¬ 0 ⊢ ⊥}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{0 \&  ¬ 0 ⊢ ⊤}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\hypo{⊥ \&  ¬ ⊥ ⊢ 1}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{⊥ \&  ¬ ⊥ ⊢ 0}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{⊥ ⊢ }
+		\infer1{⊥ \&  ¬ ⊥ ⊢ }
+		\infer1{⊥ \&  ¬ ⊥ ⊢ ⊥}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{⊥ \&  ¬ ⊥ ⊢ ⊤}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\hypo{⊤ \&  ¬ ⊤ ⊢ 1}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{⊤ \&  ¬ ⊤ ⊢ 0}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{⊢ ⊤}
+		\infer1{¬ ⊤ ⊢}
+		\infer1{¬ ⊤ ⊢ ⊥}
+		\infer1{⊤ \&  ¬ ⊤ ⊢ ⊥}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{⊤ \&  ¬ ⊤ ⊢ ⊤}
+		\end{prooftree}
+		\]
+	\end{center}
+
+\end{document}

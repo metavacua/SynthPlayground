@@ -1,0 +1,498 @@
+
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{ebproof}
+\usepackage{fullpage}
+\usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
+\usepackage{stix}
+
+\newunicodechar{Γ}{\Gamma}
+\newunicodechar{Δ}{\Delta}
+
+\newunicodechar{⊢}{\vdash}
+
+\newunicodechar{∀}{\forall}
+\newunicodechar{∃}{\exists}
+
+\newunicodechar{⊕}{\oplus}
+\newunicodechar{¬}{\neg}
+
+\setlength{\parindent}{0em}
+
+\author{James Martin, Ian D.L.N. Mclean}
+\title{First Order Structural Additive Sequent Calculus}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Strictly visible structural additive calculus with first order quantification.
+\end{abstract}
+
+\section{Structural Rules}
+
+\begin{center}
+	\[
+	\begin{prooftree}
+	\infer0[Id]{A ⊢ A}
+	\end{prooftree}
+	\]
+	
+	\[
+	\begin{prooftree}
+	\hypo{Γ ⊢ A}
+	\hypo{A ⊢ Δ}
+	\infer2[Cut]{Γ ⊢ Δ}
+	\end{prooftree}
+	\]
+	
+	\[
+	\begin{prooftree}
+	\hypo{⊢ C}
+	\infer1[wL]{A ⊢ C}
+	\end{prooftree}
+	\qquad
+	\begin{prooftree}
+	\hypo{C ⊢ }
+	\infer1[Rw]{C ⊢ A}
+	\end{prooftree}
+	\]
+	
+	\[
+	\begin{prooftree}
+	\hypo{A, A ⊢ C}
+	\infer1[cL]{A ⊢ C}
+	\end{prooftree}
+	\qquad
+	\begin{prooftree}
+	\hypo{C ⊢ A, A}
+	\infer1[Rc]{C ⊢ A}
+	\end{prooftree}
+	\]
+	
+	\[
+	\begin{prooftree}
+	\hypo{A, B ⊢ C}
+	\infer1[pL]{B, A ⊢ C}
+	\end{prooftree}
+	\qquad
+	\begin{prooftree}
+	\hypo{C ⊢ A, B}
+	\infer1[Rp]{C ⊢ B, A}
+	\end{prooftree}
+	\]
+\end{center}
+
+\section{Units}
+	\begin{center}
+		\[
+		\begin{prooftree}
+		\infer0{\bot ⊢ Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{Γ ⊢ \top}
+		\end{prooftree}
+		\]
+	\end{center}
+
+\section{Quantifiers}
+	\begin{center}
+		Standard Eigenvariable Condition Quantifiers
+		\[
+		\begin{prooftree}
+		\hypo{P[t/x] ⊢ Δ}
+		\infer1{∀x.P(x) ⊢ Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{Γ ⊢ P[y/x]}
+		\infer1{Γ ⊢ ∀x.P(x)}
+		\end{prooftree}
+		\]
+		in $∀R$ the variable y must not occur free anywhere in the lower sequent.
+		\[
+		\begin{prooftree}
+		\hypo{P[y/x] ⊢ Δ}
+		\infer1{∃x.P(x) ⊢ Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{Γ ⊢ P[t/x]}
+		\infer1{Γ ⊢ ∃x.P(x)}
+		\end{prooftree}
+		\]
+		in $∃L$ the variable y must not occur free anywhere in the lower sequent.
+		\[
+		\begin{prooftree}
+		\hypo{P(y)⊢}
+		\infer1{¬∀x.¬P(x) ⊢ }
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{⊢P(t)}
+		\infer1{⊢ ¬∀x.¬P(x)}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{P(t)⊢}
+		\infer1{¬∃x.¬P(x) ⊢ }
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{⊢P(y)}
+		\infer1{⊢ ¬∃x.¬P(x)}
+		\end{prooftree}
+		\]
+		
+		
+		Henkin constant quantifiers
+		\[
+		\begin{prooftree}
+		\hypo{P(t/x) ⊢ Δ}
+		\infer1{∀xP(x) ⊢ Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{Γ ⊢ P (c_{∀x.P}/x)}
+		\infer1{Γ ⊢ ∀xP(x)}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\hypo{P(c_{∃x.P}/x) ⊢ Δ}
+		\infer1{∃xP(x) ⊢ Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{Γ ⊢ P(t/x)}
+		\infer1{Γ ⊢ ∃xP(x)}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\hypo{P(c_{∀x.¬P(x)})⊢}
+		\infer1{¬∀x.¬P(x) ⊢ }
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{⊢P(t)}
+		\infer1{⊢ ¬∀x.¬P(x)}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{P(t)⊢}
+		\infer1{¬∃x.¬P(x) ⊢ }
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{⊢P(c_{∃x.¬P(x)})}
+		\infer1{⊢ ¬∃x.¬P(x)}
+		\end{prooftree}
+		\]
+	\end{center}
+
+\section{Operational Rules}
+	\begin{center}
+				\subsection{Negation}
+				\begin{center}
+					\[
+					\begin{prooftree}
+					\hypo{ ⊢ A}
+					\infer1{¬ A ⊢}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{A ⊢ }
+					\infer1{⊢ ¬ A}
+					\end{prooftree}
+					\]
+				\end{center}
+				
+				
+				\subsection{Negative Junctions}
+				\begin{center}
+					\[
+					\begin{prooftree}
+					\hypo{⊢ A}
+					\hypo{⊢ B}
+					\infer2{¬A \vee ¬B ⊢ }
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{A ⊢ }
+					\infer1{ ⊢ ¬A \vee ¬B}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{B ⊢ }
+					\infer1{ ⊢ ¬A \vee ¬B}
+					\end{prooftree}
+					\]
+					
+					\[
+					\begin{prooftree}
+					\hypo{ ⊢ A}
+					\infer1{¬A \wedge ¬B ⊢ }
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{ ⊢ B}
+					\infer1{¬A \wedge ¬B ⊢ }
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{A ⊢ }
+					\hypo{B ⊢ }
+					\infer2{⊢ ¬A \wedge ¬B}
+					\end{prooftree}
+					\]
+				\end{center}
+
+				\subsection{Conditionals}
+				\begin{center}
+					\[
+					\begin{prooftree}
+					\hypo{⊢ A}
+					\hypo{B ⊢ }
+					\infer2{¬A \vee B ⊢}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{⊢ A}
+					\infer1{⊢ ¬A \vee B}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{Γ ⊢ B}
+					\infer1{Γ⊢ A \vee B}
+					\end{prooftree}
+					\]
+					
+					\[
+					\begin{prooftree}
+					\hypo{A ⊢ Δ}
+					\infer1{A \wedge ¬B ⊢ Δ}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{ ⊢ B}
+					\infer1{A \wedge ¬B ⊢ }
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{⊢ A}
+					\hypo{B ⊢ }
+					\infer2{⊢ A \wedge ¬B}
+					\end{prooftree}
+					\]
+				\end{center}
+				
+				\subsection{Junctions}
+				\begin{center}
+					\[
+					\begin{prooftree}
+					\hypo{A ⊢ Δ}
+					\hypo{B ⊢ Δ}
+					\infer2{A \vee B ⊢ Δ}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{Γ ⊢ A}
+					\infer1{Γ ⊢ A \vee B}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{Γ ⊢ B}
+					\infer1{Γ ⊢ A \vee B}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{C ⊢ A, B}
+					\infer1{C ⊢ A \vee B}
+					\end{prooftree}
+					\]
+					
+					\[
+					\begin{prooftree}
+					\hypo{A, B ⊢ C}
+					\infer1{A \wedge B ⊢ C}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{A ⊢ Δ}
+					\infer1{A \wedge B ⊢ Δ}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{B ⊢ Δ}
+					\infer1{A \wedge B ⊢ Δ}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{Γ ⊢ A}
+					\hypo{Γ ⊢ B}
+					\infer2{Γ ⊢ A \wedge B}
+					\end{prooftree}
+					\]
+				\end{center}
+			
+				\subsection{Biconditionals}
+				\begin{center}
+					\[
+					\begin{prooftree}
+					\hypo{⊢ A}
+					\hypo{B ⊢ }
+					\infer2{(¬A \vee B) \wedge (¬B \vee A) ⊢ }
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{A ⊢ }
+					\hypo{B ⊢ }
+					\infer2{ ⊢ (¬A \vee B) \wedge (¬B \vee A)}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{Γ ⊢ B}
+					\hypo{Γ ⊢ A}
+					\infer2{Γ ⊢ (¬A \vee B) \wedge (¬B \vee A)}
+					\end{prooftree}
+					\]
+					
+					\[
+					\begin{prooftree}
+					\hypo{A ⊢ }
+					\hypo{⊢A}
+					\infer2{(A \wedge B) \vee  (¬A \wedge ¬B) ⊢ }
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{A ⊢ }
+					\hypo{⊢B}
+					\infer2{(A \wedge B) \vee  (¬A \wedge ¬B) ⊢ }
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{B ⊢ }
+					\hypo{⊢A}
+					\infer2{(A \wedge B) \vee  (¬A \wedge ¬B) ⊢ }
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{B ⊢ }
+					\hypo{⊢B}
+					\infer2{(A \wedge B) \vee  (¬A \wedge ¬B) ⊢ }
+					\end{prooftree}
+					\]
+					
+					\[
+					\quad
+					\begin{prooftree}
+					\hypo{Γ ⊢ A}
+					\hypo{Γ ⊢ B}
+					\infer2{Γ ⊢ (A \wedge B) \vee  (¬A \wedge ¬B)}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{B ⊢ }
+					\hypo{A ⊢ }
+					\infer2{ ⊢ (A \wedge B) \vee  (¬A \wedge ¬B)}
+					\end{prooftree}
+					\]
+					
+					TODO: XOR-like
+					\[
+					\begin{prooftree}
+					\hypo{B ⊢ Δ}
+					\hypo{A ⊢ Δ}
+					\infer2{(¬A \wedge B) \vee (¬B \vee A) ⊢ Δ}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{⊢ A}
+					\hypo{⊢ B}
+					\infer2{(¬A \wedge B) \vee (¬B \vee A) ⊢ }
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{A ⊢ }
+					\hypo{⊢ B}
+					\infer2{(¬A \wedge B) \vee (¬B \vee A) ⊢ }
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{⊢ A}
+					\hypo{B ⊢}
+					\infer2{(¬A \wedge B) \vee (¬B \vee A) ⊢ }
+					\end{prooftree}
+					\]
+					
+					\[
+					\quad
+					\begin{prooftree}
+					\hypo{A ⊢ }
+					\hypo{⊢ B}
+					\infer2{ ⊢ (¬A \wedge B) \vee (¬B \vee A)}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{⊢ A}
+					\hypo{B ⊢}
+					\infer2{⊢ (¬A \wedge B) \vee (¬B \vee A)}
+					\end{prooftree}
+					\]
+					
+					\[
+					\begin{prooftree}
+					\hypo{⊢ A}
+					\hypo{⊢ B}
+					\infer2{(A \vee B) \wedge  (¬A \vee ¬B) ⊢ }
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{A ⊢ Δ}
+					\hypo{B ⊢ Δ}
+					\infer2{(A \vee B) \wedge  (¬A \vee ¬B) ⊢ Δ}
+					\end{prooftree}
+					\]
+					
+					\[
+					\begin{prooftree}
+					\hypo{⊢ A}
+					\hypo{A ⊢}
+					\infer2{⊢ (A \vee B) \wedge  (¬A \vee ¬B)}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{⊢ B}
+					\hypo{B ⊢}
+					\infer2{⊢ (A \vee B) \wedge  (¬A \vee ¬B)}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{⊢ A}
+					\hypo{B ⊢}
+					\infer2{⊢ (A \vee B) \wedge  (¬A \vee ¬B)}
+					\end{prooftree}
+					\quad
+					\begin{prooftree}
+					\hypo{⊢ B}
+					\hypo{A ⊢}
+					\infer2{⊢ (A \vee B) \wedge  (¬A \vee ¬B)}
+					\end{prooftree}
+					\quad
+					\]
+				\end{center}
+\end{center}
+
+\part{Theorems}
+	\begin{center}
+		
+	\end{center}
+
+\end{document}

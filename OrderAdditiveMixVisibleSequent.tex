@@ -1,0 +1,408 @@
+
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{ebproof}
+\usepackage{fullpage}
+\usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
+\usepackage{stix}
+
+\newunicodechar{Γ}{\Gamma}
+\newunicodechar{Δ}{\Delta}
+\newunicodechar{Π}{\Pi}
+\newunicodechar{Λ}{\Lambda}
+\newunicodechar{Θ}{\Theta}
+
+\newunicodechar{⊢}{\vdash}
+
+\newunicodechar{℘}{\wp}
+\newunicodechar{⊗}{\otimes}
+\newunicodechar{⊕}{\oplus}
+\newunicodechar{¬}{\neg}
+
+\newunicodechar{→}{\rightarrow}
+
+\newunicodechar{⊥}{\bot}
+\newunicodechar{⊤}{\top}
+
+\setlength{\parindent}{0em}
+
+\author{James Martin, Ian D.L.N. Mclean}
+\title{Ordinary Additive Sequent Calculus with Partial Visibility}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Negation has partial visibility; the junctions obey strict visibility but the conditionals obey partial visibility.
+\end{abstract}
+	\begin{center}
+		\section{Structural Rules}
+			\begin{center}
+				\[
+				\begin{prooftree}
+				\infer0[Id]{A ⊢ A}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ ⊢ A}
+				\hypo{A ⊢ Δ}
+				\infer2[cut]{Γ ⊢ Δ}
+				\end{prooftree}
+				\]
+			\end{center}
+		
+		\section{Operational Rules}
+			\begin{center}
+				Negations
+				\[
+				\begin{prooftree}
+				\hypo{ ⊢ Δ, A}
+				\infer1{¬_{R} A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ }
+				\infer1{Γ ⊢ ¬_{R} A}
+				\end{prooftree}
+				\]
+				\[
+				\begin{prooftree}
+				\hypo{A, Γ ⊢ }
+				\infer1{Γ ⊢ ¬_{L} A}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{ ⊢ A, Δ}
+				\infer1{¬_{L} A ⊢ Δ}
+				\end{prooftree}
+				\]
+				
+				NANDs and NORs
+				
+				\[
+				\begin{prooftree}
+				\hypo{⊢ A, Δ}
+				\hypo{⊢ B, Δ}
+				\infer2{¬A ⊕ ¬B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ }
+				\infer1{Γ ⊢ ¬A ⊕ ¬B}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, B ⊢ }
+				\infer1{Γ ⊢ ¬A ⊕ ¬B}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{⊢ B, Δ}
+				\hypo{ ⊢ A, Δ}
+				\infer2{¬B ⊕ ¬A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ }
+				\infer1{Γ ⊢ ¬B ⊕ ¬A}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, B ⊢ }
+				\infer1{Γ ⊢ ¬B ⊕ ¬A}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{ ⊢ A, Δ}
+				\infer1{¬A \& ¬B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{ ⊢ B, Δ}
+				\infer1{¬A \& ¬B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ,A ⊢ }
+				\hypo{Γ,B ⊢ }
+				\infer2{Γ⊢ ¬A \& ¬B}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{ ⊢ A,Δ}
+				\infer1{¬B \& ¬A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{ ⊢ B,Δ}
+				\infer1{¬B \& ¬A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, B ⊢ }
+				\hypo{Γ, A ⊢ }
+				\infer2{Γ ⊢ ¬ B \& ¬ A}
+				\end{prooftree}
+				\]
+				
+				Conditionals
+				
+				\[
+				\begin{prooftree}
+				\hypo{⊢ B,Δ}
+				\hypo{A ⊢ Δ}
+				\infer2{¬B ⊕ A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{A ⊢ Δ}
+				\hypo{⊢ B,Δ}
+				\infer2{A ⊕ ¬B ⊢Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\infer1{Γ ⊢ A ⊕ ¬B, Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, B ⊢ }
+				\infer1{Γ ⊢ A ⊕ ¬B}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{ ⊢ A, Δ}
+				\hypo{B ⊢ Δ}
+				\infer2{¬A ⊕ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{B ⊢ Δ}
+				\hypo{ ⊢ A, Δ}
+				\infer2{B ⊕ ¬A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ }
+				\infer1{Γ ⊢ B ⊕ ¬A}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ B, Δ}
+				\infer1{Γ ⊢ B ⊕ ¬A, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\infer1{Γ, A \& ¬B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{ ⊢ B, Δ}
+				\infer1{A \& ¬B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ⊢ A}
+				\hypo{Γ,B ⊢ }
+				\infer2{Γ⊢ A \& ¬B}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ,B ⊢ }
+				\hypo{Γ⊢ A}
+				\infer2{Γ⊢ ¬B \& A}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{ ⊢ A, Δ}
+				\infer1{B \& ¬A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, B ⊢ Δ}
+				\infer1{Γ, B \& ¬A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ B}
+				\hypo{Γ,A ⊢ }
+				\infer2{Γ ⊢ B \& ¬ A}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ,A ⊢ }
+				\hypo{Γ ⊢ B}
+				\infer2{Γ ⊢ ¬A \& B}
+				\end{prooftree}
+				\]
+				
+				Conjunction and Disjunction
+				
+				\[
+				\begin{prooftree}
+				\hypo{A ⊢ Δ}
+				\hypo{B ⊢ Δ}
+				\infer2{A ⊕ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A}
+				\infer1{Γ ⊢ A ⊕ B}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ B}
+				\infer1{Γ ⊢ A ⊕ B}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{B ⊢ Δ}
+				\hypo{A ⊢ Δ}
+				\infer2{B ⊕ A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A}
+				\infer1{Γ ⊢ B ⊕ A}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ B}
+				\infer1{Γ ⊢ B ⊕ A}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{A ⊢ Δ}
+				\infer1{A \& B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{B ⊢ Δ}
+				\infer1{A \& B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A}
+				\hypo{Γ ⊢ B}
+				\infer2{Γ ⊢ A \& B}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{A ⊢ Δ}
+				\infer1{B \& A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{B ⊢ Δ}
+				\infer1{B \& A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ B}
+				\hypo{Γ ⊢ A}
+				\infer2{Γ ⊢ B \& A}
+				\end{prooftree}
+				\]
+				Biconditionals
+				\[
+				\begin{prooftree}
+				\hypo{⊢ A, Δ}
+				\hypo{B ⊢ Δ}
+				\infer2{(¬A ⊕ B) \& (¬B ⊕ A) ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{⊢ B, Δ}
+				\hypo{A ⊢ Δ}
+				\infer2{(¬A ⊕ B) \& (¬B ⊕ A) ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ }
+				\hypo{Γ, B ⊢ }
+				\infer2{Γ ⊢ (¬A ⊕ B) \& (¬B ⊕ A)}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ B, Δ}
+				\hypo{Γ ⊢ A, Δ}
+				\infer2{Γ ⊢ (¬A ⊕ B) \& (¬B ⊕ A), Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{A ⊢ Δ}
+				\hypo{⊢A, Δ}
+				\infer2{(A \& B) ⊕  (¬A \& ¬B) ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{A ⊢ Δ}
+				\hypo{⊢B, Δ}
+				\infer2{(A \& B) ⊕  (¬A \& ¬B) ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{B ⊢ Δ}
+				\hypo{⊢A, Δ}
+				\infer2{(A \& B) ⊕  (¬A \& ¬B) ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{B ⊢ Δ}
+				\hypo{⊢B, Δ}
+				\infer2{(A \& B) ⊕  (¬A \& ¬B) ⊢ Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\hypo{Γ ⊢ B, Δ}
+				\infer2{Γ ⊢ (A \& B) ⊕  (¬A \& ¬B),Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, B ⊢ }
+				\hypo{Γ, A ⊢ }
+				\infer2{Γ ⊢ (A \& B) ⊕  (¬A \& ¬B)}
+				\end{prooftree}
+				\]
+				
+				TODO: Apartness
+				
+			\end{center}
+		
+		\part{Theorems}
+			\begin{center}
+			\end{center}
+	\end{center}
+
+
+\end{document}

@@ -1,0 +1,825 @@
+
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{ebproof}
+\usepackage{fullpage}
+\usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
+\usepackage{stix}
+
+\newunicodechar{Γ}{\Gamma}
+\newunicodechar{Δ}{\Delta}
+
+\newunicodechar{Θ}{\Theta}
+\newunicodechar{Λ}{\Lambda}
+
+\newunicodechar{Ξ}{\Xi}
+\newunicodechar{Π}{\Pi}
+
+\newunicodechar{Φ}{\Phi}
+\newunicodechar{Ψ}{\Psi}
+
+\newunicodechar{Ω}{\Omega}
+
+\newunicodechar{⊢}{\vdash}
+
+\newunicodechar{⊕}{\oplus}
+\newunicodechar{¬}{\neg}
+
+\newunicodechar{⊗}{\otimes}
+\newunicodechar{→}{\rightarrow}
+\newunicodechar{←}{\leftarrow}
+\newunicodechar{↔}{\leftrightarrow}
+\newunicodechar{↮}{\nleftrightarrow}
+
+
+\newunicodechar{⅋}{\upand}
+\newunicodechar{↛}{\nrightarrow}
+\newunicodechar{↚}{\nleftarrow}
+
+\newunicodechar{⊥}{\bot}
+\newunicodechar{⊤}{\top}
+
+\setlength{\parindent}{0em}
+
+\author{James Martin, Ian D.L.N. Mclean}
+\title{The Lattice of Conservative Non-Classical and Classical Sequent Calculi}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Subclassical sequent calculi are defined by functional incompleteness and a strict subset of de Morgan dualities for the quantified predicate calculi.
+Superclassical sequent calculi are defined by at least functional completeness and classical de Morgan duality.
+\end{abstract}
+
+\part{Preliminaries}
+\begin{center}
+	\begin{flushleft}
+		The key concept to the construction of logical calculi that are distinctly different from classical logic is functional incompleteness with respect to the Boolean domain and Boolean functions.
+	\end{flushleft}
+	\begin{flushleft}
+		If a calculus has any classical logical connectives such that we can express every theorem of the classical calculus then our logical calculi would degenerate to the classical calculus and we'd lose in general the specificity that is gained by constructive reasoning.
+	\end{flushleft}
+	\begin{flushleft}
+		Roughly speaking, if any set of operators or functions is not a subset of at least one of the five functionally incomplete sets then that set of operators or functions is functionally complete.
+	\end{flushleft}
+	\begin{flushleft}
+		We generalize this in a manner analogous to Tarski's original formal interpretation as applied to the problem of decidability of theories in standard formalization. If we have collections of non-classical or sub-classical operators or functions that can be interpreted in at least one of the five functionally incomplete sets then those collections of operators or functions are functionally incomplete with respect to the Boolean domain and Boolean functions.
+	\end{flushleft}
+	\begin{flushleft}
+		Finally, if we restrict ourselves to only those logical connectives which are classical then the systems can not extend to each other and it seems can not interpret each other, but if we extend these systems by some non-classical logical connective that is compatible with a given set of functionally incomplete logical connectives then we can extend between these systems and interpret between them.
+	\end{flushleft}
+	\section{Interpretations}
+		\subsection{Operational Interpretations}
+		\subsection{Structural Interpretations}
+		\subsection{Systematic Interpretations}
+	\section{Formal Definition of Subclassical Theories}
+		\subsection{Monotonic Theories}
+		$\left\{ Γ ⊢ A \right\} \bigcup \left\{ A ⊢ Δ \right\}$
+		\subsection{Truth-Preserving Theories}
+		$\left\{ A ⊢ Δ \right\}$
+		\subsection{False-Preserving Theories}
+		$\left\{ Γ ⊢ A \right\}$
+		\subsection{Affine Theories}
+		$\left\{ Γ ⊢ A \right\} \bigcap \left\{ A ⊢ Δ \right\}=\emptyset$
+		\subsection{Self-Dual Theories}
+		$\left\{ A ⊢ A \right\}$
+	
+\end{center}
+
+\part{Conservative Duality}
+Key Concepts:
+
+Sequent calculus: A formal system for representing and reasoning about logical formulas.
+
+Theorem: A logical statement that can be proven using a sequent calculus.
+
+Antitheorem: A logical statement that can be disproven using a sequent calculus.
+
+Classical logic: A system of logic that includes the laws of commutativity, association, distributivity, identity, double negation, excluded middle, and non-contradiction.
+
+Superclassical logic: A system of logic that extends classical logic by adding additional theorems or antitheorems.
+
+Subclassical logic: A system of logic that is weaker than classical logic, meaning it does removes some of the theorems or antitheorems of classical logic while preserving at least one theorem or antitheorem.
+
+Definition 1: A sequent calculus is isomorphic if it proves the same theorems as another calculus but not more and disproves the same theorems as another calculus but not more.
+
+Definition 2: A sequent calculus is a subtension of another calculus if it proves the fewer theorems or disproves fewer antitheorems than that calculus and either proves some of the same theorems as that calculus or disproves some of the same antitheorems as that calculus.
+
+Definition 3: A sequent calculus is a conservative extension of another calculus if it proves all of the same theorems as that calculus and disproves all the same antitheorems as that calculus and proves strictly more theorems than that calculus or disproves strictly more antitheorems than that calculus.
+
+Definition 4: A sequent calculus is superclassical if it preserves all of the theorems of classical logic and it proves more theorems than classical logic or it disproves more antitheorems than classical logic.
+
+Definition 5: A sequent calculus is subclassical if it does not preserve all of the theorems of classical logic or if it does not preserve all the antitheorems of classical logic.
+
+Definition 6: Two sequent calculi are conservative duals of each other if they are mutually exclusive and share some theorems or antitheorems.
+
+Definition 1: Isomorphic sequent calculus:
+
+Two sequent calculi, C1 and C2, are isomorphic if they prove the same theorems as each other and disprove the same antitheorems as each other. In other words, for any sequent S, if C1 proves S, then C2 also proves S, and if C1 disproves S, then C2 also disproves S.
+
+Definition 2: Subtension sequent calculus:
+
+A sequent calculus, C1, is a subtension of another calculus, C2, if C1 proves fewer theorems or disproves fewer antitheorems than C2, and either C1 proves some of the same theorems as C2 or disproves some of the same antitheorems as C2. In other words, C1 is a subset of C2 in terms of the theorems it proves and the antitheorems it disproves.
+
+Definition 3: Conservative extension sequent calculus:
+
+A sequent calculus, C1, is a conservative extension of another calculus, C2, if C1 proves all of the same theorems as C2 and disproves all the same antitheorems as C2, and C1 proves strictly more theorems than C2 or disproves strictly more antitheorems than C2. In other words, C1 extends C2 by adding more theorems or disproving more antitheorems.
+
+Definition 4: Superclassical sequent calculus:
+
+A sequent calculus is superclassical if it preserves all of the theorems of classical logic and it proves more theorems than classical logic or it disproves more antitheorems than classical logic. In other words, a superclassical sequent calculus goes beyond the scope of classical logic in terms of the theorems it proves or the antitheorems it disproves.
+
+Definition 5: Subclassical sequent calculus:
+
+A sequent calculus is subclassical if it does not preserve all of the theorems of classical logic or if it does not preserve all the antitheorems of classical logic. In other words, a subclassical sequent calculus is weaker than classical logic in terms of the theorems it proves or the antitheorems it disproves.
+
+Definition 6: Conservative duals of sequent calculi:
+
+Two sequent calculi, C1 and C2, are conservative duals of each other if they are mutually exclusive and share some theorems or antitheorems. In other words, they share some number of theorems in common but have some number of theorems or antitheorems that are independent of each other calculi.
+
+Definition 1:
+Two sequent calculi, C1 and C2, are isomorphic sequent calculi if they prove the same theorems and disprove the same antitheorems for all sequents S.
+
+Definition 2: Conservative subtension sequent calculus:
+A sequent calculus, C1, is a conservative sequent subtension of another calculus, C2, if C1 proves fewer theorems or disproves fewer antitheorems than C2, and either C1 proves some of the same theorems as C2 or disproves some of the same antitheorems as C2, and it does not prove theorems that its conservative extension does not prove and it does not disprove antitheorems that its conservative extension does not disprove. In other words, C1 is a subset of C2 in terms of the theorems it proves and the antitheorems it disproves.
+
+Definition 3: Conservative extension sequent calculus:
+A sequent calculus, C1, is a conservative sequent calculus extension of another calculus, C2, if C1 proves all of the same theorems as C2 and disproves all the same antitheorems as C2, and C1 proves strictly more theorems than C2 or disproves strictly more antitheorems than C2.
+
+Definition 4: Superclassical sequent calculus:
+A sequent calculus is superclassical if it preserves all of the theorems of classical logic and it proves more theorems than classical logic or it disproves more antitheorems than classical logic. In other words, a superclassical sequent calculus goes beyond the scope of classical logic in terms of the theorems it proves or the antitheorems it disproves.
+
+Definition 5: Subclassical sequent calculus:
+A sequent calculus is subclassical if it does not preserve all of the theorems of classical logic or if it does not preserve all the antitheorems of classical logic. In other words, a subclassical sequent calculus is weaker than classical logic in terms of the theorems it proves or the antitheorems it disproves.
+
+Definition 6: Conservative duals of sequent calculi:
+Two sequent calculi, C1 and C2, are conservative duals of each other if they are mutually exclusive and share some theorems or antitheorems, and they do not prove all the same theorems and disprove all the same antitheorems. In other words, they share some number of theorems in common but have some number of theorems or antitheorems that are independent of each other calculi.
+
+Definition 7: A sequent calculus is a conservative non-classical sequent calculus if it does not contradict any theorems, antitheorems, or refutations of classical logic; equivalently, a sequent calculus is a conservative non-classical sequent calculus if it is compatible with classical logic; equivalently, a sequent calculus is a conservative non-classical sequent calculus if all theorems and antitheorems of classical logic are admissible or valid in the sequent calculus.
+
+   ∀x. ( x ⇔ (∃y. (Subtend(x, y) ∨ Extend(x, y) ∨ Dual(x, y) ∨ Isomorph(x, y))))
+   
+   ∀x,y.(Dual(x,y)↔∃z,w.(Extend(x,z)∧Extend(y,z)∧Subtension(w,x)∧Subtension(w,y)))
+   
+∀x,y.(Subtension(x,y) ⇔ (Theorem(x)→Theorem(y)∧AntiTheorem(x)→AntiTheorem(y))) (Definition of subtension)
+
+∀x,y.(Extend(x,y) ⇔ (Theorem(y)→Theorem(x)∧AntiTheorem(y)→AntiTheorem(x))) (Definition of extension)
+
+∀x,y.(Dual(x,y) ⇔ Negate(Isomorph(x, y), SequentCalculus(x)) ∧ ∃z,w.(SuperCalc(x,z) ∧ SuperCalc(y,z) ∧ SubCalc(w,x) ∧ SubCalc(w,y))) (Definition of dual)
+
+∃x∃y. (Doubtful(Deniable(x, SequentCalculus(y)), SequentCalculus(y))) ⇔ Clanemalo(x, SequentCalculus(y))
+∃x∃y. (Deniable(Doubtful(x, SequentCalculus(y)), SequentCalculus(y))) ⇔ negIndependent(x, SequentCalculus(y)) ⇔ Negate(AntiTheorem(x, SequentCalculus(y)), SequentCalculus(y))
+
+∃x∃y. Negate(x, SequentCalculus(y)) ⇔ Clanemalo(x, SequentCalculus(y)) ∨ negIndependent(x, SequentCalculus(y)) ∨ Deniable(x, SequentCalculus(y)) ∨ Doubtful(x, SequentCalculus(y))
+
+∀x, y. Independent(x, y) ⇔ (¬Proves(y, x) ∧ ¬Disproves(y, x)) ⇔ (posIndependent(x, y) ∧ negIndependent(x, y)) ⇔ ∀z. (¬Theorem(z, x) ∧ ¬AntiTheorem(z, x))
+∀x∃y. (posIndepenedent(x, y) ⇔ Negate(Theorem(x, SequentCalculus(y)), SequentCalculus(y)))
+
+   Definition of subtension   
+A Sequent Calculus, SequentCalc0, is called a subtension of a Sequent Calculus, SequentCalc1, if every theorem in SequentCalc0 is also in SequentCalc1 and every antitheorem in SequentCalc0 is also in SequentCalc1; under the same conditions, SequentCalc1 is an extension of SequentCalc0.
+
+Theorem 1: For any two sequent calculi C1 and C2, the following are mutually exclusive and jointly exhaustive:
+C1 is a conservative extension of C2.
+C2 is a conservative extension of C1.
+C1 and C2 are conservative duals of each other.
+C1 is a conservative subtension of C2.
+C2 is a conservative subtension of C1.
+Corollary1: There are no other ways for two sequent calculi to be related to each other.
+Theorem 2: The lattice of sequent calculi has a supremum sequent calculus and an infimum sequent calculus.
+Corollary 2: The supremum sequent calculus is superclassical.
+Corollary 3: The infimum sequent calculus is subclassical.
+
+Theorems:
+
+Theorem 1: For any two sequent calculi C1 and C2, the following are mutually exclusive and jointly exhaustive:
+C1 is a conservative extension of C2.
+C2 is a conservative extension of C1.
+C1 and C2 are conservative duals of each other.
+C1 is a conservative subtension of C2.
+C2 is a conservative subtension of C1.
+
+Corollary: There are no other ways for two sequent calculi to be related to each other.
+
+Theorem 2: The lattice of sequent calculi has a supremum sequent calculus and an infimum sequent calculus.
+
+Corollary 1: The supremum sequent calculus is superclassical.
+
+Corollary 2: The infimum sequent calculus is subclassical.
+\begin{center}
+	
+	\section{Structural Monotone Calculus}
+		\subsection{Structural Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0[Id]{A ⊢ A}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ A}
+			\hypo{A ⊢ Δ}
+			\infer2[Cut]{Γ ⊢ Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[wL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[Rw]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ, A, A ⊢ Δ}
+			\infer1[cL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ A, A Δ}
+			\infer1[Rc]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ_0, A, B, Γ_1 ⊢ Δ}
+			\infer1[pL]{Γ_0, B, A, Γ_1 ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ_1, A, B, Δ_0}
+			\infer1[Rp]{Γ ⊢ Δ_1, B, A, Δ_0}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Unit Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0{Γ, ⊥ ⊢ Δ}
+			\end{prooftree}
+			\quad
+			\begin{prooftree}
+			\infer0{ Γ ⊢ ⊤, Δ}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Operational Rules}
+		\begin{center}
+		
+			\subsubsection{Multiplicatives}
+			\begin{center}
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer1{Γ, A ⊗ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\hypo{Γ ⊢ B, Δ}
+				\infer2{Γ ⊢ A ⊗ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\hypo{Γ, B ⊢ Δ}
+				\infer2{Γ, A ⅋ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer1{Γ ⊢ A ⅋ B, Δ}
+				\end{prooftree}
+				\]
+			\end{center}
+		\end{center}
+		
+		\subsection{Theorems}
+		\begin{center}
+		\end{center}
+
+	\section{Structural Truth-Preserving Calculus}
+		\subsection{Structural Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0[Id]{A ⊢ A}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ A}
+			\hypo{A ⊢ Δ}
+			\infer2[Cut]{Γ ⊢ Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[wL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[Rw]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ, A, A ⊢ Δ}
+			\infer1[cL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ A, A Δ}
+			\infer1[Rc]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ_0, A, B, Γ_1 ⊢ Δ}
+			\infer1[pL]{Γ_0, B, A, Γ_1 ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ_1, A, B, Δ_0}
+			\infer1[Rp]{Γ ⊢ Δ_1, B, A, Δ_0}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Unit Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0{ Γ ⊢ ⊤, Δ}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Operational Rules}
+		\begin{center}
+			
+			\subsubsection{Multiplicatives}
+			\begin{center}
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer1{Γ, A ⊗ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\hypo{Γ ⊢ B, Δ}
+				\infer2{Γ ⊢ A ⊗ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\hypo{Γ, B ⊢ Δ}
+				\infer2{Γ, A ⅋ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer1{Γ ⊢ A ⅋ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\hypo{Γ, B ⊢ Δ}
+				\infer2{Γ, A → B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ B, Δ}
+				\infer1{Γ ⊢ A → B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\hypo{Γ ⊢ B, Δ}
+				\infer2{Γ, A ← B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, B ⊢ A, Δ}
+				\infer1{Γ ⊢ A ← B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer0{Γ, A ⊢ A, Δ}
+				\infer0{Γ, B ⊢ B, Δ}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer4{Γ, A ↔ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ B, Δ}
+				\hypo{Γ, B ⊢ A, Δ}
+				\infer2{Γ ⊢ A ↔ B, Δ}
+				\end{prooftree}
+				\]
+			\end{center}
+		\end{center}
+		
+		\subsection{Theorems}
+			\begin{center}
+			\end{center}
+
+	\section{Structural False-Preserving Calculus}
+		\subsection{Structural Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0[Id]{A ⊢ A}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ A}
+			\hypo{A ⊢ Δ}
+			\infer2[Cut]{Γ ⊢ Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[wL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[Rw]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ, A, A ⊢ Δ}
+			\infer1[cL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ A, A Δ}
+			\infer1[Rc]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ_0, A, B, Γ_1 ⊢ Δ}
+			\infer1[pL]{Γ_0, B, A, Γ_1 ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ_1, A, B, Δ_0}
+			\infer1[Rp]{Γ ⊢ Δ_1, B, A, Δ_0}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Unit Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0{Γ, ⊥ ⊢ Δ}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Operational Rules}
+		\begin{center}
+			
+			\subsubsection{Multiplicatives}
+			\begin{center}
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer1{Γ, A ⊗ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\hypo{Γ ⊢ B, Δ}
+				\infer2{Γ ⊢ A ⊗ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\hypo{Γ, B ⊢ Δ}
+				\infer2{Γ, A ⅋ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer1{Γ ⊢ A ⅋ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ B, Δ}
+				\infer1{Γ, A ↛ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\hypo{Γ, B ⊢ Δ}
+				\infer2{Γ ⊢ A ↛ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, B ⊢ A, Δ}
+				\infer1{Γ, A ↚ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\hypo{Γ ⊢ B, Δ}
+				\infer2{Γ ⊢ A ↚ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ B, Δ}
+				\hypo{Γ, B ⊢ A, Δ}
+				\infer2{Γ, A ↮ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer0{Γ, A ⊢ A, Δ}
+				\infer0{Γ, B ⊢ B, Δ}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer4{Γ ⊢ A ↮ B, Δ}
+				\end{prooftree}
+				\]
+			\end{center}
+		\end{center}
+		
+		\subsection{Theorems}
+		\begin{center}
+		\end{center}
+
+	\section{Structural Affine Calculus}
+		\subsection{Structural Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0[Id]{A ⊢ A}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ A}
+			\hypo{A ⊢ Δ}
+			\infer2[Cut]{Γ ⊢ Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[wL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[Rw]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ, A, A ⊢ Δ}
+			\infer1[cL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ A, A Δ}
+			\infer1[Rc]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ_0, A, B, Γ_1 ⊢ Δ}
+			\infer1[pL]{Γ_0, B, A, Γ_1 ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ_1, A, B, Δ_0}
+			\infer1[Rp]{Γ ⊢ Δ_1, B, A, Δ_0}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Unit Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0{Γ, ⊥ ⊢ Δ}
+			\end{prooftree}
+			\quad
+			\begin{prooftree}
+			\infer0{ Γ ⊢ ⊤, Δ}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Operational Rules}
+		\begin{center}
+			
+			\subsubsection{Multiplicatives}
+			\begin{center}
+								\[
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\infer1{Γ, ¬ A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\infer1{Γ ⊢ ¬A, Δ}
+				\end{prooftree}
+				\]
+
+				\[
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer0{Γ, A ⊢ A, Δ}
+				\infer0{Γ, B ⊢ B, Δ}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer4{Γ, A ↔ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ B, Δ}
+				\hypo{Γ, B ⊢ A, Δ}
+				\infer2{Γ ⊢ A ↔ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ B, Δ}
+				\hypo{Γ, B ⊢ A, Δ}
+				\infer2{Γ, A ↮ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer0{Γ, A ⊢ A, Δ}
+				\infer0{Γ, B ⊢ B, Δ}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer4{Γ ⊢ A ↮ B, Δ}
+				\end{prooftree}
+				\]
+			\end{center}
+		\end{center}
+		
+		\subsection{Theorems}
+		\begin{center}
+		\end{center}
+
+	\section{Structural Self-Dual Calculus}
+		\subsection{Structural Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0[Id]{A ⊢ A}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ A}
+			\hypo{A ⊢ Δ}
+			\infer2[Cut]{Γ ⊢ Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[wL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[Rw]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ, A, A ⊢ Δ}
+			\infer1[cL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ A, A Δ}
+			\infer1[Rc]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ_0, A, B, Γ_1 ⊢ Δ}
+			\infer1[pL]{Γ_0, B, A, Γ_1 ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ_1, A, B, Δ_0}
+			\infer1[Rp]{Γ ⊢ Δ_1, B, A, Δ_0}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Operational Rules}
+		\begin{center}
+			
+			\subsubsection{Multiplicatives}
+			\begin{center}
+				\[
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\infer1{Γ, ¬ A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\infer1{Γ ⊢ ¬A, Δ}
+				\end{prooftree}
+				\]
+			\end{center}
+		\end{center}
+		
+		\subsection{Theorems}
+		\begin{center}
+		\end{center}
+
+\end{center}
+
+\part{The Commutative Layer}
+\begin{center}
+	The commutative monotone, truth-preserving, false-preserving, and affine sequent systems.
+\end{center}
+
+\part{The Non-Commutative Erasure Layer}
+\begin{center}
+	The non-commutative erasable monotone, truth-preserving, false-preserving, and affine sequent systems.
+\end{center}
+
+\part{The Non-Commutative Cloning Layer}
+\begin{center}
+	The non-commutative clonable monotone, truth-preserving, false-preserving, and affine sequent systems.
+\end{center}
+
+\part{The No-Cloning and No-Erasure Non-Commutative Layer}
+\begin{center}
+	The non-commutative monotone, truth-preserving, false-preserving, and affine sequent systems.
+\end{center}
+
+
+
+\end{document}

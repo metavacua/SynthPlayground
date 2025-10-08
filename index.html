@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refuter Front-end</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Logical Formula Refuter</h1>
+
+        <div class="server-controls">
+            <h2>Server Control</h2>
+            <button id="stop-server-button" class="control-button stop">Stop Server</button>
+            <button id="restart-server-button" class="control-button restart">Restart Server</button>
+            <div id="server-status-message" class="status"></div>
+        </div>
+
+        <div class="input-section">
+            <label for="formula-input">Enter Logical Formula (as string):</label>
+            <textarea id="formula-input" rows="10" cols="50" placeholder="e.g., (dep (ind A B) (dual C))"></textarea>
+        </div>
+
+        <button id="refute-button">Refute Formula</button>
+
+        <div class="output-section">
+            <label for="result-output">Refutation Result:</label>
+            <textarea id="result-output" rows="10" cols="50" readonly></textarea>
+            <div id="refutation-status-message" class="status"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

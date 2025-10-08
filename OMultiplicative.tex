@@ -1,0 +1,453 @@
+
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{ebproof}
+\usepackage{fullpage}
+\usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
+\usepackage{stix}
+
+\newunicodechar{Γ}{\Gamma}
+\newunicodechar{Δ}{\Delta}
+
+\newunicodechar{Θ}{\Theta}
+\newunicodechar{Λ}{\Lambda}
+
+\newunicodechar{Ξ}{\Xi}
+\newunicodechar{Π}{\Pi}
+
+\newunicodechar{Φ}{\Phi}
+\newunicodechar{Ψ}{\Psi}
+
+\newunicodechar{Ω}{\Omega}
+
+\newunicodechar{⊢}{\vdash}
+
+\newunicodechar{⊕}{\oplus}
+\newunicodechar{¬}{\neg}
+
+\newunicodechar{⊗}{\otimes}
+\newunicodechar{→}{\rightarrow}
+\newunicodechar{←}{\leftarrow}
+
+\newunicodechar{⅋}{\upand}
+\newunicodechar{↛}{\nrightarrow}
+\newunicodechar{↚}{\nleftarrow}
+
+\newunicodechar{⊥}{\bot}
+\newunicodechar{⊤}{\top}
+
+\setlength{\parindent}{0em}
+
+\author{James Martin, Ian D.L.N. Mclean}
+\title{Ordinary Multiplicative Calculus}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+A sequent calculus of ordinary multiplicatives.
+\end{abstract}
+
+\section{Structural Rules}
+
+\begin{center}
+	\[
+	\begin{prooftree}
+	\infer0[Id]{A ⊢ A}
+	\end{prooftree}
+	\]
+	
+	\[
+	\begin{prooftree}
+	\hypo{Γ_{L}, A ⊢}
+	\hypo{⊢ Δ_{L}, A}
+	\infer2[Cut]{Γ_{L} ⊢ Δ_{L}}
+	\end{prooftree}
+	\]
+	
+	\[
+	\begin{prooftree}
+	\hypo{A, Γ_{R} ⊢}
+	\hypo{⊢ A, Δ_{R}}
+	\infer2[Cut]{Γ_{R} ⊢ Δ_{R}}
+	\end{prooftree}
+	\]
+	\[
+	\begin{prooftree}
+	\hypo{Γ ⊢ A}
+	\hypo{A ⊢ Δ}
+	\infer2[Cut]{Γ ⊢ Δ}
+	\end{prooftree}
+	\]
+	
+	\[
+	\begin{prooftree}
+	\hypo{Γ_{L}, A, Γ_{R} ⊢}
+	\hypo{⊢ Δ_{L}, A, Δ_{R}}
+	\infer2[Cut]{Γ_{L}, Γ_{R} ⊢ Δ_{L}, Δ_{R}}
+	\end{prooftree}
+	\]
+	
+	\[
+	\begin{prooftree}
+	\hypo{Γ_{L}, A, Γ_{R} ⊢ Δ_{M}}
+	\hypo{Γ_{M} ⊢ Δ_{L}, A, Δ_{R}}
+	\infer2[Cut]{Γ_{L}, Γ_{M}, Γ_{R} ⊢ Δ_{L}, Δ_{M}, Δ_{R}}
+	\end{prooftree}
+	\]
+\end{center}
+
+\newpage
+\section{Operational Rules}
+\begin{center}
+	\subsection{Negations}
+	\begin{center}
+		\[
+		\begin{prooftree}
+		\hypo{Γ_{L}, Γ_{R} ⊢ Δ_{L}, A, Δ_{R}}
+		\infer1{Γ_{L}, ¬_{M} A, Γ_{R} ⊢ Δ_{L}, Δ_{R}}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{ Γ_{L}, A, Γ_{R} ⊢ Δ_{L}, Δ_{R}}
+		\infer1{ Γ_{L}, Γ_{R} ⊢ Δ_{L}, ¬_{M} A, Δ_{R}}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\hypo{Γ_{L}, Γ_{R} ⊢ A, Δ}
+		\infer1{Γ_{L}, ¬_{L} A, Γ_{R} ⊢ Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{A, Γ ⊢ Δ_{L}, Δ_{R}}
+		\infer1{ Γ ⊢ Δ_{L}, ¬_{L} A, Δ_{R}}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\hypo{Γ_{L}, Γ_{R} ⊢ Δ, A}
+		\infer1{Γ_{L}, ¬_{R} A, Γ_{R} ⊢ Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{ Γ, A ⊢ Δ_{L}, Δ_{R}}
+		\infer1{ Γ ⊢ Δ_{L}, ¬_{R} A, Δ_{R}}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\hypo{Γ ⊢ A, Δ}
+		\infer1{¬_{L} A, Γ ⊢ Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{ A, Γ ⊢ Δ}
+		\infer1{ Γ ⊢ ¬_{L} A, Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{Γ ⊢ Δ, A}
+		\infer1{Γ, ¬_{R} A ⊢ Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{ Γ, A ⊢ Δ}
+		\infer1{ Γ ⊢ Δ, ¬_{R} A}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\hypo{Γ ⊢ Δ, A}
+		\infer1{¬^{*}_{L} A, Γ ⊢ Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{Γ, A ⊢ Δ}
+		\infer1{ Γ ⊢ ¬^{*}_{L} A, Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{Γ ⊢ A, Δ}
+		\infer1{Γ, ¬^{*}_{R} A ⊢ Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{ A, Γ ⊢ Δ}
+		\infer1{ Γ ⊢ Δ, ¬^{*}_{R} A}
+		\end{prooftree}
+		\]
+	\end{center}
+
+	\subsection{Junctions}
+	\begin{center}
+		\[
+		\begin{prooftree}
+		\hypo{Γ_{L}, A, B, Γ_{R} ⊢ Δ}
+		\infer1{Γ_{L}, A ⊗ B, Γ_{R} ⊢ Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{Γ_{L} ⊢ Δ_{L}, A}
+		\hypo{Γ_{R} ⊢ B, Δ_{R}}
+		\infer2{Γ_{L}, Γ_{R} ⊢ Δ_{L}, A ⊗ B, Δ_{R}}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\hypo{Γ_{L}, B, A, Γ_{R} ⊢ Δ}
+		\infer1{Γ_{L}, B ⊗ A, Γ_{R} ⊢ Δ}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{Γ_{L} ⊢ Δ_{L}, B}
+		\hypo{Γ_{R} ⊢ A, Δ_{R}}
+		\infer2{Γ_{L}, Γ_{R} ⊢ Δ_{L}, B ⊗ A, Δ_{R}}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\hypo{Γ_{L}, B ⊢ Δ_{L}}
+		\hypo{A, Γ_{R} ⊢ Δ_{R}}
+		\infer2{Γ_{L}, B ⅋ A, Γ_{R} ⊢ Δ_{L}, Δ_{R}}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{Γ ⊢ Δ_{L}, B, A, Δ_{R}}
+		\infer1{Γ ⊢ Δ_{L}, B ⅋ A, Δ_{R}}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\hypo{Γ_{L}, A ⊢ Δ_{L}}
+		\hypo{B, Γ_{R} ⊢ Δ_{R}}
+		\infer2{Γ_{L}, A ⅋ B, Γ_{R} ⊢ Δ_{L}, Δ_{R}}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\hypo{Γ ⊢ Δ_{L}, A, B, Δ_{R}}
+		\infer1{Γ ⊢ Δ_{L}, A ⅋ B, Δ_{R}}
+		\end{prooftree}
+		\]
+	\end{center}
+	\subsection{Conditionals}
+		\begin{center}
+			There are at least 4 kinds of implications possibly 5 if middle negation can be used.
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ_{L}, Γ_{M} ⊢ Δ_{L}, B}
+			\hypo{A, Γ_{R} ⊢ Δ_{R}}
+			\infer2{Γ_{L}, Γ_{M}, ¬_{R} B ⅋ A, Γ_{R} ⊢ Δ_{L}, Δ_{R}}
+			\end{prooftree}
+			\quad
+			\begin{prooftree}
+			\hypo{Γ_{L}, B ⊢ Δ_{L}, A, Δ_{R}}
+			\infer1{Γ_{L} ⊢ Δ_{L}, ¬_{R}B ⅋ A, Δ_{R}}
+			\end{prooftree}
+			\quad
+			\begin{prooftree}
+			\hypo{B, Γ_{R} ⊢ Δ_{L}, A, Δ_{R}}
+			\infer1{Γ_{R} ⊢ Δ_{L}, ¬_{L}B ⅋ A, Δ_{R}}
+			\end{prooftree}
+			\quad
+			\begin{prooftree}
+			\hypo{Γ_{L}, B, Γ_{R} ⊢ Δ_{L}, A, Δ_{R}}
+			\infer1{Γ_{L}, Γ_{R} ⊢ Δ_{L}, ¬_{M}B ⅋ A, Δ_{R}}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ_{L}, B, Γ_{R} ⊢ Δ_{L}, A}
+			\infer1{Γ_{L}, ¬_{R}A ⊗ B, Γ_{R} ⊢ Δ_{L}}
+			\end{prooftree}
+			\quad
+			\begin{prooftree}
+			\hypo{Γ_{L}, B, Γ_{R} ⊢ Δ_{L}, A, Δ_{R}}
+			\infer1{Γ_{L}, ¬_{M}A ⊗ B, Γ_{R} ⊢ Δ_{L}, Δ_{R}}
+			\end{prooftree}
+			\quad
+			\begin{prooftree}
+			\hypo{Γ_{L}, B, Γ_{R} ⊢ A, Δ_{R}}
+			\infer1{Γ_{L}, ¬_{L}A ⊗ B, Γ_{R} ⊢ Δ_{R}}
+			\end{prooftree}
+			\quad
+			\begin{prooftree}
+			\hypo{Γ_{L}, A ⊢ Δ_{L}}
+			\hypo{Γ_{R} ⊢ B, Δ_{R}}
+			\infer2{Γ_{L}, Γ_{R} ⊢ Δ_{L}, ¬_{R} A ⊗ B, Δ_{R}}
+			\end{prooftree}
+			\]
+			
+		\end{center}
+		\subsection{Biconditionals}
+			\begin{center}
+				\[
+				\begin{prooftree}
+				\hypo{Γ_{L}, ¬A ⅋ B, ¬B ⅋ A, Γ_{R} ⊢ Δ_{L},Δ_{M},Δ_{R}}
+				\infer1{Γ_{L}, (¬A ⅋ B)⊗(¬B ⅋ A), Γ_{R} ⊢ Δ_{L},Δ_{M},Δ_{R}}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ_{L} ⊢ Δ_{L}, A}
+				\hypo{B, ¬B ⊢ Δ_{M}}
+				\hypo{A, Γ_{R} ⊢ Δ_{R}}
+				\infer3{Γ_{L}, (¬_{R}A ⅋ B)⊗(¬B ⅋ A), Γ_{R} ⊢ Δ_{L},Δ_{M},Δ_{R}}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ_{L} ⊢ Δ, A}
+				\infer0{B ⊢ B}
+				\hypo{A, Γ_{R} ⊢ }
+				\infer3{Γ_{L}, (¬_{R}A ⅋ B)⊗(¬B ⅋ A), Γ_{R} ⊢ Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ_{L}⊢ Δ_{L}, A}
+				\infer0{B ⊢ B}
+				\hypo{A, Γ_{R} ⊢ Δ_{R}}
+				\infer3{Γ_{L}, (¬_{R} A ⅋ B)⊗(¬ B ⅋ A), Γ_{R} ⊢ Δ_{L},Δ_{R}}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ_{L}, A ⊢ Δ_{L}, B}
+				\hypo{B, Γ_{R} ⊢ A, Δ_{R}}
+				\infer2{Γ_{L}, Γ_{R} ⊢ Δ_{L}, (¬_{R}A ⅋ B)⊗(¬_{L}B ⅋ A), Δ_{R}}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ_{L}, B ⊢ Δ_{L}}
+				\infer0{A ⊢ A}
+				\hypo{Γ_{R} ⊢ B, Δ_{R}}
+				\infer3{Γ_{L}, (B ⅋ ¬ A)⊗(A ⅋ ¬_{L}B), Γ_{R} ⊢ Δ_{L},Δ_{R}}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ_{L}, B ⊢ Δ_{L}, A}
+				\hypo{A, Γ_{R} ⊢ B, Δ_{R}}
+				\infer2{Γ_{L}, Γ_{R} ⊢ Δ_{L}, (¬_{R}B ⅋ A)⊗(¬_{L}A ⅋ B), Δ_{R}}
+				\end{prooftree}
+				\]
+
+				\[
+				\begin{prooftree}
+				\hypo{Γ_{L} ⊢ Δ_{L}, A}
+				\hypo{B,A ⊢}
+				\hypo{Γ_{R} ⊢ B, Δ_{R}}
+				\infer3{Γ_{L}, (¬_{R} A ⅋ B)⊗(A ⅋ ¬_{L}B), Γ_{R} ⊢ Δ_{L},Δ_{R}}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ_{L}, B ⊢ Δ_{L}}
+				\hypo{⊢ A, B}
+				\hypo{A, Γ_{R} ⊢ Δ_{R}}
+				\infer3{Γ_{L}, (B ⅋ ¬ A)⊗(¬ B ⅋ A), Γ_{R} ⊢ Δ_{L},Δ_{R}}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ_{L}, B ⊢ Δ_{L}}
+				\hypo{⊢ B, A}
+				\hypo{A, Γ_{R} ⊢ Δ_{R}}
+				\infer3{Γ_{L}, (B ⅋ ¬ A)⊗(¬ B ⅋ A), Γ_{R} ⊢ Δ_{L},Δ_{R}}
+				\end{prooftree}				
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ_{L}, A , B ⊢ Δ_{L}}
+				\hypo{¬_{L}A , ¬_{L}B, Γ_{R} ⊢ Δ_{R}}
+				\infer2{Γ_{L}, (A ⊗ B)⅋(¬A ⊗ ¬B), Γ_{R} ⊢ Δ_{L},Δ_{R}}
+				\end{prooftree}
+				\]
+				Disjunctive Biconditional LHS
+				\[
+				\begin{prooftree}
+				\hypo{Γ_{L}, A , B ⊢ Δ_{L}}
+				\hypo{Γ_{R} ⊢ A, B, Δ_{R}}
+				\infer2{Γ_{L}, (A ⊗ B)⅋(¬A ⊗ ¬B), Γ_{R} ⊢ Δ_{L},Δ_{R}}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ_{L}, A , B ⊢ Δ_{L}}
+				\hypo{Γ_{R} ⊢ B, A, Δ_{R}}
+				\infer2{Γ_{L}, (A ⊗ B)⅋(¬A ⊗ ¬B), Γ_{R} ⊢ Δ_{L},Δ_{R}}
+				\end{prooftree}
+				\]
+			\end{center}
+\end{center}
+
+\part{Theorems}
+	\begin{center}
+		\[
+		\begin{prooftree}
+		\infer0{A ⊢ A}
+		\infer1{A ⊗ ¬ A ⊢ }
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{A ⊢ A}
+		\infer0{¬A ⊢ ¬A}
+		\infer2{A, ¬A ⊢ A ⊗ ¬A}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{¬A ⊢ ¬A}
+		\infer0{A ⊢ A}
+		\infer2{¬A, A ⊢ ¬A ⊗ A}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\infer0{A ⊢ A}
+		\infer1{⊢ ¬(A ⊗ ¬ A)}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\infer0{A ⊢ A}
+		\infer0{¬A ⊢ ¬A}
+		\infer2{A ⅋ ¬A ⊢ A , ¬A}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{¬A ⊢ ¬A}
+		\infer0{A ⊢ A}
+		\infer2{¬A ⅋ A ⊢ ¬A , A}
+		\end{prooftree}
+		\quad
+		\begin{prooftree}
+		\infer0{A ⊢ A}
+		\infer1{⊢  ¬A ⅋ A}
+		\end{prooftree}
+		\]
+		
+		\[
+		\begin{prooftree}
+		\infer0{A ⊢ A}
+		\infer1{¬(¬A ⅋ A) ⊢ }
+		\end{prooftree}
+		\]
+	\end{center}
+
+\end{document}

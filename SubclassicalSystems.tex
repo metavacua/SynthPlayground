@@ -1,0 +1,707 @@
+
+\documentclass{article}
+
+\usepackage{amsmath}
+\usepackage{ebproof}
+\usepackage{fullpage}
+\usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
+\usepackage{stix}
+
+\newunicodechar{Γ}{\Gamma}
+\newunicodechar{Δ}{\Delta}
+
+\newunicodechar{Θ}{\Theta}
+\newunicodechar{Λ}{\Lambda}
+
+\newunicodechar{Ξ}{\Xi}
+\newunicodechar{Π}{\Pi}
+
+\newunicodechar{Φ}{\Phi}
+\newunicodechar{Ψ}{\Psi}
+
+\newunicodechar{Ω}{\Omega}
+
+\newunicodechar{⊢}{\vdash}
+
+\newunicodechar{⊕}{\oplus}
+\newunicodechar{¬}{\neg}
+
+\newunicodechar{⊗}{\otimes}
+\newunicodechar{→}{\rightarrow}
+\newunicodechar{←}{\leftarrow}
+\newunicodechar{↔}{\leftrightarrow}
+\newunicodechar{↮}{\nleftrightarrow}
+
+
+\newunicodechar{⅋}{\upand}
+\newunicodechar{↛}{\nrightarrow}
+\newunicodechar{↚}{\nleftarrow}
+
+\newunicodechar{⊥}{\bot}
+\newunicodechar{⊤}{\top}
+
+\setlength{\parindent}{0em}
+
+\author{James Martin, Ian D.L.N. Mclean}
+\title{The Lattice of Subclassical Sequent Calculi}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+The lattice of sequent calculi formed from the combination of functionally incomplete sets of operations and structural rules in a classical metalanguage; purely classical logical connectives and Boolean functions that are functionally incomplete are isolated from each other, so in order to extend systems of functional incompleteness we need to extend them by at least one non-classical operator.
+\end{abstract}
+
+\part{Preliminaries}
+\begin{center}
+	\begin{flushleft}
+		The key concept to the construction of logical calculi that are distinctly different from classical logic is functional incompleteness with respect to the Boolean domain and Boolean functions.
+	\end{flushleft}
+	\begin{flushleft}
+		If a calculus has any classical logical connectives such that we can express every theorem of the classical calculus then our logical calculi would degenerate to the classical calculus and we'd lose in general the specificity that is gained by constructive reasoning.
+	\end{flushleft}
+	\begin{flushleft}
+		Roughly speaking, if any set of operators or functions is not a subset of at least one of the five functionally incomplete sets then that set of operators or functions is functionally complete.
+	\end{flushleft}
+	\begin{flushleft}
+		We generalize this in a manner analogous to Tarski's original formal interpretation as applied to the problem of decidability of theories in standard formalization. If we have collections of non-classical or sub-classical operators or functions that can be interpreted in at least one of the five functionally incomplete sets then those collections of operators or functions are functionally incomplete with respect to the Boolean domain and Boolean functions.
+	\end{flushleft}
+	\begin{flushleft}
+		Finally, if we restrict ourselves to only those logical connectives which are classical then the systems can not extend to each other and it seems can not interpret each other, but if we extend these systems by some non-classical logical connective that is compatible with a given set of functionally incomplete logical connectives then we can extend between these systems and interpret between them.
+	\end{flushleft}
+	\section{Interpretations}
+		\subsection{Operational Interpretations}
+		\subsection{Structural Interpretations}
+		\subsection{Systematic Interpretations}
+	\section{Formal Definition of Subclassical Theories}
+		\subsection{Monotonic Theories}
+		$\left\{ Γ ⊢ A \right\} \bigcup \left\{ A ⊢ Δ \right\}$
+		\subsection{Truth-Preserving Theories}
+		$\left\{ A ⊢ Δ \right\}$
+		\subsection{False-Preserving Theories}
+		$\left\{ Γ ⊢ A \right\}$
+		\subsection{Affine Theories}
+		$\left\{ Γ ⊢ A \right\} \bigcap \left\{ A ⊢ Δ \right\}=\emptyset$
+		\subsection{Self-Dual Theories}
+		$\left\{ A ⊢ A \right\}$
+	
+\end{center}
+
+\part{The Structural Layer}
+\begin{center}
+	The structural monotone, truth-preserving, false-preserving, and affine sequent systems.
+	
+	\section{Structural Monotone Calculus}
+		\subsection{Structural Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0[Id]{A ⊢ A}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ A}
+			\hypo{A ⊢ Δ}
+			\infer2[Cut]{Γ ⊢ Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[wL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[Rw]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ, A, A ⊢ Δ}
+			\infer1[cL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ A, A Δ}
+			\infer1[Rc]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ_0, A, B, Γ_1 ⊢ Δ}
+			\infer1[pL]{Γ_0, B, A, Γ_1 ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ_1, A, B, Δ_0}
+			\infer1[Rp]{Γ ⊢ Δ_1, B, A, Δ_0}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Unit Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0{Γ, ⊥ ⊢ Δ}
+			\end{prooftree}
+			\quad
+			\begin{prooftree}
+			\infer0{ Γ ⊢ ⊤, Δ}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Operational Rules}
+		\begin{center}
+		
+			\subsubsection{Multiplicatives}
+			\begin{center}
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer1{Γ, A ⊗ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\hypo{Γ ⊢ B, Δ}
+				\infer2{Γ ⊢ A ⊗ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\hypo{Γ, B ⊢ Δ}
+				\infer2{Γ, A ⅋ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer1{Γ ⊢ A ⅋ B, Δ}
+				\end{prooftree}
+				\]
+			\end{center}
+		\end{center}
+		
+		\subsection{Theorems}
+		\begin{center}
+		\end{center}
+
+	\section{Structural Truth-Preserving Calculus}
+		\subsection{Structural Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0[Id]{A ⊢ A}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ A}
+			\hypo{A ⊢ Δ}
+			\infer2[Cut]{Γ ⊢ Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[wL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[Rw]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ, A, A ⊢ Δ}
+			\infer1[cL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ A, A Δ}
+			\infer1[Rc]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ_0, A, B, Γ_1 ⊢ Δ}
+			\infer1[pL]{Γ_0, B, A, Γ_1 ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ_1, A, B, Δ_0}
+			\infer1[Rp]{Γ ⊢ Δ_1, B, A, Δ_0}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Unit Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0{ Γ ⊢ ⊤, Δ}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Operational Rules}
+		\begin{center}
+			
+			\subsubsection{Multiplicatives}
+			\begin{center}
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer1{Γ, A ⊗ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\hypo{Γ ⊢ B, Δ}
+				\infer2{Γ ⊢ A ⊗ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\hypo{Γ, B ⊢ Δ}
+				\infer2{Γ, A ⅋ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer1{Γ ⊢ A ⅋ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\hypo{Γ, B ⊢ Δ}
+				\infer2{Γ, A → B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ B, Δ}
+				\infer1{Γ ⊢ A → B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\hypo{Γ ⊢ B, Δ}
+				\infer2{Γ, A ← B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, B ⊢ A, Δ}
+				\infer1{Γ ⊢ A ← B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer0{Γ, A ⊢ A, Δ}
+				\infer0{Γ, B ⊢ B, Δ}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer4{Γ, A ↔ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ B, Δ}
+				\hypo{Γ, B ⊢ A, Δ}
+				\infer2{Γ ⊢ A ↔ B, Δ}
+				\end{prooftree}
+				\]
+			\end{center}
+		\end{center}
+		
+		\subsection{Theorems}
+			\begin{center}
+			\end{center}
+
+	\section{Structural False-Preserving Calculus}
+		\subsection{Structural Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0[Id]{A ⊢ A}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ A}
+			\hypo{A ⊢ Δ}
+			\infer2[Cut]{Γ ⊢ Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[wL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[Rw]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ, A, A ⊢ Δ}
+			\infer1[cL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ A, A Δ}
+			\infer1[Rc]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ_0, A, B, Γ_1 ⊢ Δ}
+			\infer1[pL]{Γ_0, B, A, Γ_1 ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ_1, A, B, Δ_0}
+			\infer1[Rp]{Γ ⊢ Δ_1, B, A, Δ_0}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Unit Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0{Γ, ⊥ ⊢ Δ}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Operational Rules}
+		\begin{center}
+			
+			\subsubsection{Multiplicatives}
+			\begin{center}
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer1{Γ, A ⊗ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\hypo{Γ ⊢ B, Δ}
+				\infer2{Γ ⊢ A ⊗ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\hypo{Γ, B ⊢ Δ}
+				\infer2{Γ, A ⅋ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer1{Γ ⊢ A ⅋ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ B, Δ}
+				\infer1{Γ, A ↛ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\hypo{Γ, B ⊢ Δ}
+				\infer2{Γ ⊢ A ↛ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, B ⊢ A, Δ}
+				\infer1{Γ, A ↚ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\hypo{Γ ⊢ B, Δ}
+				\infer2{Γ ⊢ A ↚ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ B, Δ}
+				\hypo{Γ, B ⊢ A, Δ}
+				\infer2{Γ, A ↮ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer0{Γ, A ⊢ A, Δ}
+				\infer0{Γ, B ⊢ B, Δ}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer4{Γ ⊢ A ↮ B, Δ}
+				\end{prooftree}
+				\]
+			\end{center}
+		\end{center}
+		
+		\subsection{Theorems}
+		\begin{center}
+		\end{center}
+
+	\section{Structural Affine Calculus}
+		\subsection{Structural Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0[Id]{A ⊢ A}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ A}
+			\hypo{A ⊢ Δ}
+			\infer2[Cut]{Γ ⊢ Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[wL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[Rw]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ, A, A ⊢ Δ}
+			\infer1[cL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ A, A Δ}
+			\infer1[Rc]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ_0, A, B, Γ_1 ⊢ Δ}
+			\infer1[pL]{Γ_0, B, A, Γ_1 ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ_1, A, B, Δ_0}
+			\infer1[Rp]{Γ ⊢ Δ_1, B, A, Δ_0}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Unit Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0{Γ, ⊥ ⊢ Δ}
+			\end{prooftree}
+			\quad
+			\begin{prooftree}
+			\infer0{ Γ ⊢ ⊤, Δ}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Operational Rules}
+		\begin{center}
+			
+			\subsubsection{Multiplicatives}
+			\begin{center}
+								\[
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\infer1{Γ, ¬ A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\infer1{Γ ⊢ ¬A, Δ}
+				\end{prooftree}
+				\]
+
+				\[
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer0{Γ, A ⊢ A, Δ}
+				\infer0{Γ, B ⊢ B, Δ}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer4{Γ, A ↔ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ B, Δ}
+				\hypo{Γ, B ⊢ A, Δ}
+				\infer2{Γ ⊢ A ↔ B, Δ}
+				\end{prooftree}
+				\]
+				
+				\[
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ B, Δ}
+				\hypo{Γ, B ⊢ A, Δ}
+				\infer2{Γ, A ↮ B ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, B, Δ}
+				\infer0{Γ, A ⊢ A, Δ}
+				\infer0{Γ, B ⊢ B, Δ}
+				\hypo{Γ, A, B ⊢ Δ}
+				\infer4{Γ ⊢ A ↮ B, Δ}
+				\end{prooftree}
+				\]
+			\end{center}
+		\end{center}
+		
+		\subsection{Theorems}
+		\begin{center}
+		\end{center}
+
+	\section{Structural Self-Dual Calculus}
+		\subsection{Structural Rules}
+		\begin{center}
+			\[
+			\begin{prooftree}
+			\infer0[Id]{A ⊢ A}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ A}
+			\hypo{A ⊢ Δ}
+			\infer2[Cut]{Γ ⊢ Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[wL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ}
+			\infer1[Rw]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ, A, A ⊢ Δ}
+			\infer1[cL]{Γ, A ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ A, A Δ}
+			\infer1[Rc]{Γ ⊢ A, Δ}
+			\end{prooftree}
+			\]
+			
+			\[
+			\begin{prooftree}
+			\hypo{Γ_0, A, B, Γ_1 ⊢ Δ}
+			\infer1[pL]{Γ_0, B, A, Γ_1 ⊢ Δ}
+			\end{prooftree}
+			\qquad
+			\begin{prooftree}
+			\hypo{Γ ⊢ Δ_1, A, B, Δ_0}
+			\infer1[Rp]{Γ ⊢ Δ_1, B, A, Δ_0}
+			\end{prooftree}
+			\]
+		\end{center}
+		
+		\subsection{Operational Rules}
+		\begin{center}
+			
+			\subsubsection{Multiplicatives}
+			\begin{center}
+				\[
+				\begin{prooftree}
+				\hypo{Γ ⊢ A, Δ}
+				\infer1{Γ, ¬ A ⊢ Δ}
+				\end{prooftree}
+				\quad
+				\begin{prooftree}
+				\hypo{Γ, A ⊢ Δ}
+				\infer1{Γ ⊢ ¬A, Δ}
+				\end{prooftree}
+				\]
+			\end{center}
+		\end{center}
+		
+		\subsection{Theorems}
+		\begin{center}
+		\end{center}
+
+\end{center}
+
+\part{The Commutative Layer}
+\begin{center}
+	The commutative monotone, truth-preserving, false-preserving, and affine sequent systems.
+\end{center}
+
+\part{The Non-Commutative Erasure Layer}
+\begin{center}
+	The non-commutative erasable monotone, truth-preserving, false-preserving, and affine sequent systems.
+\end{center}
+
+\part{The Non-Commutative Cloning Layer}
+\begin{center}
+	The non-commutative clonable monotone, truth-preserving, false-preserving, and affine sequent systems.
+\end{center}
+
+\part{The No-Cloning and No-Erasure Non-Commutative Layer}
+\begin{center}
+	The non-commutative monotone, truth-preserving, false-preserving, and affine sequent systems.
+\end{center}
+
+
+
+\end{document}
