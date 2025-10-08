@@ -138,6 +138,38 @@
     },
     {
       "_type": "tag",
+      "name": "extract_lessons_from_postmortem",
+      "path": "./tooling/knowledge_compiler.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "extract_metadata_from_postmortem",
+      "path": "./tooling/knowledge_compiler.py",
+      "language": "Python",
+      "line": 44,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "format_lesson_entry",
+      "path": "./tooling/knowledge_compiler.py",
+      "language": "Python",
+      "line": 56,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/knowledge_compiler.py",
+      "language": "Python",
+      "line": 75,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "has_ctags",
       "path": "./tooling/symbol_map_generator.py",
       "language": "Python",
@@ -237,7 +269,7 @@
       "name": "run",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 205,
+      "line": 220,
       "kind": "function"
     },
     {
@@ -514,6 +546,54 @@
     },
     {
       "_type": "tag",
+      "name": "TestKnowledgeCompiler",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_extract_metadata",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_extract_lessons",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 70,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_main_compiler_function",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 78,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "TestMasterControlGraphFullWorkflow",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
@@ -533,7 +613,7 @@
       "name": "tearDown",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 38,
+      "line": 46,
       "kind": "function"
     },
     {
@@ -541,7 +621,7 @@
       "name": "cleanup_files",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 41,
+      "line": 54,
       "kind": "function"
     },
     {
@@ -549,7 +629,7 @@
       "name": "test_full_atomic_workflow_with_analysis",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 55,
+      "line": 68,
       "kind": "function"
     },
     {
@@ -557,7 +637,7 @@
       "name": "run_fsm",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 73,
+      "line": 86,
       "kind": "function"
     },
     {
