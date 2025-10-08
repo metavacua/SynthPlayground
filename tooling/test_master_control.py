@@ -31,12 +31,25 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
         self.draft_postmortem_file = f"DRAFT-{self.task_id}.md"
         self.final_postmortem_file = f"postmortems/{datetime.date.today()}-{safe_task_id}.md"
         self.test_output_file = "test_output.txt"
+        self.lessons_learned_file = "knowledge_core/lessons_learned.md"
 
         # Clean up all potential artifacts from previous runs
         self.cleanup_files()
 
+        # Backup original lessons if it exists and create a fresh one for the test
+        if os.path.exists(self.lessons_learned_file):
+            os.rename(self.lessons_learned_file, self.lessons_learned_file + ".bak")
+        with open(self.lessons_learned_file, 'w') as f:
+            f.write("# Lessons Learned\n")
+
+
     def tearDown(self):
         self.cleanup_files()
+        # Clean up the test lessons learned and restore backup
+        if os.path.exists(self.lessons_learned_file):
+            os.remove(self.lessons_learned_file)
+        if os.path.exists(self.lessons_learned_file + ".bak"):
+            os.rename(self.lessons_learned_file + ".bak", self.lessons_learned_file)
 
     def cleanup_files(self):
         """Helper function to remove all files created during the test."""
@@ -97,8 +110,26 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
         time.sleep(1.5) # Allow FSM to transition to AWAITING_ANALYSIS
         self.assertTrue(os.path.exists(self.draft_postmortem_file), "Draft post-mortem file was not created.")
 
-        analysis_content = "\nThis is the test analysis content."
-        with open(self.draft_postmortem_file, "a") as f:
+        # This content simulates the agent filling out the draft file.
+        analysis_content = f"""
+# Post-Mortem Report
+**Task ID:** `{self.task_id}`
+**Completion Date:** `{datetime.date.today()}`
+---
+## 1. Task Summary
+A test summary.
+---
+## 2. Process Analysis
+A test analysis.
+---
+## 3. Corrective Actions & Lessons Learned
+
+1. **Lesson:** This is a test lesson from the integration test.
+   **Action:** The corresponding test action.
+---
+"""
+        # Overwrite the draft file with the now-completed analysis
+        with open(self.draft_postmortem_file, "w") as f:
             f.write(analysis_content)
 
         # 7. Signal that analysis is complete
@@ -125,8 +156,14 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
         self.assertTrue(os.path.exists(self.final_postmortem_file), f"Final post-mortem file was not created at {self.final_postmortem_file}")
         with open(self.final_postmortem_file, 'r') as f:
             postmortem_content = f.read()
-        self.assertIn(analysis_content, postmortem_content)
+        self.assertIn("This is a test lesson from the integration test.", postmortem_content)
         self.assertIn(f"Post-mortem analysis finalized. Report saved to '{self.final_postmortem_file}'", final_state.final_report)
+
+        # Assert that the knowledge core was updated
+        with open(self.lessons_learned_file, 'r') as f:
+            lessons_content = f.read()
+        self.assertIn("Insight:** This is a test lesson from the integration test.", lessons_content)
+        self.assertIn("Actionable Guidance:** The corresponding test action.", lessons_content)
 
         # Assert that all transient files were cleaned up correctly
         self.assertFalse(os.path.exists(self.plan_file))
