@@ -24,7 +24,7 @@ This document defines the JSON schema for entries in `logs/activity.log.jsonl`. 
     },
     "phase": {
       "type": "string",
-      "enum": ["Phase 0", "Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5", "Phase 6", "Phase 7", "Phase 8"],
+      "enum": ["Phase 0", "Phase 1", "Phase 1.5", "Phase 2", "Phase 2.5", "Phase 3", "Phase 4", "Phase 5", "Phase 6", "Phase 7", "Phase 8"],
       "description": "The protocol phase in which the action occurred."
     },
     "task": {
@@ -55,6 +55,7 @@ This document defines the JSON schema for entries in `logs/activity.log.jsonl`. 
             "PLAN_UPDATE",
             "CRITIC_FEEDBACK",
             "POST_MORTEM",
+            "TASK_END",
             "INFO",
             "SYSTEM_FAILURE"
           ],
@@ -106,6 +107,7 @@ This document defines the JSON schema for entries in `logs/activity.log.jsonl`. 
 - **TOOL_EXEC**: `{"command": "ls -l", "stdout": "...", "stderr": "..."}`
 - **EXTERNAL_RAG_QUERY**: `{"query": "React best practices 2025", "results_summary": "Top 3 results summarized..."}`
 - **POST_MORTEM**: `{"summary": "What worked, what failed, root cause analysis."}`
+- **TASK_END**: `{"summary": "Signals the formal end of the development phase of a Finite Development Cycle, post-mortem complete."}`
 - **INFO**: `{"summary": "An informational message or observation."}`
 - **SYSTEM_FAILURE**: `{"error_message": "...", "stack_trace": "..."}`
 
