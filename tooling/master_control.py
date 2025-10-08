@@ -1,15 +1,17 @@
+import datetime
 import json
+import os
+import shutil
+import subprocess
 import sys
 import time
-import os
-import subprocess
-import shutil
-import datetime
 
 # Add tooling directory to path to import other tools
-sys.path.insert(0, './tooling')
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__))))
+
 from state import AgentState
 from research import execute_research_protocol
+
 
 class MasterControlGraph:
     """
@@ -17,17 +19,23 @@ class MasterControlGraph:
     This graph reads a state definition and orchestrates the agent's workflow,
     ensuring that all protocol steps are followed in the correct order.
     """
+
     def __init__(self, fsm_path: str = "tooling/fsm.json"):
-        with open(fsm_path, 'r') as f:
+        with open(fsm_path, "r") as f:
             self.fsm = json.load(f)
         self.current_state = self.fsm["initial_state"]
 
     def get_trigger(self, source_state: str, dest_state: str) -> str:
         """Finds the trigger for a transition between two states."""
         for transition in self.fsm["transitions"]:
-            if transition["source"] == source_state and transition["dest"] == dest_state:
+            if (
+                transition["source"] == source_state
+                and transition["dest"] == dest_state
+            ):
                 return transition["trigger"]
-        raise ValueError(f"No trigger found for transition from {source_state} to {dest_state}")
+        raise ValueError(
+            f"No trigger found for transition from {source_state} to {dest_state}"
+        )
 
     def do_orientation(self, agent_state: AgentState) -> str:
         """Executes the L1, L2, and L3 orientation steps."""
@@ -35,21 +43,47 @@ class MasterControlGraph:
         try:
             # L1: Self-Awareness
             print("  - Executing L1: Self-Awareness...")
-            l1_constraints = {"target": "local_filesystem", "scope": "file", "path": "knowledge_core/agent_meta.json"}
+            l1_constraints = {
+                "target": "local_filesystem",
+                "scope": "file",
+                "path": "knowledge_core/agent_meta.json",
+            }
             agent_meta = execute_research_protocol(l1_constraints)
-            agent_state.messages.append({"role": "system", "content": f"L1 Orientation Complete. Agent Meta: {agent_meta[:100]}..."})
+            agent_state.messages.append(
+                {
+                    "role": "system",
+                    "content": (
+                        "L1 Orientation Complete. " f"Agent Meta: {agent_meta[:100]}..."
+                    ),
+                }
+            )
 
             # L2: Repo Sync
             print("  - Executing L2: Repository Sync...")
-            l2_constraints = {"target": "local_filesystem", "scope": "directory", "path": "knowledge_core/"}
+            l2_constraints = {
+                "target": "local_filesystem",
+                "scope": "directory",
+                "path": "knowledge_core/",
+            }
             repo_state = execute_research_protocol(l2_constraints)
-            agent_state.messages.append({"role": "system", "content": f"L2 Orientation Complete. Repo State: {repo_state[:100]}..."})
+            agent_state.messages.append(
+                {
+                    "role": "system",
+                    "content": (
+                        "L2 Orientation Complete. " f"Repo State: {repo_state[:100]}..."
+                    ),
+                }
+            )
 
             # L3: Environmental Probe
             print("  - Executing L3: Environmental Probe...")
             # This would call the environmental_probe.py script in a real scenario
-            agent_state.vm_capability_report = "Mock VM Capability Report: Filesystem OK, Network OK."
-            agent_state.messages.append({"role": "system", "content": "L3 Orientation Complete."})
+            agent_state.vm_capability_report = (
+                "Mock VM Capability Report: Filesystem OK, Network OK."
+            )
+            agent_state.messages.append(
+                {"role": "system", "content": "L3 Orientation Complete."}
+            )
 
             agent_state.orientation_complete = True
             print("[MasterControl] Orientation Succeeded.")
@@ -89,11 +123,16 @@ class MasterControlGraph:
             return self.get_trigger("PLANNING", "ERROR")
 
         print("  - Plan validation successful.")
-        with open(plan_file, 'r') as f:
+        with open(plan_file, "r") as f:
             plan = f.read()
 
         agent_state.plan = plan
-        agent_state.messages.append({"role": "system", "content": f"Validated plan has been set from {plan_file}."})
+        agent_state.messages.append(
+            {
+                "role": "system",
+                "content": f"Validated plan has been set from {plan_file}.",
+            }
+        )
         print("[MasterControl] Planning Complete.")
 
         # Clean up the plan file after successful validation
@@ -113,7 +152,7 @@ class MasterControlGraph:
         print("[MasterControl] State: EXECUTING")
 
         # Filter out empty lines from the plan
-        plan_steps = [step for step in agent_state.plan.split('\n') if step.strip()]
+        plan_steps = [step for step in agent_state.plan.split("\n") if step.strip()]
 
         if agent_state.current_step_index < len(plan_steps):
             step = plan_steps[agent_state.current_step_index]
@@ -126,19 +165,23 @@ class MasterControlGraph:
                 time.sleep(1)
 
             print(f"  - Detected '{step_complete_file}'.")
-            with open(step_complete_file, 'r') as f:
+            with open(step_complete_file, "r") as f:
                 result = f.read()
 
-            agent_state.messages.append({
-                "role": "system",
-                "content": f"Completed step {agent_state.current_step_index + 1}: {step}\nResult: {result}"
-            })
+            content = (
+                f"Completed step {agent_state.current_step_index + 1}: "
+                f"{step}\nResult: {result}"
+            )
+            agent_state.messages.append({"role": "system", "content": content})
 
             # Clean up the file and advance to the next step
             os.remove(step_complete_file)
             agent_state.current_step_index += 1
 
-            print(f"  - Step {agent_state.current_step_index} of {len(plan_steps)} signaled complete.")
+            print(
+                f"  - Step {agent_state.current_step_index} of {len(plan_steps)} "
+                "signaled complete."
+            )
             return self.get_trigger("EXECUTING", "EXECUTING")
         else:
             print("[MasterControl] Execution Complete.")
@@ -160,16 +203,22 @@ class MasterControlGraph:
         except Exception as e:
             agent_state.error = f"Failed to create draft post-mortem: {e}"
             print(f"[MasterControl] {agent_state.error}")
-            return self.get_trigger("EXECUTING", "ERROR") # Or a new trigger if needed
+            return self.get_trigger("EXECUTING", "ERROR")
 
         # Wait for the agent to signal analysis is complete
         analysis_complete_file = "analysis_complete.txt"
-        print(f"  - Waiting for agent to complete analysis and create '{analysis_complete_file}'...")
+        print(
+            "  - Waiting for agent to complete analysis and create "
+            f"'{analysis_complete_file}'..."
+        )
         while not os.path.exists(analysis_complete_file):
             time.sleep(1)
 
         os.remove(analysis_complete_file)
-        print(f"  - Detected and cleaned up '{analysis_complete_file}'. Analysis complete.")
+        print(
+            f"  - Detected and cleaned up '{analysis_complete_file}'. "
+            "Analysis complete."
+        )
         return self.get_trigger("AWAITING_ANALYSIS", "POST_MORTEM")
 
     def do_post_mortem(self, agent_state: AgentState) -> str:
@@ -185,17 +234,19 @@ class MasterControlGraph:
 
         # Create a safe, timestamped final path
         task_id = agent_state.task
-        safe_task_id = "".join(c for c in task_id if c.isalnum() or c in ('-', '_'))
+        safe_task_id = "".join(c for c in task_id if c.isalnum() or c in ("-", "_"))
         final_path = f"postmortems/{datetime.date.today()}-{safe_task_id}.md"
 
         try:
             os.rename(draft_path, final_path)
-            report_message = f"Post-mortem analysis finalized. Report saved to '{final_path}'."
+            report_message = (
+                "Post-mortem analysis finalized. " f"Report saved to '{final_path}'."
+            )
             agent_state.final_report = report_message
             agent_state.messages.append({"role": "system", "content": report_message})
             print(f"[MasterControl] {report_message}")
 
-            # Automatically compile lessons learned from the new post-mortem
+            # Automatically compile lessons learned
             print(f"  - Compiling lessons from '{final_path}'...")
             compile_cmd = ["python3", "tooling/knowledge_compiler.py", final_path]
             compile_result = subprocess.run(compile_cmd, capture_output=True, text=True)
@@ -207,7 +258,6 @@ class MasterControlGraph:
                 compile_msg = f"Knowledge compilation failed: {compile_result.stderr}"
                 print(f"  - {compile_msg}")
                 agent_state.messages.append({"role": "system", "content": compile_msg})
-                # For now, this is not a critical FSM failure.
 
         except Exception as e:
             agent_state.error = f"Failed to finalize post-mortem report: {e}"
@@ -244,13 +294,19 @@ class MasterControlGraph:
             # Find the next state based on the trigger
             found_transition = False
             for transition in self.fsm["transitions"]:
-                if transition["source"] == self.current_state and transition["trigger"] == trigger:
+                if (
+                    transition["source"] == self.current_state
+                    and transition["trigger"] == trigger
+                ):
                     self.current_state = transition["dest"]
                     found_transition = True
                     break
 
             if not found_transition:
-                agent_state.error = f"No transition found for state {self.current_state} with trigger {trigger}"
+                agent_state.error = (
+                    f"No transition found for state {self.current_state} "
+                    f"with trigger {trigger}"
+                )
                 self.current_state = "ERROR"
 
         print(f"[MasterControl] Workflow finished in state: {self.current_state}")
@@ -258,7 +314,8 @@ class MasterControlGraph:
             print(f"  - Error: {agent_state.error}")
         return agent_state
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     print("--- Initializing Master Control Graph Demonstration ---")
     # 1. Initialize the agent's state for a new task
     task = "Demonstrate the self-enforcing protocol."

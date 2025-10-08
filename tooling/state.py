@@ -1,12 +1,14 @@
 from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
 
+
 @dataclass
 class AgentState:
     """
     Represents the complete state of the agent's workflow at any given time.
     This object is passed between nodes in the master control graph.
     """
+
     task: str
     plan: Optional[str] = None
     messages: List[Dict[str, Any]] = field(default_factory=list)

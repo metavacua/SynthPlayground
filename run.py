@@ -1,50 +1,28 @@
 import argparse
-import json
+import os
 import sys
 
-# Add tooling directory to path to import other tools
-sys.path.insert(0, './tooling')
-from state import AgentState
-from master_control import MasterControlGraph
+# This is a hack to get the tooling directory in the path
+# It must happen before the local imports.
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
+from dotenv import load_dotenv
+from tooling.master_control import MasterControlGraph
+from tooling.state import AgentState
+
 
 def main():
-    """
-    The main entry point for the agent.
+    """Sets up the environment and runs the FDC agent."""
+    load_dotenv()  # Load environment variables from .env file
 
-    This script initializes the agent's state, runs the master control graph
-    to enforce the protocol, and prints the final result.
-    """
-    parser = argparse.ArgumentParser(
-        description="Jules, an extremely skilled software engineer, at your service."
-    )
-    parser.add_argument(
-        "task",
-        type=str,
-        help="The task description for the agent to work on."
-    )
+    parser = argparse.ArgumentParser(description="Run the FDC agent.")
+    parser.add_argument("task", type=str, help="The task for the agent to perform.")
     args = parser.parse_args()
 
-    print(f"--- Initializing New Task: {args.task} ---")
-
-    # 1. Initialize the agent's state for the new task
     initial_state = AgentState(task=args.task)
+    master_control = MasterControlGraph(initial_state)
+    master_control.run()
 
-    # 2. Initialize and run the master control graph
-    graph = MasterControlGraph()
-    final_state = graph.run(initial_state)
-
-    # 3. Print the final report
-    print("\n--- Task Complete ---")
-    print(f"Final State: {graph.current_state}")
-    if final_state.error:
-        print(f"Error: {final_state.error}")
-    else:
-        print("\n--- Final Report ---")
-        print(final_state.final_report)
-
-    print("\n--- Full State Log ---")
-    print(json.dumps(final_state.to_json(), indent=2))
-    print("--- End of Execution ---")
 
 if __name__ == "__main__":
     main()
