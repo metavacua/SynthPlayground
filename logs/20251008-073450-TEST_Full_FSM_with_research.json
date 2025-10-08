@@ -1,0 +1,23 @@
+{
+  "task": "TEST: Full FSM with research",
+  "plan": "1. Research the latest trends in AI.\n2. Summarize the findings.",
+  "current_step_index": 2,
+  "messages": [
+    {
+      "role": "system",
+      "content": "Plan has been set from plan.txt."
+    },
+    {
+      "role": "system",
+      "content": "Research for step 1 completed. Result: {\"webPages\": {\"value\": [{\"id\": \"test-1\", \"url\": \"https://example.com/test-1\", \"name\": \"Test Result 1\", \"snippet\": \"This is a test search result...\"}, {\"id\": \"test-2\", \"url\": \"https://example.com/test-2\", \"name\": \"Test Result 2\", \"snippet\": \"Another test result...\"}, {\"id\": \"test-3\", \"url\": \"https://example.com/test-3\", \"name\": \"Test Result 3\", \"snippet\": \"A third test result...\"}]}}"
+    },
+    {
+      "role": "system",
+      "content": "Completed step 2: 2. Summarize the findings.\nResult: Manual summarization complete."
+    }
+  ],
+  "code_changes": [],
+  "validation_passed": true,
+  "error": null,
+  "final_summary": "Task completed successfully."
+}

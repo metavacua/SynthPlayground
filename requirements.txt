@@ -1,3 +1,6 @@
 jsonschema
 pyyaml
 requests
+officeparserpy
+python-docx
+markdown-pdf

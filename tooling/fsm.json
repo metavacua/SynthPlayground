@@ -1,11 +1,11 @@
 {
   "states": [
     "START",
-    "ORIENTING",
-    "PLANNING",
-    "EXECUTING",
-    "AWAITING_ANALYSIS",
-    "POST_MORTEM",
+    "UNDERSTANDING_REQUEST",
+    "EXPLORING_CODEBASE",
+    "FORMULATING_PLAN",
+    "IMPLEMENTING_CHANGES",
+    "VALIDATING_WORK",
     "AWAITING_SUBMISSION",
     "ERROR"
   ],
@@ -14,58 +14,73 @@
   "transitions": [
     {
       "source": "START",
-      "dest": "ORIENTING",
-      "trigger": "begin_task"
+      "dest": "UNDERSTANDING_REQUEST",
+      "trigger": "task_initiated"
     },
     {
-      "source": "ORIENTING",
-      "dest": "PLANNING",
-      "trigger": "orientation_succeeded"
+      "source": "UNDERSTANDING_REQUEST",
+      "dest": "EXPLORING_CODEBASE",
+      "trigger": "request_understood"
     },
     {
-      "source": "ORIENTING",
-      "dest": "ERROR",
-      "trigger": "orientation_failed"
+      "source": "EXPLORING_CODEBASE",
+      "dest": "FORMULATING_PLAN",
+      "trigger": "exploration_complete"
     },
     {
-      "source": "PLANNING",
-      "dest": "EXECUTING",
-      "trigger": "plan_is_set"
+      "source": "FORMULATING_PLAN",
+      "dest": "IMPLEMENTING_CHANGES",
+      "trigger": "plan_set"
     },
     {
-      "source": "PLANNING",
-      "dest": "ERROR",
-      "trigger": "planning_failed"
+      "source": "IMPLEMENTING_CHANGES",
+      "dest": "VALIDATING_WORK",
+      "trigger": "implementation_complete"
     },
     {
-      "source": "EXECUTING",
-      "dest": "EXECUTING",
+      "source": "IMPLEMENTING_CHANGES",
+      "dest": "IMPLEMENTING_CHANGES",
       "trigger": "step_succeeded"
     },
     {
-      "source": "EXECUTING",
-      "dest": "AWAITING_ANALYSIS",
-      "trigger": "all_steps_completed"
-    },
-    {
-      "source": "AWAITING_ANALYSIS",
-      "dest": "POST_MORTEM",
-      "trigger": "analysis_complete"
-    },
-    {
-      "source": "EXECUTING",
-      "dest": "ERROR",
-      "trigger": "execution_failed"
-    },
-    {
-      "source": "POST_MORTEM",
+      "source": "VALIDATING_WORK",
       "dest": "AWAITING_SUBMISSION",
-      "trigger": "post_mortem_complete"
+      "trigger": "validation_passed"
     },
     {
-      "source": "POST_MORTEM",
+      "source": "VALIDATING_WORK",
+      "dest": "IMPLEMENTING_CHANGES",
+      "trigger": "validation_failed"
+    },
+    {
+      "source": "START",
       "dest": "ERROR",
-      "trigger": "post_mortem_failed"
+      "trigger": "error"
+    },
+    {
+      "source": "UNDERSTANDING_REQUEST",
+      "dest": "ERROR",
+      "trigger": "error"
+    },
+    {
+      "source": "EXPLORING_CODEBASE",
+      "dest": "ERROR",
+      "trigger": "error"
+    },
+    {
+      "source": "FORMULATING_PLAN",
+      "dest": "ERROR",
+      "trigger": "error"
+    },
+    {
+      "source": "IMPLEMENTING_CHANGES",
+      "dest": "ERROR",
+      "trigger": "error"
+    },
+    {
+      "source": "VALIDATING_WORK",
+      "dest": "ERROR",
+      "trigger": "error"
     }
   ]
 }

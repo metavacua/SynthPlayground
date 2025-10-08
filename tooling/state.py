@@ -1,41 +1,47 @@
 from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
+import json
+import os
+import datetime
 
 @dataclass
 class AgentState:
     """
-    Represents the complete state of the agent's workflow at any given time.
-    This object is passed between nodes in the master control graph.
+    Represents the complete state of the agent's workflow for a single task.
+    This object is initialized by the main runner and passed through the FSM.
     """
     task: str
     plan: Optional[str] = None
-    messages: List[Dict[str, Any]] = field(default_factory=list)
-
-    # Orientation Status
-    orientation_complete: bool = False
-    vm_capability_report: Optional[str] = None
-
-    # Research & Execution
     current_step_index: int = 0
-    research_findings: Dict[str, Any] = field(default_factory=dict)
-    draft_postmortem_path: Optional[str] = None
-
-    # Final Output
-    final_report: Optional[str] = None
-
-    # Meta
+    messages: List[Dict[str, Any]] = field(default_factory=list)
+    code_changes: List[str] = field(default_factory=list)
+    validation_passed: bool = False
     error: Optional[str] = None
+    final_summary: Optional[str] = None
 
     def to_json(self):
+        """Returns a JSON-serializable dictionary of the agent's state."""
         return {
             "task": self.task,
             "plan": self.plan,
-            "messages": self.messages,
-            "orientation_complete": self.orientation_complete,
-            "vm_capability_report": self.vm_capability_report,
             "current_step_index": self.current_step_index,
-            "research_findings": self.research_findings,
-            "draft_postmortem_path": self.draft_postmortem_path,
-            "final_report": self.final_report,
+            "messages": self.messages,
+            "code_changes": self.code_changes,
+            "validation_passed": self.validation_passed,
             "error": self.error,
+            "final_summary": self.final_summary
         }
+
+    def save_to_log(self, log_dir="logs"):
+        """Saves the final state to a timestamped log file."""
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir)
+
+        timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
+        safe_task_name = "".join(c for c in self.task if c.isalnum() or c in (' ', '_')).rstrip().replace(' ', '_')
+        filename = f"{log_dir}/{timestamp}-{safe_task_name}.json"
+
+        with open(filename, 'w') as f:
+            json.dump(self.to_json(), f, indent=2)
+
+        print(f"  - Saved final state to {filename}")
