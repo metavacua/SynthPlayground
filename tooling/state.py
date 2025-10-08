@@ -16,6 +16,7 @@ class AgentState:
     messages: List[Dict[str, Any]] = field(default_factory=list)
     code_changes: List[str] = field(default_factory=list)
     validation_passed: bool = False
+    initial_research_report: Optional[Dict[str, Any]] = None
     error: Optional[str] = None
     final_summary: Optional[str] = None
 
@@ -28,6 +29,7 @@ class AgentState:
             "messages": self.messages,
             "code_changes": self.code_changes,
             "validation_passed": self.validation_passed,
+            "initial_research_report": self.initial_research_report,
             "error": self.error,
             "final_summary": self.final_summary
         }

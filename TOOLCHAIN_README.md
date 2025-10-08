@@ -14,7 +14,21 @@ The toolchain consists of three main components located in the `tooling/` direct
 *   **`state.py`**: Defines the `AgentState` object, a structured container that holds all context for a given task (the plan, messages, code changes, etc.). This object is passed through the FSM from start to finish.
 *   **`master_control.py`**: The FSM engine itself. It reads the FSM definition and guides the `AgentState` through the workflow, calling the appropriate logic for each state.
 
-## 3. How to Use the Toolchain
+## 3. FSM Workflow States
+
+The development workflow is governed by the following states:
+
+*   **`START`**: The initial state where a new task is received.
+*   **`UNDERSTANDING_REQUEST`**: The agent uses tools to clarify the user's request, asking questions if necessary.
+*   **`EXPLORING_CODEBASE`**: The agent uses tools like `list_files` and `read_file` to understand the existing code and identify areas for modification.
+*   **`GATHERING_INTELLIGENCE`**: An automated state where the FSM calls the research suite to perform an initial analysis of the task, providing the agent with an upfront summary and suggested search queries before planning begins.
+*   **`FORMULATING_PLAN`**: The agent creates a detailed, step-by-step plan, informed by the initial intelligence report.
+*   **`IMPLEMENTING_CHANGES`**: The agent executes the plan. This state is now also capable of dispatching to the research suite if a plan step requires it.
+*   **`VALIDATING_WORK`**: The agent runs tests, linters, or other checks to verify the correctness of the changes. This is a critical self-correction loop.
+*   **`AWAITING_SUBMISSION`**: The work is complete and ready for submission.
+*   **`ERROR`**: A terminal state for any unrecoverable failures during the process.
+
+## 4. How to Use the Toolchain
 
 To start a new development task, you **must** use the `run_task.py` script from the root of the repository.
 
@@ -26,7 +40,7 @@ python3 run_task.py "Your detailed task description here"
 
 The script will initialize the FSM and begin orchestrating the task.
 
-## 4. The Agent's Role: The Filesystem API
+## 5. The Agent's Role: The Filesystem API
 
 The agent's primary role is to perform the intellectual work of coding and analysis. The FSM engine (`master_control.py`) will pause at specific states and wait for the agent to signal completion by creating files in the root directory. This "filesystem API" is the communication channel between the protocol enforcer and the agent.
 
@@ -48,7 +62,7 @@ The agent's primary role is to perform the intellectual work of coding and analy
     *   The content of this file must be either `passed` or a description of the failure.
     *   If the result is `passed`, the FSM will proceed. If it fails, the FSM will transition back to the `IMPLEMENTING_CHANGES` state so the agent can fix the issues.
 
-## 5. Integrated Tool Suites
+## 6. Integrated Tool Suites
 
 As the agent's capabilities expand, new tool suites will be integrated into this FSM-governed framework.
 
@@ -59,7 +73,7 @@ As the agent's capabilities expand, new tool suites will be integrated into this
 *   **Orchestrator:** `tooling/research_suite/orchestrator.py`
 *   **Usage:** The research suite is designed to be called by the agent during the `IMPLEMENTING_CHANGES` state when a plan step requires information gathering.
 
-## 6. Dual-Use Output Architecture
+## 7. Dual-Use Output Architecture
 
 The research suite has been re-architected to produce structured, dual-use outputs. This means that a single research action generates a rich data object that can be serialized into multiple formats for different use cases.
 

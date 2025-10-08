@@ -3,6 +3,7 @@
     "START",
     "UNDERSTANDING_REQUEST",
     "EXPLORING_CODEBASE",
+    "GATHERING_INTELLIGENCE",
     "FORMULATING_PLAN",
     "IMPLEMENTING_CHANGES",
     "VALIDATING_WORK",
@@ -24,8 +25,18 @@
     },
     {
       "source": "EXPLORING_CODEBASE",
-      "dest": "FORMULATING_PLAN",
+      "dest": "GATHERING_INTELLIGENCE",
       "trigger": "exploration_complete"
+    },
+    {
+      "source": "GATHERING_INTELLIGENCE",
+      "dest": "FORMULATING_PLAN",
+      "trigger": "intelligence_gathered"
+    },
+    {
+      "source": "GATHERING_INTELLIGENCE",
+      "dest": "ERROR",
+      "trigger": "intelligence_failed"
     },
     {
       "source": "FORMULATING_PLAN",

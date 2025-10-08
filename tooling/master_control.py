@@ -44,6 +44,42 @@ class MasterControlGraph:
         time.sleep(2)
         return "exploration_complete"
 
+    def do_gathering_intelligence(self, agent_state: AgentState) -> str:
+        """
+        State for automated, upfront research and intelligence gathering.
+        """
+        print("[FSM] State: GATHERING_INTELLIGENCE")
+        print("  - Automatically performing initial research based on the task description...")
+
+        try:
+            # Use the 'optimize_research' tool to get a structured analysis of the task
+            constraints = {
+                "task": "optimize_research",
+                "prompt": agent_state.task,
+                "platform_model": "mock_model" # Using mock for this automated step
+            }
+
+            research_result_json = run_research_task(constraints)
+            research_result = json.loads(research_result_json)
+
+            if "error" in research_result:
+                raise ValueError(f"Research optimization failed: {research_result['error']}")
+
+            # This field will be added to AgentState in the next step
+            agent_state.initial_research_report = research_result
+
+            agent_state.messages.append({
+                "role": "system",
+                "content": f"Initial intelligence gathering complete. Optimized Query: {research_result.get('query')}"
+            })
+            print("  - Initial intelligence gathered successfully.")
+            return "intelligence_gathered"
+
+        except Exception as e:
+            agent_state.error = f"Intelligence gathering failed: {e}"
+            print(f"  - Error: {agent_state.error}")
+            return "intelligence_failed"
+
     def do_formulating_plan(self, agent_state: AgentState) -> str:
         """State for creating a step-by-step plan."""
         print("[FSM] State: FORMULATING_PLAN")
@@ -157,6 +193,8 @@ class MasterControlGraph:
                     trigger = self.do_understanding_request(agent_state)
                 elif self.current_state == "EXPLORING_CODEBASE":
                     trigger = self.do_exploring_codebase(agent_state)
+                elif self.current_state == "GATHERING_INTELLIGENCE":
+                    trigger = self.do_gathering_intelligence(agent_state)
                 elif self.current_state == "FORMULATING_PLAN":
                     trigger = self.do_formulating_plan(agent_state)
                 elif self.current_state == "IMPLEMENTING_CHANGES":
