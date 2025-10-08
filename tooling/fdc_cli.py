@@ -289,6 +289,43 @@ def analyze_plan(plan_filepath):
     print(f"  - Modality:   {modality}")
 
 
+def check_for_recursion(plan_filepath):
+    """
+    Scans a plan file for disallowed recursive FDC CLI calls.
+    The only allowed call is to 'close'.
+    """
+    print("\n--- Running Recursion Check ---")
+    try:
+        with open(plan_filepath, "r") as f:
+            for i, line in enumerate(f):
+                # Check for calls to the FDC CLI tool itself
+                if "fdc_cli.py" in line:
+                    # The 'close' command is the only allowed recursive call
+                    if "close" not in line:
+                        print(
+                            f"Validation failed: Disallowed recursive call to 'fdc_cli.py' found on line {i+1}.",
+                            file=sys.stderr,
+                        )
+                        print(
+                            "Error: Plans must not trigger new FDC cycles or validation steps.",
+                            file=sys.stderr,
+                        )
+                        sys.exit(1)
+        print("Recursion check passed. No disallowed calls found.")
+    except FileNotFoundError:
+        print(f"Error: Plan file not found at {plan_filepath}", file=sys.stderr)
+        sys.exit(1)
+
+
+def lint_plan(plan_filepath):
+    """Runs a comprehensive suite of checks on a plan file."""
+    print(f"--- Starting Comprehensive Lint for {plan_filepath} ---")
+    validate_plan(plan_filepath)
+    analyze_plan(plan_filepath)
+    check_for_recursion(plan_filepath)
+    print("\n--- Linting Complete: All checks passed. ---")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="A tool to manage the Finite Development Cycle (FDC)."
@@ -318,6 +355,13 @@ def main():
         "plan_file", help="The path to the plan file to analyze."
     )
 
+    lint_parser = subparsers.add_parser(
+        "lint", help="Runs all validation and analysis checks on a plan."
+    )
+    lint_parser.add_argument(
+        "plan_file", help="The path to the plan file to lint."
+    )
+
     args = parser.parse_args()
     if args.command == "close":
         close_task(args.task_id)
@@ -325,6 +369,8 @@ def main():
         validate_plan(args.plan_file)
     elif args.command == "analyze":
         analyze_plan(args.plan_file)
+    elif args.command == "lint":
+        lint_plan(args.plan_file)
 
 
 if __name__ == "__main__":
