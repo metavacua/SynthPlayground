@@ -25,8 +25,10 @@ class AgentState:
 
     # Meta
     error: Optional[str] = None
+    log_file_path: Optional[str] = None
 
-    def to_json(self):
+    def full_to_json(self):
+        """Returns all data for serialization to a log file."""
         return {
             "task": self.task,
             "plan": self.plan,
@@ -38,4 +40,16 @@ class AgentState:
             "draft_postmortem_path": self.draft_postmortem_path,
             "final_report": self.final_report,
             "error": self.error,
+        }
+
+    def to_json(self):
+        """Returns a summary of the state for console output."""
+        return {
+            "task": self.task,
+            "plan": self.plan,
+            "orientation_complete": self.orientation_complete,
+            "current_step_index": self.current_step_index,
+            "final_report": self.final_report,
+            "error": self.error,
+            "log_file_path": self.log_file_path,
         }
