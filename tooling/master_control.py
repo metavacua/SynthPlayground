@@ -194,6 +194,21 @@ class MasterControlGraph:
             agent_state.final_report = report_message
             agent_state.messages.append({"role": "system", "content": report_message})
             print(f"[MasterControl] {report_message}")
+
+            # Automatically compile lessons learned from the new post-mortem
+            print(f"  - Compiling lessons from '{final_path}'...")
+            compile_cmd = ["python3", "tooling/knowledge_compiler.py", final_path]
+            compile_result = subprocess.run(compile_cmd, capture_output=True, text=True)
+            if compile_result.returncode == 0:
+                compile_msg = "Knowledge compilation successful."
+                print(f"  - {compile_msg}")
+                agent_state.messages.append({"role": "system", "content": compile_msg})
+            else:
+                compile_msg = f"Knowledge compilation failed: {compile_result.stderr}"
+                print(f"  - {compile_msg}")
+                agent_state.messages.append({"role": "system", "content": compile_msg})
+                # For now, this is not a critical FSM failure.
+
         except Exception as e:
             agent_state.error = f"Failed to finalize post-mortem report: {e}"
             print(f"[MasterControl] {agent_state.error}")
