@@ -12,11 +12,6 @@ The auditor currently performs two main checks:
     - Tools that are defined in the protocols but were never used.
 2.  **Tool Centrality:** It conducts a frequency analysis of the tools used,
     helping to identify which tools are most critical to the agent's workflow.
-
-NOTE: The current implementation has known issues. It incorrectly parses the
-`AGENTS.md` file by only reading the first JSON block and relies on a non-standard
-log file. It requires modification to parse all JSON blocks and use the correct
-`logs/activity.log.jsonl` file to be effective.
 """
 import json
 import os
