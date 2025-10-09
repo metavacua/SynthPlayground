@@ -307,6 +307,33 @@ This act of self-maintenance is a foundational element of robust, autonomous ope
 
 ---
 
+# Protocol: Initial Environment Setup
+
+This protocol defines the mandatory first step for ensuring a consistent and correct development environment at the start of any task.
+
+**Rule `dependency-install-mandate`**: Before any other action, if a `requirements.txt` file exists in the repository, you MUST run `pip install -r requirements.txt`. This action is critical to prevent `ModuleNotFoundError` errors during test execution or tool operation.
+
+This proactive step ensures that all required dependencies are present, preventing a common class of failures and ensuring that subsequent steps operate on a known, stable baseline. It is a foundational element of a robust and reliable workflow.
+```json
+{
+  "protocol_id": "initial-env-setup-001",
+  "description": "A protocol that mandates the installation of dependencies at the start of a task.",
+  "rules": [
+    {
+      "rule_id": "dependency-install-mandate",
+      "description": "If a requirements.txt file exists, the agent's first operational step MUST be to install the dependencies using 'pip install -r requirements.txt'. This ensures a consistent environment and prevents module not found errors.",
+      "enforcement": "This is a core operational discipline that should be part of the agent's initial task execution logic. Future tooling could enforce this by checking logs for the installation command at the beginning of a task.",
+      "associated_tools": [
+        "run_in_bash_session"
+      ]
+    }
+  ]
+}
+```
+
+
+---
+
 # System Documentation
 
 ---
