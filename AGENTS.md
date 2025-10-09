@@ -278,6 +278,35 @@ The FDC Toolchain is a set of utilities that the agent uses to structure its wor
 
 ---
 
+# Meta-Protocol: `AGENTS.md` Self-Management
+
+This protocol defines how the agent should manage its own core `AGENTS.md` file.
+
+**Rule `agents-md-self-awareness`**: The `AGENTS.md` file is not a static document; it is a build artifact compiled from the source files located in the `protocols/` directory. This compilation is handled by the `make AGENTS.md` command, which orchestrates the `tooling/protocol_compiler.py` script.
+
+To ensure that you are always operating under the most current set of rules and directives, you must periodically run `make AGENTS.md`. This is especially critical at the beginning of a new task or if you observe behavior that seems inconsistent with your documented protocols, as the protocols may have been updated.
+
+This act of self-maintenance is a foundational element of robust, autonomous operation. It ensures that your understanding of your own governing principles remains synchronized with the repository's ground truth.
+```json
+{
+  "protocol_id": "meta-protocol-001",
+  "description": "A meta-protocol governing the agent's awareness and maintenance of its own core protocol files.",
+  "rules": [
+    {
+      "rule_id": "agents-md-self-awareness",
+      "description": "The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols.",
+      "enforcement": "The agent should incorporate this check into its standard operating procedure, particularly at the beginning of a task or when unexpected behavior occurs."
+    }
+  ],
+  "associated_tools": [
+    "run_in_bash_session"
+  ]
+}
+```
+
+
+---
+
 # System Documentation
 
 ---
