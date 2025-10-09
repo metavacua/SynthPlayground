@@ -48,27 +48,42 @@ def compile_protocols():
     if not schema:
         return
 
-    # Find all source files
+    # Find all source files of different types
     protocol_files = sorted(glob.glob(os.path.join(PROTOCOLS_DIR, "*.protocol.json")))
     md_files = glob.glob(os.path.join(PROTOCOLS_DIR, "*.protocol.md"))
+    autodoc_files = glob.glob(os.path.join(PROTOCOLS_DIR, "*.autodoc.md"))
 
-    if not protocol_files:
-        print("Error: No protocol files (*.protocol.json) found.")
+    # Combine all file types into a single list and sort them numerically
+    all_files = sorted(protocol_files + autodoc_files)
+
+    if not all_files:
+        print("Error: No protocol or autodoc files found.")
         return
 
-    print(f"Found {len(protocol_files)} protocol files and {len(md_files)} markdown files.")
+    print(f"Found {len(protocol_files)} protocol, {len(md_files)} markdown, and {len(autodoc_files)} autodoc files.")
 
     # Start building the final content
     final_content = [DISCLAIMER]
 
-    # Process each protocol file
-    for file_path in protocol_files:
+    # Process each file
+    for file_path in all_files:
         base_name = os.path.basename(file_path)
         print(f"  - Processing {base_name}...")
 
-        # --- Find and append corresponding markdown content ---
+        if file_path.endswith(".autodoc.md"):
+            # This is a placeholder to inject auto-generated documentation
+            doc_path = os.path.join(ROOT_DIR, "knowledge_core", "SYSTEM_DOCUMENTATION.md")
+            try:
+                with open(doc_path, "r") as f:
+                    final_content.append(f.read())
+                print(f"    - Injected system documentation from {doc_path}")
+            except FileNotFoundError:
+                print(f"    - Warning: System documentation file not found at {doc_path}")
+            final_content.append("\n---\n")
+            continue
+
+        # --- Standard .protocol.json processing ---
         prefix = base_name.split("_")[0]
-        # Find a markdown file that starts with the same numeric prefix
         matching_md = next((md for md in md_files if os.path.basename(md).startswith(prefix + "_")), None)
 
         if matching_md:
@@ -82,26 +97,15 @@ def compile_protocols():
         try:
             with open(file_path, "r") as f:
                 protocol_data = json.load(f)
-
-            # Validate the data against the schema
             jsonschema.validate(instance=protocol_data, schema=schema)
             print(f"    - JSON validation successful.")
 
-            # Format the JSON into a markdown code block
             json_string = json.dumps(protocol_data, indent=2)
             md_json_block = f"```json\n{json_string}\n```\n"
             final_content.append(md_json_block)
-
-        except FileNotFoundError:
-            print(f"    - Error: Protocol file not found (this should not happen).")
-        except json.JSONDecodeError:
-            print(f"    - Error: Invalid JSON in {base_name}.")
-        except jsonschema.exceptions.ValidationError as e:
-            print(f"    - Error: Schema validation failed for {base_name}: {e.message}")
         except Exception as e:
-            print(f"    - Error: An unexpected error occurred with {base_name}: {e}")
+            print(f"    - Error: Failed to process JSON for {base_name}: {e}")
 
-        # Add a separator
         final_content.append("\n---\n")
 
 
