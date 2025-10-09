@@ -40,6 +40,16 @@ class MasterControlGraph:
         """Executes the L1, L2, and L3 orientation steps."""
         print("[MasterControl] State: ORIENTING")
         try:
+            # Protocol Self-Awareness: Ensure AGENTS.md is up-to-date
+            print("  - Executing Protocol Self-Awareness Check...")
+            try:
+                # The Makefile will only rebuild if source files are newer.
+                subprocess.run(["make", "AGENTS.md"], check=True, capture_output=True, text=True)
+                print("  - AGENTS.md is up-to-date.")
+            except subprocess.CalledProcessError as e:
+                # If make fails, it's a critical error.
+                raise RuntimeError(f"Failed to build AGENTS.md: {e.stderr}")
+
             # L1: Self-Awareness
             print("  - Executing L1: Self-Awareness...")
             l1_constraints = {
