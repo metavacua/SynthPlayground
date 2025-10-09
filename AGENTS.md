@@ -969,20 +969,12 @@ The tests cover:
 
 ### `tooling/test_knowledge_compiler.py`
 
-Unit tests for the knowledge compiler tool.
+Unit tests for the knowledge_compiler.py script.
 
-This test suite validates the functionality of the `knowledge_compiler.py`
-script, which is responsible for extracting lessons from post-mortem reports
-and adding them to the central knowledge base.
-
-The tests use a mock post-mortem file with multi-line entries to ensure that
-the parsing logic is robust. The suite covers:
-- Correct extraction of metadata (Task ID, Date) from the report.
-- Correct extraction of "Lesson" and "Action" pairs, including handling of
-  multi-line content.
-- End-to-end validation of the main compiler function, ensuring that it
-  correctly reads a post-mortem file and appends the formatted lessons to the
-  `lessons_learned.md` knowledge base.
+This test suite verifies that the knowledge compiler can correctly parse
+a mock post-mortem report and generate a structured, machine-readable
+lessons.jsonl file. It ensures that the generated lessons conform to the
+expected JSON schema, including having unique IDs and a 'pending' status.
 
 ### `tooling/test_master_control.py`
 
@@ -1004,6 +996,10 @@ The suite is divided into two main classes:
     - Using the Plan Registry to call sub-plans by a logical name.
     - Verifying that the system correctly halts when the maximum recursion
       depth is exceeded, ensuring decidability.
+
+### `tooling/test_protocol_auditor.py`
+
+_No module-level docstring found._
 
 ### `tooling/test_protocol_updater.py`
 
@@ -1117,5 +1113,8 @@ The suite covers two primary scenarios:
   (e.g., incorrect data types) correctly raises a `ValidationError` from the
   `jsonschema` library and that no log file is written, preventing the creation
   of corrupted logs.
+
+---
+
 
 ---

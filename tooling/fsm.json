@@ -6,6 +6,7 @@
     "EXECUTING",
     "AWAITING_ANALYSIS",
     "POST_MORTEM",
+    "SELF_CORRECTING",
     "AWAITING_SUBMISSION",
     "ERROR"
   ],
@@ -59,13 +60,23 @@
     },
     {
       "source": "POST_MORTEM",
-      "dest": "AWAITING_SUBMISSION",
+      "dest": "SELF_CORRECTING",
       "trigger": "post_mortem_complete"
     },
     {
       "source": "POST_MORTEM",
       "dest": "ERROR",
       "trigger": "post_mortem_failed"
+    },
+    {
+      "source": "SELF_CORRECTING",
+      "dest": "AWAITING_SUBMISSION",
+      "trigger": "self_correction_succeeded"
+    },
+    {
+      "source": "SELF_CORRECTING",
+      "dest": "ERROR",
+      "trigger": "self_correction_failed"
     }
   ]
 }

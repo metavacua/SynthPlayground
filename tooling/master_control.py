@@ -296,7 +296,7 @@ class MasterControlGraph:
 
     def do_post_mortem(self, agent_state: AgentState) -> str:
         """
-        Finalizes the post-mortem process by renaming the draft file.
+        Finalizes the post-mortem process, renaming the draft and compiling lessons.
         """
         print("[MasterControl] State: POST_MORTEM")
         draft_path = agent_state.draft_postmortem_path
@@ -323,30 +323,17 @@ class MasterControlGraph:
             print(f"  - Compiling lessons from '{final_path}'...")
             compile_cmd = ["python3", "tooling/knowledge_compiler.py", final_path]
             compile_result = subprocess.run(compile_cmd, capture_output=True, text=True)
-            if compile_result.returncode == 0:
-                compile_msg = "Knowledge compilation successful."
-                print(f"  - {compile_msg}")
-                agent_state.messages.append({"role": "system", "content": compile_msg})
-
-                # --- Run the self-correction cycle ---
-                print("  - Running self-correction cycle...")
-                correction_cmd = ["python3", "tooling/self_correction_orchestrator.py"]
-                correction_result = subprocess.run(correction_cmd, capture_output=True, text=True)
-                # We pipe the orchestrator's stdout to the agent's messages for transparency
-                agent_state.messages.append({"role": "system", "content": f"Self-Correction Output:\n{correction_result.stdout}"})
-                if correction_result.returncode != 0:
-                    # Log errors but don't fail the FSM
-                    correction_msg = f"Self-correction cycle failed:\n{correction_result.stderr}"
-                    print(f"  - {correction_msg}")
-                    agent_state.messages.append({"role": "system", "content": correction_msg})
-                else:
-                    print("  - Self-correction cycle completed.")
-
-            else:
+            if compile_result.returncode != 0:
+                # If knowledge compilation fails, it's a problem.
+                # We can't proceed to self-correction without the lessons.
                 compile_msg = f"Knowledge compilation failed: {compile_result.stderr}"
-                print(f"  - {compile_msg}")
-                agent_state.messages.append({"role": "system", "content": compile_msg})
-                # For now, this is not a critical FSM failure.
+                agent_state.error = compile_msg
+                print(f"  - {agent_state.error}")
+                return self.get_trigger("POST_MORTEM", "ERROR")
+
+            compile_msg = "Knowledge compilation successful."
+            print(f"  - {compile_msg}")
+            agent_state.messages.append({"role": "system", "content": compile_msg})
 
         except Exception as e:
             agent_state.error = f"Failed to finalize post-mortem report: {e}"
@@ -354,7 +341,45 @@ class MasterControlGraph:
             return self.get_trigger("POST_MORTEM", "ERROR")
 
         print("[MasterControl] Post-Mortem Complete.")
-        return self.get_trigger("POST_MORTEM", "AWAITING_SUBMISSION")
+        return self.get_trigger("POST_MORTEM", "SELF_CORRECTING")
+
+    def do_self_correcting(self, agent_state: AgentState) -> str:
+        """
+        Runs the automated self-correction cycle based on compiled lessons.
+        This is a mandatory step. Failure here will halt the process.
+        """
+        print("[MasterControl] State: SELF_CORRECTING")
+        try:
+            print("  - Running self-correction cycle...")
+            correction_cmd = ["python3", "tooling/self_correction_orchestrator.py"]
+            correction_result = subprocess.run(
+                correction_cmd, capture_output=True, text=True
+            )
+
+            # Pipe the orchestrator's stdout to the agent's messages for transparency
+            agent_state.messages.append(
+                {
+                    "role": "system",
+                    "content": f"Self-Correction Output:\n{correction_result.stdout}",
+                }
+            )
+
+            if correction_result.returncode != 0:
+                # A failure in the self-correction cycle is a critical error.
+                error_message = (
+                    f"Self-correction cycle FAILED:\n{correction_result.stderr}"
+                )
+                agent_state.error = error_message
+                print(f"  - {error_message}")
+                return self.get_trigger("SELF_CORRECTING", "ERROR")
+
+            print("  - Self-correction cycle completed successfully.")
+            return self.get_trigger("SELF_CORRECTING", "AWAITING_SUBMISSION")
+
+        except Exception as e:
+            agent_state.error = f"An unexpected error occurred during the self-correction cycle: {e}"
+            print(f"[MasterControl] {agent_state.error}")
+            return self.get_trigger("SELF_CORRECTING", "ERROR")
 
     def get_trigger(self, source_state: str, dest_state: str) -> str:
         """
@@ -390,6 +415,8 @@ class MasterControlGraph:
                 trigger = self.do_awaiting_analysis(agent_state)
             elif self.current_state == "POST_MORTEM":
                 trigger = self.do_post_mortem(agent_state)
+            elif self.current_state == "SELF_CORRECTING":
+                trigger = self.do_self_correcting(agent_state)
             else:
                 agent_state.error = f"Unknown state: {self.current_state}"
                 self.current_state = "ERROR"
