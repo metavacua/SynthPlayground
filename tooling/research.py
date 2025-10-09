@@ -1,3 +1,22 @@
+"""
+A unified, constraint-based interface for all research and data-gathering operations.
+
+This script abstracts the various methods an agent might use to gather information
+(reading local files, accessing the web, querying a database) into a single,
+standardized function: `execute_research_protocol`. It is a core component of
+the Advanced Orientation and Research Protocol (AORP), providing the mechanism
+by which the agent fulfills the requirements of each orientation level (L1-L4).
+
+The function operates on a `constraints` dictionary, which specifies the target,
+scope, and other parameters of the research task. This design allows the calling
+orchestrator (e.g., `master_control.py`) to request information without needing
+to know the underlying implementation details of how that information is fetched.
+
+The current implementation acts as a functional placeholder, simulating the
+different research levels to provide a testable hook for the main FSM loop
+without requiring live external services. It can simulate reading local files,
+listing directories, and fetching content from external URLs.
+"""
 import os
 import requests
 from typing import Dict, Any

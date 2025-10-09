@@ -1,3 +1,35 @@
+"""
+The master orchestrator for the agent's lifecycle, governed by a Finite State Machine.
+
+This script, `master_control.py`, is the heart of the agent's operational loop.
+It implements a strict, protocol-driven workflow defined in a JSON file
+(typically `tooling/fsm.json`). The `MasterControlGraph` class reads this FSM
+definition and steps through the prescribed states, ensuring that the agent
+cannot deviate from the established protocol.
+
+The key responsibilities of this orchestrator include:
+- **State Enforcement:** Guiding the agent through the formal states of a task:
+  ORIENTING, PLANNING, EXECUTING, AWAITING_ANALYSIS, POST_MORTEM, and finally
+  AWAITING_SUBMISSION.
+- **Plan Validation:** Before execution, it invokes the `fdc_cli.py` tool to
+  formally validate the agent-generated `plan.txt`, preventing the execution of
+  invalid or unsafe plans.
+- **Hierarchical Execution (CFDC):** It manages the plan execution stack, which
+  is the core mechanism of the Context-Free Development Cycle (CFDC). This
+  allows plans to call other plans as sub-routines via the `call_plan`
+  directive.
+- **Recursion Safety:** It enforces a `MAX_RECURSION_DEPTH` on the plan stack to
+  guarantee that the execution process is always decidable and will terminate.
+- **Lifecycle Management:** It orchestrates the entire lifecycle, from initial
+  orientation and environmental probing to the final post-mortem analysis and
+  compilation of lessons learned.
+
+The FSM operates by waiting for specific signals—typically the presence of
+files like `plan.txt` or `step_complete.txt`—before transitioning to the next
+state. This creates a robust, interactive loop where the orchestrator directs
+the high-level state, and the agent is responsible for completing the work
+required to advance that state.
+"""
 import json
 import sys
 import time

@@ -1,3 +1,21 @@
+"""
+Unit tests for the structured JSONL logger.
+
+This test suite validates the `Logger` class from `utils/logger.py`. Its main
+purpose is to ensure that the logger correctly performs schema validation and
+writes well-formed log entries to the specified log file.
+
+The tests use a temporary directory to house a mock schema file and a log file,
+ensuring the tests are isolated and do not interfere with the actual project logs.
+
+The suite covers two primary scenarios:
+- **Success Case:** It tests that a log entry with a valid data structure that
+  conforms to the schema is successfully written to the JSONL file.
+- **Failure Case:** It tests that a log entry with data that violates the schema
+  (e.g., incorrect data types) correctly raises a `ValidationError` from the
+  `jsonschema` library and that no log file is written, preventing the creation
+  of corrupted logs.
+"""
 import unittest
 import os
 import json

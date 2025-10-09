@@ -1,3 +1,29 @@
+"""
+Generates a structured, templated plan for conducting deep research tasks.
+
+This script provides a standardized workflow for the agent when it needs to
+perform in-depth research on a complex topic. The `plan_deep_research` function
+creates a markdown document that outlines a multi-phase research process,
+ensuring that the investigation is systematic and thorough.
+
+The key features of the generated plan are:
+- **Context-Awareness:** It can generate plans tailored to either the agent's
+  internal repository context (using `AGENTS.md`) or an external one.
+- **Structured Phases:** It breaks the research process down into four distinct
+  phases:
+    1.  Initial Planning & Question Formulation
+    2.  Parallel Research Execution
+    3.  Synthesis and Refinement
+    4.  Final Report Generation
+- **Tool Integration:** It explicitly references the `execute_research_protocol`
+  tool, guiding the agent on how to perform the data-gathering steps.
+- **Protocol Reference:** It includes a snippet of the governing protocol
+  document directly in the plan, providing immediate context for the task.
+
+This tool helps enforce a consistent and effective methodology for complex
+investigative tasks, improving the quality and reliability of the research
+findings.
+"""
 import json
 import sys
 from typing import Literal

@@ -1,3 +1,19 @@
+"""
+Unit tests for the knowledge compiler tool.
+
+This test suite validates the functionality of the `knowledge_compiler.py`
+script, which is responsible for extracting lessons from post-mortem reports
+and adding them to the central knowledge base.
+
+The tests use a mock post-mortem file with multi-line entries to ensure that
+the parsing logic is robust. The suite covers:
+- Correct extraction of metadata (Task ID, Date) from the report.
+- Correct extraction of "Lesson" and "Action" pairs, including handling of
+  multi-line content.
+- End-to-end validation of the main compiler function, ensuring that it
+  correctly reads a post-mortem file and appends the formatted lessons to the
+  `lessons_learned.md` knowledge base.
+"""
 import unittest
 import os
 from tooling.knowledge_compiler import (

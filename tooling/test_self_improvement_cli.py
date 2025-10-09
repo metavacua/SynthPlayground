@@ -1,3 +1,21 @@
+"""
+Unit tests for the self-improvement analysis CLI tool.
+
+This test suite validates the `analyze_planning_efficiency` function from the
+`self_improvement_cli.py` script. The primary goal is to ensure that the tool
+can correctly parse an activity log and identify tasks that involved multiple
+plan revisions, which is a key indicator of potential inefficiency.
+
+The test creates a temporary log file (`.jsonl`) containing a mix of scenarios:
+- A task with a single, efficient planning step.
+- A task with three separate plan revisions.
+- A task that uses an alternative but valid log format for plan updates.
+- A task with no planning actions at all.
+
+The test asserts that the analysis correctly identifies only the inefficient
+tasks and accurately counts the number of plan revisions for each, ensuring the
+tool provides reliable feedback for the agent's self-improvement loop.
+"""
 import unittest
 import os
 import json

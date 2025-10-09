@@ -1,3 +1,24 @@
+"""
+Provides a command-line interface for managing the agent's Plan Registry.
+
+This script is the administrative tool for the Plan Registry, a key component
+of the Context-Free Development Cycle (CFDC) that enables hierarchical and
+modular planning. The registry, located at `knowledge_core/plan_registry.json`,
+maps human-readable, logical names to the file paths of specific plans. This
+decouples the `call_plan` directive from hardcoded file paths, making plans
+more reusable and the system more robust.
+
+This CLI provides three essential functions:
+- **register**: Associates a new logical name with a plan file path, adding it
+  to the central registry.
+- **deregister**: Removes an existing logical name and its associated path from
+  the registry.
+- **list**: Displays all current name-to-path mappings in the registry.
+
+By providing a simple, standardized interface for managing this library of
+reusable plans, this tool improves the agent's ability to compose complex
+workflows from smaller, validated sub-plans.
+"""
 import argparse
 import json
 import os

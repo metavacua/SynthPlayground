@@ -1,3 +1,17 @@
+"""
+Unit tests for the dependency graph generator tool.
+
+This test suite validates the functionality of the `dependency_graph_generator.py`
+script. It uses a temporary file structure created in the `setUp` method to
+simulate a repository with both JavaScript (`package.json`) and Python
+(`requirements.txt`) projects, including nested and root-level files.
+
+The tests cover:
+- File discovery for both project types.
+- Correct parsing of package names and dependencies from each file type.
+- The successful generation of a complete dependency graph, including both
+  internal and external dependencies and the correct creation of nodes and edges.
+"""
 import unittest
 import os
 import json

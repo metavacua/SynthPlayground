@@ -1,3 +1,26 @@
+"""
+Analyzes agent activity logs to identify opportunities for self-improvement.
+
+This script is a command-line tool that serves as a key part of the agent's
+meta-cognitive loop. It parses the structured activity log
+(`logs/activity.log.jsonl`) to identify patterns that may indicate
+inefficiencies or errors in the agent's workflow.
+
+The primary analysis currently implemented is:
+- **Planning Efficiency Analysis:** It scans the logs for tasks that required
+  multiple `set_plan` actions. A high number of plan revisions for a single
+  task can suggest that the initial planning phase was insufficient, the task
+  was poorly understood, or the agent struggled to adapt to unforeseen
+  challenges.
+
+By flagging these tasks, the script provides a starting point for a deeper
+post-mortem analysis, helping the agent (or its developers) to understand the
+root causes of the planning churn and to develop strategies for more effective
+upfront planning in the future.
+
+The tool is designed to be extensible, with future analyses (such as error
+rate tracking or tool usage anti-patterns) to be added as the system evolves.
+"""
 import argparse
 import json
 from collections import defaultdict

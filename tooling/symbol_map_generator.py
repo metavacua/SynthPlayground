@@ -1,3 +1,26 @@
+"""
+Generates a code symbol map for the repository to aid in contextual understanding.
+
+This script creates a `symbols.json` file in the `knowledge_core` directory,
+which acts as a high-level index of the codebase. This map contains information
+about key programming constructs like classes and functions, including their
+name, location (file path and line number), and language.
+
+The script employs a two-tiered approach for symbol generation:
+1.  **Universal Ctags (Preferred):** It first checks for the presence of the
+    `ctags` command-line tool. If available, it uses `ctags` to perform a
+    comprehensive, multi-language scan of the repository. This is the most
+    robust and accurate method.
+2.  **AST Fallback (Python-only):** If `ctags` is not found, the script falls
+    back to using Python's built-in Abstract Syntax Tree (`ast`) module. This
+    method parses all `.py` files and extracts symbol information for Python
+    code. While less comprehensive than `ctags`, it ensures that a baseline
+    symbol map is always available.
+
+The resulting `symbols.json` artifact is a critical input for the agent's
+orientation and planning phases, allowing it to quickly locate relevant code
+and understand the structure of the repository without having to read every file.
+"""
 import os
 import json
 import glob

@@ -21,6 +21,13 @@ lint:
 	@flake8 .
 
 # ==============================================================================
+# Testing
+# ==============================================================================
+test:
+	@echo "--> Running all unit tests..."
+	@python3 -m unittest discover -v .
+
+# ==============================================================================
 # Protocol Compilation & Validation
 # ==============================================================================
 # --- Shared Variables ---
@@ -68,10 +75,17 @@ docs:
 	@python3 tooling/doc_generator.py
 
 # ==============================================================================
+# Auditing
+# ==============================================================================
+audit:
+	@echo "--> Running protocol auditor..."
+	@python3 tooling/protocol_auditor.py
+
+# ==============================================================================
 # Main Targets
 # ==============================================================================
 # A general build target that compiles all protocols and generates documentation.
-build: compile-protocols compile-security-protocols docs
+build: docs compile-protocols compile-security-protocols
 
 clean:
 	@echo "--> Removing compiled protocol and documentation artifacts..."
