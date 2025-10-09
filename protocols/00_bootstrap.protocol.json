@@ -1,0 +1,14 @@
+{
+  "protocol_id": "agent-bootstrap-001",
+  "description": "A foundational protocol that dictates the agent's initial actions upon starting any task.",
+  "rules": [
+    {
+      "rule_id": "bootstrap-load-agents-md",
+      "description": "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins.",
+      "enforcement": "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase."
+    }
+  ],
+  "associated_tools": [
+    "read_file"
+  ]
+}

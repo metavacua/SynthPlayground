@@ -36,6 +36,31 @@
 
 ---
 
+# Jules Agent Protocol: The Hierarchical Development Cycle
+
+**Version:** 4.0.0
+
+---
+```json
+{
+  "protocol_id": "agent-bootstrap-001",
+  "description": "A foundational protocol that dictates the agent's initial actions upon starting any task.",
+  "rules": [
+    {
+      "rule_id": "bootstrap-load-agents-md",
+      "description": "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins.",
+      "enforcement": "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase."
+    }
+  ],
+  "associated_tools": [
+    "read_file"
+  ]
+}
+```
+
+
+---
+
 ## 1. The Core Problem: Ensuring Formally Verifiable Execution
 
 To tackle complex tasks reliably, an agent's workflow must be formally structured and guaranteed to terminate—it must be **decidable**. This is achieved through a hierarchical system composed of a high-level **Orchestrator** that manages the agent's overall state and a low-level **FDC Toolchain** that governs the validity of the agent's plans. This structure prevents the system from entering paradoxical, non-terminating loops.
@@ -568,7 +593,25 @@ required to advance that state.
 
 ### `tooling/plan_manager.py`
 
-_No module-level docstring found._
+Provides a command-line interface for managing the agent's Plan Registry.
+
+This script is the administrative tool for the Plan Registry, a key component
+of the Context-Free Development Cycle (CFDC) that enables hierarchical and
+modular planning. The registry, located at `knowledge_core/plan_registry.json`,
+maps human-readable, logical names to the file paths of specific plans. This
+decouples the `call_plan` directive from hardcoded file paths, making plans
+more reusable and the system more robust.
+
+This CLI provides three essential functions:
+- **register**: Associates a new logical name with a plan file path, adding it
+  to the central registry.
+- **deregister**: Removes an existing logical name and its associated path from
+  the registry.
+- **list**: Displays all current name-to-path mappings in the registry.
+
+By providing a simple, standardized interface for managing this library of
+reusable plans, this tool improves the agent's ability to compose complex
+workflows from smaller, validated sub-plans.
 
 ### `tooling/protocol_auditor.py`
 
@@ -732,23 +775,95 @@ and understand the structure of the repository without having to read every file
 
 ### `tooling/test_dependency_graph_generator.py`
 
-_No module-level docstring found._
+Unit tests for the dependency graph generator tool.
+
+This test suite validates the functionality of the `dependency_graph_generator.py`
+script. It uses a temporary file structure created in the `setUp` method to
+simulate a repository with both JavaScript (`package.json`) and Python
+(`requirements.txt`) projects, including nested and root-level files.
+
+The tests cover:
+- File discovery for both project types.
+- Correct parsing of package names and dependencies from each file type.
+- The successful generation of a complete dependency graph, including both
+  internal and external dependencies and the correct creation of nodes and edges.
 
 ### `tooling/test_knowledge_compiler.py`
 
-_No module-level docstring found._
+Unit tests for the knowledge compiler tool.
+
+This test suite validates the functionality of the `knowledge_compiler.py`
+script, which is responsible for extracting lessons from post-mortem reports
+and adding them to the central knowledge base.
+
+The tests use a mock post-mortem file with multi-line entries to ensure that
+the parsing logic is robust. The suite covers:
+- Correct extraction of metadata (Task ID, Date) from the report.
+- Correct extraction of "Lesson" and "Action" pairs, including handling of
+  multi-line content.
+- End-to-end validation of the main compiler function, ensuring that it
+  correctly reads a post-mortem file and appends the formatted lessons to the
+  `lessons_learned.md` knowledge base.
 
 ### `tooling/test_master_control.py`
 
-_No module-level docstring found._
+Integration tests for the master control FSM and CFDC workflow.
+
+This test suite provides end-to-end validation of the `master_control.py`
+orchestrator. It uses a multi-threaded approach to simulate the interactive
+nature of the agent's workflow, where the FSM runs in one thread and the test
+script acts as the "agent" in the main thread, creating files like `plan.txt`
+and `step_complete.txt` to drive the FSM through its states.
+
+The suite is divided into two main classes:
+- `TestMasterControlGraphFullWorkflow`: Validates the entire "atomic" workflow
+  from orientation through planning, execution, analysis, and post-mortem,
+  ensuring the FSM transitions correctly through all its states.
+- `TestCFDCWorkflow`: Focuses specifically on the Context-Free Development
+  Cycle features, including:
+    - Executing hierarchical plans using the `call_plan` directive.
+    - Using the Plan Registry to call sub-plans by a logical name.
+    - Verifying that the system correctly halts when the maximum recursion
+      depth is exceeded, ensuring decidability.
 
 ### `tooling/test_self_improvement_cli.py`
 
-_No module-level docstring found._
+Unit tests for the self-improvement analysis CLI tool.
+
+This test suite validates the `analyze_planning_efficiency` function from the
+`self_improvement_cli.py` script. The primary goal is to ensure that the tool
+can correctly parse an activity log and identify tasks that involved multiple
+plan revisions, which is a key indicator of potential inefficiency.
+
+The test creates a temporary log file (`.jsonl`) containing a mix of scenarios:
+- A task with a single, efficient planning step.
+- A task with three separate plan revisions.
+- A task that uses an alternative but valid log format for plan updates.
+- A task with no planning actions at all.
+
+The test asserts that the analysis correctly identifies only the inefficient
+tasks and accurately counts the number of plan revisions for each, ensuring the
+tool provides reliable feedback for the agent's self-improvement loop.
 
 ### `tooling/test_symbol_map_generator.py`
 
-_No module-level docstring found._
+Unit tests for the symbol map generator tool.
+
+This test suite validates the `symbol_map_generator.py` script, which is
+responsible for creating a code symbol index for the repository. The tests
+cover both of the script's operational modes: the preferred `ctags`-based
+generation and the `ast`-based fallback.
+
+The tests include:
+- `test_generate_with_ctags_success`: Mocks the `subprocess.run` call to
+  simulate a successful `ctags` execution. It verifies that the script correctly
+  parses the JSON-lines output from `ctags` and wraps it in a valid JSON object.
+- `test_generate_with_ast_fallback`: Validates that the Python-only `ast` parser
+  correctly traverses a sample Python file and extracts class, method, and
+  function definitions.
+- `test_main_with_ast_fallback`: Mocks the `has_ctags` check to force the main
+  function to use the `ast` fallback, ensuring the end-to-end logic works
+  correctly when `ctags` is not available.
 
 ---
 
@@ -788,6 +903,21 @@ and self-improvement activities.
 
 ### `utils/test_logger.py`
 
-_No module-level docstring found._
+Unit tests for the structured JSONL logger.
+
+This test suite validates the `Logger` class from `utils/logger.py`. Its main
+purpose is to ensure that the logger correctly performs schema validation and
+writes well-formed log entries to the specified log file.
+
+The tests use a temporary directory to house a mock schema file and a log file,
+ensuring the tests are isolated and do not interfere with the actual project logs.
+
+The suite covers two primary scenarios:
+- **Success Case:** It tests that a log entry with a valid data structure that
+  conforms to the schema is successfully written to the JSONL file.
+- **Failure Case:** It tests that a log entry with data that violates the schema
+  (e.g., incorrect data types) correctly raises a `ValidationError` from the
+  `jsonschema` library and that no log file is written, preventing the creation
+  of corrupted logs.
 
 ---
