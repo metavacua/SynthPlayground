@@ -1,0 +1,14 @@
+{
+  "protocol_id": "initial-env-setup-001",
+  "description": "A protocol that mandates the installation of dependencies at the start of a task.",
+  "rules": [
+    {
+      "rule_id": "dependency-install-mandate",
+      "description": "If a requirements.txt file exists, the agent's first operational step MUST be to install the dependencies using 'pip install -r requirements.txt'. This ensures a consistent environment and prevents module not found errors.",
+      "enforcement": "This is a core operational discipline that should be part of the agent's initial task execution logic. Future tooling could enforce this by checking logs for the installation command at the beginning of a task.",
+      "associated_tools": [
+        "run_in_bash_session"
+      ]
+    }
+  ]
+}
