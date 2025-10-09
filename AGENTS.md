@@ -607,6 +607,7 @@ Before finalizing and submitting any work, the agent **must** execute the `pre_c
 3.  **Recording key learnings** to contribute to the agent's long-term memory.
 
 Adherence to this protocol is not optional. It is a fundamental step in the development lifecycle that safeguards the integrity of the codebase.
+
 ```json
 {
   "protocol_id": "pre-commit-protocol-001",
@@ -774,6 +775,10 @@ improved in future tasks.
 The script is executed via the command line, taking the path to a completed
 post-mortem file as its primary argument.
 
+### `tooling/log_failure.py`
+
+_No module-level docstring found._
+
 ### `tooling/master_control.py`
 
 The master orchestrator for the agent's lifecycle, governed by a Finite State Machine.
@@ -831,24 +836,27 @@ workflows from smaller, validated sub-plans.
 
 ### `tooling/protocol_auditor.py`
 
-Audits the agent's behavior against its governing protocols.
+Audits the agent's behavior against its governing protocols and generates a report.
 
-This script performs a comparative analysis between the tools defined in the
-`AGENTS.md` protocol document and the tools actually used, as recorded in the
-activity log. Its purpose is to provide a feedback loop for protocol enforcement
-and to identify potential gaps or inconsistencies in the agent's behavior.
+This script performs a comprehensive analysis to ensure the agent's actions,
+as recorded in the activity log, align with the defined protocols in AGENTS.md.
+It serves as a critical feedback mechanism for maintaining operational integrity.
+The final output is a detailed `audit_report.md` file.
 
-The auditor currently performs two main checks:
-1.  **Protocol Completeness:** It identifies:
-    - Tools that were used but are not associated with any formal protocol.
-    - Tools that are defined in the protocols but were never used.
-2.  **Tool Centrality:** It conducts a frequency analysis of the tools used,
-    helping to identify which tools are most critical to the agent's workflow.
+The auditor performs three main checks:
+1.  **`AGENTS.md` Source Check:** Verifies if the `AGENTS.md` build artifact is
+    potentially stale by comparing its modification time against the source
+    protocol files in the `protocols/` directory.
+2.  **Protocol Completeness:** It cross-references the tools used in the log
+    (`logs/activity.log.jsonl`) against the tools defined in `AGENTS.md` to find:
+    - Tools used but not associated with any formal protocol.
+    - Tools defined in protocols but never used in the log.
+3.  **Tool Centrality:** It conducts a frequency analysis of tool usage to
+    identify which tools are most critical to the agent's workflow.
 
-NOTE: The current implementation has known issues. It incorrectly parses the
-`AGENTS.md` file by only reading the first JSON block and relies on a non-standard
-log file. It requires modification to parse all JSON blocks and use the correct
-`logs/activity.log.jsonl` file to be effective.
+The script parses all embedded JSON protocol blocks within `AGENTS.md` and reads
+from the standard `logs/activity.log.jsonl` log file, providing a reliable and
+accurate audit.
 
 ### `tooling/protocol_compiler.py`
 
@@ -887,21 +895,6 @@ workflow.
 
 The tool operates on the .protocol.json files located in the `protocols/`
 directory, performing targeted updates based on command-line arguments.
-
-### `tooling/readme_generator.py`
-
-Generates the project's main README.md from protocol documentation.
-
-This script scans the 'protocols/' directory for markdown files (`.protocol.md`),
-concatenates them in a sorted order, and writes the final output to the
-root-level README.md file. This ensures the README always reflects the
-latest protocol definitions, providing a single source of truth for the
-project's operational guidelines.
-
-Configuration is managed via top-level constants:
-- `PROTOCOLS_DIR`: The directory where source protocol files are stored.
-- `OUTPUT_FILE`: The path to the generated README.md file.
-- `README_TITLE`: The main title for the generated README.
 
 ### `tooling/research.py`
 
@@ -1052,22 +1045,22 @@ expected JSON schema, including having unique IDs and a 'pending' status.
 
 Integration tests for the master control FSM and CFDC workflow.
 
-This test suite provides end-to-end validation of the `master_control.py`
-orchestrator. It uses a multi-threaded approach to simulate the interactive
-nature of the agent's workflow, where the FSM runs in one thread and the test
-script acts as the "agent" in the main thread, creating files like `plan.txt`
-and `step_complete.txt` to drive the FSM through its states.
+This test suite has been redesigned to be single-threaded and deterministic,
+eliminating the file-polling, multi-threaded architecture that was causing
+timeouts and instability in the test environment.
 
-The suite is divided into two main classes:
-- `TestMasterControlGraphFullWorkflow`: Validates the entire "atomic" workflow
-  from orientation through planning, execution, analysis, and post-mortem,
-  ensuring the FSM transitions correctly through all its states.
-- `TestCFDCWorkflow`: Focuses specifically on the Context-Free Development
-  Cycle features, including:
-    - Executing hierarchical plans using the `call_plan` directive.
-    - Using the Plan Registry to call sub-plans by a logical name.
-    - Verifying that the system correctly halts when the maximum recursion
-      depth is exceeded, ensuring decidability.
+The key principles of this new design are:
+- **No `time.sleep`:** All forms of waiting are removed.
+- **No `threading`:** The tests run in a single, predictable thread.
+- **Direct State Manipulation:** The tests directly call the FSM's state-handler
+  methods (e.g., `do_planning`, `do_execution`) instead of running the FSM's
+  main loop.
+- **Mocking Filesystem I/O:** `os.path.exists` and other file operations that
+  the FSM uses for polling are mocked. This gives the test complete and
+  instantaneous control over the FSM's state transitions.
+- **Hermetic Environment:** All tests run inside a temporary directory, and all
+  necessary dependencies from the repository are copied into it, ensuring tests
+  do not have side effects and do not rely on the external state of the repo.
 
 ### `tooling/test_protocol_auditor.py`
 
@@ -1095,21 +1088,6 @@ to reflect the outcome.
 ### `tooling/test_self_improvement_cli.py`
 
 Unit tests for the self-improvement analysis CLI tool.
-
-This test suite validates the `analyze_planning_efficiency` function from the
-`self_improvement_cli.py` script. The primary goal is to ensure that the tool
-can correctly parse an activity log and identify tasks that involved multiple
-plan revisions, which is a key indicator of potential inefficiency.
-
-The test creates a temporary log file (`.jsonl`) containing a mix of scenarios:
-- A task with a single, efficient planning step.
-- A task with three separate plan revisions.
-- A task that uses an alternative but valid log format for plan updates.
-- A task with no planning actions at all.
-
-The test asserts that the analysis correctly identifies only the inefficient
-tasks and accurately counts the number of plan revisions for each, ensuring the
-tool provides reliable feedback for the agent's self-improvement loop.
 
 ### `tooling/test_symbol_map_generator.py`
 
