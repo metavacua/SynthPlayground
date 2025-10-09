@@ -63,37 +63,28 @@ def _create_log_entry(task_id, action_type, details):
 
 
 def close_task(task_id):
-    """Automates the closing of a Finite Development Cycle."""
+    """
+    Logs the formal end of a task.
+
+    This command's primary role is to create a TASK_END log entry. It no longer
+    manages the post-mortem file directly; that process is now fully owned by
+    the MasterControlGraph orchestrator, which is the single source of truth
+    for state transitions and artifact lifecycle management.
+    """
     if not task_id:
         print("Error: --task-id is required.", file=sys.stderr)
         sys.exit(1)
-    safe_task_id = "".join(c for c in task_id if c.isalnum() or c in ("-", "_"))
-    new_path = os.path.join(
-        POSTMORTEMS_DIR, f"{datetime.date.today()}-{safe_task_id}.md"
-    )
-    try:
-        shutil.copyfile(POSTMORTEM_TEMPLATE_PATH, new_path)
-        print(f"Successfully created new post-mortem file: {new_path}")
-    except Exception as e:
-        print(f"Error creating post-mortem file: {e}", file=sys.stderr)
-        sys.exit(1)
 
-    _log_event(
-        _create_log_entry(
-            task_id,
-            "POST_MORTEM",
-            {"summary": f"Post-mortem initiated for '{task_id}'."},
-        )
-    )
-    _log_event(
-        _create_log_entry(
-            task_id,
-            "TASK_END",
-            {"summary": f"Development phase for FDC task '{task_id}' formally closed."},
-        )
-    )
+    # The only responsibility of this command is to log the TASK_END event.
+    # The master_control.py orchestrator handles the post-mortem lifecycle.
+    log_details = {
+        "summary": f"Agent has signaled the completion of task '{task_id}'. The Master Control Graph will now transition to the post-mortem phase."
+    }
+    _log_event(_create_log_entry(task_id, "TASK_END", log_details))
 
-    print(f"Logged POST_MORTEM and TASK_END events for task: {task_id}")
+    print(f"Logged TASK_END event for task: {task_id}")
+    # The creation of the step_complete.txt file by the agent's execution
+    # of this tool is the signal for the MasterControlGraph to proceed.
 
 
 def _validate_action(line_num, line_content, state, fsm, fs, placeholders):
