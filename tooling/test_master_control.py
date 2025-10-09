@@ -84,8 +84,9 @@ class TestMasterControlRedesigned(unittest.TestCase):
         """
         # --- Mocking Setup ---
         def subprocess_side_effect(cmd, *args, **kwargs):
-            script_name = os.path.basename(cmd[1])
-            if script_name == "knowledge_compiler.py":
+            # Make the check more robust by looking for the script name anywhere in the command.
+            cmd_str = " ".join(cmd)
+            if "knowledge_compiler.py" in cmd_str:
                 lesson = {
                     "lesson_id": "l1", "insight": "Test lesson",
                     "action": {"type": "UPDATE_PROTOCOL", "command": "add-tool", "parameters": {"protocol_id": self.mock_protocol_id, "tool_name": "new_mock_tool"}},
@@ -93,7 +94,7 @@ class TestMasterControlRedesigned(unittest.TestCase):
                 }
                 with open(self.lessons_file, "a") as f: f.write(json.dumps(lesson) + "\n")
                 return subprocess.CompletedProcess(args=cmd, returncode=0)
-            if script_name == "self_correction_orchestrator.py":
+            elif "self_correction_orchestrator.py" in cmd_str:
                 with open(self.mock_protocol_file, "r+") as f:
                     data = json.load(f)
                     data["associated_tools"].append("new_mock_tool")
@@ -148,14 +149,21 @@ class TestMasterControlRedesigned(unittest.TestCase):
         # 5. POST_MORTEM
         trigger = self.graph.do_post_mortem(self.agent_state)
         self.assertEqual(trigger, "post_mortem_complete")
+        self.graph.current_state = "SELF_CORRECTING"
+
+        # 6. SELF_CORRECTING
+        trigger = self.graph.do_self_correcting(self.agent_state)
+        self.assertEqual(trigger, "self_correction_succeeded")
         self.graph.current_state = "AWAITING_SUBMISSION"
 
         # --- Assertions ---
-        self.assertIsNone(self.agent_state.error)
+        self.assertIsNone(self.agent_state.error, f"Agent entered an error state: {self.agent_state.error}")
         self.assertEqual(self.graph.current_state, "AWAITING_SUBMISSION")
+
+        # Verify that the self-correction step actually modified the protocol file
         with open(self.mock_protocol_file, "r") as f:
             updated_protocol = json.load(f)
-        self.assertIn("new_mock_tool", updated_protocol["associated_tools"])
+        self.assertIn("new_mock_tool", updated_protocol["associated_tools"], "The protocol file was not updated by the self-correction step.")
 
 
 if __name__ == "__main__":
