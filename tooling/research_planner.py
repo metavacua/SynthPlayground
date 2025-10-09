@@ -1,3 +1,4 @@
+import json
 import sys
 from typing import Literal
 
@@ -28,8 +29,25 @@ def plan_deep_research(
 
     if repository == "local":
         workflow_file_path = "AGENTS.md"
-        with open(workflow_file_path, "r") as f:
-            workflow_content_snippet = f.read(500) + "..."
+        try:
+            with open(workflow_file_path, "r") as f:
+                content = f.read()
+            # Extract content from the json code block
+            start_marker = "```json\n"
+            end_marker = "\n```"
+            start_index = content.find(start_marker) + len(start_marker)
+            end_index = content.rfind(end_marker)
+
+            if start_index != -1 and end_index != -1:
+                json_content = content[start_index:end_index]
+                data = json.loads(json_content)
+                # Pretty-print the JSON content for readability
+                json_string = json.dumps(data, indent=2)
+                workflow_content_snippet = json_string[:500] + "..."
+            else:
+                workflow_content_snippet = "Error: Could not find JSON block in AGENTS.md"
+        except (FileNotFoundError, json.JSONDecodeError):
+            workflow_content_snippet = "Error: Could not read or parse AGENTS.md"
     elif repository == "external":
         workflow_file_path = "src/open_deep_research/deep_researcher.py"
         constraints = {"target": "external_repository", "path": workflow_file_path}
@@ -69,7 +87,7 @@ def plan_deep_research(
 *   **Output:** The final research report, ready for review.
 
 ## 3. Protocol Reference Snippet
-```
+```json
 {workflow_content_snippet}
 ```
 """
