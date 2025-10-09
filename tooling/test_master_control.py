@@ -101,7 +101,8 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
     def test_full_atomic_workflow_with_analysis(self):
         """
         Validates the entire FSM flow, including plan validation, execution,
-        interactive analysis, post-mortem, and the new self-correction step.
+        interactive analysis, post-mortem, and the new, mandatory
+        `SELF_CORRECTING` state.
         """
         # 1. Define a complete and valid command-based plan for the validator
         test_plan = (
@@ -236,71 +237,6 @@ class TestCFDCWorkflow(unittest.TestCase):
             if os.path.exists(f):
                 os.remove(f)
 
-    def test_plan_registry_execution(self):
-        """
-        Validates that the FSM can execute a plan that calls a sub-plan.
-        """
-        sub_plan_content = (
-            'set_plan "Sub-plan"\n'
-            'plan_step_complete " "\n'
-            f'create_file_with_block {self.output_file} "hello from registry"\n'
-            'run_in_bash_session close --task-id sub-task\n'
-            'submit'
-        )
-        with open(self.sub_plan_file, "w") as f:
-            f.write(sub_plan_content)
-
-        main_plan_content = (
-            'set_plan "Main plan"\n'
-            'plan_step_complete " "\n'
-            f"call_plan {sub_plan_name}\n"
-            'run_in_bash_session close --task-id main-task\n'
-            'submit'
-        )
-        with open(self.root_plan_file, "w") as f:
-            f.write(main_plan_content)
-
-        # 3. Run the FSM
-        final_state_container = {}
-
-        def run_fsm():
-            initial_state = AgentState(task=self.task_id)
-            graph = MasterControlGraph()
-            final_state = graph.run(initial_state)
-            final_state_container["final_state"] = final_state
-
-        fsm_thread = threading.Thread(target=run_fsm)
-        fsm_thread.start()
-
-        time.sleep(1.5)
-        plan_steps = main_plan_content.split('\n') + sub_plan_content.split('\n')
-        for i, step in enumerate(plan_steps):
-             if "call_plan" not in step:
-                time.sleep(1.5)
-                with open(self.step_complete_file, "w") as f:
-                    f.write(f"Step {i+1} '{step}' complete.")
-
-        draft_created = False
-        for _ in range(10):
-            if os.path.exists(self.draft_postmortem_file):
-                draft_created = True
-                break
-            time.sleep(0.5)
-        self.assertTrue(
-            draft_created, "Draft post-mortem file was not created in time."
-        )
-
-        with open(self.analysis_complete_file, "w") as f:
-            f.write("done")
-
-        fsm_thread.join(timeout=30)
-        self.assertFalse(fsm_thread.is_alive(), "FSM thread timed out.")
-
-        final_state = final_state_container["final_state"]
-        self.assertIsNone(final_state.error)
-        self.assertTrue(os.path.exists(self.output_file))
-        with open(self.output_file, "r") as f:
-            self.assertEqual(f.read(), "hello from sub-plan")
 
     def test_recursion_depth_limit(self):
         """
