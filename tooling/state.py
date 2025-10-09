@@ -1,5 +1,5 @@
-from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional
+import json
+from typing import List, Dict, Any
 
 
 @dataclass
@@ -14,8 +14,7 @@ class PlanContext:
 @dataclass
 class AgentState:
     """
-    Represents the complete state of the agent's workflow at any given time.
-    This object is passed between nodes in the master control graph.
+    A class to represent and manage the agent's state throughout its lifecycle.
     """
 
     task: str

@@ -57,7 +57,8 @@ This document defines the JSON schema for entries in `logs/activity.log.jsonl`. 
             "POST_MORTEM",
             "TASK_END",
             "INFO",
-            "SYSTEM_FAILURE"
+            "SYSTEM_FAILURE",
+            "AGENT_TOOL_CALL"
           ],
           "description": "The type of action being logged."
         },
