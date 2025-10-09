@@ -34,6 +34,7 @@ POSTMORTEMS_DIR = os.path.join(ROOT_DIR, "postmortems")
 LOG_FILE_PATH = os.path.join(ROOT_DIR, "logs", "activity.log.jsonl")
 FSM_DEF_PATH = os.path.join(ROOT_DIR, "tooling", "fdc_fsm.json")
 MAX_RECURSION_DEPTH = 10  # Safety limit for hierarchical plans
+PLAN_REGISTRY_PATH = os.path.join(ROOT_DIR, "knowledge_core", "plan_registry.json")
 
 ACTION_TYPE_MAP = {
     "set_plan": "plan_op",
@@ -53,6 +54,17 @@ ACTION_TYPE_MAP = {
 }
 
 # --- CLI Subcommands & Helpers ---
+
+
+def _load_plan_registry():
+    """Loads the plan registry, returning an empty dict if it doesn't exist or is invalid."""
+    if not os.path.exists(PLAN_REGISTRY_PATH):
+        return {}
+    try:
+        with open(PLAN_REGISTRY_PATH, "r") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, IOError):
+        return {}
 
 
 def _log_event(log_entry):
@@ -203,10 +215,11 @@ def _validate_plan_recursive(
         args = line_content.split()[1:]
 
         if command == "call_plan":
-            # 'call_plan' is a meta-command for the executor. For the validator,
-            # we just need to ensure the sub-plan is itself valid from start to finish.
-            # We do not pass the current state; each plan must be a complete FSM traversal.
-            sub_plan_path = args[0]
+            # --- Plan Registry Lookup ---
+            plan_name_or_path = args[0]
+            registry = _load_plan_registry()
+            sub_plan_path = registry.get(plan_name_or_path, plan_name_or_path)
+
             try:
                 with open(sub_plan_path, "r") as f:
                     sub_plan_lines = [
