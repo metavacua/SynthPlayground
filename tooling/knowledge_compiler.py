@@ -1,3 +1,21 @@
+"""
+Extracts structured lessons from post-mortem reports and compiles them into a
+centralized, long-term knowledge base.
+
+This script is a core component of the agent's self-improvement feedback loop.
+After a task is completed, a post-mortem report is generated that includes a
+section for "Corrective Actions & Lessons Learned." This script automates the
+process of parsing that section to extract key insights.
+
+It identifies pairs of "Lesson" and "Action" statements and transforms them
+into a standardized, machine-readable format. These formatted entries are then
+appended to the `knowledge_core/lessons_learned.md` file, which serves as the
+agent's persistent memory of what has worked, what has failed, and what can be
+improved in future tasks.
+
+The script is executed via the command line, taking the path to a completed
+post-mortem file as its primary argument.
+"""
 import argparse
 import re
 import os

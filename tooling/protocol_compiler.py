@@ -1,3 +1,28 @@
+"""
+Compiles source protocol files into unified, human-readable and machine-readable artifacts.
+
+This script is the engine behind the "protocol as code" principle. It discovers,
+validates, and assembles protocol definitions from a source directory (e.g., `protocols/`)
+into high-level documents like `AGENTS.md`.
+
+Key Functions:
+- **Discovery:** Scans a directory for source files, including `.protocol.json`
+  (machine-readable rules) and `.protocol.md` (human-readable context).
+- **Validation:** Uses a JSON schema (`protocol.schema.json`) to validate every
+  `.protocol.json` file, ensuring all protocol definitions are syntactically
+  correct and adhere to the established structure.
+- **Compilation:** Combines the human-readable markdown and the machine-readable
+  JSON into a single, cohesive Markdown file, embedding the JSON in code blocks.
+- **Documentation Injection:** Can inject other generated documents, like the
+  `SYSTEM_DOCUMENTATION.md`, into the final output at specified locations.
+- **Knowledge Graph Generation:** Optionally, it can process the validated JSON
+  protocols and serialize them into an RDF knowledge graph (in Turtle format),
+  creating a machine-queryable version of the agent's governing rules.
+
+This process ensures that `AGENTS.md` and other protocol documents are not edited
+manually but are instead generated from a validated, single source of truth,
+making the agent's protocols robust, verifiable, and maintainable.
+"""
 import os
 import glob
 import json

@@ -1,3 +1,20 @@
+"""
+Generates system documentation from Python module-level docstrings.
+
+This script scans specified directories for Python files, parses them to
+extract their module-level docstrings, and compiles them into a single,
+formatted Markdown file. It is the core engine for the project's automated
+documentation generation, ensuring that the `SYSTEM_DOCUMENTATION.md` artifact
+in the `knowledge_core` is always up-to-date with the in-code documentation.
+
+The script is configured via top-level constants:
+- `SCAN_DIRECTORIES`: A list of directories to search for .py files.
+- `OUTPUT_FILE`: The path where the final Markdown file will be written.
+- `DOC_TITLE`: The main title for the generated documentation file.
+
+It uses Python's `ast` module to reliably parse source files without
+importing them, which avoids issues with dependencies or script side-effects.
+"""
 import ast
 import os
 from typing import List, Dict, Optional

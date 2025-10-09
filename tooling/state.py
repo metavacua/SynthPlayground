@@ -1,3 +1,20 @@
+"""
+Defines the core data structures for managing the agent's state.
+
+This module provides the `AgentState` and `PlanContext` dataclasses, which are
+fundamental to the operation of the Context-Free Development Cycle (CFDC). These
+structures allow the `master_control.py` orchestrator to maintain a complete,
+snapshot-able representation of the agent's progress through a task.
+
+- `AgentState`: The primary container for all information related to the current
+  task, including the plan execution stack, message history, and error states.
+- `PlanContext`: A specific structure that holds the state of a single plan
+  file, including its content and the current execution step. This is the
+  element that gets pushed onto the `plan_stack` in `AgentState`.
+
+Together, these classes enable the hierarchical, stack-based planning and
+execution that is the hallmark of the CFDC.
+"""
 import json
 from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
@@ -5,7 +22,14 @@ from typing import List, Dict, Any, Optional
 
 @dataclass
 class PlanContext:
-    """Represents the execution context of a single plan file."""
+    """
+    Represents the execution context of a single plan file within the plan stack.
+
+    This class holds the state of a specific plan being executed, including its
+    file path, its content (as a list of commands), and a pointer to the
+    current step being executed. Instances of this class are pushed onto the
+    `plan_stack` in the `AgentState` to manage hierarchical plan execution.
+    """
 
     plan_path: str
     plan_content: List[str]
@@ -15,8 +39,30 @@ class PlanContext:
 @dataclass
 class AgentState:
     """
-    Represents the complete state of the agent's workflow at any given time.
-    This object is passed between nodes in the master control graph.
+    Represents the complete, serializable state of the agent's workflow.
+
+    This dataclass acts as a central container for all information related to the
+    agent's current task. It is designed to be passed between the different states
+    of the `MasterControlGraph` FSM, ensuring that context is maintained
+    throughout the lifecycle of a task.
+
+    Attributes:
+        task: A string describing the overall objective.
+        plan_stack: A list of `PlanContext` objects, forming the execution
+            stack for the CFDC. The plan at the top of the stack is the one
+            currently being executed.
+        messages: A history of messages, typically for interaction with an LLM.
+        orientation_complete: A flag indicating if the initial orientation
+            phase has been successfully completed.
+        vm_capability_report: A string summarizing the results of the
+            environmental probe.
+        research_findings: A dictionary to store the results of research tasks.
+        draft_postmortem_path: The file path to the draft post-mortem report
+            generated during the AWAITING_ANALYSIS state.
+        final_report: A string containing a summary of the final, completed
+            post-mortem report.
+        error: An optional string that holds an error message if the FSM
+            enters an error state, providing a clear reason for the failure.
     """
 
     task: str

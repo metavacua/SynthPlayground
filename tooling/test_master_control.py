@@ -1,3 +1,23 @@
+"""
+Integration tests for the master control FSM and CFDC workflow.
+
+This test suite provides end-to-end validation of the `master_control.py`
+orchestrator. It uses a multi-threaded approach to simulate the interactive
+nature of the agent's workflow, where the FSM runs in one thread and the test
+script acts as the "agent" in the main thread, creating files like `plan.txt`
+and `step_complete.txt` to drive the FSM through its states.
+
+The suite is divided into two main classes:
+- `TestMasterControlGraphFullWorkflow`: Validates the entire "atomic" workflow
+  from orientation through planning, execution, analysis, and post-mortem,
+  ensuring the FSM transitions correctly through all its states.
+- `TestCFDCWorkflow`: Focuses specifically on the Context-Free Development
+  Cycle features, including:
+    - Executing hierarchical plans using the `call_plan` directive.
+    - Using the Plan Registry to call sub-plans by a logical name.
+    - Verifying that the system correctly halts when the maximum recursion
+      depth is exceeded, ensuring decidability.
+"""
 import unittest
 import sys
 import os

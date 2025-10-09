@@ -1,3 +1,23 @@
+"""
+Audits the agent's behavior against its governing protocols.
+
+This script performs a comparative analysis between the tools defined in the
+`AGENTS.md` protocol document and the tools actually used, as recorded in the
+activity log. Its purpose is to provide a feedback loop for protocol enforcement
+and to identify potential gaps or inconsistencies in the agent's behavior.
+
+The auditor currently performs two main checks:
+1.  **Protocol Completeness:** It identifies:
+    - Tools that were used but are not associated with any formal protocol.
+    - Tools that are defined in the protocols but were never used.
+2.  **Tool Centrality:** It conducts a frequency analysis of the tools used,
+    helping to identify which tools are most critical to the agent's workflow.
+
+NOTE: The current implementation has known issues. It incorrectly parses the
+`AGENTS.md` file by only reading the first JSON block and relies on a non-standard
+log file. It requires modification to parse all JSON blocks and use the correct
+`logs/activity.log.jsonl` file to be effective.
+"""
 import json
 import os
 from collections import Counter
@@ -5,20 +25,28 @@ import re
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-LOG_FILE = os.path.join(ROOT_DIR, "tool_demonstration_log.txt")
+LOG_FILE = os.path.join(ROOT_DIR, "logs", "activity.log.jsonl")
 AGENTS_FILE = os.path.join(ROOT_DIR, "AGENTS.md")
 
 
 def get_used_tools_from_log(log_path):
-    """Parses the log file to get a list of used tools."""
+    """Parses the JSONL log file to get a list of used tools."""
+    used_tools = []
     try:
         with open(log_path, "r") as f:
-            # Read all lines, strip whitespace, and filter out empty lines
-            tools = [line.strip() for line in f if line.strip()]
-        return tools
+            for line in f:
+                try:
+                    log_entry = json.loads(line)
+                    # The tool name is nested within the action details
+                    tool_name = log_entry.get("action", {}).get("details", {}).get("tool_name")
+                    if tool_name:
+                        used_tools.append(tool_name)
+                except json.JSONDecodeError:
+                    print(f"Warning: Skipping malformed JSON line in log: {line.strip()}")
+                    continue
     except FileNotFoundError:
         print(f"Error: Log file not found at {log_path}")
-        return []
+    return used_tools
 
 
 def get_protocol_tools_from_agents_md(agents_md_path):
@@ -27,26 +55,35 @@ def get_protocol_tools_from_agents_md(agents_md_path):
         with open(agents_md_path, "r") as f:
             content = f.read()
 
-        # Extract content from the json code block
-        start_marker = "```json\\n"
-        end_marker = "\\n```"
-        match = re.search(f"{start_marker}(.*?){end_marker}", content, re.DOTALL)
-
-        if not match:
-            print(f"Error: Could not find JSON block in {agents_md_path}")
+        # Use re.findall to extract all JSON code blocks
+        json_blocks = re.findall(r"```json\n(.*?)\n```", content, re.DOTALL)
+        if not json_blocks:
+            print(f"Warning: No JSON blocks found in {agents_md_path}")
             return set()
 
-        json_content = match.group(1)
-        data = json.loads(json_content)
-
         protocol_tools = set()
-        for protocol in data.get("protocols", []):
-            for tool in protocol.get("associated_tools", []):
-                protocol_tools.add(tool)
+        for json_content in json_blocks:
+            try:
+                data = json.loads(json_content)
+                # Handle both single protocol objects and lists of them
+                rules = data.get("rules", [])
+                # The associated_tools might be at the top level
+                for tool in data.get("associated_tools", []):
+                    protocol_tools.add(tool)
+                # Or inside each rule
+                for rule in rules:
+                    for tool in rule.get("associated_tools", []):
+                        protocol_tools.add(tool)
+            except json.JSONDecodeError:
+                # Ignore blocks that aren't valid JSON
+                continue
         return protocol_tools
 
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error reading or parsing {agents_md_path}: {e}")
+    except FileNotFoundError:
+        print(f"Error: Protocol file not found at {agents_md_path}")
+        return set()
+    except Exception as e:
+        print(f"An unexpected error occurred while parsing {agents_md_path}: {e}")
         return set()
 
 
@@ -96,6 +133,43 @@ def run_centrality_analysis(used_tools):
     print("-" * 20)
 
 
+def run_protocol_source_check():
+    """Checks if AGENTS.md is older than its source files."""
+    print("\\n--- Running Protocol Source Check ---")
+    agents_md_path = AGENTS_FILE
+    protocols_dir = os.path.join(ROOT_DIR, "protocols")
+
+    if not os.path.exists(agents_md_path):
+        print("  - Warning: AGENTS.md not found. Cannot perform source check.")
+        return
+
+    try:
+        agents_md_mtime = os.path.getmtime(agents_md_path)
+
+        # Find the most recently modified file in the protocols directory
+        latest_source_mtime = 0
+        latest_source_file = ""
+        for root, _, files in os.walk(protocols_dir):
+            for file in files:
+                if file.endswith((".json", ".md")):
+                    path = os.path.join(root, file)
+                    mtime = os.path.getmtime(path)
+                    if mtime > latest_source_mtime:
+                        latest_source_mtime = mtime
+                        latest_source_file = path
+
+        if latest_source_mtime > agents_md_mtime:
+            print(f"  - Warning: AGENTS.md may be out of date.")
+            print(f"    - Latest source file modified: {latest_source_file}")
+            print(f"    - Recommendation: Run 'make AGENTS.md' to re-compile.")
+        else:
+            print("  - Success: AGENTS.md appears to be up-to-date with its sources.")
+
+    except Exception as e:
+        print(f"  - Error: Could not perform protocol source check. {e}")
+    print("-" * 20)
+
+
 def main():
     """Main function to run the protocol auditor."""
     print("--- Initializing Protocol Auditor ---")
@@ -105,6 +179,7 @@ def main():
     protocol_tools_from_agents = get_protocol_tools_from_agents_md(AGENTS_FILE)
 
     # Run analyses
+    run_protocol_source_check()
     run_completeness_check(used_tools_from_log, protocol_tools_from_agents)
     run_centrality_analysis(used_tools_from_log)
 
