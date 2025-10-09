@@ -5,6 +5,8 @@ import os
 import subprocess
 import shutil
 import datetime
+import shlex
+import traceback
 
 # Add tooling directory to path to import other tools
 sys.path.insert(0, "./tooling")
@@ -148,46 +150,68 @@ class MasterControlGraph:
 
     def do_execution(self, agent_state: AgentState) -> str:
         """
-        Executes the plan step-by-step, waiting for agent confirmation.
+        Executes the plan step-by-step by calling the execution_wrapper.
 
-        This node processes the plan one step at a time. For each step, it
-        waits for the agent to create a `step_complete.txt` file, signaling
-        that the step's action has been performed.
+        This node is the active executor. It parses each step of the plan
+        and invokes the `execution_wrapper.py` script to perform the action
+        and handle logging. This ensures that every action is centrally
+        managed and robustly logged.
         """
         print("[MasterControl] State: EXECUTING")
-
-        # Filter out empty lines from the plan
         plan_steps = [step for step in agent_state.plan.split("\n") if step.strip()]
 
         if agent_state.current_step_index < len(plan_steps):
             step = plan_steps[agent_state.current_step_index]
-            step_complete_file = "step_complete.txt"
+            print(f"  - Executing step {agent_state.current_step_index + 1}/{len(plan_steps)}: {step}")
 
-            print(f"  - Waiting for agent to complete step: {step}")
+            try:
+                # Use shlex to safely parse the command-line string
+                parts = shlex.split(step)
+                tool_name = parts[0]
+                args_list = parts[1:]
 
-            # Wait for the agent to signal step completion
-            while not os.path.exists(step_complete_file):
-                time.sleep(1)
+                # Prepare the command to call the execution wrapper
+                wrapper_cmd = [
+                    "python3",
+                    "tooling/execution_wrapper.py",
+                    "--tool",
+                    tool_name,
+                    "--args",
+                    json.dumps(args_list),
+                    "--task-id",
+                    agent_state.task,
+                    "--plan-step",
+                    str(agent_state.current_step_index),
+                ]
 
-            print(f"  - Detected '{step_complete_file}'.")
-            with open(step_complete_file, "r") as f:
-                result = f.read()
+                # Execute the command
+                result = subprocess.run(
+                    wrapper_cmd, capture_output=True, text=True
+                )
 
-            agent_state.messages.append(
-                {
-                    "role": "system",
-                    "content": f"Completed step {agent_state.current_step_index + 1}: {step}\nResult: {result}",
-                }
-            )
+                # If the wrapper script itself fails, it's a critical error
+                if result.returncode != 0:
+                    error_message = f"Execution wrapper failed for step: {step}\nStderr: {result.stderr}"
+                    agent_state.error = error_message
+                    print(f"[MasterControl] {error_message}")
+                    return self.get_trigger("EXECUTING", "ERROR")
 
-            # Clean up the file and advance to the next step
-            os.remove(step_complete_file)
-            agent_state.current_step_index += 1
+                # The wrapper's stdout might contain JSON results from tools like read_file
+                agent_state.messages.append(
+                    {
+                        "role": "system",
+                        "content": f"Successfully executed step {agent_state.current_step_index + 1}: {step}\nResult: {result.stdout}",
+                    }
+                )
 
-            print(
-                f"  - Step {agent_state.current_step_index} of {len(plan_steps)} signaled complete."
-            )
-            return self.get_trigger("EXECUTING", "EXECUTING")
+                agent_state.current_step_index += 1
+                return self.get_trigger("EXECUTING", "EXECUTING")
+
+            except Exception as e:
+                error_message = f"Orchestrator failed to execute step: {step}\nError: {e}\n{traceback.format_exc()}"
+                agent_state.error = error_message
+                print(f"[MasterControl] {error_message}")
+                return self.get_trigger("EXECUTING", "ERROR")
         else:
             print("[MasterControl] Execution Complete.")
             return self.get_trigger("EXECUTING", "AWAITING_ANALYSIS")
@@ -226,7 +250,7 @@ class MasterControlGraph:
 
     def do_post_mortem(self, agent_state: AgentState) -> str:
         """
-        Finalizes the post-mortem process by renaming the draft file.
+        Finalizes the post-mortem process, compiles lessons, and runs automated analysis.
         """
         print("[MasterControl] State: POST_MORTEM")
         draft_path = agent_state.draft_postmortem_path
@@ -241,6 +265,7 @@ class MasterControlGraph:
         final_path = f"postmortems/{datetime.date.today()}-{safe_task_id}.md"
 
         try:
+            # Finalize the report by renaming the draft
             os.rename(draft_path, final_path)
             report_message = (
                 f"Post-mortem analysis finalized. Report saved to '{final_path}'."
@@ -249,22 +274,39 @@ class MasterControlGraph:
             agent_state.messages.append({"role": "system", "content": report_message})
             print(f"[MasterControl] {report_message}")
 
-            # Automatically compile lessons learned from the new post-mortem
+            # Step 1: Compile lessons learned from the report
             print(f"  - Compiling lessons from '{final_path}'...")
             compile_cmd = ["python3", "tooling/knowledge_compiler.py", final_path]
             compile_result = subprocess.run(compile_cmd, capture_output=True, text=True)
             if compile_result.returncode == 0:
-                compile_msg = "Knowledge compilation successful."
-                print(f"  - {compile_msg}")
-                agent_state.messages.append({"role": "system", "content": compile_msg})
+                agent_state.messages.append({"role": "system", "content": "Knowledge compilation successful."})
             else:
-                compile_msg = f"Knowledge compilation failed: {compile_result.stderr}"
-                print(f"  - {compile_msg}")
-                agent_state.messages.append({"role": "system", "content": compile_msg})
-                # For now, this is not a critical FSM failure.
+                agent_state.messages.append({"role": "system", "content": f"Knowledge compilation failed: {compile_result.stderr}"})
+
+            # Step 2: Run automated self-improvement analysis
+            print(f"  - Running self-improvement analysis on activity log...")
+            analysis_cmd = ["python3", "tooling/self_improvement_cli.py"]
+            analysis_result = subprocess.run(analysis_cmd, capture_output=True, text=True)
+
+            # Append analysis to the post-mortem report
+            analysis_output = f"""
+---
+## 4. Automated Performance Analysis
+This section is automatically generated by the `self_improvement_cli.py` tool.
+
+```
+{analysis_result.stdout.strip()}
+```
+"""
+            with open(final_path, "a") as f:
+                f.write(analysis_output)
+
+            analysis_msg = "Automated performance analysis complete and appended to report."
+            print(f"  - {analysis_msg}")
+            agent_state.messages.append({"role": "system", "content": analysis_msg})
 
         except Exception as e:
-            agent_state.error = f"Failed to finalize post-mortem report: {e}"
+            agent_state.error = f"Failed to finalize post-mortem report: {e}\n{traceback.format_exc()}"
             print(f"[MasterControl] {agent_state.error}")
             return self.get_trigger("POST_MORTEM", "ERROR")
 
