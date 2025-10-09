@@ -205,6 +205,19 @@ class MasterControlGraph:
         step = plan_steps[current_context.current_step].strip()
         command, *args = step.split()
 
+        # --- Protocol Enforcement: Check for destructive commands ---
+        if command == "reset_all":
+            auth_token_path = os.path.join("knowledge_core", "reset_all_authorization.token")
+            if not os.path.exists(auth_token_path):
+                error_message = "Unauthorized use of 'reset_all'. Authorization token not found."
+                agent_state.error = error_message
+                print(f"[MasterControl] Protocol Violation: {error_message}")
+                return self.get_trigger("EXECUTING", "ERROR")
+            else:
+                # Consume the one-time token
+                os.remove(auth_token_path)
+                print("[MasterControl] 'reset_all' authorized. Consuming token and proceeding.")
+
         # Handle the new 'call_plan' directive
         if command == "call_plan":
             if len(agent_state.plan_stack) > MAX_RECURSION_DEPTH:

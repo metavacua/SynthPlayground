@@ -44,11 +44,11 @@ Some markdown separating the blocks.
 ```
 """
         self.mock_log_content = """
-{"action": {"type": "TOOL_EXEC", "details": {"command": "tool_A --some-arg"}}}
-{"action": {"type": "OTHER_ACTION", "details": {}}}
-{"action": {"type": "TOOL_EXEC", "details": {"command": "python3 tooling/some_script.py --arg1"}}}
-{"action": {"type": "TOOL_EXEC", "details": {"command": "tool_D --unlisted"}}}
-{"action": {"type": "TOOL_EXEC", "details": {"command": "run_in_bash_session ls -l"}}}
+{"action": {"type": "TOOL_EXEC", "details": {"tool_name": "tool_A", "parameters": {"some-arg": "value"}}}}
+{"action": {"type": "OTHER_ACTION", "details": {}}}{"action": {"type": "TOOL_EXEC", "details": {"tool_name": "tooling/some_script.py"}}}
+{"action": {"type": "TOOL_EXEC", "details": {"tool_name": "tool_D", "parameters": {"unlisted": true}}}}
+{"action": {"type": "TOOL_EXEC", "details": {"tool_name": "run_in_bash_session", "parameters": {"command": "ls -l"}}}}
+This is not a JSON line and should be skipped.
 """
         self.mock_report_path = "audit_report.md"
 
@@ -71,7 +71,7 @@ Some markdown separating the blocks.
     def test_get_used_tools_from_log(self):
         """
         Verify that `get_used_tools_from_log` correctly extracts tool names
-        from a mock activity log file.
+        from a mock activity log file using the modern `tool_name` schema.
         """
         mock_file = mock_open(read_data=self.mock_log_content)
         with patch("builtins.open", mock_file):

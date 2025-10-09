@@ -30,33 +30,38 @@ def get_used_tools_from_log(log_path):
     Parses the JSONL log file to get a list of used tool names.
     It specifically looks for 'TOOL_EXEC' actions and extracts the tool
     from the 'command' field based on the logging schema.
+    This version is robust against malformed lines with multiple JSON objects.
     """
     used_tools = []
+    decoder = json.JSONDecoder()
     try:
         with open(log_path, "r") as f:
             for line in f:
-                try:
-                    log_entry = json.loads(line)
-                    action = log_entry.get("action", {})
-                    if action.get("type") == "TOOL_EXEC":
-                        command = action.get("details", {}).get("command")
-                        if not command:
-                            continue
+                line = line.strip()
+                pos = 0
+                while pos < len(line):
+                    try:
+                        # Skip leading whitespace to find the start of the next potential object
+                        while pos < len(line) and line[pos].isspace():
+                            pos += 1
+                        if pos == len(line):
+                            break
 
-                        parts = command.split()
-                        # Handle python scripts explicitly: "python3 tooling/script.py ..."
-                        if len(parts) > 1 and parts[0].startswith("python") and parts[1].endswith(".py"):
-                            tool_name = parts[1]
-                        else:
-                            # Handle other tools like "create_file_with_block(...)" or "grep 'pattern'"
-                            tool_name = command.split('(')[0].split()[0]
-
-                        used_tools.append(tool_name)
-
-                except (json.JSONDecodeError, IndexError):
-                    # This can happen with malformed logs or empty command strings
-                    print(f"Warning: Skipping malformed or unexpected entry in log: {line.strip()}", file=sys.stderr)
-                    continue
+                        log_entry, pos = decoder.raw_decode(line, pos)
+                        action = log_entry.get("action", {})
+                        if action.get("type") == "TOOL_EXEC":
+                            details = action.get("details", {})
+                            tool_name = details.get("tool_name")
+                            if tool_name:
+                                # The modern schema provides the tool name directly.
+                                # No more parsing from a 'command' string is needed.
+                                used_tools.append(tool_name)
+                    except json.JSONDecodeError:
+                        # If raw_decode fails, we assume the rest of the line is not valid JSON.
+                        # We only print a warning if the line seemed to start with a JSON-like character.
+                        if line[pos:].lstrip().startswith(('{', '[')):
+                            print(f"Warning: Skipping malformed or unexpected entry in log: {line}", file=sys.stderr)
+                        break  # Move to the next line
     except FileNotFoundError:
         print(f"Error: Log file not found at {log_path}", file=sys.stderr)
     return used_tools

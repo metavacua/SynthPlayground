@@ -32,7 +32,7 @@ from unittest.mock import patch, MagicMock
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
 from master_control import MasterControlGraph
-from state import AgentState
+from state import AgentState, PlanContext
 
 class TestMasterControlRedesigned(unittest.TestCase):
     """
@@ -166,6 +166,60 @@ class TestMasterControlRedesigned(unittest.TestCase):
             updated_protocol = json.load(f)
         # Now this assertion should pass because the mock was called
         self.assertIn("new_mock_tool", updated_protocol["associated_tools"])
+
+    def test_reset_all_unauthorized(self):
+        """
+        Verify that an attempt to use 'reset_all' without an authorization
+        token immediately transitions the FSM to the ERROR state.
+        """
+        # Create a plan that contains the forbidden command
+        plan_content = 'reset_all "Catastrophic Reset"'
+        with open("plan.txt", "w") as f: f.write(plan_content)
+
+        # Load the plan into the agent state
+        self.agent_state.plan_stack.append(
+            PlanContext(plan_path="plan.txt", plan_content=[plan_content])
+        )
+
+        # Execute the step
+        trigger = self.graph.do_execution(self.agent_state)
+
+        # Assert that the FSM entered the error state
+        self.assertEqual(trigger, "execution_failed", "The FSM did not fire the correct error trigger.")
+        self.assertIn("Unauthorized use of 'reset_all'", self.agent_state.error)
+
+    def test_reset_all_authorized(self):
+        """
+        Verify that using 'reset_all' with an authorization token
+        is allowed and that the token is consumed.
+        """
+        # Create the authorization token
+        auth_token_path = "knowledge_core/reset_all_authorization.token"
+        with open(auth_token_path, "w") as f: f.write("authorized")
+        self.assertTrue(os.path.exists(auth_token_path))
+
+        # Create a plan with the 'reset_all' command
+        plan_content = 'reset_all "Authorized Reset"'
+        with open("plan.txt", "w") as f: f.write(plan_content)
+
+        # Load the plan into the agent state
+        self.agent_state.plan_stack.append(
+            PlanContext(plan_path="plan.txt", plan_content=[plan_content])
+        )
+
+        # Create the 'step_complete.txt' file to simulate the agent completing the step
+        with open("step_complete.txt", "w") as f:
+            f.write("Reset authorized and executed.")
+
+        # Execute the step
+        trigger = self.graph.do_execution(self.agent_state)
+
+        # Assert that the command was allowed and the FSM continued
+        self.assertEqual(trigger, "step_succeeded")
+        self.assertIsNone(self.agent_state.error)
+
+        # Assert that the one-time token was consumed
+        self.assertFalse(os.path.exists(auth_token_path), "The authorization token was not consumed.")
 
 
 if __name__ == "__main__":
