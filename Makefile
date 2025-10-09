@@ -1,6 +1,6 @@
 # Makefile for project standards and validation
 
-.PHONY: install format lint validate-protocol build compile-protocols clean
+.PHONY: install format lint build compile-protocols clean
 
 # ==============================================================================
 # Dependency Management
@@ -23,11 +23,11 @@ lint:
 # ==============================================================================
 # Protocol Compilation & Validation
 # ==============================================================================
-PROTOCOLS = $(wildcard protocols/*.md)
+PROTOCOLS = $(wildcard protocols/*.protocol.json)
 
-# The AGENTS.md file is a target that depends on the source protocol files
-# and the compiler script itself. It will only be rebuilt if any of them change.
-AGENTS.md: $(PROTOCOLS) tooling/protocol_compiler.py
+# The AGENTS.md file is a target that depends on the source protocol files,
+# the schema, and the compiler script itself. It will only be rebuilt if any of them change.
+AGENTS.md: $(PROTOCOLS) protocols/protocol.schema.json tooling/protocol_compiler.py
 	@echo "--> Compiling protocols into AGENTS.md..."
 	@python3 tooling/protocol_compiler.py
 
@@ -37,10 +37,6 @@ compile-protocols: AGENTS.md
 # A general build target.
 build: compile-protocols
 
-validate-protocol:
-	@echo "--> Validating protocol source file presence and naming..."
-	@python3 tooling/protocol_validator.py
-
 clean:
-	@echo "--> Removing compiled AGENTS.md..."
-	@rm -f AGENTS.md
+	@echo "--> Removing compiled protocol artifacts (AGENTS.json, AGENTS.md)..."
+	@rm -f AGENTS.json AGENTS.md

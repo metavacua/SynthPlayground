@@ -292,22 +292,23 @@ def analyze_plan(plan_filepath):
 def check_for_recursion(plan_filepath):
     """
     Scans a plan file for disallowed recursive FDC CLI calls.
-    The only allowed call is to 'close'.
+    Allowed recursive calls are 'close' and 'lint'.
     """
     print("\n--- Running Recursion Check ---")
+    allowed_commands = {"close", "lint"}
     try:
         with open(plan_filepath, "r") as f:
             for i, line in enumerate(f):
                 # Check for calls to the FDC CLI tool itself
                 if "fdc_cli.py" in line:
-                    # The 'close' command is the only allowed recursive call
-                    if "close" not in line:
+                    # Check if any of the allowed commands are in the line
+                    if not any(cmd in line for cmd in allowed_commands):
                         print(
                             f"Validation failed: Disallowed recursive call to 'fdc_cli.py' found on line {i+1}.",
                             file=sys.stderr,
                         )
                         print(
-                            "Error: Plans must not trigger new FDC cycles or validation steps.",
+                            f"Error: Plans must not trigger new FDC cycles. Allowed recursive commands are: {list(allowed_commands)}.",
                             file=sys.stderr,
                         )
                         sys.exit(1)
