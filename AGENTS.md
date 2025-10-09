@@ -448,6 +448,67 @@ A new tool, `tooling/plan_manager.py`, will be introduced to manage the registry
 
 ---
 
+# Protocol: The Closed-Loop Self-Correction Cycle
+
+This protocol describes the automated workflow that enables the agent to programmatically improve its own governing protocols based on new knowledge. It transforms the ad-hoc, manual process of learning into a reliable, machine-driven feedback loop.
+
+## The Problem: The Open Loop
+
+Previously, "lessons learned" were compiled into a simple markdown file, `knowledge_core/lessons_learned.md`. While this captured knowledge, it was a dead end. There was no automated process to translate these text-based insights into actual changes to the protocol source files. This required manual intervention, creating a significant bottleneck and a high risk of protocols becoming stale.
+
+## The Solution: A Protocol-Driven Self-Correction (PDSC) Workflow
+
+The PDSC workflow closes the feedback loop by introducing a set of new tools and structured data formats that allow the agent to enact its own improvements.
+
+**1. Structured, Actionable Lessons (`knowledge_core/lessons.jsonl`):**
+- Post-mortem analysis now generates lessons as structured JSON objects, not free-form text.
+- Each lesson includes a machine-readable `action` field, which contains a specific, executable command.
+
+**2. The Protocol Updater (`tooling/protocol_updater.py`):**
+- A new, dedicated tool for programmatically modifying the protocol source files (`*.protocol.json`).
+- It accepts commands like `add-tool`, allowing for precise, automated changes to protocol definitions.
+
+**3. The Orchestrator (`tooling/self_correction_orchestrator.py`):**
+- This script is the engine of the cycle. It reads `lessons.jsonl`, identifies pending lessons, and uses the `protocol_updater.py` to execute the defined actions.
+- After applying a lesson, it updates the lesson's status, creating a clear audit trail.
+- It finishes by running `make AGENTS.md` to ensure the changes are compiled into the live protocol.
+
+This new, automated cycle—**Analyze -> Structure Lesson -> Execute Correction -> Re-compile Protocol**—is a fundamental step towards autonomous self-improvement.
+```json
+{
+  "protocol_id": "self-correction-protocol-001",
+  "description": "Defines the automated, closed-loop workflow for protocol self-correction.",
+  "rules": [
+    {
+      "rule_id": "structured-lessons",
+      "description": "Lessons learned from post-mortem analysis must be generated as structured, machine-readable JSON objects in `knowledge_core/lessons.jsonl`.",
+      "enforcement": "The `tooling/knowledge_compiler.py` script is responsible for generating lessons in the correct format."
+    },
+    {
+      "rule_id": "programmatic-updates",
+      "description": "All modifications to protocol source files must be performed programmatically via the `tooling/protocol_updater.py` tool to ensure consistency and prevent manual errors.",
+      "enforcement": "Agent's core logic should be designed to use this tool for all protocol modifications."
+    },
+    {
+      "rule_id": "automated-orchestration",
+      "description": "The self-correction cycle must be managed by the `tooling/self_correction_orchestrator.py` script, which processes pending lessons and triggers the necessary updates.",
+      "enforcement": "This script is the designated engine for the PDSC workflow."
+    }
+  ],
+  "associated_tools": [
+    "tooling/knowledge_compiler.py",
+    "tooling/protocol_updater.py",
+    "tooling/self_correction_orchestrator.py"
+  ],
+  "associated_artifacts": [
+    "knowledge_core/lessons.jsonl"
+  ]
+}
+```
+
+
+---
+
 # System Documentation
 
 ---
@@ -660,6 +721,18 @@ This process ensures that `AGENTS.md` and other protocol documents are not edite
 manually but are instead generated from a validated, single source of truth,
 making the agent's protocols robust, verifiable, and maintainable.
 
+### `tooling/protocol_updater.py`
+
+A command-line tool for programmatically updating protocol source files.
+
+This script provides the mechanism for the agent to perform self-correction
+by modifying its own governing protocols based on structured, actionable
+lessons. It is a key component of the Protocol-Driven Self-Correction (PDSC)
+workflow.
+
+The tool operates on the .protocol.json files located in the `protocols/`
+directory, performing targeted updates based on command-line arguments.
+
 ### `tooling/research.py`
 
 A unified, constraint-based interface for all research and data-gathering operations.
@@ -706,6 +779,14 @@ The key features of the generated plan are:
 This tool helps enforce a consistent and effective methodology for complex
 investigative tasks, improving the quality and reliability of the research
 findings.
+
+### `tooling/self_correction_orchestrator.py`
+
+Orchestrates the Protocol-Driven Self-Correction (PDSC) workflow.
+
+This script is the engine of the automated feedback loop. It reads structured,
+actionable lessons from `knowledge_core/lessons.jsonl` and uses the
+`protocol_updater.py` tool to apply them to the source protocol files.
 
 ### `tooling/self_improvement_cli.py`
 
@@ -825,6 +906,25 @@ The suite is divided into two main classes:
     - Using the Plan Registry to call sub-plans by a logical name.
     - Verifying that the system correctly halts when the maximum recursion
       depth is exceeded, ensuring decidability.
+
+### `tooling/test_protocol_updater.py`
+
+Unit tests for the protocol_updater.py script.
+
+This test suite verifies that the protocol updater tool can correctly
+find and modify protocol source files in a controlled, temporary
+environment. It ensures that tools can be added to protocols and that
+edge cases like duplicate additions are handled gracefully.
+
+### `tooling/test_self_correction_orchestrator.py`
+
+Unit tests for the self_correction_orchestrator.py script.
+
+This test suite verifies the end-to-end functionality of the automated
+self-correction workflow. It ensures that the orchestrator can correctly
+read structured lessons, invoke the protocol_updater.py script as a
+subprocess with the correct arguments, and update the lesson status file
+to reflect the outcome.
 
 ### `tooling/test_self_improvement_cli.py`
 

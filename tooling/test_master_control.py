@@ -57,25 +57,30 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
             f"postmortems/{datetime.date.today()}-{safe_task_id}.md"
         )
         self.test_output_file = "test_output.txt"
-        self.lessons_learned_file = "knowledge_core/lessons_learned.md"
+        self.lessons_file = "knowledge_core/lessons.jsonl"
         self.step_complete_file = "step_complete.txt"
+        self.mock_protocol_id = "fsm-test-protocol-001"
+        self.mock_protocol_file = f"protocols/{self.mock_protocol_id}.protocol.json"
 
         # Clean up all potential artifacts from previous runs
         self.cleanup_files()
 
         # Backup original lessons if it exists and create a fresh one for the test
-        if os.path.exists(self.lessons_learned_file):
-            os.rename(self.lessons_learned_file, self.lessons_learned_file + ".bak")
-        with open(self.lessons_learned_file, "w") as f:
-            f.write("# Lessons Learned\n")
+        if os.path.exists(self.lessons_file):
+            os.rename(self.lessons_file, self.lessons_file + ".bak")
+        open(self.lessons_file, 'w').close() # Create empty lessons file
+
+        # Create a mock protocol file for the self-correction test
+        with open(self.mock_protocol_file, "w") as f:
+            json.dump({"protocol_id": self.mock_protocol_id, "associated_tools": []}, f)
 
     def tearDown(self):
         self.cleanup_files()
         # Clean up the test lessons learned and restore backup
-        if os.path.exists(self.lessons_learned_file):
-            os.remove(self.lessons_learned_file)
-        if os.path.exists(self.lessons_learned_file + ".bak"):
-            os.rename(self.lessons_learned_file + ".bak", self.lessons_learned_file)
+        if os.path.exists(self.lessons_file):
+            os.remove(self.lessons_file)
+        if os.path.exists(self.lessons_file + ".bak"):
+            os.rename(self.lessons_file + ".bak", self.lessons_file)
 
     def cleanup_files(self):
         """Helper function to remove all files created during the test."""
@@ -87,6 +92,7 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
             self.final_postmortem_file,
             self.test_output_file,
             self.step_complete_file,
+            self.mock_protocol_file,
         ]
         for f in files_to_delete:
             if os.path.exists(f):
@@ -94,8 +100,8 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
 
     def test_full_atomic_workflow_with_analysis(self):
         """
-        Validates the entire FSM flow: plan validation, step-by-step
-        execution, interactive analysis, and finalization.
+        Validates the entire FSM flow, including plan validation, execution,
+        interactive analysis, post-mortem, and the new self-correction step.
         """
         # 1. Define a complete and valid command-based plan for the validator
         test_plan = (
@@ -143,9 +149,15 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
             if time.time() - start_time > timeout:
                 self.fail("FSM did not create draft post-mortem in time.")
 
+        # Create a mock post-mortem with a machine-readable action
         analysis_content = f"""
 # Post-Mortem Report
 **Task ID:** `{self.task_id}`
+---
+## 3. Corrective Actions & Lessons Learned
+1.  **Lesson:** A tool is needed for FSM tests.
+    **Action:** Add tool 'fsm_test_tool' to protocol '{self.mock_protocol_id}'.
+---
 """
         with open(self.draft_postmortem_file, "w") as f:
             f.write(analysis_content)
@@ -168,6 +180,18 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
             final_state_container["final_fsm_state"], "AWAITING_SUBMISSION"
         )
         self.assertTrue(os.path.exists(self.final_postmortem_file))
+
+        # --- Assert Self-Correction Occurred ---
+        # 1. Check that the protocol file was updated
+        with open(self.mock_protocol_file, "r") as f:
+            updated_protocol = json.load(f)
+        self.assertIn("fsm_test_tool", updated_protocol["associated_tools"])
+
+        # 2. Check that the lesson status was updated to "applied"
+        with open(self.lessons_file, "r") as f:
+            lessons = [json.loads(line) for line in f if line.strip()]
+        self.assertEqual(len(lessons), 1)
+        self.assertEqual(lessons[0]["status"], "applied")
 
 
 class TestCFDCWorkflow(unittest.TestCase):
