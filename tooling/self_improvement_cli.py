@@ -75,11 +75,15 @@ def analyze_protocol_violations(log_file):
     Scans the log file for critical protocol violations, such as the
     unauthorized use of `reset_all`.
 
+    This function checks for two conditions:
+    1. A `SYSTEM_FAILURE` log explicitly blaming `reset_all`.
+    2. A `TOOL_EXEC` log where the command contains "reset_all".
+
     Args:
         log_file (str): Path to the activity log file.
 
     Returns:
-        list: A list of tasks where `reset_all` was used.
+        list: A list of unique task IDs where `reset_all` was used.
     """
     violation_tasks = set()
     try:
@@ -87,13 +91,25 @@ def analyze_protocol_violations(log_file):
             for line in f:
                 try:
                     entry = json.loads(line)
-                    action_type = entry.get("action", {}).get("type")
+                    action = entry.get("action", {})
+                    action_type = action.get("type")
+                    details = action.get("details", {})
+
+                    is_violation = False
+                    # Case 1: The tool use was logged as a system failure.
                     if action_type == "SYSTEM_FAILURE":
-                        details = entry.get("action", {}).get("details", {})
                         if details.get("tool_name") == "reset_all":
-                            task_id = entry.get("task", {}).get("id")
-                            if task_id:
-                                violation_tasks.add(task_id)
+                            is_violation = True
+
+                    # Case 2: The tool was logged as a standard tool execution.
+                    elif action_type == "TOOL_EXEC":
+                        if "reset_all" in details.get("command", ""):
+                            is_violation = True
+
+                    if is_violation:
+                        task_id = entry.get("task", {}).get("id")
+                        if task_id:
+                            violation_tasks.add(task_id)
 
                 except json.JSONDecodeError:
                     # Ignore malformed lines, they are not our concern here.
