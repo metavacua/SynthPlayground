@@ -38,6 +38,7 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
         )
         self.test_output_file = "test_output.txt"
         self.lessons_learned_file = "knowledge_core/lessons_learned.md"
+        self.step_complete_file = "step_complete.txt"
 
         # Clean up all potential artifacts from previous runs
         self.cleanup_files()
@@ -65,6 +66,7 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
             self.draft_postmortem_file,
             self.final_postmortem_file,
             self.test_output_file,
+            self.step_complete_file,
         ]
         for f in files_to_delete:
             if os.path.exists(f):
@@ -80,7 +82,7 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
             'set_plan "A valid test plan for the full workflow"\n'
             'plan_step_complete "This is the step that transitions to executing"\n'
             f'create_file_with_block {self.test_output_file} "content"\n'
-            f"run_in_bash_session close --task-id {self.task_id}\n"
+            f"run_in_bash_session python3 tooling/fdc_cli.py close --task-id {self.task_id}\n"
             "submit"
         )
         plan_steps = [step for step in test_plan.split("\n") if step.strip()]
@@ -105,18 +107,21 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
         with open(self.plan_file, "w") as f:
             f.write(test_plan)
 
-        # 5. Sequentially signal completion for each execution step
+        # 5. Manually signal completion for each step in the plan to drive the FSM.
+        time.sleep(1)
+
         for i, step in enumerate(plan_steps):
             time.sleep(1.5)
-            with open(self.step_complete_file, "w") as f:
-                f.write(f"Successfully signaled execution for step {i+1}.")
+            with open("step_complete.txt", "w") as f:
+                f.write(f"Step {i+1} '{step}' complete.")
 
-        # 6. Wait for the FSM to create the draft post-mortem, then "analyze" it
-        time.sleep(1.5)
-        self.assertTrue(
-            os.path.exists(self.draft_postmortem_file),
-            "Draft post-mortem file was not created.",
-        )
+        # 6. Wait for the FSM to create the draft post-mortem.
+        timeout = 15
+        start_time = time.time()
+        while not os.path.exists(self.draft_postmortem_file):
+            time.sleep(0.5)
+            if time.time() - start_time > timeout:
+                self.fail("FSM did not create draft post-mortem in time.")
 
         analysis_content = f"""
 # Post-Mortem Report
@@ -189,10 +194,118 @@ class TestCFDCWorkflow(unittest.TestCase):
 
     def test_plan_registry_execution(self):
         """
+        Validates that the FSM can execute a plan that calls a sub-plan.
+        """
+        sub_plan_content = (
+            'set_plan "Sub-plan"\n'
+            'plan_step_complete " "\n'
+            f'create_file_with_block {self.output_file} "hello from registry"\n'
+            'run_in_bash_session close --task-id sub-task\n'
+            'submit'
+        )
+        with open(self.sub_plan_file, "w") as f:
+            f.write(sub_plan_content)
+
+        main_plan_content = (
+            'set_plan "Main plan"\n'
+            'plan_step_complete " "\n'
+            f"call_plan {sub_plan_name}\n"
+            'run_in_bash_session close --task-id main-task\n'
+            'submit'
+        )
+        with open(self.root_plan_file, "w") as f:
+            f.write(main_plan_content)
+
+        # 3. Run the FSM
+        final_state_container = {}
+
+        def run_fsm():
+            initial_state = AgentState(task=self.task_id)
+            graph = MasterControlGraph()
+            final_state = graph.run(initial_state)
+            final_state_container["final_state"] = final_state
+
+        fsm_thread = threading.Thread(target=run_fsm)
+        fsm_thread.start()
+
+        time.sleep(1.5)
+        plan_steps = main_plan_content.split('\n') + sub_plan_content.split('\n')
+        for i, step in enumerate(plan_steps):
+             if "call_plan" not in step:
+                time.sleep(1.5)
+                with open(self.step_complete_file, "w") as f:
+                    f.write(f"Step {i+1} '{step}' complete.")
+
+        draft_created = False
+        for _ in range(10):
+            if os.path.exists(self.draft_postmortem_file):
+                draft_created = True
+                break
+            time.sleep(0.5)
+        self.assertTrue(
+            draft_created, "Draft post-mortem file was not created in time."
+        )
+
+        with open(self.analysis_complete_file, "w") as f:
+            f.write("done")
+
+        fsm_thread.join(timeout=30)
+        self.assertFalse(fsm_thread.is_alive(), "FSM thread timed out.")
+
+        final_state = final_state_container["final_state"]
+        self.assertIsNone(final_state.error)
+        self.assertTrue(os.path.exists(self.output_file))
+        with open(self.output_file, "r") as f:
+            self.assertEqual(f.read(), "hello from sub-plan")
+
+    def test_recursion_depth_limit(self):
+        """
+        Validates that the FSM correctly terminates when the recursion
+        depth limit is exceeded.
+        """
+        recursive_plan_content = (
+            'set_plan "Recursive plan"\n'
+            'plan_step_complete "Transition to executing"\n'
+            f"call_plan {self.root_plan_file}\n"
+            f"run_in_bash_session close --task-id {self.task_id}-recursive\n"
+            "submit"
+        )
+        with open(self.root_plan_file, "w") as f:
+            f.write(recursive_plan_content)
+
+        final_state_container = {}
+
+        def run_fsm():
+            initial_state = AgentState(task=self.task_id)
+            graph = MasterControlGraph()
+            with patch("master_control.MAX_RECURSION_DEPTH", 3):
+                final_state = graph.run(initial_state)
+            final_state_container["final_state"] = final_state
+            final_state_container["final_fsm_state"] = graph.current_state
+
+        fsm_thread = threading.Thread(target=run_fsm)
+        fsm_thread.start()
+
+        time.sleep(1.5)
+        with open(self.step_complete_file, "w") as f:
+            f.write("set_plan complete.")
+        time.sleep(1.5)
+        with open(self.step_complete_file, "w") as f:
+            f.write("plan_step_complete complete.")
+
+        fsm_thread.join(timeout=15)
+        self.assertFalse(fsm_thread.is_alive(), "FSM thread timed out.")
+
+        final_state = final_state_container["final_state"]
+        self.assertEqual(final_state_container["final_fsm_state"], "ERROR")
+        self.assertIsNotNone(final_state.error)
+        self.assertIn("Maximum recursion depth", final_state.error)
+
+    def test_plan_registry_execution(self):
+        """
         Validates that the FSM can execute a plan by its logical name
         from the plan registry.
         """
-        # 1. Register a plan using the plan_manager tool
         sub_plan_name = "create-hello-file"
         sub_plan_content = (
             'set_plan "Sub-plan"\n'
@@ -207,7 +320,6 @@ class TestCFDCWorkflow(unittest.TestCase):
         register_cmd = ["python3", "tooling/plan_manager.py", "register", sub_plan_name, self.sub_plan_file]
         subprocess.run(register_cmd, check=True)
 
-        # 2. Define a main plan that calls the registered plan by its logical name
         main_plan_content = (
             'set_plan "Main plan"\n'
             'plan_step_complete " "\n'
@@ -218,7 +330,6 @@ class TestCFDCWorkflow(unittest.TestCase):
         with open(self.root_plan_file, "w") as f:
             f.write(main_plan_content)
 
-        # 3. Run the FSM
         final_state_container = {}
         def run_fsm():
             initial_state = AgentState(task=self.task_id)
@@ -229,19 +340,13 @@ class TestCFDCWorkflow(unittest.TestCase):
         fsm_thread = threading.Thread(target=run_fsm)
         fsm_thread.start()
 
-        # 4. Signal all steps
-        all_steps = main_plan_content.split('\n') + sub_plan_content.split('\n')
-        # This is a brittle way to signal, a better test would parse the steps.
-        # For now, we know the order.
         step_signals = [
             "main set_plan", "main plan_step_complete", "sub set_plan", "sub plan_step_complete",
             "sub create_file", "sub close", "sub submit", "main close", "main submit"
         ]
 
-        for i, signal in enumerate(step_signals):
+        for signal in step_signals:
             time.sleep(1.5)
-            # If this is the step that creates the file, we must manually create it
-            # to correctly simulate the agent's action.
             if signal == "sub create_file":
                 with open(self.output_file, "w") as f:
                     f.write("hello from registry")
@@ -249,7 +354,6 @@ class TestCFDCWorkflow(unittest.TestCase):
             with open(self.step_complete_file, "w") as f:
                 f.write(f"Signal for: {signal}")
 
-        # 5. Signal analysis completion
         time.sleep(1.5)
         with open(self.analysis_complete_file, "w") as f:
             f.write("done")
@@ -257,7 +361,6 @@ class TestCFDCWorkflow(unittest.TestCase):
         fsm_thread.join(timeout=30)
         self.assertFalse(fsm_thread.is_alive(), "FSM thread timed out.")
 
-        # 6. Assertions
         final_state = final_state_container["final_state"]
         self.assertIsNone(final_state.error)
         self.assertTrue(os.path.exists(self.output_file))
@@ -266,9 +369,8 @@ class TestCFDCWorkflow(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    # Create postmortems dir if it doesn't exist to avoid test failure
     if not os.path.exists("postmortems"):
         os.makedirs("postmortems")
-    if not os.path.exists("knowledge_core"):
+    if not os.path.exists("knowledge_.core"):
         os.makedirs("knowledge_core")
     unittest.main()
