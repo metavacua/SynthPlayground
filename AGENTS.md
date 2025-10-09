@@ -40,6 +40,14 @@
 
 To tackle complex tasks reliably, an agent's workflow must be formally structured and guaranteed to terminate—it must be **decidable**. This is achieved through a hierarchical system composed of a high-level **Orchestrator** that manages the agent's overall state and a low-level **FDC Toolchain** that governs the validity of the agent's plans. This structure prevents the system from entering paradoxical, non-terminating loops.
 
+**To enforce this workflow, all tasks MUST be initiated through the designated entry point script:**
+
+```bash
+python3 run_task.py "Your task description here."
+```
+
+This script ensures that the Orchestrator is always engaged, guaranteeing that all protocol-mandated steps for orientation, logging, and analysis are followed without exception. Any other method of starting a task is a violation of protocol.
+
 ---
 ```json
 {
@@ -381,6 +389,29 @@ _No module-level docstring found._
 ### `tooling/master_control.py`
 
 _No module-level docstring found._
+
+### `tooling/execution_wrapper.py`
+
+**Purpose:**
+This script is the **single point of entry** for executing all tool actions within the agent's environment. It acts as a centralized wrapper that ensures every action is robustly logged before and after execution. This is the core component of the enforced logging protocol.
+
+**Core Function:**
+- `execute_and_log_action(tool_name, args_list, task_id, plan_step)`: The main function that orchestrates the execution and logging of a single tool call.
+
+**Workflow:**
+1.  **Instantiate Logger:** It creates an instance of the `Logger` from `utils/logger.py`.
+2.  **Log `IN_PROGRESS`:** It immediately logs that a tool execution is starting.
+3.  **Dispatch and Execute:** It looks up the requested `tool_name` in its `TOOL_DISPATCHER` dictionary and calls the corresponding internal function (e.g., `_list_files`, `_read_file`).
+4.  **Safe Execution:** The tool call is wrapped in a `try...except` block to gracefully handle any errors.
+5.  **Log Final Outcome:**
+    -   On success, it logs a `SUCCESS` event, including any return value from the tool as a JSON string.
+    -   On failure, it logs a `FAILURE` event, including the exception message and a full stack trace.
+
+**Usage:**
+This script is not intended to be run directly by a user. It is called as a subprocess by `tooling/master_control.py` for every step in an agent's plan.
+```bash
+python3 tooling/execution_wrapper.py --tool <tool_name> --args '[arg1, arg2]' --task-id <task_id> --plan-step <step_num>
+```
 
 ### `tooling/protocol_auditor.py`
 
