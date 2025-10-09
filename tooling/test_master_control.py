@@ -148,6 +148,12 @@ class TestMasterControlRedesigned(unittest.TestCase):
         # 5. POST_MORTEM
         trigger = self.graph.do_post_mortem(self.agent_state)
         self.assertEqual(trigger, "post_mortem_complete")
+        self.graph.current_state = "SELF_CORRECTING"
+
+        # 6. SELF_CORRECTING
+        # This is where the mocked subprocess for self_correction_orchestrator.py is called
+        trigger = self.graph.do_self_correcting(self.agent_state)
+        self.assertEqual(trigger, "self_correction_succeeded")
         self.graph.current_state = "AWAITING_SUBMISSION"
 
         # --- Assertions ---
@@ -155,6 +161,7 @@ class TestMasterControlRedesigned(unittest.TestCase):
         self.assertEqual(self.graph.current_state, "AWAITING_SUBMISSION")
         with open(self.mock_protocol_file, "r") as f:
             updated_protocol = json.load(f)
+        # Now this assertion should pass because the mock was called
         self.assertIn("new_mock_tool", updated_protocol["associated_tools"])
 
 
