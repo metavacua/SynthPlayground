@@ -36,9 +36,21 @@ AGENTS.md: $(PROTOCOLS_JSON) $(PROTOCOLS_MD) protocols/protocol.schema.json tool
 # A phony target to easily trigger the compilation.
 compile-protocols: AGENTS.md
 
-# A general build target.
-build: compile-protocols
+# ==============================================================================
+# Documentation Generation
+# ==============================================================================
+.PHONY: docs
+docs:
+	@echo "--> Generating system documentation from source..."
+	@python3 tooling/doc_generator.py
+
+# ==============================================================================
+# Main Targets
+# ==============================================================================
+# A general build target that compiles protocols and generates documentation.
+build: compile-protocols docs
 
 clean:
-	@echo "--> Removing compiled protocol artifacts (AGENTS.json, AGENTS.md)..."
-	@rm -f AGENTS.json AGENTS.md
+	@echo "--> Removing compiled protocol and documentation artifacts..."
+	@rm -f AGENTS.md
+	@rm -f knowledge_core/SYSTEM_DOCUMENTATION.md

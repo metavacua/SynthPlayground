@@ -1,3 +1,24 @@
+"""
+Provides the command-line interface for the Finite Development Cycle (FDC).
+
+This script is a core component of the agent's protocol, offering tools to ensure
+that all development work is structured, verifiable, and safe. It is used by both
+the agent to signal progress and the `master_control.py` orchestrator to
+validate the agent's plans before execution.
+
+The CLI provides several key commands:
+- `close`: Logs the formal end of a task, signaling to the orchestrator that
+  execution is complete.
+- `validate`: Performs a deep validation of a plan file against the FDC's Finite
+  State Machine (FSM) definition. It checks for both syntactic correctness (Is
+  the sequence of operations valid?) and semantic correctness (Does the plan try
+  to use a file before creating it?).
+- `analyze`: Reads a plan and provides a high-level analysis of its
+  characteristics, such as its computational complexity and whether it is a
+  read-only or read-write plan.
+- `lint`: A comprehensive "linter" that runs a full suite of checks on a plan
+  file, including `validate`, `analyze`, and checks for disallowed recursion.
+"""
 import argparse
 import datetime
 import json
