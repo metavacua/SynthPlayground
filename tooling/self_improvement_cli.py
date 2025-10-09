@@ -70,6 +70,40 @@ def analyze_planning_efficiency(log_file):
     return {task: count for task, count in task_plan_updates.items() if count > 1}
 
 
+def analyze_protocol_violations(log_file):
+    """
+    Scans the log file for critical protocol violations, such as the
+    unauthorized use of `reset_all`.
+
+    Args:
+        log_file (str): Path to the activity log file.
+
+    Returns:
+        list: A list of tasks where `reset_all` was used.
+    """
+    violation_tasks = set()
+    try:
+        with open(log_file, "r") as f:
+            for line in f:
+                try:
+                    entry = json.loads(line)
+                    action_type = entry.get("action", {}).get("type")
+                    if action_type == "SYSTEM_FAILURE":
+                        details = entry.get("action", {}).get("details", {})
+                        if details.get("tool_name") == "reset_all":
+                            task_id = entry.get("task", {}).get("id")
+                            if task_id:
+                                violation_tasks.add(task_id)
+
+                except json.JSONDecodeError:
+                    # Ignore malformed lines, they are not our concern here.
+                    continue
+    except FileNotFoundError:
+        # If the log file doesn't exist, there are no violations.
+        return []
+    return list(violation_tasks)
+
+
 def main():
     """
     Main function to run the self-improvement analysis CLI.
@@ -84,19 +118,30 @@ def main():
     )
     args = parser.parse_args()
 
-    print("Running analysis for planning inefficiencies...")
-    inefficient_tasks = analyze_planning_efficiency(args.log_file)
+    # --- Run Analyses ---
+    print("--- Running Self-Improvement Analysis ---")
 
+    print("\n[1] Analyzing for Planning Inefficiencies...")
+    inefficient_tasks = analyze_planning_efficiency(args.log_file)
     if not inefficient_tasks:
-        print(
-            "\nAnalysis Complete: No tasks with significant planning inefficiencies found."
-        )
+        print("  - Result: No tasks with significant planning inefficiencies found.")
+    else:
+        print("  - Result: Found tasks with multiple plan revisions:")
+        for task_id, count in inefficient_tasks.items():
+            print(f"    - Task ID: {task_id}, Plan Revisions: {count}")
+
+    print("\n[2] Analyzing for Critical Protocol Violations...")
+    violation_tasks = analyze_protocol_violations(args.log_file)
+    if not violation_tasks:
+        print("  - Result: No critical protocol violations found.")
     else:
         print(
-            "\nAnalysis Complete: Found tasks with multiple plan revisions, indicating potential inefficiencies:"
+            "  - WARNING: Found tasks with critical protocol violations (use of `reset_all`):"
         )
-        for task_id, count in inefficient_tasks.items():
-            print(f"  - Task ID: {task_id}, Plan Revisions: {count}")
+        for task_id in violation_tasks:
+            print(f"    - Task ID: {task_id}")
+
+    print("\n--- Analysis Complete ---")
 
 
 if __name__ == "__main__":
