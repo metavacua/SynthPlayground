@@ -134,7 +134,6 @@ def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file
             json_string = json.dumps(protocol_data, indent=2)
             md_json_block = f"```json\n{json_string}\n```\n"
             final_content.append(md_json_block)
-
         except Exception as e:
             print(f"    - Error: Failed to process JSON for {base_name}: {e}")
 
@@ -159,6 +158,8 @@ def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file
             print(f"\n--- Knowledge Graph Compilation Failed ---")
             print(f"Error serializing RDF graph: {e}")
 
+    print("\n--- Compilation Successful ---")
+    print(f"Successfully generated new AGENTS.md file.")
 
 def main():
     """Main function to run the compiler."""

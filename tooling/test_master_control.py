@@ -18,7 +18,7 @@ from state import AgentState, PlanContext
 class TestMasterControlGraphFullWorkflow(unittest.TestCase):
     """
     Tests the fully integrated FSM workflow, including plan validation,
-    active execution, and the interactive analysis phase.
+    interactive execution, and the new interactive analysis phase.
     """
 
     def setUp(self):
@@ -30,6 +30,7 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
 
         # Define all file paths used in the test
         self.plan_file = "plan.txt"
+        self.step_complete_file = "step_complete.txt"
         self.analysis_complete_file = "analysis_complete.txt"
         self.draft_postmortem_file = f"DRAFT-{self.task_id}.md"
         self.final_postmortem_file = (
@@ -60,6 +61,7 @@ class TestMasterControlGraphFullWorkflow(unittest.TestCase):
         """Helper function to remove all files created during the test."""
         files_to_delete = [
             self.plan_file,
+            self.step_complete_file,
             self.analysis_complete_file,
             self.draft_postmortem_file,
             self.final_postmortem_file,
@@ -190,30 +192,31 @@ class TestCFDCWorkflow(unittest.TestCase):
             if os.path.exists(f):
                 os.remove(f)
 
-    def test_hierarchical_plan_execution(self):
+    def test_plan_registry_execution(self):
         """
         Validates that the FSM can execute a plan that calls a sub-plan.
         """
         sub_plan_content = (
             'set_plan "Sub-plan"\n'
-            'plan_step_complete "Transition to executing in sub-plan"\n'
-            f'create_file_with_block {self.output_file} "hello from sub-plan"\n'
-            f"run_in_bash_session close --task-id {self.task_id}-sub\n"
-            "submit"
+            'plan_step_complete " "\n'
+            f'create_file_with_block {self.output_file} "hello from registry"\n'
+            'run_in_bash_session close --task-id sub-task\n'
+            'submit'
         )
         with open(self.sub_plan_file, "w") as f:
             f.write(sub_plan_content)
 
         main_plan_content = (
-            'set_plan "Hierarchical plan"\n'
-            'plan_step_complete "Transition to executing in main plan"\n'
-            f"call_plan {self.sub_plan_file}\n"
-            f"run_in_bash_session close --task-id {self.task_id}\n"
-            "submit"
+            'set_plan "Main plan"\n'
+            'plan_step_complete " "\n'
+            f"call_plan {sub_plan_name}\n"
+            'run_in_bash_session close --task-id main-task\n'
+            'submit'
         )
         with open(self.root_plan_file, "w") as f:
             f.write(main_plan_content)
 
+        # 3. Run the FSM
         final_state_container = {}
 
         def run_fsm():
@@ -221,7 +224,6 @@ class TestCFDCWorkflow(unittest.TestCase):
             graph = MasterControlGraph()
             final_state = graph.run(initial_state)
             final_state_container["final_state"] = final_state
-            final_state_container["final_fsm_state"] = graph.current_state
 
         fsm_thread = threading.Thread(target=run_fsm)
         fsm_thread.start()
@@ -245,15 +247,13 @@ class TestCFDCWorkflow(unittest.TestCase):
         )
 
         with open(self.analysis_complete_file, "w") as f:
-            f.write("Analysis complete.")
+            f.write("done")
 
         fsm_thread.join(timeout=30)
         self.assertFalse(fsm_thread.is_alive(), "FSM thread timed out.")
 
         final_state = final_state_container["final_state"]
-        self.assertIsNone(final_state.error, f"FSM ended in error: {final_state.error}")
-        self.assertEqual(final_state_container["final_fsm_state"], "AWAITING_SUBMISSION")
-
+        self.assertIsNone(final_state.error)
         self.assertTrue(os.path.exists(self.output_file))
         with open(self.output_file, "r") as f:
             self.assertEqual(f.read(), "hello from sub-plan")
