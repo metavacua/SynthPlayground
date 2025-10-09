@@ -210,6 +210,18 @@ This process ensures that `AGENTS.md` and other protocol documents are not edite
 manually but are instead generated from a validated, single source of truth,
 making the agent's protocols robust, verifiable, and maintainable.
 
+### `tooling/protocol_updater.py`
+
+A command-line tool for programmatically updating protocol source files.
+
+This script provides the mechanism for the agent to perform self-correction
+by modifying its own governing protocols based on structured, actionable
+lessons. It is a key component of the Protocol-Driven Self-Correction (PDSC)
+workflow.
+
+The tool operates on the .protocol.json files located in the `protocols/`
+directory, performing targeted updates based on command-line arguments.
+
 ### `tooling/research.py`
 
 A unified, constraint-based interface for all research and data-gathering operations.
@@ -256,6 +268,14 @@ The key features of the generated plan are:
 This tool helps enforce a consistent and effective methodology for complex
 investigative tasks, improving the quality and reliability of the research
 findings.
+
+### `tooling/self_correction_orchestrator.py`
+
+Orchestrates the Protocol-Driven Self-Correction (PDSC) workflow.
+
+This script is the engine of the automated feedback loop. It reads structured,
+actionable lessons from `knowledge_core/lessons.jsonl` and uses the
+`protocol_updater.py` tool to apply them to the source protocol files.
 
 ### `tooling/self_improvement_cli.py`
 
@@ -340,20 +360,12 @@ The tests cover:
 
 ### `tooling/test_knowledge_compiler.py`
 
-Unit tests for the knowledge compiler tool.
+Unit tests for the knowledge_compiler.py script.
 
-This test suite validates the functionality of the `knowledge_compiler.py`
-script, which is responsible for extracting lessons from post-mortem reports
-and adding them to the central knowledge base.
-
-The tests use a mock post-mortem file with multi-line entries to ensure that
-the parsing logic is robust. The suite covers:
-- Correct extraction of metadata (Task ID, Date) from the report.
-- Correct extraction of "Lesson" and "Action" pairs, including handling of
-  multi-line content.
-- End-to-end validation of the main compiler function, ensuring that it
-  correctly reads a post-mortem file and appends the formatted lessons to the
-  `lessons_learned.md` knowledge base.
+This test suite verifies that the knowledge compiler can correctly parse
+a mock post-mortem report and generate a structured, machine-readable
+lessons.jsonl file. It ensures that the generated lessons conform to the
+expected JSON schema, including having unique IDs and a 'pending' status.
 
 ### `tooling/test_master_control.py`
 
@@ -375,6 +387,29 @@ The suite is divided into two main classes:
     - Using the Plan Registry to call sub-plans by a logical name.
     - Verifying that the system correctly halts when the maximum recursion
       depth is exceeded, ensuring decidability.
+
+### `tooling/test_protocol_auditor.py`
+
+_No module-level docstring found._
+
+### `tooling/test_protocol_updater.py`
+
+Unit tests for the protocol_updater.py script.
+
+This test suite verifies that the protocol updater tool can correctly
+find and modify protocol source files in a controlled, temporary
+environment. It ensures that tools can be added to protocols and that
+edge cases like duplicate additions are handled gracefully.
+
+### `tooling/test_self_correction_orchestrator.py`
+
+Unit tests for the self_correction_orchestrator.py script.
+
+This test suite verifies the end-to-end functionality of the automated
+self-correction workflow. It ensures that the orchestrator can correctly
+read structured lessons, invoke the protocol_updater.py script as a
+subprocess with the correct arguments, and update the lesson status file
+to reflect the outcome.
 
 ### `tooling/test_self_improvement_cli.py`
 
