@@ -10,7 +10,7 @@
 ```json
 {
   "schema_version": "Agent Protocol Definition",
-  "compiled_at": "2025-10-09T00:41:57.834703",
+  "compiled_at": "2025-10-09T01:43:50.383786",
   "protocols": [
     {
       "protocol_id": "aorp-header",
@@ -165,6 +165,25 @@
         "tooling/fdc_cli.py",
         "google_search",
         "view_text_website"
+      ]
+    },
+    {
+      "protocol_id": "best-practices-001",
+      "description": "A set of best practices derived from observing successful, data-driven workflow patterns.",
+      "rules": [
+        {
+          "rule_id": "verify-after-write",
+          "description": "After every file creation or modification action (`create_file_with_block`, `overwrite_file_with_block`, `replace_with_git_merge_diff`), the agent MUST use a subsequent read-only tool (`read_file`, `list_files`, `grep`) to verify that the action was executed successfully and had the intended effect. A plan step should only be marked as complete after this verification.",
+          "enforcement": "This is a core operational discipline. Future tooling, such as a trace validator, could enforce this by analyzing the execution log against this protocol."
+        }
+      ],
+      "associated_tools": [
+        "create_file_with_block",
+        "overwrite_file_with_block",
+        "replace_with_git_merge_diff",
+        "read_file",
+        "list_files",
+        "grep"
       ]
     }
   ]
