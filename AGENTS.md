@@ -509,6 +509,89 @@ This new, automated cycle—**Analyze -> Structure Lesson -> Execute Correction 
 
 ---
 
+# Protocol: AGENTS.md Non-Compliance
+
+This protocol defines what constitutes non-compliance with the established `AGENTS.md` protocols and outlines the expected corrective actions. Adherence to these meta-rules is critical for ensuring predictable, verifiable, and robust agent behavior.
+
+## Rule `non-compliance-definition`: Definition of Non-Compliance
+
+Non-compliance is the act of violating the explicit rules, conventions, or procedures documented in the `AGENTS.md` file and its source protocols within the `protocols/` directory. The `AGENTS.md` file serves as the agent's primary operational mandate, and any deviation from it is considered a fault condition.
+
+## Rule `non-compliance-direct-editing`: Prohibition of Direct Artifact Editing
+
+**Violation:** Directly editing any file that is a documented build artifact.
+- **Primary Example:** Modifying `AGENTS.md` or `README.md` directly is a severe violation. These files are generated from source protocols and documentation.
+- **Corrective Action:** The agent must revert any direct edits to build artifacts. Changes must be made to the source files (e.g., in `protocols/` or tool docstrings), and the appropriate build command (e.g., `make AGENTS.md`, `make docs`) must be executed.
+
+## Rule `non-compliance-test-procedure`: Adherence to Testing Protocols
+
+**Violation:** Failing to execute the testing procedures as defined in `AGENTS.md` before submitting changes. This includes not running the full test suite or ignoring failing tests.
+- **Corrective Action:** The agent must halt its execution plan and run the required tests. If tests fail, the agent must enter a debugging loop to resolve the failures before proceeding.
+
+## Rule `non-compliance-architectural-deviation`: Adherence to Architectural and Convention Guidelines
+
+**Violation:** Introducing changes that contradict the architectural patterns, coding conventions, or file structures laid out in `AGENTS.md`.
+- **Example:** Placing a new backend component in the `frontend/` directory when the architecture explicitly forbids it.
+- **Corrective Action:** The agent must identify the deviation, revert the incorrect changes, and re-implement them in accordance with the documented standards.
+
+## Rule `non-compliance-self-awareness-failure`: Failure to Maintain Protocol Awareness
+
+**Violation:** Operating with an outdated understanding of the protocols by failing to re-compile `AGENTS.md` when necessary, as defined in the `meta-protocol`.
+- **Corrective Action:** If the agent detects that its actions are out of sync with repository standards, it should trigger the `make AGENTS.md` command to refresh its internal state and re-evaluate its plan.
+
+## Consequence of Non-Compliance
+
+Upon detecting any form of non-compliance, the agent is required to:
+1.  **Halt:** Immediately stop the current execution path to prevent further deviation.
+2.  **Report:** Log the specific violation that was detected.
+3.  **Correct:** Initiate the defined corrective action for the specific violation. If a corrective action is not explicitly defined, the agent should revert the violating changes and re-plan its approach.
+```json
+{
+  "protocol_id": "non-compliance-protocol-001",
+  "description": "A protocol that defines non-compliance with AGENTS.md and specifies corrective actions.",
+  "rules": [
+    {
+      "rule_id": "non-compliance-definition",
+      "description": "Defines non-compliance as a violation of any rule, convention, or procedure in AGENTS.md or its source protocols.",
+      "enforcement": "This is a definitional rule. Enforcement is achieved through the agent's adherence to the specific non-compliance rules that follow."
+    },
+    {
+      "rule_id": "non-compliance-direct-editing",
+      "description": "Prohibits the direct editing of build artifacts like AGENTS.md or README.md. Changes must be made to source files, followed by a rebuild.",
+      "enforcement": "Agent must revert direct edits and modify source files, then run the appropriate build command.",
+      "associated_tools": [
+        "restore_file",
+        "run_in_bash_session"
+      ]
+    },
+    {
+      "rule_id": "non-compliance-test-procedure",
+      "description": "Requires adherence to all documented testing procedures before submitting changes.",
+      "enforcement": "Agent must halt execution and run the required tests, debugging any failures before proceeding.",
+      "associated_tools": [
+        "run_in_bash_session"
+      ]
+    },
+    {
+      "rule_id": "non-compliance-architectural-deviation",
+      "description": "Forbids changes that contradict documented architectural patterns or coding conventions.",
+      "enforcement": "Agent must revert non-compliant changes and re-implement them according to standards."
+    },
+    {
+      "rule_id": "non-compliance-self-awareness-failure",
+      "description": "Requires the agent to maintain an up-to-date understanding of protocols by recompiling AGENTS.md when necessary.",
+      "enforcement": "Agent should run 'make AGENTS.md' to refresh its protocol knowledge and re-evaluate its plan.",
+      "associated_tools": [
+        "run_in_bash_session"
+      ]
+    }
+  ]
+}
+```
+
+
+---
+
 # System Documentation
 
 ---
@@ -612,7 +695,7 @@ process of parsing that section to extract key insights.
 
 It identifies pairs of "Lesson" and "Action" statements and transforms them
 into a standardized, machine-readable format. These formatted entries are then
-appended to the `knowledge_core/lessons_learned.md` file, which serves as the
+appended to the `knowledge_core/lessons.jsonl` file, which serves as the
 agent's persistent memory of what has worked, what has failed, and what can be
 improved in future tasks.
 
@@ -732,6 +815,21 @@ workflow.
 
 The tool operates on the .protocol.json files located in the `protocols/`
 directory, performing targeted updates based on command-line arguments.
+
+### `tooling/readme_generator.py`
+
+Generates the project's main README.md from protocol documentation.
+
+This script scans the 'protocols/' directory for markdown files (`.protocol.md`),
+concatenates them in a sorted order, and writes the final output to the
+root-level README.md file. This ensures the README always reflects the
+latest protocol definitions, providing a single source of truth for the
+project's operational guidelines.
+
+Configuration is managed via top-level constants:
+- `PROTOCOLS_DIR`: The directory where source protocol files are stored.
+- `OUTPUT_FILE`: The path to the generated README.md file.
+- `README_TITLE`: The main title for the generated README.
 
 ### `tooling/research.py`
 
