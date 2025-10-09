@@ -1,2 +1,0 @@
-This file is part of the tool demonstration.
-It will be used to showcase the submission workflow.
