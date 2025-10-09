@@ -2,12 +2,15 @@ import os
 import glob
 import json
 import jsonschema
+from rdflib import Graph
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 PROTOCOLS_DIR = os.path.join(ROOT_DIR, "protocols")
 SCHEMA_FILE = os.path.join(PROTOCOLS_DIR, "protocol.schema.json")
 TARGET_FILE = os.path.join(ROOT_DIR, "AGENTS.md")
+KNOWLEDGE_GRAPH_FILE = os.path.join(ROOT_DIR, "knowledge_core", "protocols.ttl")
+
 
 DISCLAIMER = """\
 # ---
@@ -37,12 +40,15 @@ def load_schema():
 def compile_protocols():
     """
     Reads all .protocol.json and corresponding .protocol.md files from the
-    protocols directory, validates them, and compiles them into a single,
-    human-readable AGENTS.md file.
+    protocols directory, validates them, and compiles them into two artifacts:
+    1. A human-readable AGENTS.md file.
+    2. A machine-readable knowledge graph in Turtle format (`.ttl`).
     """
-    print("--- Starting Protocol Compilation (Markdown + JSON) ---")
+    print("--- Starting Protocol Compilation (Markdown + Knowledge Graph) ---")
     print(f"Source directory: {PROTOCOLS_DIR}")
-    print(f"Target file: {TARGET_FILE}")
+    print(f"Target AGENTS.md file: {TARGET_FILE}")
+    print(f"Target Knowledge Graph file: {KNOWLEDGE_GRAPH_FILE}")
+
 
     schema = load_schema()
     if not schema:
@@ -62,7 +68,8 @@ def compile_protocols():
 
     print(f"Found {len(protocol_files)} protocol, {len(md_files)} markdown, and {len(autodoc_files)} autodoc files.")
 
-    # Start building the final content
+    # Initialize RDF graph and start building AGENTS.md content
+    g = Graph()
     final_content = [DISCLAIMER]
 
     # Process each file
@@ -100,21 +107,45 @@ def compile_protocols():
             jsonschema.validate(instance=protocol_data, schema=schema)
             print(f"    - JSON validation successful.")
 
+            # --- Knowledge Graph Generation ---
+            # Create a copy for JSON-LD processing to not modify the original dict
+            protocol_data_for_ld = protocol_data.copy()
+            # The context path is relative to the `protocols` directory
+            protocol_data_for_ld["@context"] = "protocol.context.jsonld"
+            # The publicID needs to be the directory where the file lives, so relative paths in the JSON-LD can be resolved
+            base_uri = "file://" + os.path.abspath(PROTOCOLS_DIR) + "/"
+            g.parse(data=json.dumps(protocol_data_for_ld), format="json-ld", publicID=base_uri)
+            print(f"    - Parsed {base_name} into knowledge graph.")
+
+
+            # --- AGENTS.md Generation ---
             json_string = json.dumps(protocol_data, indent=2)
             md_json_block = f"```json\n{json_string}\n```\n"
             final_content.append(md_json_block)
+
         except Exception as e:
             print(f"    - Error: Failed to process JSON for {base_name}: {e}")
 
         final_content.append("\n---\n")
 
 
-    # Write the final content to the target file
+    # --- Finalize and Write Outputs ---
+
+    # Write the final AGENTS.md content
     with open(TARGET_FILE, "w") as f:
         f.write("\n".join(final_content))
-
-    print("\n--- Compilation Successful ---")
+    print("\n--- AGENTS.md Compilation Successful ---")
     print(f"Successfully generated new AGENTS.md file.")
+
+    # Write the knowledge graph
+    try:
+        g.serialize(destination=KNOWLEDGE_GRAPH_FILE, format="turtle")
+        print("\n--- Knowledge Graph Compilation Successful ---")
+        print(f"Successfully generated knowledge graph at {KNOWLEDGE_GRAPH_FILE}")
+    except Exception as e:
+        print(f"\n--- Knowledge Graph Compilation Failed ---")
+        print(f"Error serializing RDF graph: {e}")
+
 
 def main():
     """Main function to run the compiler."""
