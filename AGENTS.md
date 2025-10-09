@@ -315,26 +315,50 @@ This act of self-maintenance is a foundational element of robust, autonomous ope
 
 ---
 
-# Protocol: Initial Environment Setup
+# Protocol: The Context-Free Development Cycle (CFDC)
 
-This protocol defines the mandatory first step for ensuring a consistent and correct development environment at the start of any task.
+This protocol marks a significant evolution from the Finite Development Cycle (FDC), introducing a hierarchical planning model that enables far greater complexity and modularity while preserving the system's core guarantee of decidability.
 
-**Rule `dependency-install-mandate`**: Before any other action, if a `requirements.txt` file exists in the repository, you MUST run `pip install -r requirements.txt`. This action is critical to prevent `ModuleNotFoundError` errors during test execution or tool operation.
+## From FSM to Pushdown Automaton
 
-This proactive step ensures that all required dependencies are present, preventing a common class of failures and ensuring that subsequent steps operate on a known, stable baseline. It is a foundational element of a robust and reliable workflow.
+The FDC was based on a Finite State Machine (FSM), which provided a strict, linear sequence of operations. While robust, this model was fundamentally limited: it could not handle nested tasks or sub-routines, forcing all plans to be monolithic.
+
+The CFDC upgrades our execution model to a **Pushdown Automaton**. This is achieved by introducing a **plan execution stack**, which allows the system to call other plans as sub-routines. This enables a powerful new paradigm: **Context-Free Development Cycles**.
+
+## The `call_plan` Directive
+
+The core of the CFDC is the new `call_plan` directive. This allows one plan to execute another, effectively creating a parent-child relationship between them.
+
+- **Usage:** `call_plan <path_to_sub_plan.txt>`
+- **Function:** When the execution engine encounters this directive, it:
+    1.  Pushes the current plan's state (e.g., the current step number) onto the execution stack.
+    2.  Begins executing the sub-plan specified in the path.
+    3.  Once the sub-plan completes, it pops the parent plan's state from the stack and resumes its execution from where it left off.
+
+## Ensuring Decidability: The Recursion Depth Limit
+
+A system with unbounded recursion is not guaranteed to terminate. To prevent this, the CFDC introduces a non-negotiable, system-wide limit on the depth of the plan execution stack.
+
+**Rule `max-recursion-depth`**: The execution engine MUST enforce a maximum recursion depth, defined by a `MAX_RECURSION_DEPTH` constant. If a `call_plan` directive would cause the stack depth to exceed this limit, the entire process MUST terminate with an error. This hard limit ensures that even with recursive or deeply nested plans, the system remains a **decidable**, non-Turing-complete process that is guaranteed to halt.
 ```json
 {
-  "protocol_id": "initial-env-setup-001",
-  "description": "A protocol that mandates the installation of dependencies at the start of a task.",
+  "protocol_id": "cfdc-protocol-001",
+  "description": "Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model.",
   "rules": [
     {
-      "rule_id": "dependency-install-mandate",
-      "description": "If a requirements.txt file exists, the agent's first operational step MUST be to install the dependencies using 'pip install -r requirements.txt'. This ensures a consistent environment and prevents module not found errors.",
-      "enforcement": "This is a core operational discipline that should be part of the agent's initial task execution logic. Future tooling could enforce this by checking logs for the installation command at the beginning of a task.",
-      "associated_tools": [
-        "run_in_bash_session"
-      ]
+      "rule_id": "hierarchical-planning-via-call-plan",
+      "description": "Plans may execute other plans as sub-routines using the 'call_plan <path_to_plan>' directive. This enables a modular, hierarchical workflow.",
+      "enforcement": "The plan validator must be able to parse this directive and recursively validate sub-plans. The execution engine must implement a plan execution stack to manage the context of nested calls."
+    },
+    {
+      "rule_id": "max-recursion-depth",
+      "description": "To ensure decidability, the plan execution stack must not exceed a system-wide constant, MAX_RECURSION_DEPTH. This prevents infinite recursion and guarantees all processes will terminate.",
+      "enforcement": "The execution engine must check the stack depth before every 'call_plan' execution and terminate with a fatal error if the limit would be exceeded."
     }
+  ],
+  "associated_tools": [
+    "tooling/master_control.py",
+    "tooling/fdc_cli.py"
   ]
 }
 ```

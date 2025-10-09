@@ -10,3 +10,19 @@ This document is a repository for accumulating knowledge and insights gained fro
 **Insight:** [The key takeaway or lesson learned from the observation.]
 **Actionable Guidance:** [Specific, concrete steps to take or avoid in similar future situations.]
 ---
+
+---
+**Task ID:** [TASK_ID]
+**Date:** [COMPLETION_DATE]
+**Observation:** This lesson was derived from the post-mortem analysis of the parent task.
+**Insight:** **Action:** 2.  **Lesson:**
+**Actionable Guidance:**
+---
+
+---
+**Task ID:** [TASK_ID]
+**Date:** [COMPLETION_DATE]
+**Observation:** This lesson was derived from the post-mortem analysis of the parent task.
+**Insight:** **Action:** 2.  **Lesson:**
+**Actionable Guidance:**
+---

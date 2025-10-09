@@ -10,7 +10,9 @@ import traceback
 
 # Add tooling directory to path to import other tools
 sys.path.insert(0, "./tooling")
-from state import AgentState
+from state import AgentState, PlanContext
+from fdc_cli import MAX_RECURSION_DEPTH
+from research import execute_research_protocol
 
 # The research module is not yet implemented, so we will stub it.
 def execute_research_protocol(constraints):
@@ -46,64 +48,127 @@ class MasterControlGraph:
             return "orientation_failed"
 
     def do_planning(self, agent_state: AgentState) -> str:
-        """Waits for and validates a plan, then returns a trigger."""
+        """
+        Waits for the agent to provide a plan, validates it, and initializes
+        the plan stack for execution.
+        """
         print("[MasterControl] State: PLANNING")
         plan_file = "plan.txt"
+
         print(f"  - Waiting for agent to create '{plan_file}'...")
         while not os.path.exists(plan_file):
-            time.sleep(0.1)
+            time.sleep(1)
 
         print(f"  - Detected '{plan_file}'. Reading and validating plan...")
+        validation_cmd = ["python3", "tooling/fdc_cli.py", "validate", plan_file]
+        result = subprocess.run(validation_cmd, capture_output=True, text=True)
+
+        if result.returncode != 0:
+            error_message = f"Plan validation failed:\n{result.stderr}"
+            agent_state.error = error_message
+            print(f"[MasterControl] {error_message}")
+            return self.get_trigger("PLANNING", "ERROR")
+
+        print("  - Plan validation successful.")
         with open(plan_file, "r") as f:
-            agent_state.plan = f.read()
+            plan_content = [line for line in f.read().split("\n") if line.strip()]
 
-        if not agent_state.plan:
-            agent_state.error = "Planning failed: plan.txt was empty."
-            print(f"[MasterControl] {agent_state.error}")
-            os.remove(plan_file)
-            return "planning_failed"
-
+        # Initialize the plan stack with the root plan
+        agent_state.plan_stack.append(
+            PlanContext(plan_path=plan_file, plan_content=plan_content)
+        )
+        agent_state.messages.append(
+            {
+                "role": "system",
+                "content": f"Validated plan from {plan_file} has been loaded and execution is starting.",
+            }
+        )
         print("[MasterControl] Planning Complete.")
-        os.remove(plan_file)
-        return "plan_is_set"
+        # We keep plan.txt for now for traceability during execution
+        return self.get_trigger("PLANNING", "EXECUTING")
 
     def do_execution(self, agent_state: AgentState) -> str:
-        """Executes one plan step and returns a trigger."""
-        print(f"[MasterControl] State: EXECUTING (Step {agent_state.current_step_index})")
-        plan_steps = [step for step in agent_state.plan.split("\n") if step.strip()]
+        """
+        Executes the plan using a stack-based approach to handle sub-plans (CFDC).
+        """
+        print("[MasterControl] State: EXECUTING")
 
-        if agent_state.current_step_index >= len(plan_steps):
-            print("[MasterControl] Execution phase complete.")
-            return "all_steps_completed"
+        if not agent_state.plan_stack:
+            print("[MasterControl] Execution Complete (plan stack is empty).")
+            # Clean up the root plan file now that execution is fully complete
+            if os.path.exists("plan.txt"):
+                os.remove("plan.txt")
+            return self.get_trigger("EXECUTING", "AWAITING_ANALYSIS")
 
-        step = plan_steps[agent_state.current_step_index]
-        print(f"  - Executing step {agent_state.current_step_index + 1}/{len(plan_steps)}: {step}")
+        # Always work with the plan at the top of the stack
+        current_context = agent_state.plan_stack[-1]
+        plan_steps = current_context.plan_content
 
-        try:
-            parts = shlex.split(step)
-            tool_name = parts[0]
-            args_list = parts[1:]
+        # If we've finished all steps in the current plan, pop it and continue
+        if current_context.current_step >= len(plan_steps):
+            agent_state.plan_stack.pop()
+            print(
+                f"  - Finished sub-plan '{current_context.plan_path}'. Resuming parent."
+            )
+            # Re-enter the execution loop immediately to process the parent plan
+            return self.get_trigger("EXECUTING", "EXECUTING")
 
-            wrapper_cmd = [
-                "python3", "tooling/execution_wrapper.py",
-                "--tool", tool_name,
-                "--args", json.dumps(args_list),
-                "--task-id", agent_state.task,
-                "--plan-step", str(agent_state.current_step_index),
-            ]
-            result = subprocess.run(wrapper_cmd, capture_output=True, text=True)
+        step = plan_steps[current_context.current_step].strip()
+        command, *args = step.split()
 
-            if result.returncode != 0:
-                agent_state.error = f"Execution wrapper failed for step: {step}\nStderr: {result.stderr}"
-                print(f"[MasterControl] {agent_state.error}")
-                return "execution_failed"
+        # Handle the new 'call_plan' directive
+        if command == "call_plan":
+            if len(agent_state.plan_stack) > MAX_RECURSION_DEPTH:
+                agent_state.error = f"Maximum recursion depth ({MAX_RECURSION_DEPTH}) exceeded."
+                print(f"[MasterControl] Error: {agent_state.error}")
+                return self.get_trigger("EXECUTING", "ERROR")
 
-            agent_state.current_step_index += 1
-            return "step_succeeded"
-        except Exception as e:
-            agent_state.error = f"Orchestrator failed to execute step: {step}\nError: {e}\n{traceback.format_exc()}"
-            print(f"[MasterControl] {agent_state.error}")
-            return "execution_failed"
+            sub_plan_path = args[0]
+            print(f"  - Calling sub-plan: {sub_plan_path}")
+            try:
+                with open(sub_plan_path, "r") as f:
+                    sub_plan_content = [
+                        line for line in f.read().split("\n") if line.strip()
+                    ]
+            except FileNotFoundError:
+                agent_state.error = f"Sub-plan file not found: {sub_plan_path}"
+                print(f"[MasterControl] Error: {agent_state.error}")
+                return self.get_trigger("EXECUTING", "ERROR")
+
+            # Advance the current plan's step *before* pushing the new one
+            current_context.current_step += 1
+
+            # Push the new plan onto the stack
+            new_context = PlanContext(
+                plan_path=sub_plan_path, plan_content=sub_plan_content
+            )
+            agent_state.plan_stack.append(new_context)
+            return self.get_trigger("EXECUTING", "EXECUTING")
+
+        # --- Standard Step Execution ---
+        step_complete_file = "step_complete.txt"
+        print(f"  - Waiting for agent to complete step: {step}")
+        while not os.path.exists(step_complete_file):
+            time.sleep(1)
+
+        print(f"  - Detected '{step_complete_file}'.")
+        with open(step_complete_file, "r") as f:
+            result = f.read()
+
+        agent_state.messages.append(
+            {
+                "role": "system",
+                "content": f"Completed step {current_context.current_step + 1} in '{current_context.plan_path}': {step}\nResult: {result}",
+            }
+        )
+
+        os.remove(step_complete_file)
+        current_context.current_step += 1
+
+        print(
+            f"  - Step {current_context.current_step} of {len(plan_steps)} in '{current_context.plan_path}' signaled complete."
+        )
+        return self.get_trigger("EXECUTING", "EXECUTING")
 
     def do_awaiting_analysis(self, agent_state: AgentState) -> str:
         """Creates a draft post-mortem and waits for analysis."""
