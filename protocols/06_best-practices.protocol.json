@@ -12,6 +12,7 @@
     "create_file_with_block",
     "overwrite_file_with_block",
     "replace_with_git_merge_diff",
+    "delete_file",
     "read_file",
     "list_files",
     "grep"

@@ -21,7 +21,8 @@
   "associated_tools": [
     "tooling/knowledge_compiler.py",
     "tooling/protocol_updater.py",
-    "tooling/self_correction_orchestrator.py"
+    "tooling/self_correction_orchestrator.py",
+    "initiate_memory_recording"
   ],
   "associated_artifacts": [
     "knowledge_core/lessons.jsonl"

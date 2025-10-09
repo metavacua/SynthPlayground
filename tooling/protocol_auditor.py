@@ -1,17 +1,25 @@
 """
-Audits the agent's behavior against its governing protocols.
+Audits the agent's behavior against its governing protocols and generates a report.
 
-This script performs a comparative analysis between the tools defined in the
-`AGENTS.md` protocol document and the tools actually used, as recorded in the
-activity log. Its purpose is to provide a feedback loop for protocol enforcement
-and to identify potential gaps or inconsistencies in the agent's behavior.
+This script performs a comprehensive analysis to ensure the agent's actions,
+as recorded in the activity log, align with the defined protocols in AGENTS.md.
+It serves as a critical feedback mechanism for maintaining operational integrity.
+The final output is a detailed `audit_report.md` file.
 
-The auditor currently performs two main checks:
-1.  **Protocol Completeness:** It identifies:
-    - Tools that were used but are not associated with any formal protocol.
-    - Tools that are defined in the protocols but were never used.
-2.  **Tool Centrality:** It conducts a frequency analysis of the tools used,
-    helping to identify which tools are most critical to the agent's workflow.
+The auditor performs three main checks:
+1.  **`AGENTS.md` Source Check:** Verifies if the `AGENTS.md` build artifact is
+    potentially stale by comparing its modification time against the source
+    protocol files in the `protocols/` directory.
+2.  **Protocol Completeness:** It cross-references the tools used in the log
+    (`logs/activity.log.jsonl`) against the tools defined in `AGENTS.md` to find:
+    - Tools used but not associated with any formal protocol.
+    - Tools defined in protocols but never used in the log.
+3.  **Tool Centrality:** It conducts a frequency analysis of tool usage to
+    identify which tools are most critical to the agent's workflow.
+
+The script parses all embedded JSON protocol blocks within `AGENTS.md` and reads
+from the standard `logs/activity.log.jsonl` log file, providing a reliable and
+accurate audit.
 """
 import json
 import os
