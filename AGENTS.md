@@ -293,6 +293,7 @@ The FDC Toolchain is a set of utilities that the agent uses to structure its wor
     "create_file_with_block",
     "overwrite_file_with_block",
     "replace_with_git_merge_diff",
+    "delete_file",
     "read_file",
     "list_files",
     "grep"
@@ -498,7 +499,8 @@ This new, automated cycle—**Analyze -> Structure Lesson -> Execute Correction 
   "associated_tools": [
     "tooling/knowledge_compiler.py",
     "tooling/protocol_updater.py",
-    "tooling/self_correction_orchestrator.py"
+    "tooling/self_correction_orchestrator.py",
+    "initiate_memory_recording"
   ],
   "associated_artifacts": [
     "knowledge_core/lessons.jsonl"
@@ -585,6 +587,39 @@ Upon detecting any form of non-compliance, the agent is required to:
         "run_in_bash_session"
       ]
     }
+  ]
+}
+```
+
+
+---
+
+# Protocol: Pre-Commit Verification
+
+This protocol establishes the mandatory sequence of verification steps that must be performed before any code is submitted. Its purpose is to ensure that all changes meet a baseline level of quality, correctness, and review, preventing regressions and maintaining repository health.
+
+## Rule: Mandatory Pre-Commit Checks
+
+Before finalizing and submitting any work, the agent **must** execute the `pre_commit_instructions` tool. This tool acts as a procedural gateway, providing the specific, up-to-date checklist of actions required for validation. This typically includes:
+
+1.  **Running all automated tests** to verify correctness.
+2.  **Requesting a formal code review** to get critical feedback.
+3.  **Recording key learnings** to contribute to the agent's long-term memory.
+
+Adherence to this protocol is not optional. It is a fundamental step in the development lifecycle that safeguards the integrity of the codebase.
+```json
+{
+  "protocol_id": "pre-commit-protocol-001",
+  "description": "Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission.",
+  "rules": [
+    {
+      "rule_id": "pre-commit-instructions-mandate",
+      "description": "Before submitting changes, the agent MUST execute the `pre_commit_instructions` tool to receive the required sequence of validation steps (e.g., running tests, requesting code review).",
+      "enforcement": "The agent's core logic should invoke this tool as the entry point to the pre-submission phase."
+    }
+  ],
+  "associated_tools": [
+    "pre_commit_instructions"
   ]
 }
 ```
