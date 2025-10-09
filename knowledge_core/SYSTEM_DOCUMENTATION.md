@@ -101,7 +101,7 @@ process of parsing that section to extract key insights.
 
 It identifies pairs of "Lesson" and "Action" statements and transforms them
 into a standardized, machine-readable format. These formatted entries are then
-appended to the `knowledge_core/lessons_learned.md` file, which serves as the
+appended to the `knowledge_core/lessons.jsonl` file, which serves as the
 agent's persistent memory of what has worked, what has failed, and what can be
 improved in future tasks.
 
@@ -221,6 +221,21 @@ workflow.
 
 The tool operates on the .protocol.json files located in the `protocols/`
 directory, performing targeted updates based on command-line arguments.
+
+### `tooling/readme_generator.py`
+
+Generates the project's main README.md from protocol documentation.
+
+This script scans the 'protocols/' directory for markdown files (`.protocol.md`),
+concatenates them in a sorted order, and writes the final output to the
+root-level README.md file. This ensures the README always reflects the
+latest protocol definitions, providing a single source of truth for the
+project's operational guidelines.
+
+Configuration is managed via top-level constants:
+- `PROTOCOLS_DIR`: The directory where source protocol files are stored.
+- `OUTPUT_FILE`: The path to the generated README.md file.
+- `README_TITLE`: The main title for the generated README.
 
 ### `tooling/research.py`
 
