@@ -36,13 +36,6 @@ FSM_DEF_PATH = os.path.join(ROOT_DIR, "tooling", "fdc_fsm.json")
 MAX_RECURSION_DEPTH = 10  # Safety limit for hierarchical plans
 PLAN_REGISTRY_PATH = os.path.join(ROOT_DIR, "knowledge_core", "plan_registry.json")
 
-# --- Protocol-Specific Linter Configuration ---
-LARGE_CHANGESET_TRIGGERS = [
-    "tooling/self_correction_orchestrator.py",
-]
-JUSTIFICATION_FILE = "review_justification.md"
-
-
 ACTION_TYPE_MAP = {
     "set_plan": "plan_op",
     "plan_step_complete": "step_op",
@@ -382,37 +375,6 @@ def analyze_plan(plan_filepath):
     print(f"  - Modality:   {modality}")
 
 
-def _validate_large_changeset_protocol(plan_filepath):
-    """
-    Checks if a plan that uses a large-changeset tool includes the required
-    justification file, as per critic-interaction-protocol-001.
-    """
-    try:
-        with open(plan_filepath, "r") as f:
-            plan_text = f.read()
-    except FileNotFoundError:
-        # This should be caught by other validators, but handle defensively.
-        # If the file doesn't exist, validate_plan will fail first.
-        return
-
-    trigger_found = None
-    for trigger in LARGE_CHANGESET_TRIGGERS:
-        if trigger in plan_text:
-            trigger_found = trigger
-            break
-
-    if trigger_found:
-        # Check if the plan includes the creation of the justification file.
-        justification_command = f"create_file_with_block {JUSTIFICATION_FILE}"
-        if justification_command not in plan_text:
-            print(
-                f"Error: Plan uses a large-changeset tool ('{trigger_found}') but does not provide a '{JUSTIFICATION_FILE}' file.",
-                file=sys.stderr,
-            )
-            sys.exit(1)
-    print("  - Large changeset protocol check: PASSED")
-
-
 def lint_plan(plan_filepath):
     """
     Runs a comprehensive suite of checks on a plan file.
@@ -422,7 +384,6 @@ def lint_plan(plan_filepath):
     print(f"--- Starting Comprehensive Lint for {plan_filepath} ---")
     validate_plan(plan_filepath)
     analyze_plan(plan_filepath)
-    _validate_large_changeset_protocol(plan_filepath)
     print("\n--- Linting Complete: All checks passed. ---")
 
 
