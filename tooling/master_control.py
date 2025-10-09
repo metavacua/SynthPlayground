@@ -176,6 +176,39 @@ class MasterControlGraph:
         # We keep plan.txt for now for traceability during execution
         return self.get_trigger("PLANNING", "EXECUTING")
 
+    def _handle_call_plan(self, agent_state: AgentState, args: list) -> str:
+        """Handles the 'call_plan' directive during execution."""
+        if len(agent_state.plan_stack) > MAX_RECURSION_DEPTH:
+            agent_state.error = f"Maximum recursion depth ({MAX_RECURSION_DEPTH}) exceeded."
+            print(f"[MasterControl] Error: {agent_state.error}")
+            return self.get_trigger("EXECUTING", "ERROR")
+
+        plan_name_or_path = args[0]
+        registry = _load_plan_registry()
+        sub_plan_path = registry.get(plan_name_or_path, plan_name_or_path)
+
+        print(f"  - Calling sub-plan: {sub_plan_path} (resolved from '{plan_name_or_path}')")
+        try:
+            with open(sub_plan_path, "r") as f:
+                sub_plan_content = [
+                    line for line in f.read().split("\n") if line.strip()
+                ]
+        except FileNotFoundError:
+            agent_state.error = f"Sub-plan file not found: {sub_plan_path}"
+            print(f"[MasterControl] Error: {agent_state.error}")
+            return self.get_trigger("EXECUTING", "ERROR")
+
+        # Advance the current plan's step *before* pushing the new one
+        current_context = agent_state.plan_stack[-1]
+        current_context.current_step += 1
+
+        # Push the new plan onto the stack
+        new_context = PlanContext(
+            plan_path=sub_plan_path, plan_content=sub_plan_content
+        )
+        agent_state.plan_stack.append(new_context)
+        return self.get_trigger("EXECUTING", "EXECUTING")
+
     def do_execution(self, agent_state: AgentState) -> str:
         """
         Executes the plan using a stack-based approach to handle sub-plans (CFDC).
@@ -218,37 +251,9 @@ class MasterControlGraph:
                 os.remove(auth_token_path)
                 print("[MasterControl] 'reset_all' authorized. Consuming token and proceeding.")
 
-        # Handle the new 'call_plan' directive
+        # Handle the 'call_plan' directive using the helper method
         if command == "call_plan":
-            if len(agent_state.plan_stack) > MAX_RECURSION_DEPTH:
-                agent_state.error = f"Maximum recursion depth ({MAX_RECURSION_DEPTH}) exceeded."
-                print(f"[MasterControl] Error: {agent_state.error}")
-                return self.get_trigger("EXECUTING", "ERROR")
-
-            plan_name_or_path = args[0]
-            registry = _load_plan_registry()
-            sub_plan_path = registry.get(plan_name_or_path, plan_name_or_path)
-
-            print(f"  - Calling sub-plan: {sub_plan_path} (resolved from '{plan_name_or_path}')")
-            try:
-                with open(sub_plan_path, "r") as f:
-                    sub_plan_content = [
-                        line for line in f.read().split("\n") if line.strip()
-                    ]
-            except FileNotFoundError:
-                agent_state.error = f"Sub-plan file not found: {sub_plan_path}"
-                print(f"[MasterControl] Error: {agent_state.error}")
-                return self.get_trigger("EXECUTING", "ERROR")
-
-            # Advance the current plan's step *before* pushing the new one
-            current_context.current_step += 1
-
-            # Push the new plan onto the stack
-            new_context = PlanContext(
-                plan_path=sub_plan_path, plan_content=sub_plan_content
-            )
-            agent_state.plan_stack.append(new_context)
-            return self.get_trigger("EXECUTING", "EXECUTING")
+            return self._handle_call_plan(agent_state, args)
 
         # --- Standard Step Execution ---
         step_complete_file = "step_complete.txt"
@@ -291,7 +296,7 @@ class MasterControlGraph:
         except Exception as e:
             agent_state.error = f"Failed to create draft post-mortem: {e}"
             print(f"[MasterControl] {agent_state.error}")
-            return self.get_trigger("EXECUTING", "ERROR")  # Or a new trigger if needed
+            return self.get_trigger("AWAITING_ANALYSIS", "ERROR")
 
         # Wait for the agent to signal analysis is complete
         analysis_complete_file = "analysis_complete.txt"

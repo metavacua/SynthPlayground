@@ -54,6 +54,11 @@
       "trigger": "analysis_complete"
     },
     {
+      "source": "AWAITING_ANALYSIS",
+      "dest": "ERROR",
+      "trigger": "analysis_failed"
+    },
+    {
       "source": "EXECUTING",
       "dest": "ERROR",
       "trigger": "execution_failed"
