@@ -40,14 +40,6 @@
 
 To tackle complex tasks reliably, an agent's workflow must be formally structured and guaranteed to terminate—it must be **decidable**. This is achieved through a hierarchical system composed of a high-level **Orchestrator** that manages the agent's overall state and a low-level **FDC Toolchain** that governs the validity of the agent's plans. This structure prevents the system from entering paradoxical, non-terminating loops.
 
-**To enforce this workflow, all tasks MUST be initiated through the designated entry point script:**
-
-```bash
-python3 run_task.py "Your task description here."
-```
-
-This script ensures that the Orchestrator is always engaged, guaranteeing that all protocol-mandated steps for orientation, logging, and analysis are followed without exception. Any other method of starting a task is a violation of protocol.
-
 ---
 ```json
 {
@@ -366,6 +358,71 @@ A system with unbounded recursion is not guaranteed to terminate. To prevent thi
 
 ---
 
+# Protocol: The Plan Registry
+
+This protocol introduces a Plan Registry to create a more robust, modular, and discoverable system for hierarchical plans. It decouples the act of calling a plan from its physical file path, allowing plans to be referenced by a logical name.
+
+## The Problem with Path-Based Calls
+
+The initial implementation of the Context-Free Development Cycle (CFDC) relied on direct file paths (e.g., `call_plan path/to/plan.txt`). This is brittle:
+- If a registered plan is moved or renamed, all plans that call it will break.
+- It is difficult for an agent to discover and reuse existing, validated plans.
+
+## The Solution: A Central Registry
+
+The Plan Registry solves this by creating a single source of truth that maps logical, human-readable plan names to their corresponding file paths.
+
+- **Location:** `knowledge_core/plan_registry.json`
+- **Format:** A simple JSON object of key-value pairs:
+  ```json
+  {
+    "logical-name-1": "path/to/plan_1.txt",
+    "run-all-tests": "plans/common/run_tests.txt"
+  }
+  ```
+
+## Updated `call_plan` Logic
+
+The `call_plan` directive is now significantly more powerful. When executing `call_plan <argument>`, the system will follow a **registry-first** approach:
+
+1.  **Registry Lookup:** The system will first treat `<argument>` as a logical name and look it up in `knowledge_core/plan_registry.json`.
+2.  **Path Fallback:** If the name is not found in the registry, the system will fall back to treating `<argument>` as a direct file path. This ensures full backward compatibility with existing plans.
+
+## Management
+
+A new tool, `tooling/plan_manager.py`, will be introduced to manage the registry with simple commands like `register`, `deregister`, and `list`, making it easy to maintain the library of reusable plans.
+```json
+{
+  "protocol_id": "plan-registry-001",
+  "description": "Defines a central registry for discovering and executing hierarchical plans by a logical name.",
+  "rules": [
+    {
+      "rule_id": "registry-definition",
+      "description": "A central plan registry MUST exist at 'knowledge_core/plan_registry.json'. It maps logical plan names to their file paths.",
+      "enforcement": "The file's existence and format can be checked by the validation toolchain."
+    },
+    {
+      "rule_id": "registry-first-resolution",
+      "description": "The 'call_plan <argument>' directive MUST first attempt to resolve '<argument>' as a logical name in the plan registry. If resolution fails, it MUST fall back to treating '<argument>' as a direct file path for backward compatibility.",
+      "enforcement": "This logic must be implemented in both the plan validator (`fdc_cli.py`) and the execution engine (`master_control.py`)."
+    },
+    {
+      "rule_id": "registry-management-tool",
+      "description": "A dedicated tool (`tooling/plan_manager.py`) MUST be provided for managing the plan registry, with functions to register, deregister, and list plans.",
+      "enforcement": "The tool's existence and functionality can be verified via integration tests."
+    }
+  ],
+  "associated_tools": [
+    "tooling/plan_manager.py",
+    "tooling/master_control.py",
+    "tooling/fdc_cli.py"
+  ]
+}
+```
+
+
+---
+
 # System Documentation
 
 ---
@@ -413,29 +470,6 @@ _No module-level docstring found._
 ### `tooling/master_control.py`
 
 _No module-level docstring found._
-
-### `tooling/execution_wrapper.py`
-
-**Purpose:**
-This script is the **single point of entry** for executing all tool actions within the agent's environment. It acts as a centralized wrapper that ensures every action is robustly logged before and after execution. This is the core component of the enforced logging protocol.
-
-**Core Function:**
-- `execute_and_log_action(tool_name, args_list, task_id, plan_step)`: The main function that orchestrates the execution and logging of a single tool call.
-
-**Workflow:**
-1.  **Instantiate Logger:** It creates an instance of the `Logger` from `utils/logger.py`.
-2.  **Log `IN_PROGRESS`:** It immediately logs that a tool execution is starting.
-3.  **Dispatch and Execute:** It looks up the requested `tool_name` in its `TOOL_DISPATCHER` dictionary and calls the corresponding internal function (e.g., `_list_files`, `_read_file`).
-4.  **Safe Execution:** The tool call is wrapped in a `try...except` block to gracefully handle any errors.
-5.  **Log Final Outcome:**
-    -   On success, it logs a `SUCCESS` event, including any return value from the tool as a JSON string.
-    -   On failure, it logs a `FAILURE` event, including the exception message and a full stack trace.
-
-**Usage:**
-This script is not intended to be run directly by a user. It is called as a subprocess by `tooling/master_control.py` for every step in an agent's plan.
-```bash
-python3 tooling/execution_wrapper.py --tool <tool_name> --args '[arg1, arg2]' --task-id <task_id> --plan-step <step_num>
-```
 
 ### `tooling/protocol_auditor.py`
 

@@ -3,4 +3,3 @@ pyyaml
 requests
 black
 flake8
-rdflib
