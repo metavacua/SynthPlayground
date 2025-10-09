@@ -1,0 +1,15 @@
+{
+  "protocol_id": "critic-interaction-protocol-001",
+  "description": "A protocol for managing interactions with the automated code review critic, especially for large, protocol-driven changes.",
+  "rules": [
+    {
+      "rule_id": "prepare-large-changeset-justification",
+      "description": "When a plan is expected to generate a large changeset as a direct result of following established protocols, the agent must add a step to its plan to create a 'review_justification.md' file. This file must explain why the changeset is large, citing the specific protocols from AGENTS.md that necessitated the action. This provides essential context for the automated review critic and any human reviewers.",
+      "enforcement": "The agent's planning logic should incorporate this check. Future tooling could lint plans to ensure this step is present when large-scale refactoring tools are used."
+    }
+  ],
+  "associated_tools": [
+    "create_file_with_block",
+    "request_code_review"
+  ]
+}
