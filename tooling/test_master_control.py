@@ -152,6 +152,7 @@ class TestMasterControlRedesigned(unittest.TestCase):
         self.graph.current_state = "SELF_CORRECTING"
 
         # 6. SELF_CORRECTING
+        # This is where the mocked subprocess for self_correction_orchestrator.py is called
         trigger = self.graph.do_self_correcting(self.agent_state)
         self.assertEqual(trigger, "self_correction_succeeded")
         self.graph.current_state = "AWAITING_SUBMISSION"
@@ -163,7 +164,8 @@ class TestMasterControlRedesigned(unittest.TestCase):
         # Verify that the self-correction step actually modified the protocol file
         with open(self.mock_protocol_file, "r") as f:
             updated_protocol = json.load(f)
-        self.assertIn("new_mock_tool", updated_protocol["associated_tools"], "The protocol file was not updated by the self-correction step.")
+        # Now this assertion should pass because the mock was called
+        self.assertIn("new_mock_tool", updated_protocol["associated_tools"])
 
 
 if __name__ == "__main__":
