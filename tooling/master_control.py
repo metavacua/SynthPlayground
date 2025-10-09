@@ -327,6 +327,21 @@ class MasterControlGraph:
                 compile_msg = "Knowledge compilation successful."
                 print(f"  - {compile_msg}")
                 agent_state.messages.append({"role": "system", "content": compile_msg})
+
+                # --- Run the self-correction cycle ---
+                print("  - Running self-correction cycle...")
+                correction_cmd = ["python3", "tooling/self_correction_orchestrator.py"]
+                correction_result = subprocess.run(correction_cmd, capture_output=True, text=True)
+                # We pipe the orchestrator's stdout to the agent's messages for transparency
+                agent_state.messages.append({"role": "system", "content": f"Self-Correction Output:\n{correction_result.stdout}"})
+                if correction_result.returncode != 0:
+                    # Log errors but don't fail the FSM
+                    correction_msg = f"Self-correction cycle failed:\n{correction_result.stderr}"
+                    print(f"  - {correction_msg}")
+                    agent_state.messages.append({"role": "system", "content": correction_msg})
+                else:
+                    print("  - Self-correction cycle completed.")
+
             else:
                 compile_msg = f"Knowledge compilation failed: {compile_result.stderr}"
                 print(f"  - {compile_msg}")

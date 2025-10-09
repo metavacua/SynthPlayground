@@ -1,0 +1,29 @@
+{
+  "protocol_id": "self-correction-protocol-001",
+  "description": "Defines the automated, closed-loop workflow for protocol self-correction.",
+  "rules": [
+    {
+      "rule_id": "structured-lessons",
+      "description": "Lessons learned from post-mortem analysis must be generated as structured, machine-readable JSON objects in `knowledge_core/lessons.jsonl`.",
+      "enforcement": "The `tooling/knowledge_compiler.py` script is responsible for generating lessons in the correct format."
+    },
+    {
+      "rule_id": "programmatic-updates",
+      "description": "All modifications to protocol source files must be performed programmatically via the `tooling/protocol_updater.py` tool to ensure consistency and prevent manual errors.",
+      "enforcement": "Agent's core logic should be designed to use this tool for all protocol modifications."
+    },
+    {
+      "rule_id": "automated-orchestration",
+      "description": "The self-correction cycle must be managed by the `tooling/self_correction_orchestrator.py` script, which processes pending lessons and triggers the necessary updates.",
+      "enforcement": "This script is the designated engine for the PDSC workflow."
+    }
+  ],
+  "associated_tools": [
+    "tooling/knowledge_compiler.py",
+    "tooling/protocol_updater.py",
+    "tooling/self_correction_orchestrator.py"
+  ],
+  "associated_artifacts": [
+    "knowledge_core/lessons.jsonl"
+  ]
+}

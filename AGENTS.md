@@ -423,6 +423,67 @@ A new tool, `tooling/plan_manager.py`, will be introduced to manage the registry
 
 ---
 
+# Protocol: The Closed-Loop Self-Correction Cycle
+
+This protocol describes the automated workflow that enables the agent to programmatically improve its own governing protocols based on new knowledge. It transforms the ad-hoc, manual process of learning into a reliable, machine-driven feedback loop.
+
+## The Problem: The Open Loop
+
+Previously, "lessons learned" were compiled into a simple markdown file, `knowledge_core/lessons_learned.md`. While this captured knowledge, it was a dead end. There was no automated process to translate these text-based insights into actual changes to the protocol source files. This required manual intervention, creating a significant bottleneck and a high risk of protocols becoming stale.
+
+## The Solution: A Protocol-Driven Self-Correction (PDSC) Workflow
+
+The PDSC workflow closes the feedback loop by introducing a set of new tools and structured data formats that allow the agent to enact its own improvements.
+
+**1. Structured, Actionable Lessons (`knowledge_core/lessons.jsonl`):**
+- Post-mortem analysis now generates lessons as structured JSON objects, not free-form text.
+- Each lesson includes a machine-readable `action` field, which contains a specific, executable command.
+
+**2. The Protocol Updater (`tooling/protocol_updater.py`):**
+- A new, dedicated tool for programmatically modifying the protocol source files (`*.protocol.json`).
+- It accepts commands like `add-tool`, allowing for precise, automated changes to protocol definitions.
+
+**3. The Orchestrator (`tooling/self_correction_orchestrator.py`):**
+- This script is the engine of the cycle. It reads `lessons.jsonl`, identifies pending lessons, and uses the `protocol_updater.py` to execute the defined actions.
+- After applying a lesson, it updates the lesson's status, creating a clear audit trail.
+- It finishes by running `make AGENTS.md` to ensure the changes are compiled into the live protocol.
+
+This new, automated cycle—**Analyze -> Structure Lesson -> Execute Correction -> Re-compile Protocol**—is a fundamental step towards autonomous self-improvement.
+```json
+{
+  "protocol_id": "self-correction-protocol-001",
+  "description": "Defines the automated, closed-loop workflow for protocol self-correction.",
+  "rules": [
+    {
+      "rule_id": "structured-lessons",
+      "description": "Lessons learned from post-mortem analysis must be generated as structured, machine-readable JSON objects in `knowledge_core/lessons.jsonl`.",
+      "enforcement": "The `tooling/knowledge_compiler.py` script is responsible for generating lessons in the correct format."
+    },
+    {
+      "rule_id": "programmatic-updates",
+      "description": "All modifications to protocol source files must be performed programmatically via the `tooling/protocol_updater.py` tool to ensure consistency and prevent manual errors.",
+      "enforcement": "Agent's core logic should be designed to use this tool for all protocol modifications."
+    },
+    {
+      "rule_id": "automated-orchestration",
+      "description": "The self-correction cycle must be managed by the `tooling/self_correction_orchestrator.py` script, which processes pending lessons and triggers the necessary updates.",
+      "enforcement": "This script is the designated engine for the PDSC workflow."
+    }
+  ],
+  "associated_tools": [
+    "tooling/knowledge_compiler.py",
+    "tooling/protocol_updater.py",
+    "tooling/self_correction_orchestrator.py"
+  ],
+  "associated_artifacts": [
+    "knowledge_core/lessons.jsonl"
+  ]
+}
+```
+
+
+---
+
 # System Documentation
 
 ---
@@ -568,7 +629,25 @@ required to advance that state.
 
 ### `tooling/plan_manager.py`
 
-_No module-level docstring found._
+Provides a command-line interface for managing the agent's Plan Registry.
+
+This script is the administrative tool for the Plan Registry, a key component
+of the Context-Free Development Cycle (CFDC) that enables hierarchical and
+modular planning. The registry, located at `knowledge_core/plan_registry.json`,
+maps human-readable, logical names to the file paths of specific plans. This
+decouples the `call_plan` directive from hardcoded file paths, making plans
+more reusable and the system more robust.
+
+This CLI provides three essential functions:
+- **register**: Associates a new logical name with a plan file path, adding it
+  to the central registry.
+- **deregister**: Removes an existing logical name and its associated path from
+  the registry.
+- **list**: Displays all current name-to-path mappings in the registry.
+
+By providing a simple, standardized interface for managing this library of
+reusable plans, this tool improves the agent's ability to compose complex
+workflows from smaller, validated sub-plans.
 
 ### `tooling/protocol_auditor.py`
 
@@ -617,6 +696,18 @@ This process ensures that `AGENTS.md` and other protocol documents are not edite
 manually but are instead generated from a validated, single source of truth,
 making the agent's protocols robust, verifiable, and maintainable.
 
+### `tooling/protocol_updater.py`
+
+A command-line tool for programmatically updating protocol source files.
+
+This script provides the mechanism for the agent to perform self-correction
+by modifying its own governing protocols based on structured, actionable
+lessons. It is a key component of the Protocol-Driven Self-Correction (PDSC)
+workflow.
+
+The tool operates on the .protocol.json files located in the `protocols/`
+directory, performing targeted updates based on command-line arguments.
+
 ### `tooling/research.py`
 
 A unified, constraint-based interface for all research and data-gathering operations.
@@ -663,6 +754,14 @@ The key features of the generated plan are:
 This tool helps enforce a consistent and effective methodology for complex
 investigative tasks, improving the quality and reliability of the research
 findings.
+
+### `tooling/self_correction_orchestrator.py`
+
+Orchestrates the Protocol-Driven Self-Correction (PDSC) workflow.
+
+This script is the engine of the automated feedback loop. It reads structured,
+actionable lessons from `knowledge_core/lessons.jsonl` and uses the
+`protocol_updater.py` tool to apply them to the source protocol files.
 
 ### `tooling/self_improvement_cli.py`
 
@@ -732,23 +831,110 @@ and understand the structure of the repository without having to read every file
 
 ### `tooling/test_dependency_graph_generator.py`
 
-_No module-level docstring found._
+Unit tests for the dependency graph generator tool.
+
+This test suite validates the functionality of the `dependency_graph_generator.py`
+script. It uses a temporary file structure created in the `setUp` method to
+simulate a repository with both JavaScript (`package.json`) and Python
+(`requirements.txt`) projects, including nested and root-level files.
+
+The tests cover:
+- File discovery for both project types.
+- Correct parsing of package names and dependencies from each file type.
+- The successful generation of a complete dependency graph, including both
+  internal and external dependencies and the correct creation of nodes and edges.
 
 ### `tooling/test_knowledge_compiler.py`
 
-_No module-level docstring found._
+Unit tests for the knowledge_compiler.py script.
+
+This test suite verifies that the knowledge compiler can correctly parse
+a mock post-mortem report and generate a structured, machine-readable
+lessons.jsonl file. It ensures that the generated lessons conform to the
+expected JSON schema, including having unique IDs and a 'pending' status.
 
 ### `tooling/test_master_control.py`
 
+Integration tests for the master control FSM and CFDC workflow.
+
+This test suite provides end-to-end validation of the `master_control.py`
+orchestrator. It uses a multi-threaded approach to simulate the interactive
+nature of the agent's workflow, where the FSM runs in one thread and the test
+script acts as the "agent" in the main thread, creating files like `plan.txt`
+and `step_complete.txt` to drive the FSM through its states.
+
+The suite is divided into two main classes:
+- `TestMasterControlGraphFullWorkflow`: Validates the entire "atomic" workflow
+  from orientation through planning, execution, analysis, and post-mortem,
+  ensuring the FSM transitions correctly through all its states.
+- `TestCFDCWorkflow`: Focuses specifically on the Context-Free Development
+  Cycle features, including:
+    - Executing hierarchical plans using the `call_plan` directive.
+    - Using the Plan Registry to call sub-plans by a logical name.
+    - Verifying that the system correctly halts when the maximum recursion
+      depth is exceeded, ensuring decidability.
+
+### `tooling/test_protocol_auditor.py`
+
 _No module-level docstring found._
+
+### `tooling/test_protocol_updater.py`
+
+Unit tests for the protocol_updater.py script.
+
+This test suite verifies that the protocol updater tool can correctly
+find and modify protocol source files in a controlled, temporary
+environment. It ensures that tools can be added to protocols and that
+edge cases like duplicate additions are handled gracefully.
+
+### `tooling/test_self_correction_orchestrator.py`
+
+Unit tests for the self_correction_orchestrator.py script.
+
+This test suite verifies the end-to-end functionality of the automated
+self-correction workflow. It ensures that the orchestrator can correctly
+read structured lessons, invoke the protocol_updater.py script as a
+subprocess with the correct arguments, and update the lesson status file
+to reflect the outcome.
 
 ### `tooling/test_self_improvement_cli.py`
 
-_No module-level docstring found._
+Unit tests for the self-improvement analysis CLI tool.
+
+This test suite validates the `analyze_planning_efficiency` function from the
+`self_improvement_cli.py` script. The primary goal is to ensure that the tool
+can correctly parse an activity log and identify tasks that involved multiple
+plan revisions, which is a key indicator of potential inefficiency.
+
+The test creates a temporary log file (`.jsonl`) containing a mix of scenarios:
+- A task with a single, efficient planning step.
+- A task with three separate plan revisions.
+- A task that uses an alternative but valid log format for plan updates.
+- A task with no planning actions at all.
+
+The test asserts that the analysis correctly identifies only the inefficient
+tasks and accurately counts the number of plan revisions for each, ensuring the
+tool provides reliable feedback for the agent's self-improvement loop.
 
 ### `tooling/test_symbol_map_generator.py`
 
-_No module-level docstring found._
+Unit tests for the symbol map generator tool.
+
+This test suite validates the `symbol_map_generator.py` script, which is
+responsible for creating a code symbol index for the repository. The tests
+cover both of the script's operational modes: the preferred `ctags`-based
+generation and the `ast`-based fallback.
+
+The tests include:
+- `test_generate_with_ctags_success`: Mocks the `subprocess.run` call to
+  simulate a successful `ctags` execution. It verifies that the script correctly
+  parses the JSON-lines output from `ctags` and wraps it in a valid JSON object.
+- `test_generate_with_ast_fallback`: Validates that the Python-only `ast` parser
+  correctly traverses a sample Python file and extracts class, method, and
+  function definitions.
+- `test_main_with_ast_fallback`: Mocks the `has_ctags` check to force the main
+  function to use the `ast` fallback, ensuring the end-to-end logic works
+  correctly when `ctags` is not available.
 
 ---
 
@@ -788,6 +974,24 @@ and self-improvement activities.
 
 ### `utils/test_logger.py`
 
-_No module-level docstring found._
+Unit tests for the structured JSONL logger.
+
+This test suite validates the `Logger` class from `utils/logger.py`. Its main
+purpose is to ensure that the logger correctly performs schema validation and
+writes well-formed log entries to the specified log file.
+
+The tests use a temporary directory to house a mock schema file and a log file,
+ensuring the tests are isolated and do not interfere with the actual project logs.
+
+The suite covers two primary scenarios:
+- **Success Case:** It tests that a log entry with a valid data structure that
+  conforms to the schema is successfully written to the JSONL file.
+- **Failure Case:** It tests that a log entry with data that violates the schema
+  (e.g., incorrect data types) correctly raises a `ValidationError` from the
+  `jsonschema` library and that no log file is written, preventing the creation
+  of corrupted logs.
+
+---
+
 
 ---

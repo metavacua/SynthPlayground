@@ -9,7 +9,7 @@ process of parsing that section to extract key insights.
 
 It identifies pairs of "Lesson" and "Action" statements and transforms them
 into a standardized, machine-readable format. These formatted entries are then
-appended to the `knowledge_core/lessons_learned.md` file, which serves as the
+appended to the `knowledge_core/lessons.jsonl` file, which serves as the
 agent's persistent memory of what has worked, what has failed, and what can be
 improved in future tasks.
 
@@ -19,17 +19,17 @@ post-mortem file as its primary argument.
 import argparse
 import re
 import os
+import json
+import uuid
 import datetime
 
-KNOWLEDGE_CORE_PATH = "knowledge_core/lessons_learned.md"
-POSTMORTEM_TEMPLATE_PATH = "postmortem.md"  # For getting the entry template
+KNOWLEDGE_CORE_PATH = "knowledge_core/lessons.jsonl"
 
 
 def extract_lessons_from_postmortem(postmortem_content: str) -> list:
     """
     Parses a post-mortem report to extract lessons learned.
     """
-    # First, isolate the Corrective Actions section to avoid parsing the wrong parts of the file
     lessons_section_match = re.search(
         r"## 3\.\s+Corrective Actions & Lessons Learned\n(.+?)\n---",
         postmortem_content,
@@ -39,27 +39,18 @@ def extract_lessons_from_postmortem(postmortem_content: str) -> list:
         return []
 
     lessons_section = lessons_section_match.group(1)
-
-    # Regex to find all numbered "Lesson:" and "Action:" pairs
-    # This pattern looks for a number, "Lesson:", captures the text,
-    # then "Action:", and captures that text until it hits the next number or the end of the string.
     lesson_pattern = re.compile(
         r"\d\.\s+\*\*Lesson:\*\*\s*(.+?)\n\s+\*\*Action:\*\*\s*(.+?)(?=\n\d\.\s+\*\*Lesson:\*\*|\Z)",
         re.DOTALL,
     )
-
     extracted = re.findall(lesson_pattern, lessons_section)
 
-    # Clean up whitespace and newlines from captured groups
     cleaned_lessons = []
     for lesson, action in extracted:
-        cleaned_lessons.append(
-            {
-                "lesson": lesson.strip().replace("\n", " "),
-                "action": action.strip().replace("\n", " "),
-            }
-        )
-
+        cleaned_lessons.append({
+            "lesson": lesson.strip().replace("\n", " "),
+            "action": action.strip().replace("\n", " "),
+        })
     return cleaned_lessons
 
 
@@ -69,38 +60,62 @@ def extract_metadata_from_postmortem(postmortem_content: str) -> dict:
     """
     task_id_match = re.search(r"\*\*Task ID:\*\*\s*`(.+?)`", postmortem_content)
     date_match = re.search(r"\*\*Completion Date:\*\*\s*`(.+?)`", postmortem_content)
-
     return {
         "task_id": task_id_match.group(1) if task_id_match else "Unknown",
         "date": date_match.group(1) if date_match else str(datetime.date.today()),
     }
 
 
-def format_lesson_entry(metadata: dict, lesson_data: dict) -> str:
+def parse_action_to_command(action_text: str) -> dict:
     """
-    Formats an extracted lesson into the standard entry format.
-    """
-    # For now, we derive Insight from the lesson and use a placeholder for Observation.
-    # This can be improved if the post-mortem format is updated.
-    observation_placeholder = (
-        "This lesson was derived from the post-mortem analysis of the parent task."
-    )
+    Parses a natural language action string into a machine-executable command.
 
-    entry = (
-        "---\n"
-        f"**Task ID:** {metadata['task_id']}\n"
-        f"**Date:** {metadata['date']}\n"
-        f"**Observation:** {observation_placeholder}\n"
-        f"**Insight:** {lesson_data['lesson']}\n"
-        f"**Actionable Guidance:** {lesson_data['action']}\n"
-        "---"
+    This is the core of translating insights into automated actions. It uses
+    pattern matching to identify specific, supported commands.
+    """
+    # Pattern: "Add tool '...' to protocol '...'"
+    add_tool_pattern = re.compile(
+        r"add tool\s+'([^']*)'\s+to protocol\s+'([^']*)'", re.IGNORECASE
     )
-    return entry
+    match = add_tool_pattern.search(action_text)
+    if match:
+        tool_name, protocol_id = match.groups()
+        return {
+            "type": "UPDATE_PROTOCOL",
+            "command": "add-tool",
+            "parameters": {
+                "protocol_id": protocol_id,
+                "tool_name": tool_name,
+            },
+        }
+
+    # Default fallback for actions that are not yet machine-executable
+    return {
+        "type": "UPDATE_PROTOCOL",
+        "command": "placeholder",
+        "parameters": {"description": action_text}
+    }
+
+
+def format_lesson_entry(metadata: dict, lesson_data: dict) -> dict:
+    """
+    Formats an extracted lesson into a structured JSON object.
+    """
+    actionable_command = parse_action_to_command(lesson_data['action'])
+
+    return {
+        "lesson_id": str(uuid.uuid4()),
+        "task_id": metadata["task_id"],
+        "date": metadata["date"],
+        "insight": lesson_data["lesson"],
+        "action": actionable_command,
+        "status": "pending"
+    }
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Parses a post-mortem report and compiles the lessons learned into the knowledge core."
+        description="Parses a post-mortem report and compiles the lessons learned into a structured JSONL file."
     )
     parser.add_argument(
         "postmortem_path", help="The path to the completed post-mortem markdown file."
@@ -124,15 +139,9 @@ def main():
     print(f"Found {len(lessons)} new lesson(s) in '{args.postmortem_path}'.")
 
     with open(KNOWLEDGE_CORE_PATH, "a") as f:
-        # Ensure there's a newline before the first new entry if the file isn't empty
-        if f.tell() > 0:
-            f.write("\n\n")
-
-        for i, lesson in enumerate(lessons):
+        for lesson in lessons:
             formatted_entry = format_lesson_entry(metadata, lesson)
-            f.write(formatted_entry)
-            if i < len(lessons) - 1:
-                f.write("\n\n")
+            f.write(json.dumps(formatted_entry) + "\n")
 
     print(
         f"Successfully compiled {len(lessons)} lesson(s) into '{KNOWLEDGE_CORE_PATH}'."
