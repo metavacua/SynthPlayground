@@ -8,7 +8,8 @@ import datetime
 
 # Add tooling directory to path to import other tools
 sys.path.insert(0, "./tooling")
-from state import AgentState
+from state import AgentState, PlanContext
+from fdc_cli import MAX_RECURSION_DEPTH
 from research import execute_research_protocol
 
 
@@ -90,23 +91,17 @@ class MasterControlGraph:
 
     def do_planning(self, agent_state: AgentState) -> str:
         """
-        Waits for the agent to provide a plan, validates it, and transitions.
-
-        This node polls for `plan.txt`, validates it using `fdc_cli.py`,
-        and on success, loads the plan into the state and transitions.
-        On failure, it enters an error state.
+        Waits for the agent to provide a plan, validates it, and initializes
+        the plan stack for execution.
         """
         print("[MasterControl] State: PLANNING")
         plan_file = "plan.txt"
 
-        # Wait for the agent to create the plan file
         print(f"  - Waiting for agent to create '{plan_file}'...")
         while not os.path.exists(plan_file):
-            time.sleep(1)  # Poll every second
+            time.sleep(1)
 
         print(f"  - Detected '{plan_file}'. Reading and validating plan...")
-
-        # Validate the plan using the fdc_cli.py tool
         validation_cmd = ["python3", "tooling/fdc_cli.py", "validate", plan_file]
         result = subprocess.run(validation_cmd, capture_output=True, text=True)
 
@@ -114,73 +109,108 @@ class MasterControlGraph:
             error_message = f"Plan validation failed:\n{result.stderr}"
             agent_state.error = error_message
             print(f"[MasterControl] {error_message}")
-            # Note: We don't delete the plan file on failure so it can be inspected.
             return self.get_trigger("PLANNING", "ERROR")
 
         print("  - Plan validation successful.")
         with open(plan_file, "r") as f:
-            plan = f.read()
+            plan_content = [line for line in f.read().split("\n") if line.strip()]
 
-        agent_state.plan = plan
+        # Initialize the plan stack with the root plan
+        agent_state.plan_stack.append(
+            PlanContext(plan_path=plan_file, plan_content=plan_content)
+        )
         agent_state.messages.append(
             {
                 "role": "system",
-                "content": f"Validated plan has been set from {plan_file}.",
+                "content": f"Validated plan from {plan_file} has been loaded and execution is starting.",
             }
         )
         print("[MasterControl] Planning Complete.")
-
-        # Clean up the plan file after successful validation
-        os.remove(plan_file)
-        print(f"  - Cleaned up '{plan_file}'.")
-
+        # We keep plan.txt for now for traceability during execution
         return self.get_trigger("PLANNING", "EXECUTING")
 
     def do_execution(self, agent_state: AgentState) -> str:
         """
-        Executes the plan step-by-step, waiting for agent confirmation.
-
-        This node processes the plan one step at a time. For each step, it
-        waits for the agent to create a `step_complete.txt` file, signaling
-        that the step's action has been performed.
+        Executes the plan using a stack-based approach to handle sub-plans (CFDC).
         """
         print("[MasterControl] State: EXECUTING")
 
-        # Filter out empty lines from the plan
-        plan_steps = [step for step in agent_state.plan.split("\n") if step.strip()]
-
-        if agent_state.current_step_index < len(plan_steps):
-            step = plan_steps[agent_state.current_step_index]
-            step_complete_file = "step_complete.txt"
-
-            print(f"  - Waiting for agent to complete step: {step}")
-
-            # Wait for the agent to signal step completion
-            while not os.path.exists(step_complete_file):
-                time.sleep(1)
-
-            print(f"  - Detected '{step_complete_file}'.")
-            with open(step_complete_file, "r") as f:
-                result = f.read()
-
-            agent_state.messages.append(
-                {
-                    "role": "system",
-                    "content": f"Completed step {agent_state.current_step_index + 1}: {step}\nResult: {result}",
-                }
-            )
-
-            # Clean up the file and advance to the next step
-            os.remove(step_complete_file)
-            agent_state.current_step_index += 1
-
-            print(
-                f"  - Step {agent_state.current_step_index} of {len(plan_steps)} signaled complete."
-            )
-            return self.get_trigger("EXECUTING", "EXECUTING")
-        else:
-            print("[MasterControl] Execution Complete.")
+        if not agent_state.plan_stack:
+            print("[MasterControl] Execution Complete (plan stack is empty).")
+            # Clean up the root plan file now that execution is fully complete
+            if os.path.exists("plan.txt"):
+                os.remove("plan.txt")
             return self.get_trigger("EXECUTING", "AWAITING_ANALYSIS")
+
+        # Always work with the plan at the top of the stack
+        current_context = agent_state.plan_stack[-1]
+        plan_steps = current_context.plan_content
+
+        # If we've finished all steps in the current plan, pop it and continue
+        if current_context.current_step >= len(plan_steps):
+            agent_state.plan_stack.pop()
+            print(
+                f"  - Finished sub-plan '{current_context.plan_path}'. Resuming parent."
+            )
+            # Re-enter the execution loop immediately to process the parent plan
+            return self.get_trigger("EXECUTING", "EXECUTING")
+
+        step = plan_steps[current_context.current_step].strip()
+        command, *args = step.split()
+
+        # Handle the new 'call_plan' directive
+        if command == "call_plan":
+            if len(agent_state.plan_stack) > MAX_RECURSION_DEPTH:
+                agent_state.error = f"Maximum recursion depth ({MAX_RECURSION_DEPTH}) exceeded."
+                print(f"[MasterControl] Error: {agent_state.error}")
+                return self.get_trigger("EXECUTING", "ERROR")
+
+            sub_plan_path = args[0]
+            print(f"  - Calling sub-plan: {sub_plan_path}")
+            try:
+                with open(sub_plan_path, "r") as f:
+                    sub_plan_content = [
+                        line for line in f.read().split("\n") if line.strip()
+                    ]
+            except FileNotFoundError:
+                agent_state.error = f"Sub-plan file not found: {sub_plan_path}"
+                print(f"[MasterControl] Error: {agent_state.error}")
+                return self.get_trigger("EXECUTING", "ERROR")
+
+            # Advance the current plan's step *before* pushing the new one
+            current_context.current_step += 1
+
+            # Push the new plan onto the stack
+            new_context = PlanContext(
+                plan_path=sub_plan_path, plan_content=sub_plan_content
+            )
+            agent_state.plan_stack.append(new_context)
+            return self.get_trigger("EXECUTING", "EXECUTING")
+
+        # --- Standard Step Execution ---
+        step_complete_file = "step_complete.txt"
+        print(f"  - Waiting for agent to complete step: {step}")
+        while not os.path.exists(step_complete_file):
+            time.sleep(1)
+
+        print(f"  - Detected '{step_complete_file}'.")
+        with open(step_complete_file, "r") as f:
+            result = f.read()
+
+        agent_state.messages.append(
+            {
+                "role": "system",
+                "content": f"Completed step {current_context.current_step + 1} in '{current_context.plan_path}': {step}\nResult: {result}",
+            }
+        )
+
+        os.remove(step_complete_file)
+        current_context.current_step += 1
+
+        print(
+            f"  - Step {current_context.current_step} of {len(plan_steps)} in '{current_context.plan_path}' signaled complete."
+        )
+        return self.get_trigger("EXECUTING", "EXECUTING")
 
     def do_awaiting_analysis(self, agent_state: AgentState) -> str:
         """

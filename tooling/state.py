@@ -3,6 +3,15 @@ from typing import List, Dict, Any, Optional
 
 
 @dataclass
+class PlanContext:
+    """Represents the execution context of a single plan file."""
+
+    plan_path: str
+    plan_content: List[str]
+    current_step: int = 0
+
+
+@dataclass
 class AgentState:
     """
     Represents the complete state of the agent's workflow at any given time.
@@ -10,7 +19,9 @@ class AgentState:
     """
 
     task: str
-    plan: Optional[str] = None
+    # The plan_stack replaces the old flat plan. The top of the stack is the
+    # currently executing plan.
+    plan_stack: List[PlanContext] = field(default_factory=list)
     messages: List[Dict[str, Any]] = field(default_factory=list)
 
     # Orientation Status
@@ -18,7 +29,6 @@ class AgentState:
     vm_capability_report: Optional[str] = None
 
     # Research & Execution
-    current_step_index: int = 0
     research_findings: Dict[str, Any] = field(default_factory=dict)
     draft_postmortem_path: Optional[str] = None
 
@@ -31,11 +41,17 @@ class AgentState:
     def to_json(self):
         return {
             "task": self.task,
-            "plan": self.plan,
+            "plan_stack": [
+                {
+                    "plan_path": ctx.plan_path,
+                    "current_step": ctx.current_step,
+                    "plan_length": len(ctx.plan_content),
+                }
+                for ctx in self.plan_stack
+            ],
             "messages": self.messages,
             "orientation_complete": self.orientation_complete,
             "vm_capability_report": self.vm_capability_report,
-            "current_step_index": self.current_step_index,
             "research_findings": self.research_findings,
             "draft_postmortem_path": self.draft_postmortem_path,
             "final_report": self.final_report,

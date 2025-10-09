@@ -4,12 +4,13 @@ import os
 import threading
 import time
 import datetime
+from unittest.mock import patch
 
 # Add tooling directory to path to import other tools
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
 from master_control import MasterControlGraph
-from state import AgentState
+from state import AgentState, PlanContext
 
 
 class TestMasterControlGraphFullWorkflow(unittest.TestCase):
@@ -154,8 +155,8 @@ A test analysis.
         self.assertIsNone(
             final_state.error, f"FSM ended in an error state: {final_state.error}"
         )
-        self.assertEqual(final_state.plan, test_plan)
-        self.assertEqual(final_state.current_step_index, len(plan_steps))
+        # The plan is no longer stored directly; we assert the stack is empty on completion.
+        self.assertEqual(len(final_state.plan_stack), 0)
 
         # Assert that the FSM ended in the correct pre-submission state
         self.assertIn(
@@ -198,6 +199,195 @@ A test analysis.
         self.assertFalse(os.path.exists(self.step_complete_file))
         self.assertFalse(os.path.exists(self.draft_postmortem_file))
         self.assertFalse(os.path.exists(self.analysis_complete_file))
+
+
+class TestCFDCWorkflow(unittest.TestCase):
+    """
+    Tests the new Context-Free Development Cycle (CFDC) functionality,
+    including hierarchical plans and recursion depth limits.
+    """
+
+    def setUp(self):
+        self.task_id = "test-cfdc-task"
+        self.sub_plan_file = "sub_plan.txt"
+        self.step_complete_file = "step_complete.txt"
+        self.analysis_complete_file = "analysis_complete.txt"
+        self.output_file = "sub_plan_output.txt"
+        self.draft_postmortem_file = f"DRAFT-{self.task_id}.md"
+        self.root_plan_file = "plan.txt"
+        self.cleanup_files()
+
+    def tearDown(self):
+        self.cleanup_files()
+
+    def cleanup_files(self):
+        """Helper function to remove all files created during the test."""
+        files_to_delete = [
+            self.sub_plan_file,
+            self.step_complete_file,
+            self.analysis_complete_file,
+            self.output_file,
+            self.root_plan_file,
+            self.draft_postmortem_file,
+        ]
+        for f in os.listdir("postmortems"):
+            if self.task_id in f:
+                files_to_delete.append(os.path.join("postmortems", f))
+        for f in files_to_delete:
+            if os.path.exists(f):
+                os.remove(f)
+
+    def test_hierarchical_plan_execution(self):
+        """
+        Validates that the FSM can execute a plan that calls a sub-plan,
+        where each plan is a valid, self-contained FSM traversal.
+        """
+        # 1. Define a complete, valid sub-plan
+        sub_plan_content = (
+            'set_plan "Sub-plan"\n'
+            'plan_step_complete "Transition to executing in sub-plan"\n'
+            f'create_file_with_block {self.output_file} "hello from sub-plan"\n'
+            f"run_in_bash_session close --task-id {self.task_id}-sub\n"
+            "submit"
+        )
+        with open(self.sub_plan_file, "w") as f:
+            f.write(sub_plan_content)
+
+        # 2. Define a complete, valid main plan that calls the sub-plan
+        main_plan_content = (
+            'set_plan "Hierarchical plan"\n'
+            'plan_step_complete "Transition to executing in main plan"\n'
+            f"call_plan {self.sub_plan_file}\n"
+            f"run_in_bash_session close --task-id {self.task_id}\n"
+            "submit"
+        )
+        with open(self.root_plan_file, "w") as f:
+            f.write(main_plan_content)
+
+        final_state_container = {}
+
+        # 3. Run the FSM in a thread
+        def run_fsm():
+            initial_state = AgentState(task=self.task_id)
+            graph = MasterControlGraph()
+            final_state = graph.run(initial_state)
+            final_state_container["final_state"] = final_state
+            final_state_container["final_fsm_state"] = graph.current_state
+
+        fsm_thread = threading.Thread(target=run_fsm)
+        fsm_thread.start()
+
+        # 4. Signal completion for every step in the correct order
+        time.sleep(1.5)
+        # Main plan steps
+        with open(self.step_complete_file, "w") as f:
+            f.write("set_plan complete.")
+        time.sleep(1.5)
+        with open(self.step_complete_file, "w") as f:
+            f.write("plan_step_complete complete.")
+        time.sleep(1.5)
+        # Sub-plan steps
+        with open(self.step_complete_file, "w") as f:
+            f.write("sub set_plan complete.")
+        time.sleep(1.5)
+        with open(self.step_complete_file, "w") as f:
+            f.write("sub plan_step_complete complete.")
+        time.sleep(1.5)
+        # Manually perform the action from the plan step, as the agent would
+        with open(self.output_file, "w") as f:
+            f.write("hello from sub-plan")
+        with open(self.step_complete_file, "w") as f:
+            f.write("sub create_file complete.")
+        time.sleep(1.5)
+        with open(self.step_complete_file, "w") as f:
+            f.write("sub close complete.")
+        time.sleep(1.5)
+        with open(self.step_complete_file, "w") as f:
+            f.write("sub submit complete.")
+        time.sleep(1.5)
+        # Final main plan steps
+        with open(self.step_complete_file, "w") as f:
+            f.write("main close complete.")
+        time.sleep(1.5)
+        with open(self.step_complete_file, "w") as f:
+            f.write("main submit complete.")
+
+        # 5. Wait for the FSM to create the draft post-mortem
+        draft_created = False
+        for _ in range(10):
+            if os.path.exists(self.draft_postmortem_file):
+                draft_created = True
+                break
+            time.sleep(0.5)
+        self.assertTrue(
+            draft_created, "Draft post-mortem file was not created in time."
+        )
+
+        # 6. Signal analysis is complete
+        with open(self.analysis_complete_file, "w") as f:
+            f.write("Analysis complete.")
+
+        # 7. Wait for FSM thread to finish
+        fsm_thread.join(timeout=30)
+        self.assertFalse(fsm_thread.is_alive(), "FSM thread timed out.")
+
+        # 8. Assertions
+        final_state = final_state_container["final_state"]
+        self.assertIsNone(final_state.error, f"FSM ended in error: {final_state.error}")
+        self.assertEqual(final_state_container["final_fsm_state"], "AWAITING_SUBMISSION")
+
+        self.assertTrue(os.path.exists(self.output_file))
+        with open(self.output_file, "r") as f:
+            self.assertEqual(f.read(), "hello from sub-plan")
+
+    def test_recursion_depth_limit(self):
+        """
+        Validates that the FSM correctly terminates when the recursion
+        depth limit is exceeded.
+        """
+        # 1. Create a fully valid, self-contained plan that calls itself.
+        recursive_plan_content = (
+            'set_plan "Recursive plan"\n'
+            'plan_step_complete "Transition to executing"\n'
+            f"call_plan {self.root_plan_file}\n"
+            f"run_in_bash_session close --task-id {self.task_id}-recursive\n"
+            "submit"
+        )
+        with open(self.root_plan_file, "w") as f:
+            f.write(recursive_plan_content)
+
+        final_state_container = {}
+
+        # 2. Run the FSM in a thread, patching the depth limit for a fast test
+        def run_fsm():
+            initial_state = AgentState(task=self.task_id)
+            graph = MasterControlGraph()
+            with patch("master_control.MAX_RECURSION_DEPTH", 3):
+                final_state = graph.run(initial_state)
+            final_state_container["final_state"] = final_state
+            final_state_container["final_fsm_state"] = graph.current_state
+
+        fsm_thread = threading.Thread(target=run_fsm)
+        fsm_thread.start()
+
+        # 3. Signal completion for the first two steps to kick off the recursion
+        time.sleep(1.5)
+        with open(self.step_complete_file, "w") as f:
+            f.write("set_plan complete.")
+        time.sleep(1.5)
+        with open(self.step_complete_file, "w") as f:
+            f.write("plan_step_complete complete.")
+
+        # 4. Wait for FSM to fail on its own due to recursion
+        fsm_thread.join(timeout=15)
+        self.assertFalse(fsm_thread.is_alive(), "FSM thread timed out.")
+
+        # 5. Assertions
+        final_state = final_state_container["final_state"]
+        self.assertEqual(final_state_container["final_fsm_state"], "ERROR")
+        self.assertIsNotNone(final_state.error)
+        self.assertIn("Maximum recursion depth", final_state.error)
+        self.assertIn("exceeded", final_state.error)
 
 
 if __name__ == "__main__":

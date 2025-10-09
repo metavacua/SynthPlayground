@@ -33,6 +33,7 @@ POSTMORTEM_TEMPLATE_PATH = os.path.join(ROOT_DIR, "postmortem.md")
 POSTMORTEMS_DIR = os.path.join(ROOT_DIR, "postmortems")
 LOG_FILE_PATH = os.path.join(ROOT_DIR, "logs", "activity.log.jsonl")
 FSM_DEF_PATH = os.path.join(ROOT_DIR, "tooling", "fdc_fsm.json")
+MAX_RECURSION_DEPTH = 10  # Safety limit for hierarchical plans
 
 ACTION_TYPE_MAP = {
     "set_plan": "plan_op",
@@ -48,6 +49,7 @@ ACTION_TYPE_MAP = {
     "rename_file": "move_op",
     "run_in_bash_session": "tool_exec",
     "for_each_file": "loop_op",
+    # 'call_plan' is a meta-directive for the executor, not the FSM validator.
 }
 
 # --- CLI Subcommands & Helpers ---
@@ -166,9 +168,23 @@ def _validate_action(line_num, line_content, state, fsm, fs, placeholders):
 
 
 def _validate_plan_recursive(
-    lines, start_index, indent_level, state, fs, placeholders, fsm
+    lines,
+    start_index,
+    indent_level,
+    state,
+    fs,
+    placeholders,
+    fsm,
+    recursion_depth,
 ):
-    """Recursively validates a block of a plan."""
+    """Recursively validates a block of a plan, now with recursion detection."""
+    if recursion_depth > MAX_RECURSION_DEPTH:
+        print(
+            f"Error: Plan validation failed. Maximum recursion depth of {MAX_RECURSION_DEPTH} exceeded.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
     i = start_index
     while i < len(lines):
         line_num, line_content = lines[i]
@@ -184,8 +200,51 @@ def _validate_plan_recursive(
 
         line_content = line_content.strip()
         command = line_content.split()[0]
+        args = line_content.split()[1:]
 
-        if command == "for_each_file":
+        if command == "call_plan":
+            # 'call_plan' is a meta-command for the executor. For the validator,
+            # we just need to ensure the sub-plan is itself valid from start to finish.
+            # We do not pass the current state; each plan must be a complete FSM traversal.
+            sub_plan_path = args[0]
+            try:
+                with open(sub_plan_path, "r") as f:
+                    sub_plan_lines = [
+                        (sub_i, sub_line.rstrip("\n"))
+                        for sub_i, sub_line in enumerate(f)
+                        if sub_line.strip()
+                    ]
+            except FileNotFoundError:
+                print(
+                    f"Error on line {line_num+1}: Sub-plan file not found at '{sub_plan_path}'.",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+
+            print(f"  Line {line_num+1}: Validating sub-plan '{sub_plan_path}'...")
+            # Validate the sub-plan as a complete, independent FSM.
+            # It starts from the beginning of the FSM, not the current state.
+            sub_final_state, _, _ = _validate_plan_recursive(
+                sub_plan_lines,
+                0,
+                0,
+                fsm["start_state"],  # Sub-plan must be valid on its own
+                fs.copy(),  # Pass a copy of the filesystem state
+                {},
+                fsm,
+                recursion_depth + 1,
+            )
+
+            if sub_final_state not in fsm["accept_states"]:
+                print(
+                    f"Error in sub-plan '{sub_plan_path}': Plan does not end in an accepted state.",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+
+            print(f"  Sub-plan '{sub_plan_path}' is valid. Resuming parent plan.")
+            i += 1
+        elif command == "for_each_file":
             loop_depth = len(placeholders) + 1
             placeholder_key = f"{{file{loop_depth}}}"
             dummy_file = f"dummy_file_for_loop_{loop_depth}"
@@ -213,6 +272,7 @@ def _validate_plan_recursive(
                 loop_fs,
                 new_placeholders,
                 fsm,
+                recursion_depth,  # Loop does not increase recursion depth
             )
 
             fs.update(loop_fs)  # Merge FS changes
@@ -227,6 +287,7 @@ def _validate_plan_recursive(
 
 
 def validate_plan(plan_filepath):
+    """Validates a plan, now supporting hierarchical (CFDC) plans."""
     try:
         with open(FSM_DEF_PATH, "r") as f:
             fsm = json.load(f)
@@ -247,7 +308,7 @@ def validate_plan(plan_filepath):
 
     print(f"Starting validation with {len(simulated_fs)} files pre-loaded...")
     final_state, _, _ = _validate_plan_recursive(
-        lines, 0, 0, fsm["start_state"], simulated_fs, {}, fsm
+        lines, 0, 0, fsm["start_state"], simulated_fs, {}, fsm, 0
     )
 
     if final_state in fsm["accept_states"]:
@@ -301,41 +362,15 @@ def analyze_plan(plan_filepath):
     print(f"  - Modality:   {modality}")
 
 
-def check_for_recursion(plan_filepath):
-    """
-    Scans a plan file for disallowed recursive FDC CLI calls.
-    Allowed recursive calls are 'close' and 'lint'.
-    """
-    print("\n--- Running Recursion Check ---")
-    allowed_commands = {"close", "lint"}
-    try:
-        with open(plan_filepath, "r") as f:
-            for i, line in enumerate(f):
-                # Check for calls to the FDC CLI tool itself
-                if "fdc_cli.py" in line:
-                    # Check if any of the allowed commands are in the line
-                    if not any(cmd in line for cmd in allowed_commands):
-                        print(
-                            f"Validation failed: Disallowed recursive call to 'fdc_cli.py' found on line {i+1}.",
-                            file=sys.stderr,
-                        )
-                        print(
-                            f"Error: Plans must not trigger new FDC cycles. Allowed recursive commands are: {list(allowed_commands)}.",
-                            file=sys.stderr,
-                        )
-                        sys.exit(1)
-        print("Recursion check passed. No disallowed calls found.")
-    except FileNotFoundError:
-        print(f"Error: Plan file not found at {plan_filepath}", file=sys.stderr)
-        sys.exit(1)
-
-
 def lint_plan(plan_filepath):
-    """Runs a comprehensive suite of checks on a plan file."""
+    """
+    Runs a comprehensive suite of checks on a plan file.
+    The old recursion check is now obsolete, as the max depth is checked
+    directly within the new hierarchical validator.
+    """
     print(f"--- Starting Comprehensive Lint for {plan_filepath} ---")
     validate_plan(plan_filepath)
     analyze_plan(plan_filepath)
-    check_for_recursion(plan_filepath)
     print("\n--- Linting Complete: All checks passed. ---")
 
 
