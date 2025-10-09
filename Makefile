@@ -40,7 +40,7 @@ AGENT_PROTOCOLS_MD = $(wildcard protocols/*.protocol.md)
 AGENT_PROTOCOLS_AUTODOC = $(wildcard protocols/*.autodoc.md)
 
 # The AGENTS.md file is a target that depends on all its source files.
-AGENTS.md: $(AGENT_PROTOCOLS_JSON) $(AGENT_PROTOCOLS_MD) $(AGENT_PROTOCOLS_AUTODOC) $(SCHEMA_FILE) $(COMPILER_SCRIPT)
+AGENTS.md: $(AGENT_PROTOCOLS_JSON) $(AGENT_PROTOCOLS_MD) $(AGENT_PROTOCOLS_AUTODOC) $(SCHEMA_FILE) $(COMPILER_SCRIPT) knowledge_core/SYSTEM_DOCUMENTATION.md
 	@echo "--> Compiling agent protocols into AGENTS.md and Knowledge Graph..."
 	@python3 $(COMPILER_SCRIPT) \
 		--source-dir protocols \
