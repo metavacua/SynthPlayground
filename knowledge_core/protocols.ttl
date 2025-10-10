@@ -119,6 +119,10 @@
     proto:hasRule <file:///app/protocols/require-authorization-token> ;
     schema:description "Requires explicit user authorization via a token file for the use of the destructive `reset_all` tool." .
 
+<file:///app/protocols/reset-all-prohibition-001> proto:associatedTool <file:///app/protocols/reset_all> ;
+    proto:hasRule <file:///app/protocols/no-reset-all> ;
+    schema:description "A high-priority protocol that unconditionally forbids the use of the `reset_all` tool." .
+
 <file:///app/protocols/self-correction-protocol-001> proto:associatedTool <file:///app/protocols/initiate_memory_recording>,
         <file:///app/protocols/tooling/code_suggester.py>,
         <file:///app/protocols/tooling/knowledge_compiler.py>,
@@ -216,6 +220,9 @@
 
 <file:///app/protocols/max-recursion-depth> proto:enforcement "The execution engine must check the stack depth before every 'call_plan' execution and terminate with a fatal error if the limit would be exceeded." ;
     schema:description "To ensure decidability, the plan execution stack must not exceed a system-wide constant, MAX_RECURSION_DEPTH. This prevents infinite recursion and guarantees all processes will terminate." .
+
+<file:///app/protocols/no-reset-all> proto:enforcement "This rule is enforced by the `master_control.py` orchestrator, which will immediately terminate the workflow with an error if an attempt is made to call this tool." ;
+    schema:description "The `reset_all` tool is strictly forbidden under all circumstances. It is a legacy tool that has been superseded by more granular and safer methods of workspace management. Its use is considered a critical failure." .
 
 <file:///app/protocols/non-compliance-architectural-deviation> proto:enforcement "Agent must revert non-compliant changes and re-implement them according to standards." ;
     schema:description "Forbids changes that contradict documented architectural patterns or coding conventions." .
