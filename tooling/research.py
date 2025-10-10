@@ -20,6 +20,7 @@ following native tools into the execution environment:
 - `view_text_website(url: str) -> str`
 """
 from typing import Dict, Any
+from tooling.knowledge_integrator import run_knowledge_integration
 
 def execute_research_protocol(constraints: Dict[str, Any]) -> str:
     """
@@ -30,11 +31,13 @@ def execute_research_protocol(constraints: Dict[str, Any]) -> str:
 
     Args:
         constraints: A dictionary specifying the operational parameters.
-            - target: 'local_filesystem', 'external_web', or 'external_repository'
-            - scope: 'file', 'directory', 'narrow', or 'broad'
+            - target: 'local_filesystem', 'external_web', 'external_repository', or 'knowledge_graph'.
+            - scope: 'file', 'directory', 'narrow', 'broad', or 'enrich'.
             - path: The file or directory path for local filesystem operations.
             - query: The search term for web research.
             - url: The specific URL for direct web access.
+            - input_graph_path: Path to the source knowledge graph.
+            - output_graph_path: Path to save the enriched knowledge graph.
 
     Returns:
         A string containing the result of the research operation.
@@ -77,6 +80,12 @@ def execute_research_protocol(constraints: Dict[str, Any]) -> str:
             return "Error: 'url' not specified for external repository research."
         # Assumes `view_text_website` is available in the execution environment
         return view_text_website(url=url)
+
+    # New Target: Knowledge Graph Enrichment
+    elif target == "knowledge_graph" and scope == "enrich":
+        input_path = constraints.get("input_graph_path", "knowledge_core/protocols.ttl")
+        output_path = constraints.get("output_graph_path", "knowledge_core/enriched_protocols.ttl")
+        return run_knowledge_integration(input_path, output_path)
 
     else:
         return "Error: The provided constraints do not map to a recognized research protocol."
