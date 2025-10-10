@@ -49,12 +49,18 @@ def process_lessons(lessons: list, protocols_dir: str) -> bool:
     """
     changes_made = False
     for lesson in lessons:
-        if lesson.get("status") == "pending":
-            print(f"--- Processing pending lesson: {lesson['lesson_id']} ---")
-            action = lesson.get("action", {})
+        if lesson.get("status") != "pending":
+            continue
 
-            if action.get("type") == "UPDATE_PROTOCOL" and action.get("command") == "add-tool":
-                params = action.get("parameters", {})
+        print(f"--- Processing pending lesson: {lesson['lesson_id']} ---")
+        action = lesson.get("action", {})
+        action_type = action.get("type")
+
+        if action_type == "UPDATE_PROTOCOL":
+            command_name = action.get("command")
+            params = action.get("parameters", {})
+
+            if command_name == "add-tool":
                 protocol_id = params.get("protocol_id")
                 tool_name = params.get("tool_name")
 
@@ -79,7 +85,12 @@ def process_lessons(lessons: list, protocols_dir: str) -> bool:
                     lesson["status"] = "failed"
                 changes_made = True
             else:
-                print(f"Warning: Skipping lesson with unknown action type: {action.get('type')}")
+                # This correctly handles placeholder commands or future commands
+                # that are not yet implemented in the orchestrator.
+                print(f"Warning: Skipping lesson with unhandled command: '{command_name}'")
+        else:
+            # This handles cases where the action type itself is unknown.
+            print(f"Warning: Skipping lesson with unknown action type: '{action_type}'")
 
     return changes_made
 

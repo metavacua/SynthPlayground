@@ -1,0 +1,14 @@
+{
+  "protocol_id": "critic-reset-prohibition-001",
+  "description": "A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool.",
+  "rules": [
+    {
+      "rule_id": "critic-no-reset",
+      "description": "The agent role-playing as the 'Code Review Critic' is explicitly forbidden from invoking the 'reset_all' tool under any circumstances. This is a critical safeguard to prevent the loss of work during the review process.",
+      "enforcement": "This rule is enforced by its inclusion in the compiled AGENTS.md, which serves as the context for the Code Review Critic. The critic must be programmed to parse and adhere to this prohibition."
+    }
+  ],
+  "associated_tools": [
+    "reset_all"
+  ]
+}
