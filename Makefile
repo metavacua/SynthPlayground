@@ -102,6 +102,5 @@ build: docs readme compile-protocols compile-security-protocols enrich-kg
 clean:
 	@echo "--> Removing compiled protocol and documentation artifacts..."
 	@rm -f README.md
-	@rm -f AGENTS.md
 	@rm -f SECURITY.md
 	@rm -f knowledge_core/SYSTEM_DOCUMENTATION.md

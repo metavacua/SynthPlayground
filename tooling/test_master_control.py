@@ -75,7 +75,7 @@ class TestMasterControlRedesigned(unittest.TestCase):
         shutil.rmtree(self.test_dir)
 
 
-    @patch("master_control.subprocess.run")
+    @patch("tooling.master_control.subprocess.run")
     def test_full_workflow_single_threaded(self, mock_subprocess):
         """
         Tests the full, non-blocking FSM workflow deterministically.
@@ -96,22 +96,22 @@ class TestMasterControlRedesigned(unittest.TestCase):
 
         # --- Test Execution ---
         # 1. ORIENTING
-        with patch("master_control.execute_research_protocol", return_value="Mocked Research Data"):
+        with patch("tooling.master_control.execute_research_protocol", return_value="Mocked Research Data"):
             trigger = self.graph.do_orientation(self.agent_state)
         self.assertEqual(trigger, "orientation_succeeded")
 
         # 2. PLANNING (Standard Workflow)
-        plan_content = 'set_plan "Test Plan"\nplan_step_complete "Done"'
+        plan_content = 'set_plan "Test Plan"\n\nplan_step_complete "Done"'
         with open("plan.txt", "w") as f: f.write(plan_content)
 
-        with patch("master_control.os.path.exists") as mock_exists:
+        with patch("tooling.master_control.os.path.exists") as mock_exists:
             mock_exists.side_effect = lambda path: path == "plan.txt"
             trigger = self.graph.do_planning(self.agent_state)
 
         self.assertEqual(trigger, "plan_is_set")
 
         # 3. EXECUTING
-        with patch("master_control.os.path.exists") as mock_exists:
+        with patch("tooling.master_control.os.path.exists") as mock_exists:
             mock_exists.side_effect = lambda path: path in ['plan.txt', 'step_complete.txt']
             for _ in range(2):
                 with open("step_complete.txt", "w") as f: f.write("done")
@@ -128,7 +128,7 @@ class TestMasterControlRedesigned(unittest.TestCase):
             self.graph.current_state = "AWAITING_ANALYSIS"
 
         # 4. AWAITING_ANALYSIS
-        with patch("master_control.os.path.exists", return_value=True):
+        with patch("tooling.master_control.os.path.exists", return_value=True):
             with open("analysis_complete.txt", "w") as f: f.write("done")
             trigger = self.graph.do_awaiting_analysis(self.agent_state)
         self.assertEqual(trigger, "analysis_complete")

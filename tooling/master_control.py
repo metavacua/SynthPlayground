@@ -44,6 +44,7 @@ from state import AgentState, PlanContext
 from fdc_cli import MAX_RECURSION_DEPTH
 from research import execute_research_protocol
 from research_planner import plan_deep_research
+from plan_parser import parse_plan
 
 PLAN_REGISTRY_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "knowledge_core", "plan_registry.json")
@@ -247,12 +248,9 @@ class MasterControlGraph:
 
         # 3. Push the validated research plan onto the execution stack
         print("  - Research plan is valid. Pushing to execution stack.")
-        plan_lines = [
-            line for line in research_plan_content.splitlines()
-            if line.strip() and not line.strip().startswith("#")
-        ]
+        parsed_commands = parse_plan(research_plan_content)
         agent_state.plan_stack.append(
-            PlanContext(plan_path=research_plan_file, plan_content=plan_lines)
+            PlanContext(plan_path=research_plan_file, commands=parsed_commands)
         )
         agent_state.messages.append(
             {
