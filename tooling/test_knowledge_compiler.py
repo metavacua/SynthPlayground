@@ -90,5 +90,80 @@ class TestKnowledgeCompiler(unittest.TestCase):
         self.assertEqual(lesson2["action"]["command"], "placeholder")
         self.assertIn("not machine-readable", lesson2["action"]["parameters"]["description"])
 
+class TestKnowledgeCompilerAdvanced(unittest.TestCase):
+
+    def setUp(self):
+        """Set up a temporary directory for advanced parsing tests."""
+        self.test_dir = tempfile.mkdtemp()
+        self.postmortem_path = os.path.join(self.test_dir, "advanced_postmortem.md")
+        # This mock post-mortem uses a different header and action format
+        postmortem_content = """
+# Post-Mortem: Advanced Failure Analysis
+**Task ID:** `adv-test-456`
+**Completion Date:** `2025-10-10`
+---
+## 5. Proposed Corrective Actions
+
+1.  A tool is no longer suitable for a protocol.
+    **Action:** Deprecate tool 'old_tool' from protocol 'legacy-protocol-002'.
+
+2.  **Lesson:** The `reset_all` tool is dangerous and was used incorrectly.
+    **Action:** The `self_improvement_cli.py` script should be updated to flag its usage.
+
+3.  A new protocol `reset-all-authorization-001` will be created to programmatically block the execution of `reset_all()`.
+---
+"""
+        with open(self.postmortem_path, "w") as f:
+            f.write(postmortem_content)
+
+        self.lessons_path = os.path.join(self.test_dir, "lessons.jsonl")
+        import tooling.knowledge_compiler
+        self.original_path = tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH
+        tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH = self.lessons_path
+
+        import sys
+        self.original_argv = sys.argv
+        sys.argv = ["tooling/knowledge_compiler.py", self.postmortem_path]
+
+    def tearDown(self):
+        """Clean up the temporary directory and restore original state."""
+        shutil.rmtree(self.test_dir)
+        import tooling.knowledge_compiler
+        tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH = self.original_path
+        import sys
+        sys.argv = self.original_argv
+
+    def test_advanced_parsing_and_deprecate_command(self):
+        """
+        Verify the compiler can handle different section headers and parse
+        the 'deprecate-tool' command.
+        """
+        compile_knowledge()
+
+        self.assertTrue(os.path.exists(self.lessons_path))
+        with open(self.lessons_path, "r") as f:
+            lines = f.readlines()
+        self.assertEqual(len(lines), 3)
+
+        lesson1 = json.loads(lines[0])
+        lesson2 = json.loads(lines[1])
+        lesson3 = json.loads(lines[2])
+
+        # Test 1: Deprecate tool command
+        self.assertIn("A tool is no longer suitable", lesson1["insight"])
+        self.assertEqual(lesson1["action"]["command"], "deprecate-tool")
+        self.assertEqual(lesson1["action"]["parameters"]["tool_name"], "old_tool")
+        self.assertEqual(lesson1["action"]["parameters"]["protocol_id"], "legacy-protocol-002")
+
+        # Test 2: Explicit Lesson and Placeholder Action
+        self.assertEqual(lesson2["insight"], "The `reset_all` tool is dangerous and was used incorrectly.")
+        self.assertEqual(lesson2["action"]["command"], "placeholder")
+        self.assertIn("should be updated to flag", lesson2["action"]["parameters"]["description"])
+
+        # Test 3: No explicit lesson, whole text becomes the action/insight
+        self.assertIn("A new protocol", lesson3["insight"])
+        self.assertEqual(lesson3["action"]["command"], "placeholder")
+
+
 if __name__ == "__main__":
     unittest.main()

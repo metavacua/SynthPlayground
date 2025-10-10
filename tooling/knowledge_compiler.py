@@ -29,9 +29,10 @@ KNOWLEDGE_CORE_PATH = "knowledge_core/lessons.jsonl"
 def extract_lessons_from_postmortem(postmortem_content: str) -> list:
     """
     Parses a post-mortem report to extract lessons learned.
+    Handles multiple possible section headers and formats.
     """
     lessons_section_match = re.search(
-        r"## 3\.\s+Corrective Actions & Lessons Learned\n(.+?)\n---",
+        r"## (?:3\.\s+Corrective Actions & Lessons Learned|5\.\s+Proposed Corrective Actions)\n(.+?)(?:\n---|\Z)",
         postmortem_content,
         re.DOTALL,
     )
@@ -39,18 +40,42 @@ def extract_lessons_from_postmortem(postmortem_content: str) -> list:
         return []
 
     lessons_section = lessons_section_match.group(1)
-    lesson_pattern = re.compile(
-        r"\d\.\s+\*\*Lesson:\*\*\s*(.+?)\n\s+\*\*Action:\*\*\s*(.+?)(?=\n\d\.\s+\*\*Lesson:\*\*|\Z)",
-        re.DOTALL,
+
+    # Pattern to capture each numbered list item
+    item_pattern = re.compile(
+        r"^\d\.\s+(.*?)(?=\n^\d\.\s+|\Z)", re.DOTALL | re.MULTILINE
     )
-    extracted = re.findall(lesson_pattern, lessons_section)
+    items = item_pattern.findall(lessons_section)
 
     cleaned_lessons = []
-    for lesson, action in extracted:
-        cleaned_lessons.append({
-            "lesson": lesson.strip().replace("\n", " "),
-            "action": action.strip().replace("\n", " "),
-        })
+    for item in items:
+        lesson = ""
+        action = ""
+
+        action_match = re.search(r"\*\*Action:\*\*(.*)", item, re.DOTALL)
+
+        if action_match:
+            action = action_match.group(1).strip()
+            # The lesson is whatever comes before "**Action:**"
+            lesson = item[:action_match.start()].strip()
+            # If there's an explicit **Lesson:**, prefer that.
+            lesson_explicit_match = re.search(r"\*\*Lesson:\*\*(.*)", lesson, re.DOTALL)
+            if lesson_explicit_match:
+                lesson = lesson_explicit_match.group(1).strip()
+        else:
+            # No "**Action:**" found, so the whole item is the action.
+            action = item.strip()
+
+        # If we failed to find a lesson text, generate one.
+        if not lesson:
+            lesson = f"A corrective action was proposed: {action}"
+
+        if lesson or action:
+            cleaned_lessons.append({
+                "lesson": lesson.replace("\n", " "),
+                "action": action.replace("\n", " "),
+            })
+
     return cleaned_lessons
 
 
@@ -83,6 +108,22 @@ def parse_action_to_command(action_text: str) -> dict:
         return {
             "type": "UPDATE_PROTOCOL",
             "command": "add-tool",
+            "parameters": {
+                "protocol_id": protocol_id,
+                "tool_name": tool_name,
+            },
+        }
+
+    # Pattern: "Deprecate tool '...' from protocol '...'"
+    deprecate_tool_pattern = re.compile(
+        r"deprecate tool\s+'([^']*)'\s+from protocol\s+'([^']*)'", re.IGNORECASE
+    )
+    match = deprecate_tool_pattern.search(action_text)
+    if match:
+        tool_name, protocol_id = match.groups()
+        return {
+            "type": "UPDATE_PROTOCOL",
+            "command": "deprecate-tool",
             "parameters": {
                 "protocol_id": protocol_id,
                 "tool_name": tool_name,
