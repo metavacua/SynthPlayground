@@ -68,6 +68,14 @@ compile-security-protocols: SECURITY.md
 
 
 # ==============================================================================
+# Knowledge Graph Enrichment
+# ==============================================================================
+enrich-kg: AGENTS.md tooling/knowledge_integrator.py
+	@echo "--> Enriching knowledge graph with external data..."
+	@python3 tooling/knowledge_integrator.py
+
+
+# ==============================================================================
 # Documentation Generation
 # ==============================================================================
 docs:
@@ -85,7 +93,7 @@ audit:
 # Main Targets
 # ==============================================================================
 # A general build target that compiles all protocols and generates documentation.
-build: docs compile-protocols compile-security-protocols
+build: docs compile-protocols compile-security-protocols enrich-kg
 
 clean:
 	@echo "--> Removing compiled protocol and documentation artifacts..."

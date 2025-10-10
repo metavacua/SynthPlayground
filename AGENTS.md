@@ -1003,6 +1003,39 @@ post-mortem file as its primary argument.
   > pattern matching to identify specific, supported commands.
 
 
+### `tooling/knowledge_integrator.py`
+
+Enriches the local knowledge graph with data from external sources like DBPedia.
+
+This script loads the RDF graph generated from the project's protocols,
+identifies key concepts (like tools and rules), queries the DBPedia SPARQL
+endpoint to find related information, and merges the external data into a new,
+enriched knowledge graph.
+
+
+**Public Functions:**
+
+
+- #### `def extract_concepts(graph)`
+
+  > Extracts key concepts (e.g., tools) from the local graph to query externally.
+
+
+- #### `def load_local_graph(graph_file)`
+
+  > Loads the local RDF graph from a file.
+
+
+- #### `def main()`
+
+  > Main execution function.
+
+
+- #### `def query_dbpedia(concept)`
+
+  > Queries DBPedia for a given concept and returns a graph of results.
+
+
 ### `tooling/log_failure.py`
 
 _No module-level docstring found._
