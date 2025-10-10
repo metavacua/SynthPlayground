@@ -665,6 +665,27 @@ This mechanism transforms the authorization from a matter of agent discretion in
 
 ---
 
+```json
+{
+  "protocol_id": "research-protocol-001",
+  "description": "A protocol for conducting systematic research using the integrated research toolchain.",
+  "rules": [
+    {
+      "rule_id": "mandate-research-tools",
+      "description": "For all complex research tasks, the `plan_deep_research` tool MUST be used to generate a plan, and the `execute_research_protocol` tool MUST be used for data gathering. This ensures a systematic and auditable research process.",
+      "enforcement": "Adherence is monitored by the Code Review Critic and through post-mortem analysis of the activity log."
+    }
+  ],
+  "associated_tools": [
+    "tooling.research_planner.plan_deep_research",
+    "tooling.research.execute_research_protocol"
+  ]
+}
+```
+
+
+---
+
 # System Documentation
 
 ---
@@ -911,10 +932,12 @@ scope, and other parameters of the research task. This design allows the calling
 orchestrator (e.g., `master_control.py`) to request information without needing
 to know the underlying implementation details of how that information is fetched.
 
-The current implementation acts as a functional placeholder, simulating the
-different research levels to provide a testable hook for the main FSM loop
-without requiring live external services. It can simulate reading local files,
-listing directories, and fetching content from external URLs.
+This script is designed to be executed by a system that has pre-loaded the
+following native tools into the execution environment:
+- `read_file(filepath: str) -> str`
+- `list_files(path: str = ".") -> list[str]`
+- `google_search(query: str) -> str`
+- `view_text_website(url: str) -> str`
 
 ### `tooling/research_planner.py`
 

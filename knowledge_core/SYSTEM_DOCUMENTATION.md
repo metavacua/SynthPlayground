@@ -244,10 +244,12 @@ scope, and other parameters of the research task. This design allows the calling
 orchestrator (e.g., `master_control.py`) to request information without needing
 to know the underlying implementation details of how that information is fetched.
 
-The current implementation acts as a functional placeholder, simulating the
-different research levels to provide a testable hook for the main FSM loop
-without requiring live external services. It can simulate reading local files,
-listing directories, and fetching content from external URLs.
+This script is designed to be executed by a system that has pre-loaded the
+following native tools into the execution environment:
+- `read_file(filepath: str) -> str`
+- `list_files(path: str = ".") -> list[str]`
+- `google_search(query: str) -> str`
+- `view_text_website(url: str) -> str`
 
 ### `tooling/research_planner.py`
 
