@@ -58,6 +58,10 @@ def process_lessons(lessons: list, protocols_dir: str) -> bool:
 
         if action_type == "UPDATE_PROTOCOL":
             command_name = action.get("command")
+            if not command_name:
+                print(f"Warning: Skipping lesson {lesson['lesson_id']} due to missing 'command' key in action.")
+                continue
+
             params = action.get("parameters", {})
 
             if command_name == "add-tool":
