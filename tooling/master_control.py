@@ -330,16 +330,10 @@ class MasterControlGraph:
 
         # Enforce protocol for destructive commands BEFORE checking for step completion
         if tool_name == "reset_all":
-            auth_token_path = os.path.join(os.getcwd(), "authorization.token")
-            if not os.path.exists(auth_token_path):
-                error_message = "Unauthorized use of 'reset_all'. Authorization token not found."
-                agent_state.error = error_message
-                print(f"[MasterControl] Protocol Violation: {error_message}")
-                return "execution_failed"
-            else:
-                # Consume the one-time token upon successful execution of the step.
-                # We don't remove it here, but after the step is confirmed complete.
-                print("[MasterControl] 'reset_all' is authorized. Proceeding with step.")
+            error_message = "The 'reset_all' tool is deprecated and strictly forbidden. Its use is a critical protocol violation."
+            agent_state.error = error_message
+            print(f"[MasterControl] FATAL: {error_message}")
+            return "execution_failed"
 
         # --- Standard Step Execution ---
         step_complete_file = "step_complete.txt"
@@ -364,13 +358,6 @@ class MasterControlGraph:
 
         os.remove(step_complete_file)
         current_context.current_step += 1
-
-        # If the completed step was 'reset_all', consume the token now.
-        if tool_name == "reset_all":
-            auth_token_path = os.path.join(os.getcwd(), "authorization.token")
-            if os.path.exists(auth_token_path):
-                os.remove(auth_token_path)
-                print("[MasterControl] Consumed 'reset_all' authorization token.")
 
         print(
             f"  - Step {current_context.current_step} of {len(commands)} in '{current_context.plan_path}' signaled complete."
