@@ -83,9 +83,16 @@ enrich-kg: AGENTS.md tooling/knowledge_integrator.py
 # ==============================================================================
 # Documentation Generation
 # ==============================================================================
-docs:
+# Find all non-test Python files in directories scanned by doc_generator.py
+PYTHON_DOC_SOURCES = $(shell find tooling/ utils/ -name "*.py" -not -name "test_*.py")
+
+# Rule to generate the main system documentation from Python source files.
+knowledge_core/SYSTEM_DOCUMENTATION.md: tooling/doc_generator.py $(PYTHON_DOC_SOURCES)
 	@echo "--> Generating system documentation from source..."
 	@python3 tooling/doc_generator.py
+
+# A phony target to easily trigger documentation generation.
+docs: knowledge_core/SYSTEM_DOCUMENTATION.md
 
 readme:
 	@echo "--> Generating README.md from source..."

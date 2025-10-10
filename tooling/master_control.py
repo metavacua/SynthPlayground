@@ -203,7 +203,7 @@ class MasterControlGraph:
             }
         )
         print("[MasterControl] Planning Complete.")
-        return self.get_trigger("PLANNING", "EXECUTING")
+        return "plan_is_set"
 
     def do_researching(self, agent_state: AgentState) -> str:
         """
@@ -335,8 +335,7 @@ class MasterControlGraph:
                 error_message = "Unauthorized use of 'reset_all'. Authorization token not found."
                 agent_state.error = error_message
                 print(f"[MasterControl] Protocol Violation: {error_message}")
-                # This is a critical failure; transition immediately to the ERROR state.
-                return self.get_trigger("EXECUTING", "ERROR")
+                return "execution_failed"
             else:
                 # Consume the one-time token upon successful execution of the step.
                 # We don't remove it here, but after the step is confirmed complete.
