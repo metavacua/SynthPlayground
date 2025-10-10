@@ -15,3 +15,7 @@ When a protocol is modified to include one of these built-in tools in its `assoc
 ## Rule: Definition of a "Functional Change"
 
 A change should be considered "functional" if it correctly modifies the agent's operational capabilities. This is determined by the combined state of the Python source code *and* the protocol source files. The critic's evaluation must consider both aspects to form a complete picture of the change's impact.
+
+## Rule: Adherence to Specific Prohibitions
+
+The critic must be aware of and strictly adhere to all specific prohibition protocols. This includes, but is not limited to, the `critic-reset-prohibition-001` protocol, which forbids the use of the `reset_all` tool. The critic's primary function is analysis, not destructive action.
