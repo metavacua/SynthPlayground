@@ -114,6 +114,23 @@ def parse_action_to_command(action_text: str) -> dict:
             },
         }
 
+    # Pattern: "Update rule '...' in protocol '...' to '...'"
+    update_rule_pattern = re.compile(
+        r"update rule\s+'([^']*)'\s+in protocol\s+'([^']*)'\s+to\s+'([^']*)'", re.IGNORECASE
+    )
+    match = update_rule_pattern.search(action_text)
+    if match:
+        rule_id, protocol_id, description = match.groups()
+        return {
+            "type": "UPDATE_PROTOCOL",
+            "command": "update-rule",
+            "parameters": {
+                "protocol_id": protocol_id,
+                "rule_id": rule_id,
+                "description": description,
+            },
+        }
+
     # Pattern: "Deprecate tool '...' from protocol '...'"
     deprecate_tool_pattern = re.compile(
         r"deprecate tool\s+'([^']*)'\s+from protocol\s+'([^']*)'", re.IGNORECASE

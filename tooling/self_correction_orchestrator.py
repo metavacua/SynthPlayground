@@ -11,6 +11,7 @@ import subprocess
 
 LESSONS_FILE = "knowledge_core/lessons.jsonl"
 UPDATER_SCRIPT = "tooling/protocol_updater.py"
+CODE_SUGGESTER_SCRIPT = "tooling/code_suggester.py"
 
 def load_lessons():
     """Loads all lessons from the JSONL file."""
@@ -63,35 +64,65 @@ def process_lessons(lessons: list, protocols_dir: str) -> bool:
                 continue
 
             params = action.get("parameters", {})
+            command_executed = False
 
             if command_name == "add-tool":
                 protocol_id = params.get("protocol_id")
                 tool_name = params.get("tool_name")
+                if protocol_id and tool_name:
+                    command = [
+                        "python3", UPDATER_SCRIPT, "--protocols-dir", protocols_dir,
+                        "add-tool", "--protocol-id", protocol_id, "--tool-name", tool_name
+                    ]
+                    command_executed = True
+            elif command_name == "update-rule":
+                protocol_id = params.get("protocol_id")
+                rule_id = params.get("rule_id")
+                description = params.get("description")
+                if protocol_id and rule_id and description:
+                    command = [
+                        "python3", UPDATER_SCRIPT, "--protocols-dir", protocols_dir,
+                        "update-rule", "--protocol-id", protocol_id, "--rule-id", rule_id, "--description", description
+                    ]
+                    command_executed = True
 
-                if not (protocol_id and tool_name):
-                    print("Error: Malformed 'add-tool' lesson. Missing parameters.")
-                    lesson["status"] = "failed"
-                    changes_made = True
-                    continue
-
-                command = [
-                    "python3",
-                    UPDATER_SCRIPT,
-                    "--protocols-dir", protocols_dir,
-                    "add-tool",
-                    "--protocol-id", protocol_id,
-                    "--tool-name", tool_name
-                ]
-
+            if command_executed:
                 if run_command(command):
                     lesson["status"] = "applied"
                 else:
                     lesson["status"] = "failed"
                 changes_made = True
             else:
-                # This correctly handles placeholder commands or future commands
-                # that are not yet implemented in the orchestrator.
-                print(f"Warning: Skipping lesson with unhandled command: '{command_name}'")
+                print(f"Warning: Skipping lesson with unhandled or malformed command: '{command_name}'")
+
+        elif action_type == "PROPOSE_CODE_CHANGE":
+            params = action.get("parameters", {})
+            filepath = params.get("filepath")
+            diff = params.get("diff")
+
+            if not (filepath and diff):
+                print("Error: Malformed 'PROPOSE_CODE_CHANGE' lesson. Missing parameters.")
+                lesson["status"] = "failed"
+                changes_made = True
+                continue
+
+            # Note: The diff content needs careful handling for shell quoting.
+            # We will pass it as a single string argument.
+            command = [
+                "python3",
+                CODE_SUGGESTER_SCRIPT,
+                "--filepath", filepath,
+                "--diff", diff
+            ]
+
+            if run_command(command):
+                # For now, "applied" means the suggester ran successfully.
+                # The actual execution of the generated plan is handled by the master controller.
+                lesson["status"] = "applied"
+                print("Code suggestion plan generated. Master controller will execute it.")
+            else:
+                lesson["status"] = "failed"
+            changes_made = True
         else:
             # This handles cases where the action type itself is unknown.
             print(f"Warning: Skipping lesson with unknown action type: '{action_type}'")
