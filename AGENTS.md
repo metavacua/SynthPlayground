@@ -951,7 +951,7 @@ The CLI provides several key commands:
 
 - #### `def validate_plan(plan_filepath)`
 
-  > Validates a plan, now supporting hierarchical (CFDC) plans.
+  > Validates a plan using the centralized parser.
 
 
 ### `tooling/knowledge_compiler.py`
@@ -1111,8 +1111,8 @@ required to advance that state.
 
   - ##### `def do_planning(self, agent_state)`
 
-    > Waits for the agent to provide a plan, validates it, and initializes
-    > the plan stack for execution.
+    > Waits for the agent to provide a plan, validates it, parses it into
+    > commands, and initializes the plan stack for execution.
 
   - ##### `def do_post_mortem(self, agent_state)`
 
@@ -1136,6 +1136,22 @@ required to advance that state.
   - ##### `def run(self, initial_agent_state)`
 
     > Runs the agent's workflow through the FSM.
+
+
+### `tooling/master_control_cli.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > The main entry point for the agent.
+  >
+  > This script initializes the agent's state, runs the master control graph
+  > to enforce the protocol, and prints the final result.
 
 
 ### `tooling/plan_manager.py`
@@ -1192,6 +1208,36 @@ workflows from smaller, validated sub-plans.
 - #### `def save_registry(registry_data)`
 
   > Saves the given data to the plan registry JSON file.
+
+
+### `tooling/plan_parser.py`
+
+Parses a plan file into a structured list of commands.
+
+This module provides the `parse_plan` function and the `Command` dataclass,
+which are central to the agent's ability to understand and execute plans.
+The parser correctly handles multi-line arguments and ignores comments,
+allowing for robust and readable plan files.
+
+
+**Public Functions:**
+
+
+- #### `def parse_plan(plan_content)`
+
+  > Parses the raw text of a plan into a list of Command objects.
+  > This parser correctly handles multi-line arguments and ignores comments.
+  > Commands are expected to be separated by one or more blank lines.
+
+
+
+**Public Classes:**
+
+
+- #### `class Command`
+
+  > Represents a single, parsed command from a plan.
+  > This structure correctly handles multi-line arguments for tools.
 
 
 ### `tooling/protocol_auditor.py`
@@ -1629,9 +1675,8 @@ execution that is the hallmark of the CFDC.
   > Represents the execution context of a single plan file within the plan stack.
   >
   > This class holds the state of a specific plan being executed, including its
-  > file path, its content (as a list of commands), and a pointer to the
-  > current step being executed. Instances of this class are pushed onto the
-  > `plan_stack` in the `AgentState` to manage hierarchical plan execution.
+  > file path, its content (as a list of parsed Command objects), and a pointer
+  > to the current step being executed.
 
 
 ### `tooling/symbol_map_generator.py`
@@ -1798,6 +1843,39 @@ and self-improvement activities.
   ],
   "associated_tools": [
     "reset_all"
+  ]
+}
+```
+
+
+---
+
+# Protocol: Deep Research Cycle
+
+This protocol defines a standardized, multi-step plan for conducting in-depth research on a complex topic. It is designed to be a reusable, callable plan that ensures a systematic and thorough investigation.
+
+The cycle consists of four main phases:
+1.  **Initial Scoping & Keyword Generation:** The agent uses its initial understanding of the topic to generate a set of search keywords.
+2.  **Broad Information Gathering:** The agent uses the keywords to perform broad web searches and collect a list of relevant URLs.
+3.  **Targeted Information Extraction:** The agent visits the most promising URLs to extract detailed information.
+4.  **Synthesis & Summary:** The agent synthesizes the gathered information into a coherent summary, which is saved to a research report file.
+
+This structured approach ensures that research is not ad-hoc but is instead a repeatable and verifiable process.
+```json
+{
+  "protocol_id": "deep-research-cycle-001",
+  "description": "A standardized, callable plan for conducting in-depth research on a complex topic.",
+  "rules": [
+    {
+      "rule_id": "structured-research-phases",
+      "description": "The deep research plan MUST follow a structured four-phase process: Scoping, Broad Gathering, Targeted Extraction, and Synthesis.",
+      "enforcement": "The plan's structure itself enforces this rule. The `lint` command can be extended to validate the structure of registered research plans."
+    }
+  ],
+  "associated_tools": [
+    "google_search",
+    "view_text_website",
+    "create_file_with_block"
   ]
 }
 ```
