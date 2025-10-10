@@ -9,8 +9,7 @@ cannot deviate from the established protocol.
 
 The key responsibilities of this orchestrator include:
 - **State Enforcement:** Guiding the agent through the formal states of a task:
-  ORIENTING, PLANNING, EXECUTING, AWAITING_ANALYSIS, POST_MORTEM, and finally
-  AWAITING_SUBMISSION.
+  ORIENTING, PLANNING, EXECUTING, FINALIZING, and finally AWAITING_SUBMISSION.
 - **Plan Validation:** Before execution, it invokes the `fdc_cli.py` tool to
   formally validate the agent-generated `plan.txt`, preventing the execution of
   invalid or unsafe plans.
@@ -304,7 +303,7 @@ class MasterControlGraph:
             research_plan_path = "research_plan.txt"
             if os.path.exists(research_plan_path):
                 os.remove(research_plan_path)
-            return self.get_trigger("EXECUTING", "AWAITING_ANALYSIS")
+            return self.get_trigger("EXECUTING", "FINALIZING")
 
         # Always work with the plan at the top of the stack
         current_context = agent_state.plan_stack[-1]
@@ -316,8 +315,8 @@ class MasterControlGraph:
             print(
                 f"  - Finished sub-plan '{current_context.plan_path}'. Resuming parent."
             )
-            # Re-enter the execution loop immediately to process the parent plan
-            return self.get_trigger("EXECUTING", "EXECUTING")
+            # Re-enter the execution loop immediately to process the parent plan or finish
+            return self.do_execution(agent_state)
 
         command_obj = commands[current_context.current_step]
         tool_name = command_obj.tool_name
@@ -364,125 +363,68 @@ class MasterControlGraph:
         )
         return self.get_trigger("EXECUTING", "EXECUTING")
 
-    def do_awaiting_analysis(self, agent_state: AgentState) -> str:
+    def do_finalizing(self, agent_state: AgentState) -> str:
         """
-        Creates a draft post-mortem and waits for the agent to analyze it.
+        Handles the finalization of the task, including post-mortem analysis and self-correction.
         """
-        print("[MasterControl] State: AWAITING_ANALYSIS")
-        task_id = agent_state.task
-        draft_path = f"DRAFT-{task_id}.md"
-        agent_state.draft_postmortem_path = draft_path
-
-        # Create the draft file from the template
+        print("[MasterControl] State: FINALIZING")
         try:
+            # 1. Create and analyze the post-mortem report
+            task_id = agent_state.task
+            draft_path = f"DRAFT-{task_id}.md"
+            agent_state.draft_postmortem_path = draft_path
             shutil.copyfile("postmortem.md", draft_path)
             print(f"  - Created draft post-mortem at '{draft_path}'.")
-        except Exception as e:
-            agent_state.error = f"Failed to create draft post-mortem: {e}"
-            print(f"[MasterControl] {agent_state.error}")
-            return self.get_trigger("AWAITING_ANALYSIS", "ERROR")
 
-        # Check for the agent to signal analysis is complete
-        analysis_complete_file = "analysis_complete.txt"
-        print(
-            f"  - Checking for agent to complete analysis and create '{analysis_complete_file}'..."
-        )
-        if not os.path.exists(analysis_complete_file):
-            print("  - Analysis not complete. Waiting for agent.")
-            return "analysis_not_complete"
-
-        os.remove(analysis_complete_file)
-        print(
-            f"  - Detected and cleaned up '{analysis_complete_file}'. Analysis complete."
-        )
-        return self.get_trigger("AWAITING_ANALYSIS", "POST_MORTEM")
-
-    def do_post_mortem(self, agent_state: AgentState) -> str:
-        """
-        Finalizes the post-mortem process, renaming the draft and compiling lessons.
-        """
-        print("[MasterControl] State: POST_MORTEM")
-        draft_path = agent_state.draft_postmortem_path
-        if not draft_path or not os.path.exists(draft_path):
-            agent_state.error = f"Draft post-mortem file '{draft_path}' not found."
-            print(f"[MasterControl] {agent_state.error}")
-            return self.get_trigger("POST_MORTEM", "ERROR")
-
-        # Create a safe, timestamped final path
-        task_id = agent_state.task
-        safe_task_id = "".join(c for c in task_id if c.isalnum() or c in ("-", "_"))
-        final_path = f"postmortems/{datetime.date.today()}-{safe_task_id}.md"
-
-        try:
-            os.rename(draft_path, final_path)
-            report_message = (
-                f"Post-mortem analysis finalized. Report saved to '{final_path}'."
+            analysis_complete_file = "analysis_complete.txt"
+            print(
+                f"  - Checking for agent to complete analysis and create '{analysis_complete_file}'..."
             )
+            if not os.path.exists(analysis_complete_file):
+                print("  - Analysis not complete. Waiting for agent.")
+                return "analysis_not_complete"
+
+            os.remove(analysis_complete_file)
+            print("  - Post-mortem analysis complete.")
+
+            # 2. Finalize the post-mortem and compile lessons
+            safe_task_id = "".join(c for c in task_id if c.isalnum() or c in ("-", "_"))
+            final_path = f"postmortems/{datetime.date.today()}-{safe_task_id}.md"
+            os.rename(draft_path, final_path)
+            report_message = f"Post-mortem analysis finalized. Report saved to '{final_path}'."
             agent_state.final_report = report_message
             agent_state.messages.append({"role": "system", "content": report_message})
-            print(f"[MasterControl] {report_message}")
+            print(f"  - {report_message}")
 
-            # Automatically compile lessons learned from the new post-mortem
-            print(f"  - Compiling lessons from '{final_path}'...")
             compile_cmd = ["python3", "tooling/knowledge_compiler.py", final_path]
             compile_result = subprocess.run(compile_cmd, capture_output=True, text=True)
             if compile_result.returncode != 0:
-                # If knowledge compilation fails, it's a problem.
-                # We can't proceed to self-correction without the lessons.
                 compile_msg = f"Knowledge compilation failed: {compile_result.stderr}"
                 agent_state.error = compile_msg
                 print(f"  - {agent_state.error}")
-                return self.get_trigger("POST_MORTEM", "ERROR")
+                return self.get_trigger("FINALIZING", "finalization_failed")
+            agent_state.messages.append({"role": "system", "content": "Knowledge compilation successful."})
+            print("  - Knowledge compilation successful.")
 
-            compile_msg = "Knowledge compilation successful."
-            print(f"  - {compile_msg}")
-            agent_state.messages.append({"role": "system", "content": compile_msg})
-
-        except Exception as e:
-            agent_state.error = f"Failed to finalize post-mortem report: {e}"
-            print(f"[MasterControl] {agent_state.error}")
-            return self.get_trigger("POST_MORTEM", "ERROR")
-
-        print("[MasterControl] Post-Mortem Complete.")
-        return self.get_trigger("POST_MORTEM", "SELF_CORRECTING")
-
-    def do_self_correcting(self, agent_state: AgentState) -> str:
-        """
-        Runs the automated self-correction cycle based on compiled lessons.
-        This is a mandatory step. Failure here will halt the process.
-        """
-        print("[MasterControl] State: SELF_CORRECTING")
-        try:
+            # 3. Run self-correction
             print("  - Running self-correction cycle...")
             correction_cmd = ["python3", "tooling/self_correction_orchestrator.py"]
-            correction_result = subprocess.run(
-                correction_cmd, capture_output=True, text=True
-            )
-
-            # Pipe the orchestrator's stdout to the agent's messages for transparency
-            agent_state.messages.append(
-                {
-                    "role": "system",
-                    "content": f"Self-Correction Output:\n{correction_result.stdout}",
-                }
-            )
-
+            correction_result = subprocess.run(correction_cmd, capture_output=True, text=True)
+            agent_state.messages.append({"role": "system", "content": f"Self-Correction Output:\n{correction_result.stdout}"})
             if correction_result.returncode != 0:
-                # A failure in the self-correction cycle is a critical error.
-                error_message = (
-                    f"Self-correction cycle FAILED:\n{correction_result.stderr}"
-                )
+                error_message = f"Self-correction cycle FAILED:\n{correction_result.stderr}"
                 agent_state.error = error_message
                 print(f"  - {error_message}")
-                return self.get_trigger("SELF_CORRECTING", "ERROR")
-
+                return self.get_trigger("FINALIZING", "finalization_failed")
             print("  - Self-correction cycle completed successfully.")
-            return self.get_trigger("SELF_CORRECTING", "AWAITING_SUBMISSION")
 
+            print("[MasterControl] Finalization Complete.")
+            return self.get_trigger("FINALIZING", "AWAITING_SUBMISSION")
         except Exception as e:
-            agent_state.error = f"An unexpected error occurred during the self-correction cycle: {e}"
+            agent_state.error = f"An unexpected error occurred during finalization: {e}"
             print(f"[MasterControl] {agent_state.error}")
-            return self.get_trigger("SELF_CORRECTING", "ERROR")
+            return self.get_trigger("FINALIZING", "finalization_failed")
+
 
     def run(self, initial_agent_state: AgentState):
         """Runs the agent's workflow through the FSM."""
@@ -501,12 +443,8 @@ class MasterControlGraph:
                 trigger = self.do_researching(agent_state)
             elif self.current_state == "EXECUTING":
                 trigger = self.do_execution(agent_state)
-            elif self.current_state == "AWAITING_ANALYSIS":
-                trigger = self.do_awaiting_analysis(agent_state)
-            elif self.current_state == "POST_MORTEM":
-                trigger = self.do_post_mortem(agent_state)
-            elif self.current_state == "SELF_CORRECTING":
-                trigger = self.do_self_correcting(agent_state)
+            elif self.current_state == "FINALIZING":
+                trigger = self.do_finalizing(agent_state)
             else:
                 agent_state.error = f"Unknown state: {self.current_state}"
                 self.current_state = "ERROR"
