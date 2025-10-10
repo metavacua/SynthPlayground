@@ -45,7 +45,8 @@ AGENTS.md: $(AGENT_PROTOCOLS_JSON) $(AGENT_PROTOCOLS_MD) $(AGENT_PROTOCOLS_AUTOD
 	@python3 $(COMPILER_SCRIPT) \
 		--source-dir protocols \
 		--output-file AGENTS.md \
-		--schema-file $(SCHEMA_FILE)
+		--schema-file $(SCHEMA_FILE) \
+		--knowledge-graph-file
 
 # A phony target to easily trigger the main protocol compilation.
 compile-protocols: AGENTS.md
