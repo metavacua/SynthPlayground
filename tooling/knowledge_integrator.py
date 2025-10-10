@@ -7,42 +7,60 @@ endpoint to find related information, and merges the external data into a new,
 enriched knowledge graph.
 """
 
-import argparse
 import os
 import requests
-from rdflib import Graph, URIRef
-from rdflib.namespace import RDF, RDFS
+from rdflib import Graph
 
 # DBPedia SPARQL endpoint
 DBPEDIA_SPARQL_ENDPOINT = "http://dbpedia.org/sparql"
 
-# --- Main Functions ---
-
 def load_local_graph(graph_file):
     """Loads the local RDF graph from a file."""
     if not os.path.exists(graph_file):
-        print(f"Error: Local graph file not found at {graph_file}")
-        return None
+        return None, f"Error: Local graph file not found at {graph_file}"
     g = Graph()
     g.parse(graph_file, format="turtle")
-    print(f"Successfully loaded local graph with {len(g)} triples.")
-    return g
+    return g, f"Successfully loaded local graph with {len(g)} triples."
 
 def extract_concepts(graph):
-    """Extracts key concepts (e.g., tools) from the local graph to query externally."""
-    # This query will need to be adapted to the actual structure of the local graph.
-    # For now, let's assume we are looking for subjects with a 'toolName' property.
-    # A more robust implementation would inspect the ontology.
+    """
+    Extracts key concepts (e.g., tools) from the local graph to query externally.
+    This version dynamically extracts tool names from the graph.
+    """
+    # This query finds the string values of any objects connected by the
+    # 'associated_tool' property.
     query = """
-    SELECT DISTINCT ?concept
+    SELECT DISTINCT ?toolName
     WHERE {
-        ?s <http://example.org/ontology/associated_tool> ?concept .
+        ?s <http://example.org/ontology/associated_tool> ?toolName .
     }
     """
     results = graph.query(query)
-    concepts = [row.concept.toPython() for row in results]
-    print(f"Extracted {len(concepts)} concepts to query from DBPedia.")
-    return concepts
+    concepts = [row.toolName.toPython() for row in results]
+    # Clean up concepts - they might be paths or have other noise
+    cleaned_concepts = []
+    for concept in concepts:
+        # Example cleanup: take the last part of a path-like tool name
+        if "/" in concept:
+            cleaned_concepts.append(concept.split("/")[-1])
+        else:
+            cleaned_concepts.append(concept)
+
+    # A simple heuristic to map file extensions to broader concepts
+    final_concepts = []
+    for concept in cleaned_concepts:
+        if concept.endswith(".py"):
+            final_concepts.append("Python (programming language)")
+        elif concept.endswith(".json"):
+            final_concepts.append("JSON")
+        elif concept == "git":
+             final_concepts.append("Git")
+        else:
+             final_concepts.append(concept)
+
+    # Return unique concepts
+    unique_concepts = sorted(list(set(final_concepts)))
+    return unique_concepts, f"Extracted {len(unique_concepts)} unique concepts to query."
 
 def query_dbpedia(concept):
     """Queries DBPedia for a given concept and returns a graph of results."""
@@ -62,61 +80,56 @@ def query_dbpedia(concept):
     }}
     LIMIT 10
     """
-    headers = {
-        "Accept": "application/rdf+xml"
-    }
-    params = {
-        "query": query,
-        "format": "application/rdf+xml"
-    }
+    headers = {"Accept": "application/rdf+xml"}
+    params = {"query": query, "format": "application/rdf+xml"}
     try:
         response = requests.get(DBPEDIA_SPARQL_ENDPOINT, params=params, headers=headers, timeout=15)
         response.raise_for_status()
         sub_graph = Graph()
         sub_graph.parse(data=response.text, format="xml")
-        return sub_graph
+        return sub_graph, f"Found {len(sub_graph)} triples for '{concept}'."
     except requests.exceptions.RequestException as e:
-        print(f"Error querying DBPedia for '{concept}': {e}")
-        return None
+        return None, f"Error querying DBPedia for '{concept}': {e}"
 
-def main():
-    """Main execution function."""
-    parser = argparse.ArgumentParser(description="Enrich local knowledge graph with DBPedia.")
-    parser.add_argument(
-        "--input-graph",
-        default="knowledge_core/protocols.ttl",
-        help="Path to the local knowledge graph file."
-    )
-    parser.add_argument(
-        "--output-graph",
-        default="knowledge_core/enriched_protocols.ttl",
-        help="Path to save the enriched knowledge graph."
-    )
-    args = parser.parse_args()
+def run_knowledge_integration(input_graph_path, output_graph_path):
+    """
+    The main library function to run the knowledge integration process.
+    It loads a graph, extracts concepts, queries DBPedia, and saves the
+    enriched graph.
+    """
+    messages = []
 
     # 1. Load local graph
-    local_graph = load_local_graph(args.input_graph)
+    local_graph, msg = load_local_graph(input_graph_path)
+    messages.append(msg)
     if not local_graph:
-        return
+        return "\n".join(messages)
+
+    initial_triple_count = len(local_graph)
 
     # 2. Extract concepts
-    # For this initial version, we will hardcode a few concepts to test the pipeline.
-    # The `extract_concepts` function will be used in the next iteration.
-    concepts_to_query = ["Python (programming language)", "JSON", "Git"]
-    print(f"Using test concepts: {concepts_to_query}")
+    concepts_to_query, msg = extract_concepts(local_graph)
+    messages.append(msg)
+    if not concepts_to_query:
+        messages.append("No concepts found to enrich. Exiting.")
+        return "\n".join(messages)
 
     # 3. Query DBPedia and merge results
+    total_added_triples = 0
     for concept in concepts_to_query:
-        print(f"  - Querying DBPedia for: {concept}")
-        external_graph = query_dbpedia(concept)
+        external_graph, msg = query_dbpedia(concept)
+        messages.append(f"  - {msg}")
         if external_graph:
-            print(f"    - Found {len(external_graph)} triples. Merging into local graph.")
+            total_added_triples += len(external_graph)
             local_graph += external_graph
 
     # 4. Save the enriched graph
-    local_graph.serialize(destination=args.output_graph, format="turtle")
-    print(f"\nSuccessfully saved enriched knowledge graph to {args.output_graph}")
-    print(f"Final graph contains {len(local_graph)} triples.")
+    local_graph.serialize(destination=output_graph_path, format="turtle")
+    final_triple_count = len(local_graph)
+    messages.append(
+        f"\nSuccessfully saved enriched knowledge graph to {output_graph_path}.\n"
+        f"Initial triples: {initial_triple_count}, Added: {total_added_triples}, "
+        f"Final triples: {final_triple_count}."
+    )
 
-if __name__ == "__main__":
-    main()
+    return "\n".join(messages)
