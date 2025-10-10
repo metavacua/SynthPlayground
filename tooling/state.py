@@ -22,7 +22,6 @@ from typing import List, Dict, Any, Optional
 # The Command dataclass is now defined in the central plan_parser module.
 from tooling.plan_parser import Command
 
-
 @dataclass
 class PlanContext:
     """
@@ -34,9 +33,9 @@ class PlanContext:
     """
 
     plan_path: str
-    # The plan is now a list of structured Command objects, not raw strings.
     commands: List[Command]
     current_step: int = 0
+    plan_content: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -51,6 +50,7 @@ class AgentState:
 
     Attributes:
         task: A string describing the overall objective.
+        plan_path: The file path to the root plan for the current task.
         plan_stack: A list of `PlanContext` objects, forming the execution
             stack for the CFDC. The plan at the top of the stack is the one
             currently being executed.
@@ -69,8 +69,7 @@ class AgentState:
     """
 
     task: str
-    # The plan_stack replaces the old flat plan. The top of the stack is the
-    # currently executing plan.
+    plan_path: Optional[str] = None
     plan_stack: List[PlanContext] = field(default_factory=list)
     messages: List[Dict[str, Any]] = field(default_factory=list)
 
@@ -91,6 +90,7 @@ class AgentState:
     def to_json(self):
         return {
             "task": self.task,
+            "plan_path": self.plan_path,
             "plan_stack": [
                 {
                     "plan_path": ctx.plan_path,

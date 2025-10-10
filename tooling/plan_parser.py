@@ -6,7 +6,6 @@ which are central to the agent's ability to understand and execute plans.
 The parser correctly handles multi-line arguments and ignores comments,
 allowing for robust and readable plan files.
 """
-import re
 from dataclasses import dataclass
 from typing import List
 
@@ -19,7 +18,6 @@ class Command:
     """
 
     tool_name: str
-    # The full, multi-line string of arguments for the tool
     args_text: str
 
 
@@ -30,32 +28,23 @@ def parse_plan(plan_content: str) -> List[Command]:
     Commands are expected to be separated by one or more blank lines.
     """
     commands = []
-    # Split the plan by blank lines to separate command blocks.
-    command_blocks = re.split(r'\n\s*\n', plan_content.strip())
+    # Split by double newline to handle multi-line arguments correctly
+    command_blocks = plan_content.strip().split("\n\n")
 
     for block in command_blocks:
-        if not block.strip():
+        block = block.strip()
+        if not block or block.startswith("#"):
             continue
 
-        # Filter out comment lines (those starting with '#')
-        lines = [
-            line for line in block.strip().split('\n') if not line.strip().startswith('#')
-        ]
+        lines = block.split("\n")
+        # Filter out comment lines within a block
+        non_comment_lines = [line for line in lines if not line.strip().startswith("#")]
 
-        if not lines:
+        if not non_comment_lines:
             continue
 
-        # The first non-comment line contains the tool name and potentially the first line of args
-        first_line_parts = lines[0].strip().split(maxsplit=1)
-        tool_name = first_line_parts[0]
-
-        # The rest of the first line and all subsequent lines form the arguments
-        args_lines = []
-        if len(first_line_parts) > 1:
-            args_lines.append(first_line_parts[1])
-        args_lines.extend(lines[1:])
-
-        args_text = '\n'.join(args_lines).strip()
+        tool_name = non_comment_lines[0].strip()
+        args_text = "\n".join(non_comment_lines[1:]).strip()
 
         commands.append(Command(tool_name=tool_name, args_text=args_text))
 
