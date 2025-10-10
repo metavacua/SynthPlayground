@@ -263,7 +263,7 @@ The CLI provides several key commands:
 
 - #### `def validate_plan(plan_filepath)`
 
-  > Validates a plan, now supporting hierarchical (CFDC) plans.
+  > Validates a plan using the centralized parser.
 
 
 ### `tooling/knowledge_compiler.py`
@@ -423,8 +423,8 @@ required to advance that state.
 
   - ##### `def do_planning(self, agent_state)`
 
-    > Waits for the agent to provide a plan, validates it, and initializes
-    > the plan stack for execution.
+    > Waits for the agent to provide a plan, validates it, parses it into
+    > commands, and initializes the plan stack for execution.
 
   - ##### `def do_post_mortem(self, agent_state)`
 
@@ -448,6 +448,22 @@ required to advance that state.
   - ##### `def run(self, initial_agent_state)`
 
     > Runs the agent's workflow through the FSM.
+
+
+### `tooling/master_control_cli.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > The main entry point for the agent.
+  >
+  > This script initializes the agent's state, runs the master control graph
+  > to enforce the protocol, and prints the final result.
 
 
 ### `tooling/plan_manager.py`
@@ -504,6 +520,36 @@ workflows from smaller, validated sub-plans.
 - #### `def save_registry(registry_data)`
 
   > Saves the given data to the plan registry JSON file.
+
+
+### `tooling/plan_parser.py`
+
+Parses a plan file into a structured list of commands.
+
+This module provides the `parse_plan` function and the `Command` dataclass,
+which are central to the agent's ability to understand and execute plans.
+The parser correctly handles multi-line arguments and ignores comments,
+allowing for robust and readable plan files.
+
+
+**Public Functions:**
+
+
+- #### `def parse_plan(plan_content)`
+
+  > Parses the raw text of a plan into a list of Command objects.
+  > This parser correctly handles multi-line arguments and ignores comments.
+  > Commands are expected to be separated by one or more blank lines.
+
+
+
+**Public Classes:**
+
+
+- #### `class Command`
+
+  > Represents a single, parsed command from a plan.
+  > This structure correctly handles multi-line arguments for tools.
 
 
 ### `tooling/protocol_auditor.py`
@@ -941,9 +987,8 @@ execution that is the hallmark of the CFDC.
   > Represents the execution context of a single plan file within the plan stack.
   >
   > This class holds the state of a specific plan being executed, including its
-  > file path, its content (as a list of commands), and a pointer to the
-  > current step being executed. Instances of this class are pushed onto the
-  > `plan_stack` in the `AgentState` to manage hierarchical plan execution.
+  > file path, its content (as a list of parsed Command objects), and a pointer
+  > to the current step being executed.
 
 
 ### `tooling/symbol_map_generator.py`

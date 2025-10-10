@@ -45,6 +45,12 @@
         <file:///app/protocols/non-turing-completeness> ;
     schema:description "Ensures all development processes are formally decidable and computationally tractable." .
 
+<file:///app/protocols/deep-research-cycle-001> proto:associatedTool <file:///app/protocols/create_file_with_block>,
+        <file:///app/protocols/google_search>,
+        <file:///app/protocols/view_text_website> ;
+    proto:hasRule <file:///app/protocols/structured-research-phases> ;
+    schema:description "A standardized, callable plan for conducting in-depth research on a complex topic." .
+
 <file:///app/protocols/fdc-protocol-001> proto:associatedTool <file:///app/protocols/LOGGING_SCHEMA.md>,
         <file:///app/protocols/knowledge_core/dependency_graph.json>,
         <file:///app/protocols/knowledge_core/symbols.json>,
@@ -250,6 +256,9 @@
 
 <file:///app/protocols/structured-lessons> proto:enforcement "The `tooling/knowledge_compiler.py` script is responsible for generating lessons in the correct format." ;
     schema:description "Lessons learned from post-mortem analysis must be generated as structured, machine-readable JSON objects in `knowledge_core/lessons.jsonl`." .
+
+<file:///app/protocols/structured-research-phases> proto:enforcement "The plan's structure itself enforces this rule. The `lint` command can be extended to validate the structure of registered research plans." ;
+    schema:description "The deep research plan MUST follow a structured four-phase process: Scoping, Broad Gathering, Targeted Extraction, and Synthesis." .
 
 <file:///app/protocols/verify-after-write> proto:enforcement "This is a core operational discipline. Future tooling, such as a trace validator, could enforce this by analyzing the execution log against this protocol." ;
     schema:description "After every file creation or modification action (`create_file_with_block`, `overwrite_file_with_block`, `replace_with_git_merge_diff`), the agent MUST use a subsequent read-only tool (`read_file`, `list_files`, `grep`) to verify that the action was executed successfully and had the intended effect. A plan step should only be marked as complete after this verification." .

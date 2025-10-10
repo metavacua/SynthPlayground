@@ -28,11 +28,10 @@ import tempfile
 import shutil
 from unittest.mock import patch, MagicMock
 
-# Add tooling directory to path to import other tools
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
-
-from master_control import MasterControlGraph
-from state import AgentState, PlanContext
+# Use absolute imports
+from tooling.master_control import MasterControlGraph
+from tooling.state import AgentState, PlanContext
+from tooling.plan_parser import parse_plan, Command
 
 class TestMasterControlRedesigned(unittest.TestCase):
     """
@@ -77,94 +76,79 @@ class TestMasterControlRedesigned(unittest.TestCase):
 
 
     @patch("master_control.subprocess.run")
-    @patch("master_control.os.path.exists")
-    def test_full_workflow_single_threaded(self, mock_exists, mock_subprocess):
+    def test_full_workflow_single_threaded(self, mock_subprocess):
         """
-        Tests the full FSM workflow deterministically without threads or sleeps.
+        Tests the full, non-blocking FSM workflow deterministically.
         """
         # --- Mocking Setup ---
         def subprocess_side_effect(cmd, *args, **kwargs):
-            # Make the check more robust by looking for the script name anywhere in the command.
             cmd_str = " ".join(cmd)
             if "knowledge_compiler.py" in cmd_str:
-                lesson = {
-                    "lesson_id": "l1", "insight": "Test lesson",
-                    "action": {"type": "UPDATE_PROTOCOL", "command": "add-tool", "parameters": {"protocol_id": self.mock_protocol_id, "tool_name": "new_mock_tool"}},
-                    "status": "pending"
-                }
+                lesson = {"lesson_id": "l1", "insight": "Test lesson", "action": {"type": "UPDATE_PROTOCOL", "command": "add-tool", "parameters": {"protocol_id": self.mock_protocol_id, "tool_name": "new_mock_tool"}}, "status": "pending"}
                 with open(self.lessons_file, "a") as f: f.write(json.dumps(lesson) + "\n")
-                return subprocess.CompletedProcess(args=cmd, returncode=0)
             elif "self_correction_orchestrator.py" in cmd_str:
                 with open(self.mock_protocol_file, "r+") as f:
                     data = json.load(f)
                     data["associated_tools"].append("new_mock_tool")
                     f.seek(0); json.dump(data, f); f.truncate()
-                return subprocess.CompletedProcess(args=cmd, returncode=0)
             return subprocess.CompletedProcess(args=cmd, returncode=0)
         mock_subprocess.side_effect = subprocess_side_effect
 
         # --- Test Execution ---
         # 1. ORIENTING
-        with patch("master_control.execute_research_protocol", return_value="Mocked Research Data"):
-             trigger = self.graph.do_orientation(self.agent_state)
+        with patch("tooling.master_control.execute_research_protocol", return_value="Mocked Research Data"):
+            trigger = self.graph.do_orientation(self.agent_state)
         self.assertEqual(trigger, "orientation_succeeded")
-        self.graph.current_state = "PLANNING"
 
         # 2. PLANNING
-        plan_content = 'set_plan "Test Plan"\nplan_step_complete "Done"'
+        trigger = self.graph.do_planning(self.agent_state)
+        self.assertEqual(trigger, "plan_not_found")
+        plan_content = 'list_files\n\n# A comment\n\nread_file tooling/state.py'
         with open("plan.txt", "w") as f: f.write(plan_content)
-        mock_exists.return_value = True
         trigger = self.graph.do_planning(self.agent_state)
         self.assertEqual(trigger, "plan_is_set")
-        self.graph.current_state = "EXECUTING"
 
         # 3. EXECUTING
-        # Simulate completing the two steps in the plan
-        for _ in range(2):
-            with open("step_complete.txt", "w") as f: f.write("done")
-            mock_exists.return_value = True
-            trigger = self.graph.do_execution(self.agent_state)
-            self.assertEqual(trigger, "step_succeeded")
-            self.graph.current_state = "EXECUTING"
-            mock_exists.return_value = False
-
-        # After all steps are done, the FSM pops the plan from the stack
-        # and returns a trigger to re-enter the execution loop.
+        # Step 1
         trigger = self.graph.do_execution(self.agent_state)
-        self.assertEqual(trigger, "step_succeeded") # This pops the finished plan
-        self.assertTrue(not self.agent_state.plan_stack) # The plan stack should now be empty
-
-        # The next call to do_execution finds the stack empty and transitions out.
+        self.assertEqual(trigger, "step_not_complete")
+        with open("step_complete.txt", "w") as f: f.write("done")
         trigger = self.graph.do_execution(self.agent_state)
+        self.assertEqual(trigger, "step_succeeded")
+        # Step 2
+        trigger = self.graph.do_execution(self.agent_state)
+        self.assertEqual(trigger, "step_not_complete")
+        with open("step_complete.txt", "w") as f: f.write("done")
+        trigger = self.graph.do_execution(self.agent_state)
+        self.assertEqual(trigger, "step_succeeded")
+
+        # Finish Execution
+        trigger = self.graph.do_execution(self.agent_state) # Pop plan
+        self.assertEqual(trigger, "step_succeeded")
+        trigger = self.graph.do_execution(self.agent_state) # Transition out
         self.assertEqual(trigger, "all_steps_completed")
-        self.graph.current_state = "AWAITING_ANALYSIS"
 
         # 4. AWAITING_ANALYSIS
+        trigger = self.graph.do_awaiting_analysis(self.agent_state)
+        self.assertEqual(trigger, "analysis_not_complete")
         with open("analysis_complete.txt", "w") as f: f.write("done")
-        mock_exists.return_value = True
         trigger = self.graph.do_awaiting_analysis(self.agent_state)
         self.assertEqual(trigger, "analysis_complete")
-        self.graph.current_state = "POST_MORTEM"
 
         # 5. POST_MORTEM
         trigger = self.graph.do_post_mortem(self.agent_state)
         self.assertEqual(trigger, "post_mortem_complete")
-        self.graph.current_state = "SELF_CORRECTING"
 
         # 6. SELF_CORRECTING
-        # This is where the mocked subprocess for self_correction_orchestrator.py is called
         trigger = self.graph.do_self_correcting(self.agent_state)
         self.assertEqual(trigger, "self_correction_succeeded")
         self.graph.current_state = "AWAITING_SUBMISSION"
 
         # --- Assertions ---
-        self.assertIsNone(self.agent_state.error, f"Agent entered an error state: {self.agent_state.error}")
+        self.assertIsNone(self.agent_state.error)
         self.assertEqual(self.graph.current_state, "AWAITING_SUBMISSION")
-
-        # Verify that the self-correction step actually modified the protocol file
         with open(self.mock_protocol_file, "r") as f:
             updated_protocol = json.load(f)
-        # Now this assertion should pass because the mock was called
         self.assertIn("new_mock_tool", updated_protocol["associated_tools"])
 
     def test_reset_all_unauthorized(self):
@@ -178,10 +162,10 @@ class TestMasterControlRedesigned(unittest.TestCase):
 
         # Load the plan into the agent state
         self.agent_state.plan_stack.append(
-            PlanContext(plan_path="plan.txt", plan_content=[plan_content])
+            PlanContext(plan_path="plan.txt", commands=parse_plan(plan_content))
         )
 
-        # Execute the step
+        # Execute the step - it should return 'execution_failed' directly now
         trigger = self.graph.do_execution(self.agent_state)
 
         # Assert that the FSM entered the error state
@@ -204,7 +188,7 @@ class TestMasterControlRedesigned(unittest.TestCase):
 
         # Load the plan into the agent state
         self.agent_state.plan_stack.append(
-            PlanContext(plan_path="plan.txt", plan_content=[plan_content])
+            PlanContext(plan_path="plan.txt", commands=parse_plan(plan_content))
         )
 
         # Create the 'step_complete.txt' file to simulate the agent completing the step
