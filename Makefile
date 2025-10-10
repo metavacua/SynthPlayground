@@ -1,6 +1,11 @@
 # Makefile for project standards and validation
 
-.PHONY: install format lint build compile-protocols compile-security-protocols clean docs
+.PHONY: all install format lint test build compile-protocols compile-security-protocols clean docs
+
+# ==============================================================================
+# Default Target
+# ==============================================================================
+all: AGENTS.md
 
 # ==============================================================================
 # Dependency Management
@@ -12,18 +17,18 @@ install:
 # ==============================================================================
 # Code Quality & Formatting
 # ==============================================================================
-format:
+format: AGENTS.md
 	@echo "--> Formatting Python code with black..."
 	@black .
 
-lint:
+lint: AGENTS.md
 	@echo "--> Linting Python code with flake8..."
 	@flake8 .
 
 # ==============================================================================
 # Testing
 # ==============================================================================
-test:
+test: AGENTS.md
 	@echo "--> Running all unit tests..."
 	@python3 -m unittest discover -v .
 
@@ -101,6 +106,7 @@ build: docs readme compile-protocols compile-security-protocols
 
 clean:
 	@echo "--> Removing compiled protocol and documentation artifacts..."
+	@rm -f AGENTS.md
 	@rm -f README.md
 	@rm -f SECURITY.md
 	@rm -f knowledge_core/SYSTEM_DOCUMENTATION.md
