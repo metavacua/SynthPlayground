@@ -1,65 +1,40 @@
 import unittest
-from unittest.mock import patch, mock_open
 from tooling.research_planner import plan_deep_research
 
-class TestResearchPlanner(unittest.TestCase):
+class TestNewResearchPlanner(unittest.TestCase):
     """
-    Tests for the research planner tool.
+    Tests for the refactored, FSM-compliant research planner.
     """
 
-    @patch("builtins.open", new_callable=mock_open, read_data='```json\n{"protocol_id": "mock-protocol"}\n```')
-    def test_plan_deep_research_local_repo(self, mock_file):
+    def test_plan_deep_research_generates_executable_plan(self):
         """
-        Verify that plan_deep_research generates a valid plan for the 'local' repository.
+        Verify that the new plan_deep_research generates a valid, executable
+        FSM-compliant plan.
         """
-        topic = "The Impact of AI on Software Development"
-        plan = plan_deep_research(topic, repository='local')
+        topic = "The Role of AI in Modern Software Engineering"
+        safe_topic_name = "the_role_of_ai_in_modern_software_engineering"
+        expected_report_file = f"research_report_{safe_topic_name}.md"
+        expected_task_id = f"research-{safe_topic_name}"
 
-        # 1. Verify basic properties
+        # Generate the plan
+        plan = plan_deep_research(topic)
+        plan_lines = plan.splitlines()
+
+        # 1. Verify it's a non-empty string
         self.assertIsInstance(plan, str)
+        self.assertTrue(len(plan) > 0)
 
-        # 2. Verify context block with correct markdown formatting
-        self.assertIn(f"- **Topic:** {topic}", plan)
-        self.assertIn("- **Repository Context:** local", plan)
-        self.assertIn("- **Governing Protocol:** `AGENTS.md`", plan)
+        # 2. Verify it contains the correct FSM directive as the second line
+        self.assertIn("# FSM: tooling/research_fsm.json", plan_lines[1])
 
-        # 3. Verify structure
-        self.assertIn("## 1. Research Context", plan)
-        self.assertIn("## 2. Research Phases", plan)
-        self.assertIn("### Phase A: Initial Planning & Question Formulation", plan)
-        self.assertIn("## 3. Protocol Reference Snippet", plan)
+        # 3. Verify it contains the core executable commands in order
+        executable_lines = [line for line in plan_lines if line.strip() and not line.strip().startswith("#")]
+        self.assertEqual(len(executable_lines), 4)
+        self.assertIn(f"set_plan This is the research plan for the topic: '{topic}'.", executable_lines[0])
+        self.assertIn("plan_step_complete", executable_lines[1])
+        self.assertIn(f"create_file_with_block {expected_report_file}", executable_lines[2])
+        self.assertIn(f'run_in_bash_session python3 tooling/fdc_cli.py close --task-id "{expected_task_id}"', executable_lines[3])
 
-        # 4. Verify content
-        self.assertIn('"protocol_id": "mock-protocol"', plan)
-        self.assertIn("execute_research_protocol", plan)
-
-        # 5. Verify mock usage
-        mock_file.assert_called_once_with("AGENTS.md", "r")
-
-    @patch("tooling.research_planner.execute_research_protocol")
-    def test_plan_deep_research_external_repo(self, mock_execute_research):
-        """
-        Verify that plan_deep_research generates a valid plan for the 'external' repository.
-        """
-        mock_execute_research.return_value = "Mocked external file content"
-
-        topic = "External Toolchain Analysis"
-        plan = plan_deep_research(topic, repository='external')
-
-        # 1. Verify context block with correct markdown formatting
-        self.assertIn(f"- **Topic:** {topic}", plan)
-        self.assertIn("- **Repository Context:** external", plan)
-        self.assertIn("- **Governing Protocol:** `src/open_deep_research/deep_researcher.py`", plan)
-
-        # 2. Verify content
-        self.assertIn("Mocked external file content", plan)
-
-        # 3. Verify the mock was called correctly
-        expected_path = "src/open_deep_research/deep_researcher.py"
-        mock_execute_research.assert_called_once_with({
-            "target": "external_repository",
-            "path": expected_path
-        })
 
 if __name__ == '__main__':
     unittest.main()

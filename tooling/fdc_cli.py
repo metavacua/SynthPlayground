@@ -176,15 +176,70 @@ def _validate_command(command: Command, state, fsm, fs):
     return next_state, fs
 
 
-def _validate_plan_recursive(commands: list[Command], state, fs, fsm, recursion_depth):
-    """Recursively validates a list of commands."""
+def _validate_plan_recursive(
+    lines,
+    start_index,
+    indent_level,
+    state,
+    fs,
+    placeholders,
+    fsm,
+    recursion_depth,
+):
+    """
+    Recursively validates a block of a plan, now with recursion detection and FSM-switching.
+    """
     if recursion_depth > MAX_RECURSION_DEPTH:
         print(f"Error: Max recursion depth ({MAX_RECURSION_DEPTH}) exceeded.", file=sys.stderr)
         sys.exit(1)
 
-    for command in commands:
-        if command.tool_name == "call_plan":
-            plan_name_or_path = command.args_text.strip()
+    i = start_index
+
+    # --- FSM Switching Logic ---
+    current_fsm = fsm
+    # An FSM directive is only valid as the first non-empty line of a plan file.
+    if start_index == 0 and lines:
+        first_line_content = lines[0][1].strip()
+        if first_line_content.startswith("# FSM:"):
+            fsm_path = first_line_content.split(":", 1)[1].strip()
+            # The path in the directive is relative to the repo root.
+            full_fsm_path = os.path.join(ROOT_DIR, fsm_path)
+            try:
+                with open(full_fsm_path, "r") as f:
+                    current_fsm = json.load(f)
+                print(f"  Switched to FSM: {fsm_path}")
+                # Reset state to the start state of the new FSM
+                state = current_fsm["start_state"]
+            except (FileNotFoundError, json.JSONDecodeError) as e:
+                print(
+                    f"Error on line 1: Could not load FSM from '{fsm_path}'. {e}",
+                    file=sys.stderr,
+                )
+                sys.exit(1)
+
+    while i < len(lines):
+        line_num, line_content = lines[i]
+        current_indent = len(line_content) - len(line_content.lstrip(" "))
+
+        if current_indent < indent_level:
+            return state, fs, i, current_fsm  # End of current block
+
+        if current_indent > indent_level:
+            print(
+                f"Error on line {line_num+1}: Unexpected indentation.", file=sys.stderr
+            )
+            sys.exit(1)
+
+        line_content = line_content.strip()
+        if line_content.startswith("# FSM:"):  # Ignore directive during validation
+            i += 1
+            continue
+
+        command = line_content.split()[0]
+        args = line_content.split()[1:]
+
+        if command == "call_plan":
+            plan_name_or_path = args[0]
             registry = _load_plan_registry()
             sub_plan_path = registry.get(plan_name_or_path, plan_name_or_path)
 
@@ -196,29 +251,72 @@ def _validate_plan_recursive(commands: list[Command], state, fs, fsm, recursion_
                 print(f"Error: Sub-plan file not found at '{sub_plan_path}'.", file=sys.stderr)
                 sys.exit(1)
 
-            print(f"  Validating sub-plan '{sub_plan_path}'...")
-            sub_final_state, _ = _validate_plan_recursive(
-                sub_commands,
-                fsm["start_state"], # Sub-plan must be valid on its own
+            print(f"  Line {line_num+1}: Validating sub-plan '{sub_plan_path}'...")
+            sub_final_state, _, _, sub_fsm = _validate_plan_recursive(
+                sub_plan_lines,
+                0,
+                0,
+                "DUMMY_STATE",
                 fs.copy(),
-                fsm,
+                {},
+                current_fsm,
                 recursion_depth + 1,
             )
-            if sub_final_state not in fsm["accept_states"]:
-                print(f"Error: Sub-plan '{sub_plan_path}' does not end in an accepted state.", file=sys.stderr)
+
+            if sub_final_state not in sub_fsm["accept_states"]:
+                print(
+                    f"Error in sub-plan '{sub_plan_path}': Plan does not end in an accepted state.",
+                    file=sys.stderr,
+                )
                 sys.exit(1)
             print(f"  Sub-plan '{sub_plan_path}' is valid. Resuming parent plan.")
-        else:
-            state, fs = _validate_command(command, state, fsm, fs)
+            i += 1
+        elif command == "for_each_file":
+            loop_depth = len(placeholders) + 1
+            placeholder_key = f"{{file{loop_depth}}}"
+            dummy_file = f"dummy_file_for_loop_{loop_depth}"
 
-    return state, fs
+            loop_body_start = i + 1
+            j = loop_body_start
+            while (
+                j < len(lines)
+                and (len(lines[j][1]) - len(lines[j][1].lstrip(" "))) > indent_level
+            ):
+                j += 1
+
+            loop_fs = fs.copy()
+            loop_fs.add(dummy_file)
+            new_placeholders = placeholders.copy()
+            new_placeholders[placeholder_key] = dummy_file
+
+            state, loop_fs, _, _ = _validate_plan_recursive(
+                lines,
+                loop_body_start,
+                indent_level + 2,
+                state,
+                loop_fs,
+                new_placeholders,
+                current_fsm,
+                recursion_depth,
+            )
+
+            fs.update(loop_fs)
+            i = j
+        else:
+            state, fs = _validate_action(
+                line_num, line_content, state, current_fsm, fs, placeholders
+            )
+            i += 1
+
+    return state, fs, i, current_fsm
 
 
 def validate_plan(plan_filepath):
     """Validates a plan using the centralized parser."""
     try:
+        # Load the default FSM. The recursive validator will switch if a directive is found.
         with open(FSM_DEF_PATH, "r") as f:
-            fsm = json.load(f)
+            default_fsm = json.load(f)
         with open(plan_filepath, "r") as f:
             plan_content = f.read()
     except FileNotFoundError as e:
@@ -235,11 +333,11 @@ def validate_plan(plan_filepath):
             simulated_fs.add(os.path.join(root, name).replace("./", ""))
 
     print(f"Starting validation with {len(simulated_fs)} files pre-loaded...")
-    final_state, _ = _validate_plan_recursive(
-        commands, fsm["start_state"], simulated_fs, fsm, 0
+    final_state, _, _, final_fsm = _validate_plan_recursive(
+        lines, 0, 0, default_fsm["start_state"], simulated_fs, {}, default_fsm, 0
     )
 
-    if final_state in fsm["accept_states"]:
+    if final_state in final_fsm["accept_states"]:
         print("\nValidation successful! Plan is syntactically and semantically valid.")
     else:
         print(f"\nValidation failed. Plan ends in non-accepted state: '{final_state}'", file=sys.stderr)
