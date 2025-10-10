@@ -144,11 +144,15 @@ def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file
             # --- Knowledge Graph Generation (Optional) ---
             if knowledge_graph_file:
                 protocol_data_for_ld = protocol_data.copy()
-                # Assume context file is in the parent of the source dir
-                context_path = os.path.join(os.path.dirname(source_dir), "protocol.context.jsonld")
+                # Consistently look for the context file in the main protocols directory.
+                context_path = os.path.join(DEFAULT_PROTOCOLS_DIR, "protocol.context.jsonld")
                 if os.path.exists(context_path):
-                    protocol_data_for_ld["@context"] = os.path.relpath(context_path, source_dir)
-                    base_uri = "file://" + os.path.abspath(source_dir) + "/"
+                    # The @context path in the JSON-LD data should be relative to the protocol file being processed.
+                    relative_context_path = os.path.relpath(context_path, os.path.dirname(file_path))
+                    protocol_data_for_ld["@context"] = relative_context_path
+
+                    # The base URI should be the directory containing the protocol file, to resolve relative paths.
+                    base_uri = "file://" + os.path.abspath(os.path.dirname(file_path)) + "/"
                     g.parse(data=json.dumps(protocol_data_for_ld), format="json-ld", publicID=base_uri)
                     print(f"    - Parsed {base_name} into knowledge graph.")
                 else:
