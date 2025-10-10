@@ -171,11 +171,24 @@ def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file
 
     # --- Finalize and Write Outputs ---
 
-    # Write the final markdown content
-    with open(target_file, "w") as f:
-        f.write("\n".join(final_content))
-    print(f"\n--- {output_filename} Compilation Successful ---")
-    print(f"Successfully generated new {output_filename} file.")
+    # Write the final markdown content to a temporary file for atomic replacement.
+    temp_target_file = target_file + ".tmp"
+    try:
+        with open(temp_target_file, "w") as f:
+            f.write("\n".join(final_content))
+
+        # Atomically rename the temporary file to the final target file.
+        # This prevents a race condition where the file is deleted and not yet recreated.
+        os.rename(temp_target_file, target_file)
+        print(f"\n--- {output_filename} Compilation Successful ---")
+        print(f"Successfully generated new {output_filename} file.")
+
+    except Exception as e:
+        print(f"\n--- {output_filename} Compilation Failed ---")
+        print(f"An error occurred during file write/rename: {e}")
+        # Clean up the temporary file if it exists to prevent leaving artifacts.
+        if os.path.exists(temp_target_file):
+            os.remove(temp_target_file)
 
     # Write the knowledge graph if requested
     if knowledge_graph_file:
