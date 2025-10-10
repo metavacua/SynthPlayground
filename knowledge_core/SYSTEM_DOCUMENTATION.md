@@ -653,6 +653,44 @@ directory, performing targeted updates based on command-line arguments.
   > Main function to parse arguments and call the appropriate handler.
 
 
+### `tooling/readme_generator.py`
+
+Generates the project's README.md file.
+
+This script combines a static, manually written overview with dynamically
+generated sections that summarize key components of the system. The goal is
+to produce a README that is both informative and easy to maintain, as it
+automatically reflects the current state of the documented source code.
+
+The script is designed to be run from the root of the repository and is
+integrated into the `Makefile` build process.
+
+
+**Public Functions:**
+
+
+- #### `def generate_key_components_section()`
+
+  > Generates the Markdown for the "Key Components" section by reading
+  > the docstrings of the curated list of files.
+
+
+- #### `def get_module_docstring(filepath)`
+
+  > Parses a Python file and extracts the module-level docstring.
+  >
+  > Args:
+  >     filepath: The path to the Python file.
+  >
+  > Returns:
+  >     The module docstring, or a placeholder if none is found.
+
+
+- #### `def main()`
+
+  > Main function to generate the README.md content and write it to a file.
+
+
 ### `tooling/research.py`
 
 A unified, constraint-based interface for all research and data-gathering operations.
