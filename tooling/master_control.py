@@ -136,6 +136,18 @@ class MasterControlGraph:
             print(f"[MasterControl] Orientation Failed: {e}")
             return self.get_trigger("ORIENTING", "ERROR")
 
+    def get_trigger(self, source_state: str, dest_state: str) -> str:
+        """Finds the trigger for a transition between two states."""
+        for transition in self.fsm["transitions"]:
+            if (
+                transition["source"] == source_state
+                and transition["dest"] == dest_state
+            ):
+                return transition["trigger"]
+        raise ValueError(
+            f"No trigger found for transition from {source_state} to {dest_state}"
+        )
+
     def do_planning(self, agent_state: AgentState) -> str:
         """
         Waits for the agent to provide a plan, validates it, and initializes
@@ -398,21 +410,6 @@ class MasterControlGraph:
             agent_state.error = f"An unexpected error occurred during the self-correction cycle: {e}"
             print(f"[MasterControl] {agent_state.error}")
             return self.get_trigger("SELF_CORRECTING", "ERROR")
-
-    def get_trigger(self, source_state: str, dest_state: str) -> str:
-        """
-        Finds a trigger in the FSM definition for a transition from a source
-        to a destination state. This is a helper to avoid hardcoding trigger
-        strings in the state handlers.
-        """
-        for transition in self.fsm["transitions"]:
-            if transition["source"] == source_state and transition["dest"] == dest_state:
-                # Return the first trigger found that matches the transition.
-                return transition["trigger"]
-        # This case indicates a logic error or an incomplete FSM definition.
-        raise RuntimeError(
-            f"No trigger defined in FSM for transition from '{source_state}' to '{dest_state}'"
-        )
 
     def run(self, initial_agent_state: AgentState):
         """Runs the agent's workflow through the FSM."""
