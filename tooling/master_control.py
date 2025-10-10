@@ -44,6 +44,7 @@ from state import AgentState, PlanContext
 from fdc_cli import MAX_RECURSION_DEPTH
 from research import execute_research_protocol
 from research_planner import plan_deep_research
+from plan_parser import parse_plan, Command
 
 PLAN_REGISTRY_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "knowledge_core", "plan_registry.json")
@@ -73,7 +74,11 @@ class MasterControlGraph:
         self.current_state = self.fsm["initial_state"]
 
     def get_trigger(self, source_state: str, dest_state: str) -> str:
-        """Finds the trigger for a transition between two states."""
+        """
+        Finds a trigger in the FSM definition for a transition from a source
+        to a destination state. This is a helper to avoid hardcoding trigger
+        strings in the state handlers.
+        """
         for transition in self.fsm["transitions"]:
             if (
                 transition["source"] == source_state
@@ -147,18 +152,6 @@ class MasterControlGraph:
             print(f"[MasterControl] Orientation Failed: {e}")
             return self.get_trigger("ORIENTING", "ERROR")
 
-    def get_trigger(self, source_state: str, dest_state: str) -> str:
-        """Finds the trigger for a transition between two states."""
-        for transition in self.fsm["transitions"]:
-            if (
-                transition["source"] == source_state
-                and transition["dest"] == dest_state
-            ):
-                return transition["trigger"]
-        raise ValueError(
-            f"No trigger found for transition from {source_state} to {dest_state}"
-        )
-
     def do_planning(self, agent_state: AgentState) -> str:
         """
         Waits for the agent to provide a plan, validates it, parses it into
@@ -179,6 +172,7 @@ class MasterControlGraph:
 
         # Standard L3 planning process
         plan_file = "plan.txt"
+        agent_state.plan_path = plan_file # Set the root plan path
         print(f"  - Waiting for agent to create '{plan_file}'...")
         while not os.path.exists(plan_file):
             time.sleep(1)
@@ -247,12 +241,9 @@ class MasterControlGraph:
 
         # 3. Push the validated research plan onto the execution stack
         print("  - Research plan is valid. Pushing to execution stack.")
-        plan_lines = [
-            line for line in research_plan_content.splitlines()
-            if line.strip() and not line.strip().startswith("#")
-        ]
+        parsed_commands = parse_plan(research_plan_content)
         agent_state.plan_stack.append(
-            PlanContext(plan_path=research_plan_file, plan_content=plan_lines)
+            PlanContext(plan_path=research_plan_file, commands=parsed_commands)
         )
         agent_state.messages.append(
             {
@@ -307,10 +298,12 @@ class MasterControlGraph:
         if not agent_state.plan_stack:
             print("[MasterControl] Execution Complete (plan stack is empty).")
             # Clean up the root plan files now that execution is fully complete
-            if os.path.exists("plan.txt"):
-                os.remove("plan.txt")
-            if os.path.exists("research_plan.txt"):
-                os.remove("research_plan.txt")
+            if agent_state.plan_path and os.path.exists(agent_state.plan_path):
+                os.remove(agent_state.plan_path)
+            # Only remove the research plan if it was actually created.
+            research_plan_path = "research_plan.txt"
+            if os.path.exists(research_plan_path):
+                os.remove(research_plan_path)
             return self.get_trigger("EXECUTING", "AWAITING_ANALYSIS")
 
         # Always work with the plan at the top of the stack
@@ -330,26 +323,24 @@ class MasterControlGraph:
         tool_name = command_obj.tool_name
         args_text = command_obj.args_text
 
-        # --- Protocol Enforcement: Check for destructive commands ---
+        # --- Protocol Enforcement & Pre-computation ---
+        # Handle special directives first
+        if tool_name == "call_plan":
+            return self._handle_call_plan(agent_state, args_text.strip().split())
+
+        # Enforce protocol for destructive commands BEFORE checking for step completion
         if tool_name == "reset_all":
-            auth_token_path = os.path.join(
-                "knowledge_core", "reset_all_authorization.token"
-            )
+            auth_token_path = os.path.join(os.getcwd(), "authorization.token")
             if not os.path.exists(auth_token_path):
                 error_message = "Unauthorized use of 'reset_all'. Authorization token not found."
                 agent_state.error = error_message
                 print(f"[MasterControl] Protocol Violation: {error_message}")
+                # This is a critical failure; transition immediately to the ERROR state.
                 return self.get_trigger("EXECUTING", "ERROR")
             else:
-                # Consume the one-time token
-                os.remove(auth_token_path)
-                print(
-                    "[MasterControl] 'reset_all' authorized. Consuming token and proceeding."
-                )
-
-        # Handle the 'call_plan' directive using the helper method
-        if tool_name == "call_plan":
-            return self._handle_call_plan(agent_state, args_text.strip().split())
+                # Consume the one-time token upon successful execution of the step.
+                # We don't remove it here, but after the step is confirmed complete.
+                print("[MasterControl] 'reset_all' is authorized. Proceeding with step.")
 
         # --- Standard Step Execution ---
         step_complete_file = "step_complete.txt"
@@ -374,6 +365,13 @@ class MasterControlGraph:
 
         os.remove(step_complete_file)
         current_context.current_step += 1
+
+        # If the completed step was 'reset_all', consume the token now.
+        if tool_name == "reset_all":
+            auth_token_path = os.path.join(os.getcwd(), "authorization.token")
+            if os.path.exists(auth_token_path):
+                os.remove(auth_token_path)
+                print("[MasterControl] Consumed 'reset_all' authorization token.")
 
         print(
             f"  - Step {current_context.current_step} of {len(commands)} in '{current_context.plan_path}' signaled complete."
@@ -547,19 +545,3 @@ class MasterControlGraph:
         if agent_state.error:
             print(f"  - Error: {agent_state.error}")
         return agent_state
-
-
-if __name__ == "__main__":
-    print("--- Initializing Master Control Graph Demonstration ---")
-    # 1. Initialize the agent's state for a new task
-    task = "Demonstrate the self-enforcing protocol."
-    initial_state = AgentState(task=task)
-
-    # 2. Initialize and run the master control graph
-    graph = MasterControlGraph()
-    final_state = graph.run(initial_state)
-
-    # 3. Print the final report
-    print("\n--- Final State ---")
-    print(json.dumps(final_state.to_json(), indent=2))
-    print("--- Demonstration Complete ---")
