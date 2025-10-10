@@ -61,6 +61,11 @@
     },
     {
       "source": "EXECUTING",
+      "dest": "EXECUTING",
+      "trigger": "step_not_complete"
+    },
+    {
+      "source": "EXECUTING",
       "dest": "AWAITING_ANALYSIS",
       "trigger": "all_steps_completed"
     },
@@ -68,6 +73,11 @@
       "source": "AWAITING_ANALYSIS",
       "dest": "POST_MORTEM",
       "trigger": "analysis_complete"
+    },
+    {
+       "source": "AWAITING_ANALYSIS",
+       "dest": "AWAITING_ANALYSIS",
+       "trigger": "analysis_not_complete"
     },
     {
       "source": "AWAITING_ANALYSIS",

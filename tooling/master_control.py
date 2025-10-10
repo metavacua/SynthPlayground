@@ -60,7 +60,6 @@ def _load_plan_registry():
     except (json.JSONDecodeError, IOError):
         return {}
 
-
 class MasterControlGraph:
     """
     A Finite State Machine (FSM) that enforces the agent's protocol.
@@ -162,8 +161,8 @@ class MasterControlGraph:
 
     def do_planning(self, agent_state: AgentState) -> str:
         """
-        Waits for the agent to provide a plan, validates it, and initializes
-        the plan stack for execution.
+        Waits for the agent to provide a plan, validates it, parses it into
+        commands, and initializes the plan stack for execution.
         """
         print("[MasterControl] State: PLANNING")
 
@@ -194,17 +193,19 @@ class MasterControlGraph:
             print(f"[MasterControl] {error_message}")
             return self.get_trigger("PLANNING", "ERROR")
 
-        print("  - Plan validation successful.")
+        print("  - Plan validation successful. Parsing plan into commands...")
         with open(plan_file, "r") as f:
-            plan_content = [line for line in f.read().split("\n") if line.strip()]
+            raw_plan_content = f.read()
+
+        parsed_commands = parse_plan(raw_plan_content)
 
         agent_state.plan_stack.append(
-            PlanContext(plan_path=plan_file, plan_content=plan_content)
+            PlanContext(plan_path=plan_file, commands=parsed_commands)
         )
         agent_state.messages.append(
             {
                 "role": "system",
-                "content": f"Validated plan from {plan_file} has been loaded and execution is starting.",
+                "content": f"Validated and parsed plan from {plan_file} has been loaded. Execution is starting.",
             }
         )
         print("[MasterControl] Planning Complete.")
@@ -264,7 +265,9 @@ class MasterControlGraph:
     def _handle_call_plan(self, agent_state: AgentState, args: list) -> str:
         """Handles the 'call_plan' directive during execution."""
         if len(agent_state.plan_stack) > MAX_RECURSION_DEPTH:
-            agent_state.error = f"Maximum recursion depth ({MAX_RECURSION_DEPTH}) exceeded."
+            agent_state.error = (
+                f"Maximum recursion depth ({MAX_RECURSION_DEPTH}) exceeded."
+            )
             print(f"[MasterControl] Error: {agent_state.error}")
             return self.get_trigger("EXECUTING", "ERROR")
 
@@ -272,12 +275,13 @@ class MasterControlGraph:
         registry = _load_plan_registry()
         sub_plan_path = registry.get(plan_name_or_path, plan_name_or_path)
 
-        print(f"  - Calling sub-plan: {sub_plan_path} (resolved from '{plan_name_or_path}')")
+        print(
+            f"  - Calling sub-plan: {sub_plan_path} (resolved from '{plan_name_or_path}')"
+        )
         try:
             with open(sub_plan_path, "r") as f:
-                sub_plan_content = [
-                    line for line in f.read().split("\n") if line.strip()
-                ]
+                raw_sub_plan_content = f.read()
+            parsed_sub_commands = parse_plan(raw_sub_plan_content)
         except FileNotFoundError:
             agent_state.error = f"Sub-plan file not found: {sub_plan_path}"
             print(f"[MasterControl] Error: {agent_state.error}")
@@ -289,7 +293,7 @@ class MasterControlGraph:
 
         # Push the new plan onto the stack
         new_context = PlanContext(
-            plan_path=sub_plan_path, plan_content=sub_plan_content
+            plan_path=sub_plan_path, commands=parsed_sub_commands
         )
         agent_state.plan_stack.append(new_context)
         return self.get_trigger("EXECUTING", "EXECUTING")
@@ -311,10 +315,10 @@ class MasterControlGraph:
 
         # Always work with the plan at the top of the stack
         current_context = agent_state.plan_stack[-1]
-        plan_steps = current_context.plan_content
+        commands = current_context.commands
 
         # If we've finished all steps in the current plan, pop it and continue
-        if current_context.current_step >= len(plan_steps):
+        if current_context.current_step >= len(commands):
             agent_state.plan_stack.pop()
             print(
                 f"  - Finished sub-plan '{current_context.plan_path}'. Resuming parent."
@@ -322,12 +326,15 @@ class MasterControlGraph:
             # Re-enter the execution loop immediately to process the parent plan
             return self.get_trigger("EXECUTING", "EXECUTING")
 
-        step = plan_steps[current_context.current_step].strip()
-        command, *args = step.split()
+        command_obj = commands[current_context.current_step]
+        tool_name = command_obj.tool_name
+        args_text = command_obj.args_text
 
         # --- Protocol Enforcement: Check for destructive commands ---
-        if command == "reset_all":
-            auth_token_path = os.path.join("knowledge_core", "reset_all_authorization.token")
+        if tool_name == "reset_all":
+            auth_token_path = os.path.join(
+                "knowledge_core", "reset_all_authorization.token"
+            )
             if not os.path.exists(auth_token_path):
                 error_message = "Unauthorized use of 'reset_all'. Authorization token not found."
                 agent_state.error = error_message
@@ -336,17 +343,23 @@ class MasterControlGraph:
             else:
                 # Consume the one-time token
                 os.remove(auth_token_path)
-                print("[MasterControl] 'reset_all' authorized. Consuming token and proceeding.")
+                print(
+                    "[MasterControl] 'reset_all' authorized. Consuming token and proceeding."
+                )
 
         # Handle the 'call_plan' directive using the helper method
-        if command == "call_plan":
-            return self._handle_call_plan(agent_state, args)
+        if tool_name == "call_plan":
+            return self._handle_call_plan(agent_state, args_text.strip().split())
 
         # --- Standard Step Execution ---
         step_complete_file = "step_complete.txt"
-        print(f"  - Waiting for agent to complete step: {step}")
-        while not os.path.exists(step_complete_file):
-            time.sleep(1)
+        step_representation = (
+            f"{tool_name} {args_text[:50]}..." if args_text else tool_name
+        )
+        print(f"  - Checking for agent completion of step: {step_representation}")
+        if not os.path.exists(step_complete_file):
+            print("  - Step not complete. Waiting for agent.")
+            return "step_not_complete"
 
         print(f"  - Detected '{step_complete_file}'.")
         with open(step_complete_file, "r") as f:
@@ -355,7 +368,7 @@ class MasterControlGraph:
         agent_state.messages.append(
             {
                 "role": "system",
-                "content": f"Completed step {current_context.current_step + 1} in '{current_context.plan_path}': {step}\nResult: {result}",
+                "content": f"Completed step {current_context.current_step + 1} in '{current_context.plan_path}': {step_representation}\nResult: {result}",
             }
         )
 
@@ -363,7 +376,7 @@ class MasterControlGraph:
         current_context.current_step += 1
 
         print(
-            f"  - Step {current_context.current_step} of {len(plan_steps)} in '{current_context.plan_path}' signaled complete."
+            f"  - Step {current_context.current_step} of {len(commands)} in '{current_context.plan_path}' signaled complete."
         )
         return self.get_trigger("EXECUTING", "EXECUTING")
 
@@ -385,13 +398,14 @@ class MasterControlGraph:
             print(f"[MasterControl] {agent_state.error}")
             return self.get_trigger("AWAITING_ANALYSIS", "ERROR")
 
-        # Wait for the agent to signal analysis is complete
+        # Check for the agent to signal analysis is complete
         analysis_complete_file = "analysis_complete.txt"
         print(
-            f"  - Waiting for agent to complete analysis and create '{analysis_complete_file}'..."
+            f"  - Checking for agent to complete analysis and create '{analysis_complete_file}'..."
         )
-        while not os.path.exists(analysis_complete_file):
-            time.sleep(1)
+        if not os.path.exists(analysis_complete_file):
+            print("  - Analysis not complete. Waiting for agent.")
+            return "analysis_not_complete"
 
         os.remove(analysis_complete_file)
         print(

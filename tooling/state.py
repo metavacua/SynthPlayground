@@ -19,6 +19,9 @@ import json
 from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
 
+# The Command dataclass is now defined in the central plan_parser module.
+from tooling.plan_parser import Command
+
 
 @dataclass
 class PlanContext:
@@ -26,13 +29,13 @@ class PlanContext:
     Represents the execution context of a single plan file within the plan stack.
 
     This class holds the state of a specific plan being executed, including its
-    file path, its content (as a list of commands), and a pointer to the
-    current step being executed. Instances of this class are pushed onto the
-    `plan_stack` in the `AgentState` to manage hierarchical plan execution.
+    file path, its content (as a list of parsed Command objects), and a pointer
+    to the current step being executed.
     """
 
     plan_path: str
-    plan_content: List[str]
+    # The plan is now a list of structured Command objects, not raw strings.
+    commands: List[Command]
     current_step: int = 0
 
 
@@ -92,7 +95,7 @@ class AgentState:
                 {
                     "plan_path": ctx.plan_path,
                     "current_step": ctx.current_step,
-                    "plan_length": len(ctx.plan_content),
+                    "plan_length": len(ctx.commands),
                 }
                 for ctx in self.plan_stack
             ],
