@@ -28,15 +28,50 @@ dependencies) and edges (the dependency links). This artifact is a primary
 input for the agent's orientation and planning phases, allowing it to reason
 about the potential impact of its changes.
 
+
+**Public Functions:**
+
+
+- #### `def find_package_json_files(root_dir)`
+
+  > Finds all package.json files in the repository, excluding node_modules.
+
+
+- #### `def find_requirements_txt_files(root_dir)`
+
+  > Finds all requirements.txt files in the repository.
+
+
+- #### `def generate_dependency_graph(root_dir='.')`
+
+  > Generates a dependency graph for all supported dependency files found.
+
+
+- #### `def main()`
+
+  > Main function to generate and save the dependency graph.
+
+
+- #### `def parse_package_json(package_json_path)`
+
+  > Parses a single package.json file to extract its name and dependencies.
+
+
+- #### `def parse_requirements_txt(requirements_path, root_dir)`
+
+  > Parses a requirements.txt file to extract its dependencies.
+
+
 ### `tooling/doc_generator.py`
 
-Generates system documentation from Python module-level docstrings.
+Generates detailed system documentation from Python source files.
 
-This script scans specified directories for Python files, parses them to
-extract their module-level docstrings, and compiles them into a single,
-formatted Markdown file. It is the core engine for the project's automated
-documentation generation, ensuring that the `SYSTEM_DOCUMENTATION.md` artifact
-in the `knowledge_core` is always up-to-date with the in-code documentation.
+This script scans specified directories for Python files, parses their
+Abstract Syntax Trees (ASTs), and extracts documentation for the module,
+classes, and functions. The output is a structured Markdown file.
+
+This is a key component of the project's self-documentation capabilities,
+powering the `SYSTEM_DOCUMENTATION.md` artifact in the `knowledge_core`.
 
 The script is configured via top-level constants:
 - `SCAN_DIRECTORIES`: A list of directories to search for .py files.
@@ -45,6 +80,90 @@ The script is configured via top-level constants:
 
 It uses Python's `ast` module to reliably parse source files without
 importing them, which avoids issues with dependencies or script side-effects.
+
+
+**Public Functions:**
+
+
+- #### `def find_python_files(directories)`
+
+  > Finds all Python files in the given directories, ignoring test files.
+
+
+- #### `def format_args(args)`
+
+  > Formats ast.arguments into a printable string, including defaults.
+
+
+- #### `def generate_documentation(all_docs)`
+
+  > Generates a single Markdown string from a list of ModuleDoc objects.
+
+
+- #### `def generate_documentation_for_module(mod_doc)`
+
+  > Generates Markdown content for a single module.
+
+
+- #### `def main()`
+
+  > Main function to find files, parse them, and write documentation.
+
+
+- #### `def parse_file_for_docs(filepath)`
+
+  > Parses a Python file and extracts documentation for its module, classes,
+  > and functions.
+
+
+
+**Public Classes:**
+
+
+- #### `class ClassDoc`
+
+  > Holds documentation for a single class.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, name, docstring, methods)`
+
+
+- #### `class DocVisitor`
+
+  > AST visitor to extract documentation from classes and functions.
+  > It navigates the tree and builds lists of discovered documentation objects.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self)`
+
+  - ##### `def visit_ClassDef(self, node)`
+
+  - ##### `def visit_FunctionDef(self, node)`
+
+
+- #### `class FunctionDoc`
+
+  > Holds documentation for a single function or method.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, name, signature, docstring)`
+
+
+- #### `class ModuleDoc`
+
+  > Holds all documentation for a single Python module.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, name, docstring, classes, functions)`
+
 
 ### `tooling/environmental_probe.py`
 
@@ -66,6 +185,30 @@ capabilities required for most software development tasks:
 The script generates a human-readable report summarizing the results of these
 probes, allowing the agent to quickly identify any environmental constraints
 that might impact its ability to complete a task.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Runs all environmental probes and prints a summary report.
+
+
+- #### `def probe_environment_variables()`
+
+  > Checks for the presence of a common environment variable.
+
+
+- #### `def probe_filesystem()`
+
+  > Tests file system write/read/delete capabilities and measures latency.
+
+
+- #### `def probe_network()`
+
+  > Tests network connectivity and measures latency to a reliable external endpoint.
+
 
 ### `tooling/fdc_cli.py`
 
@@ -89,6 +232,40 @@ The CLI provides several key commands:
 - `lint`: A comprehensive "linter" that runs a full suite of checks on a plan
   file, including `validate`, `analyze`, and checks for disallowed recursion.
 
+
+**Public Functions:**
+
+
+- #### `def analyze_plan(plan_filepath)`
+
+  > Analyzes a plan file to determine its complexity class and modality.
+
+
+- #### `def close_task(task_id)`
+
+  > Logs the formal end of a task.
+  >
+  > This command's primary role is to create a TASK_END log entry. It no longer
+  > manages the post-mortem file directly; that process is now fully owned by
+  > the MasterControlGraph orchestrator, which is the single source of truth
+  > for state transitions and artifact lifecycle management.
+
+
+- #### `def lint_plan(plan_filepath)`
+
+  > Runs a comprehensive suite of checks on a plan file.
+  > The old recursion check is now obsolete, as the max depth is checked
+  > directly within the new hierarchical validator.
+
+
+- #### `def main()`
+
+
+- #### `def validate_plan(plan_filepath)`
+
+  > Validates a plan, now supporting hierarchical (CFDC) plans.
+
+
 ### `tooling/knowledge_compiler.py`
 
 Extracts structured lessons from post-mortem reports and compiles them into a
@@ -108,9 +285,48 @@ improved in future tasks.
 The script is executed via the command line, taking the path to a completed
 post-mortem file as its primary argument.
 
+
+**Public Functions:**
+
+
+- #### `def extract_lessons_from_postmortem(postmortem_content)`
+
+  > Parses a post-mortem report to extract lessons learned.
+
+
+- #### `def extract_metadata_from_postmortem(postmortem_content)`
+
+  > Parses a post-mortem report to extract metadata like Task ID and Date.
+
+
+- #### `def format_lesson_entry(metadata, lesson_data)`
+
+  > Formats an extracted lesson into a structured JSON object.
+
+
+- #### `def main()`
+
+
+- #### `def parse_action_to_command(action_text)`
+
+  > Parses a natural language action string into a machine-executable command.
+  >
+  > This is the core of translating insights into automated actions. It uses
+  > pattern matching to identify specific, supported commands.
+
+
 ### `tooling/log_failure.py`
 
 _No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def log_catastrophic_failure()`
+
+  > Logs the catastrophic failure event.
+
 
 ### `tooling/master_control.py`
 
@@ -145,6 +361,62 @@ state. This creates a robust, interactive loop where the orchestrator directs
 the high-level state, and the agent is responsible for completing the work
 required to advance that state.
 
+
+**Public Classes:**
+
+
+- #### `class MasterControlGraph`
+
+  > A Finite State Machine (FSM) that enforces the agent's protocol.
+  > This graph reads a state definition and orchestrates the agent's workflow,
+  > ensuring that all protocol steps are followed in the correct order.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, fsm_path='tooling/fsm.json')`
+
+  - ##### `def do_awaiting_analysis(self, agent_state)`
+
+    > Creates a draft post-mortem and waits for the agent to analyze it.
+
+  - ##### `def do_execution(self, agent_state)`
+
+    > Executes the plan using a stack-based approach to handle sub-plans (CFDC).
+
+  - ##### `def do_orientation(self, agent_state)`
+
+    > Executes the L1, L2, and L3 orientation steps.
+
+  - ##### `def do_planning(self, agent_state)`
+
+    > Waits for the agent to provide a plan, validates it, and initializes
+    > the plan stack for execution.
+
+  - ##### `def do_post_mortem(self, agent_state)`
+
+    > Finalizes the post-mortem process, renaming the draft and compiling lessons.
+
+  - ##### `def do_self_correcting(self, agent_state)`
+
+    > Runs the automated self-correction cycle based on compiled lessons.
+    > This is a mandatory step. Failure here will halt the process.
+
+  - ##### `def get_trigger(self, source_state, dest_state)`
+
+    > Finds the trigger for a transition between two states.
+
+  - ##### `def get_trigger(self, source_state, dest_state)`
+
+    > Finds a trigger in the FSM definition for a transition from a source
+    > to a destination state. This is a helper to avoid hardcoding trigger
+    > strings in the state handlers.
+
+  - ##### `def run(self, initial_agent_state)`
+
+    > Runs the agent's workflow through the FSM.
+
+
 ### `tooling/plan_manager.py`
 
 Provides a command-line interface for managing the agent's Plan Registry.
@@ -166,6 +438,40 @@ This CLI provides three essential functions:
 By providing a simple, standardized interface for managing this library of
 reusable plans, this tool improves the agent's ability to compose complex
 workflows from smaller, validated sub-plans.
+
+
+**Public Functions:**
+
+
+- #### `def deregister_plan(name)`
+
+  > Removes a plan from the registry by its logical name.
+
+
+- #### `def get_registry()`
+
+  > Loads the plan registry from its JSON file.
+
+
+- #### `def list_plans()`
+
+  > Lists all currently registered plans.
+
+
+- #### `def main()`
+
+  > Main function to run the plan management CLI.
+
+
+- #### `def register_plan(name, path)`
+
+  > Registers a new plan by mapping a logical name to a file path.
+
+
+- #### `def save_registry(registry_data)`
+
+  > Saves the given data to the plan registry JSON file.
+
 
 ### `tooling/protocol_auditor.py`
 
@@ -190,6 +496,51 @@ The auditor performs three main checks:
 The script parses all embedded JSON protocol blocks within `AGENTS.md` and reads
 from the standard `logs/activity.log.jsonl` log file, providing a reliable and
 accurate audit.
+
+
+**Public Functions:**
+
+
+- #### `def generate_markdown_report(source_check, unreferenced, unused, centrality)`
+
+  > Generates a Markdown-formatted string from the audit results.
+
+
+- #### `def get_protocol_tools_from_agents_md(agents_md_path)`
+
+  > Parses AGENTS.md to get a set of all tools associated with protocols.
+  > NOTE: This function correctly parses all JSON blocks, contrary to the
+  > outdated warning in the module-level docstring.
+
+
+- #### `def get_used_tools_from_log(log_path)`
+
+  > Parses the JSONL log file to get a list of used tool names.
+  > It specifically looks for 'TOOL_EXEC' actions and extracts the tool
+  > from the 'command' field based on the logging schema.
+  > This version is robust against malformed lines with multiple JSON objects.
+
+
+- #### `def main()`
+
+  > Main function to run the protocol auditor and generate a report.
+
+
+- #### `def run_centrality_analysis(used_tools)`
+
+  > Performs a frequency analysis on the tool log and returns the counts.
+
+
+- #### `def run_completeness_check(used_tools, protocol_tools)`
+
+  > Compares used tools with protocol-defined tools and returns the gaps.
+
+
+- #### `def run_protocol_source_check()`
+
+  > Checks if AGENTS.md is older than its source files.
+  > Returns a dictionary with the check's status and relevant details.
+
 
 ### `tooling/protocol_compiler.py`
 
@@ -217,6 +568,27 @@ This process ensures that `AGENTS.md` and other protocol documents are not edite
 manually but are instead generated from a validated, single source of truth,
 making the agent's protocols robust, verifiable, and maintainable.
 
+
+**Public Functions:**
+
+
+- #### `def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file=None, autodoc_file=None)`
+
+  > Reads all .protocol.json and corresponding .protocol.md files from the
+  > source directory, validates them, and compiles them into a target markdown file.
+  > Optionally, it can also generate a machine-readable knowledge graph.
+
+
+- #### `def load_schema(schema_file)`
+
+  > Loads the protocol JSON schema.
+
+
+- #### `def main()`
+
+  > Main function to run the compiler.
+
+
 ### `tooling/protocol_updater.py`
 
 A command-line tool for programmatically updating protocol source files.
@@ -228,6 +600,25 @@ workflow.
 
 The tool operates on the .protocol.json files located in the `protocols/`
 directory, performing targeted updates based on command-line arguments.
+
+
+**Public Functions:**
+
+
+- #### `def add_tool_to_protocol(protocol_id, tool_name, protocols_dir)`
+
+  > Adds a tool to the 'associated_tools' list of a specified protocol.
+
+
+- #### `def find_protocol_file(protocol_id, protocols_dir)`
+
+  > Finds the protocol file path corresponding to a given protocol_id.
+
+
+- #### `def main()`
+
+  > Main function to parse arguments and call the appropriate handler.
+
 
 ### `tooling/research.py`
 
@@ -250,6 +641,29 @@ following native tools into the execution environment:
 - `list_files(path: str = ".") -> list[str]`
 - `google_search(query: str) -> str`
 - `view_text_website(url: str) -> str`
+
+
+**Public Functions:**
+
+
+- #### `def execute_research_protocol(constraints)`
+
+  > Executes a research task based on a dictionary of constraints.
+  >
+  > This function delegates to native, pre-loaded tools based on the specified
+  > target and scope.
+  >
+  > Args:
+  >     constraints: A dictionary specifying the operational parameters.
+  >         - target: 'local_filesystem', 'external_web', or 'external_repository'
+  >         - scope: 'file', 'directory', 'narrow', or 'broad'
+  >         - path: The file or directory path for local filesystem operations.
+  >         - query: The search term for web research.
+  >         - url: The specific URL for direct web access.
+  >
+  > Returns:
+  >     A string containing the result of the research operation.
+
 
 ### `tooling/research_planner.py`
 
@@ -278,6 +692,26 @@ This tool helps enforce a consistent and effective methodology for complex
 investigative tasks, improving the quality and reliability of the research
 findings.
 
+
+**Public Functions:**
+
+
+- #### `def plan_deep_research(topic, repository='local')`
+
+  > Generates a structured markdown template for a deep research plan.
+  >
+  > This function reads the relevant protocol document (either local or external)
+  > to provide context and then generates a pre-formatted markdown plan. This
+  > plan provides a consistent workflow for conducting deep research.
+  >
+  > Args:
+  >     topic: The research topic to be investigated.
+  >     repository: The repository context for the research ('local' or 'external').
+  >
+  > Returns:
+  >     A string containing the markdown-formatted research plan.
+
+
 ### `tooling/self_correction_orchestrator.py`
 
 Orchestrates the Protocol-Driven Self-Correction (PDSC) workflow.
@@ -285,6 +719,36 @@ Orchestrates the Protocol-Driven Self-Correction (PDSC) workflow.
 This script is the engine of the automated feedback loop. It reads structured,
 actionable lessons from `knowledge_core/lessons.jsonl` and uses the
 `protocol_updater.py` tool to apply them to the source protocol files.
+
+
+**Public Functions:**
+
+
+- #### `def load_lessons()`
+
+  > Loads all lessons from the JSONL file.
+
+
+- #### `def main()`
+
+  > Main function to run the self-correction workflow.
+
+
+- #### `def process_lessons(lessons, protocols_dir)`
+
+  > Processes all pending lessons, applies them, and updates their status.
+  > Returns True if any changes were made, False otherwise.
+
+
+- #### `def run_command(command)`
+
+  > Runs a command and returns True on success, False on failure.
+
+
+- #### `def save_lessons(lessons)`
+
+  > Saves a list of lessons back to the JSONL file, overwriting it.
+
 
 ### `tooling/self_improvement_cli.py`
 
@@ -310,6 +774,42 @@ upfront planning in the future.
 The tool is designed to be extensible, with future analyses (such as error
 rate tracking or tool usage anti-patterns) to be added as the system evolves.
 
+
+**Public Functions:**
+
+
+- #### `def analyze_planning_efficiency(log_file)`
+
+  > Analyzes the log file to find tasks with multiple plan revisions.
+  >
+  > Args:
+  >     log_file (str): Path to the activity log file.
+  >
+  > Returns:
+  >     dict: A dictionary mapping task IDs to the number of plan updates.
+
+
+- #### `def analyze_protocol_violations(log_file)`
+
+  > Scans the log file for critical protocol violations, such as the
+  > unauthorized use of `reset_all`.
+  >
+  > This function checks for two conditions:
+  > 1. A `SYSTEM_FAILURE` log explicitly blaming `reset_all`.
+  > 2. A `TOOL_EXEC` log where the command contains "reset_all".
+  >
+  > Args:
+  >     log_file (str): Path to the activity log file.
+  >
+  > Returns:
+  >     list: A list of unique task IDs where `reset_all` was used.
+
+
+- #### `def main()`
+
+  > Main function to run the self-improvement analysis CLI.
+
+
 ### `tooling/state.py`
 
 Defines the core data structures for managing the agent's state.
@@ -327,6 +827,53 @@ snapshot-able representation of the agent's progress through a task.
 
 Together, these classes enable the hierarchical, stack-based planning and
 execution that is the hallmark of the CFDC.
+
+
+**Public Classes:**
+
+
+- #### `class AgentState`
+
+  > Represents the complete, serializable state of the agent's workflow.
+  >
+  > This dataclass acts as a central container for all information related to the
+  > agent's current task. It is designed to be passed between the different states
+  > of the `MasterControlGraph` FSM, ensuring that context is maintained
+  > throughout the lifecycle of a task.
+  >
+  > Attributes:
+  >     task: A string describing the overall objective.
+  >     plan_stack: A list of `PlanContext` objects, forming the execution
+  >         stack for the CFDC. The plan at the top of the stack is the one
+  >         currently being executed.
+  >     messages: A history of messages, typically for interaction with an LLM.
+  >     orientation_complete: A flag indicating if the initial orientation
+  >         phase has been successfully completed.
+  >     vm_capability_report: A string summarizing the results of the
+  >         environmental probe.
+  >     research_findings: A dictionary to store the results of research tasks.
+  >     draft_postmortem_path: The file path to the draft post-mortem report
+  >         generated during the AWAITING_ANALYSIS state.
+  >     final_report: A string containing a summary of the final, completed
+  >         post-mortem report.
+  >     error: An optional string that holds an error message if the FSM
+  >         enters an error state, providing a clear reason for the failure.
+
+
+  **Methods:**
+
+  - ##### `def to_json(self)`
+
+
+- #### `class PlanContext`
+
+  > Represents the execution context of a single plan file within the plan stack.
+  >
+  > This class holds the state of a specific plan being executed, including its
+  > file path, its content (as a list of commands), and a pointer to the
+  > current step being executed. Instances of this class are pushed onto the
+  > `plan_stack` in the `AgentState` to manage hierarchical plan execution.
+
 
 ### `tooling/symbol_map_generator.py`
 
@@ -352,97 +899,29 @@ The resulting `symbols.json` artifact is a critical input for the agent's
 orientation and planning phases, allowing it to quickly locate relevant code
 and understand the structure of the repository without having to read every file.
 
-### `tooling/test_dependency_graph_generator.py`
 
-Unit tests for the dependency graph generator tool.
+**Public Functions:**
 
-This test suite validates the functionality of the `dependency_graph_generator.py`
-script. It uses a temporary file structure created in the `setUp` method to
-simulate a repository with both JavaScript (`package.json`) and Python
-(`requirements.txt`) projects, including nested and root-level files.
 
-The tests cover:
-- File discovery for both project types.
-- Correct parsing of package names and dependencies from each file type.
-- The successful generation of a complete dependency graph, including both
-  internal and external dependencies and the correct creation of nodes and edges.
+- #### `def generate_symbols_with_ast(root_dir='.')`
 
-### `tooling/test_knowledge_compiler.py`
+  > Fallback to generate a symbol map for Python files using the AST module.
 
-Unit tests for the knowledge_compiler.py script.
 
-This test suite verifies that the knowledge compiler can correctly parse
-a mock post-mortem report and generate a structured, machine-readable
-lessons.jsonl file. It ensures that the generated lessons conform to the
-expected JSON schema, including having unique IDs and a 'pending' status.
+- #### `def generate_symbols_with_ctags(root_dir='.')`
 
-### `tooling/test_master_control.py`
+  > Generates a symbol map using Universal Ctags.
 
-Integration tests for the master control FSM and CFDC workflow.
 
-This test suite has been redesigned to be single-threaded and deterministic,
-eliminating the file-polling, multi-threaded architecture that was causing
-timeouts and instability in the test environment.
+- #### `def has_ctags()`
 
-The key principles of this new design are:
-- **No `time.sleep`:** All forms of waiting are removed.
-- **No `threading`:** The tests run in a single, predictable thread.
-- **Direct State Manipulation:** The tests directly call the FSM's state-handler
-  methods (e.g., `do_planning`, `do_execution`) instead of running the FSM's
-  main loop.
-- **Mocking Filesystem I/O:** `os.path.exists` and other file operations that
-  the FSM uses for polling are mocked. This gives the test complete and
-  instantaneous control over the FSM's state transitions.
-- **Hermetic Environment:** All tests run inside a temporary directory, and all
-  necessary dependencies from the repository are copied into it, ensuring tests
-  do not have side effects and do not rely on the external state of the repo.
+  > Check if Universal Ctags is installed and available in the PATH.
 
-### `tooling/test_protocol_auditor.py`
 
-_No module-level docstring found._
+- #### `def main()`
 
-### `tooling/test_protocol_updater.py`
+  > Main function to generate and save the symbol map.
 
-Unit tests for the protocol_updater.py script.
-
-This test suite verifies that the protocol updater tool can correctly
-find and modify protocol source files in a controlled, temporary
-environment. It ensures that tools can be added to protocols and that
-edge cases like duplicate additions are handled gracefully.
-
-### `tooling/test_self_correction_orchestrator.py`
-
-Unit tests for the self_correction_orchestrator.py script.
-
-This test suite verifies the end-to-end functionality of the automated
-self-correction workflow. It ensures that the orchestrator can correctly
-read structured lessons, invoke the protocol_updater.py script as a
-subprocess with the correct arguments, and update the lesson status file
-to reflect the outcome.
-
-### `tooling/test_self_improvement_cli.py`
-
-Unit tests for the self-improvement analysis CLI tool.
-
-### `tooling/test_symbol_map_generator.py`
-
-Unit tests for the symbol map generator tool.
-
-This test suite validates the `symbol_map_generator.py` script, which is
-responsible for creating a code symbol index for the repository. The tests
-cover both of the script's operational modes: the preferred `ctags`-based
-generation and the `ast`-based fallback.
-
-The tests include:
-- `test_generate_with_ctags_success`: Mocks the `subprocess.run` call to
-  simulate a successful `ctags` execution. It verifies that the script correctly
-  parses the JSON-lines output from `ctags` and wraps it in a valid JSON object.
-- `test_generate_with_ast_fallback`: Validates that the Python-only `ast` parser
-  correctly traverses a sample Python file and extracts class, method, and
-  function definitions.
-- `test_main_with_ast_fallback`: Mocks the `has_ctags` check to force the main
-  function to use the `ast` fallback, ensuring the end-to-end logic works
-  correctly when `ctags` is not available.
 
 ---
 
@@ -480,21 +959,39 @@ This centralized logger is the sole mechanism by which the agent should record
 its activities, ensuring a single source of truth for all post-mortem analysis
 and self-improvement activities.
 
-### `utils/test_logger.py`
 
-Unit tests for the structured JSONL logger.
+**Public Classes:**
 
-This test suite validates the `Logger` class from `utils/logger.py`. Its main
-purpose is to ensure that the logger correctly performs schema validation and
-writes well-formed log entries to the specified log file.
 
-The tests use a temporary directory to house a mock schema file and a log file,
-ensuring the tests are isolated and do not interfere with the actual project logs.
+- #### `class Logger`
 
-The suite covers two primary scenarios:
-- **Success Case:** It tests that a log entry with a valid data structure that
-  conforms to the schema is successfully written to the JSONL file.
-- **Failure Case:** It tests that a log entry with data that violates the schema
-  (e.g., incorrect data types) correctly raises a `ValidationError` from the
-  `jsonschema` library and that no log file is written, preventing the creation
-  of corrupted logs.
+  > A class to handle structured logging to a JSONL file, validated against a schema.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, schema_path='LOGGING_SCHEMA.md', log_path='logs/activity.log.jsonl')`
+
+    > Initializes the Logger, loading the schema and setting up the session.
+    >
+    > Args:
+    >     schema_path (str): The path to the Markdown file containing the logging schema.
+    >     log_path (str): The path to the log file to be written.
+
+  - ##### `def log(self, phase, task_id, plan_step, action_type, action_details, outcome_status, outcome_message='', error_details=None, evidence='')`
+
+    > Constructs, validates, and writes a log entry.
+    >
+    > Args:
+    >     phase (str): The current protocol phase (e.g., "Phase 7").
+    >     task_id (str): The ID of the current task.
+    >     plan_step (int): The current plan step number.
+    >     action_type (str): The type of action (e.g., "TOOL_EXEC").
+    >     action_details (dict): Details specific to the action.
+    >     outcome_status (str): The outcome of the action ("SUCCESS", "FAILURE").
+    >     outcome_message (str, optional): A message describing the outcome. Defaults to "".
+    >     error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.
+    >     evidence (str, optional): Citation for the action. Defaults to "".
+    >
+    > Raises:
+    >     ValidationError: If the generated log entry does not conform to the schema.
