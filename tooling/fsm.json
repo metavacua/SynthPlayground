@@ -3,6 +3,7 @@
     "START",
     "ORIENTING",
     "PLANNING",
+    "RESEARCHING",
     "EXECUTING",
     "AWAITING_ANALYSIS",
     "POST_MORTEM",
@@ -37,6 +38,21 @@
       "source": "PLANNING",
       "dest": "ERROR",
       "trigger": "planning_failed"
+    },
+    {
+      "source": "PLANNING",
+      "dest": "RESEARCHING",
+      "trigger": "research_requested"
+    },
+    {
+      "source": "RESEARCHING",
+      "dest": "EXECUTING",
+      "trigger": "research_plan_validated"
+    },
+    {
+      "source": "RESEARCHING",
+      "dest": "ERROR",
+      "trigger": "research_failed"
     },
     {
       "source": "EXECUTING",

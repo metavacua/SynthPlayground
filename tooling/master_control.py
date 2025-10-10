@@ -43,6 +43,7 @@ sys.path.insert(0, "./tooling")
 from state import AgentState, PlanContext
 from fdc_cli import MAX_RECURSION_DEPTH
 from research import execute_research_protocol
+from research_planner import plan_deep_research
 
 PLAN_REGISTRY_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "knowledge_core", "plan_registry.json")
@@ -120,13 +121,24 @@ class MasterControlGraph:
 
             # L3: Environmental Probe
             print("  - Executing L3: Environmental Probe...")
-            # This would call the environmental_probe.py script in a real scenario
-            agent_state.vm_capability_report = (
-                "Mock VM Capability Report: Filesystem OK, Network OK."
-            )
-            agent_state.messages.append(
-                {"role": "system", "content": "L3 Orientation Complete."}
-            )
+            try:
+                probe_cmd = ["python3", "tooling/environmental_probe.py"]
+                result = subprocess.run(
+                    probe_cmd, capture_output=True, text=True, check=True
+                )
+                agent_state.vm_capability_report = result.stdout
+                agent_state.messages.append(
+                    {
+                        "role": "system",
+                        "content": f"L3 Orientation Complete.\n{result.stdout}",
+                    }
+                )
+            except (subprocess.CalledProcessError, FileNotFoundError) as e:
+                error_message = f"Environmental probe failed: {e}\n{e.stderr if hasattr(e, 'stderr') else ''}"
+                agent_state.vm_capability_report = error_message
+                agent_state.messages.append(
+                    {"role": "system", "content": error_message}
+                )
 
             agent_state.orientation_complete = True
             print("[MasterControl] Orientation Succeeded.")
@@ -154,8 +166,20 @@ class MasterControlGraph:
         the plan stack for execution.
         """
         print("[MasterControl] State: PLANNING")
-        plan_file = "plan.txt"
 
+        # L4 Check: Does the agent need to perform deep research?
+        research_request_file = "request_deep_research.txt"
+        if os.path.exists(research_request_file):
+            print("  - Detected request for L4 Deep Research Cycle.")
+            with open(research_request_file, "r") as f:
+                topic = f.read().strip()
+            agent_state.research_findings["topic"] = topic
+            os.remove(research_request_file)
+            # Transition to the new RESEARCHING state
+            return self.get_trigger("PLANNING", "RESEARCHING")
+
+        # Standard L3 planning process
+        plan_file = "plan.txt"
         print(f"  - Waiting for agent to create '{plan_file}'...")
         while not os.path.exists(plan_file):
             time.sleep(1)
@@ -174,7 +198,6 @@ class MasterControlGraph:
         with open(plan_file, "r") as f:
             plan_content = [line for line in f.read().split("\n") if line.strip()]
 
-        # Initialize the plan stack with the root plan
         agent_state.plan_stack.append(
             PlanContext(plan_path=plan_file, plan_content=plan_content)
         )
@@ -185,8 +208,58 @@ class MasterControlGraph:
             }
         )
         print("[MasterControl] Planning Complete.")
-        # We keep plan.txt for now for traceability during execution
         return self.get_trigger("PLANNING", "EXECUTING")
+
+    def do_researching(self, agent_state: AgentState) -> str:
+        """
+        Generates, validates, and initiates a formal Deep Research FDC.
+        """
+        print("[MasterControl] State: RESEARCHING")
+        topic = agent_state.research_findings.get("topic")
+        if not topic:
+            agent_state.error = "Cannot initiate research cycle without a topic."
+            return self.get_trigger("RESEARCHING", "ERROR")
+
+        # 1. Generate the executable research plan
+        print(f"  - Generating research plan for topic: '{topic}'")
+        try:
+            research_plan_content = plan_deep_research(topic=topic)
+            research_plan_file = "research_plan.txt"
+            with open(research_plan_file, "w") as f:
+                f.write(research_plan_content)
+        except Exception as e:
+            agent_state.error = f"Failed to generate research plan: {e}"
+            return self.get_trigger("RESEARCHING", "ERROR")
+
+        # 2. Validate the plan against the research FSM
+        print(f"  - Validating '{research_plan_file}' against research FSM...")
+        # The updated fdc_cli now reads the # FSM: directive from the plan file.
+        validation_cmd = ["python3", "tooling/fdc_cli.py", "validate", research_plan_file]
+        result = subprocess.run(validation_cmd, capture_output=True, text=True)
+
+        if result.returncode != 0:
+            error_message = f"Research plan validation failed:\n{result.stderr}"
+            agent_state.error = error_message
+            # Clean up the invalid plan
+            os.remove(research_plan_file)
+            return self.get_trigger("RESEARCHING", "ERROR")
+
+        # 3. Push the validated research plan onto the execution stack
+        print("  - Research plan is valid. Pushing to execution stack.")
+        plan_lines = [
+            line for line in research_plan_content.splitlines()
+            if line.strip() and not line.strip().startswith("#")
+        ]
+        agent_state.plan_stack.append(
+            PlanContext(plan_path=research_plan_file, plan_content=plan_lines)
+        )
+        agent_state.messages.append(
+            {
+                "role": "system",
+                "content": f"L4 Deep Research Cycle initiated for topic: '{topic}'. Executing '{research_plan_file}'.",
+            }
+        )
+        return self.get_trigger("RESEARCHING", "EXECUTING")
 
     def _handle_call_plan(self, agent_state: AgentState, args: list) -> str:
         """Handles the 'call_plan' directive during execution."""
@@ -229,9 +302,11 @@ class MasterControlGraph:
 
         if not agent_state.plan_stack:
             print("[MasterControl] Execution Complete (plan stack is empty).")
-            # Clean up the root plan file now that execution is fully complete
+            # Clean up the root plan files now that execution is fully complete
             if os.path.exists("plan.txt"):
                 os.remove("plan.txt")
+            if os.path.exists("research_plan.txt"):
+                os.remove("research_plan.txt")
             return self.get_trigger("EXECUTING", "AWAITING_ANALYSIS")
 
         # Always work with the plan at the top of the stack
@@ -424,6 +499,8 @@ class MasterControlGraph:
                 trigger = self.do_orientation(agent_state)
             elif self.current_state == "PLANNING":
                 trigger = self.do_planning(agent_state)
+            elif self.current_state == "RESEARCHING":
+                trigger = self.do_researching(agent_state)
             elif self.current_state == "EXECUTING":
                 trigger = self.do_execution(agent_state)
             elif self.current_state == "AWAITING_ANALYSIS":

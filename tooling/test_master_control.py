@@ -77,14 +77,12 @@ class TestMasterControlRedesigned(unittest.TestCase):
 
 
     @patch("master_control.subprocess.run")
-    @patch("master_control.os.path.exists")
-    def test_full_workflow_single_threaded(self, mock_exists, mock_subprocess):
+    def test_full_workflow_single_threaded(self, mock_subprocess):
         """
         Tests the full FSM workflow deterministically without threads or sleeps.
         """
         # --- Mocking Setup ---
         def subprocess_side_effect(cmd, *args, **kwargs):
-            # Make the check more robust by looking for the script name anywhere in the command.
             cmd_str = " ".join(cmd)
             if "knowledge_compiler.py" in cmd_str:
                 lesson = {
@@ -106,43 +104,42 @@ class TestMasterControlRedesigned(unittest.TestCase):
         # --- Test Execution ---
         # 1. ORIENTING
         with patch("master_control.execute_research_protocol", return_value="Mocked Research Data"):
-             trigger = self.graph.do_orientation(self.agent_state)
+            trigger = self.graph.do_orientation(self.agent_state)
         self.assertEqual(trigger, "orientation_succeeded")
         self.graph.current_state = "PLANNING"
 
-        # 2. PLANNING
+        # 2. PLANNING (Standard Workflow)
         plan_content = 'set_plan "Test Plan"\nplan_step_complete "Done"'
         with open("plan.txt", "w") as f: f.write(plan_content)
-        mock_exists.return_value = True
-        trigger = self.graph.do_planning(self.agent_state)
+
+        with patch("master_control.os.path.exists") as mock_exists:
+            mock_exists.side_effect = lambda path: path == "plan.txt"
+            trigger = self.graph.do_planning(self.agent_state)
+
         self.assertEqual(trigger, "plan_is_set")
         self.graph.current_state = "EXECUTING"
 
         # 3. EXECUTING
-        # Simulate completing the two steps in the plan
-        for _ in range(2):
-            with open("step_complete.txt", "w") as f: f.write("done")
-            mock_exists.return_value = True
+        with patch("master_control.os.path.exists") as mock_exists:
+            mock_exists.side_effect = lambda path: path in ['plan.txt', 'step_complete.txt']
+            for _ in range(2):
+                with open("step_complete.txt", "w") as f: f.write("done")
+                trigger = self.graph.do_execution(self.agent_state)
+                self.assertEqual(trigger, "step_succeeded")
+                self.graph.current_state = "EXECUTING"
+
             trigger = self.graph.do_execution(self.agent_state)
             self.assertEqual(trigger, "step_succeeded")
-            self.graph.current_state = "EXECUTING"
-            mock_exists.return_value = False
+            self.assertTrue(not self.agent_state.plan_stack)
 
-        # After all steps are done, the FSM pops the plan from the stack
-        # and returns a trigger to re-enter the execution loop.
-        trigger = self.graph.do_execution(self.agent_state)
-        self.assertEqual(trigger, "step_succeeded") # This pops the finished plan
-        self.assertTrue(not self.agent_state.plan_stack) # The plan stack should now be empty
-
-        # The next call to do_execution finds the stack empty and transitions out.
-        trigger = self.graph.do_execution(self.agent_state)
-        self.assertEqual(trigger, "all_steps_completed")
-        self.graph.current_state = "AWAITING_ANALYSIS"
+            trigger = self.graph.do_execution(self.agent_state)
+            self.assertEqual(trigger, "all_steps_completed")
+            self.graph.current_state = "AWAITING_ANALYSIS"
 
         # 4. AWAITING_ANALYSIS
-        with open("analysis_complete.txt", "w") as f: f.write("done")
-        mock_exists.return_value = True
-        trigger = self.graph.do_awaiting_analysis(self.agent_state)
+        with patch("master_control.os.path.exists", return_value=True):
+            with open("analysis_complete.txt", "w") as f: f.write("done")
+            trigger = self.graph.do_awaiting_analysis(self.agent_state)
         self.assertEqual(trigger, "analysis_complete")
         self.graph.current_state = "POST_MORTEM"
 
@@ -152,20 +149,63 @@ class TestMasterControlRedesigned(unittest.TestCase):
         self.graph.current_state = "SELF_CORRECTING"
 
         # 6. SELF_CORRECTING
-        # This is where the mocked subprocess for self_correction_orchestrator.py is called
         trigger = self.graph.do_self_correcting(self.agent_state)
         self.assertEqual(trigger, "self_correction_succeeded")
         self.graph.current_state = "AWAITING_SUBMISSION"
 
         # --- Assertions ---
         self.assertIsNone(self.agent_state.error, f"Agent entered an error state: {self.agent_state.error}")
-        self.assertEqual(self.graph.current_state, "AWAITING_SUBMISSION")
-
-        # Verify that the self-correction step actually modified the protocol file
         with open(self.mock_protocol_file, "r") as f:
             updated_protocol = json.load(f)
-        # Now this assertion should pass because the mock was called
         self.assertIn("new_mock_tool", updated_protocol["associated_tools"])
+
+    @patch("master_control.subprocess.run")
+    def test_l4_research_workflow(self, mock_subprocess):
+        """
+        Tests the L4 Deep Research Cycle is correctly triggered and executed.
+        """
+        mock_subprocess.return_value = subprocess.CompletedProcess(args=[], returncode=0)
+        self.graph.current_state = "PLANNING"
+        research_topic = "testing the L4 cycle"
+
+        # 1. PLANNING -> RESEARCHING
+        with patch("master_control.os.path.exists") as mock_exists:
+            mock_exists.side_effect = lambda path: path == "request_deep_research.txt"
+            with open("request_deep_research.txt", "w") as f:
+                f.write(research_topic)
+            trigger = self.graph.do_planning(self.agent_state)
+
+        self.assertEqual(trigger, "research_requested")
+        self.assertEqual(self.agent_state.research_findings["topic"], research_topic)
+        self.graph.current_state = "RESEARCHING"
+
+        # 2. RESEARCHING -> EXECUTING
+        trigger = self.graph.do_researching(self.agent_state)
+        self.assertEqual(trigger, "research_plan_validated")
+        self.assertEqual(len(self.agent_state.plan_stack), 1)
+        self.assertEqual(self.agent_state.plan_stack[0].plan_path, "research_plan.txt")
+        self.assertTrue(os.path.exists("research_plan.txt"))
+        self.graph.current_state = "EXECUTING"
+
+        # 3. EXECUTING (the research plan)
+        # The generated research plan has 4 steps
+        with patch("master_control.os.path.exists") as mock_exists:
+            mock_exists.side_effect = lambda path: path in ['research_plan.txt', 'step_complete.txt']
+            for _ in range(4):
+                with open("step_complete.txt", "w") as f: f.write("done")
+                trigger = self.graph.do_execution(self.agent_state)
+                self.assertEqual(trigger, "step_succeeded")
+                self.graph.current_state = "EXECUTING"
+
+            # After the loop, the plan is finished. The next call to do_execution
+            # will find the current context is done, pop it, and return a trigger to re-enter.
+            trigger = self.graph.do_execution(self.agent_state)
+            self.assertEqual(trigger, "step_succeeded") # This pops the finished plan
+            self.assertTrue(not self.agent_state.plan_stack) # The plan stack should now be empty
+
+            # The final call to do_execution finds the stack empty and transitions out.
+            trigger = self.graph.do_execution(self.agent_state)
+            self.assertEqual(trigger, "all_steps_completed")
 
     def test_reset_all_unauthorized(self):
         """

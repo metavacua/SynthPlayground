@@ -1,137 +1,65 @@
 """
-Generates a structured, templated plan for conducting deep research tasks.
+Generates a structured, executable plan for conducting deep research tasks.
 
-This script provides a standardized workflow for the agent when it needs to
-perform in-depth research on a complex topic. The `plan_deep_research` function
-creates a markdown document that outlines a multi-phase research process,
-ensuring that the investigation is systematic and thorough.
+This script provides a standardized, FSM-compliant workflow for the agent when
+it needs to perform in-depth research on a complex topic. The `plan_deep_research`
+function creates a plan file that is not just a template, but a formal,
+verifiable artifact that can be executed by the `master_control.py` orchestrator.
 
-The key features of the generated plan are:
-- **Context-Awareness:** It can generate plans tailored to either the agent's
-  internal repository context (using `AGENTS.md`) or an external one.
-- **Structured Phases:** It breaks the research process down into four distinct
-  phases:
-    1.  Initial Planning & Question Formulation
-    2.  Parallel Research Execution
-    3.  Synthesis and Refinement
-    4.  Final Report Generation
-- **Tool Integration:** It explicitly references the `execute_research_protocol`
-  tool, guiding the agent on how to perform the data-gathering steps.
-- **Protocol Reference:** It includes a snippet of the governing protocol
-  document directly in the plan, providing immediate context for the task.
-
-This tool helps enforce a consistent and effective methodology for complex
-investigative tasks, improving the quality and reliability of the research
-findings.
+The generated plan adheres to the state transitions defined in `research_fsm.json`,
+guiding the agent through the phases of GATHERING, SYNTHESIZING, and REPORTING.
 """
-import json
 import sys
 from typing import Literal
 
-# Ensure the tooling directory is in the path to import the research tool
-sys.path.insert(0, "./tooling")
-from research import execute_research_protocol
-
-
-def plan_deep_research(
-    topic: str, repository: Literal["local", "external"] = "local"
-) -> str:
+def plan_deep_research(topic: str) -> str:
     """
-    Generates a structured markdown template for a deep research plan.
+    Generates a structured, FSM-compliant executable plan for deep research.
 
-    This function reads the relevant protocol document (either local or external)
-    to provide context and then generates a pre-formatted markdown plan. This
-    plan provides a consistent workflow for conducting deep research.
+    This function creates a plan that guides an agent through a research
+    workflow. The plan is designed to be validated by `fdc_cli.py` against
+    the `tooling/research_fsm.json` definition.
 
     Args:
         topic: The research topic to be investigated.
-        repository: The repository context for the research ('local' or 'external').
 
     Returns:
-        A string containing the markdown-formatted research plan.
+        A string containing the executable research plan.
     """
-    workflow_file_path = ""
-    workflow_content_snippet = ""
+    # Sanitize the topic to create safe filenames and task IDs
+    safe_topic = "".join(
+        c for c in topic.replace(" ", "_") if c.isalnum() or c in ("-", "_")
+    ).lower()
+    report_filename = f"research_report_{safe_topic}.md"
+    task_id = f"research-{safe_topic}"
 
-    if repository == "local":
-        workflow_file_path = "AGENTS.md"
-        try:
-            with open(workflow_file_path, "r") as f:
-                content = f.read()
-            # Extract content from the json code block
-            start_marker = "```json\n"
-            end_marker = "\n```"
-            start_index = content.find(start_marker) + len(start_marker)
-            end_index = content.rfind(end_marker)
+    # This template creates a clean, 4-step plan that the current executor can parse.
+    plan_template = f"""\
+# Auto-Generated Deep Research Plan
+# FSM: tooling/research_fsm.json
 
-            if start_index != -1 and end_index != -1:
-                json_content = content[start_index:end_index]
-                data = json.loads(json_content)
-                # Pretty-print the JSON content for readability
-                json_string = json.dumps(data, indent=2)
-                workflow_content_snippet = json_string[:500] + "..."
-            else:
-                workflow_content_snippet = "Error: Could not find JSON block in AGENTS.md"
-        except (FileNotFoundError, json.JSONDecodeError):
-            workflow_content_snippet = "Error: Could not read or parse AGENTS.md"
-    elif repository == "external":
-        workflow_file_path = "src/open_deep_research/deep_researcher.py"
-        constraints = {"target": "external_repository", "path": workflow_file_path}
-        content = execute_research_protocol(constraints)
-        workflow_content_snippet = content[:500] + "..."
-    else:
-        return "Error: Invalid repository specified. Must be 'local' or 'external'."
+# 1. Set the plan, moving from IDLE to GATHERING
+set_plan This is the research plan for the topic: '{topic}'.
 
-    plan_template = f"""
-# Deep Research Plan
+# 2. Complete the interactive GATHERING phase, moving to SYNTHESIZING
+plan_step_complete
 
-## 1. Research Context
-- **Topic:** {topic}
-- **Repository Context:** {repository}
-- **Governing Protocol:** `{workflow_file_path}`
+# 3. Create the report file, moving from SYNTHESIZING to REPORTING
+create_file_with_block {report_filename}
 
-## 2. Research Phases
-
-### Phase A: Initial Planning & Question Formulation
-*   **Action:** Analyze the topic to break it down into fundamental questions.
-*   **Output:** A list of 3-5 core research questions.
-    -   *Question 1:*
-    -   *Question 2:*
-    -   *Question 3:*
-
-### Phase B: Parallel Research Execution
-*   **Action:** For each core question, execute a targeted research query using the `execute_research_protocol` tool.
-*   **Example Action for Question 1:** `execute_research_protocol(constraints={{"target": "external_web", "scope": "narrow", "query": "..."}})`
-*   **Output:** A collection of raw findings for each question.
-
-### Phase C: Synthesis and Refinement
-*   **Action:** Review the collected findings to identify key insights, connections, and contradictions.
-*   **Output:** A synthesized summary of the findings. Determine if any gaps exist that require follow-up research.
-
-### Phase D: Final Report Generation
-*   **Action:** Structure the synthesized findings into a comprehensive and well-organized report.
-*   **Output:** The final research report, ready for review.
-
-## 3. Protocol Reference Snippet
-```json
-{workflow_content_snippet}
-```
+# 4. Close the task, moving from REPORTING to DONE
+run_in_bash_session python3 tooling/fdc_cli.py close --task-id "{task_id}"
 """
     return plan_template.strip()
 
 
 if __name__ == "__main__":
     # Example usage for testing
-    print("--- Generating Local Research Plan ---")
-    local_plan = plan_deep_research(
-        "Understand the agent's own protocol", repository="local"
-    )
-    print(local_plan)
+    if len(sys.argv) > 1:
+        topic_arg = sys.argv[1]
+    else:
+        topic_arg = "The role of Pushdown Automata in ensuring decidability"
 
-    print("\n" + "=" * 50 + "\n")
-
-    print("--- Generating External Research Plan ---")
-    external_plan = plan_deep_research(
-        "Understand the external deep research toolchain", repository="external"
-    )
-    print(external_plan)
+    print(f"--- Generating Research Plan for: '{topic_arg}' ---")
+    plan = plan_deep_research(topic=topic_arg)
+    print(plan)
