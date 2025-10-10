@@ -1766,3 +1766,24 @@ and self-improvement activities.
 
 
 ---
+
+```json
+{
+  "protocol_id": "protocol-reset-all-pre-check-001",
+  "description": "A protocol that mandates a pre-execution check for the `reset_all` tool to prevent unauthorized use.",
+  "rules": [
+    {
+      "rule_id": "agent-must-verify-token",
+      "description": "Before invoking the `reset_all` tool, the agent MUST first use the `list_files` tool to verify that the `authorization.token` file exists in the repository root. The agent must not proceed with the `reset_all` call if the token is not found.",
+      "enforcement": "This rule is enforced by the agent's own decision-making logic. The agent's plan must show the `list_files` check occurring before the `reset_all` call."
+    }
+  ],
+  "associated_tools": [
+    "reset_all",
+    "list_files"
+  ]
+}
+```
+
+
+---

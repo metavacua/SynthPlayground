@@ -90,6 +90,11 @@
     proto:hasRule <file:///app/protocols/pre-commit-instructions-mandate> ;
     schema:description "Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission." .
 
+<file:///app/protocols/protocol-reset-all-pre-check-001> proto:associatedTool <file:///app/protocols/list_files>,
+        <file:///app/protocols/reset_all> ;
+    proto:hasRule <file:///app/protocols/agent-must-verify-token> ;
+    schema:description "A protocol that mandates a pre-execution check for the `reset_all` tool to prevent unauthorized use." .
+
 <file:///app/protocols/research-protocol-001> proto:associatedTool <file:///app/protocols/tooling.research.execute_research_protocol>,
         <file:///app/protocols/tooling.research_planner.plan_deep_research> ;
     proto:hasRule <file:///app/protocols/mandate-research-tools> ;
@@ -115,6 +120,9 @@
         <file:///app/protocols/fdc-toolchain-mandate>,
         <file:///app/protocols/rag-mandate> ;
     schema:description "A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks." .
+
+<file:///app/protocols/agent-must-verify-token> proto:enforcement "This rule is enforced by the agent's own decision-making logic. The agent's plan must show the `list_files` check occurring before the `reset_all` call." ;
+    schema:description "Before invoking the `reset_all` tool, the agent MUST first use the `list_files` tool to verify that the `authorization.token` file exists in the repository root. The agent must not proceed with the `reset_all` call if the token is not found." .
 
 <file:///app/protocols/agents-md-self-awareness> proto:enforcement "The agent should incorporate this check into its standard operating procedure, particularly at the beginning of a task or when unexpected behavior occurs." ;
     schema:description "The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols." .
