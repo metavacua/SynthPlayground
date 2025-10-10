@@ -97,7 +97,7 @@ audit:
 # Main Targets
 # ==============================================================================
 # A general build target that compiles all protocols and generates documentation.
-build: docs readme compile-protocols compile-security-protocols enrich-kg
+build: docs readme compile-protocols compile-security-protocols
 
 clean:
 	@echo "--> Removing compiled protocol and documentation artifacts..."
