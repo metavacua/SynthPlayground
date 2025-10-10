@@ -120,10 +120,13 @@
     schema:description "Requires explicit user authorization via a token file for the use of the destructive `reset_all` tool." .
 
 <file:///app/protocols/self-correction-protocol-001> proto:associatedTool <file:///app/protocols/initiate_memory_recording>,
+        <file:///app/protocols/tooling/code_suggester.py>,
         <file:///app/protocols/tooling/knowledge_compiler.py>,
         <file:///app/protocols/tooling/protocol_updater.py>,
         <file:///app/protocols/tooling/self_correction_orchestrator.py> ;
     proto:hasRule <file:///app/protocols/automated-orchestration>,
+        <file:///app/protocols/autonomous-code-suggestion>,
+        <file:///app/protocols/programmatic-rule-refinement>,
         <file:///app/protocols/programmatic-updates>,
         <file:///app/protocols/structured-lessons> ;
     schema:description "Defines the automated, closed-loop workflow for protocol self-correction." .
@@ -153,6 +156,9 @@
 
 <file:///app/protocols/automated-orchestration> proto:enforcement "This script is the designated engine for the PDSC workflow." ;
     schema:description "The self-correction cycle must be managed by the `tooling/self_correction_orchestrator.py` script, which processes pending lessons and triggers the necessary updates." .
+
+<file:///app/protocols/autonomous-code-suggestion> proto:enforcement "The `tooling/self_correction_orchestrator.py` invokes the code suggester when it processes a lesson of this type." ;
+    schema:description "The self-correction system can generate and apply code changes to its own tooling. This is achieved through a `PROPOSE_CODE_CHANGE` action, which is processed by `tooling/code_suggester.py` to create an executable plan." .
 
 <file:///app/protocols/bootstrap-load-agents-md> proto:enforcement "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase." ;
     schema:description "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins." .
@@ -247,6 +253,9 @@
 
 <file:///app/protocols/pre-commit-instructions-mandate> proto:enforcement "The agent's core logic should invoke this tool as the entry point to the pre-submission phase." ;
     schema:description "Before submitting changes, the agent MUST execute the `pre_commit_instructions` tool to receive the required sequence of validation steps (e.g., running tests, requesting code review)." .
+
+<file:///app/protocols/programmatic-rule-refinement> proto:enforcement "The `tooling/knowledge_compiler.py` can generate `update-rule` actions, and the `tooling/self_correction_orchestrator.py` executes them." ;
+    schema:description "The self-correction system can modify the description of existing protocol rules via the `update-rule` command in `tooling/protocol_updater.py`, allowing it to refine its own logic." .
 
 <file:///app/protocols/programmatic-updates> proto:enforcement "Agent's core logic should be designed to use this tool for all protocol modifications." ;
     schema:description "All modifications to protocol source files must be performed programmatically via the `tooling/protocol_updater.py` tool to ensure consistency and prevent manual errors." .
