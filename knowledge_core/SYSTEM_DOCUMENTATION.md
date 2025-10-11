@@ -542,6 +542,28 @@ workflow defined in `master_control.py`.
   > to enforce the protocol, and prints the final result.
 
 
+### `tooling/pages_generator.py`
+
+Generates a single HTML file for GitHub Pages from the repository's metalanguage.
+
+This script combines the human-readable `README.md` and the machine-readable
+`AGENTS.md` into a single, navigable HTML document. It uses the `markdown`
+library to convert the Markdown content to HTML and to automatically generate
+a Table of Contents.
+
+The final output is a semantic HTML5 document, `index.html`, which serves as
+the main page for the project's GitHub Pages site.
+
+
+**Public Functions:**
+
+
+- #### `def generate_html_page()`
+
+  > Reads the source Markdown files, converts them to HTML, and builds the
+  > final index.html page.
+
+
 ### `tooling/plan_manager.py`
 
 Provides a command-line interface for managing the agent's Plan Registry.
