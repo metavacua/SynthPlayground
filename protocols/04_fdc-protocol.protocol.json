@@ -1,0 +1,43 @@
+{
+  "protocol_id": "fdc-protocol-001",
+  "description": "Defines the Finite Development Cycle (FDC), a formally defined process for executing a single, coherent task.",
+  "rules": [
+    {
+      "rule_id": "fdc-entry-point",
+      "description": "The AORP cascade is the mandatory entry point to every FDC.",
+      "enforcement": "Enforced by the `start` command in `tooling/fdc_cli.py`."
+    },
+    {
+      "rule_id": "fdc-state-transitions",
+      "description": "The FDC is a Finite State Machine (FSM) formally defined in `tooling/fdc_fsm.json`. Plans must be valid strings in the language defined by this FSM.",
+      "enforcement": "Validated by the `lint` command in `tooling/fdc_cli.py`."
+    },
+    {
+      "rule_id": "phase1-deconstruction",
+      "description": "Phase 1 (Deconstruction & Contextualization): The agent must ingest the task, query historical logs, identify entities using the symbol map, and analyze impact using the dependency graph.",
+      "enforcement": "Procedural step guided by the agent's core logic, using artifacts in `logs/` and `knowledge_core/`."
+    },
+    {
+      "rule_id": "phase2-planning",
+      "description": "Phase 2 (Planning & Self-Correction): The agent must generate a granular plan, lint it using the FDC toolchain, cite evidence for its steps, and perform a critical review.",
+      "enforcement": "The `lint` command in `tooling/fdc_cli.py` is a mandatory pre-flight check."
+    },
+    {
+      "rule_id": "phase3-execution",
+      "description": "Phase 3 (Execution & Structured Logging): The agent must execute the validated plan and log every action according to the `LOGGING_SCHEMA.md`.",
+      "enforcement": "Logging is performed by the agent's action execution wrapper."
+    },
+    {
+      "rule_id": "phase4-post-mortem",
+      "description": "Phase 4 (Pre-Submission Post-Mortem): The agent must formally close the task using the `close` command and complete the generated post-mortem report.",
+      "enforcement": "The `close` command in `tooling/fdc_cli.py` initiates this phase."
+    }
+  ],
+  "associated_tools": [
+    "tooling/fdc_cli.py",
+    "tooling/fdc_fsm.json",
+    "knowledge_core/symbols.json",
+    "knowledge_core/dependency_graph.json",
+    "LOGGING_SCHEMA.md"
+  ]
+}

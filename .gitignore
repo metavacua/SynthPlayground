@@ -110,6 +110,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Generated Documentation
+README.md
+/knowledge_core/
+AGENTS.md
+SECURITY.md
 # Reconciliation artifacts
 AGENTS.md.reconciled
 reconciliation_report.md

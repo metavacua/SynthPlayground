@@ -1,3 +1,23 @@
+"""
+Performs a series of checks to assess the capabilities of the execution environment.
+
+This script is a critical diagnostic tool run at the beginning of a task to
+ensure the agent understands its operational sandbox. It verifies fundamental
+capabilities required for most software development tasks:
+
+1.  **Filesystem I/O:** Confirms that the agent can create, write to, read from,
+    and delete files. It also provides a basic latency measurement for these
+    operations.
+2.  **Network Connectivity:** Checks for external network access by attempting to
+    connect to a highly-available public endpoint (google.com). This is crucial
+    for tasks requiring `git` operations, package downloads, or API calls.
+3.  **Environment Variables:** Verifies that standard environment variables are
+    accessible, which is a prerequisite for many command-line tools.
+
+The script generates a human-readable report summarizing the results of these
+probes, allowing the agent to quickly identify any environmental constraints
+that might impact its ability to complete a task.
+"""
 import os
 import time
 import uuid

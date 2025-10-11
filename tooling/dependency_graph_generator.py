@@ -1,3 +1,22 @@
+"""
+Scans the repository for dependency files and generates a unified dependency graph.
+
+This script is a crucial component of the agent's environmental awareness,
+providing a clear map of the software supply chain. It recursively searches the
+entire repository for common dependency management files, specifically:
+- `package.json` (for JavaScript/Node.js projects)
+- `requirements.txt` (for Python projects)
+
+It parses these files to identify two key types of relationships:
+1.  **Internal Dependencies:** Links between different projects within this repository.
+2.  **External Dependencies:** Links to third-party libraries and packages.
+
+The final output is a JSON file, `knowledge_core/dependency_graph.json`, which
+represents these relationships as a graph structure with nodes (projects and
+dependencies) and edges (the dependency links). This artifact is a primary
+input for the agent's orientation and planning phases, allowing it to reason
+about the potential impact of its changes.
+"""
 import os
 import json
 import glob

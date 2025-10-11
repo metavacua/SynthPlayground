@@ -1,3 +1,22 @@
+"""
+Unit tests for the symbol map generator tool.
+
+This test suite validates the `symbol_map_generator.py` script, which is
+responsible for creating a code symbol index for the repository. The tests
+cover both of the script's operational modes: the preferred `ctags`-based
+generation and the `ast`-based fallback.
+
+The tests include:
+- `test_generate_with_ctags_success`: Mocks the `subprocess.run` call to
+  simulate a successful `ctags` execution. It verifies that the script correctly
+  parses the JSON-lines output from `ctags` and wraps it in a valid JSON object.
+- `test_generate_with_ast_fallback`: Validates that the Python-only `ast` parser
+  correctly traverses a sample Python file and extracts class, method, and
+  function definitions.
+- `test_main_with_ast_fallback`: Mocks the `has_ctags` check to force the main
+  function to use the `ast` fallback, ensuring the end-to-end logic works
+  correctly when `ctags` is not available.
+"""
 import unittest
 import os
 import json
