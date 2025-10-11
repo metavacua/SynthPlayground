@@ -122,6 +122,21 @@ def close_task(task_id):
     # of this tool is the signal for the MasterControlGraph to proceed.
 
 
+def start_task(task_id):
+    """
+    Logs the formal start of a task.
+    """
+    if not task_id:
+        print("Error: --task-id is required.", file=sys.stderr)
+        sys.exit(1)
+
+    log_details = {
+        "summary": f"Agent has signaled the start of task '{task_id}'. The Master Control Graph will now transition to the execution phase."
+    }
+    _log_event(_create_log_entry(task_id, "TASK_START", log_details))
+    print(f"Logged TASK_START event for task: {task_id}")
+
+
 from tooling.plan_parser import parse_plan, Command
 
 # ... (other imports remain the same)
@@ -460,7 +475,7 @@ def main():
     )
 
     start_parser = subparsers.add_parser(
-        "start", help="Starts a task, initiating the AORP cascade."
+        "start", help="Starts a task, initiating the development cycle."
     )
     start_parser.add_argument(
         "--task-id", required=True, help="The unique identifier for the task."
