@@ -88,7 +88,13 @@ HTML_TEMPLATE = """
         <h1>{title}</h1>
     </header>
     <main>
-        {body_content}
+        <nav class="toc">
+            <h2>Table of Contents</h2>
+            {toc}
+        </nav>
+        <article>
+            {body_content}
+        </article>
     </main>
     <footer>
         <p><em>This page was automatically generated from the repository's source files.</em></p>
@@ -112,36 +118,35 @@ def generate_html_page():
         print(f"Error: Could not find a source file: {e}")
         return
 
-    print("--> Creating combined markdown document for single-pass processing...")
+    print("--> Creating combined markdown document...")
 
-    # Place a [TOC] marker at the top, which the 'toc' extension will replace.
-    # This ensures that the TOC and the body are generated in a single pass,
-    # guaranteeing that the anchor links and header IDs are synchronized.
+    # Combine the two markdown files into a single document string.
+    # This ensures that header IDs are unique across the entire page,
+    # allowing the Table of Contents to generate correct anchor links.
     full_md_content = f"""
-[TOC]
-
-<hr>
-
-<article id="readme">
+# Human-Readable Metalanguage (README.md)
 {readme_md}
-</article>
 
 <hr>
 
-<article id="agents-md">
+# Machine-Readable Metalanguage (AGENTS.md)
 {agents_md}
-</article>
 """
 
-    print("--> Converting combined markdown to HTML...")
-    # Use 'toc' to generate the table of contents, 'fenced_code' for code blocks,
-    # and 'extra' for other common features like tables.
-    md = markdown.Markdown(extensions=['toc', 'fenced_code', 'extra'])
-    body_html = md.convert(full_md_content)
+    print("--> Converting markdown to HTML...")
+    # Convert the document *without* the TOC extension to get the body
+    md_body = markdown.Markdown(extensions=['fenced_code', 'extra'])
+    body_html = md_body.convert(full_md_content)
+
+    # Convert the document *with* the TOC extension to get the TOC
+    md_toc = markdown.Markdown(extensions=['toc', 'extra'])
+    md_toc.convert(full_md_content)
+    toc_html = md_toc.toc
 
     print("--> Assembling final index.html...")
     final_html = HTML_TEMPLATE.format(
         title=PAGE_TITLE,
+        toc=toc_html,
         body_content=body_html
     )
 
