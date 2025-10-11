@@ -108,8 +108,13 @@ audit:
 # ==============================================================================
 # Main Targets
 # ==============================================================================
+# Rule to generate the GitHub Pages site.
+pages: AGENTS.md README.md tooling/pages_generator.py
+	@echo "--> Generating GitHub Pages site from metalanguage..."
+	@python3 tooling/pages_generator.py
+
 # A general build target that compiles all protocols and generates documentation.
-build: docs readme compile-protocols compile-security-protocols
+build: docs readme compile-protocols compile-security-protocols pages
 
 clean:
 	@echo "--> Removing compiled protocol and documentation artifacts..."
