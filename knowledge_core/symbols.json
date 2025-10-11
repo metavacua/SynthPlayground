@@ -1293,7 +1293,15 @@
       "name": "get_module_docstring",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 70,
+      "line": 79,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "generate_core_protocols_section",
+      "path": "./tooling/readme_generator.py",
+      "language": "Python",
+      "line": 100,
       "kind": "function"
     },
     {
@@ -1301,7 +1309,7 @@
       "name": "generate_key_components_section",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 91,
+      "line": 138,
       "kind": "function"
     },
     {
@@ -1309,7 +1317,7 @@
       "name": "main",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 114,
+      "line": 161,
       "kind": "function"
     },
     {
