@@ -29,6 +29,11 @@
       "id": "flake8",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "pytest",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
@@ -51,6 +56,10 @@
     {
       "source": "root-python-project",
       "target": "flake8"
+    },
+    {
+      "source": "root-python-project",
+      "target": "pytest"
     }
   ]
 }

@@ -410,6 +410,38 @@
     },
     {
       "_type": "tag",
+      "name": "get_defined_symbols",
+      "path": "./tooling/context_awareness_scanner.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "get_imported_symbols",
+      "path": "./tooling/context_awareness_scanner.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "find_references",
+      "path": "./tooling/context_awareness_scanner.py",
+      "language": "Python",
+      "line": 40,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/context_awareness_scanner.py",
+      "language": "Python",
+      "line": 58,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "analyze_planning_efficiency",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
@@ -482,10 +514,18 @@
     },
     {
       "_type": "tag",
-      "name": "main",
+      "name": "start_task",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
       "line": 292,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 348,
       "kind": "function"
     },
     {

@@ -410,6 +410,60 @@ def lint_plan(plan_filepath):
     validate_plan(plan_filepath)
     analyze_plan(plan_filepath)
     print("\n--- Linting Complete: All checks passed. ---")
+def start_task(task_id):
+    """Initiates the AORP cascade for a new task."""
+    if not task_id:
+        print("Error: --task-id is required.", file=sys.stderr)
+        sys.exit(1)
+
+    print("--- FDC: Initiating Advanced Orientation and Research Protocol (AORP) ---")
+    print(f"--- Task ID: {task_id} ---")
+
+    # --- L1: Self-Awareness & Identity Verification ---
+    print("\n--- L1: Self-Awareness & Identity Verification ---")
+    try:
+        with open(os.path.join(ROOT_DIR, "knowledge_core", "agent_meta.json"), "r") as f:
+            agent_meta = json.load(f)
+            print("Successfully loaded knowledge_core/agent_meta.json:")
+            print(json.dumps(agent_meta, indent=2))
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Error during L1: Could not read or parse agent_meta.json. {e}", file=sys.stderr)
+        sys.exit(1)
+
+    # --- L2: Repository State Synchronization ---
+    print("\n--- L2: Repository State Synchronization ---")
+    try:
+        kc_path = os.path.join(ROOT_DIR, "knowledge_core")
+        artifacts = [f for f in os.listdir(kc_path) if os.path.isfile(os.path.join(kc_path, f)) and f != 'agent_meta.json']
+        print("Found knowledge_core artifacts:")
+        for artifact in artifacts:
+            print(f"- {artifact}")
+    except FileNotFoundError as e:
+        print(f"Error during L2: Could not list knowledge_core directory. {e}", file=sys.stderr)
+        sys.exit(1)
+
+    # --- L3: Environmental Probing ---
+    print("\n--- L3: Environmental Probing ---")
+    probe_script_path = os.path.join(ROOT_DIR, "tooling", "environmental_probe.py")
+    if not os.path.exists(probe_script_path):
+        print(f"Error during L3: Probe script not found at {probe_script_path}", file=sys.stderr)
+        sys.exit(1)
+
+    print(f"Executing: python3 {probe_script_path}")
+    # We are already running in a bash session, so we can just run the script
+    # and it will inherit the environment.
+    os.system(f"python3 {probe_script_path}")
+
+
+    # --- Logging ---
+    _log_event(
+        _create_log_entry(
+            task_id,
+            "TASK_START",
+            {"summary": f"AORP cascade completed for FDC task '{task_id}'."},
+        )
+    )
+    print(f"\n--- AORP Complete. Logged TASK_START event for task: {task_id} ---")
 
 
 def main():
