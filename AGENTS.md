@@ -1534,6 +1534,11 @@ integrated into the `Makefile` build process.
 **Public Functions:**
 
 
+- #### `def generate_core_protocols_section()`
+
+  > Parses AGENTS.md to extract protocol definitions and generate a Markdown summary.
+
+
 - #### `def generate_key_components_section()`
 
   > Generates the Markdown for the "Key Components" section by reading

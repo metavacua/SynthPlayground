@@ -11,10 +11,13 @@ integrated into the `Makefile` build process.
 """
 import ast
 import os
+import re
+import json
 
 # --- Configuration ---
 
 OUTPUT_FILE = "README.md"
+AGENTS_MD_PATH = "AGENTS.md"
 KEY_COMPONENTS_DIR = "tooling/"
 # A curated list of files to document in the "Key Components" section.
 # This keeps the README high-level and focused on the core architecture.
@@ -48,6 +51,12 @@ The agent's operation is governed by a unified workflow that integrates an inter
 2.  **Validation & Management Toolchain (`tooling/fdc_cli.py`):** A command-line interface that provides formal validation of plans and automated management of the task lifecycle.
 
 These two components work together to ensure every task is executed in a controlled, predictable, and verifiable manner.
+
+## Core Protocols
+
+This project is governed by a series of machine-readable protocols defined in `AGENTS.md`. These protocols are the source of truth for the agent's behavior. The key protocols are:
+
+{core_protocols}
 
 ## Key Components
 
@@ -88,6 +97,44 @@ def get_module_docstring(filepath: str) -> str:
         return f"_Error parsing file: {e}_"
 
 
+def generate_core_protocols_section() -> str:
+    """
+    Parses AGENTS.md to extract protocol definitions and generate a Markdown summary.
+    """
+    if not os.path.exists(AGENTS_MD_PATH):
+        return f"_Error: `{AGENTS_MD_PATH}` not found. Run `make AGENTS.md` first._"
+
+    try:
+        with open(AGENTS_MD_PATH, "r", encoding="utf-8") as f:
+            content = f.read()
+    except IOError as e:
+        return f"_Error reading `{AGENTS_MD_PATH}`: {e}_"
+
+    # Regex to find all JSON blocks within ```json ... ``` code fences
+    protocol_blocks = re.findall(r"```json\n(.*?)\n```", content, re.DOTALL)
+
+    if not protocol_blocks:
+        return "_No protocols found in `AGENTS.md`._"
+
+    parts = []
+    for block in protocol_blocks:
+        try:
+            protocol = json.loads(block)
+            protocol_id = protocol.get("protocol_id")
+            description = protocol.get("description")
+            if protocol_id and description:
+                # Format as a definition list for clarity
+                parts.append(f"- **`{protocol_id}`**: {description}")
+        except json.JSONDecodeError:
+            # Ignore blocks that aren't valid JSON
+            continue
+
+    if not parts:
+        return "_Could not parse any valid protocols from `AGENTS.md`._"
+
+    return "\n".join(parts)
+
+
 def generate_key_components_section() -> str:
     """
     Generates the Markdown for the "Key Components" section by reading
@@ -115,13 +162,17 @@ def main():
     """
     Main function to generate the README.md content and write it to a file.
     """
+    print("--> Generating 'Core Protocols' section from AGENTS.md...")
+    core_protocols_md = generate_core_protocols_section()
+
     print("--> Generating 'Key Components' section...")
     key_components_md = generate_key_components_section()
 
     print("--> Assembling final README.md content...")
     # Replace the placeholder in the template with the generated content
     final_readme_content = README_TEMPLATE.format(
-        key_components=key_components_md
+        core_protocols=core_protocols_md,
+        key_components=key_components_md,
     ).strip()
 
     print(f"--> Writing README to {OUTPUT_FILE}...")
