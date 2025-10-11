@@ -1,0 +1,134 @@
+{
+  "file_path": "tooling/fdc_cli.py",
+  "content": "import argparse\nimport datetime\nimport json\nimport os\nimport shutil\nimport sys\nimport uuid\n\n# --- Configuration ---\nROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), \"..\"))\nPOSTMORTEM_TEMPLATE_PATH = os.path.join(ROOT_DIR, \"postmortem.md\")\nPOSTMORTEMS_DIR = os.path.join(ROOT_DIR, \"postmortems\")\nLOG_FILE_PATH = os.path.join(ROOT_DIR, \"logs\", \"activity.log.jsonl\")\nFSM_DEF_PATH = os.path.join(ROOT_DIR, \"tooling\", \"fdc_fsm.json\")\n\nACTION_TYPE_MAP = {\n    \"set_plan\": \"plan_op\",\n    \"plan_step_complete\": \"step_op\",\n    \"submit\": \"submit_op\",\n    \"create_file_with_block\": \"write_op\",\n    \"overwrite_file_with_block\": \"write_op\",\n    \"replace_with_git_merge_diff\": \"write_op\",\n    \"read_file\": \"read_op\",\n    \"list_files\": \"read_op\",\n    \"grep\": \"read_op\",\n    \"delete_file\": \"delete_op\",\n    \"rename_file\": \"move_op\",\n    \"run_in_bash_session\": \"tool_exec\",\n    \"for_each_file\": \"loop_op\",\n}\n\n# --- CLI Subcommands & Helpers ---\n\n\ndef _log_event(log_entry):\n    \"\"\"Appends a new log entry to the activity log, ensuring it's on a new line.\"\"\"\n    content_to_write = json.dumps(log_entry) + \"\\n\"\n    with open(LOG_FILE_PATH, \"a+\") as f:\n        # Check if the file is not empty\n        f.seek(0, os.SEEK_END)\n        if f.tell() > 0:\n            # Check if the last character is a newline\n            f.seek(f.tell() - 1)\n            if f.read(1) != \"\\n\":\n                f.write(\"\\n\")\n        f.write(content_to_write)\n\n\ndef _create_log_entry(task_id, action_type, details):\n    \"\"\"Creates a structured log entry dictionary.\"\"\"\n    return {\n        \"log_id\": str(uuid.uuid4()),\n        \"session_id\": os.getenv(\"JULES_SESSION_ID\", \"unknown\"),\n        \"timestamp\": datetime.datetime.now(datetime.timezone.utc).isoformat(),\n        \"phase\": \"Phase 6\",\n        \"task\": {\"id\": task_id, \"plan_step\": -1},\n        \"action\": {\"type\": action_type, \"details\": details},\n        \"outcome\": {\n            \"status\": \"SUCCESS\",\n            \"message\": f\"FDC CLI: {action_type} for task {task_id}.\",\n        },\n    }\n\n\ndef close_task(task_id):\n    \"\"\"Automates the closing of a Finite Development Cycle.\"\"\"\n    if not task_id:\n        print(\"Error: --task-id is required.\", file=sys.stderr)\n        sys.exit(1)\n    safe_task_id = \"\".join(c for c in task_id if c.isalnum() or c in (\"-\", \"_\"))\n    new_path = os.path.join(\n        POSTMORTEMS_DIR, f\"{datetime.date.today()}-{safe_task_id}.md\"\n    )\n    try:\n        shutil.copyfile(POSTMORTEM_TEMPLATE_PATH, new_path)\n        print(f\"Successfully created new post-mortem file: {new_path}\")\n    except Exception as e:\n        print(f\"Error creating post-mortem file: {e}\", file=sys.stderr)\n        sys.exit(1)\n\n    _log_event(\n        _create_log_entry(\n            task_id,\n            \"POST_MORTEM\",\n            {\"summary\": f\"Post-mortem initiated for '{task_id}'.\"},\n        )\n    )\n    _log_event(\n        _create_log_entry(\n            task_id,\n            \"TASK_END\",\n            {\"summary\": f\"Development phase for FDC task '{task_id}' formally closed.\"},\n        )\n    )\n\n    print(f\"Logged POST_MORTEM and TASK_END events for task: {task_id}\")\n\n\ndef _validate_action(line_num, line_content, state, fsm, fs, placeholders):\n    \"\"\"Validates a single, non-loop action.\"\"\"\n    # Substitute placeholders like {file1}, {file2}\n    for key, val in placeholders.items():\n        line_content = line_content.replace(key, val)\n\n    parts = line_content.split()\n    command = parts[0]\n    args = parts[1:]\n    action_type = ACTION_TYPE_MAP.get(command)\n    if command == \"run_in_bash_session\" and \"close\" in args:\n        action_type = \"close_op\"\n    if not action_type:\n        print(\n            f\"Error on line {line_num+1}: Unknown command '{command}'.\", file=sys.stderr\n        )\n        sys.exit(1)\n\n    # Syntactic check\n    transitions = fsm[\"transitions\"].get(state)\n    if action_type not in (transitions or {}):\n        print(\n            f\"Error on line {line_num+1}: Invalid FSM transition. Cannot perform '{action_type}' from state '{state}'.\",\n            file=sys.stderr,\n        )\n        sys.exit(1)\n\n    # Semantic check\n    if command == \"create_file_with_block\" and args[0] in fs:\n        print(\n            f\"Error on line {line_num+1}: Semantic error. Cannot create '{args[0]}' because it already exists.\",\n            file=sys.stderr,\n        )\n        sys.exit(1)\n    if (\n        command in [\"read_file\", \"delete_file\", \"replace_with_git_merge_diff\"]\n        and args[0] not in fs\n    ):\n        print(\n            f\"Error on line {line_num+1}: Semantic error. Cannot access '{args[0]}' because it does not exist.\",\n            file=sys.stderr,\n        )\n        sys.exit(1)\n\n    # Apply state changes\n    if command == \"create_file_with_block\":\n        fs.add(args[0])\n    if command == \"delete_file\":\n        fs.remove(args[0])\n\n    next_state = transitions[action_type]\n    print(\n        f\"  Line {line_num+1}: OK. Action '{command}' ({action_type}) transitions from {state} -> {next_state}\"\n    )\n    return next_state, fs\n\n\ndef _validate_plan_recursive(\n    lines, start_index, indent_level, state, fs, placeholders, fsm\n):\n    \"\"\"Recursively validates a block of a plan.\"\"\"\n    i = start_index\n    while i < len(lines):\n        line_num, line_content = lines[i]\n        current_indent = len(line_content) - len(line_content.lstrip(\" \"))\n\n        if current_indent < indent_level:\n            return state, fs, i  # End of current block\n        if current_indent > indent_level:\n            print(\n                f\"Error on line {line_num+1}: Unexpected indentation.\", file=sys.stderr\n            )\n            sys.exit(1)\n\n        line_content = line_content.strip()\n        command = line_content.split()[0]\n\n        if command == \"for_each_file\":\n            loop_depth = len(placeholders) + 1\n            placeholder_key = f\"{{file{loop_depth}}}\"\n            dummy_file = f\"dummy_file_for_loop_{loop_depth}\"\n\n            # Find loop body\n            loop_body_start = i + 1\n            j = loop_body_start\n            while (\n                j < len(lines)\n                and (len(lines[j][1]) - len(lines[j][1].lstrip(\" \"))) > indent_level\n            ):\n                j += 1\n\n            # Validate one logical iteration of the loop\n            loop_fs = fs.copy()\n            loop_fs.add(dummy_file)\n            new_placeholders = placeholders.copy()\n            new_placeholders[placeholder_key] = dummy_file\n\n            state, loop_fs, _ = _validate_plan_recursive(\n                lines,\n                loop_body_start,\n                indent_level + 2,\n                state,\n                loop_fs,\n                new_placeholders,\n                fsm,\n            )\n\n            fs.update(loop_fs)  # Merge FS changes\n            i = j\n        else:\n            state, fs = _validate_action(\n                line_num, line_content, state, fsm, fs, placeholders\n            )\n            i += 1\n\n    return state, fs, i\n\n\ndef validate_plan(plan_filepath):\n    try:\n        with open(FSM_DEF_PATH, \"r\") as f:\n            fsm = json.load(f)\n        with open(plan_filepath, \"r\") as f:\n            lines = [(i, line.rstrip(\"\\n\")) for i, line in enumerate(f) if line.strip()]\n    except FileNotFoundError as e:\n        print(f\"Error: Could not find file {e.filename}\", file=sys.stderr)\n        sys.exit(1)\n\n    # Initialize the simulated file system with the actual state of the repository\n    simulated_fs = set()\n    for root, dirs, files in os.walk(\".\"):\n        # Exclude .git directory from the walk\n        if \".git\" in dirs:\n            dirs.remove(\".git\")\n        for name in files:\n            simulated_fs.add(os.path.join(root, name).replace(\"./\", \"\"))\n\n    print(f\"Starting validation with {len(simulated_fs)} files pre-loaded...\")\n    final_state, _, _ = _validate_plan_recursive(\n        lines, 0, 0, fsm[\"start_state\"], simulated_fs, {}, fsm\n    )\n\n    if final_state in fsm[\"accept_states\"]:\n        print(\"\\nValidation successful! Plan is syntactically and semantically valid.\")\n    else:\n        print(\n            f\"\\nValidation failed. Plan ends in non-accepted state: '{final_state}'\",\n            file=sys.stderr,\n        )\n        sys.exit(1)\n\n\ndef analyze_plan(plan_filepath):\n    \"\"\"Analyzes a plan file to determine its complexity class and modality.\"\"\"\n    try:\n        with open(plan_filepath, \"r\") as f:\n            plan_lines_with_indent = f.readlines()\n        plan_lines = [line.strip() for line in plan_lines_with_indent if line.strip()]\n    except FileNotFoundError:\n        print(f\"Error: Plan file not found at {plan_filepath}\", file=sys.stderr)\n        sys.exit(1)\n\n    # --- Complexity Analysis ---\n    loop_indents = []\n    for line in plan_lines_with_indent:\n        if line.strip().startswith(\"for_each_file\"):\n            indent = len(line) - len(line.lstrip(\" \"))\n            loop_indents.append(indent)\n\n    if not loop_indents:\n        complexity = \"Constant (O(1))\"\n    elif max(loop_indents) > min(loop_indents):\n        complexity = \"Exponential (EXPTIME-Class)\"\n    else:\n        complexity = \"Polynomial (P-Class)\"\n\n    # --- Modality Analysis ---\n    has_write_op = False\n    write_ops = {\"write_op\", \"delete_op\", \"move_op\"}\n    for line in plan_lines:\n        command = line.split()[0]\n        action_type = ACTION_TYPE_MAP.get(command)\n        if action_type in write_ops:\n            has_write_op = True\n            break\n\n    modality = \"Construction (Read-Write)\" if has_write_op else \"Analysis (Read-Only)\"\n\n    print(\"Plan Analysis Results:\")\n    print(f\"  - Complexity: {complexity}\")\n    print(f\"  - Modality:   {modality}\")\n\n\ndef start_task(task_id):\n    \"\"\"Initiates the AORP cascade for a new task.\"\"\"\n    if not task_id:\n        print(\"Error: --task-id is required.\", file=sys.stderr)\n        sys.exit(1)\n\n    print(\"--- FDC: Initiating Advanced Orientation and Research Protocol (AORP) ---\")\n    print(f\"--- Task ID: {task_id} ---\")\n\n    # --- L1: Self-Awareness & Identity Verification ---\n    print(\"\\n--- L1: Self-Awareness & Identity Verification ---\")\n    try:\n        with open(os.path.join(ROOT_DIR, \"knowledge_core\", \"agent_meta.json\"), \"r\") as f:\n            agent_meta = json.load(f)\n            print(\"Successfully loaded knowledge_core/agent_meta.json:\")\n            print(json.dumps(agent_meta, indent=2))\n    except (FileNotFoundError, json.JSONDecodeError) as e:\n        print(f\"Error during L1: Could not read or parse agent_meta.json. {e}\", file=sys.stderr)\n        sys.exit(1)\n\n    # --- L2: Repository State Synchronization ---\n    print(\"\\n--- L2: Repository State Synchronization ---\")\n    try:\n        kc_path = os.path.join(ROOT_DIR, \"knowledge_core\")\n        artifacts = [f for f in os.listdir(kc_path) if os.path.isfile(os.path.join(kc_path, f)) and f != 'agent_meta.json']\n        print(\"Found knowledge_core artifacts:\")\n        for artifact in artifacts:\n            print(f\"- {artifact}\")\n    except FileNotFoundError as e:\n        print(f\"Error during L2: Could not list knowledge_core directory. {e}\", file=sys.stderr)\n        sys.exit(1)\n\n    # --- L3: Environmental Probing ---\n    print(\"\\n--- L3: Environmental Probing ---\")\n    probe_script_path = os.path.join(ROOT_DIR, \"tooling\", \"environmental_probe.py\")\n    if not os.path.exists(probe_script_path):\n        print(f\"Error during L3: Probe script not found at {probe_script_path}\", file=sys.stderr)\n        sys.exit(1)\n    \n    print(f\"Executing: python3 {probe_script_path}\")\n    # We are already running in a bash session, so we can just run the script\n    # and it will inherit the environment.\n    os.system(f\"python3 {probe_script_path}\")\n\n\n    # --- Logging ---\n    _log_event(\n        _create_log_entry(\n            task_id,\n            \"TASK_START\",\n            {\"summary\": f\"AORP cascade completed for FDC task '{task_id}'.\"},\n        )\n    )\n    print(f\"\\n--- AORP Complete. Logged TASK_START event for task: {task_id} ---\")\n\n\ndef main():\n    parser = argparse.ArgumentParser(\n        description=\"A tool to manage the Finite Development Cycle (FDC).\"\n    )\n    subparsers = parser.add_subparsers(\n        dest=\"command\", help=\"Available subcommands\", required=True\n    )\n    \n    start_parser = subparsers.add_parser(\n        \"start\", help=\"Starts a task, initiating the AORP cascade.\"\n    )\n    start_parser.add_argument(\n        \"--task-id\", required=True, help=\"The unique identifier for the task.\"\n    )\n\n    close_parser = subparsers.add_parser(\n        \"close\", help=\"Closes a task, initiating the post-mortem process.\"\n    )\n    close_parser.add_argument(\n        \"--task-id\", required=True, help=\"The unique identifier for the task.\"\n    )\n\n    validate_parser = subparsers.add_parser(\n        \"validate\", help=\"Validates a plan file against the FDC FSM.\"\n    )\n    validate_parser.add_argument(\n        \"plan_file\", help=\"The path to the plan file to validate.\"\n    )\n\n    analyze_parser = subparsers.add_parser(\n        \"analyze\", help=\"Analyzes a plan to determine its complexity class.\"\n    )\n    analyze_parser.add_argument(\n        \"plan_file\", help=\"The path to the plan file to analyze.\"\n    )\n\n    args = parser.parse_args()\n    if args.command == \"start\":\n        start_task(args.task_id)\n    elif args.command == \"close\":\n        close_task(args.task_id)\n    elif args.command == \"validate\":\n        validate_plan(args.plan_file)\n    elif args.command == \"analyze\":\n        analyze_plan(args.plan_file)\n\n\nif __name__ == \"__main__\":\n    main()\n",
+  "defined_symbols": [
+    {
+      "type": "function",
+      "name": "_log_event",
+      "lineno": 35,
+      "references": [
+        "./tooling/fdc_cli.py"
+      ]
+    },
+    {
+      "type": "function",
+      "name": "_create_log_entry",
+      "lineno": 49,
+      "references": [
+        "./tooling/fdc_cli.py"
+      ]
+    },
+    {
+      "type": "function",
+      "name": "close_task",
+      "lineno": 65,
+      "references": [
+        "./tooling/fdc_cli.py"
+      ]
+    },
+    {
+      "type": "function",
+      "name": "_validate_action",
+      "lineno": 99,
+      "references": [
+        "./tooling/fdc_cli.py"
+      ]
+    },
+    {
+      "type": "function",
+      "name": "_validate_plan_recursive",
+      "lineno": 156,
+      "references": [
+        "./tooling/fdc_cli.py"
+      ]
+    },
+    {
+      "type": "function",
+      "name": "validate_plan",
+      "lineno": 217,
+      "references": [
+        "./tooling/fdc_cli.py"
+      ]
+    },
+    {
+      "type": "function",
+      "name": "analyze_plan",
+      "lineno": 251,
+      "references": [
+        "./tooling/self_improvement_cli.py",
+        "./tooling/test_self_improvement_cli.py",
+        "./tooling/fdc_cli.py"
+      ]
+    },
+    {
+      "type": "function",
+      "name": "start_task",
+      "lineno": 292,
+      "references": [
+        "./tooling/fdc_cli.py"
+      ]
+    },
+    {
+      "type": "function",
+      "name": "main",
+      "lineno": 348,
+      "references": [
+        "./run.py",
+        "./utils/test_logger.py",
+        "./tooling/test_dependency_graph_generator.py",
+        "./tooling/context_awareness_scanner.py",
+        "./tooling/environmental_probe.py",
+        "./tooling/symbol_map_generator.py",
+        "./tooling/test_master_control.py",
+        "./tooling/self_improvement_cli.py",
+        "./tooling/test_self_improvement_cli.py",
+        "./tooling/research_planner.py",
+        "./tooling/master_control.py",
+        "./tooling/dependency_graph_generator.py",
+        "./tooling/test_symbol_map_generator.py",
+        "./tooling/knowledge_compiler.py",
+        "./tooling/fdc_cli.py",
+        "./tooling/research.py",
+        "./tooling/protocol_validator.py",
+        "./tooling/test_knowledge_compiler.py"
+      ]
+    }
+  ],
+  "imported_symbols": [
+    {
+      "type": "module",
+      "name": "argparse",
+      "lineno": 1
+    },
+    {
+      "type": "module",
+      "name": "datetime",
+      "lineno": 2
+    },
+    {
+      "type": "module",
+      "name": "json",
+      "lineno": 3
+    },
+    {
+      "type": "module",
+      "name": "os",
+      "lineno": 4
+    },
+    {
+      "type": "module",
+      "name": "shutil",
+      "lineno": 5
+    },
+    {
+      "type": "module",
+      "name": "sys",
+      "lineno": 6
+    },
+    {
+      "type": "module",
+      "name": "uuid",
+      "lineno": 7
+    }
+  ]
+}
