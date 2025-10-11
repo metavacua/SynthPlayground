@@ -32,16 +32,26 @@ class Document:
         self.elements.append((element_type, content))
 
     def add_proof_tree(self, proof_tree_data):
+        if not proof_tree_data:
+            return
         tree = self._build_tree_recursively(proof_tree_data)
-        self.add_element("prooftree", tree)
+        if tree:
+            self.add_element("prooftree", tree)
 
     def _build_tree_recursively(self, tree_data):
+        if not tree_data:
+            return None
+
         hyp_objects = []
         for h_data in tree_data.get('hypotheses', []):
+            if not h_data: continue # Skip any None entries
+
             if h_data.get('type') == 'hypo':
                 hyp_objects.append(Sequent(h_data['content']))
             elif h_data.get('type') == 'prooftree': # It's a nested prooftree dict
-                hyp_objects.append(self._build_tree_recursively(h_data))
+                nested_tree = self._build_tree_recursively(h_data)
+                if nested_tree:
+                    hyp_objects.append(nested_tree)
 
         return ProofTree(
             hypotheses=hyp_objects,

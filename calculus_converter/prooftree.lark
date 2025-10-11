@@ -1,0 +1,14 @@
+?start: command
+
+command: hypo | infer
+
+hypo: "\\hypo" "{" content "}"
+infer: "\\infer" NUMBER? ("[" CNAME "]")? "{" content "}"
+
+// This is a simplified content rule that will be post-processed
+content: /.*?/s
+
+%import common.CNAME
+%import common.NUMBER
+%import common.WS
+%ignore WS

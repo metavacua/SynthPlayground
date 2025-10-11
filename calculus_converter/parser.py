@@ -2,44 +2,68 @@ import re
 import json
 from calculus_converter.calculus import Document
 
-def parse_prooftree_content_final(content):
-    """
-    A robust, non-recursive parser for prooftree content. It extracts the
-    final conclusion and all top-level hypotheses.
-    """
-    try:
-        # The final inference is always at the end.
-        # This regex captures the rule name (optional) and the conclusion text.
-        infer_match = re.search(r"\\infer\d*(?:\[(.*?)\])?\{(.*?)\}\s*$", content.strip(), re.DOTALL)
-        if not infer_match:
-            # If no infer is found, it's likely a malformed tree.
-            # We can still try to extract hypos if they exist.
-            hypotheses = re.findall(r"\\hypo\{(.*?)\}", content, re.DOTALL)
-            return {
-                "type": "prooftree",
-                "hypotheses": [{"type": "hypo", "content": h.strip()} for h in hypotheses],
-                "conclusion": "UNPARSED CONCLUSION",
-                "rule_name": "UNPARSED RULE",
-            }
+def find_top_level_commands(text):
+    """Finds top-level \hypo and \infer commands, respecting nested braces."""
+    commands = []
+    i = 0
+    while i < len(text):
+        match = re.search(r"\\(hypo|infer\d*)", text[i:])
+        if not match:
+            break
 
-        rule_name, conclusion = infer_match.groups()
-        rule_name = rule_name.strip() if rule_name else "Unknown Rule"
-        conclusion = conclusion.strip()
+        i += match.end()
+        cmd_name = match.group(1)
+        rule_name = None
 
-        # To get the hypotheses, we remove the final inference from the content
-        # and then find all `\hypo` commands in the remaining string.
-        hypo_content = content[:infer_match.start()]
-        hypotheses = re.findall(r"\\hypo\{(.*?)\}", hypo_content, re.DOTALL)
+        if cmd_name.startswith("infer"):
+            rule_match = re.match(r"\s*\[(.*?)\]", text[i:])
+            if rule_match:
+                rule_name = rule_match.group(1)
+                i += rule_match.end()
 
-        return {
-            "type": "prooftree",
-            "hypotheses": [{"type": "hypo", "content": h.strip()} for h in hypotheses],
-            "conclusion": conclusion,
-            "rule_name": rule_name,
-        }
-    except Exception as e:
-        print(f"Final parser failed. Error: {e}")
+        open_brace = text.find('{', i)
+        if open_brace == -1: continue
+
+        brace_level = 1
+        j = open_brace + 1
+        while j < len(text):
+            if text[j] == '{': brace_level += 1
+            elif text[j] == '}': brace_level -= 1
+
+            if brace_level == 0:
+                content = text[open_brace+1:j]
+                commands.append({'command': cmd_name, 'rule': rule_name, 'content': content})
+                break
+            j += 1
+        i = j + 1
+    return commands
+
+def parse_prooftree_content_recursive(text):
+    """A robust recursive parser for prooftree content."""
+    commands = find_top_level_commands(text)
+    if not commands:
         return None
+
+    last_command = commands[-1]
+    conclusion = last_command['content']
+    rule_name = last_command['rule'] if last_command['rule'] else "Unknown Rule"
+
+    hypotheses = []
+    for cmd_data in commands[:-1]:
+        if cmd_data['command'] == "hypo":
+            content = cmd_data['content']
+            if content.strip().startswith(r"\begin{prooftree}"):
+                nested_content = content.strip()[17:-18]
+                hypotheses.append(parse_prooftree_content_recursive(nested_content))
+            else:
+                hypotheses.append({"type": "hypo", "content": content})
+
+    return {
+        "type": "prooftree",
+        "hypotheses": hypotheses,
+        "conclusion": conclusion,
+        "rule_name": rule_name
+    }
 
 def cleanup_latex(text):
     """Strips the LaTeX preamble and other noisy commands."""
@@ -50,9 +74,44 @@ def cleanup_latex(text):
     text = re.sub(r"\\(newpage|quad|\[|\]|maketitle)", "", text)
     return text.strip()
 
+def find_top_level_environments(text, env_name="prooftree"):
+    """Finds top-level environments (e.g., prooftree), respecting nesting."""
+    begin_tag = f"\\begin{{{env_name}}}"
+    end_tag = f"\\end{{{env_name}}}"
+
+    parts = []
+    level = 0
+    start_of_env = 0
+    last_pos = 0
+
+    i = 0
+    while i < len(text):
+        if text[i:].startswith(begin_tag):
+            if level == 0:
+                if i > last_pos:
+                    parts.append({'type': 'text', 'content': text[last_pos:i]})
+                start_of_env = i
+            level += 1
+            i += len(begin_tag)
+        elif text[i:].startswith(end_tag):
+            level -= 1
+            if level == 0:
+                content = text[start_of_env + len(begin_tag):i].strip()
+                parts.append({'type': env_name, 'content': content})
+                last_pos = i + len(end_tag)
+            i += len(end_tag)
+        else:
+            i += 1
+
+    if last_pos < len(text):
+        parts.append({'type': 'text', 'content': text[last_pos:]})
+
+    return parts
+
 def parse_latex_to_document(text):
     """
     Parses a LaTeX string and returns a Document object with semantic structure.
+    This version correctly handles nested environments.
     """
     doc = Document()
     title_match = re.search(r"\\title\{(.*?)\}", text)
@@ -61,27 +120,28 @@ def parse_latex_to_document(text):
     doc.author = author_match.group(1) if author_match else None
 
     clean_text = cleanup_latex(text)
-    content_pattern = r"(\\begin{prooftree}.*?\\end{prooftree})"
-    parts = re.split(content_pattern, clean_text, flags=re.DOTALL)
+
+    parts = find_top_level_environments(clean_text, "prooftree")
 
     for part in parts:
-        if not part.strip():
+        content = part['content'].strip()
+        if not content:
             continue
 
-        if part.startswith("\\begin{prooftree}"):
-            content = part.replace("\\begin{prooftree}", "").replace("\\end{prooftree}", "").strip()
-            parsed_tree = parse_prooftree_content_final(content)
+        if part['type'] == "prooftree":
+            parsed_tree = parse_prooftree_content_recursive(content)
             if parsed_tree:
                 doc.add_proof_tree(parsed_tree)
             else:
                 doc.add_element("text", f"UNPARSED PROOFTREE: {content}")
-        else:
-            remaining_text = part
+
+        elif part['type'] == "text":
+            remaining_text = content
             while remaining_text.strip():
                 cmd_match = re.match(r"\s*\\(part|section|subsection|subsubsection)\{(.*?)\}", remaining_text, re.DOTALL)
                 if cmd_match:
-                    cmd, content = cmd_match.groups()
-                    doc.add_element(cmd, content.strip())
+                    cmd, cmd_content = cmd_match.groups()
+                    doc.add_element(cmd, cmd_content.strip())
                     remaining_text = remaining_text[cmd_match.end():]
                 else:
                     next_cmd_pos = re.search(r"\\(part|section|subsection|subsubsection)\{", remaining_text)
@@ -95,11 +155,3 @@ def parse_latex_to_document(text):
                             doc.add_element("text", remaining_text.strip())
                         break
     return doc
-
-if __name__ == '__main__':
-    with open('BS.tex', 'r') as f:
-        content = f.read()
-
-    document = parse_latex_to_document(content)
-
-    print(document.to_json())
