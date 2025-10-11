@@ -101,6 +101,7 @@ venv.bak/
 
 # mkdocs documentation
 /site
+/_site/
 
 # mypy
 .mypy_cache/
@@ -111,6 +112,10 @@ dmypy.json
 .pyre/
 
 # Generated Documentation
+README.md
+/knowledge_core/
+AGENTS.md
+SECURITY.md
 # Reconciliation artifacts
 AGENTS.md.reconciled
 reconciliation_report.md

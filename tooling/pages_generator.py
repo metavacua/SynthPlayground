@@ -6,8 +6,8 @@ This script combines the human-readable `README.md` and the machine-readable
 library to convert the Markdown content to HTML and to automatically generate
 a Table of Contents.
 
-The final output is a semantic HTML5 document, `index.html`, which serves as
-the main page for the project's GitHub Pages site.
+The final output is a semantic HTML5 document, `_site/index.html`, which serves
+as the main page for the project's GitHub Pages site.
 """
 import markdown
 import os
@@ -15,7 +15,8 @@ import os
 # --- Configuration ---
 README_PATH = "README.md"
 AGENTS_MD_PATH = "AGENTS.md"
-OUTPUT_PATH = "index.html"
+OUTPUT_DIR = "_site"
+OUTPUT_PATH = os.path.join(OUTPUT_DIR, "index.html")
 PAGE_TITLE = "Project Chimera: System Metalanguage"
 
 HTML_TEMPLATE = """
@@ -69,10 +70,6 @@ HTML_TEMPLATE = """
         }}
         .toc ul {{
             padding-left: 20px;
-            list-style-type: none;
-        }}
-        .toc li {{
-            margin-top: 4px;
         }}
         article {{
             margin-bottom: 40px;
@@ -91,10 +88,6 @@ HTML_TEMPLATE = """
         <h1>{title}</h1>
     </header>
     <main>
-        <nav class="toc">
-            <h2>Table of Contents</h2>
-            {toc}
-        </nav>
         {body_content}
     </main>
     <footer>
@@ -119,41 +112,41 @@ def generate_html_page():
         print(f"Error: Could not find a source file: {e}")
         return
 
-    print("--> Creating combined markdown document...")
-    # Use the `md_in_html` extension by wrapping content in `article` tags
-    # with the `markdown="1"` attribute. This allows us to process the
-    # whole document at once, ensuring the TOC and header IDs are consistent.
-    full_md_content = f"""
-<article id="readme" markdown="1">
-<h2>Human-Readable Metalanguage (README.md)</h2>
+    print("--> Creating combined markdown document for single-pass processing...")
 
+    # Place a [TOC] marker at the top, which the 'toc' extension will replace.
+    # This ensures that the TOC and the body are generated in a single pass,
+    # guaranteeing that the anchor links and header IDs are synchronized.
+    full_md_content = f"""
+[TOC]
+
+<hr>
+
+<article id="readme">
 {readme_md}
 </article>
 
 <hr>
 
-<article id="agents-md" markdown="1">
-<h2>Machine-Readable Metalanguage (AGENTS.md)</h2>
-
+<article id="agents-md">
 {agents_md}
 </article>
 """
 
-    print("--> Converting combined markdown to HTML with TOC...")
-    # 'toc' for table of contents, 'fenced_code' for code blocks,
-    # 'extra' for features like tables, and 'md_in_html' to process
-    # markdown inside the article tags.
-    md = markdown.Markdown(extensions=['toc', 'fenced_code', 'extra', 'md_in_html'])
-
+    print("--> Converting combined markdown to HTML...")
+    # Use 'toc' to generate the table of contents, 'fenced_code' for code blocks,
+    # and 'extra' for other common features like tables.
+    md = markdown.Markdown(extensions=['toc', 'fenced_code', 'extra'])
     body_html = md.convert(full_md_content)
-    toc_html = md.toc
 
     print("--> Assembling final index.html...")
     final_html = HTML_TEMPLATE.format(
         title=PAGE_TITLE,
-        toc=toc_html,
         body_content=body_html
     )
+
+    # Ensure the output directory exists
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
 
     try:
         with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
