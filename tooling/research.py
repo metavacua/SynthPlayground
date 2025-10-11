@@ -19,8 +19,10 @@ following native tools into the execution environment:
 - `google_search(query: str) -> str`
 - `view_text_website(url: str) -> str`
 """
+
 from typing import Dict, Any
 from tooling.knowledge_integrator import run_knowledge_integration
+
 
 def execute_research_protocol(constraints: Dict[str, Any]) -> str:
     """
@@ -53,38 +55,40 @@ def execute_research_protocol(constraints: Dict[str, Any]) -> str:
         if not path:
             return "Error: 'path' not specified for local file research."
         # Assumes `read_file` is available in the execution environment
-        return read_file(filepath=path)
+        return read_file(filepath=path)  # noqa
 
     # Level 2: List a local directory
     elif target == "local_filesystem" and scope == "directory":
         # Assumes `list_files` is available in the execution environment
-        return "\n".join(list_files(path=path or "."))
+        return "\n".join(list_files(path=path or "."))  # noqa
 
     # Level 3: Targeted web search
     elif target == "external_web" and scope == "narrow":
         if not query:
             return "Error: 'query' not specified for narrow web research."
         # Assumes `google_search` is available in the execution environment
-        return google_search(query=query)
+        return google_search(query=query)  # noqa
 
     # Level 4: Broad web research (fetch content from a specific URL)
     elif target == "external_web" and scope == "broad":
         if not url:
             return "Error: 'url' not specified for broad web research."
         # Assumes `view_text_website` is available in the execution environment
-        return view_text_website(url=url)
+        return view_text_website(url=url)  # noqa
 
     # Level 5: Fetch a file from a specific URL (e.g., from a Git repo)
     elif target == "external_repository":
         if not url:
             return "Error: 'url' not specified for external repository research."
         # Assumes `view_text_website` is available in the execution environment
-        return view_text_website(url=url)
+        return view_text_website(url=url)  # noqa
 
     # New Target: Knowledge Graph Enrichment
     elif target == "knowledge_graph" and scope == "enrich":
         input_path = constraints.get("input_graph_path", "knowledge_core/protocols.ttl")
-        output_path = constraints.get("output_graph_path", "knowledge_core/enriched_protocols.ttl")
+        output_path = constraints.get(
+            "output_graph_path", "knowledge_core/enriched_protocols.ttl"
+        )
         return run_knowledge_integration(input_path, output_path)
 
     else:

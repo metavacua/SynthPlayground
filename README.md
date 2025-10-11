@@ -1,4 +1,4 @@
-# An Agent Self-Improvement Protocol
+# Project Chimera: An Agent Self-Improvement Protocol
 
 ## Overview
 

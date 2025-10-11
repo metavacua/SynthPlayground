@@ -1,13 +1,13 @@
 import unittest
 import os
-import json
 import sys
 from unittest.mock import patch, mock_open
 
 # Ensure the tooling directory is in the path for imports
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
 import protocol_auditor
+
 
 class TestProtocolAuditor(unittest.TestCase):
     """Test suite for the protocol_auditor.py script."""
@@ -64,7 +64,9 @@ This is not a JSON line and should be skipped.
         """
         mock_file = mock_open(read_data=self.mock_agents_md_content)
         with patch("builtins.open", mock_file):
-            protocol_tools = protocol_auditor.get_protocol_tools_from_agents_md("dummy_path")
+            protocol_tools = protocol_auditor.get_protocol_tools_from_agents_md(
+                "dummy_path"
+            )
             expected_tools = {"tool_A", "tool_B", "run_in_bash_session", "tool_C"}
             self.assertEqual(protocol_tools, expected_tools)
 
@@ -76,10 +78,15 @@ This is not a JSON line and should be skipped.
         mock_file = mock_open(read_data=self.mock_log_content)
         with patch("builtins.open", mock_file):
             used_tools = protocol_auditor.get_used_tools_from_log("dummy_path")
-            expected_tools = ["tool_A", "tooling/some_script.py", "tool_D", "run_in_bash_session"]
+            expected_tools = [
+                "tool_A",
+                "tooling/some_script.py",
+                "tool_D",
+                "run_in_bash_session",
+            ]
             self.assertCountEqual(used_tools, expected_tools)
 
-    @patch('tooling.protocol_auditor.run_protocol_source_check')
+    @patch("tooling.protocol_auditor.run_protocol_source_check")
     def test_end_to_end_report_generation(self, mock_source_check):
         """
         Run the main function end-to-end and verify the content
@@ -88,7 +95,7 @@ This is not a JSON line and should be skipped.
         # Mock the source check to return a success state
         mock_source_check.return_value = {
             "status": "success",
-            "message": "AGENTS.md appears to be up-to-date."
+            "message": "AGENTS.md appears to be up-to-date.",
         }
 
         # Create a mock handle specifically for the write operation
@@ -131,5 +138,6 @@ This is not a JSON line and should be skipped.
         self.assertIn("| `tooling/some_script.py` | 1 |", written_content)
         self.assertIn("| `tool_D` | 1 |", written_content)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

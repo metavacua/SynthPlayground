@@ -7,12 +7,18 @@ read structured lessons, invoke the protocol_updater.py script as a
 subprocess with the correct arguments, and update the lesson status file
 to reflect the outcome.
 """
+
 import unittest
 import os
 import json
 import tempfile
 import shutil
-from tooling.self_correction_orchestrator import process_lessons, load_lessons, save_lessons
+from tooling.self_correction_orchestrator import (
+    process_lessons,
+    load_lessons,
+    save_lessons,
+)
+
 
 class TestSelfCorrectionOrchestrator(unittest.TestCase):
 
@@ -29,16 +35,16 @@ class TestSelfCorrectionOrchestrator(unittest.TestCase):
                 "action": {
                     "type": "UPDATE_PROTOCOL",
                     "command": "add-tool",
-                    "parameters": {"protocol_id": "p1", "tool_name": "new_tool"}
+                    "parameters": {"protocol_id": "p1", "tool_name": "new_tool"},
                 },
-                "status": "pending"
+                "status": "pending",
             },
             {
                 "lesson_id": "l2",
                 "insight": "This one is already done.",
                 "action": {},
-                "status": "applied"
-            }
+                "status": "applied",
+            },
         ]
         with open(self.lessons_file_path, "w") as f:
             for lesson in self.initial_lessons:
@@ -47,16 +53,19 @@ class TestSelfCorrectionOrchestrator(unittest.TestCase):
         # Mock the protocols directory and a protocol file
         self.protocols_dir_path = os.path.join(self.test_dir, "protocols")
         os.makedirs(self.protocols_dir_path)
-        self.protocol_file_path = os.path.join(self.protocols_dir_path, "p1.protocol.json")
+        self.protocol_file_path = os.path.join(
+            self.protocols_dir_path, "p1.protocol.json"
+        )
         self.initial_protocol_data = {
             "protocol_id": "p1",
-            "associated_tools": ["existing_tool"]
+            "associated_tools": ["existing_tool"],
         }
         with open(self.protocol_file_path, "w") as f:
             json.dump(self.initial_protocol_data, f, indent=2)
 
         # --- Monkey-patch the constants in the orchestrator to use our temp files ---
         import tooling.self_correction_orchestrator as orchestrator
+
         self.orchestrator_orig_lessons = orchestrator.LESSONS_FILE
         orchestrator.LESSONS_FILE = self.lessons_file_path
 
@@ -64,6 +73,7 @@ class TestSelfCorrectionOrchestrator(unittest.TestCase):
         """Clean up and restore original constants."""
         shutil.rmtree(self.test_dir)
         import tooling.self_correction_orchestrator as orchestrator
+
         orchestrator.LESSONS_FILE = self.orchestrator_orig_lessons
 
     def test_process_lessons_end_to_end(self):
@@ -92,7 +102,7 @@ class TestSelfCorrectionOrchestrator(unittest.TestCase):
         # 2. Verify the lessons file was updated
         updated_lessons = load_lessons()
         self.assertEqual(updated_lessons[0]["status"], "applied")
-        self.assertEqual(updated_lessons[1]["status"], "applied") # Stays the same
+        self.assertEqual(updated_lessons[1]["status"], "applied")  # Stays the same
 
     def test_process_lessons_handles_malformed_lesson_gracefully(self):
         """
@@ -107,9 +117,9 @@ class TestSelfCorrectionOrchestrator(unittest.TestCase):
             "action": {
                 "type": "UPDATE_PROTOCOL",
                 # "command" key is intentionally missing
-                "parameters": {"protocol_id": "p-broken", "tool_name": "t-broken"}
+                "parameters": {"protocol_id": "p-broken", "tool_name": "t-broken"},
             },
-            "status": "pending"
+            "status": "pending",
         }
         # The valid lesson from the initial setup
         valid_lesson = self.initial_lessons[0]
@@ -121,7 +131,9 @@ class TestSelfCorrectionOrchestrator(unittest.TestCase):
         # --- Execution ---
         # Run the processing. This should not raise an exception.
         changes_made = process_lessons(lessons_with_malformed, self.protocols_dir_path)
-        self.assertTrue(changes_made, "Should report changes since the valid lesson was processed.")
+        self.assertTrue(
+            changes_made, "Should report changes since the valid lesson was processed."
+        )
 
         # Save the results back to the file before verifying
         save_lessons(lessons_with_malformed)

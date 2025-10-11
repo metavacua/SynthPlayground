@@ -16,6 +16,7 @@ improved in future tasks.
 The script is executed via the command line, taking the path to a completed
 post-mortem file as its primary argument.
 """
+
 import argparse
 import re
 import os
@@ -57,7 +58,7 @@ def extract_lessons_from_postmortem(postmortem_content: str) -> list:
         if action_match:
             action = action_match.group(1).strip()
             # The lesson is whatever comes before "**Action:**"
-            lesson = item[:action_match.start()].strip()
+            lesson = item[: action_match.start()].strip()
             # If there's an explicit **Lesson:**, prefer that.
             lesson_explicit_match = re.search(r"\*\*Lesson:\*\*(.*)", lesson, re.DOTALL)
             if lesson_explicit_match:
@@ -71,10 +72,12 @@ def extract_lessons_from_postmortem(postmortem_content: str) -> list:
             lesson = f"A corrective action was proposed: {action}"
 
         if lesson or action:
-            cleaned_lessons.append({
-                "lesson": lesson.replace("\n", " "),
-                "action": action.replace("\n", " "),
-            })
+            cleaned_lessons.append(
+                {
+                    "lesson": lesson.replace("\n", " "),
+                    "action": action.replace("\n", " "),
+                }
+            )
 
     return cleaned_lessons
 
@@ -116,7 +119,8 @@ def parse_action_to_command(action_text: str) -> dict:
 
     # Pattern: "Update rule '...' in protocol '...' to '...'"
     update_rule_pattern = re.compile(
-        r"update rule\s+'([^']*)'\s+in protocol\s+'([^']*)'\s+to\s+'([^']*)'", re.IGNORECASE
+        r"update rule\s+'([^']*)'\s+in protocol\s+'([^']*)'\s+to\s+'([^']*)'",
+        re.IGNORECASE,
     )
     match = update_rule_pattern.search(action_text)
     if match:
@@ -151,7 +155,7 @@ def parse_action_to_command(action_text: str) -> dict:
     return {
         "type": "UPDATE_PROTOCOL",
         "command": "placeholder",
-        "parameters": {"description": action_text}
+        "parameters": {"description": action_text},
     }
 
 
@@ -159,7 +163,7 @@ def format_lesson_entry(metadata: dict, lesson_data: dict) -> dict:
     """
     Formats an extracted lesson into a structured JSON object.
     """
-    actionable_command = parse_action_to_command(lesson_data['action'])
+    actionable_command = parse_action_to_command(lesson_data["action"])
 
     return {
         "lesson_id": str(uuid.uuid4()),
@@ -167,7 +171,7 @@ def format_lesson_entry(metadata: dict, lesson_data: dict) -> dict:
         "date": metadata["date"],
         "insight": lesson_data["lesson"],
         "action": actionable_command,
-        "status": "pending"
+        "status": "pending",
     }
 
 

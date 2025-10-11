@@ -21,6 +21,7 @@ The resulting `symbols.json` artifact is a critical input for the agent's
 orientation and planning phases, allowing it to quickly locate relevant code
 and understand the structure of the repository without having to read every file.
 """
+
 import os
 import json
 import glob

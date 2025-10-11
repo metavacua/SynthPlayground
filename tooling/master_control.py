@@ -29,6 +29,7 @@ state. This creates a robust, interactive loop where the orchestrator directs
 the high-level state, and the agent is responsible for completing the work
 required to advance that state.
 """
+
 import json
 import sys
 import time
@@ -43,10 +44,12 @@ from state import AgentState, PlanContext
 from fdc_cli import MAX_RECURSION_DEPTH
 from research import execute_research_protocol
 from research_planner import plan_deep_research
-from plan_parser import parse_plan, Command
+from plan_parser import parse_plan
 
 PLAN_REGISTRY_PATH = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "knowledge_core", "plan_registry.json")
+    os.path.join(
+        os.path.dirname(__file__), "..", "knowledge_core", "plan_registry.json"
+    )
 )
 
 
@@ -59,6 +62,7 @@ def _load_plan_registry():
             return json.load(f)
     except (json.JSONDecodeError, IOError):
         return {}
+
 
 class MasterControlGraph:
     """
@@ -171,7 +175,7 @@ class MasterControlGraph:
 
         # Standard L3 planning process
         plan_file = "plan.txt"
-        agent_state.plan_path = plan_file # Set the root plan path
+        agent_state.plan_path = plan_file  # Set the root plan path
         print(f"  - Waiting for agent to create '{plan_file}'...")
         while not os.path.exists(plan_file):
             time.sleep(1)
@@ -228,7 +232,12 @@ class MasterControlGraph:
         # 2. Validate the plan against the research FSM
         print(f"  - Validating '{research_plan_file}' against research FSM...")
         # The updated fdc_cli now reads the # FSM: directive from the plan file.
-        validation_cmd = ["python3", "tooling/fdc_cli.py", "validate", research_plan_file]
+        validation_cmd = [
+            "python3",
+            "tooling/fdc_cli.py",
+            "validate",
+            research_plan_file,
+        ]
         result = subprocess.run(validation_cmd, capture_output=True, text=True)
 
         if result.returncode != 0:
@@ -282,9 +291,7 @@ class MasterControlGraph:
         current_context.current_step += 1
 
         # Push the new plan onto the stack
-        new_context = PlanContext(
-            plan_path=sub_plan_path, commands=parsed_sub_commands
-        )
+        new_context = PlanContext(plan_path=sub_plan_path, commands=parsed_sub_commands)
         agent_state.plan_stack.append(new_context)
         return self.get_trigger("EXECUTING", "EXECUTING")
 
@@ -391,7 +398,9 @@ class MasterControlGraph:
             safe_task_id = "".join(c for c in task_id if c.isalnum() or c in ("-", "_"))
             final_path = f"postmortems/{datetime.date.today()}-{safe_task_id}.md"
             os.rename(draft_path, final_path)
-            report_message = f"Post-mortem analysis finalized. Report saved to '{final_path}'."
+            report_message = (
+                f"Post-mortem analysis finalized. Report saved to '{final_path}'."
+            )
             agent_state.final_report = report_message
             agent_state.messages.append({"role": "system", "content": report_message})
             print(f"  - {report_message}")
@@ -403,16 +412,27 @@ class MasterControlGraph:
                 agent_state.error = compile_msg
                 print(f"  - {agent_state.error}")
                 return self.get_trigger("FINALIZING", "finalization_failed")
-            agent_state.messages.append({"role": "system", "content": "Knowledge compilation successful."})
+            agent_state.messages.append(
+                {"role": "system", "content": "Knowledge compilation successful."}
+            )
             print("  - Knowledge compilation successful.")
 
             # 3. Run self-correction
             print("  - Running self-correction cycle...")
             correction_cmd = ["python3", "tooling/self_correction_orchestrator.py"]
-            correction_result = subprocess.run(correction_cmd, capture_output=True, text=True)
-            agent_state.messages.append({"role": "system", "content": f"Self-Correction Output:\n{correction_result.stdout}"})
+            correction_result = subprocess.run(
+                correction_cmd, capture_output=True, text=True
+            )
+            agent_state.messages.append(
+                {
+                    "role": "system",
+                    "content": f"Self-Correction Output:\n{correction_result.stdout}",
+                }
+            )
             if correction_result.returncode != 0:
-                error_message = f"Self-correction cycle FAILED:\n{correction_result.stderr}"
+                error_message = (
+                    f"Self-correction cycle FAILED:\n{correction_result.stderr}"
+                )
                 agent_state.error = error_message
                 print(f"  - {error_message}")
                 return self.get_trigger("FINALIZING", "finalization_failed")
@@ -424,7 +444,6 @@ class MasterControlGraph:
             agent_state.error = f"An unexpected error occurred during finalization: {e}"
             print(f"[MasterControl] {agent_state.error}")
             return self.get_trigger("FINALIZING", "finalization_failed")
-
 
     def run(self, initial_agent_state: AgentState):
         """Runs the agent's workflow through the FSM."""

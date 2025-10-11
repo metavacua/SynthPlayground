@@ -9,8 +9,9 @@ verifiable artifact that can be executed by the `master_control.py` orchestrator
 The generated plan adheres to the state transitions defined in `research_fsm.json`,
 guiding the agent through the phases of GATHERING, SYNTHESIZING, and REPORTING.
 """
+
 import sys
-from typing import Literal
+
 
 def plan_deep_research(topic: str) -> str:
     """

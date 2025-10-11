@@ -1069,11 +1069,6 @@ The CLI provides several key commands:
 
 - #### `def start_task(task_id)`
 
-  > Logs the formal start of a task.
-
-
-- #### `def start_task(task_id)`
-
   > Initiates the AORP cascade for a new task.
 
 

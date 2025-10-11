@@ -16,9 +16,10 @@ The script is configured via top-level constants:
 It uses Python's `ast` module to reliably parse source files without
 importing them, which avoids issues with dependencies or script side-effects.
 """
+
 import ast
 import os
-from typing import List, Dict, Optional, Any, Union
+from typing import List, Dict, Optional
 
 # Directories to scan for Python source files.
 SCAN_DIRECTORIES = ["tooling/", "utils/"]
@@ -29,29 +30,43 @@ DOC_TITLE = "# System Documentation"
 
 # --- Data Structures for Documentation ---
 
+
 class FunctionDoc:
     """Holds documentation for a single function or method."""
+
     def __init__(self, name: str, signature: str, docstring: Optional[str]):
         self.name = name
         self.signature = signature
         self.docstring = docstring.strip() if docstring else ""
 
+
 class ClassDoc:
     """Holds documentation for a single class."""
+
     def __init__(self, name: str, docstring: Optional[str], methods: List[FunctionDoc]):
         self.name = name
         self.docstring = docstring.strip() if docstring else ""
         self.methods = sorted(methods, key=lambda m: m.name)
 
+
 class ModuleDoc:
     """Holds all documentation for a single Python module."""
-    def __init__(self, name: str, docstring: Optional[str], classes: List[ClassDoc], functions: List[FunctionDoc]):
+
+    def __init__(
+        self,
+        name: str,
+        docstring: Optional[str],
+        classes: List[ClassDoc],
+        functions: List[FunctionDoc],
+    ):
         self.name = name
         self.docstring = docstring.strip() if docstring else ""
         self.classes = sorted(classes, key=lambda c: c.name)
         self.functions = sorted(functions, key=lambda f: f.name)
 
+
 # --- AST Parsing Logic ---
+
 
 def _format_default_value(node: ast.expr) -> str:
     """Safely formats a default argument value from an AST node."""
@@ -62,6 +77,7 @@ def _format_default_value(node: ast.expr) -> str:
     # Fallback for more complex expressions (e.g., calls, dicts)
     # This is a simplified representation.
     return "..."
+
 
 def format_args(args: ast.arguments) -> str:
     """Formats ast.arguments into a printable string, including defaults."""
@@ -79,7 +95,7 @@ def format_args(args: ast.arguments) -> str:
             parts.append(arg.arg)
 
     if args.posonlyargs and args.args:
-        parts.append('/') # Separator for pos-only args
+        parts.append("/")  # Separator for pos-only args
 
     # Regular arguments
     for i, arg in enumerate(args.args):
@@ -96,7 +112,7 @@ def format_args(args: ast.arguments) -> str:
 
     # Keyword-only arguments
     if args.kwonlyargs and not args.vararg:
-        parts.append('*')
+        parts.append("*")
 
     for i, kwarg in enumerate(args.kwonlyargs):
         if args.kw_defaults[i]:
@@ -117,6 +133,7 @@ class DocVisitor(ast.NodeVisitor):
     AST visitor to extract documentation from classes and functions.
     It navigates the tree and builds lists of discovered documentation objects.
     """
+
     def __init__(self):
         self.classes: List[ClassDoc] = []
         self.functions: List[FunctionDoc] = []
@@ -153,11 +170,14 @@ class DocVisitor(ast.NodeVisitor):
         # Visit the body of the class to find methods
         self.generic_visit(node)
 
-        class_doc = ClassDoc(name=node.name, docstring=docstring, methods=self._current_class_methods)
+        class_doc = ClassDoc(
+            name=node.name, docstring=docstring, methods=self._current_class_methods
+        )
         self.classes.append(class_doc)
 
         # Restore the previous state
         self._current_class_methods = previous_methods_list
+
 
 def parse_file_for_docs(filepath: str) -> Optional[ModuleDoc]:
     """
@@ -178,13 +198,15 @@ def parse_file_for_docs(filepath: str) -> Optional[ModuleDoc]:
                 name=filepath,
                 docstring=module_docstring,
                 classes=visitor.classes,
-                functions=visitor.functions
+                functions=visitor.functions,
             )
         except Exception as e:
             print(f"    -! Error parsing {filepath}: {e}")
             return None
 
+
 # --- Markdown Generation ---
+
 
 def generate_documentation_for_module(mod_doc: ModuleDoc) -> List[str]:
     """Generates Markdown content for a single module."""
@@ -204,7 +226,9 @@ def generate_documentation_for_module(mod_doc: ModuleDoc) -> List[str]:
             parts.append(f"\n- #### `{func.signature}`\n")
             if func.docstring:
                 # Indent docstring for better readability
-                indented_doc = "\n".join([f"  > {line}" for line in func.docstring.splitlines()])
+                indented_doc = "\n".join(
+                    [f"  > {line}" for line in func.docstring.splitlines()]
+                )
                 parts.append(indented_doc + "\n")
 
     # Classes
@@ -213,7 +237,9 @@ def generate_documentation_for_module(mod_doc: ModuleDoc) -> List[str]:
         for cls in mod_doc.classes:
             parts.append(f"\n- #### `class {cls.name}`\n")
             if cls.docstring:
-                indented_doc = "\n".join([f"  > {line}" for line in cls.docstring.splitlines()])
+                indented_doc = "\n".join(
+                    [f"  > {line}" for line in cls.docstring.splitlines()]
+                )
                 parts.append(indented_doc + "\n")
 
             if cls.methods:
@@ -221,9 +247,12 @@ def generate_documentation_for_module(mod_doc: ModuleDoc) -> List[str]:
                 for meth in cls.methods:
                     parts.append(f"  - ##### `{meth.signature}`\n")
                     if meth.docstring:
-                        indented_doc = "\n".join([f"    > {line}" for line in meth.docstring.splitlines()])
+                        indented_doc = "\n".join(
+                            [f"    > {line}" for line in meth.docstring.splitlines()]
+                        )
                         parts.append(indented_doc + "\n")
     return parts
+
 
 def generate_documentation(all_docs: List[ModuleDoc]) -> str:
     """
@@ -247,7 +276,9 @@ def generate_documentation(all_docs: List[ModuleDoc]) -> str:
 
     return "\n".join(doc_parts)
 
+
 # --- Main Execution Logic ---
+
 
 def find_python_files(directories: List[str]) -> List[str]:
     """Finds all Python files in the given directories, ignoring test files."""
@@ -258,6 +289,7 @@ def find_python_files(directories: List[str]) -> List[str]:
                 if file.endswith(".py") and not file.startswith("test_"):
                     py_files.append(os.path.join(root, file))
     return sorted(py_files)
+
 
 def main():
     """Main function to find files, parse them, and write documentation."""
@@ -289,6 +321,7 @@ def main():
         print("--> Documentation generated successfully.")
     except IOError as e:
         print(f"Error writing to file {OUTPUT_FILE}: {e}")
+
 
 if __name__ == "__main__":
     main()

@@ -19,11 +19,11 @@ The CLI provides several key commands:
 - `lint`: A comprehensive "linter" that runs a full suite of checks on a plan
   file, including `validate`, `analyze`, and checks for disallowed recursion.
 """
+
 import argparse
 import datetime
 import json
 import os
-import shutil
 import sys
 import uuid
 
@@ -122,21 +122,6 @@ def close_task(task_id):
     # of this tool is the signal for the MasterControlGraph to proceed.
 
 
-def start_task(task_id):
-    """
-    Logs the formal start of a task.
-    """
-    if not task_id:
-        print("Error: --task-id is required.", file=sys.stderr)
-        sys.exit(1)
-
-    log_details = {
-        "summary": f"Agent has signaled the start of task '{task_id}'. The Master Control Graph will now transition to the execution phase."
-    }
-    _log_event(_create_log_entry(task_id, "TASK_START", log_details))
-    print(f"Logged TASK_START event for task: {task_id}")
-
-
 from tooling.plan_parser import parse_plan, Command
 
 # ... (other imports remain the same)
@@ -155,14 +140,13 @@ ACTION_TYPE_MAP = {
     "delete_file": "delete_op",
     "rename_file": "move_op",
     "run_in_bash_session": "tool_exec",
-    "call_plan": "call_plan_op", # Now a recognized action type
+    "call_plan": "call_plan_op",  # Now a recognized action type
 }
 
 
 def _validate_command(command: Command, state, fsm, fs):
     """Validates a single Command object against the FSM and filesystem state."""
     tool_name = command.tool_name
-    args_text = command.args_text
 
     action_type = ACTION_TYPE_MAP.get(tool_name)
     if not action_type:
@@ -205,7 +189,10 @@ def _validate_plan_recursive(
     Recursively validates a block of a plan, now with recursion detection and FSM-switching.
     """
     if recursion_depth > MAX_RECURSION_DEPTH:
-        print(f"Error: Max recursion depth ({MAX_RECURSION_DEPTH}) exceeded.", file=sys.stderr)
+        print(
+            f"Error: Max recursion depth ({MAX_RECURSION_DEPTH}) exceeded.",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     i = start_index
@@ -263,12 +250,15 @@ def _validate_plan_recursive(
                     sub_plan_content = f.read()
                 sub_commands = parse_plan(sub_plan_content)
             except FileNotFoundError:
-                print(f"Error: Sub-plan file not found at '{sub_plan_path}'.", file=sys.stderr)
+                print(
+                    f"Error: Sub-plan file not found at '{sub_plan_path}'.",
+                    file=sys.stderr,
+                )
                 sys.exit(1)
 
             print(f"  Line {line_num+1}: Validating sub-plan '{sub_plan_path}'...")
             sub_final_state, _, _, sub_fsm = _validate_plan_recursive(
-                sub_plan_lines,
+                [(i, str(cmd)) for i, cmd in enumerate(sub_commands)],
                 0,
                 0,
                 "DUMMY_STATE",
@@ -318,8 +308,8 @@ def _validate_plan_recursive(
             fs.update(loop_fs)
             i = j
         else:
-            state, fs = _validate_action(
-                line_num, line_content, state, current_fsm, fs, placeholders
+            state, fs = _validate_command(
+                Command(line_content.split()[0], " ".join(line_content.split()[1:])), state, current_fsm, fs
             )
             i += 1
 
@@ -349,13 +339,16 @@ def validate_plan(plan_filepath):
 
     print(f"Starting validation with {len(simulated_fs)} files pre-loaded...")
     final_state, _, _, final_fsm = _validate_plan_recursive(
-        lines, 0, 0, default_fsm["start_state"], simulated_fs, {}, default_fsm, 0
+        [(i, str(cmd)) for i, cmd in enumerate(commands)], 0, 0, default_fsm["start_state"], simulated_fs, {}, default_fsm, 0
     )
 
     if final_state in final_fsm["accept_states"]:
         print("\nValidation successful! Plan is syntactically and semantically valid.")
     else:
-        print(f"\nValidation failed. Plan ends in non-accepted state: '{final_state}'", file=sys.stderr)
+        print(
+            f"\nValidation failed. Plan ends in non-accepted state: '{final_state}'",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
 
@@ -410,6 +403,8 @@ def lint_plan(plan_filepath):
     validate_plan(plan_filepath)
     analyze_plan(plan_filepath)
     print("\n--- Linting Complete: All checks passed. ---")
+
+
 def start_task(task_id):
     """Initiates the AORP cascade for a new task."""
     if not task_id:
@@ -422,38 +417,52 @@ def start_task(task_id):
     # --- L1: Self-Awareness & Identity Verification ---
     print("\n--- L1: Self-Awareness & Identity Verification ---")
     try:
-        with open(os.path.join(ROOT_DIR, "knowledge_core", "agent_meta.json"), "r") as f:
+        with open(
+            os.path.join(ROOT_DIR, "knowledge_core", "agent_meta.json"), "r"
+        ) as f:
             agent_meta = json.load(f)
             print("Successfully loaded knowledge_core/agent_meta.json:")
             print(json.dumps(agent_meta, indent=2))
     except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error during L1: Could not read or parse agent_meta.json. {e}", file=sys.stderr)
+        print(
+            f"Error during L1: Could not read or parse agent_meta.json. {e}",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     # --- L2: Repository State Synchronization ---
     print("\n--- L2: Repository State Synchronization ---")
     try:
         kc_path = os.path.join(ROOT_DIR, "knowledge_core")
-        artifacts = [f for f in os.listdir(kc_path) if os.path.isfile(os.path.join(kc_path, f)) and f != 'agent_meta.json']
+        artifacts = [
+            f
+            for f in os.listdir(kc_path)
+            if os.path.isfile(os.path.join(kc_path, f)) and f != "agent_meta.json"
+        ]
         print("Found knowledge_core artifacts:")
         for artifact in artifacts:
             print(f"- {artifact}")
     except FileNotFoundError as e:
-        print(f"Error during L2: Could not list knowledge_core directory. {e}", file=sys.stderr)
+        print(
+            f"Error during L2: Could not list knowledge_core directory. {e}",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     # --- L3: Environmental Probing ---
     print("\n--- L3: Environmental Probing ---")
     probe_script_path = os.path.join(ROOT_DIR, "tooling", "environmental_probe.py")
     if not os.path.exists(probe_script_path):
-        print(f"Error during L3: Probe script not found at {probe_script_path}", file=sys.stderr)
+        print(
+            f"Error during L3: Probe script not found at {probe_script_path}",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     print(f"Executing: python3 {probe_script_path}")
     # We are already running in a bash session, so we can just run the script
     # and it will inherit the environment.
     os.system(f"python3 {probe_script_path}")
-
 
     # --- Logging ---
     _log_event(
@@ -505,9 +514,7 @@ def main():
     lint_parser = subparsers.add_parser(
         "lint", help="Runs all validation and analysis checks on a plan."
     )
-    lint_parser.add_argument(
-        "plan_file", help="The path to the plan file to lint."
-    )
+    lint_parser.add_argument("plan_file", help="The path to the plan file to lint.")
 
     args = parser.parse_args()
     if args.command == "start":

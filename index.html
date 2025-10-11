@@ -79,6 +79,7 @@
 <li><a href="#project-chimera-an-agent-self-improvement-protocol">Project Chimera: An Agent Self-Improvement Protocol</a><ul>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#core-architecture-the-integrated-fsm-workflow">Core Architecture: The Integrated FSM Workflow</a></li>
+<li><a href="#core-protocols">Core Protocols</a></li>
 <li><a href="#key-components">Key Components</a></li>
 <li><a href="#build-system-usage">Build System &amp; Usage</a></li>
 <li><a href="#machine-readable-metalanguage-agentsmd">Machine-Readable Metalanguage (AGENTS.md)</a></li>
@@ -258,6 +259,10 @@
 <li><a href="#def-main_7">def main()</a></li>
 </ul>
 </li>
+<li><a href="#toolingpages_generatorpy">tooling/pages_generator.py</a><ul>
+<li><a href="#def-generate_html_page">def generate_html_page()</a></li>
+</ul>
+</li>
 <li><a href="#toolingplan_managerpy">tooling/plan_manager.py</a><ul>
 <li><a href="#def-deregister_planname">def deregister_plan(name)</a></li>
 <li><a href="#def-get_registry">def get_registry()</a></li>
@@ -296,6 +301,7 @@
 </ul>
 </li>
 <li><a href="#toolingreadme_generatorpy">tooling/readme_generator.py</a><ul>
+<li><a href="#def-generate_core_protocols_section">def generate_core_protocols_section()</a></li>
 <li><a href="#def-generate_key_components_section">def generate_key_components_section()</a></li>
 <li><a href="#def-get_module_docstringfilepath">def get_module_docstring(filepath)</a></li>
 <li><a href="#def-main_12">def main()</a></li>
@@ -372,6 +378,31 @@
 <li><strong>Validation &amp; Management Toolchain (<code>tooling/fdc_cli.py</code>):</strong> A command-line interface that provides formal validation of plans and automated management of the task lifecycle.</li>
 </ol>
 <p>These two components work together to ensure every task is executed in a controlled, predictable, and verifiable manner.</p>
+<h2 id="core-protocols">Core Protocols</h2>
+<p>This project is governed by a series of machine-readable protocols defined in <code>AGENTS.md</code>. These protocols are the source of truth for the agent's behavior. The key protocols are:</p>
+<ul>
+<li><strong><code>aorp-header</code></strong>: Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP).</li>
+<li><strong><code>agent-bootstrap-001</code></strong>: A foundational protocol that dictates the agent's initial actions upon starting any task.</li>
+<li><strong><code>core-directive-001</code></strong>: The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC).</li>
+<li><strong><code>decidability-constraints-001</code></strong>: Ensures all development processes are formally decidable and computationally tractable.</li>
+<li><strong><code>orientation-cascade-001</code></strong>: Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state.</li>
+<li><strong><code>fdc-protocol-001</code></strong>: Defines the Finite Development Cycle (FDC), a formally defined process for executing a single, coherent task.</li>
+<li><strong><code>standing-orders-001</code></strong>: A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks.</li>
+<li><strong><code>best-practices-001</code></strong>: A set of best practices derived from observing successful, data-driven workflow patterns.</li>
+<li><strong><code>meta-protocol-001</code></strong>: A meta-protocol governing the agent's awareness and maintenance of its own core protocol files.</li>
+<li><strong><code>cfdc-protocol-001</code></strong>: Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model.</li>
+<li><strong><code>self-correction-protocol-001</code></strong>: Defines the automated, closed-loop workflow for protocol self-correction.</li>
+<li><strong><code>non-compliance-protocol-001</code></strong>: A protocol that defines non-compliance with AGENTS.md and specifies corrective actions.</li>
+<li><strong><code>pre-commit-protocol-001</code></strong>: Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission.</li>
+<li><strong><code>reset-all-authorization-001</code></strong>: Requires explicit user authorization via a token file for the use of the destructive <code>reset_all</code> tool.</li>
+<li><strong><code>research-protocol-001</code></strong>: A protocol for conducting systematic research using the integrated research toolchain.</li>
+<li><strong><code>reset-all-prohibition-001</code></strong>: A high-priority protocol that unconditionally forbids the use of the <code>reset_all</code> tool.</li>
+<li><strong><code>critic-meta-protocol-001</code></strong>: A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent.</li>
+<li><strong><code>critic-reset-prohibition-001</code></strong>: A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool.</li>
+<li><strong><code>deep-research-cycle-001</code></strong>: A standardized, callable plan for conducting in-depth research on a complex topic.</li>
+<li><strong><code>protocol-reset-all-pre-check-001</code></strong>: A protocol that mandates a pre-execution check for the <code>reset_all</code> tool to prevent unauthorized use.</li>
+<li><strong><code>research-fdc-001</code></strong>: Defines the formal Finite Development Cycle (FDC) for conducting deep research.</li>
+</ul>
 <h2 id="key-components">Key Components</h2>
 <ul>
 <li><strong><code>tooling/master_control.py</code></strong>:</li>
@@ -1624,6 +1655,24 @@ workflow defined in <code>master_control.py</code>.</p>
 <p>This script initializes the agent's state, runs the master control graph
 to enforce the protocol, and prints the final result.</p>
 </blockquote>
+<h3 id="toolingpages_generatorpy"><code>tooling/pages_generator.py</code></h3>
+<p>Generates a single HTML file for GitHub Pages from the repository's metalanguage.</p>
+<p>This script combines the human-readable <code>README.md</code> and the machine-readable
+<code>AGENTS.md</code> into a single, navigable HTML document. It uses the <code>markdown</code>
+library to convert the Markdown content to HTML and to automatically generate
+a Table of Contents.</p>
+<p>The final output is a semantic HTML5 document, <code>index.html</code>, which serves as
+the main page for the project's GitHub Pages site.</p>
+<p><strong>Public Functions:</strong></p>
+<ul>
+<li>
+<h4 id="def-generate_html_page"><code>def generate_html_page()</code></h4>
+</li>
+</ul>
+<blockquote>
+<p>Reads the source Markdown files, converts them to HTML, and builds the
+final index.html page.</p>
+</blockquote>
 <h3 id="toolingplan_managerpy"><code>tooling/plan_manager.py</code></h3>
 <p>Provides a command-line interface for managing the agent's Plan Registry.</p>
 <p>This script is the administrative tool for the Plan Registry, a key component
@@ -1897,6 +1946,14 @@ automatically reflects the current state of the documented source code.</p>
 <p>The script is designed to be run from the root of the repository and is
 integrated into the <code>Makefile</code> build process.</p>
 <p><strong>Public Functions:</strong></p>
+<ul>
+<li>
+<h4 id="def-generate_core_protocols_section"><code>def generate_core_protocols_section()</code></h4>
+</li>
+</ul>
+<blockquote>
+<p>Parses AGENTS.md to extract protocol definitions and generate a Markdown summary.</p>
+</blockquote>
 <ul>
 <li>
 <h4 id="def-generate_key_components_section"><code>def generate_key_components_section()</code></h4>

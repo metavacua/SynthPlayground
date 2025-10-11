@@ -6,6 +6,7 @@ from unittest.mock import patch
 
 from tooling import readme_generator
 
+
 class TestReadmeGenerator(unittest.TestCase):
     """
     Tests for the readme_generator.py script.
@@ -42,8 +43,9 @@ class TestReadmeGenerator(unittest.TestCase):
         """
         files_to_doc = ["component_one.py", "component_two.py"]
         # Patch the constants to point to our test setup
-        with patch("tooling.readme_generator.KEY_COMPONENTS_DIR", self.tooling_dir), \
-             patch("tooling.readme_generator.KEY_FILES_TO_DOCUMENT", files_to_doc):
+        with patch(
+            "tooling.readme_generator.KEY_COMPONENTS_DIR", self.tooling_dir
+        ), patch("tooling.readme_generator.KEY_FILES_TO_DOCUMENT", files_to_doc):
 
             result = readme_generator.generate_key_components_section()
 
@@ -67,9 +69,9 @@ class TestReadmeGenerator(unittest.TestCase):
         key_files = ["component_one.py", "component_two.py", "component_three.py"]
 
         # Patch the configuration constants within the readme_generator module
-        with patch("tooling.readme_generator.OUTPUT_FILE", output_filepath), \
-             patch("tooling.readme_generator.KEY_FILES_TO_DOCUMENT", key_files), \
-             patch("tooling.readme_generator.KEY_COMPONENTS_DIR", self.tooling_dir):
+        with patch("tooling.readme_generator.OUTPUT_FILE", output_filepath), patch(
+            "tooling.readme_generator.KEY_FILES_TO_DOCUMENT", key_files
+        ), patch("tooling.readme_generator.KEY_COMPONENTS_DIR", self.tooling_dir):
 
             readme_generator.main()
 
@@ -93,6 +95,7 @@ class TestReadmeGenerator(unittest.TestCase):
         path_three = os.path.join(self.tooling_dir, "component_three.py")
         self.assertIn(f"`{path_three}`", content)
         self.assertIn("> _No docstring found._", content)
+
 
 if __name__ == "__main__":
     unittest.main()

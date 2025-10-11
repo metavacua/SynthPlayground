@@ -1,6 +1,7 @@
 import unittest
 from tooling.research_planner import plan_deep_research
 
+
 class TestNewResearchPlanner(unittest.TestCase):
     """
     Tests for the refactored, FSM-compliant research planner.
@@ -28,13 +29,25 @@ class TestNewResearchPlanner(unittest.TestCase):
         self.assertIn("# FSM: tooling/research_fsm.json", plan_lines[1])
 
         # 3. Verify it contains the core executable commands in order
-        executable_lines = [line for line in plan_lines if line.strip() and not line.strip().startswith("#")]
+        executable_lines = [
+            line
+            for line in plan_lines
+            if line.strip() and not line.strip().startswith("#")
+        ]
         self.assertEqual(len(executable_lines), 4)
-        self.assertIn(f"set_plan This is the research plan for the topic: '{topic}'.", executable_lines[0])
+        self.assertIn(
+            f"set_plan This is the research plan for the topic: '{topic}'.",
+            executable_lines[0],
+        )
         self.assertIn("plan_step_complete", executable_lines[1])
-        self.assertIn(f"create_file_with_block {expected_report_file}", executable_lines[2])
-        self.assertIn(f'run_in_bash_session python3 tooling/fdc_cli.py close --task-id "{expected_task_id}"', executable_lines[3])
+        self.assertIn(
+            f"create_file_with_block {expected_report_file}", executable_lines[2]
+        )
+        self.assertIn(
+            f'run_in_bash_session python3 tooling/fdc_cli.py close --task-id "{expected_task_id}"',
+            executable_lines[3],
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
