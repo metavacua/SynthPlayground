@@ -258,6 +258,14 @@
     },
     {
       "_type": "tag",
+      "name": "generate_html_page",
+      "path": "./tooling/pages_generator.py",
+      "language": "Python",
+      "line": 107,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "TestNewResearchPlanner",
       "path": "./tooling/test_research_planner.py",
       "language": "Python",

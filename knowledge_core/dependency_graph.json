@@ -39,6 +39,11 @@
       "id": "pytest",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "Markdown",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
@@ -69,6 +74,10 @@
     {
       "source": "root-python-project",
       "target": "pytest"
+    },
+    {
+      "source": "root-python-project",
+      "target": "Markdown"
     }
   ]
 }
