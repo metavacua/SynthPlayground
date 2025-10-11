@@ -1,0 +1,144 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Data Structures (Minimal for Prototype) - Enhanced Node
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defclass relnet-node ()
+  ((name :initarg :name :accessor relnet-node-name)
+   (type :initarg :type :accessor relnet-node-type))) ;; Added type attribute
+
+(defvar *knowledge-base* nil "Global Knowledge Base (Minimal for Prototype)")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Axioms (con_R and incon_L - Minimal for Prototype)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun axiom-con-r (kb)
+  "Proof Axiom (axiom con_R (() con)). Minimal implementation."
+  ;; In barebones prototype, con_R always applies to an empty KB for simplicity.
+  (declare (ignore kb))
+  (format t "Proof Thread: Applying con_R axiom - Axiomatically Proven.~%")
+  :proven)
+
+(defun axiom-incon-l (kb)
+  "Refutation Axiom (axiom incon_L (incon ())). Minimal implementation."
+  ;; In barebones prototype, incon_L always applies to an empty KB for simplicity.
+  (declare (ignore kb))
+  (format t "Refutation Thread: Applying incon_L axiom - Axiomatically Refuted.~%")
+  :refuted)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Rules (Dependence Right - ∦R - Minimal for Prototype)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun rule-dependence-r (kb)
+  "Dependence Right Rule (rule ∦R (∧ (() A) (() B)) ( () (∦ A B) )). Minimal implementation for '∦ con con'."
+  (format t "Proof Thread: Attempting rule ∦R (Dependence Right).~%")
+  ;; In barebones prototype, we check for the specific case of proving (∦ con con)
+  ;; by axiomatically proving 'con' twice.
+  (let ((proof1-result (axiom-con-r kb))
+        (proof2-result (axiom-con-r kb)))
+    (if (and (eq proof1-result :proven) (eq proof2-result :proven))
+        (progn
+          (format t "Proof Thread: Rule ∦R applied successfully - Proven (∦ con con).~%")
+          :rule-applied)
+        (progn
+          (format t "Proof Thread: Rule ∦R failed to apply.~%")
+          nil))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Thread Functions (Proof and Refutation - Minimal for Prototype)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defvar *proof-result* nil "Variable to store proof thread result")
+(defvar *refutation-result* nil "Variable to store refutation thread result")
+(defvar *termination-flag* nil "Flag to signal termination to both threads")
+
+
+(defun proof-thread-function ()
+  "Proof Thread: Applies con_R and rule ∦R axioms, sets *proof-result*."
+  (format t "Proof Thread: Starting.~%")
+  (sleep 1) ; Simulate some work
+
+  ;; 1. Try axiom con_R
+  (let ((axiom-con-r-result (axiom-con-r *knowledge-base*)))
+    (when (eq axiom-con-r-result :proven)
+      (setf *proof-result* :proven)
+      (setf *termination-flag* :proof-terminated)
+      (format t "Proof Thread: Terminating (via con_R axiom).~%")
+      (return-from proof-thread-function :proven))) ; Early exit if con_R proves
+
+  ;; 2. If con_R didn't prove, try rule ∦R (Dependence Right)
+  (let ((rule-dep-r-result (rule-dependence-r *knowledge-base*)))
+    (when (eq rule-dep-r-result :rule-applied)
+      (setf *proof-result* :proven) ; Or potentially a more specific result like :proven-dependence
+      (setf *termination-flag* :proof-terminated)
+      (format t "Proof Thread: Terminating (via rule ∦R).~%")
+      (return-from proof-thread-function :proven))) ; Early exit if rule ∦R proves - Corrected line
+
+  ;; 3. If neither con_R nor rule ∦R proved, then proof fails in this prototype
+  (format t "Proof Thread: No proof found in this iteration.~%")
+  (setf *proof-result* :unknown)
+  (setf *termination-flag* :proof-terminated) ; Terminate even if no proof found in this minimal version
+  (format t "Proof Thread: Terminating (no proof).~%")
+  :unknown)
+
+
+
+(defun refutation-thread-function ()
+  "Refutation Thread: Applies incon_L axiom and sets *refutation-result*."
+  (format t "Refutation Thread: Starting.~%")
+  (sleep 1.5) ; Simulate slightly different work time
+  (let ((result (axiom-incon-l *knowledge-base*)))
+    (setf *refutation-result* result)
+    (setf *termination-flag* :refutation-terminated)
+    (format t "Refutation Thread: Terminating.~%")))
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Parallel Interface and Orchestration (Barebones Prototype)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun initialize-knowledge-base ()
+  "Initializes the global *knowledge-base* (minimal for prototype)."
+  (setf *knowledge-base* nil)) ;; For prototype, KB is initially empty list
+
+(defun run-prover ()
+  "Runs the barebones theorem prover prototype with two threads."
+  (format t "Prover: Initializing Knowledge Base.~%")
+  (initialize-knowledge-base)
+
+  (format t "Prover: Starting Proof and Refutation Threads.~%")
+  (let ((proof-thread (sb-thread:make-thread #'proof-thread-function :name "Proof-Thread"))
+        (refutation-thread (sb-thread:make-thread #'refutation-thread-function :name "Refutation-Thread")))
+
+    (format t "Prover: Waiting for termination signal from threads.~%")
+    (loop until *termination-flag*  ; Simple polling for termination
+          do (sleep 0.1))
+
+    (format t "Prover: Termination signal received: ~A~%" *termination-flag*)
+
+    (cond ((eq *termination-flag* :proof-terminated)
+           (format t "Prover: Proof Thread terminated first. Result: Proven.~%")
+           :proven)
+          ((eq *termination-flag* :refutation-terminated)
+           (format t "Prover: Refutation Thread terminated first. Result: Refuted.~%")
+           :refuted)
+          (t
+           (format t "Prover: Unexpected termination state.~%")
+           :unknown))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Main Entry Point - Run the Prover Prototype
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun main ()
+  (format t "Starting Barebones Theorem Prover Prototype.~%")
+  (let ((prover-result (run-prover)))
+    (format t "Prover Result: ~A~%" prover-result)
+    (format t "Barebones Theorem Prover Prototype Finished.~%")))
+
+(main)

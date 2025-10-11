@@ -1,0 +1,1161 @@
+import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
+
+// Helper function to estimate tokens (4 chars per token heuristic)
+const estimateTokens = (text) => {
+    if (!text || typeof text !== 'string') return 0;
+    return Math.ceil(text.length / 4);
+};
+
+// Function to remove vowels
+const removeVowels = (text) => {
+    if (!text || typeof text !== 'string') return "";
+    return text.replace(/[aeiouAEIOU]/g, '');
+};
+
+const SHORT_PROMPT_THRESHOLD = 20; // Characters for prompts *without* detected structures
+
+// Vocabulary for Structural Feature Vector (ensure this order is maintained)
+const STRUCTURE_VOCABULARY = [
+    'latex_documentclass', 'latex_document_env', 'latex_usepackage',
+    'xml_declaration', 'doctype_declaration', 'html_tag', 'html_body_tag', 'svg_tag', 'xml_html_block_general',
+    'python_def', 'python_class', 'python_import',
+    'javascript_function', 'javascript_class', 'javascript_variable_declaration', 'javascript_console_log',
+    'lisp_keyword_form',
+    'markdown_code_block_other', 'markdown_table',
+    'css_rules'
+];
+
+// Heuristics for detecting document structures (operates on processed text)
+const detectStructures = (prompt, response) => {
+    const structures = new Set(); 
+    const combinedText = `${prompt}\n${response}`; 
+
+    if (/\\documentclass\[?[^\]]*\]?\{[^}]*\}/.test(combinedText)) structures.add('latex_documentclass'); 
+    if (/\\begin\{document\}/.test(combinedText)) structures.add('latex_document_env'); 
+    if (/\\usepackage\{[^}]*\}/.test(combinedText)) structures.add('latex_usepackage'); 
+    
+    if (/<\?xml[^>]*\?>/.test(combinedText)) structures.add('xml_declaration');
+    if (/<!DOCTYPE[^>]*>/i.test(combinedText)) structures.add('doctype_declaration');
+    if (/<html[^>]*>/i.test(combinedText)) structures.add('html_tag'); 
+    if (/<body[^>]*>/i.test(combinedText)) structures.add('html_body_tag'); 
+    if (/<svg[^>]*>/i.test(combinedText)) structures.add('svg_tag');
+    if (/<([a-zA-Z][\w:-]*)(?:\s+[a-zA-Z][\w:-]*\s*=\s*(?:"[^"]*"|'[^']*'|[^>\s]+))*\s*\/?>[\s\S]*?<\/\1\s*>/m.test(combinedText)) {
+         structures.add('xml_html_block_general');
+    }
+
+    if (/\bdef\s+[a-zA-Z_][a-zA-Z0-9_]*\s*\(/.test(combinedText)) structures.add('python_def');
+    if (/\bclass\s+[A-Z_][a-zA-Z0-9_]*\s*[:\(]/.test(combinedText)) structures.add('python_class');
+    if (/^\s*(?:from\s+[\w.]+\s+)?import\s+(?:[\w.*]+(?:,\s*[\w.*]+)*)/m.test(combinedText)) structures.add('python_import'); 
+
+    if (/\bfunction(?:\s+[\w$]*)?\s*\(/.test(combinedText)) structures.add('javascript_function'); 
+    if (/\bclass\s+[A-Z_$][\w$]*(\s+extends\s+[A-Z_$][\w$]*)?\s*\{/.test(combinedText)) structures.add('javascript_class');
+    if (/\b(const|let|var)\s+[\w$]+\s*=?/.test(combinedText)) structures.add('javascript_variable_declaration');
+    if (/\bconsole\.log\s*\(/.test(combinedText)) structures.add('javascript_console_log');
+
+    if (/\((?:defun|define|lambda|let\*?|if|cond|setq)\s+[^)]*\)/i.test(combinedText)) structures.add('lisp_keyword_form');
+    
+    if (/```(?:[a-zA-Z0-9\-_]+)?\n[\s\S]*?\n```/g.test(combinedText)) { 
+        structures.add('markdown_code_block_other');
+    }
+    if (/^\s*\|.*?\n^\s*\|\s*---+\s*\|/m.test(combinedText)) structures.add('markdown_table'); 
+
+    if (/(?:[.#]?[a-zA-Z][\w-]*|@md[^\{]+)\s*\{[\s\S]*?\}/.test(combinedText)) structures.add('css_rules'); 
+
+    return Array.from(structures);
+};
+
+// Function to get length category
+const getLengthCategory = (text) => {
+    const length = text ? text.length : 0;
+    if (length < 50) return 'S'; // Short
+    if (length <= 250) return 'M'; // Medium
+    return 'L'; // Long
+};
+
+// Function to tokenize text for frequency analysis (simple version)
+const tokenizeTextForFrequency = (text) => {
+    if (!text || typeof text !== 'string') return [];
+    return text.toLowerCase().match(/\b\w{3,}\b/g) || []; // Get words with at least 3 chars to reduce noise
+};
+
+// Async function to calculate word frequencies (simulating worker)
+const calculateWordFrequenciesAsync = async (interactions, textAccessor) => {
+    return new Promise((resolve) => {
+        setTimeout(() => { // Yield to main thread
+            const frequencies = new Map();
+            interactions.forEach(interaction => {
+                const textToAnalyze = textAccessor(interaction);
+                const tokens = tokenizeTextForFrequency(textToAnalyze);
+                tokens.forEach(token => {
+                    frequencies.set(token, (frequencies.get(token) || 0) + 1);
+                });
+            });
+            resolve(frequencies);
+        }, 0);
+    });
+};
+
+
+// Helper function to parse the HTML content
+const parseGeminiActivityHTML = (htmlString) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, 'text/html');
+    const interactions = [];
+    const interactionElements = doc.querySelectorAll('div.outer-cell.mdl-cell.mdl-cell--12-col.mdl-shadow--2dp');
+
+    if (!interactionElements || interactionElements.length === 0) {
+        console.error("Could not find interaction elements. Please inspect your HTML structure.");
+        return [];
+    }
+    // console.log(`Found ${interactionElements.length} potential interaction elements.`); // Reduced verbosity
+
+    interactionElements.forEach((elementContainer, i) => {
+        let queryOriginal = ""; 
+        let responseOriginal = ""; 
+        let timestampStr = "";
+        let originalPromptTextForFeedbackCheck = ""; 
+
+        const mainContentCell = elementContainer.querySelector('div.content-cell.mdl-cell.mdl-cell--6-col.mdl-typography--body-1');
+
+        if (mainContentCell) {
+            const currentPromptParts = [];
+            let responseStartNode = null;
+            for (let nodeIdx = 0; nodeIdx < mainContentCell.childNodes.length; nodeIdx++) {
+                const currentNode = mainContentCell.childNodes[nodeIdx];
+                if (currentNode.nodeName.toLowerCase() === 'br') {
+                    const nextSibling = currentNode.nextSibling;
+                    if (nextSibling && nextSibling.nodeType === Node.TEXT_NODE) {
+                        const potentialTimestamp = nextSibling.textContent.trim();
+                        if (potentialTimestamp.match(/\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b \d{1,2}, \d{4}, \d{1,2}:\d{2}:\d{2}\s*(?:AM|PM)(?:\s+[A-Z]{3})?/)) {
+                            timestampStr = potentialTimestamp;
+                            responseStartNode = nextSibling.nextSibling;
+                            break;
+                        }
+                    }
+                    currentPromptParts.push("\n");
+                } else if (currentNode.nodeType === Node.TEXT_NODE) {
+                    currentPromptParts.push(currentNode.textContent);
+                } else if (currentNode.nodeType === Node.ELEMENT_NODE && !['script', 'style'].includes(currentNode.nodeName.toLowerCase())) {
+                    currentPromptParts.push(currentNode.textContent || "");
+                }
+            }
+            
+            let tempPromptText = currentPromptParts.join("").trim();
+            originalPromptTextForFeedbackCheck = tempPromptText; 
+            
+            if (tempPromptText.startsWith("Prompted ")) {
+                queryOriginal = tempPromptText.substring("Prompted ".length).trim();
+            } else {
+                queryOriginal = tempPromptText; 
+            }
+            
+            if (responseStartNode) {
+                const responsePartsCollected = [];
+                let currentResponseSibling = responseStartNode;
+                while (currentResponseSibling) {
+                    if (currentResponseSibling.nodeType === Node.ELEMENT_NODE) {
+                        const nodeNameLower = currentResponseSibling.nodeName.toLowerCase();
+                        if (['p', 'div', 'ul', 'ol', 'pre', 'table'].includes(nodeNameLower)) {
+                            const nodeText = currentResponseSibling.textContent || "";
+                            if (!nodeText.toLowerCase().includes("explore related topics") && !currentResponseSibling.querySelector('button')) {
+                                responsePartsCollected.push(nodeText.trim());
+                            }
+                        }
+                    } else if (currentResponseSibling.nodeType === Node.TEXT_NODE && currentResponseSibling.textContent.trim()) {
+                        responsePartsCollected.push(currentResponseSibling.textContent.trim());
+                    }
+                    currentResponseSibling = currentResponseSibling.nextSibling;
+                }
+                if (responsePartsCollected.length > 0) responseOriginal = responsePartsCollected.filter(Boolean).join("\n\n").trim();
+            }
+            // Timestamp fallback
+            if (!timestampStr) { 
+                const captionCell = elementContainer.querySelector('div.content-cell.mdl-cell.mdl-cell--12-col.mdl-typography--caption');
+                if (captionCell) {
+                    const captionTextNodes = Array.from(captionCell.childNodes).filter(node => node.nodeType === Node.TEXT_NODE);
+                    for (const textNode of captionTextNodes) {
+                        const potentialTs = textNode.textContent.trim();
+                        if (potentialTs.match(/\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b \d{1,2}, \d{4}, \d{1,2}:\d{2}:\d{2}\s*(?:AM|PM)(?:\s+[A-Z]{3})?/)) {
+                            timestampStr = potentialTs;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Initial processing based on original text
+        const promptTokens = estimateTokens(queryOriginal);
+        const responseTokens = estimateTokens(responseOriginal);
+        const detectedStructuresArray = detectStructures(queryOriginal, responseOriginal);
+
+        let responseToPromptTokenRatio = null;
+        if (promptTokens > 0) {
+            responseToPromptTokenRatio = parseFloat((responseTokens / promptTokens).toFixed(2));
+        } else if (responseTokens > 0 && promptTokens === 0) { 
+            responseToPromptTokenRatio = Infinity; 
+        } else { 
+            responseToPromptTokenRatio = 0; 
+        }
+
+        let clientSideFilter = { 
+            passed: false, 
+            reason: "no_qualifying_condition_met", 
+            detectedStructures: detectedStructuresArray 
+        };
+        
+        if (originalPromptTextForFeedbackCheck.startsWith("Gave feedback:")) { 
+            clientSideFilter.passed = false; 
+            clientSideFilter.reason = "feedback_entry";
+        } else if (detectedStructuresArray.length > 0) { 
+            clientSideFilter.passed = true; 
+            clientSideFilter.reason = null; 
+        } else { 
+            clientSideFilter.passed = false; 
+            clientSideFilter.reason = "no_specific_structure_detected";
+            if (!queryOriginal || queryOriginal.length < SHORT_PROMPT_THRESHOLD) {
+                 clientSideFilter.reason = "no_structure_and_short_prompt";
+            } else if (!responseOriginal) {
+                 clientSideFilter.reason = "no_structure_and_empty_response";
+            }
+        }
+
+        if (queryOriginal || responseOriginal || (timestampStr && !queryOriginal && !responseOriginal) || clientSideFilter.reason === "feedback_entry") {
+            interactions.push({ 
+                id: `interaction-${i}`, 
+                query: queryOriginal, 
+                response: responseOriginal, 
+                queryOriginal: queryOriginal, 
+                responseOriginal: responseOriginal, 
+                textTransformationApplied: null, 
+                timestamp: timestampStr || "Unknown Time", 
+                originalIndex: i,
+                estimatedTokens: { 
+                    prompt: promptTokens,
+                    response: responseTokens,
+                    total: promptTokens + responseTokens
+                },
+                responseToPromptTokenRatio: responseToPromptTokenRatio, 
+                clientSideFilter: clientSideFilter,
+                rhythmSignature: null, 
+                structuralVector: null  
+            });
+        }
+    });
+    // console.log(`Successfully parsed ${interactions.length} interactions.`); // Reduced verbosity
+    return interactions;
+};
+
+const BATCH_SIZE = 5; 
+
+// Confirmation Modal Component - DEFINED OUTSIDE AND BEFORE App
+const ConfirmationModalComponent = ({ show, estimates, onConfirm, onCancel, isVowelRemovalApplied }) => { 
+    if (!show) return null;
+    return (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl max-w-md w-full">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Confirm Bulk Structure Analysis</h2>
+                <p className="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                    This action will analyze <span className="font-semibold">{estimates.filteredCount.toLocaleString()}</span> (currently filtered out of {estimates.originalCount.toLocaleString()} total) interactions using the Gemini API.
+                    {isVowelRemovalApplied ? <span className="block text-xs text-orange-500">Vowel removal is active.</span> : null}
+                </p>
+                <ul className="text-sm text-gray-700 dark:text-gray-300 list-disc list-inside mb-4 space-y-1">
+                    <li>Estimated API Calls: <span className="font-semibold">{estimates.calls}</span> (Batch size: {BATCH_SIZE})</li>
+                    <li>Estimated Total Input Tokens for Analysis (on processed text): <span className="font-semibold">{estimates.tokens.toLocaleString()}</span></li>
+                </ul>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
+                    This process may take time and consume API quota. Refer to official Google Gemini API pricing. You can cancel anytime.
+                </p>
+                <div className="flex justify-end space-x-3">
+                    <button onClick={onCancel} className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 rounded-md">
+                        Cancel
+                    </button>
+                    <button onClick={onConfirm} className="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md">
+                        Proceed with Analysis
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+ };
+
+
+// Main App Component
+export default function App() {
+    const [file, setFile] = useState(null);
+    const [fileName, setFileName] = useState('');
+    const [interactions, setInteractions] = useState([]); 
+    const [selectedInteraction, setSelectedInteraction] = useState(null);
+    const [isLoading, setIsLoading] = useState(false); 
+    const [error, setError] = useState('');
+    const [theme, setTheme] = useState('light');
+    const [isVowelRemovalApplied, setIsVowelRemovalApplied] = useState(false); 
+    const [areSemanticEncodingsGenerated, setAreSemanticEncodingsGenerated] = useState(false);
+    const [encodingStatusMessage, setEncodingStatusMessage] = useState(''); 
+
+    // Filter & Sort States
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedStructureFilters, setSelectedStructureFilters] = useState([]);
+    const [clientFilterStatus, setClientFilterStatus] = useState('all'); 
+    const [transformationFilter, setTransformationFilter] = useState('all'); 
+    const [sortOption, setSortOption] = useState('timestamp_desc'); 
+    const [availableStructures, setAvailableStructures] = useState([]);
+
+    // Anti-Zipfian States
+    const [antiZipfianThresholdInput, setAntiZipfianThresholdInput] = useState("1");
+    const [activeRareWords, setActiveRareWords] = useState([]); 
+    const [matchingInteractionIdsForAntiZipfian, setMatchingInteractionIdsForAntiZipfian] = useState(new Set()); 
+    const [isAntiZipfianFilterActive, setIsAntiZipfianFilterActive] = useState(false);
+    const [wordFrequenciesGlobal, setWordFrequenciesGlobal] = useState(null); 
+    const [antiZipfianStatusMessage, setAntiZipfianStatusMessage] = useState('');
+    const [isApplyingAntiZipfian, setIsApplyingAntiZipfian] = useState(false); 
+    const [isProcessingHeavyTask, setIsProcessingHeavyTask] = useState(false);
+
+
+    // LLM States
+    const [summary, setSummary] = useState('');
+    const [isSummarizing, setIsSummarizing] = useState(false);
+    const [suggestedPrompts, setSuggestedPrompts] = useState([]);
+    const [isSuggesting, setIsSuggesting] = useState(false);
+    const [llmError, setLlmError] = useState('');
+    const [copySuccess, setCopySuccess] = useState('');
+
+    // Bulk Analysis States
+    const [isAnalyzingAllStructures, setIsAnalyzingAllStructures] = useState(false);
+    const [analysisProgress, setAnalysisProgress] = useState({ processed: 0, total: 0, batches: 0, currentBatch: 0 });
+    const [collatedAnalysisReport, setCollatedAnalysisReport] = useState('');
+    const analysisAbortControllerRef = useRef(null);
+    const [showBulkAnalysisConfirm, setShowBulkAnalysisConfirm] = useState(false);
+    const [bulkAnalysisEstimates, setBulkAnalysisEstimates] = useState({ calls: 0, tokens: 0, filteredCount: 0, originalCount: 0 });
+
+
+    useEffect(() => {
+        document.documentElement.classList.toggle('dark', theme === 'dark');
+    }, [theme]);
+
+    const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
+
+    const handleFileChange = (event) => {
+        const uploadedFile = event.target.files[0];
+        if (uploadedFile && uploadedFile.type === "text/html") {
+            setFile(uploadedFile); setFileName(uploadedFile.name); setError('');
+            setInteractions([]); setSelectedInteraction(null); setCollatedAnalysisReport('');
+            setAnalysisProgress({ processed: 0, total: 0, batches: 0, currentBatch: 0 });
+            setShowBulkAnalysisConfirm(false);
+            setIsVowelRemovalApplied(false); 
+            setAreSemanticEncodingsGenerated(false);
+            setEncodingStatusMessage(''); 
+            setSearchTerm(''); setSelectedStructureFilters([]); setClientFilterStatus('all');
+            setTransformationFilter('all'); setSortOption('timestamp_desc'); setAvailableStructures([]);
+            setAntiZipfianThresholdInput("1"); setActiveRareWords([]); setIsAntiZipfianFilterActive(false);
+            setWordFrequenciesGlobal(null); setAntiZipfianStatusMessage('');
+            setMatchingInteractionIdsForAntiZipfian(new Set());
+            setIsApplyingAntiZipfian(false); 
+            setIsProcessingHeavyTask(false);
+        } else {
+            setFile(null); setFileName(''); setError('Please upload a valid HTML file.');
+        }
+    };
+
+    const downloadReport = (content, filename, mimeType = 'text/plain') => {
+        console.log(`Attempting to download: ${filename}, type: ${mimeType}`);
+        try {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            console.log(`Download initiated for ${filename}`);
+        } catch (e) {
+            console.error(`Error during download for ${filename}:`, e);
+            setError(`Failed to initiate download for ${filename}. Check console for details.`);
+        }
+    };
+
+    const callGeminiAPI = async (promptForLLM, signal) => {
+        setLlmError(''); 
+        const apiKey = ""; 
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+        const payload = { contents: [{ role: "user", parts: [{ text: promptForLLM }] }] };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+                signal: signal, 
+            });
+            if (signal?.aborted) throw new DOMException('Aborted by user.', 'AbortError');
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
+            }
+            const result = await response.json();
+            if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                return result.candidates[0].content.parts[0].text;
+            }
+            throw new Error('Failed to get valid content from API response.');
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                console.log('API call aborted by user.');
+                setLlmError('Analysis aborted by user.'); 
+            } else {
+                console.error('Error calling Gemini API:', error);
+                setLlmError(error.message || 'An unknown error occurred during API call.');
+            }
+            return null;
+        }
+    };
+    
+    const parseBatchedAnalysisResponse = (batchedResponse, batchOriginalIndices, batchTimestamps) => {
+        const individualReports = batchedResponse.split(/\[\[ANALYSIS_FOR_INTERACTION_\d+\]\]/);
+        let parsedAnalyses = [];
+        for (let i = 1; i < individualReports.length; i++) {
+            if (i - 1 < batchOriginalIndices.length) {
+                 parsedAnalyses.push({
+                    originalIndex: batchOriginalIndices[i-1],
+                    timestamp: batchTimestamps[i-1],
+                    analysis: individualReports[i].trim()
+                });
+            }
+        }
+        if (parsedAnalyses.length !== batchOriginalIndices.length) {
+            console.warn("Mismatch parsing batched reports.", "Expected:", batchOriginalIndices.length, "Got:", parsedAnalyses.length);
+            const errorMessage = `BATCH_ANALYSIS_PARSE_ERROR: Expected ${batchOriginalIndices.length} reports, received ${parsedAnalyses.length}. Raw LLM output for batch:\n\n${batchedResponse}`;
+            return batchOriginalIndices.map((originalIndex, idx) => ({
+                originalIndex: originalIndex,
+                timestamp: batchTimestamps[idx],
+                analysis: errorMessage 
+            }));
+        }
+        return parsedAnalyses;
+    };
+
+    const reProcessInteractionForFiltersAndEncodings = (interaction, transformationApplied) => {
+        const currentQuery = interaction.query;
+        const currentResponse = interaction.response;
+
+        const promptTokens = estimateTokens(currentQuery);
+        const responseTokens = estimateTokens(currentResponse);
+        const detectedStructuresArray = detectStructures(currentQuery, currentResponse);
+
+        let responseToPromptTokenRatio = null;
+        if (promptTokens > 0) {
+            responseToPromptTokenRatio = parseFloat((responseTokens / promptTokens).toFixed(2));
+        } else if (responseTokens > 0 && promptTokens === 0) {
+            responseToPromptTokenRatio = Infinity;
+        } else {
+            responseToPromptTokenRatio = 0;
+        }
+
+        let clientSideFilter = { 
+            passed: false, 
+            reason: "no_qualifying_condition_met", 
+            detectedStructures: detectedStructuresArray 
+        };
+        
+        if (interaction.clientSideFilter.reason === "feedback_entry") { 
+             clientSideFilter.passed = false;
+             clientSideFilter.reason = "feedback_entry";
+        } else if (detectedStructuresArray.length > 0) { 
+            clientSideFilter.passed = true; 
+            clientSideFilter.reason = null; 
+        } else { 
+            clientSideFilter.passed = false; 
+            clientSideFilter.reason = "no_specific_structure_detected";
+            if (!currentQuery || currentQuery.length < SHORT_PROMPT_THRESHOLD) {
+                 clientSideFilter.reason = "no_structure_and_short_prompt";
+            } else if (!currentResponse) {
+                 clientSideFilter.reason = "no_structure_and_empty_response";
+            }
+        }
+
+        return {
+            ...interaction,
+            textTransformationApplied: transformationApplied,
+            estimatedTokens: { prompt: promptTokens, response: responseTokens, total: promptTokens + responseTokens },
+            responseToPromptTokenRatio: responseToPromptTokenRatio,
+            clientSideFilter: clientSideFilter,
+            rhythmSignature: null, 
+            structuralVector: null
+        };
+    };
+
+    const handleApplyVowelRemoval = async () => {
+        if (interactions.length === 0 || isVowelRemovalApplied) return;
+        setIsProcessingHeavyTask(true); 
+        setEncodingStatusMessage('Applying vowel removal and re-evaluating data...');
+        console.log("handleApplyVowelRemoval: Started");
+
+        await new Promise(resolve => setTimeout(resolve, 0)); 
+
+        try {
+            const transformedInteractions = interactions.map(interaction => {
+                const queryProcessed = removeVowels(interaction.queryOriginal); 
+                const responseProcessed = removeVowels(interaction.responseOriginal); 
+                
+                const tempInteraction = { ...interaction, query: queryProcessed, response: responseProcessed };
+                return reProcessInteractionForFiltersAndEncodings(tempInteraction, "vowel_removal");
+            });
+
+            setInteractions(transformedInteractions);
+            setEncodingStatusMessage('Calculating word frequencies for vowel-removed text...');
+            await new Promise(resolve => setTimeout(resolve, 0));
+
+            const freqs = await calculateWordFrequenciesAsync(transformedInteractions, int => `${int.query} ${int.response}`);
+            setWordFrequenciesGlobal(freqs);
+            
+            setIsVowelRemovalApplied(true);
+            setAreSemanticEncodingsGenerated(false); 
+            setIsAntiZipfianFilterActive(false); 
+            setActiveRareWords([]);
+            setMatchingInteractionIdsForAntiZipfian(new Set());
+            setEncodingStatusMessage("Vowel removal applied. All metadata re-evaluated. Semantic encodings and Anti-Zipfian filter reset.");
+        } catch (e) {
+            console.error("Error in handleApplyVowelRemoval:", e);
+            setError("Error during vowel removal process.");
+        } finally {
+            setIsProcessingHeavyTask(false);
+            console.log("handleApplyVowelRemoval: Finished");
+        }
+    };
+
+    const handleGenerateSemanticEncodings = () => {
+        if (interactions.length === 0 || areSemanticEncodingsGenerated) return;
+        setIsProcessingHeavyTask(true);
+        setEncodingStatusMessage('Generating semantic encodings...');
+        console.log("handleGenerateSemanticEncodings: Started");
+
+        setTimeout(() => {
+            try {
+                const encodedInteractions = interactions.map(interaction => {
+                    const promptLenCat = getLengthCategory(interaction.query); 
+                    const responseLenCat = getLengthCategory(interaction.response); 
+                    const structureTags = interaction.clientSideFilter.detectedStructures.length > 0 
+                        ? interaction.clientSideFilter.detectedStructures.join(',') 
+                        : 'NONE';
+                    const rhythmSignature = `P[${promptLenCat},${structureTags.substring(0,15)}]_R[${responseLenCat}]`; 
+
+                    const structuralVector = STRUCTURE_VOCABULARY.map(vocabItem => 
+                        interaction.clientSideFilter.detectedStructures.includes(vocabItem) ? 1 : 0
+                    );
+
+                    return {
+                        ...interaction,
+                        rhythmSignature,
+                        structuralVector
+                    };
+                });
+                setInteractions(encodedInteractions); 
+                setAreSemanticEncodingsGenerated(true);
+                setEncodingStatusMessage("Semantic Encodings (Rhythm Signatures & Structural Vectors) generated. View in Interaction Details or Metadata JSON.");
+            } catch(e) {
+                console.error("Error in handleGenerateSemanticEncodings:", e);
+                setError("Error during semantic encoding generation.");
+            } finally {
+                setIsProcessingHeavyTask(false);
+                console.log("handleGenerateSemanticEncodings: Finished");
+            }
+        }, 0);
+    };
+
+    const handleApplyAntiZipfianFilter = async () => {
+        if (!wordFrequenciesGlobal) {
+            setError("Word frequencies not calculated. Process a file first.");
+            return;
+        }
+        const threshold = parseInt(antiZipfianThresholdInput, 10);
+        if (isNaN(threshold) || threshold < 1) {
+            setError("Please enter a valid positive number for the threshold.");
+            setAntiZipfianStatusMessage("Invalid threshold.");
+            return;
+        }
+
+        setIsProcessingHeavyTask(true); 
+        setIsApplyingAntiZipfian(true); 
+        setAntiZipfianStatusMessage(`Identifying rare words (frequency <= ${threshold})...`);
+        console.log("handleApplyAntiZipfianFilter: Started");
+
+
+        await new Promise(resolve => setTimeout(resolve, 0));
+
+        try {
+            const rareWordsFound = [];
+            wordFrequenciesGlobal.forEach((count, word) => {
+                if (count <= threshold) {
+                    rareWordsFound.push(word);
+                }
+            });
+
+            if (rareWordsFound.length === 0) {
+                setAntiZipfianStatusMessage(`No words found appearing <= ${threshold} time(s). Filter not actively applied.`);
+                setIsAntiZipfianFilterActive(false);
+                setActiveRareWords([]);
+                setMatchingInteractionIdsForAntiZipfian(new Set());
+                setIsProcessingHeavyTask(false);
+                setIsApplyingAntiZipfian(false);
+                return;
+            }
+            
+            setActiveRareWords(rareWordsFound); 
+
+            setAntiZipfianStatusMessage(`Found ${rareWordsFound.length} rare words. Matching against interactions...`);
+            await new Promise(resolve => setTimeout(resolve, 0));
+
+            const matchingIds = new Set();
+
+            for (let k = 0; k < interactions.length; k++) {
+                const int = interactions[k];
+                const interactionText = `${int.query} ${int.response}`.toLowerCase(); 
+                const interactionTokens = tokenizeTextForFrequency(interactionText); 
+                const interactionTokenSet = new Set(interactionTokens);
+
+                if (rareWordsFound.some(rareWord => interactionTokenSet.has(rareWord))) {
+                    matchingIds.add(int.id);
+                }
+                if (k % 200 === 0 && k > 0) { 
+                     setAntiZipfianStatusMessage(`Matching... ${k}/${interactions.length}`);
+                     await new Promise(resolve => setTimeout(resolve, 0));
+                }
+            }
+            
+            setMatchingInteractionIdsForAntiZipfian(matchingIds);
+            setIsAntiZipfianFilterActive(true);
+            setAntiZipfianStatusMessage(`${rareWordsFound.length} rare word(s) identified. ${matchingIds.size} interactions match. Filter applied.`);
+        } catch(e) {
+            console.error("Error in handleApplyAntiZipfianFilter:", e);
+            setError("Error applying Anti-Zipfian filter.");
+        } finally {
+            setIsProcessingHeavyTask(false);
+            setIsApplyingAntiZipfian(false);
+            console.log("handleApplyAntiZipfianFilter: Finished");
+        }
+    };
+
+
+    const handleClearAntiZipfianFilter = () => {
+        setIsAntiZipfianFilterActive(false);
+        setActiveRareWords([]);
+        setMatchingInteractionIdsForAntiZipfian(new Set());
+        setAntiZipfianStatusMessage('Anti-Zipfian filter cleared.');
+    };
+
+
+    const startBulkAnalysis = async (interactionsForAnalysis) => { /* ... (same as before) ... */ };
+    
+    const processFileOnly = useCallback(async () => { 
+        if (!file) { 
+            setError('Please select a file first.'); 
+            return; 
+        }
+        console.log("processFileOnly: Initiated");
+        setIsLoading(true); 
+        setIsProcessingHeavyTask(true); 
+        setError(''); 
+        setInteractions([]); 
+        setCollatedAnalysisReport('');
+        setAnalysisProgress({ processed: 0, total: 0, batches: 0, currentBatch: 0 });
+        setShowBulkAnalysisConfirm(false);
+        setIsVowelRemovalApplied(false); 
+        setAreSemanticEncodingsGenerated(false);
+        setEncodingStatusMessage(''); 
+        setWordFrequenciesGlobal(null);
+        setIsAntiZipfianFilterActive(false);
+        setActiveRareWords([]);
+        setMatchingInteractionIdsForAntiZipfian(new Set());
+        setAntiZipfianStatusMessage('Processing file...');
+
+
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            console.log("processFileOnly: FileReader onload triggered.");
+            const content = e.target.result;
+            try {
+                console.log("processFileOnly: Starting HTML parsing...");
+                const parsedInteractions = parseGeminiActivityHTML(content); 
+                setInteractions(parsedInteractions); 
+                console.log(`processFileOnly: Parsed ${parsedInteractions.length} interactions.`);
+
+                if (parsedInteractions.length > 0) {
+                    setAntiZipfianStatusMessage('Calculating word frequencies...');
+                    await new Promise(resolve => setTimeout(resolve, 0)); 
+
+                    const freqs = await calculateWordFrequenciesAsync(parsedInteractions, int => `${int.queryOriginal} ${int.responseOriginal}`);
+                    setWordFrequenciesGlobal(freqs);
+                    console.log(`processFileOnly: Calculated ${freqs.size} unique word frequencies.`);
+                    
+                    const allDetected = new Set();
+                    parsedInteractions.forEach(interaction => {
+                        interaction.clientSideFilter.detectedStructures.forEach(s => allDetected.add(s));
+                    });
+                    setAvailableStructures(Array.from(allDetected).sort());
+                    console.log("processFileOnly: Available structures populated.");
+                    setAntiZipfianStatusMessage('File processed. Word frequencies calculated.');
+
+                } else if (content) { 
+                    setError('File processed, but no interactions found.'); 
+                    setAntiZipfianStatusMessage('');
+                } else { 
+                     setError('File content is empty.');
+                     setAntiZipfianStatusMessage('');
+                }
+                
+            } catch (parseError) { 
+                console.error("Error parsing HTML:", parseError);
+                setError(`Error parsing HTML: ${parseError.message}`); 
+                setAntiZipfianStatusMessage('Error during processing.');
+            } finally {
+                setIsLoading(false); 
+                setIsProcessingHeavyTask(false);
+                console.log("processFileOnly: Finished.");
+            }
+        };
+        reader.onerror = () => { 
+            console.error("FileReader error");
+            setError('Failed to read file.'); 
+            setIsLoading(false); 
+            setIsProcessingHeavyTask(false);
+            setAntiZipfianStatusMessage('Error reading file.');
+        };
+        reader.readAsText(file);
+    }, [file]); 
+
+    const prepareForBulkAnalysis = () => {
+        console.log("prepareForBulkAnalysis clicked");
+        const interactionsForAnalysis = displayedInteractions.filter(interaction => interaction.clientSideFilter.passed);
+        console.log("Interactions to analyze (after filter):", interactionsForAnalysis.length);
+        
+        if (interactionsForAnalysis.length === 0) {
+            setError("No interactions match current filters or pass client-side checks for bulk analysis.");
+            return;
+        }
+        const totalTokensEstimate = interactionsForAnalysis.reduce((acc, curr) => acc + (curr.estimatedTokens?.total || 0), 0);
+        const estimatedApiCalls = Math.ceil(interactionsForAnalysis.length / BATCH_SIZE);
+        setBulkAnalysisEstimates({ 
+            calls: estimatedApiCalls, 
+            tokens: totalTokensEstimate, 
+            filteredCount: interactionsForAnalysis.length,
+            originalCount: interactions.length 
+        });
+        setShowBulkAnalysisConfirm(true); 
+    };
+    const handleCancelAnalysis = () => { /* ... (same as before) ... */ };
+    
+    const downloadInteractionsAsJSON = () => {
+        console.log("Download Displayed Interactions JSON button clicked");
+        if (displayedInteractions.length === 0) { 
+            setError('No interactions to download based on current filters.');
+            return;
+        }
+        const jsonString = JSON.stringify(displayedInteractions, null, 2); 
+        downloadReport(jsonString, `${fileName.replace('.html', '')}_filtered_interactions${isVowelRemovalApplied ? '_vowel_removed' : ''}.json`, 'application/json');
+    };
+
+    const downloadInteractionMetadata = () => {
+        console.log("Download Displayed Metadata button clicked");
+        if (displayedInteractions.length === 0) { 
+            setError('No interactions to get metadata from based on current filters.');
+            return;
+        }
+        const metadata = displayedInteractions.map(interaction => ({
+            id: interaction.id,
+            originalIndex: interaction.originalIndex,
+            timestamp: interaction.timestamp,
+            estimatedTokens: interaction.estimatedTokens, 
+            responseToPromptTokenRatio: interaction.responseToPromptTokenRatio, 
+            clientSideFilter: interaction.clientSideFilter,
+            textTransformationApplied: interaction.textTransformationApplied,
+            rhythmSignature: interaction.rhythmSignature, 
+            structuralVector: interaction.structuralVector 
+        }));
+        const jsonString = JSON.stringify(metadata, null, 2);
+        downloadReport(jsonString, `${fileName.replace('.html', '')}_filtered_metadata${isVowelRemovalApplied ? '_vowel_removed_active' : ''}${areSemanticEncodingsGenerated ? '_with_encodings' : ''}.json`, 'application/json');
+    };
+    
+    const handleSummarize = async () => { /* ... (same as before) ... */ };
+    const handleSuggestFollowUps = async () => { /* ... (same as before) ... */ };
+    const formatForNotebookLM = (interaction) => { /* ... (same as before) ... */ };
+    const downloadForNotebookLM = (interaction) => { /* ... (same as before) ... */ };
+    const copyForNotebookLM = (interaction) => { /* ... (same as before) ... */ };
+    const downloadInteractionAsMD = (interaction) => { /* ... (same as before) ... */ };
+
+    useEffect(() => { 
+        setSummary(''); setSuggestedPrompts([]); setLlmError(''); setCopySuccess('');
+    }, [selectedInteraction]);
+
+    // Memoized function for filtering and sorting interactions
+    const displayedInteractions = useMemo(() => {
+        let filtered = [...interactions];
+
+        // 1. Filter by Transformation
+        if (transformationFilter !== 'all') {
+            filtered = filtered.filter(int => 
+                transformationFilter === 'original' ? !int.textTransformationApplied : int.textTransformationApplied === transformationFilter
+            );
+        }
+
+        // 2. Filter by Client-Side Filter Status
+        if (clientFilterStatus !== 'all') {
+            filtered = filtered.filter(int => 
+                clientFilterStatus === 'passed' ? int.clientSideFilter.passed : !int.clientSideFilter.passed
+            );
+        }
+
+        // 3. Filter by Detected Structures (AND logic for multiple selections)
+        if (selectedStructureFilters.length > 0) {
+            filtered = filtered.filter(int => 
+                selectedStructureFilters.every(struct => int.clientSideFilter.detectedStructures.includes(struct))
+            );
+        }
+        
+        // 3.5 Filter by Anti-Zipfian (Rare Words) - USES PRE-CALCULATED IDs
+        if (isAntiZipfianFilterActive) {
+            filtered = filtered.filter(int => int && matchingInteractionIdsForAntiZipfian.has(int.id)); 
+        }
+
+
+        // 4. Filter by Search Term
+        if (searchTerm) {
+            const lowerSearchTerm = searchTerm.toLowerCase();
+            filtered = filtered.filter(int => 
+                (int.query && int.query.toLowerCase().includes(lowerSearchTerm)) || 
+                (int.response && int.response.toLowerCase().includes(lowerSearchTerm))
+            );
+        }
+
+        // 5. Sort
+        const parseTimestamp = (ts) => {
+            try { return new Date(ts); } catch (e) { return new Date(0); }
+        };
+
+        switch (sortOption) {
+            case 'timestamp_asc':
+                filtered.sort((a, b) => parseTimestamp(a.timestamp) - parseTimestamp(b.timestamp));
+                break;
+            case 'timestamp_desc':
+                filtered.sort((a, b) => parseTimestamp(b.timestamp) - parseTimestamp(a.timestamp));
+                break;
+            // ... other sort cases remain the same
+            default:
+                filtered.sort((a, b) => parseTimestamp(b.timestamp) - parseTimestamp(a.timestamp));
+        }
+        return filtered;
+    }, [interactions, searchTerm, selectedStructureFilters, clientFilterStatus, transformationFilter, sortOption, isAntiZipfianFilterActive, matchingInteractionIdsForAntiZipfian]); 
+
+    const handleStructureFilterChange = (structure) => { /* ... (same as before) ... */ };
+    const clearAllFilters = () => { /* ... (same as before) ... */ };
+    
+    const handleConfirmBulkAnalysis = () => {
+        const interactionsForBulk = displayedInteractions.filter(int => int && int.clientSideFilter && int.clientSideFilter.passed); 
+        startBulkAnalysis(interactionsForBulk);
+    };
+
+
+    if (selectedInteraction) {
+        // Interaction Detail View
+        return ( <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4 sm:p-6 lg:p-8">
+                <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow-xl rounded-lg">
+                    {/* Header */}
+                    <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 px-6 py-4 border-b dark:border-gray-700 rounded-t-lg"> 
+                        <div className="flex justify-between items-center">
+                            <h1 className="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400">Interaction Detail</h1>
+                            <div className="flex items-center space-x-2">
+                                <button onClick={() => setSelectedInteraction(null)} className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-semibold py-2 px-3 rounded-lg text-sm"> &larr; Back </button>
+                                <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"> 
+                                    {theme === 'light' ? <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m8.66-12.66l-.707.707M4.04 19.96l-.707.707M21 12h-1M4 12H3m15.66-8.66l-.707-.707M4.04 4.04l-.707-.707" /></svg>}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Scrollable Content */}
+                    <div className="p-6 space-y-6 max-h-[calc(100vh-220px)] overflow-y-auto"> 
+                        <div><h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Timestamp:</h2><p className="text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 p-2 rounded-md text-sm">{selectedInteraction.timestamp}</p></div>
+                        <div><h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Est. Tokens (Current Text): <span className="font-normal text-xs">(P: {selectedInteraction.estimatedTokens?.prompt}, R: {selectedInteraction.estimatedTokens?.response}, Total: {selectedInteraction.estimatedTokens?.total})</span></h2></div>
+                        <div><h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Response/Prompt Token Ratio (Current Text): <span className="font-normal text-sm">{selectedInteraction.responseToPromptTokenRatio === Infinity ? 'Infinity' : (selectedInteraction.responseToPromptTokenRatio ?? 'N/A')}</span></h2></div>
+                        <div><h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Text Transformation: <span className="font-normal text-sm">{selectedInteraction.textTransformationApplied || 'none'}</span></h2></div>
+                        <div><h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Client-Side Filter: <span className={`font-normal text-xs ${selectedInteraction.clientSideFilter.passed ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
+                            {selectedInteraction.clientSideFilter.passed ? 'Passed' : `Filtered (${selectedInteraction.clientSideFilter.reason})`}
+                        </span></h2></div>
+                        {selectedInteraction.clientSideFilter.detectedStructures.length > 0 ? (
+                            <div><h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Detected Structures (on Current Text):</h2>
+                                <div className="flex flex-wrap gap-2">
+                                    {selectedInteraction.clientSideFilter.detectedStructures.map(s => (
+                                        <span key={s} className="text-xs bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-2 py-1 rounded-full">{s.replace(/_/g, ' ')}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : null }
+                        {selectedInteraction.rhythmSignature ? (
+                             <div><h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Rhythm Signature:</h2>
+                                <p className="text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 p-2 rounded-md text-sm font-mono">{selectedInteraction.rhythmSignature}</p>
+                             </div>
+                        ): null }
+                        {selectedInteraction.structuralVector ? (
+                             <div><h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Structural Vector:</h2>
+                                <p className="text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-gray-700 p-2 rounded-md text-sm font-mono break-all">[{selectedInteraction.structuralVector.join(', ')}]</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Vector based on vocabulary: {STRUCTURE_VOCABULARY.join(', ').replace(/_/g, ' ')}</p>
+                             </div>
+                        ): null }
+
+                        <div><h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Prompt (Current):</h2>{selectedInteraction.query ? <pre className="whitespace-pre-wrap bg-gray-50 dark:bg-gray-700 p-3 rounded-md text-xs sm:text-sm leading-relaxed font-mono max-h-60 overflow-y-auto">{selectedInteraction.query}</pre> : <p className="italic text-gray-500 dark:text-gray-400">No prompt.</p>}</div>
+                        <div><h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Response (Current):</h2>{selectedInteraction.response ? <div className="prose prose-xs sm:prose-sm dark:prose-invert max-w-none bg-gray-50 dark:bg-gray-700 p-3 rounded-md leading-relaxed max-h-80 overflow-y-auto" dangerouslySetInnerHTML={{ __html: selectedInteraction.response.replace(/\n/g, '<br/>') }}></div> : <p className="italic text-gray-500 dark:text-gray-400">No response.</p>}</div>
+                        
+                        {selectedInteraction.textTransformationApplied ? (
+                            <>
+                                <div className="pt-4 border-t dark:border-gray-600"><h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Original Prompt:</h2>{selectedInteraction.queryOriginal ? <pre className="whitespace-pre-wrap bg-gray-100 dark:bg-gray-700 p-3 rounded-md text-xs sm:text-sm leading-relaxed font-mono max-h-60 overflow-y-auto">{selectedInteraction.queryOriginal}</pre> : <p className="italic text-gray-500 dark:text-gray-400">No original prompt.</p>}</div>
+                                <div><h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Original Response:</h2>{selectedInteraction.responseOriginal ? <div className="prose prose-xs sm:prose-sm dark:prose-invert max-w-none bg-gray-100 dark:bg-gray-700 p-3 rounded-md leading-relaxed max-h-80 overflow-y-auto" dangerouslySetInnerHTML={{ __html: selectedInteraction.responseOriginal.replace(/\n/g, '<br/>') }}></div> : <p className="italic text-gray-500 dark:text-gray-400">No original response.</p>}</div>
+                            </>
+                        ) : null}
+                    </div>
+                    {/* Footer Actions */}
+                     <div className="sticky bottom-0 z-10 bg-white dark:bg-gray-800 px-6 py-4 border-t dark:border-gray-700 rounded-b-lg max-h-[calc(100vh-120px)] overflow-y-auto">
+                        <div className="space-y-3">
+                            <button onClick={() => downloadInteractionAsMD(selectedInteraction)} className="w-full bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg text-sm">Download as MD</button>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <button onClick={() => downloadForNotebookLM(selectedInteraction)} className="w-full bg-yellow-500 hover:bg-yellow-600 dark:bg-yellow-600 dark:hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded-lg text-sm">Export for NotebookLM (.txt)</button>
+                                <button onClick={() => copyForNotebookLM(selectedInteraction)} className="w-full bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white font-semibold py-2 px-4 rounded-lg text-sm">{copySuccess || "Copy for NotebookLM"}</button>
+                            </div>
+                        </div>
+                        <div className="mt-4 pt-3 border-t dark:border-gray-600">
+                            <h2 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-2 text-center">✨ AI Insights (API Call) ✨</h2>
+                            {llmError ? <div className="mb-2 p-2 bg-red-100 dark:bg-red-900 border-red-400 text-red-700 dark:text-red-200 rounded-md text-xs">{llmError}</div> : null }
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                                <button onClick={handleSummarize} disabled={isSummarizing} className="w-full bg-indigo-500 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg text-sm disabled:opacity-50">{isSummarizing ? '...' : 'Summarize ✨'}</button>
+                                <button onClick={handleSuggestFollowUps} disabled={isSuggesting} className="w-full bg-teal-500 hover:bg-teal-600 dark:bg-teal-600 dark:hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded-lg text-sm disabled:opacity-50">{isSuggesting ? '...' : 'Suggest Follow-ups ✨'}</button>
+                            </div>
+                            {summary && !isSummarizing ? <div className="mt-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-md"><h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-1 text-xs">Summary:</h3><p className="text-xs text-gray-800 dark:text-gray-200 whitespace-pre-wrap max-h-28 overflow-y-auto">{summary}</p></div> : null}
+                            {suggestedPrompts.length > 0 && !isSuggesting ? <div className="mt-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-md"><h3 className="font-semibold text-gray-700 dark:text-gray-300 mb-1 text-xs">Suggested Follow-ups:</h3><ul className="list-disc list-inside space-y-1 text-xs text-gray-800 dark:text-gray-200 max-h-28 overflow-y-auto">{suggestedPrompts.map((p, idx) => <li key={idx}>{p}</li>)}</ul></div> : null}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    // Main View
+    return (
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-4 sm:p-6 lg:p-8">
+            <ConfirmationModalComponent 
+                show={showBulkAnalysisConfirm}
+                estimates={{
+                    calls: bulkAnalysisEstimates.calls,
+                    tokens: bulkAnalysisEstimates.tokens,
+                    filteredCount: bulkAnalysisEstimates.filteredCount,
+                    originalCount: interactions.length 
+                }}
+                onConfirm={handleConfirmBulkAnalysis} 
+                onCancel={() => setShowBulkAnalysisConfirm(false)}
+                isVowelRemovalApplied={isVowelRemovalApplied} 
+            />
+            <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow-xl rounded-lg p-6">
+                <div className="flex justify-between items-center mb-6"> 
+                    <h1 className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">Gemini Activity Processor</h1>
+                    <button onClick={toggleTheme} className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"> 
+                        {theme === 'light' ? <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg> : <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3v1m0 16v1m8.66-12.66l-.707.707M4.04 19.96l-.707.707M21 12h-1M4 12H3m15.66-8.66l-.707-.707M4.04 4.04l-.707-.707" /></svg>}
+                    </button>
+                </div>
+                {error ? <div className="mb-4 p-3 bg-red-100 dark:bg-red-800 border-red-400 text-red-700 dark:text-red-200 rounded-md text-sm">{error}</div> : null}
+                
+                <div className="mb-6 p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700"> 
+                    <label htmlFor="file-upload" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Upload `MyActivity.html`:</label>
+                    <input id="file-upload" type="file" accept=".html" onChange={handleFileChange} className="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:font-semibold file:bg-blue-50 dark:file:bg-blue-800 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-700"/>
+                    {fileName ? <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">Selected: {fileName}</p> : null}
+                </div>
+                
+                <div className="space-y-3">
+                    <button onClick={processFileOnly} disabled={!file || isLoading || isAnalyzingAllStructures || isProcessingHeavyTask} className="w-full bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-md disabled:opacity-50">
+                        {isLoading ? 'Parsing File...' : (isProcessingHeavyTask ? 'Processing...' : '1. Process File (Load Originals)')}
+                    </button>
+
+                    {interactions.length > 0 && !isLoading && !isAnalyzingAllStructures ? (
+                        <>
+                            <button 
+                                onClick={handleApplyVowelRemoval} 
+                                disabled={isVowelRemovalApplied || isProcessingHeavyTask}
+                                className="w-full bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-md disabled:opacity-50"
+                            >
+                                {isVowelRemovalApplied ? 'Vowel Removal Applied' : '2. Apply Vowel Removal (Optional)'}
+                            </button>
+                             <button 
+                                onClick={handleGenerateSemanticEncodings} 
+                                disabled={areSemanticEncodingsGenerated || isProcessingHeavyTask} 
+                                className="w-full bg-indigo-500 hover:bg-indigo-600 dark:bg-indigo-600 dark:hover:bg-indigo-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-md disabled:opacity-50"
+                                title={areSemanticEncodingsGenerated ? "Encodings already generated for current text state. Re-process file or change text transformation to re-enable." : "Generates rhythm and structural vector encodings."}
+                            >
+                                {areSemanticEncodingsGenerated ? 'Semantic Encodings Generated' : '3. Generate Semantic Encodings (Optional)'}
+                            </button>
+                            {encodingStatusMessage ? <p className="text-sm text-green-600 dark:text-green-400 mt-2 text-center">{encodingStatusMessage}</p> : null}
+                            
+                            <div className="mt-4 p-3 border dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-700/50">
+                                <label htmlFor="anti-zipfian-threshold" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Anti-Zipfian: Show interactions with words appearing &lt;= N times:</label>
+                                <div className="flex items-center space-x-2 mt-1">
+                                    <input 
+                                        type="number" 
+                                        id="anti-zipfian-threshold"
+                                        value={antiZipfianThresholdInput}
+                                        onChange={e => setAntiZipfianThresholdInput(e.target.value)}
+                                        min="1"
+                                        className="w-20 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-800 text-sm"
+                                    />
+                                    <button onClick={handleApplyAntiZipfianFilter} disabled={!wordFrequenciesGlobal || isProcessingHeavyTask} className="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-1 px-3 rounded-md text-sm disabled:opacity-50">
+                                        {isApplyingAntiZipfian ? 'Applying...' : 'Apply Filter'} 
+                                    </button>
+                                    {isAntiZipfianFilterActive ? (
+                                        <button onClick={handleClearAntiZipfianFilter} className="text-pink-600 dark:text-pink-400 hover:underline text-sm">Clear Filter</button>
+                                    ) : null}
+                                </div>
+                                {antiZipfianStatusMessage ? <p className="text-xs text-pink-600 dark:text-pink-400 mt-1">{antiZipfianStatusMessage}</p> : null}
+                            </div>
+
+
+                            <button 
+                                onClick={prepareForBulkAnalysis} 
+                                disabled={isAnalyzingAllStructures || interactions.length === 0 || isProcessingHeavyTask}
+                                className="w-full bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700 text-white font-semibold py-2.5 px-4 rounded-lg shadow-md disabled:opacity-50"
+                            >
+                                4. Prepare Bulk Structure Analysis (API Calls)
+                            </button>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <button onClick={downloadInteractionsAsJSON} className="w-full bg-purple-500 hover:bg-purple-600 dark:bg-purple-600 dark:hover:bg-purple-700 text-white font-semibold py-2 px-3 rounded-lg text-sm">Download Displayed Interactions (.json)</button>
+                                <button onClick={downloadInteractionMetadata} className="w-full bg-sky-500 hover:bg-sky-600 dark:bg-sky-600 dark:hover:bg-sky-700 text-white font-semibold py-2 px-3 rounded-lg text-sm">Download Displayed Metadata (.json)</button>
+                            </div>
+                        </>
+                    ) : null}
+                </div>
+                
+                {interactions.length > 0 && !isAnalyzingAllStructures ? (
+                    <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">Filter & Sort Interactions ({displayedInteractions.length} matching)</h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label htmlFor="search-term" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Search Query/Response:</label>
+                                <input type="text" id="search-term" value={searchTerm} onChange={e => setSearchTerm(e.target.value)}
+                                    className="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                            </div>
+                            <div>
+                                <label htmlFor="sort-option" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Sort By:</label>
+                                <select id="sort-option" value={sortOption} onChange={e => setSortOption(e.target.value)}
+                                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option value="timestamp_desc">Timestamp (Newest First)</option>
+                                    <option value="timestamp_asc">Timestamp (Oldest First)</option>
+                                    <option value="prompt_len_desc">Prompt Length (Longest First)</option>
+                                    <option value="prompt_len_asc">Prompt Length (Shortest First)</option>
+                                    <option value="response_len_desc">Response Length (Longest First)</option>
+                                    <option value="response_len_asc">Response Length (Shortest First)</option>
+                                    <option value="total_tokens_desc">Total Tokens (Most First)</option>
+                                    <option value="total_tokens_asc">Total Tokens (Fewest First)</option>
+                                    <option value="ratio_desc">Response/Prompt Ratio (Highest First)</option>
+                                    <option value="ratio_asc">Response/Prompt Ratio (Lowest First)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label htmlFor="client-filter-status" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Client-Side Filter Status:</label>
+                                <select id="client-filter-status" value={clientFilterStatus} onChange={e => setClientFilterStatus(e.target.value)}
+                                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option value="all">All</option>
+                                    <option value="passed">Passed Client Filter</option>
+                                    <option value="failed">Failed Client Filter</option>
+                                </select>
+                            </div>
+                             <div>
+                                <label htmlFor="transformation-filter" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Text Transformation:</label>
+                                <select id="transformation-filter" value={transformationFilter} onChange={e => setTransformationFilter(e.target.value)}
+                                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option value="all">All (Current State)</option>
+                                    <option value="original">Original Text Only</option>
+                                    <option value="vowel_removal">Vowel Removed Only</option>
+                                </select>
+                            </div>
+                        </div>
+                        {availableStructures.length > 0 ? (
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Filter by Detected Structures (Client-Side, on current text):</label>
+                                <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-h-32 overflow-y-auto p-2 border dark:border-gray-600 rounded-md">
+                                    {availableStructures.map(structure => (
+                                        <label key={structure} className="flex items-center space-x-2 text-xs">
+                                            <input type="checkbox" 
+                                                checked={selectedStructureFilters.includes(structure)}
+                                                onChange={() => handleStructureFilterChange(structure)}
+                                                className="h-3.5 w-3.5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                                            />
+                                            <span>{structure.replace(/_/g, ' ')}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : null}
+                        <button onClick={clearAllFilters} className="text-sm text-blue-600 dark:text-blue-400 hover:underline">Clear All Filters & Sort</button>
+                    </div>
+                ) : null}
+
+
+                {isAnalyzingAllStructures ? ( 
+                    <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow">
+                        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Bulk Content Structure Analysis Progress:</h3>
+                        <div className="text-sm text-gray-600 dark:text-gray-300 mb-1">Batch {analysisProgress.currentBatch} of {analysisProgress.batches}</div>
+                        <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-4 mb-2">
+                            <div className="bg-blue-500 h-4 rounded-full" style={{ width: `${analysisProgress.total > 0 ? (analysisProgress.processed / analysisProgress.total) * 100 : 0}%` }}></div>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">{analysisProgress.processed} of {analysisProgress.total} interactions analyzed.</p>
+                        <button onClick={handleCancelAnalysis} className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg text-sm">Cancel Analysis</button>
+                    </div>
+                 ) : null}
+                {llmError && (isAnalyzingAllStructures || collatedAnalysisReport) ? <div className="mt-4 p-3 bg-red-100 dark:bg-red-800 border-red-400 text-red-700 dark:text-red-200 rounded-md text-sm">{llmError}</div> : null}
+                
+                {collatedAnalysisReport && !isAnalyzingAllStructures ? ( 
+                     <div className="mt-6 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow">
+                        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-2">Collated Content Structure Analysis Report:</h3>
+                        <button onClick={() => downloadReport(collatedAnalysisReport, `${fileName.replace('.html', '')}_full_structure_analysis${isVowelRemovalApplied ? '_vowel_removed' : ''}.txt`)}
+                                className="w-full mb-3 bg-cyan-500 hover:bg-cyan-600 text-white font-semibold py-2 px-4 rounded-lg text-sm">
+                            Download Full Analysis Report (.txt)
+                        </button>
+                        <pre className="whitespace-pre-wrap bg-white dark:bg-gray-800 p-3 rounded-md text-xs max-h-96 overflow-y-auto border border-gray-200 dark:border-gray-600">
+                            {collatedAnalysisReport.substring(0, 3000)} 
+                            {collatedAnalysisReport.length > 3000 ? "\n\n... (report truncated for display, full content in download) ..." : ""}
+                        </pre>
+                    </div>
+                ) : null}
+
+                {interactions.length > 0 && !isAnalyzingAllStructures ? ( 
+                    <div className="mt-8">
+                        <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-4">
+                            Displaying {displayedInteractions.length} of {interactions.length} Interactions 
+                            {isVowelRemovalApplied ? " (Vowel Removal Applied)" : ""}
+                            {areSemanticEncodingsGenerated ? " (Semantic Encodings Generated)" : ""}
+                            {isAntiZipfianFilterActive ? ` (Anti-Zipfian Filter: <= ${antiZipfianThresholdInput} occurrences)` : ""}
+                        </h2>
+                        <ul className="space-y-3 max-h-96 overflow-y-auto bg-gray-50 dark:bg-gray-700 p-3 rounded-md shadow">
+                            {displayedInteractions.map((interaction) => (
+                                <li key={interaction.id} onClick={() => setSelectedInteraction(interaction)} 
+                                    className={`p-3 bg-white dark:bg-gray-800 rounded-md shadow-sm hover:shadow-lg cursor-pointer transition-all duration-200 border dark:border-gray-600 ${interaction.clientSideFilter.passed ? 'hover:bg-blue-50 dark:hover:bg-gray-700' : 'opacity-60 hover:bg-red-50 dark:hover:bg-red-900'}`}
+                                    title={!interaction.clientSideFilter.passed ? `Filtered out: ${interaction.clientSideFilter.reason?.replace(/_/g, ' ')}` : `Detected (on current text): ${interaction.clientSideFilter.detectedStructures.join(', ').replace(/_/g, ' ') || 'None'}. Click to view details.`}
+                                >
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                                        {interaction.timestamp} 
+                                        <span className="ml-2 text-gray-400 dark:text-gray-500">(~{interaction.estimatedTokens.total} tokens)</span>
+                                        <span className="ml-2 text-gray-400 dark:text-gray-500">(R/P Ratio: {interaction.responseToPromptTokenRatio === Infinity ? 'Infinity' : (interaction.responseToPromptTokenRatio ?? 'N/A')})</span>
+                                        {interaction.rhythmSignature ? <span className="ml-2 text-purple-500 dark:text-purple-400 text-xs">(Sig: {interaction.rhythmSignature})</span> : null}
+                                    </p>
+                                    <p className="font-medium text-blue-600 dark:text-blue-400 truncate">{interaction.query ? interaction.query.substring(0, 100) + (interaction.query.length > 100 ? '...' : '') : <em>No prompt</em>}</p>
+                                    <div className="mt-1 flex flex-wrap gap-1">
+                                        {!interaction.clientSideFilter.passed ? <span className="text-xs bg-red-100 dark:bg-red-700 text-red-700 dark:text-red-200 px-1.5 py-0.5 rounded-full">{interaction.clientSideFilter.reason.replace(/_/g, ' ')}</span> : null}
+                                        {interaction.clientSideFilter.detectedStructures.map(s => (
+                                            <span key={s} className="text-xs bg-blue-100 dark:bg-blue-700 text-blue-700 dark:text-blue-200 px-1.5 py-0.5 rounded-full">{s.replace(/_/g, ' ')}</span>
+                                        ))}
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                         {displayedInteractions.length === 0 && interactions.length > 0 ? (
+                            <p className="text-center text-gray-500 dark:text-gray-400 mt-4">No interactions match the current filter criteria.</p>
+                        ) : null}
+                    </div>
+                ) : null}
+                <footer className="mt-12 text-center text-xs text-gray-500 dark:text-gray-400">Gemini Activity Processor App.</footer>
+            </div>
+        </div>
+    );
+}

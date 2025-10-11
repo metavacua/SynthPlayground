@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ document.title }}</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; max-width: 800px; margin: 20px auto; padding: 0 10px; }
+        h1, h2, h3, h4 { color: #333; }
+        .author { color: #555; text-align: center; margin-bottom: 2em; }
+        .prooftree {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 20px 0;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .prooftree .rule {
+            border-top: 1px solid #000;
+            padding-top: 10px;
+            margin-top: 10px;
+            font-style: italic;
+            text-align: right;
+            font-size: 0.9em;
+            color: #444;
+        }
+        .prooftree .conclusion { font-weight: bold; }
+        .hypotheses { margin-bottom: 10px; padding-bottom: 10px; display: flex; justify-content: space-around; }
+        .hypothesis { display: inline-block; vertical-align: top; margin: 0 10px; }
+        .hypothesis .sequent { display: block; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    {# Recursive macro to render proof trees #}
+    {% macro render_prooftree(tree) %}
+        <div class="prooftree">
+            <div class="hypotheses">
+                {% for hypo in tree.hypotheses %}
+                    <div class="hypothesis">
+                        {% if hypo.__class__.__name__ == 'ProofTree' %}
+                            {{ render_prooftree(hypo) }} {# Recurse for nested trees #}
+                        {% else %}
+                            <span class="sequent"> \({{ hypo.raw }}\) </span>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="conclusion">
+                <div class="rule">{{ tree.rule_name }}</div>
+                <span>\({{ tree.conclusion.raw }}\)</span>
+            </div>
+        </div>
+    {% endmacro %}
+
+    <h1>{{ document.title }}</h1>
+    {% if document.author %}
+        <p class="author">{{ document.author }}</p>
+    {% endif %}
+
+    {% for element_type, element in document.elements %}
+        {% if element_type == 'prooftree' %}
+            {{ render_prooftree(element) }}
+        {% elif element_type == 'part' %}
+            <h2>{{ element }}</h2>
+        {% elif element_type == 'section' %}
+            <h3>{{ element }}</h3>
+        {% elif element_type == 'subsection' %}
+            <h4>{{ element }}</h4>
+        {% elif element_type == 'subsubsection' %}
+            <h5>{{ element }}</h5>
+        {% elif element_type == 'text' %}
+            <p>{{ element }}</p>
+        {% endif %}
+    {% endfor %}
+
+</body>
+</html>
