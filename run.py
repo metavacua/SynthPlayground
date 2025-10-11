@@ -3,9 +3,10 @@ import json
 import sys
 
 # Add tooling directory to path to import other tools
-sys.path.insert(0, './tooling')
+sys.path.insert(0, "./tooling")
 from state import AgentState
 from master_control import MasterControlGraph
+
 
 def main():
     """
@@ -18,9 +19,7 @@ def main():
         description="Jules, an extremely skilled software engineer, at your service."
     )
     parser.add_argument(
-        "task",
-        type=str,
-        help="The task description for the agent to work on."
+        "task", type=str, help="The task description for the agent to work on."
     )
     args = parser.parse_args()
 
@@ -45,6 +44,7 @@ def main():
     print("\n--- Full State Log ---")
     print(json.dumps(final_state.to_json(), indent=2))
     print("--- End of Execution ---")
+
 
 if __name__ == "__main__":
     main()

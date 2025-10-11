@@ -1,0 +1,37 @@
+{
+  "states": [
+    "IDLE",
+    "GATHERING",
+    "SYNTHESIZING",
+    "REPORTING",
+    "DONE"
+  ],
+  "alphabet": [
+    "plan_op",
+    "step_op",
+    "read_op",
+    "write_op",
+    "tool_exec",
+    "close_op"
+  ],
+  "transitions": {
+    "IDLE": {
+      "plan_op": "GATHERING"
+    },
+    "GATHERING": {
+      "read_op": "GATHERING",
+      "tool_exec": "GATHERING",
+      "step_op": "SYNTHESIZING"
+    },
+    "SYNTHESIZING": {
+      "write_op": "REPORTING"
+    },
+    "REPORTING": {
+      "close_op": "DONE"
+    }
+  },
+  "start_state": "IDLE",
+  "accept_states": [
+    "DONE"
+  ]
+}
