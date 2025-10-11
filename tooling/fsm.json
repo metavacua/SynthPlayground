@@ -3,9 +3,9 @@
     "START",
     "ORIENTING",
     "PLANNING",
+    "RESEARCHING",
     "EXECUTING",
-    "AWAITING_ANALYSIS",
-    "POST_MORTEM",
+    "FINALIZING",
     "AWAITING_SUBMISSION",
     "ERROR"
   ],
@@ -38,19 +38,34 @@
       "trigger": "planning_failed"
     },
     {
+      "source": "PLANNING",
+      "dest": "RESEARCHING",
+      "trigger": "research_requested"
+    },
+    {
+      "source": "RESEARCHING",
+      "dest": "EXECUTING",
+      "trigger": "research_plan_validated"
+    },
+    {
+      "source": "RESEARCHING",
+      "dest": "ERROR",
+      "trigger": "research_failed"
+    },
+    {
       "source": "EXECUTING",
       "dest": "EXECUTING",
       "trigger": "step_succeeded"
     },
     {
       "source": "EXECUTING",
-      "dest": "AWAITING_ANALYSIS",
-      "trigger": "all_steps_completed"
+      "dest": "EXECUTING",
+      "trigger": "step_not_complete"
     },
     {
-      "source": "AWAITING_ANALYSIS",
-      "dest": "POST_MORTEM",
-      "trigger": "analysis_complete"
+      "source": "EXECUTING",
+      "dest": "FINALIZING",
+      "trigger": "all_steps_completed"
     },
     {
       "source": "EXECUTING",
@@ -58,14 +73,14 @@
       "trigger": "execution_failed"
     },
     {
-      "source": "POST_MORTEM",
+      "source": "FINALIZING",
       "dest": "AWAITING_SUBMISSION",
-      "trigger": "post_mortem_complete"
+      "trigger": "finalization_succeeded"
     },
     {
-      "source": "POST_MORTEM",
+      "source": "FINALIZING",
       "dest": "ERROR",
-      "trigger": "post_mortem_failed"
+      "trigger": "finalization_failed"
     }
   ]
 }

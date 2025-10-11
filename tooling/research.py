@@ -1,84 +1,91 @@
-import os
-import requests
-from typing import Dict, Any
+"""
+A unified, constraint-based interface for all research and data-gathering operations.
 
+This script abstracts the various methods an agent might use to gather information
+(reading local files, accessing the web, querying a database) into a single,
+standardized function: `execute_research_protocol`. It is a core component of
+the Advanced Orientation and Research Protocol (AORP), providing the mechanism
+by which the agent fulfills the requirements of each orientation level (L1-L4).
+
+The function operates on a `constraints` dictionary, which specifies the target,
+scope, and other parameters of the research task. This design allows the calling
+orchestrator (e.g., `master_control.py`) to request information without needing
+to know the underlying implementation details of how that information is fetched.
+
+This script is designed to be executed by a system that has pre-loaded the
+following native tools into the execution environment:
+- `read_file(filepath: str) -> str`
+- `list_files(path: str = ".") -> list[str]`
+- `google_search(query: str) -> str`
+- `view_text_website(url: str) -> str`
+"""
+from typing import Dict, Any
+from tooling.knowledge_integrator import run_knowledge_integration
 
 def execute_research_protocol(constraints: Dict[str, Any]) -> str:
     """
-    A placeholder for a unified, constraint-based research tool.
+    Executes a research task based on a dictionary of constraints.
 
-    This function simulates the behavior of the deep research tool by inspecting
-    the `constraints` dictionary and returning a mock response appropriate for
-    each AORP level (L1-L4). This provides a functional, testable hook for
-    the protocol without requiring a live service.
+    This function delegates to native, pre-loaded tools based on the specified
+    target and scope.
 
     Args:
-        constraints: A dictionary specifying the operational parameters for the
-                     research task, defining the "level" of research.
+        constraints: A dictionary specifying the operational parameters.
+            - target: 'local_filesystem', 'external_web', 'external_repository', or 'knowledge_graph'.
+            - scope: 'file', 'directory', 'narrow', 'broad', or 'enrich'.
+            - path: The file or directory path for local filesystem operations.
+            - query: The search term for web research.
+            - url: The specific URL for direct web access.
+            - input_graph_path: Path to the source knowledge graph.
+            - output_graph_path: Path to save the enriched knowledge graph.
 
     Returns:
-        A string representing the result of the research operation.
+        A string containing the result of the research operation.
     """
     target = constraints.get("target")
     scope = constraints.get("scope")
     path = constraints.get("path")
     query = constraints.get("query")
+    url = constraints.get("url")
 
-    # Level 1: Self-Awareness & Identity Verification
+    # Level 1: Read a local file
     if target == "local_filesystem" and scope == "file":
-        if path and os.path.exists(path):
-            try:
-                with open(path, "r") as f:
-                    return f.read()
-            except Exception as e:
-                return f"Error reading file {path}: {e}"
-        return f"Error: Path '{path}' not specified or does not exist for L1 research."
+        if not path:
+            return "Error: 'path' not specified for local file research."
+        # Assumes `read_file` is available in the execution environment
+        return read_file(filepath=path)
 
-    # Level 2: Repository State Synchronization
+    # Level 2: List a local directory
     elif target == "local_filesystem" and scope == "directory":
-        if path and os.path.isdir(path):
-            try:
-                files = os.listdir(path)
-                return f"Directory listing for '{path}':\n" + "\n".join(files)
-            except Exception as e:
-                return f"Error listing directory {path}: {e}"
-        return (
-            f"Error: Path '{path}' not specified or is not a directory for L2 research."
-        )
+        # Assumes `list_files` is available in the execution environment
+        return "\n".join(list_files(path=path or "."))
 
-    # Level 3: Targeted RAG
+    # Level 3: Targeted web search
     elif target == "external_web" and scope == "narrow":
-        if query:
-            return f"Mock search result for query '{query}': The latest version of LangGraph is 0.5.4."
-        return "Error: Query not specified for L3 research."
+        if not query:
+            return "Error: 'query' not specified for narrow web research."
+        # Assumes `google_search` is available in the execution environment
+        return google_search(query=query)
 
-    # Level 4: Deep Research
+    # Level 4: Broad web research (fetch content from a specific URL)
     elif target == "external_web" and scope == "broad":
-        return (
-            "**Mock Deep Research Report**\n\n"
-            "**Topic:** Broad inquiry into recent advancements.\n\n"
-            "**Summary:**\n"
-            "Recent advancements in the specified field have been driven by innovations in machine learning and data analytics. "
-            "Key findings indicate a trend towards decentralized systems and increased automation. "
-            "This report, generated by the mock deep research tool, synthesizes these trends into a coherent overview."
-        )
+        if not url:
+            return "Error: 'url' not specified for broad web research."
+        # Assumes `view_text_website` is available in the execution environment
+        return view_text_website(url=url)
 
-    # New Level: Meta-Research on External Repository
+    # Level 5: Fetch a file from a specific URL (e.g., from a Git repo)
     elif target == "external_repository":
-        repo_base_url = (
-            "https://raw.githubusercontent.com/metavacua/open_deep_research_jules/main/"
-        )
-        if path:
-            file_url = f"{repo_base_url}{path}"
-            try:
-                response = requests.get(file_url)
-                response.raise_for_status()  # Raise an exception for bad status codes (4xx or 5xx)
-                return response.text
-            except requests.exceptions.RequestException as e:
-                return f"Error fetching file from external repository '{file_url}': {e}"
-        return "Error: Path not specified for external_repository research."
+        if not url:
+            return "Error: 'url' not specified for external repository research."
+        # Assumes `view_text_website` is available in the execution environment
+        return view_text_website(url=url)
+
+    # New Target: Knowledge Graph Enrichment
+    elif target == "knowledge_graph" and scope == "enrich":
+        input_path = constraints.get("input_graph_path", "knowledge_core/protocols.ttl")
+        output_path = constraints.get("output_graph_path", "knowledge_core/enriched_protocols.ttl")
+        return run_knowledge_integration(input_path, output_path)
 
     else:
-        return (
-            "Error: The provided constraints do not map to a recognized research level."
-        )
+        return "Error: The provided constraints do not map to a recognized research protocol."
