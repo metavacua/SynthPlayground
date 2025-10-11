@@ -10,10 +10,114 @@
     },
     {
       "_type": "tag",
+      "name": "plan_deep_research",
+      "path": "./archive/agentic-research-experiments/agentic-research-experiments_tooling_research_planner.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "plan_deep_research",
+      "path": "./archive/feat/feat_protocol-build-system_tooling_research_planner.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "build_protocol",
+      "path": "./archive/feat/feat_protocol-build-system_tooling_build_protocol.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "TestBuildProtocol",
+      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_build_protocol_concatenates_in_order",
+      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_no_markdown_files",
+      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "plan_deep_research",
+      "path": "./archive/add-protocol-validation/add-protocol-validation_tooling_research_planner.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./archive/add-protocol-validation/add-protocol-validation_tooling_protocol_validator.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./archive/main/main_tooling_protocol_validator.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "plan_deep_research",
+      "path": "./archive/main/main_tooling_research_planner.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "plan_deep_research",
+      "path": "./archive/fix/fix_correct-agent-md-references_tooling_research_planner.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "Logger",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 8,
+      "line": 35,
       "kind": "class"
     },
     {
@@ -21,7 +125,7 @@
       "name": "__init__",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 13,
+      "line": 40,
       "kind": "function"
     },
     {
@@ -29,7 +133,7 @@
       "name": "_load_schema",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 29,
+      "line": 56,
       "kind": "function"
     },
     {
@@ -37,7 +141,7 @@
       "name": "log",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 55,
+      "line": 82,
       "kind": "function"
     },
     {
@@ -45,7 +149,7 @@
       "name": "TestLogger",
       "path": "./utils/test_logger.py",
       "language": "Python",
-      "line": 9,
+      "line": 27,
       "kind": "class"
     },
     {
@@ -53,7 +157,7 @@
       "name": "setUp",
       "path": "./utils/test_logger.py",
       "language": "Python",
-      "line": 11,
+      "line": 29,
       "kind": "function"
     },
     {
@@ -61,7 +165,7 @@
       "name": "tearDown",
       "path": "./utils/test_logger.py",
       "language": "Python",
-      "line": 73,
+      "line": 91,
       "kind": "function"
     },
     {
@@ -69,7 +173,7 @@
       "name": "test_log_success_with_correct_schema",
       "path": "./utils/test_logger.py",
       "language": "Python",
-      "line": 78,
+      "line": 96,
       "kind": "function"
     },
     {
@@ -77,7 +181,167 @@
       "name": "test_log_failure_with_incorrect_schema_data",
       "path": "./utils/test_logger.py",
       "language": "Python",
-      "line": 95,
+      "line": 113,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "TestKnowledgeIntegrator",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_load_local_graph_success",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_load_local_graph_not_found",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_extract_concepts",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_query_dbpedia_success",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 47,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_query_dbpedia_http_error",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_run_knowledge_integration",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 72,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "TestNewResearchPlanner",
+      "path": "./tooling/test_research_planner.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "test_plan_deep_research_generates_executable_plan",
+      "path": "./tooling/test_research_planner.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "load_local_graph",
+      "path": "./tooling/knowledge_integrator.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "extract_concepts",
+      "path": "./tooling/knowledge_integrator.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "query_dbpedia",
+      "path": "./tooling/knowledge_integrator.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "run_knowledge_integration",
+      "path": "./tooling/knowledge_integrator.py",
+      "language": "Python",
+      "line": 94,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "TestReadmeGenerator",
+      "path": "./tooling/test_readme_generator.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_readme_generator.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_readme_generator.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_generate_key_components_section",
+      "path": "./tooling/test_readme_generator.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_main_generates_readme_correctly",
+      "path": "./tooling/test_readme_generator.py",
+      "language": "Python",
+      "line": 62,
       "kind": "function"
     },
     {
@@ -85,7 +349,7 @@
       "name": "TestSymbolMapGenerator",
       "path": "./tooling/test_symbol_map_generator.py",
       "language": "Python",
-      "line": 13,
+      "line": 32,
       "kind": "class"
     },
     {
@@ -93,7 +357,7 @@
       "name": "setUp",
       "path": "./tooling/test_symbol_map_generator.py",
       "language": "Python",
-      "line": 15,
+      "line": 34,
       "kind": "function"
     },
     {
@@ -101,7 +365,7 @@
       "name": "tearDown",
       "path": "./tooling/test_symbol_map_generator.py",
       "language": "Python",
-      "line": 30,
+      "line": 49,
       "kind": "function"
     },
     {
@@ -109,7 +373,7 @@
       "name": "test_generate_with_ctags_success",
       "path": "./tooling/test_symbol_map_generator.py",
       "language": "Python",
-      "line": 36,
+      "line": 55,
       "kind": "function"
     },
     {
@@ -117,7 +381,7 @@
       "name": "test_generate_with_ast_fallback",
       "path": "./tooling/test_symbol_map_generator.py",
       "language": "Python",
-      "line": 69,
+      "line": 88,
       "kind": "function"
     },
     {
@@ -125,7 +389,7 @@
       "name": "test_main_with_ast_fallback",
       "path": "./tooling/test_symbol_map_generator.py",
       "language": "Python",
-      "line": 85,
+      "line": 104,
       "kind": "function"
     },
     {
@@ -133,7 +397,79 @@
       "name": "side_effect",
       "path": "./tooling/test_symbol_map_generator.py",
       "language": "Python",
-      "line": 40,
+      "line": 59,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "find_protocol_file",
+      "path": "./tooling/protocol_updater.py",
+      "language": "Python",
+      "line": 19,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "add_tool_to_protocol",
+      "path": "./tooling/protocol_updater.py",
+      "language": "Python",
+      "line": 31,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "update_rule_in_protocol",
+      "path": "./tooling/protocol_updater.py",
+      "language": "Python",
+      "line": 63,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/protocol_updater.py",
+      "language": "Python",
+      "line": 101,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "TestSelfCorrectionOrchestrator",
+      "path": "./tooling/test_self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 19,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 63,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_process_lessons_end_to_end",
+      "path": "./tooling/test_self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 69,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_process_lessons_handles_malformed_lesson_gracefully",
+      "path": "./tooling/test_self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 97,
       "kind": "function"
     },
     {
@@ -141,7 +477,7 @@
       "name": "extract_lessons_from_postmortem",
       "path": "./tooling/knowledge_compiler.py",
       "language": "Python",
-      "line": 10,
+      "line": 29,
       "kind": "function"
     },
     {
@@ -149,7 +485,15 @@
       "name": "extract_metadata_from_postmortem",
       "path": "./tooling/knowledge_compiler.py",
       "language": "Python",
-      "line": 48,
+      "line": 82,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "parse_action_to_command",
+      "path": "./tooling/knowledge_compiler.py",
+      "language": "Python",
+      "line": 94,
       "kind": "function"
     },
     {
@@ -157,7 +501,7 @@
       "name": "format_lesson_entry",
       "path": "./tooling/knowledge_compiler.py",
       "language": "Python",
-      "line": 61,
+      "line": 158,
       "kind": "function"
     },
     {
@@ -165,7 +509,31 @@
       "name": "main",
       "path": "./tooling/knowledge_compiler.py",
       "language": "Python",
-      "line": 83,
+      "line": 174,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "generate_suggestion_plan",
+      "path": "./tooling/code_suggester.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/code_suggester.py",
+      "language": "Python",
+      "line": 48,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/master_control_cli.py",
+      "language": "Python",
+      "line": 18,
       "kind": "function"
     },
     {
@@ -173,7 +541,7 @@
       "name": "has_ctags",
       "path": "./tooling/symbol_map_generator.py",
       "language": "Python",
-      "line": 8,
+      "line": 31,
       "kind": "function"
     },
     {
@@ -181,7 +549,7 @@
       "name": "generate_symbols_with_ctags",
       "path": "./tooling/symbol_map_generator.py",
       "language": "Python",
-      "line": 17,
+      "line": 40,
       "kind": "function"
     },
     {
@@ -189,7 +557,7 @@
       "name": "generate_symbols_with_ast",
       "path": "./tooling/symbol_map_generator.py",
       "language": "Python",
-      "line": 59,
+      "line": 82,
       "kind": "function"
     },
     {
@@ -197,7 +565,15 @@
       "name": "main",
       "path": "./tooling/symbol_map_generator.py",
       "language": "Python",
-      "line": 98,
+      "line": 121,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "_load_plan_registry",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 53,
       "kind": "function"
     },
     {
@@ -205,7 +581,7 @@
       "name": "MasterControlGraph",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 15,
+      "line": 63,
       "kind": "class"
     },
     {
@@ -213,7 +589,7 @@
       "name": "__init__",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 22,
+      "line": 70,
       "kind": "function"
     },
     {
@@ -221,7 +597,7 @@
       "name": "get_trigger",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 27,
+      "line": 75,
       "kind": "function"
     },
     {
@@ -229,7 +605,7 @@
       "name": "do_orientation",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 39,
+      "line": 91,
       "kind": "function"
     },
     {
@@ -237,7 +613,23 @@
       "name": "do_planning",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 91,
+      "line": 154,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "do_researching",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 207,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "_handle_call_plan",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 255,
       "kind": "function"
     },
     {
@@ -245,23 +637,15 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 139,
+      "line": 291,
       "kind": "function"
     },
     {
       "_type": "tag",
-      "name": "do_awaiting_analysis",
+      "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 185,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "do_post_mortem",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 217,
+      "line": 366,
       "kind": "function"
     },
     {
@@ -269,23 +653,79 @@
       "name": "run",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 264,
+      "line": 429,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "get_used_tools_from_log",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "get_protocol_tools_from_agents_md",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 78,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "run_completeness_check",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 120,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "run_centrality_analysis",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 128,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "run_protocol_source_check",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 135,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "generate_markdown_report",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 173,
       "kind": "function"
     },
     {
       "_type": "tag",
       "name": "main",
-      "path": "./tooling/protocol_validator.py",
+      "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 5,
+      "line": 220,
       "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "PlanContext",
+      "path": "./tooling/state.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "class"
     },
     {
       "_type": "tag",
       "name": "AgentState",
       "path": "./tooling/state.py",
       "language": "Python",
-      "line": 6,
+      "line": 42,
       "kind": "class"
     },
     {
@@ -293,7 +733,7 @@
       "name": "to_json",
       "path": "./tooling/state.py",
       "language": "Python",
-      "line": 31,
+      "line": 90,
       "kind": "function"
     },
     {
@@ -301,7 +741,7 @@
       "name": "probe_filesystem",
       "path": "./tooling/environmental_probe.py",
       "language": "Python",
-      "line": 8,
+      "line": 28,
       "kind": "function"
     },
     {
@@ -309,7 +749,7 @@
       "name": "probe_network",
       "path": "./tooling/environmental_probe.py",
       "language": "Python",
-      "line": 44,
+      "line": 64,
       "kind": "function"
     },
     {
@@ -317,7 +757,7 @@
       "name": "probe_environment_variables",
       "path": "./tooling/environmental_probe.py",
       "language": "Python",
-      "line": 79,
+      "line": 99,
       "kind": "function"
     },
     {
@@ -325,15 +765,23 @@
       "name": "main",
       "path": "./tooling/environmental_probe.py",
       "language": "Python",
-      "line": 90,
+      "line": 110,
       "kind": "function"
     },
     {
       "_type": "tag",
-      "name": "TestSelfImprovementCLI",
+      "name": "TestPlanningEfficiencyAnalysis",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 7,
+      "line": 13,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "TestProtocolViolationAnalysis",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 61,
       "kind": "class"
     },
     {
@@ -341,7 +789,7 @@
       "name": "setUp",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 9,
+      "line": 16,
       "kind": "function"
     },
     {
@@ -349,7 +797,7 @@
       "name": "tearDown",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 66,
+      "line": 48,
       "kind": "function"
     },
     {
@@ -357,7 +805,39 @@
       "name": "test_analyze_planning_efficiency",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 71,
+      "line": 53,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 98,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_analyze_protocol_violations",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 103,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "log_catastrophic_failure",
+      "path": "./tooling/log_failure.py",
+      "language": "Python",
+      "line": 9,
       "kind": "function"
     },
     {
@@ -365,7 +845,7 @@
       "name": "find_package_json_files",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 9,
+      "line": 28,
       "kind": "function"
     },
     {
@@ -373,7 +853,7 @@
       "name": "find_requirements_txt_files",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 15,
+      "line": 34,
       "kind": "function"
     },
     {
@@ -381,7 +861,7 @@
       "name": "parse_package_json",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 23,
+      "line": 42,
       "kind": "function"
     },
     {
@@ -389,7 +869,7 @@
       "name": "parse_requirements_txt",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 46,
+      "line": 65,
       "kind": "function"
     },
     {
@@ -397,7 +877,7 @@
       "name": "generate_dependency_graph",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 84,
+      "line": 103,
       "kind": "function"
     },
     {
@@ -405,7 +885,7 @@
       "name": "main",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 136,
+      "line": 155,
       "kind": "function"
     },
     {
@@ -442,10 +922,258 @@
     },
     {
       "_type": "tag",
+      "name": "FunctionDoc",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 32,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "ClassDoc",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "ModuleDoc",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 46,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "_format_default_value",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 56,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "format_args",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 66,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "DocVisitor",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 115,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "parse_file_for_docs",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 162,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "generate_documentation_for_module",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 189,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "generate_documentation",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 228,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "find_python_files",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 252,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 262,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 48,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 120,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "visit_FunctionDef",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 125,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "visit_ClassDef",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 142,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "Command",
+      "path": "./tooling/plan_parser.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "parse_plan",
+      "path": "./tooling/plan_parser.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "load_schema",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "compile_protocols",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 67,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 206,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "TestResearchExecutor",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "test_local_filesystem_file_scope",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_local_filesystem_directory_scope",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 32,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_external_web_narrow_scope",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 42,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_external_web_broad_scope",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 52,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_external_repository_scope",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 62,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_invalid_target",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 72,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_missing_parameters",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 78,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "analyze_planning_efficiency",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
-      "line": 9,
+      "line": 32,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_protocol_violations",
+      "path": "./tooling/self_improvement_cli.py",
+      "language": "Python",
+      "line": 73,
       "kind": "function"
     },
     {
@@ -453,7 +1181,15 @@
       "name": "main",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
-      "line": 50,
+      "line": 123,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "_load_plan_registry",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 59,
       "kind": "function"
     },
     {
@@ -461,7 +1197,7 @@
       "name": "_log_event",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 35,
+      "line": 70,
       "kind": "function"
     },
     {
@@ -469,7 +1205,7 @@
       "name": "_create_log_entry",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 49,
+      "line": 84,
       "kind": "function"
     },
     {
@@ -477,39 +1213,7 @@
       "name": "close_task",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 65,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "_validate_action",
-      "path": "./tooling/fdc_cli.py",
-      "language": "Python",
-      "line": 99,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "_validate_plan_recursive",
-      "path": "./tooling/fdc_cli.py",
-      "language": "Python",
-      "line": 156,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "validate_plan",
-      "path": "./tooling/fdc_cli.py",
-      "language": "Python",
-      "line": 217,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "analyze_plan",
-      "path": "./tooling/fdc_cli.py",
-      "language": "Python",
-      "line": 251,
+      "line": 100,
       "kind": "function"
     },
     {
@@ -517,7 +1221,55 @@
       "name": "start_task",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 292,
+      "line": 125,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "_validate_command",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 162,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "_validate_plan_recursive",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 194,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "validate_plan",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 329,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_plan",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 362,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "lint_plan",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 403,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "start_task",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 413,
       "kind": "function"
     },
     {
@@ -525,7 +1277,31 @@
       "name": "main",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 348,
+      "line": 469,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "get_module_docstring",
+      "path": "./tooling/readme_generator.py",
+      "language": "Python",
+      "line": 70,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "generate_key_components_section",
+      "path": "./tooling/readme_generator.py",
+      "language": "Python",
+      "line": 91,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/readme_generator.py",
+      "language": "Python",
+      "line": 114,
       "kind": "function"
     },
     {
@@ -533,7 +1309,7 @@
       "name": "execute_research_protocol",
       "path": "./tooling/research.py",
       "language": "Python",
-      "line": 6,
+      "line": 25,
       "kind": "function"
     },
     {
@@ -541,7 +1317,7 @@
       "name": "TestDependencyGraphGenerator",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 14,
+      "line": 28,
       "kind": "class"
     },
     {
@@ -549,7 +1325,7 @@
       "name": "setUp",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 16,
+      "line": 30,
       "kind": "function"
     },
     {
@@ -557,7 +1333,7 @@
       "name": "tearDown",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 49,
+      "line": 63,
       "kind": "function"
     },
     {
@@ -565,7 +1341,7 @@
       "name": "test_find_files",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 54,
+      "line": 68,
       "kind": "function"
     },
     {
@@ -573,7 +1349,7 @@
       "name": "test_parse_package_json",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 64,
+      "line": 78,
       "kind": "function"
     },
     {
@@ -581,7 +1357,7 @@
       "name": "test_parse_requirements_txt",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 73,
+      "line": 87,
       "kind": "function"
     },
     {
@@ -589,7 +1365,7 @@
       "name": "test_generate_dependency_graph",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 87,
+      "line": 101,
       "kind": "function"
     },
     {
@@ -597,55 +1373,119 @@
       "name": "TestKnowledgeCompiler",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 10,
+      "line": 16,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "TestKnowledgeCompilerAdvanced",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 93,
       "kind": "class"
     },
     {
       "_type": "tag",
       "name": "setUp",
       "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 52,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_knowledge_compiler_end_to_end",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 60,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 95,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 128,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_advanced_parsing_and_deprecate_command",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 136,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "TestProtocolAuditor",
+      "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
       "line": 12,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_protocol_auditor.py",
+      "language": "Python",
+      "line": 15,
       "kind": "function"
     },
     {
       "_type": "tag",
       "name": "tearDown",
-      "path": "./tooling/test_knowledge_compiler.py",
+      "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
-      "line": 54,
+      "line": 55,
       "kind": "function"
     },
     {
       "_type": "tag",
-      "name": "test_extract_metadata",
-      "path": "./tooling/test_knowledge_compiler.py",
+      "name": "test_get_protocol_tools_from_agents_md",
+      "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
-      "line": 64,
+      "line": 60,
       "kind": "function"
     },
     {
       "_type": "tag",
-      "name": "test_extract_lessons",
-      "path": "./tooling/test_knowledge_compiler.py",
+      "name": "test_get_used_tools_from_log",
+      "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
-      "line": 69,
+      "line": 71,
       "kind": "function"
     },
     {
       "_type": "tag",
-      "name": "test_main_compiler_function",
-      "path": "./tooling/test_knowledge_compiler.py",
+      "name": "test_end_to_end_report_generation",
+      "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
-      "line": 77,
+      "line": 83,
       "kind": "function"
     },
     {
       "_type": "tag",
-      "name": "TestMasterControlGraphFullWorkflow",
+      "name": "TestMasterControlRedesigned",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 15,
+      "line": 23,
       "kind": "class"
     },
     {
@@ -653,39 +1493,191 @@
       "name": "setUp",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 21,
+      "line": 28,
       "kind": "function"
     },
     {
       "_type": "tag",
       "name": "tearDown",
       "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 72,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_do_orientation",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 78,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_do_planning",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 84,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_do_execution",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 92,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_do_finalizing",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 111,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "TestProtocolUpdater",
+      "path": "./tooling/test_protocol_updater.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_protocol_updater.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_protocol_updater.py",
+      "language": "Python",
+      "line": 42,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_find_protocol_file_success",
+      "path": "./tooling/test_protocol_updater.py",
       "language": "Python",
       "line": 48,
       "kind": "function"
     },
     {
       "_type": "tag",
-      "name": "cleanup_files",
-      "path": "./tooling/test_master_control.py",
+      "name": "test_find_protocol_file_not_found",
+      "path": "./tooling/test_protocol_updater.py",
       "language": "Python",
-      "line": 56,
+      "line": 53,
       "kind": "function"
     },
     {
       "_type": "tag",
-      "name": "test_full_atomic_workflow_with_analysis",
-      "path": "./tooling/test_master_control.py",
+      "name": "test_add_tool_to_protocol_success",
+      "path": "./tooling/test_protocol_updater.py",
       "language": "Python",
-      "line": 70,
+      "line": 58,
       "kind": "function"
     },
     {
       "_type": "tag",
-      "name": "run_fsm",
-      "path": "./tooling/test_master_control.py",
+      "name": "test_add_duplicate_tool",
+      "path": "./tooling/test_protocol_updater.py",
+      "language": "Python",
+      "line": 71,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "load_lessons",
+      "path": "./tooling/self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "save_lessons",
+      "path": "./tooling/self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "run_command",
+      "path": "./tooling/self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "process_lessons",
+      "path": "./tooling/self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 46,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 132,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "get_registry",
+      "path": "./tooling/plan_manager.py",
+      "language": "Python",
+      "line": 32,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "save_registry",
+      "path": "./tooling/plan_manager.py",
+      "language": "Python",
+      "line": 44,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "register_plan",
+      "path": "./tooling/plan_manager.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "deregister_plan",
+      "path": "./tooling/plan_manager.py",
+      "language": "Python",
+      "line": 76,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "list_plans",
+      "path": "./tooling/plan_manager.py",
       "language": "Python",
       "line": 88,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/plan_manager.py",
+      "language": "Python",
+      "line": 102,
       "kind": "function"
     },
     {
@@ -693,7 +1685,7 @@
       "name": "plan_deep_research",
       "path": "./tooling/research_planner.py",
       "language": "Python",
-      "line": 9,
+      "line": 15,
       "kind": "function"
     }
   ]
