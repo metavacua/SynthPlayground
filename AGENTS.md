@@ -1538,11 +1538,22 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
 
 ---
 
-## Child Module: `parent`
+## Child Module: `intermediate-inference`
 
 This module contains the following protocols, which are defined in its own `AGENTS.md` file:
 
-- `parent-protocol-001`
+- `inference-communication-style`
+
+---
+
+
+---
+
+## Child Module: `meta`
+
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
+
+- `meta-axiom-schema`
 
 ---
 

@@ -1,0 +1,25 @@
+{
+  "protocol_id": "meta-axiom-schema",
+  "description": "This protocol defines the structure for a 'Reflexive Axiom' protocol. It is itself an instance of this structure, establishing a foundational, self-referential rule for the system.",
+  "rules": [
+    {
+      "rule_id": "axiom-structure",
+      "description": "An axiomatic protocol must conform to the standard agent protocol schema, containing a 'protocol_id', 'description', and a non-empty 'rules' array.",
+      "enforcement": "Validation is performed by the `protocol_compiler.py` against the `protocol.schema.json`."
+    },
+    {
+      "rule_id": "axiom-self-containment",
+      "description": "The rules within an axiomatic protocol must be self-contained and not depend on child modules. The directory containing an axiom should not have sub-directories with further protocols.",
+      "enforcement": "Verified by the `hierarchical_compiler.py` which will find no child protocol directories to process."
+    },
+    {
+      "rule_id": "axiom-identification",
+      "description": "The 'protocol_id' for an axiom should ideally follow a recognizable pattern, such as 'axiom-<name>', to clearly distinguish it from higher-order, inferential protocols.",
+      "enforcement": "Enforced by convention and code review. Future tooling could programmatically validate this."
+    }
+  ],
+  "associated_tools": [
+    "tooling/protocol_compiler.py",
+    "tooling/hierarchical_compiler.py"
+  ]
+}

@@ -32,12 +32,19 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`protocol-reset-all-pre-check-001`**: A protocol that mandates a pre-execution check for the `reset_all` tool to prevent unauthorized use.
 - **`research-fdc-001`**: Defines the formal Finite Development Cycle (FDC) for conducting deep research.
 
-### Child Module: `parent`
+### Child Module: `intermediate-inference`
 
-This module includes protocols from its child module `parent`, as summarized below:
+This module includes protocols from its child module `intermediate-inference`, as summarized below:
 This module contains the following protocols, which are defined in its own `AGENTS.md` file:
 
-- `parent-protocol-001`
+- `inference-communication-style`
+
+### Child Module: `meta`
+
+This module includes protocols from its child module `meta`, as summarized below:
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
+
+- `meta-axiom-schema`
 
 ## Key Components
 
