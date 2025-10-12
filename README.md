@@ -11,6 +11,7 @@ corresponding `AGENTS.md` file and the source code docstrings.
 This module is governed by a series of machine-readable protocols defined in `AGENTS.md`. These protocols are the source of truth for the agent's behavior within this scope. The key protocols are:
 
 - **`agent-bootstrap-001`**: A foundational protocol that dictates the agent's initial actions upon starting any task.
+- **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
 - **`core-directive-001`**: The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC).
 - **`decidability-constraints-001`**: Ensures all development processes are formally decidable and computationally tractable.
 - **`orientation-cascade-001`**: Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state.
