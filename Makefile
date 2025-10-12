@@ -116,6 +116,10 @@ pages: AGENTS.md README.md tooling/pages_generator.py
 # A general build target that compiles all protocols and generates documentation.
 build: docs readme compile-protocols compile-security-protocols pages
 
+deploy-calculus:
+	@echo "--> Deploying calculus pages..."
+	@python3 tooling/deploy_calculus_pages.py
+
 clean:
 	@echo "--> Removing compiled protocol and documentation artifacts..."
 	@rm -f AGENTS.md
