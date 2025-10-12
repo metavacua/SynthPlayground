@@ -344,6 +344,50 @@ The CLI provides several key commands:
   > Validates a plan using the centralized parser.
 
 
+### `tooling/hierarchical_compiler.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def cleanup_summaries(directory)`
+
+  > Removes temporary summary files from a protocols directory.
+
+
+- #### `def find_protocol_dirs(root_dir)`
+
+  > Finds all directories named 'protocols' within the root directory,
+  > ignoring any special-cased directories.
+
+
+- #### `def generate_summary(child_agents_md_path)`
+
+  > Generates a summary of a child AGENTS.md file by extracting protocol IDs.
+
+
+- #### `def get_parent_module(module_path, all_module_paths)`
+
+  > Finds the direct parent module of a given module.
+
+
+- #### `def main()`
+
+  > Main function to orchestrate the hierarchical compilation.
+
+
+- #### `def run_compiler(source_dir)`
+
+  > Invokes the protocol_compiler.py script as a subprocess.
+
+
+- #### `def run_readme_generator(source_agents_md)`
+
+  > Invokes the readme_generator.py script as a subprocess.
+
+
 ### `tooling/knowledge_compiler.py`
 
 Extracts structured lessons from post-mortem reports and compiles them into a
@@ -804,40 +848,26 @@ directory, performing targeted updates based on command-line arguments.
 
 ### `tooling/readme_generator.py`
 
-Generates the project's README.md file.
-
-This script combines a static, manually written overview with dynamically
-generated sections that summarize key components of the system. The goal is
-to produce a README that is both informative and easy to maintain, as it
-automatically reflects the current state of the documented source code.
-
-The script is designed to be run from the root of the repository and is
-integrated into the `Makefile` build process.
+_No module-level docstring found._
 
 
 **Public Functions:**
 
 
-- #### `def generate_core_protocols_section()`
+- #### `def generate_core_protocols_section(agents_md_path)`
 
-  > Parses AGENTS.md to extract protocol definitions and generate a Markdown summary.
+  > Parses a given AGENTS.md file to extract protocol definitions and generate a Markdown summary.
 
 
-- #### `def generate_key_components_section()`
+- #### `def generate_key_components_section(module_path)`
 
-  > Generates the Markdown for the "Key Components" section by reading
-  > the docstrings of the curated list of files.
+  > Generates the Markdown for the "Key Components" section by documenting
+  > any `.py` files found in a `tooling/` subdirectory of the module.
 
 
 - #### `def get_module_docstring(filepath)`
 
   > Parses a Python file and extracts the module-level docstring.
-  >
-  > Args:
-  >     filepath: The path to the Python file.
-  >
-  > Returns:
-  >     The module docstring, or a placeholder if none is found.
 
 
 - #### `def main()`
