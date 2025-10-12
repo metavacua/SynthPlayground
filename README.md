@@ -10,7 +10,6 @@ corresponding `AGENTS.md` file and the source code docstrings.
 
 This module is governed by a series of machine-readable protocols defined in `AGENTS.md`. These protocols are the source of truth for the agent's behavior within this scope. The key protocols are:
 
-- **`aorp-header`**: Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP).
 - **`agent-bootstrap-001`**: A foundational protocol that dictates the agent's initial actions upon starting any task.
 - **`core-directive-001`**: The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC).
 - **`decidability-constraints-001`**: Ensures all development processes are formally decidable and computationally tractable.
@@ -20,6 +19,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`best-practices-001`**: A set of best practices derived from observing successful, data-driven workflow patterns.
 - **`meta-protocol-001`**: A meta-protocol governing the agent's awareness and maintenance of its own core protocol files.
 - **`cfdc-protocol-001`**: Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model.
+- **`plan-registry-001`**: Defines a central registry for discovering and executing hierarchical plans by a logical name.
 - **`self-correction-protocol-001`**: Defines the automated, closed-loop workflow for protocol self-correction.
 - **`non-compliance-protocol-001`**: A protocol that defines non-compliance with AGENTS.md and specifies corrective actions.
 - **`pre-commit-protocol-001`**: Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission.
@@ -32,12 +32,12 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`protocol-reset-all-pre-check-001`**: A protocol that mandates a pre-execution check for the `reset_all` tool to prevent unauthorized use.
 - **`research-fdc-001`**: Defines the formal Finite Development Cycle (FDC) for conducting deep research.
 
-### Child Module: `hierarchical_test`
+### Child Module: `parent`
 
-This module includes protocols from its child module `hierarchical_test`, as summarized below:
+This module includes protocols from its child module `parent`, as summarized below:
 This module contains the following protocols, which are defined in its own `AGENTS.md` file:
 
-- `test-protocol-001`
+- `parent-protocol-001`
 
 ## Key Components
 
