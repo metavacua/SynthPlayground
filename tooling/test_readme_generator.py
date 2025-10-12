@@ -2,7 +2,8 @@ import unittest
 import os
 import tempfile
 import shutil
-from unittest.mock import patch
+import json
+from unittest.mock import patch, MagicMock
 
 from tooling import readme_generator
 
@@ -30,47 +31,49 @@ class TestReadmeGenerator(unittest.TestCase):
             with open(os.path.join(self.tooling_dir, name), "w") as f:
                 f.write(content)
 
+        # Create a dummy AGENTS.md
+        self.agents_md_path = os.path.join(self.test_dir, "AGENTS.md")
+        with open(self.agents_md_path, "w") as f:
+            f.write("""
+# Test Agents MD
+
+```json
+{
+  "protocol_id": "test-proto-1",
+  "description": "This is a test protocol."
+}
+```
+
+## Child Module: `child`
+
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
+
+- `child-proto-1`
+
+---
+            """)
+
     def tearDown(self):
         """
         Clean up the temporary directory after tests are complete.
         """
         shutil.rmtree(self.test_dir)
 
-    def test_generate_key_components_section(self):
-        """
-        Verify that the key components section is generated correctly from mock files.
-        """
-        files_to_doc = ["component_one.py", "component_two.py"]
-        # Patch the constants to point to our test setup
-        with patch("tooling.readme_generator.KEY_COMPONENTS_DIR", self.tooling_dir), \
-             patch("tooling.readme_generator.KEY_FILES_TO_DOCUMENT", files_to_doc):
-
-            result = readme_generator.generate_key_components_section()
-
-        # The path in the output will be the full temporary path.
-        path_one = os.path.join(self.tooling_dir, "component_one.py")
-        self.assertIn(f"- **`{path_one}`**:", result)
-        self.assertIn("> This is the first component.", result)
-
-        path_two = os.path.join(self.tooling_dir, "component_two.py")
-        self.assertIn(f"- **`{path_two}`**:", result)
-        self.assertIn("> This is the second component.", result)
-        self.assertIn("> It has multiple lines.", result)
-
-        self.assertNotIn("component_three.py", result)
-
     def test_main_generates_readme_correctly(self):
         """
-        Test the main function to ensure it generates a complete README.md.
+        Test the main function to ensure it generates a complete README.md
+        by simulating command-line arguments.
         """
         output_filepath = os.path.join(self.test_dir, "TEST_README.md")
-        key_files = ["component_one.py", "component_two.py", "component_three.py"]
 
-        # Patch the configuration constants within the readme_generator module
-        with patch("tooling.readme_generator.OUTPUT_FILE", output_filepath), \
-             patch("tooling.readme_generator.KEY_FILES_TO_DOCUMENT", key_files), \
-             patch("tooling.readme_generator.KEY_COMPONENTS_DIR", self.tooling_dir):
+        # Mock sys.argv to simulate command-line execution
+        test_args = [
+            "readme_generator.py",
+            "--source-file", self.agents_md_path,
+            "--output-file", output_filepath
+        ]
 
+        with patch('sys.argv', test_args):
             readme_generator.main()
 
         # Verify the output file was created
@@ -81,17 +84,23 @@ class TestReadmeGenerator(unittest.TestCase):
             content = f.read()
 
         # Check for static content
-        self.assertIn("# Project Chimera", content)
-        self.assertIn("## Build System & Usage", content)
+        self.assertIn("# Module Documentation", content)
+        self.assertIn("## Core Protocols", content)
 
-        # Check for dynamically generated content
-        path_one = os.path.join(self.tooling_dir, "component_one.py")
-        self.assertIn(f"`{path_one}`", content)
+        # Check for protocol content from AGENTS.md
+        self.assertIn("- **`test-proto-1`**: This is a test protocol.", content)
+
+        # Check for child module summary
+        self.assertIn("### Child Module: `child`", content)
+        self.assertIn("- `child-proto-1`", content)
+
+        # Check for key component docstrings
+        self.assertIn("## Key Components", content)
+        self.assertIn("- **`tooling/component_one.py`**:", content)
         self.assertIn("> This is the first component.", content)
-
-        # Check that the component without a docstring is handled gracefully
-        path_three = os.path.join(self.tooling_dir, "component_three.py")
-        self.assertIn(f"`{path_three}`", content)
+        self.assertIn("- **`tooling/component_two.py`**:", content)
+        self.assertIn("> This is the second component.", content)
+        self.assertIn("- **`tooling/component_three.py`**:", content)
         self.assertIn("> _No docstring found._", content)
 
 if __name__ == "__main__":

@@ -88,7 +88,8 @@ def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file
     autodoc_files = glob.glob(os.path.join(source_dir, "*.autodoc.md"))
 
     # Combine all file types into a single list and sort them numerically
-    all_files = sorted(protocol_files + autodoc_files)
+    summary_files = glob.glob(os.path.join(source_dir, "_z_child_summary_*.protocol.md"))
+    all_files = sorted(protocol_files + autodoc_files + summary_files)
 
     if not all_files:
         print(f"Warning: No protocol or autodoc files found in {source_dir}.")

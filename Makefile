@@ -40,18 +40,14 @@ SCHEMA_FILE = protocols/protocol.schema.json
 COMPILER_SCRIPT = tooling/protocol_compiler.py
 
 # --- AGENTS.md ---
-AGENT_PROTOCOLS_JSON = $(wildcard protocols/*.protocol.json)
-AGENT_PROTOCOLS_MD = $(wildcard protocols/*.protocol.md)
-AGENT_PROTOCOLS_AUTODOC = $(wildcard protocols/*.autodoc.md)
+HIERARCHICAL_COMPILER_SCRIPT = tooling/hierarchical_compiler.py
+ALL_PROTOCOL_SOURCES = $(shell find . -path '*/protocols/*.protocol.json' -o -path '*/protocols/*.protocol.md' -o -path '*/protocols/*.autodoc.md')
 
-# The AGENTS.md file is a target that depends on all its source files.
-AGENTS.md: $(AGENT_PROTOCOLS_JSON) $(AGENT_PROTOCOLS_MD) $(AGENT_PROTOCOLS_AUTODOC) $(SCHEMA_FILE) $(COMPILER_SCRIPT) knowledge_core/SYSTEM_DOCUMENTATION.md
-	@echo "--> Compiling agent protocols into AGENTS.md and Knowledge Graph..."
-	@python3 $(COMPILER_SCRIPT) \
-		--source-dir protocols \
-		--output-file AGENTS.md \
-		--schema-file $(SCHEMA_FILE) \
-		--knowledge-graph-file
+# The AGENTS.md file is a target that depends on the hierarchical compiler
+# and all possible source files it might find.
+AGENTS.md: $(ALL_PROTOCOL_SOURCES) $(HIERARCHICAL_COMPILER_SCRIPT) $(COMPILER_SCRIPT) knowledge_core/SYSTEM_DOCUMENTATION.md
+	@echo "--> Recursively compiling all AGENTS.md and README.md files..."
+	@python3 $(HIERARCHICAL_COMPILER_SCRIPT)
 
 # A phony target to easily trigger the main protocol compilation.
 compile-protocols: AGENTS.md
