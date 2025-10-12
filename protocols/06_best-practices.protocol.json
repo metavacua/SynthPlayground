@@ -16,5 +16,10 @@
     "read_file",
     "list_files",
     "grep"
+  ],
+  "inheritable_rules": [
+    {
+      "rule_id": "verify-after-write"
+    }
   ]
 }

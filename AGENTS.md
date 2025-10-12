@@ -1538,17 +1538,6 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
 
 ---
 
-## Child Module: `parent`
-
-This module contains the following protocols, which are defined in its own `AGENTS.md` file:
-
-- `parent-protocol-001`
-
----
-
-
----
-
 # Meta-Protocol: Code Review Critic Evaluation Context
 
 This protocol governs the behavior of the Code Review Critic agent. Its purpose is to provide the critic with the necessary context to perform accurate and helpful evaluations of changes made by other agents.
@@ -1699,6 +1688,11 @@ This new protocol provides a robust, reliable, and formally verifiable mechanism
   ],
   "associated_tools": [
     "tooling/fdc_cli.py"
+  ],
+  "inheritable_rules": [
+    {
+      "rule_id": "mandatory-fdc-start"
+    }
   ]
 }
 ```
@@ -1874,6 +1868,11 @@ This new protocol provides a robust, reliable, and formally verifiable mechanism
     "read_file",
     "list_files",
     "grep"
+  ],
+  "inheritable_rules": [
+    {
+      "rule_id": "verify-after-write"
+    }
   ]
 }
 ```

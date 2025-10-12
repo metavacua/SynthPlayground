@@ -10,5 +10,10 @@
   ],
   "associated_tools": [
     "tooling/fdc_cli.py"
+  ],
+  "inheritable_rules": [
+    {
+      "rule_id": "mandatory-fdc-start"
+    }
   ]
 }

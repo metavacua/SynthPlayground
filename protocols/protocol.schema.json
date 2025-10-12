@@ -42,6 +42,27 @@
         "type": "string",
         "description": "The name of the tool or script (e.g., 'tooling/fdc_cli.py')."
       }
+    },
+    "inheritable_rules": {
+      "description": "An optional list of rules that can be inherited by child modules. This enables top-down propagation of policies.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rule_id": {
+            "description": "The 'rule_id' of a rule from the 'rules' array in this protocol that should be inherited.",
+            "type": "string"
+          },
+          "scope": {
+            "description": "An optional glob pattern to restrict which child modules inherit this rule (e.g., 'services/*'). Defaults to all children if omitted.",
+            "type": "string",
+            "default": "**/*"
+          }
+        },
+        "required": [
+          "rule_id"
+        ]
+      }
     }
   },
   "required": ["protocol_id", "description", "rules"]

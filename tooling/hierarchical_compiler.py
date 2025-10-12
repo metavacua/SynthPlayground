@@ -2,6 +2,7 @@ import os
 import subprocess
 import json
 import re
+import glob
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -11,7 +12,7 @@ README_FILENAME = "README.md"
 PROTOCOL_COMPILER_PATH = os.path.join(os.path.dirname(__file__), "protocol_compiler.py")
 README_GENERATOR_PATH = os.path.join(os.path.dirname(__file__), "readme_generator.py")
 SUMMARY_FILE_PREFIX = "_z_child_summary_"
-SPECIAL_DIRS = ["protocols/security"] # Directories to be ignored by the hierarchical scan
+SPECIAL_DIRS = ["protocols/security", "examples", "test_inheritance_fixture"] # Directories to be ignored by the hierarchical scan
 
 def find_protocol_dirs(root_dir):
     """
@@ -32,8 +33,11 @@ def find_protocol_dirs(root_dir):
     # Process from the deepest directories upwards to ensure children are built before parents
     return sorted(protocol_dirs, key=lambda x: -x.count(os.sep))
 
-def run_compiler(source_dir):
-    """Invokes the protocol_compiler.py script as a subprocess."""
+def run_compiler(source_dir, inherited_rules=None):
+    """
+    Invokes the protocol_compiler.py script as a subprocess, optionally passing
+    a list of inherited rules.
+    """
     parent_dir = os.path.dirname(source_dir)
     target_agents_md = os.path.join(parent_dir, AGENTS_MD_FILENAME)
 
@@ -44,6 +48,9 @@ def run_compiler(source_dir):
         "--output-file", target_agents_md,
         "--knowledge-graph-file"
     ]
+
+    if inherited_rules:
+        command.extend(["--inherited-rules", json.dumps(inherited_rules)])
 
     print(f"Running AGENTS.md compiler for: {source_dir}")
     try:
@@ -119,32 +126,87 @@ def cleanup_summaries(directory):
             os.remove(os.path.join(directory, filename))
             print(f"Cleaned up summary file: {filename}")
 
-def get_parent_module(module_path, all_module_paths):
+def find_all_protocol_source_files(directory):
+    """Finds all .protocol.json files in a directory."""
+    return glob.glob(os.path.join(directory, "*.protocol.json"))
+
+def build_inheritance_map(all_protocol_dirs, module_paths, root_dir):
+    """
+    Walks the module tree from top to bottom to build a map of what rules
+    each module inherits from its parents.
+    """
+    inheritance_map = {path: [] for path in module_paths}
+
+    # Sort modules from top-level to deepest
+    sorted_modules = sorted(module_paths, key=lambda x: x.count(os.sep))
+
+    for module_path in sorted_modules:
+        parent_module = get_parent_module(module_path, module_paths, root_dir)
+
+        # First, inherit the rules from the parent's context
+        if parent_module and parent_module in inheritance_map:
+            inheritance_map[module_path].extend(inheritance_map[parent_module])
+
+        # Second, add the parent's own inheritable rules to the context for this module
+        if parent_module:
+            parent_protocols_dir = os.path.join(parent_module, PROTOCOLS_DIR_NAME)
+            source_files = find_all_protocol_source_files(parent_protocols_dir)
+
+            for fpath in source_files:
+                try:
+                    with open(fpath, 'r') as f:
+                        data = json.load(f)
+
+                    inheritable_rules_def = data.get("inheritable_rules", [])
+                    if not inheritable_rules_def:
+                        continue
+
+                    all_rules = {rule['rule_id']: rule for rule in data.get('rules', [])}
+                    for inheritable in inheritable_rules_def:
+                        rule_id = inheritable.get("rule_id")
+                        if rule_id in all_rules:
+                            inheritance_map[module_path].append(all_rules[rule_id])
+
+                except (json.JSONDecodeError, KeyError) as e:
+                    print(f"Warning: Could not parse inheritable rules from {fpath}: {e}")
+                    continue
+
+    return inheritance_map
+
+def get_parent_module(module_path, all_module_paths, root_dir):
     """Finds the direct parent module of a given module."""
     parent_path = os.path.dirname(module_path)
-    while len(parent_path) >= len(ROOT_DIR) and parent_path != "/":
+    while len(parent_path) >= len(root_dir) and parent_path != "/":
         if parent_path in all_module_paths:
             return parent_path
         parent_path = os.path.dirname(parent_path)
     return None
 
-def main():
+def main(root_dir=None):
     """
     Main function to orchestrate the hierarchical compilation.
+    If root_dir is None, it defaults to the repository's root.
     """
+    if root_dir is None:
+        root_dir = ROOT_DIR
+
     print("--- Starting Hierarchical Build ---")
-    all_protocol_dirs = find_protocol_dirs(ROOT_DIR)
+    all_protocol_dirs = find_protocol_dirs(root_dir)
     module_paths = [os.path.dirname(p) for p in all_protocol_dirs]
+
+    # First pass: build the inheritance map from top to bottom
+    inheritance_map = build_inheritance_map(all_protocol_dirs, module_paths, root_dir)
 
     compiled_artifacts = {}
 
+    # Second pass: build the artifacts from bottom to top
     for proto_dir in all_protocol_dirs:
         current_module_path = os.path.dirname(proto_dir)
         print(f"\n--- Processing Module: {current_module_path} ---")
 
         # Inject summaries from children that have already been compiled
         for child_module_path, artifacts in compiled_artifacts.items():
-            parent_module = get_parent_module(child_module_path, module_paths)
+            parent_module = get_parent_module(child_module_path, module_paths, root_dir)
             if parent_module == current_module_path:
                 print(f"Found compiled child: {child_module_path}. Generating summary.")
                 summary_content = generate_summary(artifacts['agents_md'])
@@ -155,8 +217,9 @@ def main():
                         f.write(summary_content)
                     print(f"Injected summary for '{child_module_path}' into {summary_filepath}")
 
-        # Compile the current module's AGENTS.md
-        target_agents_md = run_compiler(proto_dir)
+        # Compile the current module's AGENTS.md, passing in any inherited rules
+        inherited_rules = inheritance_map.get(current_module_path, [])
+        target_agents_md = run_compiler(proto_dir, inherited_rules)
         if target_agents_md:
             # Generate the corresponding README.md
             target_readme = run_readme_generator(target_agents_md)
