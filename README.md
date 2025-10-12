@@ -11,6 +11,44 @@ corresponding `AGENTS.md` file and the source code docstrings.
 This module is governed by a series of machine-readable protocols defined in `AGENTS.md`. These protocols are the source of truth for the agent's behavior within this scope. The key protocols are:
 
 - **`agent-bootstrap-001`**: A foundational protocol that dictates the agent's initial actions upon starting any task.
+
+### Child Module: `compliance`
+
+This module includes protocols from its child module `compliance`, as summarized below:
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
+
+- `best-practices-001`
+- `meta-protocol-001`
+- `non-compliance-protocol-001`
+- `pre-commit-protocol-001`
+- `protocol-reset-all-pre-check-001`
+- `reset-all-authorization-001`
+- `reset-all-prohibition-001`
+
+### Child Module: `core`
+
+This module includes protocols from its child module `core`, as summarized below:
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
+
+- `cfdc-protocol-001`
+- `core-directive-001`
+- `decidability-constraints-001`
+- `deep-research-cycle-001`
+- `fdc-protocol-001`
+- `orientation-cascade-001`
+- `plan-registry-001`
+- `research-fdc-001`
+- `research-protocol-001`
+- `self-correction-protocol-001`
+- `standing-orders-001`
+
+### Child Module: `critic`
+
+This module includes protocols from its child module `critic`, as summarized below:
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
+
+- `critic-meta-protocol-001`
+- `critic-reset-prohibition-001`
 - **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
 - **`core-directive-001`**: The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC).
 - **`decidability-constraints-001`**: Ensures all development processes are formally decidable and computationally tractable.

@@ -5,6 +5,9 @@
     proto:hasRule <file:///app/protocols/bootstrap-load-agents-md> ;
     schema:description "A foundational protocol that dictates the agent's initial actions upon starting any task." .
 
+<file:///app/protocols/bootstrap-load-agents-md> proto:enforcement "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase." ;
+    schema:description "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins." .
+
 <file:///app/protocols/aorp-header> proto:hasRule <file:///app/protocols/aorp-identity>,
         <file:///app/protocols/aorp-versioning> ;
     schema:description "Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP)." .

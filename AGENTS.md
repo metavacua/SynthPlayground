@@ -1265,6 +1265,17 @@ and self-improvement activities.
 
 ---
 
+## Child Module: `compliance`
+
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
+
+- `best-practices-001`
+- `meta-protocol-001`
+- `non-compliance-protocol-001`
+- `pre-commit-protocol-001`
+- `protocol-reset-all-pre-check-001`
+- `reset-all-authorization-001`
+- `reset-all-prohibition-001`
 # Protocol: Dependency Management
 
 This protocol establishes a formal process for managing Python dependencies to ensure a reliable and repeatable execution environment.
@@ -1562,76 +1573,41 @@ The critic must be aware of and strictly adhere to all specific prohibition prot
 
 ---
 
-# Protocol: Critic `reset_all` Prohibition
-
-This protocol establishes a critical safeguard to protect the integrity of the development workflow.
-
-## Rule: `critic-no-reset`
-
-The agent assigned the role of 'Code Review Critic' is explicitly and strictly forbidden from using the `reset_all` tool.
-
-**Rationale:** The `reset_all` tool is a destructive action that reverts all changes in the workspace. Its use by a review agent could lead to the accidental deletion of work-in-progress, creating a significant disruption. This protocol ensures that the critic's function is limited to analysis and feedback, preventing it from taking destructive actions.
-
-This prohibition is non-negotiable and must be adhered to by any agent assuming the 'Code Review Critic' role.
-
-**Enforcement Mechanism:** The Code Review Critic is not implemented in this repository. Its behavior is governed by the compiled `AGENTS.md` file, which is consumed by an external orchestration system. The inclusion of this protocol in `AGENTS.md` constitutes the complete implementation of this safeguard from the perspective of this codebase.
 
 ---
 
-# Protocol: Deep Research Cycle
+## Child Module: `core`
 
-This protocol defines a standardized, multi-step plan for conducting in-depth research on a complex topic. It is designed to be a reusable, callable plan that ensures a systematic and thorough investigation.
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
 
-The cycle consists of four main phases:
-1.  **Initial Scoping & Keyword Generation:** The agent uses its initial understanding of the topic to generate a set of search keywords.
-2.  **Broad Information Gathering:** The agent uses the keywords to perform broad web searches and collect a list of relevant URLs.
-3.  **Targeted Information Extraction:** The agent visits the most promising URLs to extract detailed information.
-4.  **Synthesis & Summary:** The agent synthesizes the gathered information into a coherent summary, which is saved to a research report file.
-
-This structured approach ensures that research is not ad-hoc but is instead a repeatable and verifiable process.
+- `cfdc-protocol-001`
+- `core-directive-001`
+- `decidability-constraints-001`
+- `deep-research-cycle-001`
+- `fdc-protocol-001`
+- `orientation-cascade-001`
+- `plan-registry-001`
+- `research-fdc-001`
+- `research-protocol-001`
+- `self-correction-protocol-001`
+- `standing-orders-001`
 
 ---
 
+
+---
+
+## Child Module: `critic`
 # Protocol: The Formal Research Cycle (L4)
 
 This protocol establishes the L4 Deep Research Cycle, a specialized, self-contained Finite Development Cycle (FDC) designed for comprehensive knowledge acquisition. It elevates research from a simple tool-based action to a formal, verifiable process.
 
-## The Problem: Ad-Hoc Research
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
 
-Previously, research was an unstructured activity. The agent could use tools like `google_search` or `read_file`, but there was no formal process for planning, executing, and synthesizing complex research tasks. This made it difficult to tackle "unknown unknowns" in a reliable and auditable way.
-
-## The Solution: A Dedicated Research FDC
-
-The L4 Research Cycle solves this by introducing a new, specialized Finite State Machine (FSM) tailored specifically for research. When the main orchestrator (`master_control.py`) determines that a task requires deep knowledge, it initiates this cycle.
-
-### Key Features:
-
-1.  **Specialized FSM (`tooling/research_fsm.json`):** Unlike the generic development FSM, the research FSM has states that reflect a true research workflow: `GATHERING`, `SYNTHESIZING`, and `REPORTING`. This provides a more accurate model for the task.
-2.  **Executable Plans:** The `tooling/research_planner.py` is upgraded to generate formal, executable plans that are validated against the new research FSM. These are no longer just templates but are verifiable artifacts that guide the agent through the research process.
-3.  **Formal Invocation:** The L4 cycle is a first-class citizen in the agent's architecture. The main orchestrator can formally invoke it, execute the research plan, and then integrate the resulting knowledge back into its main task.
-
-This new protocol provides a robust, reliable, and formally verifiable mechanism for the agent to explore complex topics, making it significantly more autonomous and capable.
+- `critic-meta-protocol-001`
+- `critic-reset-prohibition-001`
 
 ---
-
-```json
-{
-  "protocol_id": "aorp-header",
-  "description": "Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP).",
-  "rules": [
-    {
-      "rule_id": "aorp-identity",
-      "description": "The governing protocol set is identified as the Advanced Orientation and Research Protocol (AORP).",
-      "enforcement": "Protocol is identified by its name in documentation and compiled artifacts."
-    },
-    {
-      "rule_id": "aorp-versioning",
-      "description": "The official protocol version is tracked in the VERSION file in the repository root, following Semantic Versioning (SemVer).",
-      "enforcement": "Build or validation scripts should verify the presence and format of the VERSION file."
-    }
-  ]
-}
-```
 
 
 ---
