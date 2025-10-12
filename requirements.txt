@@ -7,3 +7,5 @@ rdflib
 flake8
 pytest
 Markdown
+rdflib
+requests
