@@ -44,6 +44,11 @@
       "id": "Markdown",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "markdown",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
@@ -90,6 +95,10 @@
     {
       "source": "root-python-project",
       "target": "requests"
+    },
+    {
+      "source": "root-python-project",
+      "target": "markdown"
     }
   ]
 }

@@ -186,6 +186,22 @@
     },
     {
       "_type": "tag",
+      "name": "parse_makefile_command",
+      "path": "./tooling/standard_agents_compiler.py",
+      "language": "Python",
+      "line": 74,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/standard_agents_compiler.py",
+      "language": "Python",
+      "line": 106,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "TestKnowledgeIntegrator",
       "path": "./tooling/test_knowledge_integrator.py",
       "language": "Python",
