@@ -11,6 +11,7 @@ corresponding `AGENTS.md` file and the source code docstrings.
 This module is governed by a series of machine-readable protocols defined in `AGENTS.md`. These protocols are the source of truth for the agent's behavior within this scope. The key protocols are:
 
 - **`agent-bootstrap-001`**: A foundational protocol that dictates the agent's initial actions upon starting any task.
+- **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
 - **`core-directive-001`**: The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC).
 - **`decidability-constraints-001`**: Ensures all development processes are formally decidable and computationally tractable.
 - **`orientation-cascade-001`**: Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state.
@@ -23,21 +24,12 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`self-correction-protocol-001`**: Defines the automated, closed-loop workflow for protocol self-correction.
 - **`non-compliance-protocol-001`**: A protocol that defines non-compliance with AGENTS.md and specifies corrective actions.
 - **`pre-commit-protocol-001`**: Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission.
-- **`reset-all-authorization-001`**: Requires explicit user authorization via a token file for the use of the destructive `reset_all` tool.
 - **`research-protocol-001`**: A protocol for conducting systematic research using the integrated research toolchain.
 - **`reset-all-prohibition-001`**: A high-priority protocol that unconditionally forbids the use of the `reset_all` tool.
 - **`critic-meta-protocol-001`**: A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent.
 - **`critic-reset-prohibition-001`**: A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool.
 - **`deep-research-cycle-001`**: A standardized, callable plan for conducting in-depth research on a complex topic.
-- **`protocol-reset-all-pre-check-001`**: A protocol that mandates a pre-execution check for the `reset_all` tool to prevent unauthorized use.
 - **`research-fdc-001`**: Defines the formal Finite Development Cycle (FDC) for conducting deep research.
-
-### Child Module: `parent`
-
-This module includes protocols from its child module `parent`, as summarized below:
-This module contains the following protocols, which are defined in its own `AGENTS.md` file:
-
-- `parent-protocol-001`
 
 ## Key Components
 

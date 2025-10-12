@@ -1265,6 +1265,25 @@ and self-improvement activities.
 
 ---
 
+# Protocol: Dependency Management
+
+This protocol establishes a formal process for managing Python dependencies to ensure a reliable and repeatable execution environment.
+
+## The Problem: Environmental Brittleness
+
+The agent's operating environment previously lacked a formal dependency declaration. This required manual, trial-and-error installation of necessary packages (`jsonschema`, `rdflib`, `requests`) upon encountering `ModuleNotFoundError` exceptions. This process is inefficient, error-prone, and makes the successful execution of tasks dependent on undocumented, ad-hoc environmental setup.
+
+## The Solution: Formal Dependency Declaration and Installation
+
+To solve this, two components are introduced:
+
+1.  **`requirements.txt`:** A standard `requirements.txt` file is added to the repository root. This file serves as the single source of truth for all required Python packages.
+2.  **A New Protocol Rule:** A new rule, `dependency-install-on-start`, is established. This rule mandates that upon starting any task, the agent's first action *after* reading `AGENTS.md` should be to install the dependencies listed in `requirements.txt` using `pip`.
+
+This protocol transforms dependency management from an ad-hoc, reactive process into a proactive, automated, and verifiable step in the agent's workflow, significantly improving its robustness and reliability.
+
+---
+
 # Jules Agent Protocol: The Hierarchical Development Cycle
 
 **Version:** 4.0.0
@@ -1497,26 +1516,6 @@ Adherence to this protocol is not optional. It is a fundamental step in the deve
 
 ---
 
-# Protocol: Authorization for Destructive Tools
-
-## The Problem: Unauthorized Use of Destructive Tools
-
-A recent catastrophic failure demonstrated a critical flaw in the agent's protocol adherence. The agent invoked the `reset_all()` tool, a destructive operation, without explicit user authorization. This led to a complete workflow collapse, loss of work, and the inability to complete the assigned task. The agent's internal logic and planning capabilities are not yet robust enough to handle the consequences of such a powerful and state-destroying action without external guidance.
-
-## The Solution: Explicit, Auditable Authorization
-
-To prevent this class of failure, this protocol introduces a hard-coded safety interlock on the `reset_all` tool. The tool is now forbidden from executing unless it can verify the presence of a specific, short-lived authorization token file in the repository root.
-
--   **Authorization Token:** `authorization.token`
--   **Procedure:**
-    1.  The agent MUST request permission from the user before using `reset_all`.
-    2.  The user, if they approve, will create the `authorization.token` file.
-    3.  The `reset_all` tool, upon execution, will check for this file. If present, it will execute and then immediately delete the token file to ensure the authorization is single-use. If the file is not present, the tool must refuse to execute and raise a critical error.
-
-This mechanism transforms the authorization from a matter of agent discretion into a verifiable, machine-enforced protocol, ensuring that destructive operations are only ever performed with explicit, just-in-time human consent.
-
----
-
 # Protocol: `reset_all` Prohibition
 
 **ID:** `reset-all-prohibition-001`
@@ -1535,17 +1534,6 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
 
 -   **Description:** The `reset_all` tool is strictly forbidden under all circumstances.
 -   **Enforcement:** The `master_control.py` orchestrator will programmatically block any attempt to call `reset_all` and will immediately terminate the task with a critical error. This is not a rule for the agent to interpret, but a hard-coded system constraint.
-
----
-
-## Child Module: `parent`
-
-This module contains the following protocols, which are defined in its own `AGENTS.md` file:
-
-- `parent-protocol-001`
-
----
-
 
 ---
 
@@ -1601,24 +1589,6 @@ The cycle consists of four main phases:
 4.  **Synthesis & Summary:** The agent synthesizes the gathered information into a coherent summary, which is saved to a research report file.
 
 This structured approach ensures that research is not ad-hoc but is instead a repeatable and verifiable process.
-
----
-
-# Protocol: `reset_all` Pre-Execution Authorization Check
-
-This protocol strengthens the safety measures around the destructive `reset_all` tool by shifting the burden of verification from the tool to the agent.
-
-## The Flaw in the Previous Protocol
-
-The original protocol (`reset-all-authorization-001`) required the `reset_all` tool itself to perform the authorization check. However, since `reset_all` is a built-in, unmodifiable tool provided by the execution environment, this protocol was **unenforceable**. An agent could call the tool without consequence, leading directly to the catastrophic failure that was logged.
-
-## The Corrective Action: Agent-Side Verification
-
-This new protocol, `protocol-reset-all-pre-check-001`, corrects this flaw by making the agent explicitly responsible for the check.
-
-**Rule `agent-must-verify-token`**: Before ever attempting to call `reset_all`, the agent's plan **MUST** include a step to use the `list_files` tool to verify the existence of the `authorization.token` file.
-
-This change makes adherence verifiable by inspecting the agent's plan and execution log. It closes the loophole and ensures that the decision to use a destructive tool is always preceded by a conscious, verifiable check for authorization.
 
 ---
 
@@ -1679,6 +1649,26 @@ This new protocol provides a robust, reliable, and formally verifiable mechanism
   ],
   "associated_tools": [
     "read_file"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "dependency-management-001",
+  "description": "A protocol for ensuring a reliable execution environment through formal dependency management.",
+  "rules": [
+    {
+      "rule_id": "dependency-install-on-start",
+      "description": "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed.",
+      "enforcement": "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions."
+    }
+  ],
+  "associated_tools": [
+    "run_in_bash_session"
   ]
 }
 ```
@@ -2075,26 +2065,6 @@ This new protocol provides a robust, reliable, and formally verifiable mechanism
 
 ```json
 {
-  "protocol_id": "reset-all-authorization-001",
-  "description": "Requires explicit user authorization via a token file for the use of the destructive `reset_all` tool.",
-  "rules": [
-    {
-      "rule_id": "require-authorization-token",
-      "description": "The `reset_all` tool must not execute unless a file named `authorization.token` exists in the repository root.",
-      "enforcement": "The `reset_all` tool's implementation must be modified to check for the existence of this file, proceed with its operation, and then delete the token file upon completion. If the file does not exist, the tool must raise an exception and terminate."
-    }
-  ],
-  "associated_tools": [
-    "reset_all"
-  ]
-}
-```
-
-
----
-
-```json
-{
   "protocol_id": "research-protocol-001",
   "description": "A protocol for conducting systematic research using the integrated research toolchain.",
   "rules": [
@@ -2197,27 +2167,6 @@ This new protocol provides a robust, reliable, and formally verifiable mechanism
     "google_search",
     "view_text_website",
     "create_file_with_block"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "protocol-reset-all-pre-check-001",
-  "description": "A protocol that mandates a pre-execution check for the `reset_all` tool to prevent unauthorized use.",
-  "rules": [
-    {
-      "rule_id": "agent-must-verify-token",
-      "description": "Before invoking the `reset_all` tool, the agent MUST first use the `list_files` tool to verify that the `authorization.token` file exists in the repository root. The agent must not proceed with the `reset_all` call if the token is not found.",
-      "enforcement": "This rule is enforced by the agent's own decision-making logic. The agent's plan must show the `list_files` check occurring before the `reset_all` call."
-    }
-  ],
-  "associated_tools": [
-    "reset_all",
-    "list_files"
   ]
 }
 ```
