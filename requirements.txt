@@ -9,3 +9,4 @@ pytest
 Markdown
 rdflib
 requests
+markdown
