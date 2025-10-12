@@ -317,7 +317,7 @@
       "name": "TestReadmeGenerator",
       "path": "./tooling/test_readme_generator.py",
       "language": "Python",
-      "line": 9,
+      "line": 10,
       "kind": "class"
     },
     {
@@ -325,7 +325,7 @@
       "name": "setUp",
       "path": "./tooling/test_readme_generator.py",
       "language": "Python",
-      "line": 14,
+      "line": 15,
       "kind": "function"
     },
     {
@@ -333,15 +333,7 @@
       "name": "tearDown",
       "path": "./tooling/test_readme_generator.py",
       "language": "Python",
-      "line": 33,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "test_generate_key_components_section",
-      "path": "./tooling/test_readme_generator.py",
-      "language": "Python",
-      "line": 39,
+      "line": 56,
       "kind": "function"
     },
     {
@@ -518,6 +510,62 @@
       "path": "./tooling/knowledge_compiler.py",
       "language": "Python",
       "line": 174,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "find_protocol_dirs",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "run_compiler",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "run_readme_generator",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 58,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "generate_summary",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 80,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "cleanup_summaries",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 113,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "get_parent_module",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 122,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 131,
       "kind": "function"
     },
     {
@@ -1101,7 +1149,7 @@
       "name": "main",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 206,
+      "line": 207,
       "kind": "function"
     },
     {
@@ -1293,7 +1341,7 @@
       "name": "get_module_docstring",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 79,
+      "line": 33,
       "kind": "function"
     },
     {
@@ -1301,7 +1349,7 @@
       "name": "generate_core_protocols_section",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 100,
+      "line": 47,
       "kind": "function"
     },
     {
@@ -1309,7 +1357,7 @@
       "name": "generate_key_components_section",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 138,
+      "line": 85,
       "kind": "function"
     },
     {
@@ -1317,7 +1365,7 @@
       "name": "main",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 161,
+      "line": 111,
       "kind": "function"
     },
     {
