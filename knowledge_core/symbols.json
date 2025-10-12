@@ -11,31 +11,15 @@
     {
       "_type": "tag",
       "name": "plan_deep_research",
-      "path": "./archive/agentic-research-experiments/agentic-research-experiments_tooling_research_planner.py",
+      "path": "./archive/agentic-research-experiments/agentic-research-experiments-tooling-research-planner.py",
       "language": "Python",
       "line": 8,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "plan_deep_research",
-      "path": "./archive/feat/feat_protocol-build-system_tooling_research_planner.py",
-      "language": "Python",
-      "line": 8,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "build_protocol",
-      "path": "./archive/feat/feat_protocol-build-system_tooling_build_protocol.py",
-      "language": "Python",
-      "line": 3,
       "kind": "function"
     },
     {
       "_type": "tag",
       "name": "TestBuildProtocol",
-      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
       "line": 6,
       "kind": "class"
@@ -43,7 +27,7 @@
     {
       "_type": "tag",
       "name": "setUp",
-      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
       "line": 8,
       "kind": "function"
@@ -51,7 +35,7 @@
     {
       "_type": "tag",
       "name": "tearDown",
-      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
       "line": 14,
       "kind": "function"
@@ -59,7 +43,7 @@
     {
       "_type": "tag",
       "name": "test_build_protocol_concatenates_in_order",
-      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
       "line": 21,
       "kind": "function"
@@ -67,7 +51,7 @@
     {
       "_type": "tag",
       "name": "test_no_markdown_files",
-      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
       "line": 41,
       "kind": "function"
@@ -75,23 +59,23 @@
     {
       "_type": "tag",
       "name": "plan_deep_research",
-      "path": "./archive/add-protocol-validation/add-protocol-validation_tooling_research_planner.py",
+      "path": "./archive/feat/feat-protocol-build-system-tooling-research-planner.py",
       "language": "Python",
-      "line": 9,
+      "line": 8,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "build_protocol",
+      "path": "./archive/feat/feat-protocol-build-system-tooling-build-protocol.py",
+      "language": "Python",
+      "line": 3,
       "kind": "function"
     },
     {
       "_type": "tag",
       "name": "main",
-      "path": "./archive/add-protocol-validation/add-protocol-validation_tooling_protocol_validator.py",
-      "language": "Python",
-      "line": 5,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./archive/main/main_tooling_protocol_validator.py",
+      "path": "./archive/add-protocol-validation/add-protocol-validation-tooling-protocol-validator.py",
       "language": "Python",
       "line": 5,
       "kind": "function"
@@ -99,7 +83,7 @@
     {
       "_type": "tag",
       "name": "plan_deep_research",
-      "path": "./archive/main/main_tooling_research_planner.py",
+      "path": "./archive/add-protocol-validation/add-protocol-validation-tooling-research-planner.py",
       "language": "Python",
       "line": 9,
       "kind": "function"
@@ -107,7 +91,23 @@
     {
       "_type": "tag",
       "name": "plan_deep_research",
-      "path": "./archive/fix/fix_correct-agent-md-references_tooling_research_planner.py",
+      "path": "./archive/main/main-tooling-research-planner.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./archive/main/main-tooling-protocol-validator.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "plan_deep_research",
+      "path": "./archive/fix/fix-correct-agent-md-references-tooling-research-planner.py",
       "language": "Python",
       "line": 8,
       "kind": "function"
