@@ -67,6 +67,15 @@ SECURITY.md: $(SECURITY_PROTOCOLS_JSON) $(SECURITY_PROTOCOLS_MD) $(SCHEMA_FILE) 
 # A phony target to easily trigger the security protocol compilation.
 compile-security-protocols: SECURITY.md
 
+# --- AGENTS.standard.md ---
+STANDARD_COMPILER_SCRIPT = tooling/standard_agents_compiler.py
+AGENTS.standard.md: $(STANDARD_COMPILER_SCRIPT) Makefile
+	@echo "--> Compiling standard-compliant AGENTS.md..."
+	@python3 $(STANDARD_COMPILER_SCRIPT)
+
+# A phony target to easily trigger the standard-compliant AGENTS.md compilation.
+agents-standard: AGENTS.standard.md
+
 
 # ==============================================================================
 # Knowledge Graph Enrichment
@@ -90,9 +99,9 @@ knowledge_core/SYSTEM_DOCUMENTATION.md: tooling/doc_generator.py $(PYTHON_DOC_SO
 # A phony target to easily trigger documentation generation.
 docs: knowledge_core/SYSTEM_DOCUMENTATION.md
 
-readme:
+readme: AGENTS.md tooling/readme_generator.py
 	@echo "--> Generating README.md from source..."
-	@python3 tooling/readme_generator.py
+	@python3 tooling/readme_generator.py --source-file AGENTS.md --output-file README.md
 
 # ==============================================================================
 # Auditing

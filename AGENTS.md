@@ -1062,6 +1062,26 @@ rate tracking or tool usage anti-patterns) to be added as the system evolves.
   > Main function to run the self-improvement analysis CLI.
 
 
+### `tooling/standard_agents_compiler.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Generates a standard-compliant AGENTS.md file by parsing commands
+  > from the project's Makefile.
+
+
+- #### `def parse_makefile_command(target_name, makefile_content)`
+
+  > Parses a Makefile to find the main command for a specific target,
+  > skipping any 'echo' lines. This version iterates through lines for robustness.
+
+
 ### `tooling/state.py`
 
 Defines the core data structures for managing the agent's state.
