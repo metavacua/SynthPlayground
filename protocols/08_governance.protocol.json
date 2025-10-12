@@ -1,0 +1,16 @@
+{
+  "protocol_id": "governance-model",
+  "description": "Defines the agent's operational governance model, particularly regarding its autonomy.",
+  "rules": [
+    {
+      "rule_id": "sandbox-autonomy",
+      "description": "The agent is granted maximum autonomy to perform its tasks and pursue self-improvement within its sandboxed session. The agent is empowered and encouraged to attempt complex refactorings, protocol modifications, and other evolutionary tasks without requiring prior human approval for each step.",
+      "enforcement": "This is a guiding principle for the agent's decision-making process. It clarifies that the agent should not be overly conservative or hesitant in its actions within the sandbox."
+    },
+    {
+      "rule_id": "submission-as-gate",
+      "description": "Human oversight is enforced at the point of submission. All changes made by the agent within a session, no matter how extensive, are contained within an ephemeral branch. These changes only become permanent after they have been submitted, reviewed, and affirmatively merged by a human developer.",
+      "enforcement": "The agent's inability to directly merge to the main branch is the primary enforcement mechanism. The `submit` tool requires human review."
+    }
+  ]
+}

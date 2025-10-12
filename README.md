@@ -12,6 +12,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`aorp-header`**: Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP).
 - **`agent-bootstrap-001`**: A foundational protocol that dictates the agent's initial actions upon starting any task.
+- **`core-schema-definition`**: Defines the foundational, machine-readable constitution for the AI agent, including its identity, mandate, and operational boundaries.
 - **`core-directive-001`**: The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC).
 - **`decidability-constraints-001`**: Ensures all development processes are formally decidable and computationally tractable.
 - **`orientation-cascade-001`**: Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state.
@@ -19,6 +20,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`standing-orders-001`**: A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks.
 - **`best-practices-001`**: A set of best practices derived from observing successful, data-driven workflow patterns.
 - **`meta-protocol-001`**: A meta-protocol governing the agent's awareness and maintenance of its own core protocol files.
+- **`governance-model`**: Defines the agent's operational governance model, particularly regarding its autonomy.
 - **`cfdc-protocol-001`**: Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model.
 - **`self-correction-protocol-001`**: Defines the automated, closed-loop workflow for protocol self-correction.
 - **`non-compliance-protocol-001`**: A protocol that defines non-compliance with AGENTS.md and specifies corrective actions.
@@ -26,18 +28,12 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`reset-all-authorization-001`**: Requires explicit user authorization via a token file for the use of the destructive `reset_all` tool.
 - **`research-protocol-001`**: A protocol for conducting systematic research using the integrated research toolchain.
 - **`reset-all-prohibition-001`**: A high-priority protocol that unconditionally forbids the use of the `reset_all` tool.
+- **`system-roadmap`**: Defines the formal roadmap for system development, outlining known gaps and future goals.
 - **`critic-meta-protocol-001`**: A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent.
 - **`critic-reset-prohibition-001`**: A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool.
 - **`deep-research-cycle-001`**: A standardized, callable plan for conducting in-depth research on a complex topic.
 - **`protocol-reset-all-pre-check-001`**: A protocol that mandates a pre-execution check for the `reset_all` tool to prevent unauthorized use.
 - **`research-fdc-001`**: Defines the formal Finite Development Cycle (FDC) for conducting deep research.
-
-### Child Module: `hierarchical_test`
-
-This module includes protocols from its child module `hierarchical_test`, as summarized below:
-This module contains the following protocols, which are defined in its own `AGENTS.md` file:
-
-- `test-protocol-001`
 
 ## Key Components
 

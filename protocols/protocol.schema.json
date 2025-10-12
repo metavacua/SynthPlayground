@@ -13,6 +13,40 @@
       "description": "A human-readable summary of the protocol's purpose.",
       "type": "string"
     },
+    "schema_version": {
+      "description": "The version of the AGENTS.md schema this protocol adheres to.",
+      "type": "string"
+    },
+    "agent_id": {
+      "description": "The designated name of the agent this file is primarily for.",
+      "type": "string"
+    },
+    "core_mandate": {
+      "description": "The high-level objective and purpose of the agent within this repository.",
+      "type": "string"
+    },
+    "knowledge_artifacts": {
+      "description": "Pointers to key machine-readable files that provide the agent with deep contextual understanding.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "path": {"type": "string"},
+          "description": {"type": "string"}
+        },
+        "required": ["name", "path", "description"]
+      }
+    },
+    "permissions": {
+      "description": "Explicit lists of allowed and prohibited actions to establish clear operational guardrails.",
+      "type": "object",
+      "properties": {
+        "allowed_actions": {"type": "array", "items": {"type": "string"}},
+        "prohibited_actions": {"type": "array", "items": {"type": "string"}}
+      },
+      "required": ["allowed_actions", "prohibited_actions"]
+    },
     "rules": {
       "description": "An array of formal rules that constitute the protocol.",
       "type": "array",
@@ -44,5 +78,5 @@
       }
     }
   },
-  "required": ["protocol_id", "description", "rules"]
+  "required": ["protocol_id", "description"]
 }

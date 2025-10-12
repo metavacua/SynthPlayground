@@ -1,0 +1,21 @@
+{
+  "protocol_id": "system-roadmap",
+  "description": "Defines the formal roadmap for system development, outlining known gaps and future goals.",
+  "rules": [
+    {
+      "rule_id": "roadmap-testing",
+      "description": "The protocol compilation toolchain lacks a comprehensive suite of unit and integration tests. A key development goal is to create a robust test harness to ensure the reliability and correctness of the compilers and other tooling.",
+      "enforcement": "The agent should prioritize tasks that involve writing tests for the `tooling/` directory."
+    },
+    {
+      "rule_id": "roadmap-security",
+      "description": "The system is vulnerable to prompt injection and other LLM-specific attacks. A key development goal is to design and implement security measures, such as input sanitization, sandboxed execution, and automated security auditing of protocols.",
+      "enforcement": "The agent should prioritize the development of security-focused tools and protocols."
+    },
+    {
+      "rule_id": "roadmap-scalability",
+      "description": "The performance of the hierarchical compiler has not been benchmarked and may not scale to larger repositories. A key development goal is to analyze the performance of the toolchain and implement optimizations to ensure it remains efficient.",
+      "enforcement": "The agent should consider performance implications when modifying the compilation toolchain."
+    }
+  ]
+}

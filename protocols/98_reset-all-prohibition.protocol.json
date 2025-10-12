@@ -1,6 +1,5 @@
 {
   "protocol_id": "reset-all-prohibition-001",
-  "protocol_name": "Prohibition of reset_all Tool",
   "description": "A high-priority protocol that unconditionally forbids the use of the `reset_all` tool.",
   "rules": [
     {

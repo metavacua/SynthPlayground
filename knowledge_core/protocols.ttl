@@ -29,6 +29,8 @@
     proto:hasRule <file:///app/protocols/mandatory-fdc-start> ;
     schema:description "The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC)." .
 
+<file:///app/protocols/core-schema-definition> schema:description "Defines the foundational, machine-readable constitution for the AI agent, including its identity, mandate, and operational boundaries." .
+
 <file:///app/protocols/critic-meta-protocol-001> proto:hasRule <file:///app/protocols/built-in-tools-are-valid>,
         <file:///app/protocols/functional-change-definition>,
         <file:///app/protocols/protocol-as-source-code> ;
@@ -63,6 +65,10 @@
         <file:///app/protocols/phase3-execution>,
         <file:///app/protocols/phase4-post-mortem> ;
     schema:description "Defines the Finite Development Cycle (FDC), a formally defined process for executing a single, coherent task." .
+
+<file:///app/protocols/governance-model> proto:hasRule <file:///app/protocols/sandbox-autonomy>,
+        <file:///app/protocols/submission-as-gate> ;
+    schema:description "Defines the agent's operational governance model, particularly regarding its autonomy." .
 
 <file:///app/protocols/meta-protocol-001> proto:associatedTool <file:///app/protocols/run_in_bash_session> ;
     proto:hasRule <file:///app/protocols/agents-md-self-awareness> ;
@@ -142,6 +148,11 @@
         <file:///app/protocols/fdc-toolchain-mandate>,
         <file:///app/protocols/rag-mandate> ;
     schema:description "A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks." .
+
+<file:///app/protocols/system-roadmap> proto:hasRule <file:///app/protocols/roadmap-scalability>,
+        <file:///app/protocols/roadmap-security>,
+        <file:///app/protocols/roadmap-testing> ;
+    schema:description "Defines the formal roadmap for system development, outlining known gaps and future goals." .
 
 <file:///app/protocols/agent-must-verify-token> proto:enforcement "This rule is enforced by the agent's own decision-making logic. The agent's plan must show the `list_files` check occurring before the `reset_all` call." ;
     schema:description "Before invoking the `reset_all` tool, the agent MUST first use the `list_files` tool to verify that the `authorization.token` file exists in the repository root. The agent must not proceed with the `reset_all` call if the token is not found." .
@@ -285,6 +296,18 @@
 <file:///app/protocols/require-authorization-token> proto:enforcement "The `reset_all` tool's implementation must be modified to check for the existence of this file, proceed with its operation, and then delete the token file upon completion. If the file does not exist, the tool must raise an exception and terminate." ;
     schema:description "The `reset_all` tool must not execute unless a file named `authorization.token` exists in the repository root." .
 
+<file:///app/protocols/roadmap-scalability> proto:enforcement "The agent should consider performance implications when modifying the compilation toolchain." ;
+    schema:description "The performance of the hierarchical compiler has not been benchmarked and may not scale to larger repositories. A key development goal is to analyze the performance of the toolchain and implement optimizations to ensure it remains efficient." .
+
+<file:///app/protocols/roadmap-security> proto:enforcement "The agent should prioritize the development of security-focused tools and protocols." ;
+    schema:description "The system is vulnerable to prompt injection and other LLM-specific attacks. A key development goal is to design and implement security measures, such as input sanitization, sandboxed execution, and automated security auditing of protocols." .
+
+<file:///app/protocols/roadmap-testing> proto:enforcement "The agent should prioritize tasks that involve writing tests for the `tooling/` directory." ;
+    schema:description "The protocol compilation toolchain lacks a comprehensive suite of unit and integration tests. A key development goal is to create a robust test harness to ensure the reliability and correctness of the compilers and other tooling." .
+
+<file:///app/protocols/sandbox-autonomy> proto:enforcement "This is a guiding principle for the agent's decision-making process. It clarifies that the agent should not be overly conservative or hesitant in its actions within the sandbox." ;
+    schema:description "The agent is granted maximum autonomy to perform its tasks and pursue self-improvement within its sandboxed session. The agent is empowered and encouraged to attempt complex refactorings, protocol modifications, and other evolutionary tasks without requiring prior human approval for each step." .
+
 <file:///app/protocols/specialized-fsm> proto:enforcement "The `master_control.py` orchestrator must load and execute plans against this specific FSM when initiating an L4 Deep Research Cycle." ;
     schema:description "The Research FDC must be governed by its own dedicated Finite State Machine, defined in `tooling/research_fsm.json`. This FSM is tailored for a research workflow, with states for gathering, synthesis, and reporting." .
 
@@ -293,6 +316,9 @@
 
 <file:///app/protocols/structured-research-phases> proto:enforcement "The plan's structure itself enforces this rule. The `lint` command can be extended to validate the structure of registered research plans." ;
     schema:description "The deep research plan MUST follow a structured four-phase process: Scoping, Broad Gathering, Targeted Extraction, and Synthesis." .
+
+<file:///app/protocols/submission-as-gate> proto:enforcement "The agent's inability to directly merge to the main branch is the primary enforcement mechanism. The `submit` tool requires human review." ;
+    schema:description "Human oversight is enforced at the point of submission. All changes made by the agent within a session, no matter how extensive, are contained within an ephemeral branch. These changes only become permanent after they have been submitted, reviewed, and affirmatively merged by a human developer." .
 
 <file:///app/protocols/verify-after-write> proto:enforcement "This is a core operational discipline. Future tooling, such as a trace validator, could enforce this by analyzing the execution log against this protocol." ;
     schema:description "After every file creation or modification action (`create_file_with_block`, `overwrite_file_with_block`, `replace_with_git_merge_diff`), the agent MUST use a subsequent read-only tool (`read_file`, `list_files`, `grep`) to verify that the action was executed successfully and had the intended effect. A plan step should only be marked as complete after this verification." .
