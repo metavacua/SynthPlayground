@@ -733,16 +733,20 @@ accurate audit.
 **Public Functions:**
 
 
-- #### `def generate_markdown_report(source_check, unreferenced, unused, centrality)`
+- #### `def find_all_agents_md_files(root_dir)`
+
+  > Finds all AGENTS.md files in the repository.
+
+
+- #### `def generate_markdown_report(source_checks, unreferenced, unused, centrality)`
 
   > Generates a Markdown-formatted string from the audit results.
 
 
-- #### `def get_protocol_tools_from_agents_md(agents_md_path)`
+- #### `def get_protocol_tools_from_agents_md(agents_md_paths)`
 
-  > Parses AGENTS.md to get a set of all tools associated with protocols.
-  > NOTE: This function correctly parses all JSON blocks, contrary to the
-  > outdated warning in the module-level docstring.
+  > Parses a list of AGENTS.md files to get a set of all tools associated
+  > with protocols.
 
 
 - #### `def get_used_tools_from_log(log_path)`
@@ -768,10 +772,10 @@ accurate audit.
   > Compares used tools with protocol-defined tools and returns the gaps.
 
 
-- #### `def run_protocol_source_check()`
+- #### `def run_protocol_source_check(all_agents_files)`
 
-  > Checks if AGENTS.md is older than its source files.
-  > Returns a dictionary with the check's status and relevant details.
+  > Checks if each AGENTS.md file is older than its corresponding source files.
+  > Returns a list of warning/error dictionaries.
 
 
 ### `tooling/protocol_compiler.py`
@@ -1367,6 +1371,24 @@ This act of self-maintenance is a foundational element of robust, autonomous ope
 
 ---
 
+# Meta-Protocol: Toolchain Review on Schema Change
+
+This protocol establishes a critical feedback loop to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
+
+## The Problem: Protocol-Toolchain Desynchronization
+
+A significant process gap was identified where a major architectural change to the protocol system (e.g., the introduction of a hierarchical `AGENTS.md` structure) did not automatically trigger a review of the tools that depend on that structure. The `protocol_auditor.py` tool, for instance, became partially obsolete as it was unaware of the new hierarchical model, leading to incomplete audits. This demonstrates that the agent's tools can become desynchronized from its own governing rules, creating a critical blind spot.
+
+## The Solution: Mandated Toolchain Audit
+
+This protocol closes that gap by introducing a new rule that explicitly links changes in the protocol system's architecture to a mandatory review of the toolchain.
+
+**Rule `toolchain-audit-on-schema-change`**: If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory **must** be performed as a subsequent step.
+
+This ensures that any modification to the fundamental way protocols are defined or processed is immediately followed by a conscious verification that all dependent tools are still functioning correctly and are aware of the new structure. This transforms the previously manual and error-prone discovery process into a formal, required step of the development lifecycle.
+
+---
+
 # Protocol: The Context-Free Development Cycle (CFDC)
 
 This protocol marks a significant evolution from the Finite Development Cycle (FDC), introducing a hierarchical planning model that enables far greater complexity and modularity while preserving the system's core guarantee of decidability.
@@ -1884,6 +1906,28 @@ This new protocol provides a robust, reliable, and formally verifiable mechanism
   ],
   "associated_tools": [
     "run_in_bash_session"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "toolchain-review-on-schema-change-001",
+  "description": "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.",
+  "rules": [
+    {
+      "rule_id": "toolchain-audit-on-schema-change",
+      "description": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.",
+      "enforcement": "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files."
+    }
+  ],
+  "associated_tools": [
+    "tooling/protocol_auditor.py",
+    "tooling/protocol_compiler.py",
+    "tooling/hierarchical_compiler.py"
   ]
 }
 ```

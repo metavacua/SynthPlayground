@@ -19,6 +19,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`standing-orders-001`**: A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks.
 - **`best-practices-001`**: A set of best practices derived from observing successful, data-driven workflow patterns.
 - **`meta-protocol-001`**: A meta-protocol governing the agent's awareness and maintenance of its own core protocol files.
+- **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
 - **`cfdc-protocol-001`**: Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model.
 - **`plan-registry-001`**: Defines a central registry for discovering and executing hierarchical plans by a logical name.
 - **`self-correction-protocol-001`**: Defines the automated, closed-loop workflow for protocol self-correction.
