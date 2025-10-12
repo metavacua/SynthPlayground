@@ -64,7 +64,7 @@ def load_schema(schema_file):
         print(f"Error: Could not decode JSON from schema file at {schema_file}")
         return None
 
-def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file=None, autodoc_file=None):
+def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file=None, autodoc_file=None, inherited_rules=None):
     """
     Reads all .protocol.json and corresponding .protocol.md files from the
     source directory, validates them, and compiles them into a target markdown file.
@@ -87,20 +87,33 @@ def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file
     all_md_files = sorted(glob.glob(os.path.join(source_dir, "*.protocol.md")))
     all_json_files = sorted(glob.glob(os.path.join(source_dir, "*.protocol.json")))
 
-    if not all_md_files and not all_json_files and not autodoc_placeholders:
-        print(f"Warning: No protocol or documentation files found in {source_dir}.")
+    if not all_md_files and not all_json_files and not autodoc_placeholders and not inherited_rules:
+        print(f"Warning: No protocol, documentation, or inherited rules found in {source_dir}.")
         with open(target_file, "w") as f:
             f.write(DISCLAIMER_TEMPLATE.format(source_dir_name=os.path.basename(source_dir)))
         return
 
     print(f"Found {len(all_json_files)} protocol, {len(all_md_files)} markdown, and {len(autodoc_placeholders)} autodoc files.")
+    if inherited_rules:
+        print(f"Received {len(inherited_rules)} inherited rules.")
 
     # --- Content Assembly ---
     g = Graph()
     disclaimer = DISCLAIMER_TEMPLATE.format(source_dir_name=os.path.basename(source_dir))
     final_content = [disclaimer]
 
-    # 1. Process Autodoc Placeholders
+    # 1. Process Inherited Rules
+    if inherited_rules:
+        final_content.append("## Inherited Rules\n")
+        final_content.append("The following rules have been inherited from parent modules:\n")
+        for rule in inherited_rules:
+            json_string = json.dumps(rule, indent=2)
+            md_json_block = f"```json\n{json_string}\n```\n"
+            final_content.append(md_json_block)
+        final_content.append("\n---\n")
+
+
+    # 2. Process Autodoc Placeholders
     for file_path in autodoc_placeholders:
         print(f"  - Processing: {os.path.basename(file_path)}")
         if autodoc_file and os.path.exists(autodoc_file):
@@ -221,16 +234,33 @@ def main():
         default=DEFAULT_AUTODOC_FILE,
         help=f"Path to the system documentation file to be injected. Defaults to {DEFAULT_AUTODOC_FILE}"
     )
+    parser.add_argument(
+        "--inherited-rules",
+        type=str,
+        default=None,
+        help="A JSON string representing a list of rule objects to be inherited from parent modules."
+    )
 
 
     args = parser.parse_args()
+
+    inherited_rules_data = []
+    if args.inherited_rules:
+        try:
+            inherited_rules_data = json.loads(args.inherited_rules)
+        except json.JSONDecodeError:
+            print(f"Error: Could not decode JSON from inherited rules: {args.inherited_rules}")
+            # Decide on error handling: exit, or just proceed without inherited rules
+            inherited_rules_data = []
+
 
     compile_protocols(
         source_dir=args.source_dir,
         target_file=args.output_file,
         schema_file=args.schema_file,
         knowledge_graph_file=args.knowledge_graph_file,
-        autodoc_file=args.autodoc_file
+        autodoc_file=args.autodoc_file,
+        inherited_rules=inherited_rules_data
     )
 
 if __name__ == "__main__":
