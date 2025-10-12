@@ -40,9 +40,10 @@
   (run-prover formula))
 
 (defun meta-refute (formula)
-  "Refutes a formula by proving its dual. refute(F) <=> prove(dual(F))"
-  (let ((dual-formula (dual-transform formula)))
-    (run-prover dual-formula)))
+  "Refutes a formula using the RefuterV0 system.
+   This acts as a direct interface to the refuter, it does not transform the
+   formula."
+  (run-refuter formula))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Main Entry Point - Test Meta-System

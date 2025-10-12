@@ -64,15 +64,18 @@ The `run_refuter` function implements the non-recursive, fixed-chain dispatch.
 
 ---
 
-## Relationality and Duality
+## Relationality, Duality, and Extensibility
 
-The Prover and the Refuter are **dual** systems, but this duality is a deep, conceptual one, not a simple logical NOT.
+The Prover and the Refuter are **dual** systems. This duality is not a simple negation, but a more fundamental relationship between what can be concluded and what can be assumed. The core design philosophy is one of **maximal compatibility and extensibility**.
 
-- **Separate Worlds:** A formula's failure to be a theorem does not imply it is an antitheorem.
-- **The Meta-System:** The true relationship is captured at a meta-level. The `MetaV0.lisp` file defines a `dual-transform` operation. The fundamental theorem of this meta-system is **`refute(F) <=> prove(dual(F))`**. This shows that refutation is not negation, but rather proof in a transformed, dual space. This provides a powerful way to reason about the relationship between the two systems without conflating them. The key transformations are:
-  - `dual(con)` becomes `incon`
-  - `dual(incon)` becomes `con`
-  - `dual(dep A B)` becomes `ind (dual A) (dual B)`
-  - `dual(ind A B)` becomes `dep (dual A) (dual B)`
+- **Constructive Fragments:** Both the prover and the refuter are minimal, constructive fragments. Their purpose is not to enforce classical consistency or non-contradiction, but to provide a foundational layer that can be extended into a wide variety of more expressive logics.
 
-This separation of concerns—keeping the object-level provers and refuters distinct from the meta-level duality transformation—is the core architectural principle of this logical framework.
+- **Prover as Consequence System:** The prover identifies **provable consequences** based on its minimal rule set. If `run_prover(F)` succeeds, it means `F` is a theorem of this specific system. It makes no claims about whether `F` would be consistent in a classical sense; it only asserts that `F` can be constructed from the available axioms and rules.
+
+- **Refuter as Assumption System:** The refuter identifies **refutable assumptions**. If `run_refuter(F)` succeeds, it means that `F` is an antitheorem, and it would be inconsistent to assume `F` within this specific system.
+
+- **Admissibility and Independence:** Because the systems are so minimal, they are compatible with a wide range of extensions. Both classical consistency and paraconsistency (contradiction-tolerance) are **admissible**. A formula `F` that is neither provable nor refutable is independent of the system. This means one could extend the logic by adding `F` as a new theorem (a new conclusion) or as a new axiom (a new assumption) without breaking the core logic. This extensibility is a key feature of the design.
+
+- **The `dual-transform` Meta-Operation:** The `MetaV0.lisp` file defines a `dual-transform` function. This is a tool for exploring the dual space of formulas. However, it is a **meta-operation** and does not define the operational relationship between the prover and refuter. The equivalence `refute(F) <=> prove(dual(F))` does **not** hold in this system, as that would require stronger axioms (like non-contradiction or excluded middle) than are present. The two systems are and must remain distinct.
+
+This separation of concerns—keeping the object-level provers and refuters as minimal, extensible fragments—is the core architectural principle of this logical framework.
