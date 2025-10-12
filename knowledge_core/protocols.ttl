@@ -141,6 +141,12 @@
         <file:///app/protocols/rag-mandate> ;
     schema:description "A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks." .
 
+<file:///app/protocols/toolchain-review-on-schema-change-001> proto:associatedTool <file:///app/protocols/tooling/hierarchical_compiler.py>,
+        <file:///app/protocols/tooling/protocol_auditor.py>,
+        <file:///app/protocols/tooling/protocol_compiler.py> ;
+    proto:hasRule <file:///app/protocols/toolchain-audit-on-schema-change> ;
+    schema:description "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols." .
+
 <file:///app/protocols/agents-md-self-awareness> proto:enforcement "The agent should incorporate this check into its standard operating procedure, particularly at the beginning of a task or when unexpected behavior occurs." ;
     schema:description "The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols." .
 
@@ -288,6 +294,9 @@
 
 <file:///app/protocols/structured-research-phases> proto:enforcement "The plan's structure itself enforces this rule. The `lint` command can be extended to validate the structure of registered research plans." ;
     schema:description "The deep research plan MUST follow a structured four-phase process: Scoping, Broad Gathering, Targeted Extraction, and Synthesis." .
+
+<file:///app/protocols/toolchain-audit-on-schema-change> proto:enforcement "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files." ;
+    schema:description "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure." .
 
 <file:///app/protocols/verify-after-write> proto:enforcement "This is a core operational discipline. Future tooling, such as a trace validator, could enforce this by analyzing the execution log against this protocol." ;
     schema:description "After every file creation or modification action (`create_file_with_block`, `overwrite_file_with_block`, `replace_with_git_merge_diff`), the agent MUST use a subsequent read-only tool (`read_file`, `list_files`, `grep`) to verify that the action was executed successfully and had the intended effect. A plan step should only be marked as complete after this verification." .
