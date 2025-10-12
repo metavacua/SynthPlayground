@@ -1265,6 +1265,25 @@ and self-improvement activities.
 
 ---
 
+# Protocol: Dependency Management
+
+This protocol establishes a formal process for managing Python dependencies to ensure a reliable and repeatable execution environment.
+
+## The Problem: Environmental Brittleness
+
+The agent's operating environment previously lacked a formal dependency declaration. This required manual, trial-and-error installation of necessary packages (`jsonschema`, `rdflib`, `requests`) upon encountering `ModuleNotFoundError` exceptions. This process is inefficient, error-prone, and makes the successful execution of tasks dependent on undocumented, ad-hoc environmental setup.
+
+## The Solution: Formal Dependency Declaration and Installation
+
+To solve this, two components are introduced:
+
+1.  **`requirements.txt`:** A standard `requirements.txt` file is added to the repository root. This file serves as the single source of truth for all required Python packages.
+2.  **A New Protocol Rule:** A new rule, `dependency-install-on-start`, is established. This rule mandates that upon starting any task, the agent's first action *after* reading `AGENTS.md` should be to install the dependencies listed in `requirements.txt` using `pip`.
+
+This protocol transforms dependency management from an ad-hoc, reactive process into a proactive, automated, and verifiable step in the agent's workflow, significantly improving its robustness and reliability.
+
+---
+
 # Jules Agent Protocol: The Hierarchical Development Cycle
 
 **Version:** 4.0.0
@@ -1630,6 +1649,26 @@ This new protocol provides a robust, reliable, and formally verifiable mechanism
   ],
   "associated_tools": [
     "read_file"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "dependency-management-001",
+  "description": "A protocol for ensuring a reliable execution environment through formal dependency management.",
+  "rules": [
+    {
+      "rule_id": "dependency-install-on-start",
+      "description": "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed.",
+      "enforcement": "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions."
+    }
+  ],
+  "associated_tools": [
+    "run_in_bash_session"
   ]
 }
 ```
