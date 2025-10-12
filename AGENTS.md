@@ -733,16 +733,20 @@ accurate audit.
 **Public Functions:**
 
 
-- #### `def generate_markdown_report(source_check, unreferenced, unused, centrality)`
+- #### `def find_all_agents_md_files(root_dir)`
+
+  > Finds all AGENTS.md files in the repository.
+
+
+- #### `def generate_markdown_report(source_checks, unreferenced, unused, centrality)`
 
   > Generates a Markdown-formatted string from the audit results.
 
 
-- #### `def get_protocol_tools_from_agents_md(agents_md_path)`
+- #### `def get_protocol_tools_from_agents_md(agents_md_paths)`
 
-  > Parses AGENTS.md to get a set of all tools associated with protocols.
-  > NOTE: This function correctly parses all JSON blocks, contrary to the
-  > outdated warning in the module-level docstring.
+  > Parses a list of AGENTS.md files to get a set of all tools associated
+  > with protocols.
 
 
 - #### `def get_used_tools_from_log(log_path)`
@@ -768,10 +772,10 @@ accurate audit.
   > Compares used tools with protocol-defined tools and returns the gaps.
 
 
-- #### `def run_protocol_source_check()`
+- #### `def run_protocol_source_check(all_agents_files)`
 
-  > Checks if AGENTS.md is older than its source files.
-  > Returns a dictionary with the check's status and relevant details.
+  > Checks if each AGENTS.md file is older than its corresponding source files.
+  > Returns a list of warning/error dictionaries.
 
 
 ### `tooling/protocol_compiler.py`
@@ -1285,6 +1289,17 @@ and self-improvement activities.
 
 ---
 
+## Child Module: `compliance`
+
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
+
+- `best-practices-001`
+- `meta-protocol-001`
+- `non-compliance-protocol-001`
+- `pre-commit-protocol-001`
+- `protocol-reset-all-pre-check-001`
+- `reset-all-authorization-001`
+- `reset-all-prohibition-001`
 # Protocol: Dependency Management
 
 This protocol establishes a formal process for managing Python dependencies to ensure a reliable and repeatable execution environment.
@@ -1384,6 +1399,24 @@ This protocol defines how the agent should manage its own core `AGENTS.md` file.
 To ensure that you are always operating under the most current set of rules and directives, you must periodically run `make AGENTS.md`. This is especially critical at the beginning of a new task or if you observe behavior that seems inconsistent with your documented protocols, as the protocols may have been updated.
 
 This act of self-maintenance is a foundational element of robust, autonomous operation. It ensures that your understanding of your own governing principles remains synchronized with the repository's ground truth.
+
+---
+
+# Meta-Protocol: Toolchain Review on Schema Change
+
+This protocol establishes a critical feedback loop to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
+
+## The Problem: Protocol-Toolchain Desynchronization
+
+A significant process gap was identified where a major architectural change to the protocol system (e.g., the introduction of a hierarchical `AGENTS.md` structure) did not automatically trigger a review of the tools that depend on that structure. The `protocol_auditor.py` tool, for instance, became partially obsolete as it was unaware of the new hierarchical model, leading to incomplete audits. This demonstrates that the agent's tools can become desynchronized from its own governing rules, creating a critical blind spot.
+
+## The Solution: Mandated Toolchain Audit
+
+This protocol closes that gap by introducing a new rule that explicitly links changes in the protocol system's architecture to a mandatory review of the toolchain.
+
+**Rule `toolchain-audit-on-schema-change`**: If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory **must** be performed as a subsequent step.
+
+This ensures that any modification to the fundamental way protocols are defined or processed is immediately followed by a conscious verification that all dependent tools are still functioning correctly and are aware of the new structure. This transforms the previously manual and error-prone discovery process into a formal, required step of the development lifecycle.
 
 ---
 
@@ -1582,76 +1615,41 @@ The critic must be aware of and strictly adhere to all specific prohibition prot
 
 ---
 
-# Protocol: Critic `reset_all` Prohibition
-
-This protocol establishes a critical safeguard to protect the integrity of the development workflow.
-
-## Rule: `critic-no-reset`
-
-The agent assigned the role of 'Code Review Critic' is explicitly and strictly forbidden from using the `reset_all` tool.
-
-**Rationale:** The `reset_all` tool is a destructive action that reverts all changes in the workspace. Its use by a review agent could lead to the accidental deletion of work-in-progress, creating a significant disruption. This protocol ensures that the critic's function is limited to analysis and feedback, preventing it from taking destructive actions.
-
-This prohibition is non-negotiable and must be adhered to by any agent assuming the 'Code Review Critic' role.
-
-**Enforcement Mechanism:** The Code Review Critic is not implemented in this repository. Its behavior is governed by the compiled `AGENTS.md` file, which is consumed by an external orchestration system. The inclusion of this protocol in `AGENTS.md` constitutes the complete implementation of this safeguard from the perspective of this codebase.
 
 ---
 
-# Protocol: Deep Research Cycle
+## Child Module: `core`
 
-This protocol defines a standardized, multi-step plan for conducting in-depth research on a complex topic. It is designed to be a reusable, callable plan that ensures a systematic and thorough investigation.
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
 
-The cycle consists of four main phases:
-1.  **Initial Scoping & Keyword Generation:** The agent uses its initial understanding of the topic to generate a set of search keywords.
-2.  **Broad Information Gathering:** The agent uses the keywords to perform broad web searches and collect a list of relevant URLs.
-3.  **Targeted Information Extraction:** The agent visits the most promising URLs to extract detailed information.
-4.  **Synthesis & Summary:** The agent synthesizes the gathered information into a coherent summary, which is saved to a research report file.
-
-This structured approach ensures that research is not ad-hoc but is instead a repeatable and verifiable process.
+- `cfdc-protocol-001`
+- `core-directive-001`
+- `decidability-constraints-001`
+- `deep-research-cycle-001`
+- `fdc-protocol-001`
+- `orientation-cascade-001`
+- `plan-registry-001`
+- `research-fdc-001`
+- `research-protocol-001`
+- `self-correction-protocol-001`
+- `standing-orders-001`
 
 ---
 
+
+---
+
+## Child Module: `critic`
 # Protocol: The Formal Research Cycle (L4)
 
 This protocol establishes the L4 Deep Research Cycle, a specialized, self-contained Finite Development Cycle (FDC) designed for comprehensive knowledge acquisition. It elevates research from a simple tool-based action to a formal, verifiable process.
 
-## The Problem: Ad-Hoc Research
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
 
-Previously, research was an unstructured activity. The agent could use tools like `google_search` or `read_file`, but there was no formal process for planning, executing, and synthesizing complex research tasks. This made it difficult to tackle "unknown unknowns" in a reliable and auditable way.
-
-## The Solution: A Dedicated Research FDC
-
-The L4 Research Cycle solves this by introducing a new, specialized Finite State Machine (FSM) tailored specifically for research. When the main orchestrator (`master_control.py`) determines that a task requires deep knowledge, it initiates this cycle.
-
-### Key Features:
-
-1.  **Specialized FSM (`tooling/research_fsm.json`):** Unlike the generic development FSM, the research FSM has states that reflect a true research workflow: `GATHERING`, `SYNTHESIZING`, and `REPORTING`. This provides a more accurate model for the task.
-2.  **Executable Plans:** The `tooling/research_planner.py` is upgraded to generate formal, executable plans that are validated against the new research FSM. These are no longer just templates but are verifiable artifacts that guide the agent through the research process.
-3.  **Formal Invocation:** The L4 cycle is a first-class citizen in the agent's architecture. The main orchestrator can formally invoke it, execute the research plan, and then integrate the resulting knowledge back into its main task.
-
-This new protocol provides a robust, reliable, and formally verifiable mechanism for the agent to explore complex topics, making it significantly more autonomous and capable.
+- `critic-meta-protocol-001`
+- `critic-reset-prohibition-001`
 
 ---
-
-```json
-{
-  "protocol_id": "aorp-header",
-  "description": "Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP).",
-  "rules": [
-    {
-      "rule_id": "aorp-identity",
-      "description": "The governing protocol set is identified as the Advanced Orientation and Research Protocol (AORP).",
-      "enforcement": "Protocol is identified by its name in documentation and compiled artifacts."
-    },
-    {
-      "rule_id": "aorp-versioning",
-      "description": "The official protocol version is tracked in the VERSION file in the repository root, following Semantic Versioning (SemVer).",
-      "enforcement": "Build or validation scripts should verify the presence and format of the VERSION file."
-    }
-  ]
-}
-```
 
 
 ---
@@ -1904,6 +1902,28 @@ This new protocol provides a robust, reliable, and formally verifiable mechanism
   ],
   "associated_tools": [
     "run_in_bash_session"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "toolchain-review-on-schema-change-001",
+  "description": "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.",
+  "rules": [
+    {
+      "rule_id": "toolchain-audit-on-schema-change",
+      "description": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.",
+      "enforcement": "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files."
+    }
+  ],
+  "associated_tools": [
+    "tooling/protocol_auditor.py",
+    "tooling/protocol_compiler.py",
+    "tooling/hierarchical_compiler.py"
   ]
 }
 ```

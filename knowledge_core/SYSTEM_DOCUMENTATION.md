@@ -722,16 +722,20 @@ accurate audit.
 **Public Functions:**
 
 
-- #### `def generate_markdown_report(source_check, unreferenced, unused, centrality)`
+- #### `def find_all_agents_md_files(root_dir)`
+
+  > Finds all AGENTS.md files in the repository.
+
+
+- #### `def generate_markdown_report(source_checks, unreferenced, unused, centrality)`
 
   > Generates a Markdown-formatted string from the audit results.
 
 
-- #### `def get_protocol_tools_from_agents_md(agents_md_path)`
+- #### `def get_protocol_tools_from_agents_md(agents_md_paths)`
 
-  > Parses AGENTS.md to get a set of all tools associated with protocols.
-  > NOTE: This function correctly parses all JSON blocks, contrary to the
-  > outdated warning in the module-level docstring.
+  > Parses a list of AGENTS.md files to get a set of all tools associated
+  > with protocols.
 
 
 - #### `def get_used_tools_from_log(log_path)`
@@ -757,10 +761,10 @@ accurate audit.
   > Compares used tools with protocol-defined tools and returns the gaps.
 
 
-- #### `def run_protocol_source_check()`
+- #### `def run_protocol_source_check(all_agents_files)`
 
-  > Checks if AGENTS.md is older than its source files.
-  > Returns a dictionary with the check's status and relevant details.
+  > Checks if each AGENTS.md file is older than its corresponding source files.
+  > Returns a list of warning/error dictionaries.
 
 
 ### `tooling/protocol_compiler.py`
