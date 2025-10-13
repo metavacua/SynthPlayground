@@ -1,0 +1,6 @@
+11:01:11 pulseaudio: GetManagedObjects() failed: org.freedesktop.DBus.Error.NoReply: Did not receive a reply. Possible causes include: the remote application did not send a reply, the message bus security policy blocked the reply, the reply timeout expired, or the network connection was broken.
+11:00:47 systemd: Failed to start Application launched by gnome-session-binary.
+11:00:41 kernel: mce: [Hardware Error]: PROCESSOR 2:800f11 TIME 1746727237 SOCKET 0 APIC 4 microcode 8001138
+11:00:41 kernel: mce: [Hardware Error]: PROCESSOR 2:800f11 TIME 1746727237 SOCKET 0 APIC 4 microcode 8001138
+11:00:41 kernel: mce: [Hardware Error]: TSC 0 ADDR 1ffff864068c0 MISC d012000100000000 SYND 4d000000 IPID 500b000000000 
+11:00:41 kernel: mce: [Hardware Error]: CPU 2: Machine Check: 0 Bank 5: bea0000000000108
