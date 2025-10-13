@@ -143,6 +143,10 @@
     proto:hasRule <file:///app/protocols/bootstrap-load-agents-md> ;
     schema:description "A foundational protocol that dictates the agent's initial actions upon starting any task." .
 
+<file:///app/protocols/agent-shell-001> proto:associatedTool <file:///app/protocols/tooling/agent_shell.py> ;
+    proto:hasRule <file:///app/protocols/shell-is-primary-entry-point> ;
+    schema:description "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks." .
+
 <file:///app/protocols/dependency-management-001> proto:associatedTool <file:///app/protocols/run_in_bash_session> ;
     proto:hasRule <file:///app/protocols/dependency-install-on-start> ;
     schema:description "A protocol for ensuring a reliable execution environment through formal dependency management." .
@@ -328,6 +332,9 @@
 
 <file:///app/protocols/security/vuln-reporting-channel> proto:enforcement "This is a procedural rule. The designated contact is specified in the project's main SECURITY.md file." ;
     schema:description "All suspected security vulnerabilities MUST be reported privately to the designated security contact." .
+
+<file:///app/protocols/shell-is-primary-entry-point> proto:enforcement "This is a procedural rule. The agent's operational framework should only expose the agent_shell.py as the means of starting a new task." ;
+    schema:description "All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation." .
 
 <file:///app/protocols/toolchain-audit-on-schema-change> proto:enforcement "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files." ;
     schema:description "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure." .
