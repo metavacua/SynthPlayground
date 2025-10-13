@@ -693,7 +693,7 @@
       "name": "do_researching",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 207,
+      "line": 213,
       "kind": "function"
     },
     {
@@ -701,7 +701,7 @@
       "name": "_handle_call_plan",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 255,
+      "line": 261,
       "kind": "function"
     },
     {
@@ -709,7 +709,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 291,
+      "line": 297,
       "kind": "function"
     },
     {
@@ -717,7 +717,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 366,
+      "line": 372,
       "kind": "function"
     },
     {
@@ -725,7 +725,7 @@
       "name": "run",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 429,
+      "line": 435,
       "kind": "function"
     },
     {
@@ -790,6 +790,46 @@
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
       "line": 255,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "parse_concepts_from_agents_md",
+      "path": "./tooling/reorientation_manager.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "run_temporal_orientation",
+      "path": "./tooling/reorientation_manager.py",
+      "language": "Python",
+      "line": 50,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "update_temporal_orientations",
+      "path": "./tooling/reorientation_manager.py",
+      "language": "Python",
+      "line": 73,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "check_for_deep_research_trigger",
+      "path": "./tooling/reorientation_manager.py",
+      "language": "Python",
+      "line": 100,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/reorientation_manager.py",
+      "language": "Python",
+      "line": 111,
       "kind": "function"
     },
     {
@@ -918,6 +958,62 @@
       "path": "./tooling/log_failure.py",
       "language": "Python",
       "line": 9,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "TestReorientationManager",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 19,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "cleanup_files",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 23,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_temporal_orientation_triggered",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_deep_research_triggered",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_no_changes_detected",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 90,
       "kind": "function"
     },
     {
@@ -1518,78 +1614,6 @@
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
       "line": 136,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "TestProtocolAuditor",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 12,
-      "kind": "class"
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 15,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 55,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "test_get_protocol_tools_from_agents_md",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 60,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "test_get_used_tools_from_log",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 71,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "test_end_to_end_report_generation",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 83,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "test_find_all_agents_md_files_with_special_dirs",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 147,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "open_side_effect",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 106,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "walk_side_effect",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 163,
       "kind": "function"
     },
     {
