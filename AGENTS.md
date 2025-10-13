@@ -1610,6 +1610,23 @@ This prohibition is non-negotiable and must be adhered to by any agent assuming 
 
 ---
 
+# Protocol: Code Refactoring
+
+This protocol defines the use of the `refactor.py` tool, which provides a simple way to perform automated refactoring of Python code.
+
+## Rule: `refactor-rename-symbol`
+
+The `refactor.py` tool can be used to rename a symbol (a function or class) and all of its references within a given search path.
+
+**Usage:**
+```
+python tooling/refactor.py --filepath <path_to_file> --old-name <old_symbol_name> --new-name <new_symbol_name> [--search-path <path>]
+```
+
+The tool will generate a plan file containing a series of `replace_with_git_merge_diff` commands to perform the renaming. This plan can then be executed by the agent's master controller.
+
+---
+
 ```json
 {
   "protocol_id": "agent-bootstrap-001",
@@ -1665,6 +1682,26 @@ This prohibition is non-negotiable and must be adhered to by any agent assuming 
     "tooling/protocol_auditor.py",
     "tooling/protocol_compiler.py",
     "tooling/hierarchical_compiler.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "refactor-001",
+  "description": "A protocol for using the refactoring tool.",
+  "rules": [
+    {
+      "rule_id": "refactor-rename-symbol",
+      "description": "The `refactor.py` tool can be used to rename a symbol and all of its references.",
+      "enforcement": "The tool is used by invoking it from the command line with the appropriate arguments. The agent should use this tool when a refactoring task is requested."
+    }
+  ],
+  "associated_tools": [
+    "tooling/refactor.py"
   ]
 }
 ```

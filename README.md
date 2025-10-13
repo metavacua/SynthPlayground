@@ -10,8 +10,10 @@ corresponding `AGENTS.md` file and the source code docstrings.
 
 This module is governed by a series of machine-readable protocols defined in `AGENTS.md`. These protocols are the source of truth for the agent's behavior within this scope. The key protocols are:
 
+- **`agent-bootstrap-001`**: A foundational protocol that dictates the agent's initial actions upon starting any task.
 - **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
 - **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
+- **`refactor-001`**: A protocol for using the refactoring tool.
 
 ## Key Components
 
@@ -94,6 +96,14 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`tooling/readme_generator.py`**:
 
   > _No docstring found._
+
+- **`tooling/refactor.py`**:
+
+  > _No docstring found._
+
+- **`tooling/reorientation_manager.py`**:
+
+  > Re-orientation Manager\n  > \n  > This script is the core of the automated re-orientation process. It is\n  > designed to be triggered by the build system whenever the agent's core\n  > protocols (`AGENTS.md`) are re-compiled.\n  > \n  > The manager performs the following key functions:\n  > 1.  **Diff Analysis:** It compares the old version of AGENTS.md with the new\n  >     version to identify new protocols, tools, or other key concepts that have\n  >     been introduced.\n  > 2.  **Temporal Orientation (Shallow Research):** For each new concept, it\n  >     invokes the `temporal_orienter.py` tool to fetch a high-level summary from\n  >     an external knowledge base like DBpedia. This ensures the agent has a\n  >     baseline understanding of new terms.\n  > 3.  **Knowledge Storage:** The summaries from the temporal orientation are\n  >     stored in a structured JSON file (`knowledge_core/temporal_orientations.json`),\n  >     creating a persistent, queryable knowledge artifact.\n  > 4.  **Deep Research Trigger:** It analyzes the nature of the changes. If a\n  >     change is deemed significant (e.g., the addition of a new core\n  >     architectural protocol), it programmatically triggers a formal L4 Deep\n  >     Research Cycle by creating a `deep_research_required.json` file.\n  > \n  > This automated workflow ensures that the agent never operates with an outdated\n  > understanding of its own protocols. It closes the loop between protocol\n  > modification and the agent's self-awareness, making the system more robust,\n  > adaptive, and reliable.
 
 - **`tooling/research.py`**:
 
