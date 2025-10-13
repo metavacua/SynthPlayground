@@ -1,12 +1,8 @@
-jsonschema
-pyyaml
-requests
 black
-jsonschema
-rdflib
 flake8
+jsonschema
+markdown
 pytest
-Markdown
+pyyaml
 rdflib
 requests
-markdown
