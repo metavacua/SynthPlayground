@@ -21,9 +21,13 @@ format: AGENTS.md
 	@echo "--> Formatting Python code with black..."
 	@black .
 
-lint: AGENTS.md
+lint: AGENTS.md lint-protocols
 	@echo "--> Linting Python code with flake8..."
 	@flake8 .
+
+lint-protocols:
+	@echo "--> Linting protocol proof tree..."
+	@python3 tooling/proof_tree_validator.py
 
 # ==============================================================================
 # Testing

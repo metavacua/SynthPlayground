@@ -1,5 +1,6 @@
 {
   "protocol_id": "aorp-header",
+  "branch_status": "open",
   "description": "Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP).",
   "rules": [
     {

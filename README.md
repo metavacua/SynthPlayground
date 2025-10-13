@@ -10,34 +10,45 @@ corresponding `AGENTS.md` file and the source code docstrings.
 
 This module is governed by a series of machine-readable protocols defined in `AGENTS.md`. These protocols are the source of truth for the agent's behavior within this scope. The key protocols are:
 
-- **`agent-bootstrap-001`**: A foundational protocol that dictates the agent's initial actions upon starting any task.
-- **`core-directive-001`**: The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC).
-- **`decidability-constraints-001`**: Ensures all development processes are formally decidable and computationally tractable.
-- **`orientation-cascade-001`**: Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state.
-- **`fdc-protocol-001`**: Defines the Finite Development Cycle (FDC), a formally defined process for executing a single, coherent task.
-- **`standing-orders-001`**: A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks.
-- **`best-practices-001`**: A set of best practices derived from observing successful, data-driven workflow patterns.
-- **`meta-protocol-001`**: A meta-protocol governing the agent's awareness and maintenance of its own core protocol files.
-- **`cfdc-protocol-001`**: Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model.
-- **`plan-registry-001`**: Defines a central registry for discovering and executing hierarchical plans by a logical name.
-- **`self-correction-protocol-001`**: Defines the automated, closed-loop workflow for protocol self-correction.
-- **`non-compliance-protocol-001`**: A protocol that defines non-compliance with AGENTS.md and specifies corrective actions.
-- **`pre-commit-protocol-001`**: Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission.
-- **`reset-all-authorization-001`**: Requires explicit user authorization via a token file for the use of the destructive `reset_all` tool.
-- **`research-protocol-001`**: A protocol for conducting systematic research using the integrated research toolchain.
-- **`reset-all-prohibition-001`**: A high-priority protocol that unconditionally forbids the use of the `reset_all` tool.
-- **`critic-meta-protocol-001`**: A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent.
-- **`critic-reset-prohibition-001`**: A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool.
-- **`deep-research-cycle-001`**: A standardized, callable plan for conducting in-depth research on a complex topic.
-- **`protocol-reset-all-pre-check-001`**: A protocol that mandates a pre-execution check for the `reset_all` tool to prevent unauthorized use.
-- **`research-fdc-001`**: Defines the formal Finite Development Cycle (FDC) for conducting deep research.
+- **`security-header`**: Defines the identity and purpose of the Security Protocol document.
+- **`security-vuln-reporting-001`**: Defines the official policy and procedure for reporting security vulnerabilities.
 
-### Child Module: `parent`
+### Child Module: `compliance`
 
-This module includes protocols from its child module `parent`, as summarized below:
+This module includes protocols from its child module `compliance`, as summarized below:
 This module contains the following protocols, which are defined in its own `AGENTS.md` file:
 
-- `parent-protocol-001`
+- `meta-protocol-001`
+- `non-compliance-protocol-001`
+- `pre-commit-protocol-001`
+- `protocol-reset-all-pre-check-001`
+- `reset-all-authorization-001`
+- `reset-all-prohibition-001`
+
+### Child Module: `core`
+
+This module includes protocols from its child module `core`, as summarized below:
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
+
+- `cfdc-protocol-001`
+- `core-directive-001`
+- `decidability-constraints-001`
+- `deep-research-cycle-001`
+- `fdc-protocol-001`
+- `orientation-cascade-001`
+- `plan-registry-001`
+- `research-fdc-001`
+- `research-protocol-001`
+- `self-correction-protocol-001`
+- `standing-orders-001`
+
+### Child Module: `critic`
+
+This module includes protocols from its child module `critic`, as summarized below:
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
+
+- `critic-meta-protocol-001`
+- `critic-reset-prohibition-001`
 
 ## Key Components
 
@@ -104,6 +115,10 @@ This module contains the following protocols, which are defined in its own `AGEN
 - **`tooling/plan_parser.py`**:
 
   > Parses a plan file into a structured list of commands.\n  > \n  > This module provides the `parse_plan` function and the `Command` dataclass,\n  > which are central to the agent's ability to understand and execute plans.\n  > The parser correctly handles multi-line arguments and ignores comments,\n  > allowing for robust and readable plan files.
+
+- **`tooling/proof_tree_validator.py`**:
+
+  > _No docstring found._
 
 - **`tooling/protocol_auditor.py`**:
 

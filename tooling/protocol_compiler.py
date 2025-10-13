@@ -83,9 +83,9 @@ def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file
     # Discover all relevant files and sort them to ensure deterministic output.
     # The sort order is: autodoc placeholders, then all markdown, then all json.
     # This ensures descriptions and summaries appear before the JSON blocks.
-    autodoc_placeholders = sorted(glob.glob(os.path.join(source_dir, "*.autodoc.md")))
-    all_md_files = sorted(glob.glob(os.path.join(source_dir, "*.protocol.md")))
-    all_json_files = sorted(glob.glob(os.path.join(source_dir, "*.protocol.json")))
+    autodoc_placeholders = sorted(glob.glob(os.path.join(source_dir, "**/*.autodoc.md"), recursive=True))
+    all_md_files = sorted(glob.glob(os.path.join(source_dir, "**/*.protocol.md"), recursive=True))
+    all_json_files = sorted(glob.glob(os.path.join(source_dir, "**/*.protocol.json"), recursive=True))
 
     if not all_md_files and not all_json_files and not autodoc_placeholders:
         print(f"Warning: No protocol or documentation files found in {source_dir}.")
@@ -145,6 +145,10 @@ def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file
                     print(f"    - Warning: JSON-LD context file not found at {context_path}")
 
             # Markdown Generation
+            branch_status = protocol_data.get("branch_status")
+            if branch_status:
+                final_content.append(f"**Branch Status:** `{branch_status.upper()}`\n\n")
+
             json_string = json.dumps(protocol_data, indent=2)
             md_json_block = f"```json\n{json_string}\n```\n"
             final_content.append(md_json_block)
