@@ -2,7 +2,11 @@ jsonschema
 pyyaml
 requests
 black
-flake8
+jsonschema
 rdflib
+flake8
 pytest
 Markdown
+rdflib
+requests
+markdown

@@ -11,31 +11,15 @@
     {
       "_type": "tag",
       "name": "plan_deep_research",
-      "path": "./archive/agentic-research-experiments/agentic-research-experiments_tooling_research_planner.py",
+      "path": "./archive/agentic-research-experiments/agentic-research-experiments-tooling-research-planner.py",
       "language": "Python",
       "line": 8,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "plan_deep_research",
-      "path": "./archive/feat/feat_protocol-build-system_tooling_research_planner.py",
-      "language": "Python",
-      "line": 8,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "build_protocol",
-      "path": "./archive/feat/feat_protocol-build-system_tooling_build_protocol.py",
-      "language": "Python",
-      "line": 3,
       "kind": "function"
     },
     {
       "_type": "tag",
       "name": "TestBuildProtocol",
-      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
       "line": 6,
       "kind": "class"
@@ -43,7 +27,7 @@
     {
       "_type": "tag",
       "name": "setUp",
-      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
       "line": 8,
       "kind": "function"
@@ -51,7 +35,7 @@
     {
       "_type": "tag",
       "name": "tearDown",
-      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
       "line": 14,
       "kind": "function"
@@ -59,7 +43,7 @@
     {
       "_type": "tag",
       "name": "test_build_protocol_concatenates_in_order",
-      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
       "line": 21,
       "kind": "function"
@@ -67,7 +51,7 @@
     {
       "_type": "tag",
       "name": "test_no_markdown_files",
-      "path": "./archive/feat/feat_protocol-build-system_tests_test_build_protocol.py",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
       "line": 41,
       "kind": "function"
@@ -75,23 +59,23 @@
     {
       "_type": "tag",
       "name": "plan_deep_research",
-      "path": "./archive/add-protocol-validation/add-protocol-validation_tooling_research_planner.py",
+      "path": "./archive/feat/feat-protocol-build-system-tooling-research-planner.py",
       "language": "Python",
-      "line": 9,
+      "line": 8,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "build_protocol",
+      "path": "./archive/feat/feat-protocol-build-system-tooling-build-protocol.py",
+      "language": "Python",
+      "line": 3,
       "kind": "function"
     },
     {
       "_type": "tag",
       "name": "main",
-      "path": "./archive/add-protocol-validation/add-protocol-validation_tooling_protocol_validator.py",
-      "language": "Python",
-      "line": 5,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./archive/main/main_tooling_protocol_validator.py",
+      "path": "./archive/add-protocol-validation/add-protocol-validation-tooling-protocol-validator.py",
       "language": "Python",
       "line": 5,
       "kind": "function"
@@ -99,7 +83,7 @@
     {
       "_type": "tag",
       "name": "plan_deep_research",
-      "path": "./archive/main/main_tooling_research_planner.py",
+      "path": "./archive/add-protocol-validation/add-protocol-validation-tooling-research-planner.py",
       "language": "Python",
       "line": 9,
       "kind": "function"
@@ -107,7 +91,23 @@
     {
       "_type": "tag",
       "name": "plan_deep_research",
-      "path": "./archive/fix/fix_correct-agent-md-references_tooling_research_planner.py",
+      "path": "./archive/main/main-tooling-research-planner.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./archive/main/main-tooling-protocol-validator.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "plan_deep_research",
+      "path": "./archive/fix/fix-correct-agent-md-references-tooling-research-planner.py",
       "language": "Python",
       "line": 8,
       "kind": "function"
@@ -182,6 +182,22 @@
       "path": "./utils/test_logger.py",
       "language": "Python",
       "line": 113,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "parse_makefile_command",
+      "path": "./tooling/standard_agents_compiler.py",
+      "language": "Python",
+      "line": 74,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/standard_agents_compiler.py",
+      "language": "Python",
+      "line": 106,
       "kind": "function"
     },
     {
@@ -317,7 +333,7 @@
       "name": "TestReadmeGenerator",
       "path": "./tooling/test_readme_generator.py",
       "language": "Python",
-      "line": 9,
+      "line": 10,
       "kind": "class"
     },
     {
@@ -325,7 +341,7 @@
       "name": "setUp",
       "path": "./tooling/test_readme_generator.py",
       "language": "Python",
-      "line": 14,
+      "line": 15,
       "kind": "function"
     },
     {
@@ -333,15 +349,7 @@
       "name": "tearDown",
       "path": "./tooling/test_readme_generator.py",
       "language": "Python",
-      "line": 33,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "test_generate_key_components_section",
-      "path": "./tooling/test_readme_generator.py",
-      "language": "Python",
-      "line": 39,
+      "line": 56,
       "kind": "function"
     },
     {
@@ -522,6 +530,62 @@
     },
     {
       "_type": "tag",
+      "name": "find_protocol_dirs",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "run_compiler",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "run_readme_generator",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 58,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "generate_summary",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 80,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "cleanup_summaries",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 113,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "get_parent_module",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 122,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 131,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "generate_suggestion_plan",
       "path": "./tooling/code_suggester.py",
       "language": "Python",
@@ -666,7 +730,7 @@
     },
     {
       "_type": "tag",
-      "name": "get_used_tools_from_log",
+      "name": "find_all_agents_md_files",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
       "line": 36,
@@ -674,10 +738,18 @@
     },
     {
       "_type": "tag",
+      "name": "get_used_tools_from_log",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 45,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "get_protocol_tools_from_agents_md",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 78,
+      "line": 87,
       "kind": "function"
     },
     {
@@ -685,7 +757,7 @@
       "name": "run_completeness_check",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 120,
+      "line": 123,
       "kind": "function"
     },
     {
@@ -693,7 +765,7 @@
       "name": "run_centrality_analysis",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 128,
+      "line": 131,
       "kind": "function"
     },
     {
@@ -701,7 +773,7 @@
       "name": "run_protocol_source_check",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 135,
+      "line": 138,
       "kind": "function"
     },
     {
@@ -709,7 +781,7 @@
       "name": "generate_markdown_report",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 173,
+      "line": 185,
       "kind": "function"
     },
     {
@@ -717,7 +789,7 @@
       "name": "main",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 220,
+      "line": 238,
       "kind": "function"
     },
     {
@@ -1101,7 +1173,7 @@
       "name": "main",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 206,
+      "line": 194,
       "kind": "function"
     },
     {
@@ -1293,7 +1365,7 @@
       "name": "get_module_docstring",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 79,
+      "line": 33,
       "kind": "function"
     },
     {
@@ -1301,7 +1373,7 @@
       "name": "generate_core_protocols_section",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 100,
+      "line": 47,
       "kind": "function"
     },
     {
@@ -1309,7 +1381,7 @@
       "name": "generate_key_components_section",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 138,
+      "line": 85,
       "kind": "function"
     },
     {
@@ -1317,7 +1389,7 @@
       "name": "main",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 161,
+      "line": 111,
       "kind": "function"
     },
     {

@@ -1,0 +1,463 @@
+﻿Provable Repositories: A Proof-Theoretic Build System Architecture Integrating Linear Logic, Sequent Calculus, and the Semantic Web
+
+
+
+
+Part I: Theoretical Foundations: A Synthesis of Logic, Computation, and Software
+
+
+The design of a build system is fundamentally an exercise in managing dependencies and orchestrating transformations. Contemporary systems accomplish this through syntactic analysis of source files and configuration manifests, constructing a directed acyclic graph of dependencies that dictates the order of execution.1 While effective, this approach operates at a purely structural level, remaining agnostic to the semantic intent or logical correctness of the software it constructs. The proposal under analysis posits a radical departure from this paradigm, envisioning a system where the repository's structure and its build process are not merely analogous to a formal proof but are a concrete, verifiable instantiation of one.
+This new architecture is built upon a theoretical trifecta, synthesizing principles from disparate but deeply connected fields of computer science. First, it adopts the sequent calculus as a structural blueprint, mapping the hierarchical nature of a formal proof directly onto the repository's directory structure. Second, it employs linear logic, a resource-sensitive substructural logic, to provide the dynamic rules for state transformation, ensuring that build operations are modeled with the rigor of logical inference and guaranteeing properties like atomicity and hermeticity. Finally, it is grounded in the Curry-Howard correspondence, which establishes an isomorphism between proofs and programs, elevating repository artifacts like README.md files from informal documentation to formal type specifications, and the source code itself to a constructive proof of that specification. This foundational part of the report will establish these three pillars, arguing that their synthesis provides a sound and compelling basis for a new generation of provably correct build systems.
+
+
+Section 1: The Sequent Calculus as a Computational Metaphor
+
+
+Sequent calculus, developed by Gerhard Gentzen, provides a system for structuring logical proofs that is exceptionally well-suited to modeling computational processes.3 Unlike natural deduction, which can involve complex scoping rules for assumptions, sequent calculus makes all available assumptions explicit at every step of a proof.4 This explicitness and its characteristic bottom-up proof construction method provide a powerful blueprint for a dependency-aware build system.
+
+
+Sequents as Build Contracts
+
+
+The fundamental unit in sequent calculus is the sequent, an expression of the form $ \Gamma \vdash \Delta  \Gamma  \Delta $) is true.6 For the purposes of a build system, this structure can be reinterpreted as a formal, verifiable contract for a single build step or module.
+* The antecedent $ \Gamma $ represents the complete set of required inputs, assumptions, and resources for the build step. This includes source files, configuration data, and, crucially, the compiled artifacts produced by prerequisite build steps (i.e., child directories).4
+* The succedent $ \Delta $ represents the goal of the build step—the set of target artifacts that must be constructed or propositions that must be proven true by the successful completion of the build.4
+* The turnstile $ \vdash $ symbolizes the transformation process itself. The sequent $ \Gamma \vdash \Delta $ is read not as a statement of logical implication, but as an assertion of computational capability: "Given the complete set of resources specified in $ \Gamma $, it is possible to construct the target artifacts defined in $ \Delta $".7
+Under this interpretation, each directory in a software repository can be associated with a specific sequent, which acts as its formal interface and build contract.
+
+
+Proof Trees as Build Plans
+
+
+A formal proof in sequent calculus is a tree structure where the conclusion to be proven is at the root, and the branches extend upwards to the axioms at the leaves.5 Proofs are always constructed from the bottom up: to prove the root sequent, one applies an inference rule that requires one or more premise sequents to be proven, which in turn become new sub-goals higher up the tree.4
+This bottom-up construction method is a perfect analogue for the dependency analysis performed by a build system. The final build target of a project (the root of the proof tree) determines which components must be built first. These components, in turn, have their own dependencies, which must be built before them. The process continues until it reaches the "axioms"—the foundational components that have no further dependencies. The structure of the proof tree is, therefore, a direct representation of the project's build plan and dependency graph.10
+
+
+Inference Rules as Build Operations
+
+
+The connections between sequents in a proof tree are governed by inference rules, which define how logical connectives are introduced on the left (antecedent) or right (succedent) side of the turnstile.5 In the proposed architecture, these rules are re-envisioned as primitive, verifiable build operations. Each rule specifies how to combine input artifacts (from the premise sequents) to produce an output artifact (for the conclusion sequent). For example, a conjunction-right rule ($ \land R $), which states that to prove $ A \land B $ one must prove both $ A $ and $ B $, can be interpreted as a build operation that combines two artifacts, $ A $ and $ B $, into a composite artifact, $ A \land B $.4
+
+
+Axioms as Foundational Units
+
+
+A proof tree terminates when all its branches end in an axiom, or an initial sequent, typically of the form $ A \vdash A $.10 This represents a trivial proof: if we assume $ A $, we have proven $ A $. In the build system, these axioms correspond to foundational, self-contained components that require no further decomposition or dependency analysis. An axiom could be a static configuration file, a pre-compiled binary, or a component whose internal correctness can be verified through a local, decidable process (such as a model checker), without reference to any other part of the system. These axiomatic leaf nodes form the bedrock upon which the entire build is constructed.
+This mapping from sequent calculus to a build system elevates the concept of dependency beyond mere file inclusion. Conventional build systems like Make or Bazel operate on a syntactic dependency graph: a target B depends on a source file A because of a directive like an #include statement or an entry in a BUILD file.1 The build system ensures that A is available before processing B, but it has no understanding of the logical relationship between them.
+The sequent calculus framework allows for the construction of a logical dependency graph. The build target for a directory D depends on the targets of its children C1 and C2 not simply because of their relative file paths, but because the proposition being proven by D is a logical consequence of the propositions proven by C1 and C2. This transforms the build system from a file orchestrator into a verifier of logical invariants. The primary goal is no longer merely to ensure that a build succeeds in producing a binary, but to ensure that the resulting binary is semantically correct according to a formal, hierarchical specification embedded in the repository's very structure.
+
+
+Section 2: Linear Logic: A Formalism for Resource-Sensitive State Transformation
+
+
+While the sequent calculus provides a robust static structure for the build system, it does not, in its classical form, adequately model the dynamic process of transformation. Classical logic is a logic of eternal truths, whereas a build process is a sequence of state changes involving finite, consumable resources. The introduction of linear logic, a substructural logic developed by Jean-Yves Girard, provides the necessary formal machinery to model these dynamics with precision.12
+
+
+The Unsuitability of Classical Logic for Build Systems
+
+
+The power of classical logic stems from its structural rules of Weakening and Contraction.12 Weakening allows any assumption to be discarded, meaning a premise can be ignored. Contraction allows any assumption to be duplicated and used multiple times. While essential for mathematical reasoning, these rules are catastrophic for modeling a build process.
+* Weakening would imply that a source file listed as a dependency might not be used at all in the compilation, breaking the principle of explicit dependency management.
+* Contraction would imply that a single-use resource, like a one-time signing key, could be used multiple times, or that a source file could be consumed in multiple, potentially conflicting, compilation steps.
+These rules fundamentally break the hermeticity and reproducibility required of a reliable build system. A classical proof cannot guarantee that every specified input was used, or that it was used in the correct manner and quantity.
+
+
+Linear Logic as a "Logic of Resources"
+
+
+Linear logic resolves this by rejecting the structural rules of Weakening and Contraction as default properties of the system.12 In linear logic, a hypothesis is treated as a finite resource that must be used exactly once in a proof.14 This "resource-conscious" perspective perfectly models the physical reality of a computational process, where input files are consumed by a compiler to produce an output file, and the original state is superseded by a new one. This reframes the sequent $ \Gamma \vdash \Delta $ to mean: "The complete set of resources $ \Gamma $ can be consumed to produce the state $ \Delta $."
+
+
+A Calculus of Build Operations
+
+
+This resource-sensitive foundation imbues the logical connectives with new, computational meanings that are directly applicable to build system operations.14
+* Multiplicative Conjunction ($ A \otimes B $, "tensor"): This connective represents the simultaneous, independent possession of two distinct resources. Its right-introduction rule ($ \otimes R $) is a formal model for parallel builds. To prove (produce) $ \Gamma_1, \Gamma_2 \vdash A \otimes B $, one must prove both $ \Gamma_1 \vdash A $ and $ \Gamma_2 \vdash B  \Gamma_1, \Gamma_2 $) must be partitioned, with one subset used to build $ A $ and the other, disjoint subset used to build $ B $. These two sub-proofs are independent and can be executed concurrently.14
+* Linear Implication ($ A \multimap B $, "lolli"): This connective represents a transformation, a process that consumes a resource of type $ A $ to produce a resource of type $ B  \multimap L $) models the application of such a tool. To use a resource $ A \multimap B $ to help prove a goal $ C $, the proof must split into two sub-goals: first, produce an artifact of type $ A $ (consuming some resources), which then unlocks the resource $ B $ to be used in the subsequent proof of $ C $.13
+* Exponentials ($!A $, "of course A"): Linear logic is not so restrictive as to forbid reusable resources entirely. The exponential modality ! ("of course") is used to mark formulas to which the structural rules of Weakening and Contraction are selectively re-admitted.12 A resource of type $!A $ can be used any number of times (Contraction) or not at all (Weakening). This is the perfect logical model for shared, immutable components in a build system: a compiler, a static configuration file, a foundational library that can be linked against multiple targets, or a container image defining the build environment. These resources are available throughout the build but are not consumed by any single step.13
+
+
+Ensuring Feasible Builds with PTIME-Complete Variants
+
+
+While linear logic provides the expressive power to model resource transformations, its full propositional form is undecidable, meaning a proof search (a build) may not terminate.12 For a practical build system, computational feasibility is a non-negotiable requirement. This is why the proposal's specification of particular fragments of linear logic is critical.
+* Bounded Linear Logic (BLL): This system achieves decidability and a correspondence with polynomial-time (PTIME) computation by replacing the unbounded exponential ! with a family of bounded reuse operators. A formula $!_{p(n)}A $ represents a resource $ A $ that can be used a number of times bounded by a polynomial $ p(n) $ in the size of the input.15
+* Light Linear Logic (LLL): This system takes an alternative approach, redesigning the inference rules for the exponentials themselves to be weaker. This creates a system where the process of proof normalization (the computational equivalent of program execution) is intrinsically polynomial-time.15
+The mandate to use one of these PTIME-complete variants is a formal guarantee that the build system is computationally tractable. It ensures that the act of proof construction—the build itself—is guaranteed to terminate in a reasonable amount of time, grounding the abstract logical framework in the practical constraints of computational complexity theory.
+The choice of linear logic provides a formal, mathematical foundation for properties that are merely conventions or best practices in traditional build systems. The resource-sensitive nature of linear implication ($ \multimap $) provides a logical guarantee of atomicity and transactional integrity.15 Because the premise (input file) is fully consumed in the production of the conclusion (output file), it is logically impossible for the system to end in an inconsistent intermediate state where a transformation is only partially complete. Similarly, because all hypotheses in the antecedent must be accounted for in the proof, it is logically impossible for an external, undeclared resource to be introduced into the build process. This provides a formal basis for hermetic builds, moving their enforcement from runtime sandboxing to the static, logical structure of the build definition itself. This directly aligns with the use of linear logic for ensuring transactional integrity in advanced agent architectures.15
+
+
+Section 3: The Curry-Howard Correspondence: Repositories as Constructive Proofs
+
+
+The final theoretical pillar of the proposed architecture is the Curry-Howard correspondence, a profound observation in logic and computer science that establishes a direct isomorphism between proofs and programs.16 This principle, often summarized as "propositions-as-types, proofs-as-programs," provides the philosophical and operational core of the system, transforming the entire software repository into a single, large-scale constructive proof.
+* Propositions as README.md (Types): In this framework, a logical proposition—a statement to be proven—is mapped to the formal specification of a software component. The README.md file within a directory is no longer informal documentation; it becomes the declaration of the component's type. It defines what the component claims to do, the types of its inputs, and the type of its output.18
+* Proofs as Source Code (Programs): A constructive proof of a proposition is a method or algorithm that demonstrates the proposition's truth by constructing an example, or a "witness." In this system, the proof is the implementation of the component itself. The source code, configuration files, tests, and other assets within the directory collectively serve as the constructive witness that fulfills the specification laid out in the README.md.18 The existence of a valid, compilable program that matches the type signature is the proof of the proposition.
+* Proof Checking as Type Checking (and Building): The process of verifying a proof corresponds directly to the act of type-checking and compiling a program. In this architecture, the build system itself serves as the proof checker. When the build for a directory is initiated, the system is attempting to verify that the provided "program" (the source files) is a valid "proof" of the "proposition" (the README.md specification). A successful build—where the code type-checks, compiles, passes all tests, and produces the specified artifacts—is a formal validation of the proof. The entire CI/CD pipeline is thus transformed into a distributed, automated proof-checking engine.18
+This application of the Curry-Howard correspondence elevates the role of documentation within the software development lifecycle. In conventional practice, documentation is a post-hoc artifact that describes what the code does, and it is notoriously prone to becoming outdated as the code evolves. This "documentation drift" is a major source of friction and error in software maintenance.
+The proposed system makes such drift impossible by design. By treating the README.md as the formal type definition for the module, it becomes a binding contract. A mismatch between the code's actual behavior and the specification in the README.md is no longer a documentation bug; it is a type error that will be caught by the proof checker, causing the build to fail. This creates a powerful feedback loop that enforces consistency between specification and implementation. Documentation cannot become stale because any divergence is a build-breaking change. This represents a fundamental shift in software engineering practice, integrating formal specification and verification directly into the development workflow and making the README.md a first-class, verifiable component of the system's architecture.
+
+
+Part II: Architectural Specification of the Proof-Theoretic Build System
+
+
+Having established the theoretical underpinnings, this part of the report translates the abstract logical framework into a concrete, implementable architecture. It provides a master blueprint for structuring a software repository as a formal proof tree, specifies the format and function of the key AGENTS.md and README.md artifacts, details the mechanics of the build process as an act of proof construction, and defines a formal model for the axiomatic leaf nodes of the system.
+
+
+Section 4: The Repository as a Proof Tree: A Structural Mapping
+
+
+The central architectural innovation is the creation of a direct isomorphism between the logical structure of a proof in sequent calculus and the physical directory structure of a software repository. This mapping is not merely an organizational convention but the primary mechanism for embedding the project's logical dependencies into the file system itself.
+* Root Directory (The Conclusion): The root of the repository corresponds to the final sequent of the proof, the ultimate conclusion to be demonstrated. This sequent can be represented as $ \vdash P $, where $ P $ is the high-level proposition that the entire software system is correct and fulfills its primary objective.4 The AGENTS.md and README.md files in the root directory serve to define this final goal, specifying the main executable or deployable artifact that the entire build process aims to produce.
+* Intermediary Directories (Inference Steps): Every non-leaf subdirectory represents the application of a logical inference rule. A directory D with child directories C1,..., Cn corresponds to an inference step in the proof tree. The sequents associated with the children C1...Cn act as the premises of the rule, and the sequent for D is the conclusion. The build process for directory D is the implementation of this rule, consuming the artifacts produced by its children to construct its own target artifact.5
+* Leaf Directories (Axioms): The leaf directories of the repository tree, those with no subdirectories, represent the initial sequents or axioms of the proof.4 These are the foundational components of the system whose correctness can be established without further decomposition. They are self-contained, independently verifiable, and require no inputs from other project components. Their build process is an act of local verification rather than transformation of external dependencies.
+This structural mapping provides a clear, navigable, and logically sound organization for the entire codebase. The following table provides a direct, two-column visualization of this core analogy, serving as a legend for the architecture.
+Logical Concept (Sequent Calculus)
+	Repository Component (File System)
+	Proof Tree
+	The entire repository directory structure
+	Root of the Tree (Conclusion)
+	The root directory of the repository
+	Internal Node (Inference Step)
+	An intermediary subdirectory
+	Leaf of the Tree (Axiom/Initial Sequent)
+	A leaf subdirectory (no children)
+	Sequent ($ \Gamma \vdash \Delta $)
+	A directory's AGENTS.md file and its contents
+	Antecedent ($ \Gamma $)
+	Set of artifacts produced by child directories
+	Succedent ($ \Delta $)
+	The build target/proposition for the current directory
+	Inference Rule
+	The build logic/script within a directory
+	
+
+Section 5: AGENTS.md as Dynamically Generated Sequents
+
+
+The AGENTS.md file, an emerging standard for providing machine-readable instructions to AI agents, is repurposed in this architecture to serve a more formal and critical role.21 It evolves from an informal guide into a structured, machine-readable representation of the logical sequent for its enclosing directory. This formalizes the build contract for each component.
+
+
+Format and Schema
+
+
+To facilitate machine parsing and validation, a YAML-based schema is proposed for the AGENTS.md files. This choice is inspired by the declarative and structured nature of modern workflow definition languages, such as those used for GitHub Actions or the Common Workflow Language (CWL).22 The schema directly reflects the structure of a sequent.
+An example AGENTS.md for a parser module might be structured as follows:
+
+
+YAML
+
+
+
+
+# AGENTS.md for directory /packages/parser
+specVersion: "proof-theoretic-build/v1.0"
+sequent:
+ antecedent: # Resources required (Γ)
+   - id: lexer_lib
+     source: "../lexer" # Path to child directory
+     type: "!Library"   # Linear logic type (! = reusable)
+     witness: "packages/lexer/dist/lexer.a"
+   - id: grammar_file
+     source: "./"
+     type: "GrammarSpec"
+     witness: "src/grammar.bcnf"
+ succedent: # Goal to be proven (Δ)
+   - id: parser_lib
+     type: "Library"
+     proposition: "A parser that correctly implements the specified grammar."
+
+In this schema:
+* The antecedent section lists the resources ($ \Gamma $) required for the build. Each entry specifies a logical id, the source directory that produces it, its linear logic type (e.g., !Library for a reusable library), and a witness field that provides the concrete file path to the artifact.
+* The succedent section defines the goal ($ \Delta $) of the build. It specifies the logical id and type of the artifact to be produced, along with a human-readable proposition that describes its intended function.
+
+
+Dynamic Construction and Verification
+
+
+The build system is responsible for the dynamic construction and verification of these AGENTS.md files. When a directory's build is initiated, the system first inspects the succedent sections of all child directories. It then populates the antecedent section of the current directory's AGENTS.md with this information, creating a verifiable chain of dependencies. The build fails if a required resource in the antecedent does not have a corresponding witness file produced by a child build.
+The README.md file is then automatically generated from the proposition field in the succedent, serving as the human-readable specification. The files referenced by the witness fields in both the antecedent and succedent are the concrete, constructive proof of that proposition.
+This structured approach transforms the AGENTS.md file from a simple, one-way communication channel (human-to-AI) into a formal, bidirectional contract or API for each directory-as-a-module. The succedent acts as the module's exported interface, declaring what it proves and produces. The antecedent acts as its list of imported dependencies. A build failure due to a missing antecedent is equivalent to a dependency resolution error in a traditional package manager. A failure to produce the artifact specified in the succedent is a contract violation, equivalent to a function failing to return a value of its declared type. This architecture turns the file system into a network of strongly-typed modules, with AGENTS.md files serving as the interface definitions, rigorously enforced by the build system acting as a proof checker.
+
+
+Section 6: The Build Process as Proof Construction in Linear Logic
+
+
+The operational mechanics of the build system are a direct implementation of bottom-up proof construction in the sequent calculus, with the dynamics governed by the rules of linear logic.
+
+
+Orchestration
+
+
+The build process is orchestrated to traverse the proof tree from the leaves to the root. A directory's build can only be initiated after all of its child directories (the premises for its inference rule) have successfully completed their own builds and produced their target artifacts. This dependency-driven execution can be implemented using a variety of modern CI/CD tools, such as a series of GitHub Actions workflows linked by workflow_dispatch events or a more sophisticated build tool like Bazel that can analyze the dependency graph defined by the AGENTS.md files.1
+
+
+Build Scripts as Inference Rules
+
+
+The build script within each directory—whether a Makefile, a shell script, or a YAML-based workflow file—is the concrete implementation of a logical inference rule. Its purpose is to consume the artifacts (witnesses) listed in its AGENTS.md antecedent and transform them to produce the new artifact specified in its succedent. The logic of this script must adhere to the strict resource-accounting principles of linear logic.
+The following table provides a clear translation between the abstract rules of linear logic and the concrete build operations they represent, demonstrating the direct and practical applicability of the logical framework.
+Linear Logic Rule
+	Interpretation in Build System
+	Example
+	$ A \vdash A $ (Identity)
+	An artifact is its own proof.
+	A source file config.json is provided as-is without transformation.
+	$ \otimes R $ (Tensor Right)
+	Parallel execution of independent builds.
+	Splitting resources to compile frontend.js and backend.go simultaneously.
+	$ \otimes L $ (Tensor Left)
+	Combining multiple build artifacts for a single step.
+	Linking two object files (.o) to create a single executable.
+	$ \multimap L $ (Lolli Left)
+	Applying a tool (compiler, linter, test runner).
+	Consuming a source file ($ A  A \multimap B  B $).
+	$!C $ (Contraction)
+	Reusing a shared dependency.
+	Linking the same shared library (!lib_crypto.a) into multiple different executables.
+	$!W $ (Weakening)
+	A shared dependency is available but not used.
+	The crypto library is available to all modules, but the logging module doesn't need it.
+	
+
+Section 7: Axioms as Decidable Systems: Finite State Transducers at the Leaves
+
+
+The entire proof structure rests upon the axioms at the leaves of the tree. For the proof to be sound, these foundational units must be verifiably correct in their own right. This section specifies a formal model for these leaf directories, grounding the proof in components whose correctness is decidable.
+
+
+Decidability as the Axiomatic Property
+
+
+A leaf directory is considered an axiom because its internal correctness can be established without reference to any other components in the repository. Its "proof" is a local, terminating verification process. This property of decidability is what gives the axiom its foundational status.
+
+
+Finite State Machines (FSMs) and Transducers (FSTs) as Models
+
+
+Many fundamental software components can be formally modeled as finite state automata.
+* Finite State Machines (FSMs): Components that manage internal state in response to a sequence of events, such as UI widgets, network protocol handlers, or parsers, can be modeled as FSMs. The set of valid states, the initial state, and the transition rules can be defined declaratively. Research and existing tooling demonstrate that FSMs can be effectively represented in structured, human-readable formats like YAML or JSON.24 This declarative FSM definition would reside in the leaf directory's AGENTS.md. The "build" process for this axiomatic leaf would not be a compilation, but an act of model checking: a verifier would analyze the component's source code to formally prove that its implementation is a correct refinement of the FSM specification.
+* Finite State Transducers (FSTs): For components whose primary function is to transform a sequence of inputs into a sequence of outputs (such as serializers, lexical analyzers, or simple API gateways), the more powerful model of a Finite State Transducer is appropriate.28 An FST defines a regular relation between an input language and an output language. Similar to FSMs, FSTs can be represented declaratively.30 The AGENTS.md of a transducer-based leaf would contain this declarative specification. The "build" would then involve verifying that the component's code implements exactly the specified input-output relation.
+This approach of grounding the proof tree in decidable, model-checked axioms enables a powerful methodology for compositional verification. The system's architecture allows for a separation of concerns in the proof of correctness. First, the leaf components (the axioms) are proven correct through local model checking against their FSM/FST specifications. Second, the build system, governed by the rules of linear logic, ensures that the composition of these components into larger subsystems (the inference steps) correctly preserves resources and dependencies. By induction over the structure of the proof tree, the correctness of the individual parts and the soundness of their composition imply the correctness of the entire system relative to its hierarchical specifications. This architecture does not merely build software; it simultaneously constructs a formal, verifiable proof of the software's correctness, embedding the principles of formal methods directly into the CI/CD pipeline.
+
+
+Part III: Semantic Compression and Knowledge Representation
+
+
+The architecture described thus far embeds the repository's logical structure implicitly within its file system hierarchy and a distributed network of AGENTS.md files. The user's requirement for "semantic compression" calls for making this implicit structure explicit, transforming the repository into a single, queryable knowledge graph. This part details the use of Semantic Web technologies to achieve this, defining a formal ontology for the build process and specifying a method for serializing the entire proof structure into a root-level manifest.
+
+
+Section 8: An Ontology for Proof-Theoretic Builds
+
+
+To represent the knowledge inherent in the build process in a machine-readable and interoperable way, a formal ontology is required. An ontology provides a shared vocabulary of classes and properties to model a specific domain.32 We will define this ontology using the W3C's Web Ontology Language (OWL), a standard for representing rich and complex knowledge.33
+
+
+Core Classes and Properties
+
+
+The ontology for the proof-theoretic build system will define the core concepts of the domain:
+* Classes:
+   * BuildTarget: Represents a proposition to be proven or an artifact to be constructed (a succedent in a sequent).
+   * BuildResource: Represents an available artifact or assumption used as an input (an antecedent in a sequent).
+   * ProofStep: Represents a build step associated with a directory. It is the central class modeling a node in the proof tree.
+   * AxiomaticStep: A subclass of ProofStep, specifically for leaf directories whose correctness is decidable.
+   * InferentialStep: A subclass of ProofStep for intermediary directories that compose results from child steps.
+   * Sequent: A class to represent the formal contract defined in an AGENTS.md file.
+* Object Properties (Relationships):
+   * hasPremise: Links an InferentialStep to the ProofStep instances of its child directories, modeling the structure of an inference rule.
+   * hasConclusion: Links a ProofStep to the BuildTarget it aims to produce.
+   * requiresResource: Links a ProofStep to the BuildResource instances it requires as input.
+   * hasSequent: Links a ProofStep to the Sequent that defines its contract.
+
+
+Integration with the PROV Ontology (PROV-O)
+
+
+A key aspect of this design is the integration with the W3C's PROV Ontology (PROV-O), a standard for representing provenance and data lineage.35 This allows the build process to be modeled as a verifiable chain of generation and derivation, providing a complete and auditable history for every artifact.
+* A ProofStep will be defined as a subclass of prov:Activity, representing the process that occurs.37
+* A BuildArtifact (which can be either a BuildTarget or BuildResource) will be a subclass of prov:Entity, representing the things that are created and consumed.37
+* The relationship between a ProofStep and the artifact it produces will be modeled with the prov:wasGeneratedBy property.
+* The relationship between a ProofStep and the artifacts it consumes will be modeled with the prov:used property.
+* The derivation of an output artifact from one or more input artifacts will be captured by the prov:wasDerivedFrom property.37
+This integration does not require reinventing the concepts of data lineage; instead, it leverages a robust, standardized vocabulary to describe the flow of transformations through the build system. The following table summarizes the core schema of this new ontology.
+Class/Property
+	Type
+	Domain
+	Range
+	Description & PROV-O Mapping
+	ProofStep
+	owl:Class
+	
+
+	
+
+	Represents a build step in a directory. Subclass of prov:Activity.
+	BuildArtifact
+	owl:Class
+	
+
+	
+
+	Represents a file or resource. Subclass of prov:Entity.
+	Sequent
+	owl:Class
+	
+
+	
+
+	Represents the formal contract in an AGENTS.md file.
+	hasSequent
+	owl:ObjectProperty
+	ProofStep
+	Sequent
+	Links a build step to its formal contract.
+	prov:used
+	owl:ObjectProperty
+	ProofStep
+	BuildArtifact
+	An activity (build step) used an entity (input artifact).
+	prov:wasGeneratedBy
+	owl:ObjectProperty
+	BuildArtifact
+	ProofStep
+	An entity (output artifact) was generated by an activity (build step).
+	prov:wasDerivedFrom
+	owl:ObjectProperty
+	BuildArtifact
+	BuildArtifact
+	An output artifact was derived from one or more input artifacts.
+	
+
+Section 9: The Root Directory as a Knowledge Graph Manifest
+
+
+With a formal ontology defined, the final step in achieving "semantic compression" is to serialize the entire repository's proof structure into a single, explicit manifest. This manifest will reside in the root directory, serving as the primary entry point for any machine agent seeking to understand the project's architecture.
+
+
+JSON-LD for Linked Data Representation
+
+
+The chosen format for this manifest is JSON-LD (JSON for Linked Data).39 This format is ideal because it is simultaneously a valid JSON document, making it easily parsable by virtually any programming language or tool, and a standard serialization for RDF knowledge graphs.41 This duality allows the rich semantic structure to be embedded within a familiar and accessible file format, which will be the root AGENTS.md.
+* The @context Block: The JSON-LD document will begin with a @context block. This crucial section acts as a bridge between the simple keys used in the JSON document (e.g., "step", "inputs") and the full, formal URIs defined in our OWL ontology (e.g., http://example.com/build#ProofStep). This links the manifest's data to its formal semantic meaning, enabling any compliant tool to interpret the graph correctly.39
+* The Manifest Body as an RDF Graph: The body of the root AGENTS.md will contain the full set of RDF triples, serialized as a graph of nested JSON objects, that describes the entire proof tree. The build system's final step will be to traverse the completed build and generate this graph. It will create an instance of the ProofStep class for each directory, linking them together using the hasPremise property to represent the tree structure. It will also instantiate BuildArtifact objects for every input and output file, connecting them to the appropriate steps using the prov:used and prov:wasGeneratedBy properties.
+This root AGENTS.md file becomes a complete, self-describing manifest of the repository's logical architecture. It fulfills the "semantic compression" goal in a powerful and practical way: the entire logical structure and data provenance of a potentially multi-million line codebase is compressed into a single, queryable entry point. This is the "semantic zip" concept made manifest—a monolithic, machine-readable artifact that represents the whole repository.43
+The profound implication of this design is that the repository is no longer just a collection of files to be browsed or compiled; it becomes a queryable database. An AI agent, a developer, or an automated analysis tool can load this single JSON-LD file into an RDF-compliant graph database or query engine and execute SPARQL queries to answer complex architectural and provenance questions.44 For example, one could ask:
+* "Find all ProofSteps that transitively depend on the AxiomaticStep representing the openssl-lib component."
+* "Show the complete prov:wasDerivedFrom chain for the final executable app.exe, tracing it back to all original source files."
+* "List all BuildTargets of type !Library that are used by more than five other ProofSteps."
+This capability provides an unprecedented level of automated insight and introspection into the software's structure, moving beyond what is possible with traditional static analysis tools.
+
+
+Part IV: Implementation Strategy and Future Implications
+
+
+This final part provides a practical roadmap for implementing the proposed proof-theoretic build system using widely available technologies. It also offers a concluding analysis of the architecture's strengths, challenges, and its broader implications for the future of software engineering and human-AI collaboration.
+
+
+Section 10: An Implementation Blueprint using GitHub Actions
+
+
+The proposed architecture, while theoretically sophisticated, can be implemented pragmatically using the capabilities of modern CI/CD platforms like GitHub Actions.22 The key is to design a system of orchestrated workflows that mirrors the bottom-up construction of the proof tree.
+* Workflow Orchestration: A "master" workflow, triggered on a push to the main branch, will serve as the primary orchestrator. Its first task is to analyze the repository's directory structure to determine the build order (i.e., the reverse topological sort of the proof tree). It identifies the leaf directories that must be built first.
+* Bottom-Up Execution via workflow_dispatch: The master workflow will use workflow_dispatch events to trigger the individual build workflows located within each leaf directory. This event-driven approach allows for decentralized and parallel execution of the axiomatic build steps.
+* Artifact Passing and Dependency Chaining: Upon successful completion, each workflow will upload its succedent artifact (the compiled file and its AGENTS.md sequent) using the actions/upload-artifact action. A parent directory's workflow will be configured to wait for the completion of its children's workflows. Before executing its own build logic, it will download the necessary artifacts from its children using actions/download-artifact. This mechanism of passing artifacts up the tree directly implements the flow of premises to conclusions in the proof.
+* Dynamic AGENTS.md Generation: As a first step in its execution, each workflow will dynamically generate its own AGENTS.md file. It will inspect the downloaded artifacts from its children to populate its antecedent section, thereby creating a machine-verified record of its dependencies.
+* Finalization and Knowledge Graph Generation: The workflow for the root directory is the last to run. In addition to performing its own final linking or packaging step, it has the unique responsibility of finalization. It will download the provenance data from all preceding workflow runs and aggregate this information to generate the final, complete JSON-LD knowledge graph, which it then commits to the root AGENTS.md file.
+This implementation strategy creates a robust, decentralized, and verifiable build system using standard, off-the-shelf CI/CD primitives.
+
+
+Section 11: Generating the Constructive README.md
+
+
+A core tenet of the architecture is that the README.md file serves as a human-readable narrative of the constructive proof. To ensure this narrative is always accurate and synchronized with the implementation, it must be automatically generated as a build artifact.
+* Declarative Transformation: This generation process can be implemented using a declarative data transformation language.47 For instance, a templating engine (like Jinja2 or Handlebars) or a more formal transformation language like XSLT (if the AGENTS.md were XML-based) can be used.49
+* Generation Process: As part of each directory's build step, a transformation script will be executed. This script will take two primary inputs: the directory's formal AGENTS.md file (representing the sequent) and the logs from its build run (representing the proof steps). It will then generate a README.md file that explains in clear, natural language:
+   1. The Goal: What this component's purpose is, derived from the proposition field in the succedent.
+   2. The Prerequisites: What resources and components it required as input, derived from the antecedent and linked to the README.md files of the corresponding child directories.
+   3. The Construction: A human-readable summary of the key transformation steps performed during the build.
+   4. The Result: A description of the final artifact produced, confirming that the proposition has been successfully proven.
+This automated process creates a system that is not merely self-documenting, but one whose documentation is a provably correct reflection of its implementation. Because the README.md is a build artifact generated directly from the same formal AGENTS.md contract that governs the build itself, it is logically impossible for the documentation to diverge from the code's behavior. This solves one of the most persistent and costly problems in software maintenance. The entire repository becomes a browsable, hyperlinked network of proofs, where the documentation is guaranteed to be in sync with the code it describes.
+
+
+Section 12: Analysis and Future Implications
+
+
+The architecture proposed and detailed in this report represents a significant departure from conventional software development and build methodologies. Its adoption offers profound benefits but also presents considerable challenges.
+
+
+Strengths
+
+
+* Provable Correctness: The system's primary strength is its foundation in formal logic, which provides a framework for compositional verification. The correctness of the whole is derived from the verified correctness of its parts and the soundness of their composition.
+* Hermeticity and Reproducibility: The use of linear logic to model resource consumption provides a formal guarantee that builds are hermetic (using only specified inputs) and reproducible.
+* Auditable Provenance: The integration of the PROV-O ontology and the generation of a repository-wide knowledge graph create a complete, queryable, and auditable record of the data lineage for every artifact produced.
+* Enhanced Agent Collaboration: The formal, machine-readable structure of the repository, governed by AGENTS.md contracts and exposed via a semantic knowledge graph, creates an ideal environment for advanced AI agents. It provides the unambiguous context and verifiable guardrails necessary for reliable, autonomous software engineering, aligning with the principles of advanced agent architectures like the Aletheia Protocol.15
+
+
+Challenges
+
+
+* Complexity and Learning Curve: The system is undeniably complex, requiring cross-disciplinary expertise in formal methods, substructural logics, ontology engineering, and advanced build systems. This presents a significant barrier to adoption.
+* Performance Overhead: The overhead associated with dynamic file generation, logical verification, and knowledge graph construction may result in slower build times for rapid, iterative local development compared to highly optimized traditional systems like Bazel.
+* Tooling Investment: Realizing this architecture requires a significant investment in custom tooling. This includes the master build orchestrator, the AGENTS.md generation and verification logic, model checkers for axiomatic leaves, and tools for generating and querying the final knowledge graph.
+
+
+Future Directions
+
+
+Despite the challenges, this architecture points toward a future where software development is a more rigorous, reliable, and automated discipline. It serves as a foundation for several transformative possibilities:
+* AI-Driven Software Synthesis: With specifications formalized as propositions, it becomes conceivable for an AI agent to not just verify a proof (code) but to synthesize it automatically, searching for a valid proof within the logical system that satisfies the given type.
+* Automated Debugging via Proof Analysis: A build failure in this system is a failed proof. The point of failure in the proof tree pinpoints the exact logical inconsistency, enabling automated debugging agents to analyze the faulty inference step and propose a correction.
+* Semantic Version Control: The current model of version control, based on textual diffs, is brittle. This architecture opens the door to a "semantic version control" system, as envisioned in the "Semantic Zip" concept.43 A "commit" would no longer be a text patch but a record of a transformation from one valid proof tree to another. "Merging" would become a well-defined logical problem of synthesizing two independent proofs into a new, coherent one, a task potentially mediated by an AI agent.
+In conclusion, the synthesis of sequent calculus, linear logic, and semantic technologies provides a powerful and coherent blueprint for the future of software construction. It transforms the act of building software from an informal craft into a formal, verifiable, and semantically rich engineering discipline, creating repositories that are not just collections of code, but living, provable, and intelligent artifacts.
+Works cited
+1. Understanding Bazel: An Introductory Overview | by David Mavrodiev - Medium, accessed October 12, 2025, https://medium.com/@d.s.m/understanding-bazel-an-introductory-overview-0c9ddb1b1ce9
+2. Open-source Bazel Build Tutorial, Examples, and Advantages - Semaphore CI, accessed October 12, 2025, https://semaphore.io/blog/bazel-build-tutorial-examples
+3. Sequent Calculus - CMU School of Computer Science, accessed October 12, 2025, https://www.cs.cmu.edu/~fp/courses/15816-f01/handouts/picalc.pdf
+4. Lecture Notes on Sequent Calculus, accessed October 12, 2025, https://www.cs.cmu.edu/~fp/courses/15317-s23/lectures/07-seqcalc.pdf
+5. Sequent calculus: rules and proof construction | Proof Theory Class Notes - Fiveable, accessed October 12, 2025, https://fiveable.me/proof-theory/unit-4/sequent-calculus-rules-proof-construction/study-guide/ofPyrfHSHF26MYqr
+6. The Sequent Calculus - Open Logic Project Builds, accessed October 12, 2025, https://builds.openlogicproject.org/content/first-order-logic/sequent-calculus/sequent-calculus.pdf
+7. How to understand Sequent Calculus - YouTube, accessed October 12, 2025, https://www.youtube.com/watch?v=hoE-XBklNVU
+8. CHAPTER 10: TRUTH TREES - Sandiego, accessed October 12, 2025, https://home.sandiego.edu/~baber/logic/10.TruthTrees.pdf
+9. Proof systems (CS 2800, Fall 2015) - CS@Cornell, accessed October 12, 2025, https://www.cs.cornell.edu/courses/cs2800/2016sp/lectures/lec38-proofs.html
+10. Par Part 1: Sequent Calculus - Ryan Brewer, accessed October 12, 2025, https://ryanbrewer.dev/posts/sequent-calculus/
+11. Interactive Tutorial of the Sequent Calculus - Logitext, accessed October 12, 2025, http://logitext.mit.edu/tutorial
+12. Linear logic - Wikipedia, accessed October 12, 2025, https://en.wikipedia.org/wiki/Linear_logic
+13. Linear Logic - Stanford Encyclopedia of Philosophy, accessed October 12, 2025, https://plato.stanford.edu/entries/logic-linear/
+14. Lecture Notes on Linear Logic, accessed October 12, 2025, https://www.cs.cmu.edu/~fp/courses/15816-s10/lectures/23-linlog.pdf
+15. Agent Protocol: Logic and Paraconsistency
+16. en.wikipedia.org, accessed October 12, 2025, https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence#:~:text=The%20Curry%E2%80%93Howard%20correspondence%20is%20the%20observation%20that%20there%20is,can%20be%20considered%20as%20identical.
+17. Curry–Howard correspondence - Wikipedia, accessed October 12, 2025, https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence
+18. The Curry-Howard correspondence between ... - Haskell for all, accessed October 12, 2025, https://www.haskellforall.com/2017/02/the-curry-howard-correspondence-between.html
+19. The Curry-Howard Correspondence - YouTube, accessed October 12, 2025, https://www.youtube.com/watch?v=GdcOy6zVFC4
+20. Curry-Howard Isomorphism - Department of information engineering and computer science, accessed October 12, 2025, https://disi.unitn.it/~bernardi/RSISE11/Papers/curry-howard.pdf
+21. Researching AGENTS.md File
+22. GitHub Repository Special Files Explained
+23. Common Workflow Language (CWL) Workflow Description, draft 3, accessed October 12, 2025, https://www.commonwl.org/draft-3/Workflow.html
+24. JSON Finite State Machine (JFMS) Representation, Validation and Generation - GitHub, accessed October 12, 2025, https://github.com/ryankurte/jfsm
+25. Finite State Machine Sensor - Custom Integrations - Home Assistant Community, accessed October 12, 2025, https://community.home-assistant.io/t/finite-state-machine-sensor/510915
+26. Finite State Machine - Chatto, accessed October 12, 2025, https://chatto.jaimeteb.com/finitestatemachine/
+27. muxa/esphome-state-machine - GitHub, accessed October 12, 2025, https://github.com/muxa/esphome-state-machine
+28. What is a finite state transducer? - Stack Overflow, accessed October 12, 2025, https://stackoverflow.com/questions/4872115/what-is-a-finite-state-transducer
+29. Encoding linear models as weighted finite-state transducers - Google Research, accessed October 12, 2025, https://research.google.com/pubs/archive/43078.pdf
+30. how can I create a Finite State Transducer? - Stack Overflow, accessed October 12, 2025, https://stackoverflow.com/questions/41922697/how-can-i-create-a-finite-state-transducer
+31. arXiv:2407.08103v3 [cs.CL] 5 Aug 2024, accessed October 12, 2025, https://arxiv.org/pdf/2407.08103
+32. Ontology engineering - Wikipedia, accessed October 12, 2025, https://en.wikipedia.org/wiki/Ontology_engineering
+33. Web Ontology Language - Wikipedia, accessed October 12, 2025, https://en.wikipedia.org/wiki/Web_Ontology_Language
+34. OWL - Semantic Web Standards - W3C, accessed October 12, 2025, https://www.w3.org/OWL/
+35. Mapping PROV to BFO - John Beverley, accessed October 12, 2025, https://johnbeverley.com/blogic/2025/2/14/mapping-prov-to-bfo
+36. W3C Prov - Wikipedia, accessed October 12, 2025, https://en.wikipedia.org/wiki/W3C_Prov
+37. PROV-O: The PROV Ontology - W3C, accessed October 12, 2025, https://www.w3.org/TR/prov-o/
+38. The PROV Ontology: Model and Formal Semantics - W3C, accessed October 12, 2025, https://www.w3.org/TR/2011/WD-prov-o-20111213/
+39. What is JSON-LD? - Fluree, accessed October 12, 2025, https://flur.ee/fluree-blog/what-is-json-ld/
+40. The Anatomy of a Content Knowledge Graph | Schema App Solutions, accessed October 12, 2025, https://www.schemaapp.com/schema-markup/the-anatomy-of-a-content-knowledge-graph/
+41. JSON-LD for Linked Open Data and Knowledge Graphs - SoCal Linux Expo, accessed October 12, 2025, https://www.socallinuxexpo.org/sites/default/files/presentations/Enrich%20Your%20Enterprise%20Knowledge%20Graph%20with%20Linked%20Open%20Data%20via%20JSON-LD%20-%20Jans%20Aasman.pdf
+42. JSON-LD Tutorial | NeuroWeb - official documentation, accessed October 12, 2025, https://docs.neuroweb.ai/knowledge-mining/knowledge-mining-kit/json-ld-tutorial
+43. From Files to Artifacts: Analyzing the 'Semantic Zip' and the Future of Agent-Driven Software Engineering
+44. What Is the Semantic Web? | Ontotext Fundamentals, accessed October 12, 2025, https://www.ontotext.com/knowledgehub/fundamentals/what-is-the-semantic-web/
+45. Semantic Web and RDF - GeeksforGeeks, accessed October 12, 2025, https://www.geeksforgeeks.org/web-scraping/semantic-web-and-rdf/
+46. GitHub Repository Setup for Jules
+47. Transformation language - Wikipedia, accessed October 12, 2025, https://en.wikipedia.org/wiki/Transformation_language
+48. Declarative programming - Wikipedia, accessed October 12, 2025, https://en.wikipedia.org/wiki/Declarative_programming
+49. Declarative Data Transformation: Moving Beyond Imperative Scripts - Dev3lop, accessed October 12, 2025, https://dev3lop.com/declarative-data-transformation-moving-beyond-imperative-scripts/
