@@ -147,6 +147,10 @@
     proto:hasRule <file:///app/protocols/dependency-install-on-start> ;
     schema:description "A protocol for ensuring a reliable execution environment through formal dependency management." .
 
+<file:///app/protocols/refactor-001> proto:associatedTool <file:///app/protocols/tooling/refactor.py> ;
+    proto:hasRule <file:///app/protocols/refactor-rename-symbol> ;
+    schema:description "A protocol for using the refactoring tool." .
+
 <file:///app/protocols/security/security-header> schema:description "Defines the identity and purpose of the Security Protocol document." .
 
 <file:///app/protocols/security/security-vuln-reporting-001> proto:hasRule <file:///app/protocols/security/no-public-disclosure>,
@@ -315,6 +319,9 @@
 
 <file:///app/protocols/dependency-install-on-start> proto:enforcement "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions." ;
     schema:description "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed." .
+
+<file:///app/protocols/refactor-rename-symbol> proto:enforcement "The tool is used by invoking it from the command line with the appropriate arguments. The agent should use this tool when a refactoring task is requested." ;
+    schema:description "The `refactor.py` tool can be used to rename a symbol and all of its references." .
 
 <file:///app/protocols/security/no-public-disclosure> proto:enforcement "Violation of this rule may result in being banned from the project community." ;
     schema:description "Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed." .

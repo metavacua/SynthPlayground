@@ -10,8 +10,10 @@ corresponding `AGENTS.md` file and the source code docstrings.
 
 This module is governed by a series of machine-readable protocols defined in `AGENTS.md`. These protocols are the source of truth for the agent's behavior within this scope. The key protocols are:
 
+- **`agent-bootstrap-001`**: A foundational protocol that dictates the agent's initial actions upon starting any task.
 - **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
 - **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
+- **`refactor-001`**: A protocol for using the refactoring tool.
 
 ## Key Components
 
@@ -92,6 +94,10 @@ This module is governed by a series of machine-readable protocols defined in `AG
   > A command-line tool for programmatically updating protocol source files.\n  > \n  > This script provides the mechanism for the agent to perform self-correction\n  > by modifying its own governing protocols based on structured, actionable\n  > lessons. It is a key component of the Protocol-Driven Self-Correction (PDSC)\n  > workflow.\n  > \n  > The tool operates on the .protocol.json files located in the `protocols/`\n  > directory, performing targeted updates based on command-line arguments.
 
 - **`tooling/readme_generator.py`**:
+
+  > _No docstring found._
+
+- **`tooling/refactor.py`**:
 
   > _No docstring found._
 

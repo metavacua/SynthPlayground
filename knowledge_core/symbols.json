@@ -1346,6 +1346,62 @@
     },
     {
       "_type": "tag",
+      "name": "TestRefactorTool",
+      "path": "./tooling/test_refactor.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_refactor.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_refactor.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_rename_symbol",
+      "path": "./tooling/test_refactor.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "find_symbol_definition",
+      "path": "./tooling/refactor.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "find_references",
+      "path": "./tooling/refactor.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/refactor.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "analyze_planning_efficiency",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",

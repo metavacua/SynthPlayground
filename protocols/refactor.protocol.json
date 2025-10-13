@@ -1,0 +1,14 @@
+{
+  "protocol_id": "refactor-001",
+  "description": "A protocol for using the refactoring tool.",
+  "rules": [
+    {
+      "rule_id": "refactor-rename-symbol",
+      "description": "The `refactor.py` tool can be used to rename a symbol and all of its references.",
+      "enforcement": "The tool is used by invoking it from the command line with the appropriate arguments. The agent should use this tool when a refactoring task is requested."
+    }
+  ],
+  "associated_tools": [
+    "tooling/refactor.py"
+  ]
+}
