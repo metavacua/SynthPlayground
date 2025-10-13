@@ -79,6 +79,21 @@ This is not a JSON line and should be skipped.
             expected_tools = ["tool_A", "tooling/some_script.py", "tool_D", "run_in_bash_session"]
             self.assertCountEqual(used_tools, expected_tools)
 
+    @patch('os.walk')
+    @patch('tooling.protocol_auditor.run_protocol_source_check')
+    def test_end_to_end_report_generation(self, mock_source_check, mock_walk):
+        """
+        Run the main function end-to-end and verify the content
+        of the generated Markdown report, mocking a hierarchical file system.
+        """
+        # Mock the source check to return a success state (an empty list)
+        mock_source_check.return_value = []
+
+        # Simulate finding multiple AGENTS.md files
+        mock_walk.return_value = [
+            ('/app', [], ['AGENTS.md', 'some_other_file', 'activity.log.jsonl']),
+            ('/app/core', [], ['AGENTS.md']),
+        ]
     @patch('protocol_auditor.get_protocol_tools_from_agents_md')
     @patch('protocol_auditor.get_used_tools_from_log')
     @patch('protocol_auditor.run_protocol_source_check')
@@ -129,6 +144,24 @@ This is not a JSON line and should be skipped.
         # Create a mock handle specifically for the write operation
         mock_write_handle = mock_open().return_value
 
+        m = mock_open()
+        with patch("builtins.open", m):
+            # This function will be the side_effect for our mock_open
+            def mock_file_open(filename, *args, **kwargs):
+                if 'activity.log' in filename:
+                    return mock_open(read_data=self.mock_log_content).return_value
+                elif 'core/AGENTS.md' in filename:
+                    # Add a unique tool to this file to check it's being read
+                    return mock_open(read_data="```json\n{\"protocol_id\":\"core-proto\", \"associated_tools\": [\"core_tool\"]}\n```").return_value
+                elif 'AGENTS.md' in filename:
+                    return mock_open(read_data=self.mock_agents_md_content).return_value
+                elif 'audit_report.md' in filename:
+                    return mock_write_handle
+                else:
+                    # Fallback for any other file open calls
+                    return mock_open(read_data="").return_value
+
+            m.side_effect = mock_file_open
         # This dictionary will map filepaths to their mock content
         mock_files = {
             os.path.abspath(protocol_auditor.LOG_FILE): self.mock_log_content,
@@ -170,6 +203,7 @@ This is not a JSON line and should be skipped.
         # Check for unused protocol tools (in protocol but not used)
         self.assertIn("`tool_B`", written_content)
         self.assertIn("`tool_C`", written_content)
+        self.assertIn("`core_tool`", written_content) # Check for the tool from the mocked core/AGENTS.md
 
         # Check for tool centrality counts
         self.assertIn("| `run_in_bash_session` | 1 |", written_content)

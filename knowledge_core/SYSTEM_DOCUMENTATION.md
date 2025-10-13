@@ -357,6 +357,12 @@ _No module-level docstring found._
   > Removes temporary summary files from a protocols directory.
 
 
+- #### `def compile_centralized_knowledge_graph()`
+
+  > Finds all protocol.json files in the entire repository, loads them, and
+  > compiles them into a single, unified knowledge graph.
+
+
 - #### `def find_protocol_dirs(root_dir)`
 
   > Finds all directories named 'protocols' within the root directory,
@@ -365,7 +371,10 @@ _No module-level docstring found._
 
 - #### `def generate_summary(child_agents_md_path)`
 
-  > Generates a summary of a child AGENTS.md file by extracting protocol IDs.
+  > Extracts the full, rendered protocol blocks from a child AGENTS.md file.
+  > This function finds all protocol definitions (human-readable markdown and
+  > the associated machine-readable JSON block) and concatenates them into a
+  > single string to be injected into the parent AGENTS.md.
 
 
 - #### `def get_parent_module(module_path, all_module_paths)`
