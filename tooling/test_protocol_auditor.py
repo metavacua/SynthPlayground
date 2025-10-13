@@ -84,8 +84,6 @@ This is not a JSON line and should be skipped.
     @patch('protocol_auditor.run_protocol_source_check')
     @patch('protocol_auditor.find_all_agents_md_files')
     def test_end_to_end_report_generation(self, mock_find_files, mock_source_check, mock_get_used_tools, mock_get_protocol_tools):
-    @patch('protocol_auditor.run_protocol_source_check')
-    def test_end_to_end_report_generation(self, mock_source_check):
         """
         Run the main function end-to-end by mocking the data gathering functions
         and verifying the content of the generated Markdown report.
@@ -120,92 +118,23 @@ This is not a JSON line and should be skipped.
             self.assertIn("| `tool_A` | 1 |", written_content)
             self.assertIn("| `tooling/some_script.py` | 1 |", written_content)
             self.assertIn("| `tool_D` | 1 |", written_content)
-        # Mock the source check to return a success state
-        mock_source_check.return_value = [{
-            "status": "success",
-            "message": "AGENTS.md appears to be up-to-date."
-        }]
 
-        # Create a mock handle specifically for the write operation
-        mock_write_handle = mock_open().return_value
-
-        # This dictionary will map filepaths to their mock content
-        mock_files = {
-            os.path.abspath(protocol_auditor.LOG_FILE): self.mock_log_content,
-            # We will only mock one AGENTS.md for this test to keep it simple
-            os.path.abspath("AGENTS.md"): self.mock_agents_md_content,
-            os.path.abspath(self.mock_report_path): "" # For the write
-        }
-
-        # The new side effect function for `open`
-        def open_side_effect(path, mode='r'):
-            path = os.path.abspath(path)
-            if mode == 'w':
-                # This handles the report writing
-                return mock_write_handle
-
-            # This handles reading from our mocked files
-            content = mock_files.get(path, "") # Default to empty for other files
-            return mock_open(read_data=content).return_value
-
-        # We also need to mock find_all_agents_md_files to control its output
-        with patch("builtins.open", open_side_effect), \
-             patch("protocol_auditor.find_all_agents_md_files", return_value=[os.path.abspath("AGENTS.md")]):
-            protocol_auditor.main()
-
-        # The auditor calculates an absolute path, so we must check for that.
-        expected_report_path = os.path.abspath(self.mock_report_path)
-
-        # Check that the report was written to the correct file
-        mock_write_handle.write.assert_called_once()
-
-        # Get the content that was written to the report file
-        written_content = mock_write_handle.write.call_args[0][0]
-
-        # --- Assertions on Report Content ---
-        # Check for unreferenced tools (used but not in protocol)
-        self.assertIn("`tool_D`", written_content)
-        self.assertIn("`tooling/some_script.py`", written_content)
-
-        # Check for unused protocol tools (in protocol but not used)
-        self.assertIn("`tool_B`", written_content)
-        self.assertIn("`tool_C`", written_content)
-
-        # Check for tool centrality counts
-        self.assertIn("| `run_in_bash_session` | 1 |", written_content)
-        self.assertIn("| `tool_A` | 1 |", written_content)
-        self.assertIn("| `tooling/some_script.py` | 1 |", written_content)
-        self.assertIn("| `tool_D` | 1 |", written_content)
-
-    @patch('os.path.getmtime')
     @patch('os.walk')
-    def test_find_all_agents_md_files_with_special_dirs(self, mock_walk, mock_getmtime):
+    def test_find_all_agents_md_files_with_special_dirs(self, mock_walk):
         """
         Verify that `find_all_agents_md_files` correctly ignores directories
         listed in the SPECIAL_DIRS configuration.
         """
         # --- Mock Filesystem Setup ---
         # This setup simulates a root AGENTS.md, a nested one, and one in a special dir.
-        mock_fs = {
-            os.path.abspath('.'): (['core', 'protocols', 'protocols/security'], ['AGENTS.md', 'README.md']),
-            os.path.abspath('./core'): (['protocols'], ['AGENTS.md']),
-            os.path.abspath('./core/protocols'): ([], ['some.protocol.md']),
-            os.path.abspath('./protocols'): ([], ['main.protocol.md']),
-            os.path.abspath('./protocols/security'): ([], ['AGENTS.md']), # This should be ignored
-        }
-
-        # The first element of the tuple is directories, the second is files.
-        def walk_side_effect(path, topdown=True):
-            if path in mock_fs:
-                dirs, files = mock_fs[path]
-                yield path, dirs, files
-                for d in dirs:
-                    # This recursive call is the key to making the mock work
-                    yield from walk_side_effect(os.path.join(path, d))
-            else:
-                yield path, [], [] # Stop walking if path not in mock_fs
-
-        mock_walk.side_effect = walk_side_effect
+        auditor_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        mock_walk.return_value = [
+            (auditor_root, ['core', 'protocols'], ['AGENTS.md', 'README.md']),
+            (os.path.join(auditor_root, 'core'), ['protocols'], ['AGENTS.md']),
+            (os.path.join(auditor_root, 'core', 'protocols'), [], ['some.protocol.md']),
+            (os.path.join(auditor_root, 'protocols'), ['security'], ['main.protocol.md']),
+            (os.path.join(auditor_root, 'protocols', 'security'), [], ['AGENTS.md']), # This should be ignored
+        ]
 
         # --- Execution ---
         # The auditor's ROOT_DIR is the parent of the tooling dir, so we call it from there.
