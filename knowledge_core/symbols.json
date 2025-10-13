@@ -733,7 +733,7 @@
       "name": "find_all_agents_md_files",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 36,
+      "line": 38,
       "kind": "function"
     },
     {
@@ -741,7 +741,7 @@
       "name": "get_used_tools_from_log",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 45,
+      "line": 62,
       "kind": "function"
     },
     {
@@ -749,7 +749,7 @@
       "name": "get_protocol_tools_from_agents_md",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 87,
+      "line": 104,
       "kind": "function"
     },
     {
@@ -757,7 +757,7 @@
       "name": "run_completeness_check",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 123,
+      "line": 140,
       "kind": "function"
     },
     {
@@ -765,7 +765,7 @@
       "name": "run_centrality_analysis",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 131,
+      "line": 148,
       "kind": "function"
     },
     {
@@ -773,7 +773,7 @@
       "name": "run_protocol_source_check",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 138,
+      "line": 155,
       "kind": "function"
     },
     {
@@ -781,7 +781,7 @@
       "name": "generate_markdown_report",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 185,
+      "line": 202,
       "kind": "function"
     },
     {
@@ -789,7 +789,7 @@
       "name": "main",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 238,
+      "line": 255,
       "kind": "function"
     },
     {
@@ -1565,7 +1565,31 @@
       "name": "test_end_to_end_report_generation",
       "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
-      "line": 83,
+      "line": 84,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_find_all_agents_md_files_with_special_dirs",
+      "path": "./tooling/test_protocol_auditor.py",
+      "language": "Python",
+      "line": 150,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "walk_side_effect",
+      "path": "./tooling/test_protocol_auditor.py",
+      "language": "Python",
+      "line": 166,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "mock_file_open",
+      "path": "./tooling/test_protocol_auditor.py",
+      "language": "Python",
+      "line": 104,
       "kind": "function"
     },
     {
