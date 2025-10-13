@@ -209,9 +209,13 @@ This new protocol provides a robust, reliable, and formally verifiable mechanism
 
 ---
 
+**Branch Status:** `OPEN`
+
+
 ```json
 {
   "protocol_id": "aorp-header",
+  "branch_status": "open",
   "description": "Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP).",
   "rules": [
     {

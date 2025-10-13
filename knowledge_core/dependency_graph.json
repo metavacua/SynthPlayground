@@ -11,12 +11,37 @@
       "type": "python-external"
     },
     {
-      "id": "rdflib",
+      "id": "pyyaml",
       "path": null,
       "type": "python-external"
     },
     {
       "id": "requests",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "black",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "flake8",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "rdflib",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "pytest",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "Markdown",
       "path": null,
       "type": "python-external"
     }
@@ -28,11 +53,31 @@
     },
     {
       "source": "root-python-project",
-      "target": "rdflib"
+      "target": "pyyaml"
     },
     {
       "source": "root-python-project",
       "target": "requests"
+    },
+    {
+      "source": "root-python-project",
+      "target": "black"
+    },
+    {
+      "source": "root-python-project",
+      "target": "flake8"
+    },
+    {
+      "source": "root-python-project",
+      "target": "rdflib"
+    },
+    {
+      "source": "root-python-project",
+      "target": "pytest"
+    },
+    {
+      "source": "root-python-project",
+      "target": "Markdown"
     }
   ]
 }

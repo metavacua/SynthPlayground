@@ -30,16 +30,7 @@ import re
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 LOG_FILE = os.path.join(ROOT_DIR, "logs", "activity.log.jsonl")
-AGENTS_MD_FILENAME = "AGENTS.md"
-
-
-def find_all_agents_md_files(root_dir):
-    """Finds all AGENTS.md files in the repository."""
-    agents_files = []
-    for dirpath, _, filenames in os.walk(root_dir):
-        if AGENTS_MD_FILENAME in filenames:
-            agents_files.append(os.path.join(dirpath, AGENTS_MD_FILENAME))
-    return agents_files
+AGENTS_FILE = os.path.join(ROOT_DIR, "AGENTS.md")
 
 
 def get_used_tools_from_log(log_path):
@@ -84,40 +75,46 @@ def get_used_tools_from_log(log_path):
     return used_tools
 
 
-def get_protocol_tools_from_agents_md(agents_md_paths):
+def get_protocol_tools_from_agents_md(agents_md_path):
     """
-    Parses a list of AGENTS.md files to get a set of all tools associated
-    with protocols.
+    Parses AGENTS.md to get a set of all tools associated with protocols.
+    NOTE: This function correctly parses all JSON blocks, contrary to the
+    outdated warning in the module-level docstring.
     """
-    protocol_tools = set()
-    for file_path in agents_md_paths:
-        try:
-            with open(file_path, "r") as f:
-                content = f.read()
+    try:
+        with open(agents_md_path, "r") as f:
+            content = f.read()
 
-            json_blocks = re.findall(r"```json\n(.*?)\n```", content, re.DOTALL)
-            if not json_blocks:
-                print(f"Warning: No JSON blocks found in {file_path}", file=sys.stderr)
-                continue
+        # Use re.findall to extract all JSON code blocks
+        json_blocks = re.findall(r"```json\n(.*?)\n```", content, re.DOTALL)
+        if not json_blocks:
+            print(f"Warning: No JSON blocks found in {agents_md_path}", file=sys.stderr)
+            return set()
 
-            for json_content in json_blocks:
-                try:
-                    data = json.loads(json_content)
-                    rules = data.get("rules", [])
-                    for tool in data.get("associated_tools", []):
+        protocol_tools = set()
+        for json_content in json_blocks:
+            try:
+                data = json.loads(json_content)
+                # Handle both single protocol objects and lists of them
+                rules = data.get("rules", [])
+                # The associated_tools might be at the top level
+                for tool in data.get("associated_tools", []):
+                    protocol_tools.add(tool)
+                # Or inside each rule
+                for rule in rules:
+                    for tool in rule.get("associated_tools", []):
                         protocol_tools.add(tool)
-                    for rule in rules:
-                        for tool in rule.get("associated_tools", []):
-                            protocol_tools.add(tool)
-                except json.JSONDecodeError:
-                    continue
-        except FileNotFoundError:
-            print(f"Error: Protocol file not found at {file_path}", file=sys.stderr)
-            continue
-        except Exception as e:
-            print(f"An unexpected error occurred while parsing {file_path}: {e}", file=sys.stderr)
-            continue
-    return protocol_tools
+            except json.JSONDecodeError:
+                # Ignore blocks that aren't valid JSON
+                continue
+        return protocol_tools
+
+    except FileNotFoundError:
+        print(f"Error: Protocol file not found at {agents_md_path}", file=sys.stderr)
+        return set()
+    except Exception as e:
+        print(f"An unexpected error occurred while parsing {agents_md_path}: {e}", file=sys.stderr)
+        return set()
 
 
 def run_completeness_check(used_tools, protocol_tools):
@@ -135,73 +132,58 @@ def run_centrality_analysis(used_tools):
     return Counter(used_tools)
 
 
-def run_protocol_source_check(all_agents_files):
+def run_protocol_source_check():
     """
-    Checks if each AGENTS.md file is older than its corresponding source files.
-    Returns a list of warning/error dictionaries.
+    Checks if AGENTS.md is older than its source files.
+    Returns a dictionary with the check's status and relevant details.
     """
-    results = []
-    for agents_md_path in all_agents_files:
-        module_dir = os.path.dirname(agents_md_path)
-        protocols_dir = os.path.join(module_dir, "protocols")
+    agents_md_path = AGENTS_FILE
+    protocols_dir = os.path.join(ROOT_DIR, "protocols")
 
-        if not os.path.isdir(protocols_dir):
-            # This AGENTS.md file is likely a leaf or not a module, which is fine.
-            continue
+    if not os.path.exists(agents_md_path):
+        return {"status": "error", "message": "AGENTS.md not found."}
 
-        try:
-            agents_md_mtime = os.path.getmtime(agents_md_path)
-            latest_source_mtime = 0
-            latest_source_file = ""
+    try:
+        agents_md_mtime = os.path.getmtime(agents_md_path)
+        latest_source_mtime = 0
+        latest_source_file = ""
 
-            for root, _, files in os.walk(protocols_dir):
-                for file in files:
-                    if file.endswith((".json", ".md")):
-                        path = os.path.join(root, file)
-                        mtime = os.path.getmtime(path)
-                        if mtime > latest_source_mtime:
-                            latest_source_mtime = mtime
-                            latest_source_file = path
+        for root, _, files in os.walk(protocols_dir):
+            for file in files:
+                if file.endswith((".json", ".md")):
+                    path = os.path.join(root, file)
+                    mtime = os.path.getmtime(path)
+                    if mtime > latest_source_mtime:
+                        latest_source_mtime = mtime
+                        latest_source_file = path
 
-            if latest_source_mtime > agents_md_mtime:
-                results.append({
-                    "status": "warning",
-                    "message": f"`{os.path.relpath(agents_md_path, ROOT_DIR)}` may be out of date.",
-                    "details": f"Latest source file modified: `{os.path.relpath(latest_source_file, ROOT_DIR)}`."
-                })
+        if latest_source_mtime > agents_md_mtime:
+            return {
+                "status": "warning",
+                "message": "AGENTS.md may be out of date.",
+                "details": f"Latest source file modified: `{latest_source_file}`."
+            }
+        else:
+            return {"status": "success", "message": "AGENTS.md appears to be up-to-date."}
 
-        except Exception as e:
-            results.append({
-                "status": "error",
-                "message": f"Could not perform source check for `{os.path.relpath(agents_md_path, ROOT_DIR)}`: {e}"
-            })
-
-    if not results:
-        return [{"status": "success", "message": "All AGENTS.md files appear to be up-to-date."}]
-
-    return results
+    except Exception as e:
+        return {"status": "error", "message": f"Could not perform protocol source check: {e}"}
 
 
-def generate_markdown_report(source_checks, unreferenced, unused, centrality):
+def generate_markdown_report(source_check, unreferenced, unused, centrality):
     """Generates a Markdown-formatted string from the audit results."""
     report = ["# Protocol Audit Report"]
 
     # --- Source Check ---
     report.append("## 1. `AGENTS.md` Source Check")
-    has_warning = any(check['status'] == 'warning' for check in source_checks)
-    has_error = any(check['status'] == 'error' for check in source_checks)
-
-    if not has_warning and not has_error:
-        report.append("- ✅ **Success:** All AGENTS.md files appear to be up-to-date.")
+    if source_check['status'] == 'success':
+        report.append(f"- ✅ **Success:** {source_check['message']}")
+    elif source_check['status'] == 'warning':
+        report.append(f"- ⚠️ **Warning:** {source_check['message']}")
+        report.append(f"  - {source_check['details']}")
+        report.append("  - **Recommendation:** Run `make AGENTS.md` to re-compile.")
     else:
-        for check in source_checks:
-            if check['status'] == 'warning':
-                report.append(f"- ⚠️ **Warning:** {check['message']}")
-                report.append(f"  - {check['details']}")
-                report.append("  - **Recommendation:** Run `make AGENTS.md` to re-compile.")
-            elif check['status'] == 'error':
-                 report.append(f"- ❌ **Error:** {check['message']}")
-
+        report.append(f"- ❌ **Error:** {source_check['message']}")
 
     # --- Completeness Check ---
     report.append("\n## 2. Protocol Completeness")
@@ -240,18 +222,17 @@ def main():
     print("--- Initializing Protocol Auditor ---", file=sys.stderr)
 
     # Get data from sources
-    all_agents_files = find_all_agents_md_files(ROOT_DIR)
     used_tools_from_log = get_used_tools_from_log(LOG_FILE)
-    protocol_tools_from_agents = get_protocol_tools_from_agents_md(all_agents_files)
+    protocol_tools_from_agents = get_protocol_tools_from_agents_md(AGENTS_FILE)
 
     # Run analyses
-    source_check_results = run_protocol_source_check(all_agents_files)
+    source_check_result = run_protocol_source_check()
     unreferenced_tools, unused_protocol_tools = run_completeness_check(used_tools_from_log, protocol_tools_from_agents)
     centrality_analysis = run_centrality_analysis(used_tools_from_log)
 
     # Generate report
     report_content = generate_markdown_report(
-        source_check_results,
+        source_check_result,
         unreferenced_tools,
         unused_protocol_tools,
         centrality_analysis

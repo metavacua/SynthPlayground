@@ -714,7 +714,7 @@
     },
     {
       "_type": "tag",
-      "name": "find_all_agents_md_files",
+      "name": "get_used_tools_from_log",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
       "line": 36,
@@ -722,18 +722,10 @@
     },
     {
       "_type": "tag",
-      "name": "get_used_tools_from_log",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 45,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
       "name": "get_protocol_tools_from_agents_md",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 87,
+      "line": 78,
       "kind": "function"
     },
     {
@@ -741,7 +733,7 @@
       "name": "run_completeness_check",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 123,
+      "line": 120,
       "kind": "function"
     },
     {
@@ -749,7 +741,7 @@
       "name": "run_centrality_analysis",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 131,
+      "line": 128,
       "kind": "function"
     },
     {
@@ -757,7 +749,7 @@
       "name": "run_protocol_source_check",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 138,
+      "line": 135,
       "kind": "function"
     },
     {
@@ -765,7 +757,7 @@
       "name": "generate_markdown_report",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 185,
+      "line": 173,
       "kind": "function"
     },
     {
@@ -773,7 +765,7 @@
       "name": "main",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 238,
+      "line": 220,
       "kind": "function"
     },
     {
