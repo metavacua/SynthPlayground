@@ -117,7 +117,7 @@
       "name": "Logger",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 36,
+      "line": 35,
       "kind": "class"
     },
     {
@@ -125,7 +125,7 @@
       "name": "__init__",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 41,
+      "line": 40,
       "kind": "function"
     },
     {
@@ -133,7 +133,7 @@
       "name": "_load_schema",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 57,
+      "line": 56,
       "kind": "function"
     },
     {
@@ -141,7 +141,7 @@
       "name": "log",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 83,
+      "line": 82,
       "kind": "function"
     },
     {
@@ -602,30 +602,6 @@
     },
     {
       "_type": "tag",
-      "name": "TestTemporalOrienter",
-      "path": "./tooling/test_temporal_orienter.py",
-      "language": "Python",
-      "line": 4,
-      "kind": "class"
-    },
-    {
-      "_type": "tag",
-      "name": "test_get_dbpedia_summary_success",
-      "path": "./tooling/test_temporal_orienter.py",
-      "language": "Python",
-      "line": 6,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "test_get_dbpedia_summary_not_found",
-      "path": "./tooling/test_temporal_orienter.py",
-      "language": "Python",
-      "line": 16,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
       "name": "main",
       "path": "./tooling/master_control_cli.py",
       "language": "Python",
@@ -741,7 +717,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 376,
+      "line": 366,
       "kind": "function"
     },
     {
@@ -749,7 +725,7 @@
       "name": "run",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 439,
+      "line": 429,
       "kind": "function"
     },
     {
@@ -1589,15 +1565,7 @@
       "name": "test_end_to_end_report_generation",
       "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
-      "line": 84,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "mock_file_open",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 104,
+      "line": 83,
       "kind": "function"
     },
     {
@@ -1802,162 +1770,10 @@
     },
     {
       "_type": "tag",
-      "name": "get_dbpedia_summary",
-      "path": "./tooling/temporal_orienter.py",
-      "language": "Python",
-      "line": 5,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
       "name": "plan_deep_research",
       "path": "./tooling/research_planner.py",
       "language": "Python",
       "line": 15,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "convert_all_latex_files",
-      "path": "./calculus_converter/convert_all.py",
-      "language": "Python",
-      "line": 5,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "Sequent",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 3,
-      "kind": "class"
-    },
-    {
-      "_type": "tag",
-      "name": "ProofTree",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 14,
-      "kind": "class"
-    },
-    {
-      "_type": "tag",
-      "name": "Document",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 24,
-      "kind": "class"
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 5,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "__repr__",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 11,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 16,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "__repr__",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 21,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 26,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "add_element",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 31,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "add_proof_tree",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 34,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "_build_tree_recursively",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 38,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "to_json",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 52,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "_prooftree_to_dict",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 66,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "generate_html",
-      "path": "./calculus_converter/generator.py",
-      "language": "Python",
-      "line": 5,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "parse_prooftree_content_final",
-      "path": "./calculus_converter/parser.py",
-      "language": "Python",
-      "line": 5,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "cleanup_latex",
-      "path": "./calculus_converter/parser.py",
-      "language": "Python",
-      "line": 44,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "parse_latex_to_document",
-      "path": "./calculus_converter/parser.py",
-      "language": "Python",
-      "line": 53,
       "kind": "function"
     }
   ]

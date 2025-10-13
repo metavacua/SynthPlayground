@@ -328,20 +328,10 @@ class MasterControlGraph:
             return self._handle_call_plan(agent_state, args_text.strip().split())
 
         # Enforce protocol for destructive commands BEFORE checking for step completion
-        # This check must be comprehensive. It looks for direct calls to `reset_all`
-        # and calls to `reset_all` embedded within other tools like `run_in_bash_session`.
-        is_forbidden = False
         if tool_name == "reset_all":
-            is_forbidden = True
-        elif tool_name == "run_in_bash_session" and "reset_all" in args_text:
-            is_forbidden = True
-
-        if is_forbidden:
-            error_message = "FATAL: The 'reset_all' tool is strictly forbidden by protocol `reset-all-prohibition-001`. Terminating task."
+            error_message = "The 'reset_all' tool is deprecated and strictly forbidden. Its use is a critical protocol violation."
             agent_state.error = error_message
-            print(f"[MasterControl] {error_message}")
-            # This is a critical failure. We transition to a special error state
-            # to ensure the system halts completely.
+            print(f"[MasterControl] FATAL: {error_message}")
             return "execution_failed"
 
         # --- Standard Step Execution ---

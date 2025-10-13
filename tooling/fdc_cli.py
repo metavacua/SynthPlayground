@@ -257,6 +257,9 @@ def _validate_plan_recursive(
             plan_name_or_path = args[0]
             registry = _load_plan_registry()
             sub_plan_path = registry.get(plan_name_or_path, plan_name_or_path)
+            # Ensure the path is absolute, relative to the repo root
+            if not os.path.isabs(sub_plan_path):
+                sub_plan_path = os.path.join(ROOT_DIR, sub_plan_path)
 
             try:
                 with open(sub_plan_path, "r") as f:
