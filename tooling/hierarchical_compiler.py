@@ -1,6 +1,13 @@
 import os
+import sys
 import json
 import re
+
+# Ensure the project root is in the Python path
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT_DIR not in sys.path:
+    sys.path.append(ROOT_DIR)
+
 from tooling import protocol_compiler, readme_generator
 
 # --- Configuration ---
