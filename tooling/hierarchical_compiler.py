@@ -1,15 +1,13 @@
 import os
-import subprocess
 import json
 import re
+from tooling import protocol_compiler, readme_generator
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 PROTOCOLS_DIR_NAME = "protocols"
 AGENTS_MD_FILENAME = "AGENTS.md"
 README_FILENAME = "README.md"
-PROTOCOL_COMPILER_PATH = os.path.join(os.path.dirname(__file__), "protocol_compiler.py")
-README_GENERATOR_PATH = os.path.join(os.path.dirname(__file__), "readme_generator.py")
 SUMMARY_FILE_PREFIX = "_z_child_summary_"
 SPECIAL_DIRS = ["protocols/security"] # Directories to be ignored by the hierarchical scan
 
@@ -33,48 +31,39 @@ def find_protocol_dirs(root_dir):
     return sorted(protocol_dirs, key=lambda x: -x.count(os.sep))
 
 def run_compiler(source_dir):
-    """Invokes the protocol_compiler.py script as a subprocess."""
+    """Invokes the protocol_compiler.py script as a library."""
     parent_dir = os.path.dirname(source_dir)
     target_agents_md = os.path.join(parent_dir, AGENTS_MD_FILENAME)
-
-    command = [
-        "python3",
-        PROTOCOL_COMPILER_PATH,
-        "--source-dir", source_dir,
-        "--output-file", target_agents_md
-    ]
+    schema_file = os.path.join(source_dir, "protocol.schema.json")
+    if not os.path.exists(schema_file):
+        # Fallback to the root schema if not found in the current protocol dir
+        schema_file = os.path.join(ROOT_DIR, "protocols", "protocol.schema.json")
 
     print(f"Running AGENTS.md compiler for: {source_dir}")
     try:
-        result = subprocess.run(command, check=True, capture_output=True, text=True)
+        protocol_compiler.compile_protocols(source_dir, target_agents_md, schema_file)
         print(f"Successfully compiled {target_agents_md}")
         return target_agents_md
-    except subprocess.CalledProcessError as e:
+    except Exception as e:
         print(f"Error compiling AGENTS.md in {source_dir}:")
-        print(e.stderr)
+        print(e)
         return None
 
 def run_readme_generator(source_agents_md):
-    """Invokes the readme_generator.py script as a subprocess."""
+    """Invokes the readme_generator.py script as a library."""
     parent_dir = os.path.dirname(source_agents_md)
     target_readme = os.path.join(parent_dir, README_FILENAME)
 
-    command = [
-        "python3",
-        README_GENERATOR_PATH,
-        "--source-file", source_agents_md,
-        "--output-file", target_readme
-    ]
-
     print(f"Running README.md generator for: {source_agents_md}")
     try:
-        result = subprocess.run(command, check=True, capture_output=True, text=True)
+        readme_generator.main(source_agents_md, target_readme)
         print(f"Successfully generated {target_readme}")
         return target_readme
-    except subprocess.CalledProcessError as e:
+    except Exception as e:
         print(f"Error generating README.md for {source_agents_md}:")
-        print(e.stderr)
+        print(e)
         return None
+
 
 def generate_summary(child_agents_md_path):
     """

@@ -195,8 +195,8 @@ def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file
 
     print(f"\n--- Compilation finished for {os.path.basename(target_file)} ---")
 
-def main():
-    """Main function to run the compiler."""
+def main_cli():
+    """Main function to run the compiler from the command line."""
     parser = argparse.ArgumentParser(description="Compiles protocol files into a single Markdown document and optional Knowledge Graph.")
     parser.add_argument(
         "--source-dir",
@@ -245,4 +245,4 @@ def main():
     )
 
 if __name__ == "__main__":
-    main()
+    main_cli()
