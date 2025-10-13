@@ -22,8 +22,37 @@ import os
 import json
 import uuid
 import datetime
+import yaml
+import glob
 
 KNOWLEDGE_CORE_PATH = "knowledge_core/lessons.jsonl"
+
+
+def load_and_parse_sequents(sequents_dir="sequents/"):
+    """
+    Loads all generated sequent files and returns a list of proven rules.
+    """
+    all_rules = []
+    if not os.path.exists(sequents_dir):
+        print(f"Warning: Sequents directory '{sequents_dir}' not found.")
+        return all_rules
+
+    for filepath in glob.glob(os.path.join(sequents_dir, "*.agents.md")):
+        with open(filepath, 'r') as f:
+            try:
+                data = yaml.safe_load(f)
+                # The top-level key is 'sequent', but we check to be safe
+                sequent_data = data.get("sequent", {})
+                calculus_title = data.get("title", "Unknown Calculus")
+
+                # The succedent contains the list of proven rules
+                succedent = sequent_data.get("succedent", [])
+                for rule in succedent:
+                    rule['calculus'] = calculus_title # Add provenance
+                    all_rules.append(rule)
+            except yaml.YAMLError as e:
+                print(f"Error parsing YAML from {filepath}: {e}")
+    return all_rules
 
 
 def extract_lessons_from_postmortem(postmortem_content: str) -> list:
@@ -171,39 +200,98 @@ def format_lesson_entry(metadata: dict, lesson_data: dict) -> dict:
     }
 
 
+def sequents_to_rdf(sequents_data):
+    """
+    Converts a list of parsed sequent rules into an RDF graph.
+    """
+    from rdflib import Graph, URIRef, Literal, Namespace
+    from rdflib.namespace import RDF, RDFS, PROV
+
+    g = Graph()
+    BUILD_NS = Namespace("http://example.com/build#")
+
+    g.bind("build", BUILD_NS)
+    g.bind("prov", PROV)
+
+    for rule in sequents_data:
+        rule_uri = BUILD_NS[rule['id']]
+        g.add((rule_uri, RDF.type, BUILD_NS.ProofRule))
+        g.add((rule_uri, RDFS.label, Literal(rule['proposition'])))
+        g.add((rule_uri, BUILD_NS.calculus, Literal(rule['calculus'])))
+
+        # Add conclusion
+        conclusion_bnode = BUILD_NS[f"{rule['id']}-conclusion"]
+        g.add((rule_uri, PROV.generated, conclusion_bnode))
+        g.add((conclusion_bnode, RDF.type, PROV.Entity))
+        g.add((conclusion_bnode, RDFS.label, Literal(json.dumps(rule['provenance']['conclusion']))))
+
+        # Add hypotheses
+        for i, hypo in enumerate(rule['provenance']['hypotheses']):
+            hypo_bnode = BUILD_NS[f"{rule['id']}-hypo-{i}"]
+            g.add((rule_uri, PROV.used, hypo_bnode))
+            g.add((hypo_bnode, RDF.type, PROV.Entity))
+            g.add((hypo_bnode, RDFS.label, Literal(json.dumps(hypo))))
+
+    return g
+
+
 def main():
     parser = argparse.ArgumentParser(
-        description="Parses a post-mortem report and compiles the lessons learned into a structured JSONL file."
+        description="Compiles lessons from post-mortems or calculi from .tex files into the knowledge core."
     )
     parser.add_argument(
-        "postmortem_path", help="The path to the completed post-mortem markdown file."
+        "--source",
+        choices=['postmortem', 'calculus'],
+        required=True,
+        help="The source of knowledge to compile."
+    )
+    parser.add_argument(
+        "path", help="The path to the source file or directory."
     )
     args = parser.parse_args()
 
-    if not os.path.exists(args.postmortem_path):
-        print(f"Error: Post-mortem file not found at '{args.postmortem_path}'")
-        return
+    if args.source == 'postmortem':
+        if not os.path.exists(args.path):
+            print(f"Error: Post-mortem file not found at '{args.path}'")
+            return
 
-    with open(args.postmortem_path, "r") as f:
-        content = f.read()
+        with open(args.path, "r") as f:
+            content = f.read()
 
-    metadata = extract_metadata_from_postmortem(content)
-    lessons = extract_lessons_from_postmortem(content)
+        metadata = extract_metadata_from_postmortem(content)
+        lessons = extract_lessons_from_postmortem(content)
 
-    if not lessons:
-        print("No lessons found in the specified post-mortem file.")
-        return
+        if not lessons:
+            print("No lessons found in the specified post-mortem file.")
+            return
 
-    print(f"Found {len(lessons)} new lesson(s) in '{args.postmortem_path}'.")
+        print(f"Found {len(lessons)} new lesson(s) in '{args.path}'.")
+        with open(KNOWLEDGE_CORE_PATH, "a") as f:
+            for lesson in lessons:
+                formatted_entry = format_lesson_entry(metadata, lesson)
+                f.write(json.dumps(formatted_entry) + "\n")
+        print(f"Successfully compiled {len(lessons)} lesson(s) into '{KNOWLEDGE_CORE_PATH}'.")
 
-    with open(KNOWLEDGE_CORE_PATH, "a") as f:
-        for lesson in lessons:
-            formatted_entry = format_lesson_entry(metadata, lesson)
-            f.write(json.dumps(formatted_entry) + "\n")
+    elif args.source == 'calculus':
+        from rdflib import Graph
+        sequents_data = load_and_parse_sequents(args.path)
+        if not sequents_data:
+            print(f"No valid sequent files found in '{args.path}'.")
+            return
 
-    print(
-        f"Successfully compiled {len(lessons)} lesson(s) into '{KNOWLEDGE_CORE_PATH}'."
-    )
+        rdf_graph = sequents_to_rdf(sequents_data)
+
+        # Integrate with main knowledge graph
+        kg_path = "knowledge_core/protocols.ttl"
+        main_graph = Graph()
+        if os.path.exists(kg_path):
+            main_graph.parse(kg_path, format="turtle")
+
+        print(f"Integrating {len(rdf_graph)} new triples from calculi into the knowledge graph.")
+        main_graph += rdf_graph
+
+        main_graph.serialize(destination=kg_path, format="turtle")
+        print(f"Successfully updated '{kg_path}'.")
 
 
 if __name__ == "__main__":

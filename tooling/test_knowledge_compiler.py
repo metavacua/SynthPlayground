@@ -11,6 +11,8 @@ import os
 import json
 import tempfile
 import shutil
+import sys
+from unittest.mock import patch
 from tooling.knowledge_compiler import main as compile_knowledge
 
 class TestKnowledgeCompiler(unittest.TestCase):
@@ -44,25 +46,30 @@ class TestKnowledgeCompiler(unittest.TestCase):
         self.original_path = tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH
         tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH = self.lessons_path
 
-        # Mock sys.argv
-        import sys
-        self.original_argv = sys.argv
-        sys.argv = ["tooling/knowledge_compiler.py", self.postmortem_path]
+        # Path for the output lessons file
+        self.lessons_path = os.path.join(self.test_dir, "lessons.jsonl")
+
+        # Monkey-patch the KNOWLEDGE_CORE_PATH to use our temp file
+        import tooling.knowledge_compiler
+        self.original_path = tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH
+        tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH = self.lessons_path
 
     def tearDown(self):
         """Clean up the temporary directory and restore original state."""
         shutil.rmtree(self.test_dir)
         import tooling.knowledge_compiler
         tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH = self.original_path
-        import sys
-        sys.argv = self.original_argv
 
-    def test_knowledge_compiler_end_to_end(self):
+    @patch('sys.argv')
+    def test_knowledge_compiler_end_to_end(self, mock_argv):
         """
         Verify that the compiler correctly parses a post-mortem and
         generates a structured lessons.jsonl file with both machine-readable
         and placeholder commands.
         """
+        # Set the mock argv for this specific test
+        sys.argv = ['tooling/knowledge_compiler.py', '--source', 'postmortem', self.postmortem_path]
+
         # Run the main function of the compiler
         compile_knowledge()
 
@@ -121,23 +128,24 @@ class TestKnowledgeCompilerAdvanced(unittest.TestCase):
         self.original_path = tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH
         tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH = self.lessons_path
 
-        import sys
-        self.original_argv = sys.argv
-        sys.argv = ["tooling/knowledge_compiler.py", self.postmortem_path]
+        self.lessons_path = os.path.join(self.test_dir, "lessons.jsonl")
+        import tooling.knowledge_compiler
+        self.original_path = tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH
+        tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH = self.lessons_path
 
     def tearDown(self):
         """Clean up the temporary directory and restore original state."""
         shutil.rmtree(self.test_dir)
         import tooling.knowledge_compiler
         tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH = self.original_path
-        import sys
-        sys.argv = self.original_argv
 
-    def test_advanced_parsing_and_deprecate_command(self):
+    @patch('sys.argv')
+    def test_advanced_parsing_and_deprecate_command(self, mock_argv):
         """
         Verify the compiler can handle different section headers and parse
         the 'deprecate-tool' command.
         """
+        sys.argv = ['tooling/knowledge_compiler.py', '--source', 'postmortem', self.postmortem_path]
         compile_knowledge()
 
         self.assertTrue(os.path.exists(self.lessons_path))

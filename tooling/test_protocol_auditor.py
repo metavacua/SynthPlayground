@@ -85,47 +85,60 @@ This is not a JSON line and should be skipped.
         Run the main function end-to-end and verify the content
         of the generated Markdown report.
         """
-        # Mock the source check to return a success state
         mock_source_check.return_value = {
             "status": "success",
             "message": "AGENTS.md appears to be up-to-date."
         }
 
-        # Create a mock handle specifically for the write operation
-        mock_write_handle = mock_open().return_value
+        # Store mock files and their content
+        mock_files = {
+            os.path.abspath("logs/activity.log.jsonl"): self.mock_log_content,
+            os.path.abspath("AGENTS.md"): self.mock_agents_md_content,
+        }
 
-        # Patch the file reads and the final write
-        m = mock_open()
-        with patch("builtins.open", m) as mock_file:
-            # Configure mock to handle different files
-            mock_file.side_effect = [
-                mock_open(read_data=self.mock_log_content).return_value,
-                mock_open(read_data=self.mock_agents_md_content).return_value,
-                mock_write_handle,  # For the final report write
-            ]
+        # This will hold the content written to the report
+        report_content_holder = {}
 
+        # The actual path where the report will be written
+        report_path = os.path.abspath(self.mock_report_path)
+
+        # Custom side effect for mock_open
+        def open_side_effect(filepath, mode='r', *args, **kwargs):
+            abs_path = os.path.abspath(filepath)
+            if mode == 'r':
+                if abs_path in mock_files:
+                    return mock_open(read_data=mock_files[abs_path]).return_value
+                else:
+                    # Return an empty file for any other read operations
+                    return mock_open(read_data="").return_value
+            elif mode == 'w' and abs_path == report_path:
+                # Capture the written content for the report
+                def write_side_effect(content):
+                    report_content_holder['content'] = content
+
+                mock_file_handle = mock_open().return_value
+                mock_file_handle.write.side_effect = write_side_effect
+                return mock_file_handle
+            else:
+                # Fallback for any other write operations
+                return mock_open().return_value
+
+        with patch('builtins.open', side_effect=open_side_effect) as mock_file_open:
             # Run the main auditor function
             protocol_auditor.main()
 
-        # The auditor calculates an absolute path, so we must check for that.
-        expected_report_path = os.path.abspath(self.mock_report_path)
-
-        # Check that the report was written to the correct file
-        m.assert_any_call(expected_report_path, "w")
+        # Check that the report file was opened for writing
+        mock_file_open.assert_any_call(report_path, "w")
 
         # Get the content that was written to the report file
-        written_content = mock_write_handle.write.call_args[0][0]
+        written_content = report_content_holder.get('content', '')
+        self.assertTrue(written_content, "Report file was not written to.")
 
         # --- Assertions on Report Content ---
-        # Check for unreferenced tools (used but not in protocol)
         self.assertIn("`tool_D`", written_content)
         self.assertIn("`tooling/some_script.py`", written_content)
-
-        # Check for unused protocol tools (in protocol but not used)
         self.assertIn("`tool_B`", written_content)
         self.assertIn("`tool_C`", written_content)
-
-        # Check for tool centrality counts
         self.assertIn("| `run_in_bash_session` | 1 |", written_content)
         self.assertIn("| `tool_A` | 1 |", written_content)
         self.assertIn("| `tooling/some_script.py` | 1 |", written_content)

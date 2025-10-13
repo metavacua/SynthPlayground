@@ -1,15 +1,73 @@
 import json
+import re
+
+class Formula:
+    """Represents a parsed logical formula with its structure."""
+    def __init__(self, content):
+        self.raw = content.strip()
+        # This is a simple recursive descent parser for the formulas.
+        self.structure = self._parse_formula(self.raw)
+
+    def _parse_formula(self, text):
+        text = text.strip()
+
+        # This is a very basic parser that doesn't handle precedence or associativity correctly.
+        # It's a demonstration of creating a structured representation.
+        # It splits on the first found operator.
+
+        # Binary operators
+        for op in ['→', '⊕', '⊗', '&', '℘']:
+            # Be careful not to split inside parentheses (not handled here)
+            if op in text:
+                parts = text.split(op, 1)
+                if len(parts) == 2 and parts[0].strip() and parts[1].strip():
+                    return {
+                        "type": "binary",
+                        "op": op,
+                        "left": self._parse_formula(parts[0]),
+                        "right": self._parse_formula(parts[1])
+                    }
+
+        # Unary operator
+        if text.startswith('¬'):
+            return {
+                "type": "unary",
+                "op": '¬',
+                "operand": self._parse_formula(text[1:])
+            }
+
+        # Atomic formula (variable or constant)
+        return {"type": "atom", "name": text}
+
+    def to_dict(self):
+        return self.structure
+
+    def __repr__(self):
+        return f"Formula({self.raw})"
 
 class Sequent:
-    """Represents a logical sequent of the form 'antecedent ⊢ succedent'."""
+    """Represents a logical sequent with structured formulas."""
     def __init__(self, raw_sequent):
         self.raw = raw_sequent.strip()
         parts = self.raw.split('⊢')
-        self.antecedent = parts[0].strip() if len(parts) > 1 else ""
-        self.succedent = parts[1].strip() if len(parts) > 1 else parts[0].strip()
+
+        antecedent_str = parts[0].strip() if len(parts) > 1 else ""
+        succedent_str = parts[1].strip() if len(parts) > 1 else parts[0].strip()
+
+        # Formulas in antecedent/succedent are separated by commas
+        self.antecedent = [Formula(f) for f in antecedent_str.split(',') if f.strip()] if antecedent_str else []
+        self.succedent = [Formula(f) for f in succedent_str.split(',') if f.strip()] if succedent_str else []
+
+    def to_dict(self):
+        return {
+            "antecedent": [f.to_dict() for f in self.antecedent],
+            "succedent": [f.to_dict() for f in self.succedent]
+        }
 
     def __repr__(self):
-        return f"Sequent({self.antecedent} ⊢ {self.succedent})"
+        ant_str = ", ".join(f.raw for f in self.antecedent)
+        suc_str = ", ".join(f.raw for f in self.succedent)
+        return f"Sequent({ant_str} ⊢ {suc_str})"
 
 class ProofTree:
     """Represents a potentially nested proof tree."""
@@ -67,13 +125,17 @@ class Document:
         hyp_list = []
         for h in tree.hypotheses:
             if isinstance(h, Sequent):
-                hyp_list.append({"type": "sequent", "content": h.raw})
+                hyp_list.append({"type": "sequent", "raw": h.raw, **h.to_dict()})
             elif isinstance(h, ProofTree):
-                hyp_list.append(self._prooftree_to_dict(h)) # Recurse
+                # ProofTree objects don't have a to_dict, so we recurse
+                hyp_list.append(self._prooftree_to_dict(h))
 
         return {
             "type": "prooftree",
             "rule": tree.rule_name,
-            "conclusion": tree.conclusion.raw,
-            "hypotheses": hyp_list
+            "conclusion": {
+                "raw": tree.conclusion.raw,
+                **tree.conclusion.to_dict()
+            },
+            "hypotheses": hyp_list,
         }

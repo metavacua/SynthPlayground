@@ -121,9 +121,21 @@ pages: AGENTS.md README.md tooling/pages_generator.py
 # A general build target that compiles all protocols and generates documentation.
 build: docs readme compile-protocols compile-security-protocols pages
 
+# ==============================================================================
+# Calculus Conversion & Knowledge Integration
+# ==============================================================================
+calculus-sequents:
+	@echo "--> Step 1: Converting LaTeX calculi to machine-readable AGENTS.md sequents..."
+	@python3 calculus_converter/convert_all.py --format sequents --output-dir sequents
+	@echo "--> Step 2: Integrating generated sequents into the knowledge graph..."
+	@python3 tooling/knowledge_compiler.py --source calculus sequents/
+
 clean:
 	@echo "--> Removing compiled protocol and documentation artifacts..."
 	@rm -f AGENTS.md
 	@rm -f README.md
 	@rm -f SECURITY.md
 	@rm -f knowledge_core/SYSTEM_DOCUMENTATION.md
+	@echo "--> Removing converted calculus artifacts..."
+	@rm -rf converted_calculus
+	@rm -rf sequents
