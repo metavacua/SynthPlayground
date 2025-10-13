@@ -33,7 +33,8 @@ from rdflib import Graph
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 DEFAULT_PROTOCOLS_DIR = os.path.join(ROOT_DIR, "protocols")
-DEFAULT_SCHEMA_FILE = os.path.join(DEFAULT_PROTOCOLS_DIR, "protocol.schema.json")
+# The schema is now resolved relative to the source directory, not a global default.
+DEFAULT_SCHEMA_FILENAME = "protocol.schema.json"
 DEFAULT_TARGET_FILE = os.path.join(ROOT_DIR, "AGENTS.md")
 DEFAULT_KG_FILE = os.path.join(ROOT_DIR, "knowledge_core", "protocols.ttl")
 DEFAULT_AUTODOC_FILE = os.path.join(ROOT_DIR, "knowledge_core", "SYSTEM_DOCUMENTATION.md")
@@ -134,7 +135,8 @@ def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file
             # Knowledge Graph Generation
             if knowledge_graph_file:
                 protocol_data_for_ld = protocol_data.copy()
-                context_path = os.path.join(DEFAULT_PROTOCOLS_DIR, "protocol.context.jsonld")
+                # The context file should be relative to the source dir being processed
+                context_path = os.path.join(source_dir, "protocol.context.jsonld")
                 if os.path.exists(context_path):
                     relative_context_path = os.path.relpath(context_path, os.path.dirname(file_path))
                     protocol_data_for_ld["@context"] = relative_context_path
@@ -163,6 +165,8 @@ def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file
     final_output_string = "\n".join(final_content)
     temp_target_file = target_file + ".tmp"
     try:
+        # Ensure the target directory exists before writing the file
+        os.makedirs(os.path.dirname(target_file), exist_ok=True)
         with open(temp_target_file, "w") as f:
             f.write(final_output_string)
 
@@ -206,8 +210,8 @@ def main():
     )
     parser.add_argument(
         "--schema-file",
-        default=DEFAULT_SCHEMA_FILE,
-        help=f"Path to the JSON schema for validation. Defaults to {DEFAULT_SCHEMA_FILE}"
+        default=None,
+        help=f"Path to the JSON schema for validation. If not provided, it defaults to {DEFAULT_SCHEMA_FILENAME} within the source directory."
     )
     parser.add_argument(
         "--knowledge-graph-file",
@@ -225,10 +229,17 @@ def main():
 
     args = parser.parse_args()
 
+    # Determine the schema file path. Use the argument if provided,
+    # otherwise default to the schema file within the source directory.
+    schema_file = args.schema_file
+    if not schema_file:
+        schema_file = os.path.join(args.source_dir, DEFAULT_SCHEMA_FILENAME)
+
+
     compile_protocols(
         source_dir=args.source_dir,
         target_file=args.output_file,
-        schema_file=args.schema_file,
+        schema_file=schema_file,
         knowledge_graph_file=args.knowledge_graph_file,
         autodoc_file=args.autodoc_file
     )
