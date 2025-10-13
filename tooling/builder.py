@@ -33,7 +33,7 @@ def execute_build(target_name, config):
         if target_name == 'readme':
             source_file = os.path.join(ROOT_DIR, target_config['sources'][0])
             command.extend(["--source-file", source_file, "--output-file", output_path])
-        else:
+        elif 'sources' in target_config and target_config['sources']:
             source_dir = os.path.join(ROOT_DIR, target_config['sources'][0])
             command.extend(["--source-dir", source_dir, "--output-file", output_path])
 
