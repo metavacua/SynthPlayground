@@ -24,27 +24,31 @@ class Command:
 def parse_plan(plan_content: str) -> List[Command]:
     """
     Parses the raw text of a plan into a list of Command objects.
-    This parser correctly handles multi-line arguments and ignores comments.
-    Commands are expected to be separated by one or more blank lines.
+    This parser correctly handles multi-line arguments, comments, and the '---' separator.
     """
     commands = []
-    # Split by double newline to handle multi-line arguments correctly
-    command_blocks = plan_content.strip().split("\n\n")
+    # Split the plan into logical command blocks using '---'
+    plan_blocks = plan_content.strip().split("\n---\n")
 
-    for block in command_blocks:
+    for block in plan_blocks:
         block = block.strip()
-        if not block or block.startswith("#"):
+        if not block:
             continue
 
-        lines = block.split("\n")
-        # Filter out comment lines within a block
-        non_comment_lines = [line for line in lines if not line.strip().startswith("#")]
+        # Split the block into lines and filter out comments
+        lines = [line for line in block.split('\n') if not line.strip().startswith('#')]
 
-        if not non_comment_lines:
+        if not lines:
             continue
 
-        tool_name = non_comment_lines[0].strip()
-        args_text = "\n".join(non_comment_lines[1:]).strip()
+        # The first non-comment line is the tool name
+        tool_name = lines[0].strip()
+
+        if not tool_name:
+            continue
+
+        # The rest of the lines are the arguments
+        args_text = '\n'.join(lines[1:]).strip()
 
         commands.append(Command(tool_name=tool_name, args_text=args_text))
 

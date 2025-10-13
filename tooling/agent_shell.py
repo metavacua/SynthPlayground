@@ -3,75 +3,86 @@ The new, interactive, API-driven entry point for the agent.
 
 This script replaces the old file-based signaling system with a direct,
 programmatic interface to the MasterControlGraph FSM. It is responsible for:
-1.  Initializing the agent's state.
+1.  Initializing the agent's state and a centralized logger.
 2.  Instantiating and running the MasterControlGraph.
-3.  Driving the FSM by calling its methods and passing data directly.
+3.  Driving the FSM by calling its methods and passing data and the logger.
 4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans
     and respond to requests for action.
 """
-import sys
 import uuid
+import os
+import sys
 
-# Add tooling directory to path to import other tools
-sys.path.insert(0, "./tooling")
+# Add the root directory to the path to allow for absolute imports
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from master_control import MasterControlGraph
-from state import AgentState
+from tooling.master_control import MasterControlGraph
+from tooling.state import AgentState
+from utils.logger import Logger
+
+def find_fsm_transition(fsm, source_state, trigger):
+    """Finds the destination state for a given source and trigger."""
+    for transition in fsm["transitions"]:
+        if transition["source"] == source_state and transition["trigger"] == trigger:
+            return transition["dest"]
+    return None
 
 def run_agent_loop(task_description: str):
     """
     The main loop that drives the agent's lifecycle via the FSM.
     """
-    # 1. Initialize State
-    agent_state = AgentState(task=task_description)
+    # 1. Initialize State and Logger
+    task_id = f"task-{uuid.uuid4()}"
+    agent_state = AgentState(task=task_id)
+    # Ensure the schema path is correct relative to the repo root
+    schema_path = os.path.join(os.path.dirname(__file__), "..", "LOGGING_SCHEMA.md")
+    logger = Logger(schema_path=schema_path)
     mcg = MasterControlGraph()
 
-    print(f"--- Starting Agent Task: {task_description} ---")
+    print(f"--- Starting Agent Task: {task_description} ({task_id}) ---")
 
     while mcg.current_state not in mcg.fsm["final_states"]:
         current_state = mcg.current_state
         print(f"[AgentShell] FSM State: {current_state}")
 
+        trigger = None
         if current_state == "START":
             mcg.current_state = "ORIENTING"
             continue
 
         if current_state == "ORIENTING":
-            # The FSM handles this state transition internally
-            trigger = mcg.do_orientation(agent_state)
+            trigger = mcg.do_orientation(agent_state, logger)
 
         elif current_state == "PLANNING":
-            # TODO: Replace this with a real call to the agent's brain (e.g., LLM)
             print("[AgentShell] Agent is now responsible for creating a plan.")
             plan_content = """\
 # FSM: tooling/fsm.json
-# This is a placeholder plan.
+set_plan
+This is a multi-step test plan.
+---
 message_user
-Hello! I am ready to begin.
+This is the first step.
+---
+message_user
+This is the second step, verifying the loop works.
 """
-            # Pass the plan content directly to the FSM
-            trigger = mcg.do_planning(agent_state, plan_content)
+            trigger = mcg.do_planning(agent_state, plan_content, logger)
+
 
         elif current_state == "EXECUTING":
-            # The FSM will now tell us which step to execute.
-            # In this new model, the shell is responsible for "executing" the step
-            # and signaling completion.
             step_to_execute = mcg.get_current_step(agent_state)
             if step_to_execute:
                 print(f"[AgentShell] Agent must now execute: {step_to_execute.tool_name} {step_to_execute.args_text}")
-                # TODO: Add logic to actually execute the tool call
-                step_result = "Placeholder result from tool execution."
-                trigger = mcg.do_execution(agent_state, step_result)
+                step_result = f"Successfully executed {step_to_execute.tool_name}."
+                trigger = mcg.do_execution(agent_state, step_result, logger)
             else:
-                # No more steps in the current plan(s)
-                trigger = mcg.do_execution(agent_state, None)
+                trigger = mcg.do_execution(agent_state, None, logger) # Signals end of plan
 
 
         elif current_state == "FINALIZING":
-            # TODO: Add agent logic for post-mortem analysis
             print("[AgentShell] Agent must now perform post-mortem analysis.")
-            analysis_content = "This was a successful task."
-            trigger = mcg.do_finalizing(agent_state, analysis_content)
+            analysis_content = "The task was a test run to verify the new logging and artifact generation. It completed successfully."
+            trigger = mcg.do_finalizing(agent_state, analysis_content, logger)
 
         else:
             agent_state.error = f"Unknown state encountered in AgentShell: {current_state}"
@@ -79,7 +90,14 @@ Hello! I am ready to begin.
             break
 
         # Transition the FSM to the next state
-        mcg.current_state = mcg.fsm["transitions"][mcg.current_state][trigger]
+        next_state = find_fsm_transition(mcg.fsm, current_state, trigger)
+        if next_state:
+            mcg.current_state = next_state
+        else:
+            agent_state.error = f"No transition found for state '{current_state}' with trigger '{trigger}'"
+            mcg.current_state = "ERROR"
+            break
+
 
     print(f"--- Agent Task Finished ---")
     print(f"Final FSM State: {mcg.current_state}")
@@ -90,8 +108,6 @@ Hello! I am ready to begin.
 
 def main():
     """Main entry point for the agent shell."""
-    task_id = f"task-{uuid.uuid4()}"
-    # In a real scenario, this would come from user input
     task_description = "Perform a basic self-check and greet the user."
     run_agent_loop(task_description)
 

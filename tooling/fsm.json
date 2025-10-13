@@ -30,7 +30,7 @@
     {
       "source": "PLANNING",
       "dest": "EXECUTING",
-      "trigger": "plan_is_set"
+      "trigger": "plan_op"
     },
     {
       "source": "PLANNING",
@@ -55,12 +55,7 @@
     {
       "source": "EXECUTING",
       "dest": "EXECUTING",
-      "trigger": "step_succeeded"
-    },
-    {
-      "source": "EXECUTING",
-      "dest": "EXECUTING",
-      "trigger": "step_not_complete"
+      "trigger": "step_op"
     },
     {
       "source": "EXECUTING",

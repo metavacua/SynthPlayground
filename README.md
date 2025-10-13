@@ -21,7 +21,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/agent_shell.py`**:
 
-  > The new, interactive, API-driven entry point for the agent.\n  > \n  > This script replaces the old file-based signaling system with a direct,\n  > programmatic interface to the MasterControlGraph FSM. It is responsible for:\n  > 1.  Initializing the agent's state.\n  > 2.  Instantiating and running the MasterControlGraph.\n  > 3.  Driving the FSM by calling its methods and passing data directly.\n  > 4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans\n  >     and respond to requests for action.
+  > The new, interactive, API-driven entry point for the agent.\n  > \n  > This script replaces the old file-based signaling system with a direct,\n  > programmatic interface to the MasterControlGraph FSM. It is responsible for:\n  > 1.  Initializing the agent's state and a centralized logger.\n  > 2.  Instantiating and running the MasterControlGraph.\n  > 3.  Driving the FSM by calling its methods and passing data and the logger.\n  > 4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans\n  >     and respond to requests for action.
 
 - **`tooling/code_suggester.py`**:
 
@@ -43,10 +43,6 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
   > Performs a series of checks to assess the capabilities of the execution environment.\n  > \n  > This script is a critical diagnostic tool run at the beginning of a task to\n  > ensure the agent understands its operational sandbox. It verifies fundamental\n  > capabilities required for most software development tasks:\n  > \n  > 1.  **Filesystem I/O:** Confirms that the agent can create, write to, read from,\n  >     and delete files. It also provides a basic latency measurement for these\n  >     operations.\n  > 2.  **Network Connectivity:** Checks for external network access by attempting to\n  >     connect to a highly-available public endpoint (google.com). This is crucial\n  >     for tasks requiring `git` operations, package downloads, or API calls.\n  > 3.  **Environment Variables:** Verifies that standard environment variables are\n  >     accessible, which is a prerequisite for many command-line tools.\n  > \n  > The script generates a human-readable report summarizing the results of these\n  > probes, allowing the agent to quickly identify any environmental constraints\n  > that might impact its ability to complete a task.
 
-- **`tooling/fdc_cli.py`**:
-
-  > A streamlined command-line tool for validating plan files against a\n  > Finite State Machine (FSM) definition.\n  > \n  > This script is a critical part of the agent's development protocol, used by the\n  > `MasterControlGraph` to validate plan content before execution. It is the sole\n  > remaining component of the original `fdc_cli.py` after the refactoring to an\n  > API-driven architecture.\n  > \n  > The script takes a single argument: the path to a plan file. It then:\n  > 1.  Parses the plan into a sequence of commands.\n  > 2.  Reads an FSM definition, potentially switching FSMs if the plan contains\n  >     a `# FSM:` directive.\n  > 3.  Simulates the execution of the plan against the FSM, ensuring all state\n  >     transitions are valid.\n  > 4.  Exits with a status code of 0 for a valid plan and 1 for an invalid plan.
-
 - **`tooling/hierarchical_compiler.py`**:
 
   > _No docstring found._
@@ -65,7 +61,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/master_control.py`**:
 
-  > The master orchestrator for the agent's lifecycle, governed by a Finite State Machine.\n  > \n  > This script, master_control.py, is the heart of the agent's operational loop.\n  > It implements a strict, protocol-driven workflow defined in a JSON file\n  > (typically `tooling/fsm.json`). The MasterControlGraph class reads this FSM\n  > definition and steps through the prescribed states, ensuring that the agent\n  > cannot deviate from the established protocol.\n  > \n  > This version has been refactored to be a library controlled by an external\n  > shell (e.g., `agent_shell.py`), eliminating all file-based polling and making\n  > the interaction purely programmatic.
+  > The master orchestrator for the agent's lifecycle, governed by a Finite State Machine.\n  > \n  > This script, master_control.py, is the heart of the agent's operational loop.\n  > It implements a strict, protocol-driven workflow defined in a JSON file\n  > (typically `tooling/fsm.json`). The MasterControlGraph class reads this FSM\n  > definition and steps through the prescribed states, ensuring that the agent\n  > cannot deviate from the established protocol.\n  > \n  > This version has been refactored to be a library controlled by an external\n  > shell (e.g., `agent_shell.py`), eliminating all file-based polling and making\n  > the interaction purely programmatic and fully logged.
 
 - **`tooling/master_control_cli.py`**:
 

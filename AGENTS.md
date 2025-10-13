@@ -25,14 +25,19 @@ The new, interactive, API-driven entry point for the agent.
 
 This script replaces the old file-based signaling system with a direct,
 programmatic interface to the MasterControlGraph FSM. It is responsible for:
-1.  Initializing the agent's state.
+1.  Initializing the agent's state and a centralized logger.
 2.  Instantiating and running the MasterControlGraph.
-3.  Driving the FSM by calling its methods and passing data directly.
+3.  Driving the FSM by calling its methods and passing data and the logger.
 4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans
     and respond to requests for action.
 
 
 **Public Functions:**
+
+
+- #### `def find_fsm_transition(fsm, source_state, trigger)`
+
+  > Finds the destination state for a given source and trigger.
 
 
 - #### `def main()`
@@ -315,38 +320,6 @@ that might impact its ability to complete a task.
   > Tests network connectivity and measures latency to a reliable external endpoint.
 
 
-### `tooling/fdc_cli.py`
-
-A streamlined command-line tool for validating plan files against a
-Finite State Machine (FSM) definition.
-
-This script is a critical part of the agent's development protocol, used by the
-`MasterControlGraph` to validate plan content before execution. It is the sole
-remaining component of the original `fdc_cli.py` after the refactoring to an
-API-driven architecture.
-
-The script takes a single argument: the path to a plan file. It then:
-1.  Parses the plan into a sequence of commands.
-2.  Reads an FSM definition, potentially switching FSMs if the plan contains
-    a `# FSM:` directive.
-3.  Simulates the execution of the plan against the FSM, ensuring all state
-    transitions are valid.
-4.  Exits with a status code of 0 for a valid plan and 1 for an invalid plan.
-
-
-**Public Functions:**
-
-
-- #### `def main()`
-
-  > Main entry point for the FDC CLI.
-
-
-- #### `def validate_plan(plan_filepath)`
-
-  > Validates a plan file against the appropriate FSM.
-
-
 ### `tooling/hierarchical_compiler.py`
 
 _No module-level docstring found._
@@ -511,7 +484,7 @@ cannot deviate from the established protocol.
 
 This version has been refactored to be a library controlled by an external
 shell (e.g., `agent_shell.py`), eliminating all file-based polling and making
-the interaction purely programmatic.
+the interaction purely programmatic and fully logged.
 
 
 **Public Classes:**
@@ -528,23 +501,23 @@ the interaction purely programmatic.
 
   - ##### `def __init__(self, fsm_path='tooling/fsm.json')`
 
-  - ##### `def do_execution(self, agent_state, step_result)`
+  - ##### `def do_execution(self, agent_state, step_result, logger)`
 
     > Processes the result of a step and advances the execution state.
 
-  - ##### `def do_finalizing(self, agent_state, analysis_content)`
+  - ##### `def do_finalizing(self, agent_state, analysis_content, logger)`
 
     > Handles the finalization of the task with agent-provided analysis.
 
-  - ##### `def do_orientation(self, agent_state)`
+  - ##### `def do_orientation(self, agent_state, logger)`
 
     > Executes the L1, L2, and L3 orientation steps.
 
-  - ##### `def do_planning(self, agent_state, plan_content)`
+  - ##### `def do_planning(self, agent_state, plan_content, logger)`
 
     > Validates a given plan, parses it, and initializes the plan stack.
 
-  - ##### `def do_researching(self, agent_state)`
+  - ##### `def do_researching(self, agent_state, logger)`
 
     > Generates, validates, and initiates a formal Deep Research FDC.
 
@@ -672,8 +645,7 @@ allowing for robust and readable plan files.
 - #### `def parse_plan(plan_content)`
 
   > Parses the raw text of a plan into a list of Command objects.
-  > This parser correctly handles multi-line arguments and ignores comments.
-  > Commands are expected to be separated by one or more blank lines.
+  > This parser correctly handles multi-line arguments, comments, and the '---' separator.
 
 
 

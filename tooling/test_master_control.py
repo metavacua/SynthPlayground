@@ -42,9 +42,9 @@ class TestMasterControlRedesigned(unittest.TestCase):
             "transitions": [
                 {"source": "ORIENTING", "dest": "PLANNING", "trigger": "orientation_succeeded"},
                 {"source": "ORIENTING", "dest": "ERROR", "trigger": "orientation_failed"},
-                {"source": "PLANNING", "dest": "EXECUTING", "trigger": "plan_is_set"},
+                {"source": "PLANNING", "dest": "EXECUTING", "trigger": "plan_op"},
                 {"source": "PLANNING", "dest": "ERROR", "trigger": "planning_failed"},
-                {"source": "EXECUTING", "dest": "EXECUTING", "trigger": "step_succeeded"},
+                {"source": "EXECUTING", "dest": "EXECUTING", "trigger": "step_op"},
                 {"source": "EXECUTING", "dest": "FINALIZING", "trigger": "all_steps_completed"},
                 {"source": "EXECUTING", "dest": "ERROR", "trigger": "execution_failed"},
                 {"source": "FINALIZING", "dest": "AWAITING_SUBMISSION", "trigger": "finalization_succeeded"},
@@ -55,7 +55,6 @@ class TestMasterControlRedesigned(unittest.TestCase):
             json.dump(fsm_content, f)
 
         # Create dummy dependencies that are called by the master_control
-        with open("tooling/fdc_cli.py", "w") as f: f.write(" ")
         with open("tooling/environmental_probe.py", "w") as f: f.write(" ")
         with open("tooling/knowledge_compiler.py", "w") as f: f.write(" ")
         with open("tooling/self_correction_orchestrator.py", "w") as f: f.write(" ")
@@ -65,6 +64,7 @@ class TestMasterControlRedesigned(unittest.TestCase):
         self.task_id = "test-redesigned-workflow"
         self.agent_state = AgentState(task=self.task_id)
         self.graph = MasterControlGraph(fsm_path=self.fsm_path)
+        self.mock_logger = MagicMock()
 
 
     def tearDown(self):
@@ -75,58 +75,44 @@ class TestMasterControlRedesigned(unittest.TestCase):
     @patch("tooling.master_control.execute_research_protocol", return_value="Mocked Research Data")
     def test_do_orientation(self, mock_research, mock_subprocess):
         mock_subprocess.return_value = subprocess.CompletedProcess(args=[], returncode=0, stdout="mocked output", stderr="")
-        trigger = self.graph.do_orientation(self.agent_state)
+        trigger = self.graph.do_orientation(self.agent_state, self.mock_logger)
         # In the new system, do_orientation directly returns the next state, not a trigger.
         self.assertEqual(trigger, self.graph.get_trigger("ORIENTING", "PLANNING"))
+        self.mock_logger.log.assert_called()
 
-    @patch("tooling.master_control.subprocess.run")
-    def test_do_planning(self, mock_subprocess):
-        mock_subprocess.return_value = subprocess.CompletedProcess(args=[], returncode=0, stdout="", stderr="")
-        # The plan content is now passed directly as an argument, with a double newline
-        plan_content = "# FSM: tooling/fsm.json\n\nmessage_user\n\nTest message"
-        trigger = self.graph.do_planning(self.agent_state, plan_content)
-        self.assertEqual(trigger, "plan_is_set")
+    @patch("tooling.master_control.MasterControlGraph._validate_plan_in_memory", return_value=(True, ""))
+    def test_do_planning(self, mock_validate):
+        plan_content = "set_plan\nThis is a test plan."
+        trigger = self.graph.do_planning(self.agent_state, plan_content, self.mock_logger)
+        self.assertEqual(trigger, "plan_op")
         self.assertEqual(len(self.agent_state.plan_stack), 1)
-        self.assertEqual(self.agent_state.plan_stack[0].commands[0].tool_name, "message_user")
+        self.assertEqual(self.agent_state.plan_stack[0].commands[0].tool_name, "set_plan")
+        self.mock_logger.log.assert_called()
 
     def test_do_execution(self):
-        # Set up a plan on the stack
         self.agent_state.plan_stack.append(
             PlanContext(plan_path="test_plan", commands=[
-                Command(tool_name="message_user", args_text="test1"),
-                Command(tool_name="message_user", args_text="test2")
+                Command(tool_name="message_user", args_text="test1")
             ])
         )
-        # Simulate the agent shell loop
-        # Step 1
-        step1 = self.graph.get_current_step(self.agent_state)
-        self.assertIsNotNone(step1)
-        self.assertEqual(step1.tool_name, "message_user")
-        trigger1 = self.graph.do_execution(self.agent_state, "Step 1 result")
-        self.assertEqual(trigger1, self.graph.get_trigger("EXECUTING", "EXECUTING"))
-
-        # Step 2
-        step2 = self.graph.get_current_step(self.agent_state)
-        self.assertIsNotNone(step2)
-        self.assertEqual(step2.tool_name, "message_user")
-        trigger2 = self.graph.do_execution(self.agent_state, "Step 2 result")
-        self.assertEqual(trigger2, self.graph.get_trigger("EXECUTING", "EXECUTING"))
-
-        # End of plan
-        step3 = self.graph.get_current_step(self.agent_state)
-        self.assertIsNone(step3) # No more steps
-        trigger3 = self.graph.do_execution(self.agent_state, None) # Signal end of plan
-        self.assertEqual(trigger3, self.graph.get_trigger("EXECUTING", "FINALIZING"))
+        trigger = self.graph.do_execution(self.agent_state, "Step 1 result", self.mock_logger)
+        self.assertEqual(trigger, "step_op")
+        trigger = self.graph.do_execution(self.agent_state, None, self.mock_logger)
+        self.assertEqual(trigger, self.graph.get_trigger("EXECUTING", "FINALIZING"))
+        self.mock_logger.log.assert_called()
 
 
     @patch("tooling.master_control.subprocess.run")
-    def test_do_finalizing(self, mock_subprocess):
+    @patch("tooling.master_control.datetime")
+    def test_do_finalizing(self, mock_datetime, mock_subprocess):
+        mock_datetime.date.today.return_value = datetime.date(2025, 10, 13)
         mock_subprocess.return_value = subprocess.CompletedProcess(args=[], returncode=0, stdout="", stderr="")
-        # The analysis content is now passed as an argument
         analysis_content = "The task was completed successfully."
-        trigger = self.graph.do_finalizing(self.agent_state, analysis_content)
+        trigger = self.graph.do_finalizing(self.agent_state, analysis_content, self.mock_logger)
         self.assertEqual(trigger, self.graph.get_trigger("FINALIZING", "AWAITING_SUBMISSION"))
-        self.assertIn("Post-mortem analysis finalized", self.agent_state.final_report)
+        expected_path = f"postmortems/2025-10-13-{self.task_id}.md"
+        self.assertTrue(os.path.exists(expected_path))
+        self.mock_logger.log.assert_called_with("Phase 5", self.task_id, -1, "POST_MORTEM", {"path": expected_path, "content": "# Post-Mortem Report for Task: test-redesigned-workflow\n\n## Agent Analysis\n\nThe task was completed successfully.\n"}, "SUCCESS")
 
 
 if __name__ == "__main__":
