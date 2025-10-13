@@ -1282,10 +1282,18 @@
     },
     {
       "_type": "tag",
+      "name": "install_dependencies",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 38,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "load_schema",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 56,
+      "line": 107,
       "kind": "function"
     },
     {
@@ -1293,7 +1301,7 @@
       "name": "compile_protocols",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 68,
+      "line": 119,
       "kind": "function"
     },
     {
@@ -1301,7 +1309,7 @@
       "name": "main_cli",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 198,
+      "line": 249,
       "kind": "function"
     },
     {
