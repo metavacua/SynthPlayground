@@ -1,9 +1,9 @@
 """
 The official command-line interface for the agent's master control loop.
 
-This script provides a clean entry point for initiating a task. It handles
-argument parsing, initializes the agent's state, and runs the main FSM-driven
-workflow defined in `master_control.py`.
+This script is now a lightweight wrapper that passes control to the new,
+API-driven `agent_shell.py`. It preserves the command-line interface while
+decoupling the entry point from the FSM implementation.
 """
 import argparse
 import json
@@ -11,16 +11,14 @@ import sys
 
 # Ensure the tooling directory is in the Python path
 sys.path.insert(0, ".")
-from tooling.master_control import MasterControlGraph
-from tooling.state import AgentState
+from tooling.agent_shell import run_agent_loop
 
 
 def main():
     """
     The main entry point for the agent.
 
-    This script initializes the agent's state, runs the master control graph
-    to enforce the protocol, and prints the final result.
+    This script parses the task description and invokes the agent shell.
     """
     parser = argparse.ArgumentParser(
         description="Run the Jules agent's master control loop."
@@ -32,14 +30,8 @@ def main():
     )
     args = parser.parse_args()
 
-    print("--- Initializing Master Control Graph ---")
-
-    # 1. Initialize the agent's state for the new task
-    initial_state = AgentState(task=args.task)
-
-    # 2. Initialize and run the master control graph
-    graph = MasterControlGraph()
-    final_state = graph.run(initial_state)
+    print("--- Invoking Agent Shell ---")
+    final_state = run_agent_loop(task_description=args.task)
 
     # 3. Print the final report
     print("\n--- Final State ---")

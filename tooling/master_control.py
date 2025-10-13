@@ -1,41 +1,23 @@
 """
 The master orchestrator for the agent's lifecycle, governed by a Finite State Machine.
 
-This script, `master_control.py`, is the heart of the agent's operational loop.
+This script, master_control.py, is the heart of the agent's operational loop.
 It implements a strict, protocol-driven workflow defined in a JSON file
-(typically `tooling/fsm.json`). The `MasterControlGraph` class reads this FSM
+(typically `tooling/fsm.json`). The MasterControlGraph class reads this FSM
 definition and steps through the prescribed states, ensuring that the agent
 cannot deviate from the established protocol.
 
-The key responsibilities of this orchestrator include:
-- **State Enforcement:** Guiding the agent through the formal states of a task:
-  ORIENTING, PLANNING, EXECUTING, FINALIZING, and finally AWAITING_SUBMISSION.
-- **Plan Validation:** Before execution, it invokes the `fdc_cli.py` tool to
-  formally validate the agent-generated `plan.txt`, preventing the execution of
-  invalid or unsafe plans.
-- **Hierarchical Execution (CFDC):** It manages the plan execution stack, which
-  is the core mechanism of the Context-Free Development Cycle (CFDC). This
-  allows plans to call other plans as sub-routines via the `call_plan`
-  directive.
-- **Recursion Safety:** It enforces a `MAX_RECURSION_DEPTH` on the plan stack to
-  guarantee that the execution process is always decidable and will terminate.
-- **Lifecycle Management:** It orchestrates the entire lifecycle, from initial
-  orientation and environmental probing to the final post-mortem analysis and
-  compilation of lessons learned.
-
-The FSM operates by waiting for specific signals—typically the presence of
-files like `plan.txt` or `step_complete.txt`—before transitioning to the next
-state. This creates a robust, interactive loop where the orchestrator directs
-the high-level state, and the agent is responsible for completing the work
-required to advance that state.
+This version has been refactored to be a library controlled by an external
+shell (e.g., `agent_shell.py`), eliminating all file-based polling and making
+the interaction purely programmatic.
 """
 import json
 import sys
-import time
 import os
 import subprocess
 import shutil
 import datetime
+import tempfile
 
 # Add tooling directory to path to import other tools
 sys.path.insert(0, "./tooling")
@@ -151,40 +133,23 @@ class MasterControlGraph:
             print(f"[MasterControl] Orientation Failed: {e}")
             return self.get_trigger("ORIENTING", "ERROR")
 
-    def do_planning(self, agent_state: AgentState) -> str:
+    def do_planning(self, agent_state: AgentState, plan_content: str) -> str:
         """
-        Waits for the agent to provide a plan, validates it, parses it into
-        commands, and initializes the plan stack for execution.
+        Validates a given plan, parses it, and initializes the plan stack.
         """
         print("[MasterControl] State: PLANNING")
 
-        # L4 Check: Has a deep research cycle been programmatically triggered?
-        research_trigger_file = "deep_research_required.json"
-        if os.path.exists(research_trigger_file):
-            print(f"  - Detected programmatic trigger for L4 Deep Research Cycle: '{research_trigger_file}'")
-            with open(research_trigger_file, "r") as f:
-                try:
-                    data = json.load(f)
-                    topic = data["topic"]
-                except (json.JSONDecodeError, KeyError) as e:
-                    agent_state.error = f"Invalid research trigger file: {e}"
-                    return self.get_trigger("PLANNING", "ERROR")
+        # To validate, we must use the fdc_cli, which expects a file.
+        # We'll write the content to a temporary file.
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix=".txt", prefix="plan-") as temp_plan:
+            temp_plan_path = temp_plan.name
+            temp_plan.write(plan_content)
 
-            agent_state.research_findings["topic"] = topic
-            os.remove(research_trigger_file)
-            # Transition to the RESEARCHING state
-            return self.get_trigger("PLANNING", "RESEARCHING")
-
-        # Standard planning process
-        plan_file = "plan.txt"
-        agent_state.plan_path = plan_file # Set the root plan path
-        print(f"  - Waiting for agent to create '{plan_file}'...")
-        while not os.path.exists(plan_file):
-            time.sleep(1)
-
-        print(f"  - Detected '{plan_file}'. Reading and validating plan...")
-        validation_cmd = ["python3", "tooling/fdc_cli.py", "validate", plan_file]
+        print(f"  - Validating plan content written to '{temp_plan_path}'...")
+        validation_cmd = ["python3", "tooling/fdc_cli.py", "validate", temp_plan_path]
         result = subprocess.run(validation_cmd, capture_output=True, text=True)
+
+        os.remove(temp_plan_path) # Clean up the temporary file
 
         if result.returncode != 0:
             error_message = f"Plan validation failed:\n{result.stderr}"
@@ -193,22 +158,22 @@ class MasterControlGraph:
             return self.get_trigger("PLANNING", "ERROR")
 
         print("  - Plan validation successful. Parsing plan into commands...")
-        with open(plan_file, "r") as f:
-            raw_plan_content = f.read()
+        parsed_commands = parse_plan(plan_content)
 
-        parsed_commands = parse_plan(raw_plan_content)
-
+        # The "plan_path" is now a logical concept, we'll use a placeholder.
+        agent_state.plan_path = "agent_generated_plan"
         agent_state.plan_stack.append(
-            PlanContext(plan_path=plan_file, commands=parsed_commands)
+            PlanContext(plan_path=agent_state.plan_path, commands=parsed_commands)
         )
         agent_state.messages.append(
             {
                 "role": "system",
-                "content": f"Validated and parsed plan from {plan_file} has been loaded. Execution is starting.",
+                "content": "Validated and parsed plan has been loaded. Execution is starting.",
             }
         )
         print("[MasterControl] Planning Complete.")
         return "plan_is_set"
+
 
     def do_researching(self, agent_state: AgentState) -> str:
         """
@@ -220,40 +185,39 @@ class MasterControlGraph:
             agent_state.error = "Cannot initiate research cycle without a topic."
             return self.get_trigger("RESEARCHING", "ERROR")
 
-        # 1. Generate the executable research plan
+        # 1. Generate the executable research plan content
         print(f"  - Generating research plan for topic: '{topic}'")
         try:
             research_plan_content = plan_deep_research(topic=topic)
-            research_plan_file = "research_plan.txt"
-            with open(research_plan_file, "w") as f:
-                f.write(research_plan_content)
         except Exception as e:
             agent_state.error = f"Failed to generate research plan: {e}"
             return self.get_trigger("RESEARCHING", "ERROR")
 
         # 2. Validate the plan against the research FSM
-        print(f"  - Validating '{research_plan_file}' against research FSM...")
-        # The updated fdc_cli now reads the # FSM: directive from the plan file.
-        validation_cmd = ["python3", "tooling/fdc_cli.py", "validate", research_plan_file]
+        print(f"  - Validating research plan content...")
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix=".txt", prefix="research-plan-") as temp_plan:
+            temp_plan_path = temp_plan.name
+            temp_plan.write(research_plan_content)
+
+        validation_cmd = ["python3", "tooling/fdc_cli.py", "validate", temp_plan_path]
         result = subprocess.run(validation_cmd, capture_output=True, text=True)
+        os.remove(temp_plan_path)
 
         if result.returncode != 0:
             error_message = f"Research plan validation failed:\n{result.stderr}"
             agent_state.error = error_message
-            # Clean up the invalid plan
-            os.remove(research_plan_file)
             return self.get_trigger("RESEARCHING", "ERROR")
 
         # 3. Push the validated research plan onto the execution stack
         print("  - Research plan is valid. Pushing to execution stack.")
         parsed_commands = parse_plan(research_plan_content)
         agent_state.plan_stack.append(
-            PlanContext(plan_path=research_plan_file, commands=parsed_commands)
+            PlanContext(plan_path="research_plan.txt", commands=parsed_commands)
         )
         agent_state.messages.append(
             {
                 "role": "system",
-                "content": f"L4 Deep Research Cycle initiated for topic: '{topic}'. Executing '{research_plan_file}'.",
+                "content": f"L4 Deep Research Cycle initiated for topic: '{topic}'.",
             }
         )
         return self.get_trigger("RESEARCHING", "EXECUTING")
@@ -294,108 +258,101 @@ class MasterControlGraph:
         agent_state.plan_stack.append(new_context)
         return self.get_trigger("EXECUTING", "EXECUTING")
 
-    def do_execution(self, agent_state: AgentState) -> str:
+    def get_current_step(self, agent_state: AgentState) -> Command | None:
         """
-        Executes the plan using a stack-based approach to handle sub-plans (CFDC).
+        Returns the current command to be executed by the agent, or None if execution is complete.
+        """
+        if not agent_state.plan_stack:
+            return None
+
+        current_context = agent_state.plan_stack[-1]
+        if current_context.current_step >= len(current_context.commands):
+            return None # This plan is done, shell should call do_execution to pop it.
+
+        return current_context.commands[current_context.current_step]
+
+    def do_execution(self, agent_state: AgentState, step_result: str | None) -> str:
+        """
+        Processes the result of a step and advances the execution state.
         """
         print("[MasterControl] State: EXECUTING")
 
         if not agent_state.plan_stack:
             print("[MasterControl] Execution Complete (plan stack is empty).")
-            # Clean up the root plan files now that execution is fully complete
-            if agent_state.plan_path and os.path.exists(agent_state.plan_path):
-                os.remove(agent_state.plan_path)
-            # Only remove the research plan if it was actually created.
-            research_plan_path = "research_plan.txt"
-            if os.path.exists(research_plan_path):
-                os.remove(research_plan_path)
             return self.get_trigger("EXECUTING", "FINALIZING")
 
         # Always work with the plan at the top of the stack
         current_context = agent_state.plan_stack[-1]
-        commands = current_context.commands
 
         # If we've finished all steps in the current plan, pop it and continue
-        if current_context.current_step >= len(commands):
+        if current_context.current_step >= len(current_context.commands):
             agent_state.plan_stack.pop()
-            print(
-                f"  - Finished sub-plan '{current_context.plan_path}'. Resuming parent."
-            )
-            # Re-enter the execution loop immediately to process the parent plan or finish
-            return self.do_execution(agent_state)
+            if not agent_state.plan_stack:
+                 print("  - Finished final plan. Moving to FINALIZING.")
+                 return self.get_trigger("EXECUTING", "FINALIZING")
+            else:
+                print(f"  - Finished sub-plan '{current_context.plan_path}'. Resuming parent.")
+                # Return a trigger that keeps us in the EXECUTING state for the next loop
+                return self.get_trigger("EXECUTING", "EXECUTING")
 
-        command_obj = commands[current_context.current_step]
+        command_obj = current_context.commands[current_context.current_step]
         tool_name = command_obj.tool_name
         args_text = command_obj.args_text
 
-        # --- Protocol Enforcement & Pre-computation ---
-        # Handle special directives first
+        # Handle special directives that are executed by the FSM itself
         if tool_name == "call_plan":
             return self._handle_call_plan(agent_state, args_text.strip().split())
 
-        # Enforce protocol for destructive commands BEFORE checking for step completion
+        # Enforce protocol for destructive commands.
         if tool_name == "reset_all":
             error_message = "The 'reset_all' tool is deprecated and strictly forbidden. Its use is a critical protocol violation."
             agent_state.error = error_message
             print(f"[MasterControl] FATAL: {error_message}")
             return "execution_failed"
 
-        # --- Standard Step Execution ---
-        step_complete_file = "step_complete.txt"
+        # The agent shell has executed the command and provided the result.
+        # Now we just log it and advance the step.
         step_representation = (
             f"{tool_name} {args_text[:50]}..." if args_text else tool_name
         )
-        print(f"  - Checking for agent completion of step: {step_representation}")
-        if not os.path.exists(step_complete_file):
-            print("  - Step not complete. Waiting for agent.")
-            return "step_not_complete"
-
-        print(f"  - Detected '{step_complete_file}'.")
-        with open(step_complete_file, "r") as f:
-            result = f.read()
 
         agent_state.messages.append(
             {
                 "role": "system",
-                "content": f"Completed step {current_context.current_step + 1} in '{current_context.plan_path}': {step_representation}\nResult: {result}",
+                "content": f"Completed step {current_context.current_step + 1} in '{current_context.plan_path}': {step_representation}\nResult: {step_result}",
             }
         )
 
-        os.remove(step_complete_file)
         current_context.current_step += 1
 
         print(
-            f"  - Step {current_context.current_step} of {len(commands)} in '{current_context.plan_path}' signaled complete."
+            f"  - Step {current_context.current_step} of {len(current_context.commands)} in '{current_context.plan_path}' signaled complete."
         )
+        # Stay in the EXECUTING state for the next loop
         return self.get_trigger("EXECUTING", "EXECUTING")
 
-    def do_finalizing(self, agent_state: AgentState) -> str:
+    def do_finalizing(self, agent_state: AgentState, analysis_content: str) -> str:
         """
-        Handles the finalization of the task, including post-mortem analysis and self-correction.
+        Handles the finalization of the task with agent-provided analysis.
         """
         print("[MasterControl] State: FINALIZING")
         try:
-            # 1. Create and analyze the post-mortem report
+            # 1. Use the agent's analysis to create the post-mortem report
             task_id = agent_state.task
             draft_path = f"DRAFT-{task_id}.md"
             agent_state.draft_postmortem_path = draft_path
-            shutil.copyfile("postmortem.md", draft_path)
-            print(f"  - Created draft post-mortem at '{draft_path}'.")
 
-            analysis_complete_file = "analysis_complete.txt"
-            print(
-                f"  - Checking for agent to complete analysis and create '{analysis_complete_file}'..."
-            )
-            if not os.path.exists(analysis_complete_file):
-                print("  - Analysis not complete. Waiting for agent.")
-                return "analysis_not_complete"
-
-            os.remove(analysis_complete_file)
-            print("  - Post-mortem analysis complete.")
+            # Create the report content
+            report_header = f"# Post-Mortem Report for Task: {task_id}\n\n"
+            report_body = f"## Agent Analysis\n\n{analysis_content}\n"
+            with open(draft_path, "w") as f:
+                f.write(report_header + report_body)
+            print(f"  - Created draft post-mortem from agent analysis at '{draft_path}'.")
 
             # 2. Finalize the post-mortem and compile lessons
             safe_task_id = "".join(c for c in task_id if c.isalnum() or c in ("-", "_"))
             final_path = f"postmortems/{datetime.date.today()}-{safe_task_id}.md"
+            os.makedirs(os.path.dirname(final_path), exist_ok=True)
             os.rename(draft_path, final_path)
             report_message = f"Post-mortem analysis finalized. Report saved to '{final_path}'."
             agent_state.final_report = report_message
@@ -430,48 +387,3 @@ class MasterControlGraph:
             agent_state.error = f"An unexpected error occurred during finalization: {e}"
             print(f"[MasterControl] {agent_state.error}")
             return self.get_trigger("FINALIZING", "finalization_failed")
-
-
-    def run(self, initial_agent_state: AgentState):
-        """Runs the agent's workflow through the FSM."""
-        agent_state = initial_agent_state
-
-        while self.current_state not in self.fsm["final_states"]:
-            if self.current_state == "START":
-                self.current_state = "ORIENTING"
-                continue
-
-            if self.current_state == "ORIENTING":
-                trigger = self.do_orientation(agent_state)
-            elif self.current_state == "PLANNING":
-                trigger = self.do_planning(agent_state)
-            elif self.current_state == "RESEARCHING":
-                trigger = self.do_researching(agent_state)
-            elif self.current_state == "EXECUTING":
-                trigger = self.do_execution(agent_state)
-            elif self.current_state == "FINALIZING":
-                trigger = self.do_finalizing(agent_state)
-            else:
-                agent_state.error = f"Unknown state: {self.current_state}"
-                self.current_state = "ERROR"
-                break
-
-            # Find the next state based on the trigger
-            found_transition = False
-            for transition in self.fsm["transitions"]:
-                if (
-                    transition["source"] == self.current_state
-                    and transition["trigger"] == trigger
-                ):
-                    self.current_state = transition["dest"]
-                    found_transition = True
-                    break
-
-            if not found_transition:
-                agent_state.error = f"No transition found for state {self.current_state} with trigger {trigger}"
-                self.current_state = "ERROR"
-
-        print(f"[MasterControl] Workflow finished in state: {self.current_state}")
-        if agent_state.error:
-            print(f"  - Error: {agent_state.error}")
-        return agent_state

@@ -8,6 +8,32 @@
 
 _No module-level docstring found._
 
+### `tooling/agent_shell.py`
+
+The new, interactive, API-driven entry point for the agent.
+
+This script replaces the old file-based signaling system with a direct,
+programmatic interface to the MasterControlGraph FSM. It is responsible for:
+1.  Initializing the agent's state.
+2.  Instantiating and running the MasterControlGraph.
+3.  Driving the FSM by calling its methods and passing data directly.
+4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans
+    and respond to requests for action.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Main entry point for the agent shell.
+
+
+- #### `def run_agent_loop(task_description)`
+
+  > The main loop that drives the agent's lifecycle via the FSM.
+
+
 ### `tooling/code_suggester.py`
 
 Handles the generation and application of autonomous code change suggestions.
@@ -280,68 +306,34 @@ that might impact its ability to complete a task.
 
 ### `tooling/fdc_cli.py`
 
-Provides the command-line interface for the Finite Development Cycle (FDC).
+A streamlined command-line tool for validating plan files against a
+Finite State Machine (FSM) definition.
 
-This script is a core component of the agent's protocol, offering tools to ensure
-that all development work is structured, verifiable, and safe. It is used by both
-the agent to signal progress and the `master_control.py` orchestrator to
-validate the agent's plans before execution.
+This script is a critical part of the agent's development protocol, used by the
+`MasterControlGraph` to validate plan content before execution. It is the sole
+remaining component of the original `fdc_cli.py` after the refactoring to an
+API-driven architecture.
 
-The CLI provides several key commands:
-- `close`: Logs the formal end of a task, signaling to the orchestrator that
-  execution is complete.
-- `validate`: Performs a deep validation of a plan file against the FDC's Finite
-  State Machine (FSM) definition. It checks for both syntactic correctness (Is
-  the sequence of operations valid?) and semantic correctness (Does the plan try
-  to use a file before creating it?).
-- `analyze`: Reads a plan and provides a high-level analysis of its
-  characteristics, such as its computational complexity and whether it is a
-  read-only or read-write plan.
-- `lint`: A comprehensive "linter" that runs a full suite of checks on a plan
-  file, including `validate`, `analyze`, and checks for disallowed recursion.
+The script takes a single argument: the path to a plan file. It then:
+1.  Parses the plan into a sequence of commands.
+2.  Reads an FSM definition, potentially switching FSMs if the plan contains
+    a `# FSM:` directive.
+3.  Simulates the execution of the plan against the FSM, ensuring all state
+    transitions are valid.
+4.  Exits with a status code of 0 for a valid plan and 1 for an invalid plan.
 
 
 **Public Functions:**
 
 
-- #### `def analyze_plan(plan_filepath)`
-
-  > Analyzes a plan file to determine its complexity class and modality.
-
-
-- #### `def close_task(task_id)`
-
-  > Logs the formal end of a task.
-  >
-  > This command's primary role is to create a TASK_END log entry. It no longer
-  > manages the post-mortem file directly; that process is now fully owned by
-  > the MasterControlGraph orchestrator, which is the single source of truth
-  > for state transitions and artifact lifecycle management.
-
-
-- #### `def lint_plan(plan_filepath)`
-
-  > Runs a comprehensive suite of checks on a plan file.
-  > The old recursion check is now obsolete, as the max depth is checked
-  > directly within the new hierarchical validator.
-
-
 - #### `def main()`
 
-
-- #### `def start_task(task_id)`
-
-  > Logs the formal start of a task.
-
-
-- #### `def start_task(task_id)`
-
-  > Initiates the AORP cascade for a new task.
+  > Main entry point for the FDC CLI.
 
 
 - #### `def validate_plan(plan_filepath)`
 
-  > Validates a plan using the centralized parser.
+  > Validates a plan file against the appropriate FSM.
 
 
 ### `tooling/hierarchical_compiler.py`
@@ -500,33 +492,15 @@ _No module-level docstring found._
 
 The master orchestrator for the agent's lifecycle, governed by a Finite State Machine.
 
-This script, `master_control.py`, is the heart of the agent's operational loop.
+This script, master_control.py, is the heart of the agent's operational loop.
 It implements a strict, protocol-driven workflow defined in a JSON file
-(typically `tooling/fsm.json`). The `MasterControlGraph` class reads this FSM
+(typically `tooling/fsm.json`). The MasterControlGraph class reads this FSM
 definition and steps through the prescribed states, ensuring that the agent
 cannot deviate from the established protocol.
 
-The key responsibilities of this orchestrator include:
-- **State Enforcement:** Guiding the agent through the formal states of a task:
-  ORIENTING, PLANNING, EXECUTING, FINALIZING, and finally AWAITING_SUBMISSION.
-- **Plan Validation:** Before execution, it invokes the `fdc_cli.py` tool to
-  formally validate the agent-generated `plan.txt`, preventing the execution of
-  invalid or unsafe plans.
-- **Hierarchical Execution (CFDC):** It manages the plan execution stack, which
-  is the core mechanism of the Context-Free Development Cycle (CFDC). This
-  allows plans to call other plans as sub-routines via the `call_plan`
-  directive.
-- **Recursion Safety:** It enforces a `MAX_RECURSION_DEPTH` on the plan stack to
-  guarantee that the execution process is always decidable and will terminate.
-- **Lifecycle Management:** It orchestrates the entire lifecycle, from initial
-  orientation and environmental probing to the final post-mortem analysis and
-  compilation of lessons learned.
-
-The FSM operates by waiting for specific signals—typically the presence of
-files like `plan.txt` or `step_complete.txt`—before transitioning to the next
-state. This creates a robust, interactive loop where the orchestrator directs
-the high-level state, and the agent is responsible for completing the work
-required to advance that state.
+This version has been refactored to be a library controlled by an external
+shell (e.g., `agent_shell.py`), eliminating all file-based polling and making
+the interaction purely programmatic.
 
 
 **Public Classes:**
@@ -543,26 +517,29 @@ required to advance that state.
 
   - ##### `def __init__(self, fsm_path='tooling/fsm.json')`
 
-  - ##### `def do_execution(self, agent_state)`
+  - ##### `def do_execution(self, agent_state, step_result)`
 
-    > Executes the plan using a stack-based approach to handle sub-plans (CFDC).
+    > Processes the result of a step and advances the execution state.
 
-  - ##### `def do_finalizing(self, agent_state)`
+  - ##### `def do_finalizing(self, agent_state, analysis_content)`
 
-    > Handles the finalization of the task, including post-mortem analysis and self-correction.
+    > Handles the finalization of the task with agent-provided analysis.
 
   - ##### `def do_orientation(self, agent_state)`
 
     > Executes the L1, L2, and L3 orientation steps.
 
-  - ##### `def do_planning(self, agent_state)`
+  - ##### `def do_planning(self, agent_state, plan_content)`
 
-    > Waits for the agent to provide a plan, validates it, parses it into
-    > commands, and initializes the plan stack for execution.
+    > Validates a given plan, parses it, and initializes the plan stack.
 
   - ##### `def do_researching(self, agent_state)`
 
     > Generates, validates, and initiates a formal Deep Research FDC.
+
+  - ##### `def get_current_step(self, agent_state)`
+
+    > Returns the current command to be executed by the agent, or None if execution is complete.
 
   - ##### `def get_trigger(self, source_state, dest_state)`
 
@@ -570,18 +547,14 @@ required to advance that state.
     > to a destination state. This is a helper to avoid hardcoding trigger
     > strings in the state handlers.
 
-  - ##### `def run(self, initial_agent_state)`
-
-    > Runs the agent's workflow through the FSM.
-
 
 ### `tooling/master_control_cli.py`
 
 The official command-line interface for the agent's master control loop.
 
-This script provides a clean entry point for initiating a task. It handles
-argument parsing, initializes the agent's state, and runs the main FSM-driven
-workflow defined in `master_control.py`.
+This script is now a lightweight wrapper that passes control to the new,
+API-driven `agent_shell.py`. It preserves the command-line interface while
+decoupling the entry point from the FSM implementation.
 
 
 **Public Functions:**
@@ -591,8 +564,7 @@ workflow defined in `master_control.py`.
 
   > The main entry point for the agent.
   >
-  > This script initializes the agent's state, runs the master control graph
-  > to enforce the protocol, and prints the final result.
+  > This script parses the task description and invokes the agent shell.
 
 
 ### `tooling/pages_generator.py`
@@ -733,7 +705,8 @@ accurate audit.
 
 - #### `def find_all_agents_md_files(root_dir)`
 
-  > Finds all AGENTS.md files in the repository.
+  > Finds all AGENTS.md files in the repository, ignoring any special-cased
+  > directories that are not part of the standard hierarchical build.
 
 
 - #### `def generate_markdown_report(source_checks, unreferenced, unused, centrality)`
@@ -886,6 +859,63 @@ _No module-level docstring found._
 - #### `def main()`
 
   > Main function to generate the README.md content and write it to a file.
+
+
+### `tooling/reorientation_manager.py`
+
+Re-orientation Manager
+
+This script is the core of the automated re-orientation process. It is
+designed to be triggered by the build system whenever the agent's core
+protocols (`AGENTS.md`) are re-compiled.
+
+The manager performs the following key functions:
+1.  **Diff Analysis:** It compares the old version of AGENTS.md with the new
+    version to identify new protocols, tools, or other key concepts that have
+    been introduced.
+2.  **Temporal Orientation (Shallow Research):** For each new concept, it
+    invokes the `temporal_orienter.py` tool to fetch a high-level summary from
+    an external knowledge base like DBpedia. This ensures the agent has a
+    baseline understanding of new terms.
+3.  **Knowledge Storage:** The summaries from the temporal orientation are
+    stored in a structured JSON file (`knowledge_core/temporal_orientations.json`),
+    creating a persistent, queryable knowledge artifact.
+4.  **Deep Research Trigger:** It analyzes the nature of the changes. If a
+    change is deemed significant (e.g., the addition of a new core
+    architectural protocol), it programmatically triggers a formal L4 Deep
+    Research Cycle by creating a `deep_research_required.json` file.
+
+This automated workflow ensures that the agent never operates with an outdated
+understanding of its own protocols. It closes the loop between protocol
+modification and the agent's self-awareness, making the system more robust,
+adaptive, and reliable.
+
+
+**Public Functions:**
+
+
+- #### `def check_for_deep_research_trigger(new_concepts)`
+
+  > Checks if any of the new concepts should trigger a deep research cycle.
+
+
+- #### `def main()`
+
+
+- #### `def parse_concepts_from_agents_md(content)`
+
+  > Parses an AGENTS.md file to extract a set of key concepts.
+  > This version uses a simple regex to find protocol IDs and tool names.
+
+
+- #### `def run_temporal_orientation(concept)`
+
+  > Runs the temporal_orienter.py tool for a given concept.
+
+
+- #### `def update_temporal_orientations(new_orientations)`
+
+  > Updates the temporal orientations knowledge base.
 
 
 ### `tooling/research.py`
