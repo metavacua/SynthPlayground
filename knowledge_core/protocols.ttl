@@ -5,6 +5,9 @@
     proto:hasRule <file:///app/protocols/bootstrap-load-agents-md> ;
     schema:description "A foundational protocol that dictates the agent's initial actions upon starting any task." .
 
+<file:///app/protocols/bootstrap-load-agents-md> proto:enforcement "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase." ;
+    schema:description "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins." .
+
 <file:///app/protocols/aorp-header> proto:hasRule <file:///app/protocols/aorp-identity>,
         <file:///app/protocols/aorp-versioning> ;
     schema:description "Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP)." .
@@ -51,6 +54,10 @@
     proto:hasRule <file:///app/protocols/structured-research-phases> ;
     schema:description "A standardized, callable plan for conducting in-depth research on a complex topic." .
 
+<file:///app/protocols/dependency-management-001> proto:associatedTool <file:///app/protocols/run_in_bash_session> ;
+    proto:hasRule <file:///app/protocols/dependency-install-on-start> ;
+    schema:description "A protocol for ensuring a reliable execution environment through formal dependency management." .
+
 <file:///app/protocols/fdc-protocol-001> proto:associatedTool <file:///app/protocols/LOGGING_SCHEMA.md>,
         <file:///app/protocols/knowledge_core/dependency_graph.json>,
         <file:///app/protocols/knowledge_core/symbols.json>,
@@ -96,11 +103,6 @@
     proto:hasRule <file:///app/protocols/pre-commit-instructions-mandate> ;
     schema:description "Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission." .
 
-<file:///app/protocols/protocol-reset-all-pre-check-001> proto:associatedTool <file:///app/protocols/list_files>,
-        <file:///app/protocols/reset_all> ;
-    proto:hasRule <file:///app/protocols/agent-must-verify-token> ;
-    schema:description "A protocol that mandates a pre-execution check for the `reset_all` tool to prevent unauthorized use." .
-
 <file:///app/protocols/research-fdc-001> proto:associatedTool <file:///app/protocols/tooling/fdc_cli.py>,
         <file:///app/protocols/tooling/master_control.py>,
         <file:///app/protocols/tooling/research.py>,
@@ -114,10 +116,6 @@
         <file:///app/protocols/tooling.research_planner.plan_deep_research> ;
     proto:hasRule <file:///app/protocols/mandate-research-tools> ;
     schema:description "A protocol for conducting systematic research using the integrated research toolchain." .
-
-<file:///app/protocols/reset-all-authorization-001> proto:associatedTool <file:///app/protocols/reset_all> ;
-    proto:hasRule <file:///app/protocols/require-authorization-token> ;
-    schema:description "Requires explicit user authorization via a token file for the use of the destructive `reset_all` tool." .
 
 <file:///app/protocols/reset-all-prohibition-001> proto:associatedTool <file:///app/protocols/reset_all> ;
     proto:hasRule <file:///app/protocols/no-reset-all> ;
@@ -143,8 +141,11 @@
         <file:///app/protocols/rag-mandate> ;
     schema:description "A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks." .
 
-<file:///app/protocols/agent-must-verify-token> proto:enforcement "This rule is enforced by the agent's own decision-making logic. The agent's plan must show the `list_files` check occurring before the `reset_all` call." ;
-    schema:description "Before invoking the `reset_all` tool, the agent MUST first use the `list_files` tool to verify that the `authorization.token` file exists in the repository root. The agent must not proceed with the `reset_all` call if the token is not found." .
+<file:///app/protocols/toolchain-review-on-schema-change-001> proto:associatedTool <file:///app/protocols/tooling/hierarchical_compiler.py>,
+        <file:///app/protocols/tooling/protocol_auditor.py>,
+        <file:///app/protocols/tooling/protocol_compiler.py> ;
+    proto:hasRule <file:///app/protocols/toolchain-audit-on-schema-change> ;
+    schema:description "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols." .
 
 <file:///app/protocols/agents-md-self-awareness> proto:enforcement "The agent should incorporate this check into its standard operating procedure, particularly at the beginning of a task or when unexpected behavior occurs." ;
     schema:description "The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols." .
@@ -175,6 +176,9 @@
 
 <file:///app/protocols/critic-no-reset> proto:enforcement "This rule is enforced by its inclusion in the compiled AGENTS.md, which serves as the context for the Code Review Critic. The critic must be programmed to parse and adhere to this prohibition." ;
     schema:description "The agent role-playing as the 'Code Review Critic' is explicitly forbidden from invoking the 'reset_all' tool under any circumstances. This is a critical safeguard to prevent the loss of work during the review process." .
+
+<file:///app/protocols/dependency-install-on-start> proto:enforcement "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions." ;
+    schema:description "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed." .
 
 <file:///app/protocols/executable-plans> proto:enforcement "The output of the research planner must be linted and validated by the `fdc_cli.py` tool using the `research_fsm.json`." ;
     schema:description "Research plans must be generated by `tooling/research_planner.py` as valid, executable plans that conform to the `research_fsm.json` definition. They are not just templates but formal, verifiable artifacts." .
@@ -282,9 +286,6 @@
 <file:///app/protocols/registry-management-tool> proto:enforcement "The tool's existence and functionality can be verified via integration tests." ;
     schema:description "A dedicated tool (`tooling/plan_manager.py`) MUST be provided for managing the plan registry, with functions to register, deregister, and list plans." .
 
-<file:///app/protocols/require-authorization-token> proto:enforcement "The `reset_all` tool's implementation must be modified to check for the existence of this file, proceed with its operation, and then delete the token file upon completion. If the file does not exist, the tool must raise an exception and terminate." ;
-    schema:description "The `reset_all` tool must not execute unless a file named `authorization.token` exists in the repository root." .
-
 <file:///app/protocols/specialized-fsm> proto:enforcement "The `master_control.py` orchestrator must load and execute plans against this specific FSM when initiating an L4 Deep Research Cycle." ;
     schema:description "The Research FDC must be governed by its own dedicated Finite State Machine, defined in `tooling/research_fsm.json`. This FSM is tailored for a research workflow, with states for gathering, synthesis, and reporting." .
 
@@ -293,6 +294,9 @@
 
 <file:///app/protocols/structured-research-phases> proto:enforcement "The plan's structure itself enforces this rule. The `lint` command can be extended to validate the structure of registered research plans." ;
     schema:description "The deep research plan MUST follow a structured four-phase process: Scoping, Broad Gathering, Targeted Extraction, and Synthesis." .
+
+<file:///app/protocols/toolchain-audit-on-schema-change> proto:enforcement "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files." ;
+    schema:description "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure." .
 
 <file:///app/protocols/verify-after-write> proto:enforcement "This is a core operational discipline. Future tooling, such as a trace validator, could enforce this by analyzing the execution log against this protocol." ;
     schema:description "After every file creation or modification action (`create_file_with_block`, `overwrite_file_with_block`, `replace_with_git_merge_diff`), the agent MUST use a subsequent read-only tool (`read_file`, `list_files`, `grep`) to verify that the action was executed successfully and had the intended effect. A plan step should only be marked as complete after this verification." .

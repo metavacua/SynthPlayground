@@ -344,6 +344,50 @@ The CLI provides several key commands:
   > Validates a plan using the centralized parser.
 
 
+### `tooling/hierarchical_compiler.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def cleanup_summaries(directory)`
+
+  > Removes temporary summary files from a protocols directory.
+
+
+- #### `def find_protocol_dirs(root_dir)`
+
+  > Finds all directories named 'protocols' within the root directory,
+  > ignoring any special-cased directories.
+
+
+- #### `def generate_summary(child_agents_md_path)`
+
+  > Generates a summary of a child AGENTS.md file by extracting protocol IDs.
+
+
+- #### `def get_parent_module(module_path, all_module_paths)`
+
+  > Finds the direct parent module of a given module.
+
+
+- #### `def main()`
+
+  > Main function to orchestrate the hierarchical compilation.
+
+
+- #### `def run_compiler(source_dir)`
+
+  > Invokes the protocol_compiler.py script as a subprocess.
+
+
+- #### `def run_readme_generator(source_agents_md)`
+
+  > Invokes the readme_generator.py script as a subprocess.
+
+
 ### `tooling/knowledge_compiler.py`
 
 Extracts structured lessons from post-mortem reports and compiles them into a
@@ -678,16 +722,20 @@ accurate audit.
 **Public Functions:**
 
 
-- #### `def generate_markdown_report(source_check, unreferenced, unused, centrality)`
+- #### `def find_all_agents_md_files(root_dir)`
+
+  > Finds all AGENTS.md files in the repository.
+
+
+- #### `def generate_markdown_report(source_checks, unreferenced, unused, centrality)`
 
   > Generates a Markdown-formatted string from the audit results.
 
 
-- #### `def get_protocol_tools_from_agents_md(agents_md_path)`
+- #### `def get_protocol_tools_from_agents_md(agents_md_paths)`
 
-  > Parses AGENTS.md to get a set of all tools associated with protocols.
-  > NOTE: This function correctly parses all JSON blocks, contrary to the
-  > outdated warning in the module-level docstring.
+  > Parses a list of AGENTS.md files to get a set of all tools associated
+  > with protocols.
 
 
 - #### `def get_used_tools_from_log(log_path)`
@@ -713,10 +761,10 @@ accurate audit.
   > Compares used tools with protocol-defined tools and returns the gaps.
 
 
-- #### `def run_protocol_source_check()`
+- #### `def run_protocol_source_check(all_agents_files)`
 
-  > Checks if AGENTS.md is older than its source files.
-  > Returns a dictionary with the check's status and relevant details.
+  > Checks if each AGENTS.md file is older than its corresponding source files.
+  > Returns a list of warning/error dictionaries.
 
 
 ### `tooling/protocol_compiler.py`
@@ -804,40 +852,26 @@ directory, performing targeted updates based on command-line arguments.
 
 ### `tooling/readme_generator.py`
 
-Generates the project's README.md file.
-
-This script combines a static, manually written overview with dynamically
-generated sections that summarize key components of the system. The goal is
-to produce a README that is both informative and easy to maintain, as it
-automatically reflects the current state of the documented source code.
-
-The script is designed to be run from the root of the repository and is
-integrated into the `Makefile` build process.
+_No module-level docstring found._
 
 
 **Public Functions:**
 
 
-- #### `def generate_core_protocols_section()`
+- #### `def generate_core_protocols_section(agents_md_path)`
 
-  > Parses AGENTS.md to extract protocol definitions and generate a Markdown summary.
+  > Parses a given AGENTS.md file to extract protocol definitions and generate a Markdown summary.
 
 
-- #### `def generate_key_components_section()`
+- #### `def generate_key_components_section(module_path)`
 
-  > Generates the Markdown for the "Key Components" section by reading
-  > the docstrings of the curated list of files.
+  > Generates the Markdown for the "Key Components" section by documenting
+  > any `.py` files found in a `tooling/` subdirectory of the module.
 
 
 - #### `def get_module_docstring(filepath)`
 
   > Parses a Python file and extracts the module-level docstring.
-  >
-  > Args:
-  >     filepath: The path to the Python file.
-  >
-  > Returns:
-  >     The module docstring, or a placeholder if none is found.
 
 
 - #### `def main()`
@@ -1019,6 +1053,26 @@ rate tracking or tool usage anti-patterns) to be added as the system evolves.
 - #### `def main()`
 
   > Main function to run the self-improvement analysis CLI.
+
+
+### `tooling/standard_agents_compiler.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Generates a standard-compliant AGENTS.md file by parsing commands
+  > from the project's Makefile.
+
+
+- #### `def parse_makefile_command(target_name, makefile_content)`
+
+  > Parses a Makefile to find the main command for a specific target,
+  > skipping any 'echo' lines. This version iterates through lines for robustness.
 
 
 ### `tooling/state.py`
