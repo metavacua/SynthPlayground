@@ -352,20 +352,15 @@ _No module-level docstring found._
 **Public Functions:**
 
 
-- #### `def cleanup_summaries(directory)`
-
-  > Removes temporary summary files from a protocols directory.
-
-
 - #### `def find_protocol_dirs(root_dir)`
 
   > Finds all directories named 'protocols' within the root directory,
   > ignoring any special-cased directories.
 
 
-- #### `def generate_summary(child_agents_md_path)`
+- #### `def generate_sequent_agents_md(target_path, antecedent, local_protocol_dir)`
 
-  > Generates a summary of a child AGENTS.md file by extracting protocol IDs.
+  > Generates the new AGENTS.md file in the YAML-based sequent format.
 
 
 - #### `def get_parent_module(module_path, all_module_paths)`
@@ -375,17 +370,22 @@ _No module-level docstring found._
 
 - #### `def main()`
 
-  > Main function to orchestrate the hierarchical compilation.
+  > Main function to orchestrate the hierarchical, proof-theoretic build.
 
 
-- #### `def run_compiler(source_dir)`
+- #### `def run_local_build_script(module_path)`
 
-  > Invokes the protocol_compiler.py script as a subprocess.
+  > Executes the local build script for a module, if it exists.
 
 
 - #### `def run_readme_generator(source_agents_md)`
 
   > Invokes the readme_generator.py script as a subprocess.
+
+
+- #### `def verify_and_get_succedent(agents_md_path)`
+
+  > Verifies that the witnesses in a module's succedent exist and returns the succedent.
 
 
 ### `tooling/knowledge_compiler.py`
@@ -436,6 +436,39 @@ post-mortem file as its primary argument.
   >
   > This is the core of translating insights into automated actions. It uses
   > pattern matching to identify specific, supported commands.
+
+
+### `tooling/knowledge_graph_finalizer.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def define_ontology(graph)`
+
+  > Adds the ontology definitions to the graph.
+
+
+- #### `def find_all_sequents(root_dir)`
+
+  > Finds all AGENTS.md sequent files in the repository.
+
+
+- #### `def generate_knowledge_graph(root_dir)`
+
+  > Generates the full knowledge graph and serializes it to JSON-LD.
+
+
+- #### `def main()`
+
+  > Main function to generate and print the knowledge graph.
+
+
+- #### `def process_sequent_file(graph, file_path, root_dir)`
+
+  > Processes a single AGENTS.md file and adds its triples to the graph.
 
 
 ### `tooling/knowledge_integrator.py`
@@ -858,25 +891,14 @@ _No module-level docstring found._
 **Public Functions:**
 
 
-- #### `def generate_core_protocols_section(agents_md_path)`
+- #### `def generate_specification_readme(agents_md_path)`
 
-  > Parses a given AGENTS.md file to extract protocol definitions and generate a Markdown summary.
-
-
-- #### `def generate_key_components_section(module_path)`
-
-  > Generates the Markdown for the "Key Components" section by documenting
-  > any `.py` files found in a `tooling/` subdirectory of the module.
-
-
-- #### `def get_module_docstring(filepath)`
-
-  > Parses a Python file and extracts the module-level docstring.
+  > Parses a YAML-based AGENTS.md file to generate a specification-focused README.md.
 
 
 - #### `def main()`
 
-  > Main function to generate the README.md content and write it to a file.
+  > Main function to generate the specification README.md content and write it to a file.
 
 
 ### `tooling/research.py`

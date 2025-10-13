@@ -10,3 +10,4 @@ Markdown
 rdflib
 requests
 markdown
+pyyaml

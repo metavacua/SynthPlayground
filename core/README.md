@@ -1,27 +1,15 @@
-# Module Documentation
+# Module Specification: `core`
 
-## Overview
+This document outlines the formal specification for the `core` module, as defined by the proof-theoretic build system.
 
-This document provides a human-readable summary of the protocols and key
-components defined within this module. It is automatically generated from the
-corresponding `AGENTS.md` file and the source code docstrings.
+## 1. Propositions (Goals)
 
-## Core Protocols
+This module makes the following formal claims, which are proven by its successful build:
 
-This module is governed by a series of machine-readable protocols defined in `AGENTS.md`. These protocols are the source of truth for the agent's behavior within this scope. The key protocols are:
+- **core_library**: A core library containing essential business logic. (Produces artifact `dist/core.lib` of type `!Library`)
 
-- **`core-directive-001`**: The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC).
-- **`decidability-constraints-001`**: Ensures all development processes are formally decidable and computationally tractable.
-- **`orientation-cascade-001`**: Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state.
-- **`fdc-protocol-001`**: Defines the Finite Development Cycle (FDC), a formally defined process for executing a single, coherent task.
-- **`standing-orders-001`**: A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks.
-- **`cfdc-protocol-001`**: Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model.
-- **`plan-registry-001`**: Defines a central registry for discovering and executing hierarchical plans by a logical name.
-- **`self-correction-protocol-001`**: Defines the automated, closed-loop workflow for protocol self-correction.
-- **`research-protocol-001`**: A protocol for conducting systematic research using the integrated research toolchain.
-- **`deep-research-cycle-001`**: A standardized, callable plan for conducting in-depth research on a complex topic.
-- **`research-fdc-001`**: Defines the formal Finite Development Cycle (FDC) for conducting deep research.
+## 2. Prerequisites (Dependencies)
 
-## Key Components
+To prove its propositions, this module requires the following artifacts to be provided as inputs. These are the verified conclusions of its child modules.
 
-_No `tooling/` directory found in this module._
+- This module has no prerequisites; it is an axiom.

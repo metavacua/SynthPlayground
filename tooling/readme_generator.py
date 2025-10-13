@@ -1,122 +1,87 @@
-import ast
 import os
-import re
-import json
+import yaml
 import argparse
 
 # --- Static Content ---
 
-# Manually written overview and architectural description.
-# Using a template string allows for easy updates to the narrative.
+# A new template focused on specification (Propositions and Prerequisites)
 README_TEMPLATE = """
-# Module Documentation
+# Module Specification: `{module_name}`
 
-## Overview
+This document outlines the formal specification for the `{module_name}` module, as defined by the proof-theoretic build system.
 
-This document provides a human-readable summary of the protocols and key
-components defined within this module. It is automatically generated from the
-corresponding `AGENTS.md` file and the source code docstrings.
+## 1. Propositions (Goals)
 
-## Core Protocols
+This module makes the following formal claims, which are proven by its successful build:
 
-This module is governed by a series of machine-readable protocols defined in `AGENTS.md`. These protocols are the source of truth for the agent's behavior within this scope. The key protocols are:
+{propositions}
 
-{core_protocols}
+## 2. Prerequisites (Dependencies)
 
-## Key Components
+To prove its propositions, this module requires the following artifacts to be provided as inputs. These are the verified conclusions of its child modules.
 
-{key_components}
+{prerequisites}
 """
 
 # --- Dynamic Content Generation ---
 
-def get_module_docstring(filepath: str) -> str:
+def generate_specification_readme(agents_md_path: str) -> str:
     """
-    Parses a Python file and extracts the module-level docstring.
-    """
-    try:
-        with open(filepath, "r", encoding="utf-8") as f:
-            source = f.read()
-            tree = ast.parse(source, filename=filepath)
-            docstring = ast.get_docstring(tree, clean=True)
-            return docstring or "_No docstring found._"
-    except (FileNotFoundError, SyntaxError) as e:
-        print(f"Warning: Could not parse {filepath}. Reason: {e}")
-        return f"_Error parsing file: {e}_"
-
-def generate_core_protocols_section(agents_md_path: str) -> str:
-    """
-    Parses a given AGENTS.md file to extract protocol definitions and generate a Markdown summary.
+    Parses a YAML-based AGENTS.md file to generate a specification-focused README.md.
     """
     if not os.path.exists(agents_md_path):
-        return f"_Error: `{agents_md_path}` not found._"
+        return f"_Error: Sequent file `{agents_md_path}` not found._"
 
     try:
         with open(agents_md_path, "r", encoding="utf-8") as f:
-            content = f.read()
-    except IOError as e:
-        return f"_Error reading `{agents_md_path}`: {e}_"
+            sequent_data = yaml.safe_load(f).get("sequent", {})
+    except (IOError, yaml.YAMLError) as e:
+        return f"_Error reading or parsing `{agents_md_path}`: {e}_"
 
-    protocol_blocks = re.findall(r"```json\n(.*?)\n```", content, re.DOTALL)
-    summary_blocks = re.findall(r"## Child Module: `(.*?)`\n\n(.*?)\n\n---", content, re.DOTALL)
+    # --- Propositions Section ---
+    succedent = sequent_data.get("succedent", [])
+    propositions_parts = []
+    if not succedent:
+        propositions_parts.append("- This module makes no formal propositions.")
+    else:
+        for item in succedent:
+            propositions_parts.append(f"- **{item.get('id', 'N/A')}**: {item.get('proposition', 'No proposition stated.')} (Produces artifact `{item.get('witness', 'N/A')}` of type `{item.get('type', 'N/A')}`)")
 
+    propositions_md = "\n".join(propositions_parts)
 
-    parts = []
-    for block in protocol_blocks:
-        try:
-            protocol = json.loads(block)
-            protocol_id = protocol.get("protocol_id")
-            description = protocol.get("description")
-            if protocol_id and description:
-                parts.append(f"- **`{protocol_id}`**: {description}")
-        except json.JSONDecodeError:
-            continue
+    # --- Prerequisites Section ---
+    antecedent = sequent_data.get("antecedent", [])
+    prerequisites_parts = []
+    if not antecedent:
+        prerequisites_parts.append("- This module has no prerequisites; it is an axiom.")
+    else:
+        for item in antecedent:
+            prerequisites_parts.append(f"- **{item.get('id', 'N/A')}**: Requires artifact `{item.get('witness', 'N/A')}` from module `{item.get('source', 'N/A')}`.")
 
-    for child_name, child_protocols in summary_blocks:
-        parts.append(f"\n### Child Module: `{child_name}`\n\nThis module includes protocols from its child module `{child_name}`, as summarized below:")
-        parts.append(child_protocols)
+    prerequisites_md = "\n".join(prerequisites_parts)
 
+    module_name = os.path.basename(os.path.dirname(agents_md_path))
+    if not module_name: # Handle root directory case
+        module_name = "Repository Root"
 
-    if not parts:
-        return "_No protocols found in this module._"
+    return README_TEMPLATE.format(
+        module_name=module_name,
+        propositions=propositions_md,
+        prerequisites=prerequisites_md
+    ).strip()
 
-    return "\n".join(parts)
-
-def generate_key_components_section(module_path: str) -> str:
-    """
-    Generates the Markdown for the "Key Components" section by documenting
-    any `.py` files found in a `tooling/` subdirectory of the module.
-    """
-    tooling_dir = os.path.join(module_path, "tooling")
-    if not os.path.isdir(tooling_dir):
-        return "_No `tooling/` directory found in this module._"
-
-    key_files = [f for f in os.listdir(tooling_dir) if f.endswith(".py") and not f.startswith("test_")]
-
-    if not key_files:
-        return "_No key component scripts found in the `tooling/` directory._"
-
-    parts = []
-    for filename in sorted(key_files):
-        filepath = os.path.join(tooling_dir, filename)
-        docstring = get_module_docstring(filepath)
-        parts.append(f"- **`{os.path.join('tooling', filename)}`**:")
-        indented_doc = "\\n".join([f"  > {line}" for line in docstring.splitlines()])
-        parts.append(indented_doc)
-
-    return "\n\n".join(parts)
 
 # --- Main Execution Logic ---
 
 def main():
     """
-    Main function to generate the README.md content and write it to a file.
+    Main function to generate the specification README.md content and write it to a file.
     """
-    parser = argparse.ArgumentParser(description="Generates a README.md from a corresponding AGENTS.md file.")
+    parser = argparse.ArgumentParser(description="Generates a specification README.md from a YAML-based AGENTS.md sequent file.")
     parser.add_argument(
         "--source-file",
         required=True,
-        help="Path to the source AGENTS.md file."
+        help="Path to the source AGENTS.md sequent file."
     )
     parser.add_argument(
         "--output-file",
@@ -126,25 +91,16 @@ def main():
     args = parser.parse_args()
 
     module_path = os.path.dirname(args.output_file)
-    print(f"--- Generating README.md for module: {module_path} ---")
+    print(f"--- Generating Specification README.md for module: {module_path} ---")
 
-    print(f"--> Generating 'Core Protocols' section from {args.source_file}...")
-    core_protocols_md = generate_core_protocols_section(args.source_file)
+    print(f"--> Parsing sequent from {args.source_file}...")
+    final_readme_content = generate_specification_readme(args.source_file)
 
-    print("--> Generating 'Key Components' section...")
-    key_components_md = generate_key_components_section(module_path)
-
-    print("--> Assembling final README.md content...")
-    final_readme_content = README_TEMPLATE.format(
-        core_protocols=core_protocols_md,
-        key_components=key_components_md,
-    ).strip()
-
-    print(f"--> Writing README to {args.output_file}...")
+    print(f"--> Writing specification to {args.output_file}...")
     try:
         with open(args.output_file, "w", encoding="utf-8") as f:
             f.write(final_readme_content)
-        print("--> README.md generated successfully.")
+        print("--> Specification README.md generated successfully.")
     except IOError as e:
         print(f"Error: Could not write to {args.output_file}. Reason: {e}")
 

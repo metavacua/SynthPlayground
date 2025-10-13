@@ -1,18 +1,15 @@
-# Module Documentation
+# Module Specification: `critic`
 
-## Overview
+This document outlines the formal specification for the `critic` module, as defined by the proof-theoretic build system.
 
-This document provides a human-readable summary of the protocols and key
-components defined within this module. It is automatically generated from the
-corresponding `AGENTS.md` file and the source code docstrings.
+## 1. Propositions (Goals)
 
-## Core Protocols
+This module makes the following formal claims, which are proven by its successful build:
 
-This module is governed by a series of machine-readable protocols defined in `AGENTS.md`. These protocols are the source of truth for the agent's behavior within this scope. The key protocols are:
+- **critic_artifact**: This module has no defined succedent. It may be a container for other modules. (Produces artifact `artifact.placeholder` of type `Placeholder`)
 
-- **`critic-meta-protocol-001`**: A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent.
-- **`critic-reset-prohibition-001`**: A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool.
+## 2. Prerequisites (Dependencies)
 
-## Key Components
+To prove its propositions, this module requires the following artifacts to be provided as inputs. These are the verified conclusions of its child modules.
 
-_No `tooling/` directory found in this module._
+- This module has no prerequisites; it is an axiom.

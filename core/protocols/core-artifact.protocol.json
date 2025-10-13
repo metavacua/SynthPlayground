@@ -1,0 +1,6 @@
+{
+    "id": "core_library",
+    "type": "!Library",
+    "proposition": "A core library containing essential business logic.",
+    "witness": "dist/core.lib"
+}
