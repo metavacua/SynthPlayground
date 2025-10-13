@@ -24,22 +24,23 @@ def execute_build(target_name, config):
 
     target_config = config['targets'][target_name]
     compiler_path = os.path.join(ROOT_DIR, target_config['compiler'])
-    output_path = os.path.join(ROOT_DIR, target_config['output'])
-
     command = ["python3", compiler_path]
 
-    # Handle different source types
-    if target_name == 'agents':
-        # The hierarchical compiler discovers its own sources.
+    # Handle targets that produce output files
+    if 'output' in target_config:
+        output_path = os.path.join(ROOT_DIR, target_config['output'])
+        # Handle different source types for output-producing targets
+        if target_name == 'readme':
+            source_file = os.path.join(ROOT_DIR, target_config['sources'][0])
+            command.extend(["--source-file", source_file, "--output-file", output_path])
+        else:
+            source_dir = os.path.join(ROOT_DIR, target_config['sources'][0])
+            command.extend(["--source-dir", source_dir, "--output-file", output_path])
+
+    # Handle targets that are simple commands (like audit)
+    elif target_name == 'agents':
+        # The hierarchical compiler discovers its own sources and has no output arg
         pass
-    elif target_name == 'readme':
-        # The readme generator takes a single source file.
-        source_file = os.path.join(ROOT_DIR, target_config['sources'][0])
-        command.extend(["--source-file", source_file, "--output-file", output_path])
-    else:
-        # Most compilers take a source directory.
-        source_dir = os.path.join(ROOT_DIR, target_config['sources'][0])
-        command.extend(["--source-dir", source_dir, "--output-file", output_path])
 
     # Add any additional command-line options
     if 'options' in target_config:
@@ -48,7 +49,8 @@ def execute_build(target_name, config):
 
     print(f"--- Building Target: {target_name.upper()} ---")
     print(f"  - Compiler: {target_config['compiler']}")
-    print(f"  - Output:   {target_config['output']}")
+    if 'output' in target_config:
+        print(f"  - Output:   {target_config['output']}")
     print(f"  - Command:  {' '.join(command)}")
 
     try:
@@ -103,7 +105,7 @@ def main():
     if args.target == 'all':
         print("--- Executing Full Build ---")
         # Build in a logical order
-        build_order = ['docs', 'security', 'agents', 'readme']
+        build_order = ['docs', 'security', 'agents', 'readme', 'audit']
         for target_name in build_order:
             if target_name in config['targets']:
                 execute_build(target_name, config)

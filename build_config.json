@@ -33,6 +33,10 @@
         "AGENTS.md"
       ],
       "description": "Generates README.md from AGENTS.md."
+    },
+    "audit": {
+      "compiler": "tooling/protocol_auditor.py",
+      "description": "Runs the protocol auditor to check for compliance."
     }
   }
 }

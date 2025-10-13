@@ -67,8 +67,8 @@ test:
 # Auditing
 # ==============================================================================
 audit:
-	@echo "--> Running protocol auditor..."
-	@python3 tooling/protocol_auditor.py
+	@echo "--> Building target: audit"
+	@python3 $(BUILDER_SCRIPT) --target audit
 
 # ==============================================================================
 # Cleanup
