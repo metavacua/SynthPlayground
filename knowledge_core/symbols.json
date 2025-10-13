@@ -117,7 +117,7 @@
       "name": "Logger",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 35,
+      "line": 36,
       "kind": "class"
     },
     {
@@ -125,7 +125,7 @@
       "name": "__init__",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 40,
+      "line": 41,
       "kind": "function"
     },
     {
@@ -133,7 +133,7 @@
       "name": "_load_schema",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 56,
+      "line": 57,
       "kind": "function"
     },
     {
@@ -141,7 +141,7 @@
       "name": "log",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 82,
+      "line": 83,
       "kind": "function"
     },
     {
@@ -733,7 +733,7 @@
       "name": "find_all_agents_md_files",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 36,
+      "line": 39,
       "kind": "function"
     },
     {
@@ -741,7 +741,7 @@
       "name": "get_used_tools_from_log",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 45,
+      "line": 73,
       "kind": "function"
     },
     {
@@ -749,7 +749,7 @@
       "name": "get_protocol_tools_from_agents_md",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 87,
+      "line": 115,
       "kind": "function"
     },
     {
@@ -757,7 +757,7 @@
       "name": "run_completeness_check",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 123,
+      "line": 151,
       "kind": "function"
     },
     {
@@ -765,7 +765,7 @@
       "name": "run_centrality_analysis",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 131,
+      "line": 159,
       "kind": "function"
     },
     {
@@ -773,7 +773,7 @@
       "name": "run_protocol_source_check",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 138,
+      "line": 166,
       "kind": "function"
     },
     {
@@ -781,7 +781,7 @@
       "name": "generate_markdown_report",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 185,
+      "line": 213,
       "kind": "function"
     },
     {
@@ -789,7 +789,7 @@
       "name": "main",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 238,
+      "line": 266,
       "kind": "function"
     },
     {
