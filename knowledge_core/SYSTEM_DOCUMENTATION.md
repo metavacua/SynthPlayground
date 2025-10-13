@@ -306,7 +306,14 @@ The CLI provides several key commands:
 
 - #### `def analyze_plan(plan_filepath)`
 
-  > Analyzes a plan file to determine its complexity class and modality.
+  > Analyzes a plan file to determine its decidability, modality, and complexity.
+  >
+  > This function performs a comprehensive analysis of a given plan by:
+  > 1.  Confirming its decidability based on the system's design.
+  > 2.  Determining its modality (Read-Only vs. Read-Write).
+  > 3.  Calculating its computational complexity by combining the structural
+  >     complexity of the plan (e.g., loops) with the declared complexities
+  >     of the tools it calls, as defined in `knowledge_core/tool_complexity.json`.
 
 
 - #### `def close_task(task_id)`

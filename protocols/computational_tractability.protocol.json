@@ -1,0 +1,14 @@
+{
+  "protocol_id": "computational-tractability-001",
+  "description": "A protocol to ensure that agent-generated plans are not only decidable but also computationally efficient and tractable.",
+  "rules": [
+    {
+      "rule_id": "mandate-efficiency-analysis",
+      "description": "For any plan that involves loops ('for_each_file') or is identified as potentially high-complexity, the agent SHOULD use the 'analyze' command of the FDC toolchain to assess its computational complexity before execution. This ensures that the agent is aware of the performance implications of its plans and can avoid generating unnecessarily inefficient solutions.",
+      "enforcement": "This is a procedural best practice. Adherence can be encouraged through code review and post-mortem analysis, and potentially automated in the future by having the 'lint' command issue a warning for complex plans."
+    }
+  ],
+  "associated_tools": [
+    "tooling/fdc_cli.py"
+  ]
+}

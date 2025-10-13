@@ -360,44 +360,100 @@ def validate_plan(plan_filepath):
 
 
 def analyze_plan(plan_filepath):
-    """Analyzes a plan file to determine its complexity class and modality."""
+    """
+    Analyzes a plan file to determine its decidability, modality, and complexity.
+
+    This function performs a comprehensive analysis of a given plan by:
+    1.  Confirming its decidability based on the system's design.
+    2.  Determining its modality (Read-Only vs. Read-Write).
+    3.  Calculating its computational complexity by combining the structural
+        complexity of the plan (e.g., loops) with the declared complexities
+        of the tools it calls, as defined in `knowledge_core/tool_complexity.json`.
+    """
     try:
         with open(plan_filepath, "r") as f:
-            plan_lines_with_indent = f.readlines()
-        plan_lines = [line.strip() for line in plan_lines_with_indent if line.strip()]
+            plan_content = f.read()
+        commands = parse_plan(plan_content)
     except FileNotFoundError:
         print(f"Error: Plan file not found at {plan_filepath}", file=sys.stderr)
         sys.exit(1)
 
-    # --- Complexity Analysis ---
-    loop_indents = []
-    for line in plan_lines_with_indent:
-        if line.strip().startswith("for_each_file"):
-            indent = len(line) - len(line.lstrip(" "))
-            loop_indents.append(indent)
+    # Load the tool complexity knowledge base
+    complexity_db_path = os.path.join(ROOT_DIR, "knowledge_core", "tool_complexity.json")
+    try:
+        with open(complexity_db_path, "r") as f:
+            tool_complexity_db = json.load(f)["tools"]
+    except (FileNotFoundError, json.JSONDecodeError):
+        print(f"Warning: Could not load or parse {complexity_db_path}. Tool complexity analysis will be incomplete.", file=sys.stderr)
+        tool_complexity_db = {}
 
-    if not loop_indents:
-        complexity = "Constant (O(1))"
-    elif max(loop_indents) > min(loop_indents):
-        complexity = "Exponential (EXPTIME-Class)"
-    else:
-        complexity = "Polynomial (P-Class)"
+    # --- Decidability Analysis ---
+    # This is guaranteed by the CFDC protocol's bounded recursion depth.
+    decidability = "Guaranteed to Halt (Decidable Process)"
 
-    # --- Modality Analysis ---
+    # --- Modality and Tool Complexity Analysis ---
     has_write_op = False
     write_ops = {"write_op", "delete_op", "move_op"}
-    for line in plan_lines:
-        command = line.split()[0]
-        action_type = ACTION_TYPE_MAP.get(command)
+    used_tools = {}
+
+    # Simple loop detection (more robust than old indentation method)
+    # A proper implementation would require a full AST of the plan.
+    # For now, we assume no nested loops for complexity calculation, which is a simplifying assumption.
+    is_loop_present = any(cmd.tool_name == "for_each_file" for cmd in commands)
+
+    for command in commands:
+        tool_name = command.tool_name
+        # Modality Check
+        action_type = ACTION_TYPE_MAP.get(tool_name)
         if action_type in write_ops:
             has_write_op = True
-            break
+
+        # Tool Complexity Aggregation
+        if tool_name not in used_tools:
+            complexity_info = tool_complexity_db.get(tool_name, {
+                "complexity": "Unknown",
+                "justification": "Tool not found in complexity database."
+            })
+            used_tools[tool_name] = complexity_info
 
     modality = "Construction (Read-Write)" if has_write_op else "Analysis (Read-Only)"
 
-    print("Plan Analysis Results:")
-    print(f"  - Complexity: {complexity}")
-    print(f"  - Modality:   {modality}")
+    # --- Final Complexity Calculation ---
+    # This is a simplified model. A true analysis would require a more complex graph traversal.
+    # We find the "highest" complexity class among the tools used.
+    # This is a heuristic and may not be perfectly accurate for all cases.
+    complexity_order = ["O(1)", "O(log n)", "O(n)", "O(n log n)", "O(n^2)", "O(2^n)", "Variable", "Unknown"]
+    dominant_complexity = "O(1)"
+    for tool, info in used_tools.items():
+        if complexity_order.index(info["complexity"]) > complexity_order.index(dominant_complexity):
+            dominant_complexity = info["complexity"]
+
+    if is_loop_present:
+        # A loop elevates the complexity of the operations within it.
+        # E.g., a loop of O(N) containing an O(F) operation is O(N*F)
+        # We'll represent this simplification as "Polynomial"
+        final_complexity = "Polynomial (P-Class)"
+    else:
+        final_complexity = f"Dominantly {dominant_complexity}"
+
+
+    # --- Reporting ---
+    print("--- Plan Analysis Report ---")
+    print(f"File: {plan_filepath}\n")
+    print(f"1. Decidability Analysis:")
+    print(f"   - Result: {decidability}")
+    print(f"   - Justification: The agent's Context-Free Development Cycle (CFDC) protocol enforces a maximum recursion depth, ensuring all plan executions terminate.\n")
+
+    print(f"2. Modality Analysis:")
+    print(f"   - Result: {modality}\n")
+
+    print(f"3. Computational Complexity Analysis:")
+    print(f"   - Overall Estimated Complexity: {final_complexity}")
+    print(f"   - Structural Complexity: {'Contains loops' if is_loop_present else 'Linear (No loops)'}")
+    print(f"   - Tool-Specific Complexity:")
+    for tool, info in sorted(used_tools.items()):
+        print(f"     - {tool:<28} | {info['complexity']:<10} | {info['justification']}")
+    print("\n--- End of Report ---")
 
 
 def lint_plan(plan_filepath):

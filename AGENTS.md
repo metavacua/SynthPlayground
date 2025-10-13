@@ -317,7 +317,14 @@ The CLI provides several key commands:
 
 - #### `def analyze_plan(plan_filepath)`
 
-  > Analyzes a plan file to determine its complexity class and modality.
+  > Analyzes a plan file to determine its decidability, modality, and complexity.
+  >
+  > This function performs a comprehensive analysis of a given plan by:
+  > 1.  Confirming its decidability based on the system's design.
+  > 2.  Determining its modality (Read-Only vs. Read-Write).
+  > 3.  Calculating its computational complexity by combining the structural
+  >     complexity of the plan (e.g., loops) with the declared complexities
+  >     of the tools it calls, as defined in `knowledge_core/tool_complexity.json`.
 
 
 - #### `def close_task(task_id)`
@@ -1289,17 +1296,6 @@ and self-improvement activities.
 
 ---
 
-## Child Module: `compliance`
-
-This module contains the following protocols, which are defined in its own `AGENTS.md` file:
-
-- `best-practices-001`
-- `meta-protocol-001`
-- `non-compliance-protocol-001`
-- `pre-commit-protocol-001`
-- `protocol-reset-all-pre-check-001`
-- `reset-all-authorization-001`
-- `reset-all-prohibition-001`
 # Protocol: Dependency Management
 
 This protocol establishes a formal process for managing Python dependencies to ensure a reliable and repeatable execution environment.
@@ -1316,89 +1312,6 @@ To solve this, two components are introduced:
 2.  **A New Protocol Rule:** A new rule, `dependency-install-on-start`, is established. This rule mandates that upon starting any task, the agent's first action *after* reading `AGENTS.md` should be to install the dependencies listed in `requirements.txt` using `pip`.
 
 This protocol transforms dependency management from an ad-hoc, reactive process into a proactive, automated, and verifiable step in the agent's workflow, significantly improving its robustness and reliability.
-
----
-
-# Jules Agent Protocol: The Hierarchical Development Cycle
-
-**Version:** 4.0.0
-
----
-
----
-
-## 1. The Core Problem: Ensuring Formally Verifiable Execution
-
-To tackle complex tasks reliably, an agent's workflow must be formally structured and guaranteed to terminate—it must be **decidable**. This is achieved through a hierarchical system composed of a high-level **Orchestrator** that manages the agent's overall state and a low-level **FDC Toolchain** that governs the validity of the agent's plans. This structure prevents the system from entering paradoxical, non-terminating loops.
-
----
-
----
-
-## 2. The Solution: A Two-Layered FSM System
-
----
-
-### Layer 1: The Orchestrator (`master_control.py` & `fsm.json`)
-
-The Orchestrator is the master Finite State Machine (FSM) that guides the agent through its entire lifecycle, from orientation to submission. It is not directly controlled by the agent's plan but rather directs the agent's state based on the successful completion of each phase.
-
-**Key States (defined in `tooling/fsm.json`):**
-*   `ORIENTING`: The initial state where the agent gathers context.
-*   `PLANNING`: The state where the Orchestrator waits for the agent to produce a `plan.txt`.
-*   `EXECUTING`: The state where the Orchestrator oversees the step-by-step execution of the validated plan.
-*   `POST_MORTEM`: The state for finalizing the task and recording learnings.
-*   `AWAITING_SUBMISSION`: The final state before the code is submitted.
-
-**The Orchestrator's Critical Role in Planning:**
-During the `PLANNING` state, the Orchestrator's most important job is to validate the agent-generated `plan.txt`. It does this by calling the FDC Toolchain's `lint` command. **A plan that fails this check will halt the entire process, preventing the agent from entering an invalid state.**
-
----
-
-### Layer 2: The FDC Toolchain (`fdc_cli.py` & `fdc_fsm.json`)
-
-The FDC Toolchain is a set of utilities that the agent uses to structure its work and that the Orchestrator uses for validation. The toolchain is governed by its own FSM (`tooling/fdc_fsm.json`), which defines the legal sequence of commands *within a plan*.
-
-#### **FDC Commands for Agent Use:**
-
-**`start` - Task Initiation**
-*   **Usage:** The first command the agent MUST issue upon receiving a task.
-*   **Command:** `run_in_bash_session python3 tooling/fdc_cli.py start --task-id "your-task-id"`
-*   **Function:** Logs the `TASK_START` event, formally beginning the development cycle.
-
-**`lint` - Pre-Flight Plan Validation**
-*   **Usage:** A command the agent can use to self-correct its own plan before finalizing it. The Orchestrator will *always* run this command on `plan.txt` as a mandatory check.
-*   **Command:** `run_in_bash_session python3 tooling/fdc_cli.py lint <plan_file.txt>`
-*   **Function:** Performs a comprehensive check against the low-level FSM:
-    1.  **Closure Mandate:** Ensures the plan's final action is a call to the `close` command.
-    2.  **FSM Validation:** Validates the sequence of agent tools against `tooling/fdc_fsm.json`.
-    3.  **Semantic Validation:** Checks for errors like using a file before creating it.
-
-**`close` - Task Closure**
-*   **Usage:** The **last command** in any valid plan.
-*   **Command:** `run_in_bash_session python3 tooling/fdc_cli.py close --task-id "your-task-id"`
-*   **Function:** Logs `TASK_END`, generates a post-mortem template, and signals to the Orchestrator that plan execution is complete.
----
-
----
-
-### STANDING ORDERS
-
-1.  **Orchestrator is Sovereign:** The agent's lifecycle is governed by `master_control.py`. The agent's primary job is to provide a valid `plan.txt` when the Orchestrator enters the `PLANNING` state.
-2.  **Toolchain is Law:** All plans must be valid according to the `fdc_cli.py lint` command. A valid plan is one that passes the Closure Mandate and is a valid string in the language defined by `fdc_fsm.json`.
-3.  **Hierarchy is Structure:** The Orchestrator (`master_control.py`) validates the agent's plan using the FDC Toolchain (`fdc_cli.py`). This separation ensures a robust, verifiable, and decidable development process, preventing the system from executing paradoxical or non-terminating plans.
-
----
-
-# Meta-Protocol: `AGENTS.md` Self-Management
-
-This protocol defines how the agent should manage its own core `AGENTS.md` file.
-
-**Rule `agents-md-self-awareness`**: The `AGENTS.md` file is not a static document; it is a build artifact compiled from the source files located in the `protocols/` directory. This compilation is handled by the `make AGENTS.md` command, which orchestrates the `tooling/protocol_compiler.py` script.
-
-To ensure that you are always operating under the most current set of rules and directives, you must periodically run `make AGENTS.md`. This is especially critical at the beginning of a new task or if you observe behavior that seems inconsistent with your documented protocols, as the protocols may have been updated.
-
-This act of self-maintenance is a foundational element of robust, autonomous operation. It ensures that your understanding of your own governing principles remains synchronized with the repository's ground truth.
 
 ---
 
@@ -1420,198 +1333,17 @@ This ensures that any modification to the fundamental way protocols are defined 
 
 ---
 
-# Protocol: The Context-Free Development Cycle (CFDC)
-
-This protocol marks a significant evolution from the Finite Development Cycle (FDC), introducing a hierarchical planning model that enables far greater complexity and modularity while preserving the system's core guarantee of decidability.
-
-## From FSM to Pushdown Automaton
-
-The FDC was based on a Finite State Machine (FSM), which provided a strict, linear sequence of operations. While robust, this model was fundamentally limited: it could not handle nested tasks or sub-routines, forcing all plans to be monolithic.
-
-The CFDC upgrades our execution model to a **Pushdown Automaton**. This is achieved by introducing a **plan execution stack**, which allows the system to call other plans as sub-routines. This enables a powerful new paradigm: **Context-Free Development Cycles**.
-
-## The `call_plan` Directive
-
-The core of the CFDC is the new `call_plan` directive. This allows one plan to execute another, effectively creating a parent-child relationship between them.
-
-- **Usage:** `call_plan <path_to_sub_plan.txt>`
-- **Function:** When the execution engine encounters this directive, it:
-    1.  Pushes the current plan's state (e.g., the current step number) onto the execution stack.
-    2.  Begins executing the sub-plan specified in the path.
-    3.  Once the sub-plan completes, it pops the parent plan's state from the stack and resumes its execution from where it left off.
-
-## Ensuring Decidability: The Recursion Depth Limit
-
-A system with unbounded recursion is not guaranteed to terminate. To prevent this, the CFDC introduces a non-negotiable, system-wide limit on the depth of the plan execution stack.
-
-**Rule `max-recursion-depth`**: The execution engine MUST enforce a maximum recursion depth, defined by a `MAX_RECURSION_DEPTH` constant. If a `call_plan` directive would cause the stack depth to exceed this limit, the entire process MUST terminate with an error. This hard limit ensures that even with recursive or deeply nested plans, the system remains a **decidable**, non-Turing-complete process that is guaranteed to halt.
-
----
-
-# Protocol: The Plan Registry
-
-This protocol introduces a Plan Registry to create a more robust, modular, and discoverable system for hierarchical plans. It decouples the act of calling a plan from its physical file path, allowing plans to be referenced by a logical name.
-
-## The Problem with Path-Based Calls
-
-The initial implementation of the Context-Free Development Cycle (CFDC) relied on direct file paths (e.g., `call_plan path/to/plan.txt`). This is brittle:
-- If a registered plan is moved or renamed, all plans that call it will break.
-- It is difficult for an agent to discover and reuse existing, validated plans.
-
-## The Solution: A Central Registry
-
-The Plan Registry solves this by creating a single source of truth that maps logical, human-readable plan names to their corresponding file paths.
-
-- **Location:** `knowledge_core/plan_registry.json`
-- **Format:** A simple JSON object of key-value pairs:
-  ```json
-  {
-    "logical-name-1": "path/to/plan_1.txt",
-    "run-all-tests": "plans/common/run_tests.txt"
-  }
-  ```
-
-## Updated `call_plan` Logic
-
-The `call_plan` directive is now significantly more powerful. When executing `call_plan <argument>`, the system will follow a **registry-first** approach:
-
-1.  **Registry Lookup:** The system will first treat `<argument>` as a logical name and look it up in `knowledge_core/plan_registry.json`.
-2.  **Path Fallback:** If the name is not found in the registry, the system will fall back to treating `<argument>` as a direct file path. This ensures full backward compatibility with existing plans.
-
-## Management
-
-A new tool, `tooling/plan_manager.py`, will be introduced to manage the registry with simple commands like `register`, `deregister`, and `list`, making it easy to maintain the library of reusable plans.
-
----
-
-# Protocol: The Closed-Loop Self-Correction Cycle
-
-This protocol describes the automated workflow that enables the agent to programmatically improve its own governing protocols based on new knowledge. It transforms the ad-hoc, manual process of learning into a reliable, machine-driven feedback loop.
-
-## The Problem: The Open Loop
-
-Previously, "lessons learned" were compiled into a simple markdown file, `knowledge_core/lessons_learned.md`. While this captured knowledge, it was a dead end. There was no automated process to translate these text-based insights into actual changes to the protocol source files. This required manual intervention, creating a significant bottleneck and a high risk of protocols becoming stale.
-
-## The Solution: A Protocol-Driven Self-Correction (PDSC) Workflow
-
-The PDSC workflow closes the feedback loop by introducing a set of new tools and structured data formats that allow the agent to enact its own improvements.
-
-**1. Structured, Actionable Lessons (`knowledge_core/lessons.jsonl`):**
-- Post-mortem analysis now generates lessons as structured JSON objects, not free-form text.
-- Each lesson includes a machine-readable `action` field, which contains a specific, executable command.
-
-**2. The Protocol Updater (`tooling/protocol_updater.py`):**
-- A new, dedicated tool for programmatically modifying the protocol source files (`*.protocol.json`).
-- It accepts commands like `add-tool`, allowing for precise, automated changes to protocol definitions.
-
-**3. The Orchestrator (`tooling/self_correction_orchestrator.py`):**
-- This script is the engine of the cycle. It reads `lessons.jsonl`, identifies pending lessons, and uses the `protocol_updater.py` to execute the defined actions.
-- After applying a lesson, it updates the lesson's status, creating a clear audit trail.
-- It finishes by running `make AGENTS.md` to ensure the changes are compiled into the live protocol.
-
-This new, automated cycle—**Analyze -> Structure Lesson -> Execute Correction -> Re-compile Protocol**—is a fundamental step towards autonomous self-improvement.
-
----
-
-# Protocol: AGENTS.md Non-Compliance
-
-This protocol defines what constitutes non-compliance with the established `AGENTS.md` protocols and outlines the expected corrective actions. Adherence to these meta-rules is critical for ensuring predictable, verifiable, and robust agent behavior.
-
-## Rule `non-compliance-definition`: Definition of Non-Compliance
-
-Non-compliance is the act of violating the explicit rules, conventions, or procedures documented in the `AGENTS.md` file and its source protocols within the `protocols/` directory. The `AGENTS.md` file serves as the agent's primary operational mandate, and any deviation from it is considered a fault condition.
-
-## Rule `non-compliance-direct-editing`: Prohibition of Direct Artifact Editing
-
-**Violation:** Directly editing any file that is a documented build artifact.
-- **Primary Example:** Modifying `AGENTS.md` or `README.md` directly is a severe violation. These files are generated from source protocols and documentation.
-- **Corrective Action:** The agent must revert any direct edits to build artifacts. Changes must be made to the source files (e.g., in `protocols/` or tool docstrings), and the appropriate build command (e.g., `make AGENTS.md`, `make docs`) must be executed.
-
-## Rule `non-compliance-test-procedure`: Adherence to Testing Protocols
-
-**Violation:** Failing to execute the testing procedures as defined in `AGENTS.md` before submitting changes. This includes not running the full test suite or ignoring failing tests.
-- **Corrective Action:** The agent must halt its execution plan and run the required tests. If tests fail, the agent must enter a debugging loop to resolve the failures before proceeding.
-
-## Rule `non-compliance-architectural-deviation`: Adherence to Architectural and Convention Guidelines
-
-**Violation:** Introducing changes that contradict the architectural patterns, coding conventions, or file structures laid out in `AGENTS.md`.
-- **Example:** Placing a new backend component in the `frontend/` directory when the architecture explicitly forbids it.
-- **Corrective Action:** The agent must identify the deviation, revert the incorrect changes, and re-implement them in accordance with the documented standards.
-
-## Rule `non-compliance-self-awareness-failure`: Failure to Maintain Protocol Awareness
-
-**Violation:** Operating with an outdated understanding of the protocols by failing to re-compile `AGENTS.md` when necessary, as defined in the `meta-protocol`.
-- **Corrective Action:** If the agent detects that its actions are out of sync with repository standards, it should trigger the `make AGENTS.md` command to refresh its internal state and re-evaluate its plan.
-
-## Consequence of Non-Compliance
-
-Upon detecting any form of non-compliance, the agent is required to:
-1.  **Halt:** Immediately stop the current execution path to prevent further deviation.
-2.  **Report:** Log the specific violation that was detected.
-3.  **Correct:** Initiate the defined corrective action for the specific violation. If a corrective action is not explicitly defined, the agent should revert the violating changes and re-plan its approach.
-
----
-
-# Protocol: Pre-Commit Verification
-
-This protocol establishes the mandatory sequence of verification steps that must be performed before any code is submitted. Its purpose is to ensure that all changes meet a baseline level of quality, correctness, and review, preventing regressions and maintaining repository health.
-
-## Rule: Mandatory Pre-Commit Checks
-
-Before finalizing and submitting any work, the agent **must** execute the `pre_commit_instructions` tool. This tool acts as a procedural gateway, providing the specific, up-to-date checklist of actions required for validation. This typically includes:
-
-1.  **Running all automated tests** to verify correctness.
-2.  **Requesting a formal code review** to get critical feedback.
-3.  **Recording key learnings** to contribute to the agent's long-term memory.
-
-Adherence to this protocol is not optional. It is a fundamental step in the development lifecycle that safeguards the integrity of the codebase.
-
-
----
-
-# Protocol: `reset_all` Prohibition
-
-**ID:** `reset-all-prohibition-001`
-
-## 1. Description
-
-This protocol establishes a strict and unconditional prohibition on the use of the `reset_all` tool. This tool is considered a legacy, high-risk command that is no longer permitted in any workflow.
-
-## 2. Rationale
-
-The `reset_all` tool has been the cause of multiple catastrophic failures, leading to the complete loss of work and the inability to complete tasks. Its behavior is too destructive and unpredictable for a production environment. More granular and safer tools are available for workspace management. This protocol serves as a hard-coded safeguard to prevent any future use of this tool.
-
-## 3. Rules
-
-### Rule `no-reset-all`
-
--   **Description:** The `reset_all` tool is strictly forbidden under all circumstances.
--   **Enforcement:** The `master_control.py` orchestrator will programmatically block any attempt to call `reset_all` and will immediately terminate the task with a critical error. This is not a rule for the agent to interpret, but a hard-coded system constraint.
-
----
-
-# Meta-Protocol: Code Review Critic Evaluation Context
-
-This protocol governs the behavior of the Code Review Critic agent. Its purpose is to provide the critic with the necessary context to perform accurate and helpful evaluations of changes made by other agents.
-
-## Rule: Protocols are Functional Source Code
-
-The `protocols/` directory is not just documentation; it is a core part of the agent's functional definition. The `.json` and `.md` files within this directory define the rules, capabilities, and constraints that govern the agent's behavior. Therefore, any changes to these files must be treated as **functional source code** and reviewed with the same level of scrutiny as changes to Python scripts.
-
-## Rule: Built-in Tools are Valid Dependencies
-
-The agent possesses a set of core, built-in tools provided by its execution environment (e.g., `read_file`, `list_files`, `submit`, `pre_commit_instructions`). The source code for these tools does not reside within this repository.
-
-When a protocol is modified to include one of these built-in tools in its `associated_tools` list, this constitutes a valid and complete functional change. It is an act of formally bringing an existing capability under the governance of a protocol. Such a change **must not** be flagged as "incomplete" simply because the tool's implementation is not included in the patch.
-
-## Rule: Definition of a "Functional Change"
-
-A change should be considered "functional" if it correctly modifies the agent's operational capabilities. This is determined by the combined state of the Python source code *and* the protocol source files. The critic's evaluation must consider both aspects to form a complete picture of the change's impact.
-
-## Rule: Adherence to Specific Prohibitions
-
-The critic must be aware of and strictly adhere to all specific prohibition protocols. This includes, but is not limited to, the `critic-reset-prohibition-001` protocol, which forbids the use of the `reset_all` tool. The critic's primary function is analysis, not destructive action.
-
+## Child Module: `compliance`
+
+This module contains the following protocols, which are defined in its own `AGENTS.md` file:
+
+- `best-practices-001`
+- `meta-protocol-001`
+- `non-compliance-protocol-001`
+- `pre-commit-protocol-001`
+- `protocol-reset-all-pre-check-001`
+- `reset-all-authorization-001`
+- `reset-all-prohibition-001`
 
 ---
 
@@ -1640,9 +1372,6 @@ This module contains the following protocols, which are defined in its own `AGEN
 ---
 
 ## Child Module: `critic`
-# Protocol: The Formal Research Cycle (L4)
-
-This protocol establishes the L4 Deep Research Cycle, a specialized, self-contained Finite Development Cycle (FDC) designed for comprehensive knowledge acquisition. It elevates research from a simple tool-based action to a formal, verifiable process.
 
 This module contains the following protocols, which are defined in its own `AGENTS.md` file:
 
@@ -1651,6 +1380,22 @@ This module contains the following protocols, which are defined in its own `AGEN
 
 ---
 
+
+---
+
+# Protocol: Computational Tractability
+
+This protocol introduces a formal checkpoint to ensure that agent-generated plans are not only decidable but also computationally efficient.
+
+## The Problem: The Risk of Inefficient Plans
+
+The agent's execution framework guarantees that all plans will eventually halt (decidability). However, it does not prevent the agent from generating plans that are technically correct but wildly inefficient. For example, a plan might use a `grep` operation inside a `for_each_file` loop, resulting in a high-complexity (e.g., polynomial time) operation that could consume significant resources and time, even though it is guaranteed to terminate.
+
+## The Solution: Mandated Efficiency Analysis
+
+To address this, we introduce a new protocol that mandates the use of the enhanced `analyze` command in the FDC toolchain. This command provides a detailed report on a plan's computational complexity, drawing from a formal knowledge base of tool efficiencies.
+
+By requiring the agent to perform this analysis on any plan that contains loops or other high-complexity patterns, we ensure that "performance" becomes a primary consideration during the planning phase. This allows the agent to self-correct and identify opportunities to refactor its own plans for better efficiency before execution begins, leading to a more robust and performant system.
 
 ---
 
@@ -1696,221 +1441,6 @@ This module contains the following protocols, which are defined in its own `AGEN
 
 ```json
 {
-  "protocol_id": "core-directive-001",
-  "description": "The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC).",
-  "rules": [
-    {
-      "rule_id": "mandatory-fdc-start",
-      "description": "Upon receiving a new task, the agent's first action MUST be to programmatically execute the FDC 'start' command to formally initiate the task and run the AORP orientation cascade.",
-      "enforcement": "This is a hard-coded behavior in the agent's core operational loop and is verified by the FDC toolchain."
-    }
-  ],
-  "associated_tools": [
-    "tooling/fdc_cli.py"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "decidability-constraints-001",
-  "description": "Ensures all development processes are formally decidable and computationally tractable.",
-  "rules": [
-    {
-      "rule_id": "non-turing-completeness",
-      "description": "The agent's planning and execution language is, by design, not Turing-complete. This is a fundamental constraint to guarantee that all processes will terminate.",
-      "enforcement": "Enforced by the design of the plan runner and validated by the `lint` command in the FDC toolchain."
-    },
-    {
-      "rule_id": "bounded-recursion",
-      "description": "The agent MUST NOT generate plans that involve recursion or self-invocation. A plan cannot trigger another FDC or a sub-plan, with the sole exception of the 'Deep Research Cycle'.",
-      "enforcement": "The `lint` command in `tooling/fdc_cli.py` scans plans for disallowed recursive calls."
-    },
-    {
-      "rule_id": "fsm-adherence",
-      "description": "All plans must be valid strings in the language defined by the tooling/fdc_fsm.json Finite State Machine.",
-      "enforcement": "The `lint` command in `tooling/fdc_cli.py` validates the plan against the FSM definition."
-    }
-  ],
-  "associated_tools": [
-    "tooling/fdc_cli.py",
-    "tooling/fdc_fsm.json"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "orientation-cascade-001",
-  "description": "Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state.",
-  "rules": [
-    {
-      "rule_id": "l1-self-awareness",
-      "description": "Level 1 (Self-Awareness): The agent must first establish its own identity and inherent limitations by reading the `knowledge_core/agent_meta.json` artifact.",
-      "enforcement": "The `start` command of the FDC toolchain executes this step and fails if the artifact is missing or invalid."
-    },
-    {
-      "rule_id": "l2-repository-sync",
-      "description": "Level 2 (Repository Sync): The agent must understand the current state of the local repository by loading primary artifacts from the `knowledge_core/` directory.",
-      "enforcement": "The `start` command of the FDC toolchain executes this step."
-    },
-    {
-      "rule_id": "l3-environmental-probing",
-      "description": "Level 3 (Environmental Probing & Targeted RAG): The agent must discover the rules and constraints of its operational environment by executing a probe script and using targeted RAG to resolve 'known unknowns'.",
-      "enforcement": "The `start` command of the FDC toolchain executes this step, utilizing tools like `google_search` and `view_text_website`."
-    },
-    {
-      "rule_id": "l4-deep-research-cycle",
-      "description": "Level 4 (Deep Research Cycle): To investigate 'unknown unknowns', the agent must initiate a formal, self-contained Finite Development Cycle (FDC) of the 'Analysis Modality'.",
-      "enforcement": "This is a special case of recursion, explicitly allowed and managed by the FDC toolchain."
-    }
-  ],
-  "associated_tools": [
-    "tooling/environmental_probe.py",
-    "google_search",
-    "view_text_website"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "fdc-protocol-001",
-  "description": "Defines the Finite Development Cycle (FDC), a formally defined process for executing a single, coherent task.",
-  "rules": [
-    {
-      "rule_id": "fdc-entry-point",
-      "description": "The AORP cascade is the mandatory entry point to every FDC.",
-      "enforcement": "Enforced by the `start` command in `tooling/fdc_cli.py`."
-    },
-    {
-      "rule_id": "fdc-state-transitions",
-      "description": "The FDC is a Finite State Machine (FSM) formally defined in `tooling/fdc_fsm.json`. Plans must be valid strings in the language defined by this FSM.",
-      "enforcement": "Validated by the `lint` command in `tooling/fdc_cli.py`."
-    },
-    {
-      "rule_id": "phase1-deconstruction",
-      "description": "Phase 1 (Deconstruction & Contextualization): The agent must ingest the task, query historical logs, identify entities using the symbol map, and analyze impact using the dependency graph.",
-      "enforcement": "Procedural step guided by the agent's core logic, using artifacts in `logs/` and `knowledge_core/`."
-    },
-    {
-      "rule_id": "phase2-planning",
-      "description": "Phase 2 (Planning & Self-Correction): The agent must generate a granular plan, lint it using the FDC toolchain, cite evidence for its steps, and perform a critical review.",
-      "enforcement": "The `lint` command in `tooling/fdc_cli.py` is a mandatory pre-flight check."
-    },
-    {
-      "rule_id": "phase3-execution",
-      "description": "Phase 3 (Execution & Structured Logging): The agent must execute the validated plan and log every action according to the `LOGGING_SCHEMA.md`.",
-      "enforcement": "Logging is performed by the agent's action execution wrapper."
-    },
-    {
-      "rule_id": "phase4-post-mortem",
-      "description": "Phase 4 (Pre-Submission Post-Mortem): The agent must formally close the task using the `close` command and complete the generated post-mortem report.",
-      "enforcement": "The `close` command in `tooling/fdc_cli.py` initiates this phase."
-    }
-  ],
-  "associated_tools": [
-    "tooling/fdc_cli.py",
-    "tooling/fdc_fsm.json",
-    "knowledge_core/symbols.json",
-    "knowledge_core/dependency_graph.json",
-    "LOGGING_SCHEMA.md"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "standing-orders-001",
-  "description": "A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks.",
-  "rules": [
-    {
-      "rule_id": "aorp-mandate",
-      "description": "All Finite Development Cycles (FDCs) MUST be initiated using the FDC toolchain's 'start' command. This is non-negotiable.",
-      "enforcement": "Enforced by the agent's core operational loop and the `start` command in `tooling/fdc_cli.py`."
-    },
-    {
-      "rule_id": "rag-mandate",
-      "description": "For any task involving external technologies, Just-In-Time External RAG is REQUIRED to verify current best practices. Do not trust internal knowledge.",
-      "enforcement": "This is a core principle of the L3 orientation phase, utilizing tools like `google_search`."
-    },
-    {
-      "rule_id": "fdc-toolchain-mandate",
-      "description": "Use the `fdc_cli.py` tool for all core FDC state transitions: task initiation ('start'), plan linting ('lint'), and task closure ('close').",
-      "enforcement": "The agent's internal logic is designed to prefer these specific tool commands for FDC state transitions."
-    }
-  ],
-  "associated_tools": [
-    "tooling/fdc_cli.py",
-    "google_search",
-    "view_text_website"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "best-practices-001",
-  "description": "A set of best practices derived from observing successful, data-driven workflow patterns.",
-  "rules": [
-    {
-      "rule_id": "verify-after-write",
-      "description": "After every file creation or modification action (`create_file_with_block`, `overwrite_file_with_block`, `replace_with_git_merge_diff`), the agent MUST use a subsequent read-only tool (`read_file`, `list_files`, `grep`) to verify that the action was executed successfully and had the intended effect. A plan step should only be marked as complete after this verification.",
-      "enforcement": "This is a core operational discipline. Future tooling, such as a trace validator, could enforce this by analyzing the execution log against this protocol."
-    }
-  ],
-  "associated_tools": [
-    "create_file_with_block",
-    "overwrite_file_with_block",
-    "replace_with_git_merge_diff",
-    "delete_file",
-    "read_file",
-    "list_files",
-    "grep"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "meta-protocol-001",
-  "description": "A meta-protocol governing the agent's awareness and maintenance of its own core protocol files.",
-  "rules": [
-    {
-      "rule_id": "agents-md-self-awareness",
-      "description": "The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols.",
-      "enforcement": "The agent should incorporate this check into its standard operating procedure, particularly at the beginning of a task or when unexpected behavior occurs."
-    }
-  ],
-  "associated_tools": [
-    "run_in_bash_session"
-  ]
-}
-```
-
-
----
-
-```json
-{
   "protocol_id": "toolchain-review-on-schema-change-001",
   "description": "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.",
   "rules": [
@@ -1933,312 +1463,16 @@ This module contains the following protocols, which are defined in its own `AGEN
 
 ```json
 {
-  "protocol_id": "cfdc-protocol-001",
-  "description": "Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model.",
+  "protocol_id": "computational-tractability-001",
+  "description": "A protocol to ensure that agent-generated plans are not only decidable but also computationally efficient and tractable.",
   "rules": [
     {
-      "rule_id": "hierarchical-planning-via-call-plan",
-      "description": "Plans may execute other plans as sub-routines using the 'call_plan <path_to_plan>' directive. This enables a modular, hierarchical workflow.",
-      "enforcement": "The plan validator must be able to parse this directive and recursively validate sub-plans. The execution engine must implement a plan execution stack to manage the context of nested calls."
-    },
-    {
-      "rule_id": "max-recursion-depth",
-      "description": "To ensure decidability, the plan execution stack must not exceed a system-wide constant, MAX_RECURSION_DEPTH. This prevents infinite recursion and guarantees all processes will terminate.",
-      "enforcement": "The execution engine must check the stack depth before every 'call_plan' execution and terminate with a fatal error if the limit would be exceeded."
+      "rule_id": "mandate-efficiency-analysis",
+      "description": "For any plan that involves loops ('for_each_file') or is identified as potentially high-complexity, the agent SHOULD use the 'analyze' command of the FDC toolchain to assess its computational complexity before execution. This ensures that the agent is aware of the performance implications of its plans and can avoid generating unnecessarily inefficient solutions.",
+      "enforcement": "This is a procedural best practice. Adherence can be encouraged through code review and post-mortem analysis, and potentially automated in the future by having the 'lint' command issue a warning for complex plans."
     }
   ],
   "associated_tools": [
-    "tooling/master_control.py",
-    "tooling/fdc_cli.py"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "plan-registry-001",
-  "description": "Defines a central registry for discovering and executing hierarchical plans by a logical name.",
-  "rules": [
-    {
-      "rule_id": "registry-definition",
-      "description": "A central plan registry MUST exist at 'knowledge_core/plan_registry.json'. It maps logical plan names to their file paths.",
-      "enforcement": "The file's existence and format can be checked by the validation toolchain."
-    },
-    {
-      "rule_id": "registry-first-resolution",
-      "description": "The 'call_plan <argument>' directive MUST first attempt to resolve '<argument>' as a logical name in the plan registry. If resolution fails, it MUST fall back to treating '<argument>' as a direct file path for backward compatibility.",
-      "enforcement": "This logic must be implemented in both the plan validator (`fdc_cli.py`) and the execution engine (`master_control.py`)."
-    },
-    {
-      "rule_id": "registry-management-tool",
-      "description": "A dedicated tool (`tooling/plan_manager.py`) MUST be provided for managing the plan registry, with functions to register, deregister, and list plans.",
-      "enforcement": "The tool's existence and functionality can be verified via integration tests."
-    }
-  ],
-  "associated_tools": [
-    "tooling/plan_manager.py",
-    "tooling/master_control.py",
-    "tooling/fdc_cli.py"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "self-correction-protocol-001",
-  "description": "Defines the automated, closed-loop workflow for protocol self-correction.",
-  "rules": [
-    {
-      "rule_id": "structured-lessons",
-      "description": "Lessons learned from post-mortem analysis must be generated as structured, machine-readable JSON objects in `knowledge_core/lessons.jsonl`.",
-      "enforcement": "The `tooling/knowledge_compiler.py` script is responsible for generating lessons in the correct format."
-    },
-    {
-      "rule_id": "programmatic-updates",
-      "description": "All modifications to protocol source files must be performed programmatically via the `tooling/protocol_updater.py` tool to ensure consistency and prevent manual errors.",
-      "enforcement": "Agent's core logic should be designed to use this tool for all protocol modifications."
-    },
-    {
-      "rule_id": "automated-orchestration",
-      "description": "The self-correction cycle must be managed by the `tooling/self_correction_orchestrator.py` script, which processes pending lessons and triggers the necessary updates.",
-      "enforcement": "This script is the designated engine for the PDSC workflow."
-    },
-    {
-      "rule_id": "programmatic-rule-refinement",
-      "description": "The self-correction system can modify the description of existing protocol rules via the `update-rule` command in `tooling/protocol_updater.py`, allowing it to refine its own logic.",
-      "enforcement": "The `tooling/knowledge_compiler.py` can generate `update-rule` actions, and the `tooling/self_correction_orchestrator.py` executes them."
-    },
-    {
-      "rule_id": "autonomous-code-suggestion",
-      "description": "The self-correction system can generate and apply code changes to its own tooling. This is achieved through a `PROPOSE_CODE_CHANGE` action, which is processed by `tooling/code_suggester.py` to create an executable plan.",
-      "enforcement": "The `tooling/self_correction_orchestrator.py` invokes the code suggester when it processes a lesson of this type."
-    }
-  ],
-  "associated_tools": [
-    "tooling/knowledge_compiler.py",
-    "tooling/protocol_updater.py",
-    "tooling/self_correction_orchestrator.py",
-    "tooling/code_suggester.py",
-    "initiate_memory_recording"
-  ],
-  "associated_artifacts": [
-    "knowledge_core/lessons.jsonl"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "non-compliance-protocol-001",
-  "description": "A protocol that defines non-compliance with AGENTS.md and specifies corrective actions.",
-  "rules": [
-    {
-      "rule_id": "non-compliance-definition",
-      "description": "Defines non-compliance as a violation of any rule, convention, or procedure in AGENTS.md or its source protocols.",
-      "enforcement": "This is a definitional rule. Enforcement is achieved through the agent's adherence to the specific non-compliance rules that follow."
-    },
-    {
-      "rule_id": "non-compliance-direct-editing",
-      "description": "Prohibits the direct editing of build artifacts like AGENTS.md or README.md. Changes must be made to source files, followed by a rebuild.",
-      "enforcement": "Agent must revert direct edits and modify source files, then run the appropriate build command.",
-      "associated_tools": [
-        "restore_file",
-        "run_in_bash_session"
-      ]
-    },
-    {
-      "rule_id": "non-compliance-test-procedure",
-      "description": "Requires adherence to all documented testing procedures before submitting changes.",
-      "enforcement": "Agent must halt execution and run the required tests, debugging any failures before proceeding.",
-      "associated_tools": [
-        "run_in_bash_session"
-      ]
-    },
-    {
-      "rule_id": "non-compliance-architectural-deviation",
-      "description": "Forbids changes that contradict documented architectural patterns or coding conventions.",
-      "enforcement": "Agent must revert non-compliant changes and re-implement them according to standards."
-    },
-    {
-      "rule_id": "non-compliance-self-awareness-failure",
-      "description": "Requires the agent to maintain an up-to-date understanding of protocols by recompiling AGENTS.md when necessary.",
-      "enforcement": "Agent should run 'make AGENTS.md' to refresh its protocol knowledge and re-evaluate its plan.",
-      "associated_tools": [
-        "run_in_bash_session"
-      ]
-    }
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "pre-commit-protocol-001",
-  "description": "Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission.",
-  "rules": [
-    {
-      "rule_id": "pre-commit-instructions-mandate",
-      "description": "Before submitting changes, the agent MUST execute the `pre_commit_instructions` tool to receive the required sequence of validation steps (e.g., running tests, requesting code review).",
-      "enforcement": "The agent's core logic should invoke this tool as the entry point to the pre-submission phase."
-    }
-  ],
-  "associated_tools": [
-    "pre_commit_instructions"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "research-protocol-001",
-  "description": "A protocol for conducting systematic research using the integrated research toolchain.",
-  "rules": [
-    {
-      "rule_id": "mandate-research-tools",
-      "description": "For all complex research tasks, the `plan_deep_research` tool MUST be used to generate a plan, and the `execute_research_protocol` tool MUST be used for data gathering. This ensures a systematic and auditable research process.",
-      "enforcement": "Adherence is monitored by the Code Review Critic and through post-mortem analysis of the activity log."
-    }
-  ],
-  "associated_tools": [
-    "tooling.research_planner.plan_deep_research",
-    "tooling.research.execute_research_protocol"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "reset-all-prohibition-001",
-  "protocol_name": "Prohibition of reset_all Tool",
-  "description": "A high-priority protocol that unconditionally forbids the use of the `reset_all` tool.",
-  "rules": [
-    {
-      "rule_id": "no-reset-all",
-      "description": "The `reset_all` tool is strictly forbidden under all circumstances. It is a legacy tool that has been superseded by more granular and safer methods of workspace management. Its use is considered a critical failure.",
-      "enforcement": "This rule is enforced by the `master_control.py` orchestrator, which will immediately terminate the workflow with an error if an attempt is made to call this tool."
-    }
-  ],
-  "associated_tools": [
-    "reset_all"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "critic-meta-protocol-001",
-  "description": "A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent.",
-  "rules": [
-    {
-      "rule_id": "protocol-as-source-code",
-      "description": "The `protocols/` directory and all its contents (`.md`, `.json` files) MUST be treated as functional source code. Changes to these files directly alter the agent's operational capabilities and governing rules.",
-      "enforcement": "The Code Review Critic must analyze changes in this directory with the same rigor as changes to `.py` files."
-    },
-    {
-      "rule_id": "built-in-tools-are-valid",
-      "description": "The agent's execution environment provides a set of built-in tools (e.g., `read_file`, `delete_file`, `pre_commit_instructions`). The implementation of these tools does not reside within the repository. A protocol change that adds a built-in tool to the `associated_tools` list is a valid and complete functional change.",
-      "enforcement": "The Code Review Critic must not flag a change as 'incomplete' or 'non-functional' solely because the implementation of a built-in tool is not present in the repository."
-    },
-    {
-      "rule_id": "functional-change-definition",
-      "description": "A change is considered 'functional' if it correctly modifies the agent's operational rules or capabilities, as defined by the combination of Python source code and the protocol source files in `protocols/`.",
-      "enforcement": "The Code Review Critic's evaluation of 'functionality' must encompass both traditional code and protocol definitions."
-    }
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "critic-reset-prohibition-001",
-  "description": "A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool.",
-  "rules": [
-    {
-      "rule_id": "critic-no-reset",
-      "description": "The agent role-playing as the 'Code Review Critic' is explicitly forbidden from invoking the 'reset_all' tool under any circumstances. This is a critical safeguard to prevent the loss of work during the review process.",
-      "enforcement": "This rule is enforced by its inclusion in the compiled AGENTS.md, which serves as the context for the Code Review Critic. The critic must be programmed to parse and adhere to this prohibition."
-    }
-  ],
-  "associated_tools": [
-    "reset_all"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "deep-research-cycle-001",
-  "description": "A standardized, callable plan for conducting in-depth research on a complex topic.",
-  "rules": [
-    {
-      "rule_id": "structured-research-phases",
-      "description": "The deep research plan MUST follow a structured four-phase process: Scoping, Broad Gathering, Targeted Extraction, and Synthesis.",
-      "enforcement": "The plan's structure itself enforces this rule. The `lint` command can be extended to validate the structure of registered research plans."
-    }
-  ],
-  "associated_tools": [
-    "google_search",
-    "view_text_website",
-    "create_file_with_block"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "research-fdc-001",
-  "description": "Defines the formal Finite Development Cycle (FDC) for conducting deep research.",
-  "rules": [
-    {
-      "rule_id": "specialized-fsm",
-      "description": "The Research FDC must be governed by its own dedicated Finite State Machine, defined in `tooling/research_fsm.json`. This FSM is tailored for a research workflow, with states for gathering, synthesis, and reporting.",
-      "enforcement": "The `master_control.py` orchestrator must load and execute plans against this specific FSM when initiating an L4 Deep Research Cycle."
-    },
-    {
-      "rule_id": "executable-plans",
-      "description": "Research plans must be generated by `tooling/research_planner.py` as valid, executable plans that conform to the `research_fsm.json` definition. They are not just templates but formal, verifiable artifacts.",
-      "enforcement": "The output of the research planner must be linted and validated by the `fdc_cli.py` tool using the `research_fsm.json`."
-    },
-    {
-      "rule_id": "l4-invocation",
-      "description": "The L4 Deep Research Cycle is the designated mechanism for resolving complex 'unknown unknowns'. It is invoked by the main orchestrator when a task requires knowledge that cannot be obtained through simple L1-L3 orientation probes.",
-      "enforcement": "The `master_control.py` orchestrator is responsible for triggering the L4 cycle."
-    }
-  ],
-  "associated_tools": [
-    "tooling/master_control.py",
-    "tooling/research_planner.py",
-    "tooling/research.py",
     "tooling/fdc_cli.py"
   ]
 }

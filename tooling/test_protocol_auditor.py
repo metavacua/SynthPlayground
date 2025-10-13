@@ -79,17 +79,17 @@ This is not a JSON line and should be skipped.
             expected_tools = ["tool_A", "tooling/some_script.py", "tool_D", "run_in_bash_session"]
             self.assertCountEqual(used_tools, expected_tools)
 
-    @patch('tooling.protocol_auditor.run_protocol_source_check')
-    def test_end_to_end_report_generation(self, mock_source_check):
+    @patch('protocol_auditor.find_all_agents_md_files')
+    @patch('os.path.getmtime')
+    def test_end_to_end_report_generation(self, mock_getmtime, mock_find_agents):
         """
         Run the main function end-to-end and verify the content
         of the generated Markdown report.
         """
-        # Mock the source check to return a success state
-        mock_source_check.return_value = {
-            "status": "success",
-            "message": "AGENTS.md appears to be up-to-date."
-        }
+        # Mock the filesystem interaction
+        mock_find_agents.return_value = ['/app/protocols/AGENTS.md']
+        # Mock mtime to prevent source check warnings. Make source older than agent file.
+        mock_getmtime.side_effect = [100, 50] # AGENTS.md is newer
 
         # Create a mock handle specifically for the write operation
         mock_write_handle = mock_open().return_value
@@ -98,14 +98,16 @@ This is not a JSON line and should be skipped.
         m = mock_open()
         with patch("builtins.open", m) as mock_file:
             # Configure mock to handle different files
+            # The order is now: 1. log file, 2. the single AGENTS.md, 3. the output report
             mock_file.side_effect = [
                 mock_open(read_data=self.mock_log_content).return_value,
                 mock_open(read_data=self.mock_agents_md_content).return_value,
-                mock_write_handle,  # For the final report write
+                mock_write_handle,
             ]
 
             # Run the main auditor function
-            protocol_auditor.main()
+            with patch('os.path.isdir', return_value=True): # Assume protocols dir exists
+                 protocol_auditor.main()
 
         # The auditor calculates an absolute path, so we must check for that.
         expected_report_path = os.path.abspath(self.mock_report_path)

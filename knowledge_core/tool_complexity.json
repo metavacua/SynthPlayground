@@ -1,0 +1,65 @@
+{
+  "comment": "This file contains the computational complexity analysis for tools available to the agent. The complexity is expressed in Big O notation. This knowledge base is used by 'tooling/fdc_cli.py analyze' to assess the efficiency of plans.",
+  "tools": {
+    "set_plan": {
+      "complexity": "O(1)",
+      "justification": "Sets or updates an in-memory string. The operation is constant time."
+    },
+    "plan_step_complete": {
+      "complexity": "O(1)",
+      "justification": "A signal with a small, fixed-size payload. The operation is constant time."
+    },
+    "submit": {
+      "complexity": "O(N)",
+      "justification": "Git commit operation. Complexity is proportional to the number of files (N) being committed. For typical use cases, this is very fast."
+    },
+    "create_file_with_block": {
+      "complexity": "O(L)",
+      "justification": "Writes a block of text to a file. Complexity is proportional to the length (L) of the content being written."
+    },
+    "overwrite_file_with_block": {
+      "complexity": "O(L)",
+      "justification": "Writes a block of text to a file. Complexity is proportional to the length (L) of the content being written."
+    },
+    "replace_with_git_merge_diff": {
+      "complexity": "O(F)",
+      "justification": "Reads a file of size F, performs a search, and writes the result. Complexity is proportional to the size of the file (F)."
+    },
+    "read_file": {
+      "complexity": "O(F)",
+      "justification": "Reads the entire content of a file. Complexity is proportional to the size of the file (F)."
+    },
+    "list_files": {
+      "complexity": "O(D)",
+      "justification": "Lists files in a directory. Complexity is proportional to the number of entries (D) in the directory."
+    },
+    "grep": {
+      "complexity": "O(C)",
+      "justification": "Searches through all files in the current directory and its subdirectories. Complexity is proportional to the total size of all content (C) being searched."
+    },
+    "delete_file": {
+      "complexity": "O(1)",
+      "justification": "A standard filesystem operation that is typically constant time, assuming an efficient filesystem implementation."
+    },
+    "rename_file": {
+      "complexity": "O(1)",
+      "justification": "A standard filesystem operation that is typically constant time if the source and destination are on the same filesystem."
+    },
+    "run_in_bash_session": {
+      "complexity": "Variable",
+      "justification": "The complexity depends entirely on the command being executed. This tool acts as a wrapper and its own complexity is negligible, but the executed command can range from O(1) to EXPTIME or worse."
+    },
+    "google_search": {
+        "complexity": "O(1)",
+        "justification": "External API call. From the agent's perspective, the time taken is constant and not dependent on local data size."
+    },
+    "view_text_website": {
+        "complexity": "O(1)",
+        "justification": "External API call. From the agent's perspective, the time taken is constant and not dependent on local data size."
+    },
+    "request_user_input": {
+        "complexity": "O(1)",
+        "justification": "Halts execution and waits for external input. The time taken is constant from a computational perspective."
+    }
+  }
+}

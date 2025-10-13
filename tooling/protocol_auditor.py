@@ -135,51 +135,47 @@ def run_centrality_analysis(used_tools):
     return Counter(used_tools)
 
 
-def run_protocol_source_check(all_agents_files):
+def run_protocol_source_check(agents_md_path, root_dir):
     """
-    Checks if each AGENTS.md file is older than its corresponding source files.
-    Returns a list of warning/error dictionaries.
+    Checks if a single AGENTS.md file is older than its corresponding source files.
+    Returns a dictionary with the check result.
     """
-    results = []
-    for agents_md_path in all_agents_files:
-        module_dir = os.path.dirname(agents_md_path)
-        protocols_dir = os.path.join(module_dir, "protocols")
+    module_dir = os.path.dirname(agents_md_path)
+    protocols_dir = os.path.join(module_dir, "protocols")
 
-        if not os.path.isdir(protocols_dir):
-            # This AGENTS.md file is likely a leaf or not a module, which is fine.
-            continue
+    if not os.path.isdir(protocols_dir):
+        # Not a module with a protocols directory, so we skip the check for this file.
+        return None
 
-        try:
-            agents_md_mtime = os.path.getmtime(agents_md_path)
-            latest_source_mtime = 0
-            latest_source_file = ""
+    try:
+        agents_md_mtime = os.path.getmtime(agents_md_path)
+        latest_source_mtime = 0
+        latest_source_file = ""
 
-            for root, _, files in os.walk(protocols_dir):
-                for file in files:
-                    if file.endswith((".json", ".md")):
-                        path = os.path.join(root, file)
-                        mtime = os.path.getmtime(path)
-                        if mtime > latest_source_mtime:
-                            latest_source_mtime = mtime
-                            latest_source_file = path
+        for source_root, _, files in os.walk(protocols_dir):
+            for file in files:
+                if file.endswith((".json", ".md")):
+                    path = os.path.join(source_root, file)
+                    mtime = os.path.getmtime(path)
+                    if mtime > latest_source_mtime:
+                        latest_source_mtime = mtime
+                        latest_source_file = path
 
-            if latest_source_mtime > agents_md_mtime:
-                results.append({
-                    "status": "warning",
-                    "message": f"`{os.path.relpath(agents_md_path, ROOT_DIR)}` may be out of date.",
-                    "details": f"Latest source file modified: `{os.path.relpath(latest_source_file, ROOT_DIR)}`."
-                })
+        if latest_source_mtime > agents_md_mtime:
+            return {
+                "status": "warning",
+                "message": f"`{os.path.relpath(agents_md_path, root_dir)}` may be out of date.",
+                "details": f"Latest source file modified: `{os.path.relpath(latest_source_file, root_dir)}`."
+            }
 
-        except Exception as e:
-            results.append({
-                "status": "error",
-                "message": f"Could not perform source check for `{os.path.relpath(agents_md_path, ROOT_DIR)}`: {e}"
-            })
+    except Exception as e:
+        return {
+            "status": "error",
+            "message": f"Could not perform source check for `{os.path.relpath(agents_md_path, root_dir)}`: {e}"
+        }
 
-    if not results:
-        return [{"status": "success", "message": "All AGENTS.md files appear to be up-to-date."}]
-
-    return results
+    # If we reach here, the check for this file passed.
+    return None
 
 
 def generate_markdown_report(source_checks, unreferenced, unused, centrality):
@@ -239,13 +235,26 @@ def main():
     """Main function to run the protocol auditor and generate a report."""
     print("--- Initializing Protocol Auditor ---", file=sys.stderr)
 
-    # Get data from sources
+    # Centralized file discovery
     all_agents_files = find_all_agents_md_files(ROOT_DIR)
+
+    # Get data from sources
     used_tools_from_log = get_used_tools_from_log(LOG_FILE)
     protocol_tools_from_agents = get_protocol_tools_from_agents_md(all_agents_files)
 
     # Run analyses
-    source_check_results = run_protocol_source_check(all_agents_files)
+    source_check_results = []
+    for agents_file in all_agents_files:
+        result = run_protocol_source_check(agents_file, ROOT_DIR)
+        if result:
+            source_check_results.append(result)
+
+    if not source_check_results:
+        source_check_results.append({
+            "status": "success",
+            "message": "All AGENTS.md files appear to be up-to-date."
+        })
+
     unreferenced_tools, unused_protocol_tools = run_completeness_check(used_tools_from_log, protocol_tools_from_agents)
     centrality_analysis = run_centrality_analysis(used_tools_from_log)
 

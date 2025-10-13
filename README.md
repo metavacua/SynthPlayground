@@ -11,6 +11,9 @@ corresponding `AGENTS.md` file and the source code docstrings.
 This module is governed by a series of machine-readable protocols defined in `AGENTS.md`. These protocols are the source of truth for the agent's behavior within this scope. The key protocols are:
 
 - **`agent-bootstrap-001`**: A foundational protocol that dictates the agent's initial actions upon starting any task.
+- **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
+- **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
+- **`computational-tractability-001`**: A protocol to ensure that agent-generated plans are not only decidable but also computationally efficient and tractable.
 
 ### Child Module: `compliance`
 
@@ -49,26 +52,6 @@ This module contains the following protocols, which are defined in its own `AGEN
 
 - `critic-meta-protocol-001`
 - `critic-reset-prohibition-001`
-- **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
-- **`core-directive-001`**: The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC).
-- **`decidability-constraints-001`**: Ensures all development processes are formally decidable and computationally tractable.
-- **`orientation-cascade-001`**: Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state.
-- **`fdc-protocol-001`**: Defines the Finite Development Cycle (FDC), a formally defined process for executing a single, coherent task.
-- **`standing-orders-001`**: A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks.
-- **`best-practices-001`**: A set of best practices derived from observing successful, data-driven workflow patterns.
-- **`meta-protocol-001`**: A meta-protocol governing the agent's awareness and maintenance of its own core protocol files.
-- **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
-- **`cfdc-protocol-001`**: Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model.
-- **`plan-registry-001`**: Defines a central registry for discovering and executing hierarchical plans by a logical name.
-- **`self-correction-protocol-001`**: Defines the automated, closed-loop workflow for protocol self-correction.
-- **`non-compliance-protocol-001`**: A protocol that defines non-compliance with AGENTS.md and specifies corrective actions.
-- **`pre-commit-protocol-001`**: Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission.
-- **`research-protocol-001`**: A protocol for conducting systematic research using the integrated research toolchain.
-- **`reset-all-prohibition-001`**: A high-priority protocol that unconditionally forbids the use of the `reset_all` tool.
-- **`critic-meta-protocol-001`**: A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent.
-- **`critic-reset-prohibition-001`**: A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool.
-- **`deep-research-cycle-001`**: A standardized, callable plan for conducting in-depth research on a complex topic.
-- **`research-fdc-001`**: Defines the formal Finite Development Cycle (FDC) for conducting deep research.
 
 ## Key Components
 
