@@ -6,6 +6,11 @@
       "type": "python-project"
     },
     {
+      "id": "calculus_converter",
+      "path": "./calculus_converter/requirements.txt",
+      "type": "python-project"
+    },
+    {
       "id": "jsonschema",
       "path": null,
       "type": "python-external"
@@ -47,6 +52,16 @@
     },
     {
       "id": "markdown",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "lark",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "jinja2",
       "path": null,
       "type": "python-external"
     }
@@ -99,6 +114,14 @@
     {
       "source": "root-python-project",
       "target": "markdown"
+    },
+    {
+      "source": "calculus_converter",
+      "target": "lark"
+    },
+    {
+      "source": "calculus_converter",
+      "target": "jinja2"
     }
   ]
 }
