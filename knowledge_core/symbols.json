@@ -602,6 +602,30 @@
     },
     {
       "_type": "tag",
+      "name": "TestTemporalOrienter",
+      "path": "./tooling/test_temporal_orienter.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "test_get_dbpedia_summary_success",
+      "path": "./tooling/test_temporal_orienter.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_get_dbpedia_summary_not_found",
+      "path": "./tooling/test_temporal_orienter.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "main",
       "path": "./tooling/master_control_cli.py",
       "language": "Python",
@@ -1782,6 +1806,14 @@
       "path": "./tooling/plan_manager.py",
       "language": "Python",
       "line": 102,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "get_dbpedia_summary",
+      "path": "./tooling/temporal_orienter.py",
+      "language": "Python",
+      "line": 5,
       "kind": "function"
     },
     {
