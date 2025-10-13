@@ -41,8 +41,7 @@ def run_compiler(source_dir):
         "python3",
         PROTOCOL_COMPILER_PATH,
         "--source-dir", source_dir,
-        "--output-file", target_agents_md,
-        "--knowledge-graph-file"
+        "--output-file", target_agents_md
     ]
 
     print(f"Running AGENTS.md compiler for: {source_dir}")
@@ -79,7 +78,10 @@ def run_readme_generator(source_agents_md):
 
 def generate_summary(child_agents_md_path):
     """
-    Generates a summary of a child AGENTS.md file by extracting protocol IDs.
+    Extracts the full, rendered protocol blocks from a child AGENTS.md file.
+    This function finds all protocol definitions (human-readable markdown and
+    the associated machine-readable JSON block) and concatenates them into a
+    single string to be injected into the parent AGENTS.md.
     """
     if not child_agents_md_path or not os.path.exists(child_agents_md_path):
         return ""
@@ -87,26 +89,20 @@ def generate_summary(child_agents_md_path):
     with open(child_agents_md_path, 'r') as f:
         content = f.read()
 
-    json_blocks = re.findall(r'```json\n(.*?)\n```', content, re.DOTALL)
+    # Find all protocol blocks, which start with a header and end with a separator.
+    # This regex captures the entire block from a header (e.g., #, ##) up to the
+    # standard protocol separator '---'. This ensures that the full, unabridged
+    # protocol text is captured for inclusion in the parent AGENTS.md.
+    protocol_blocks = re.findall(r'(# Protocol:.*?---\n)', content, re.DOTALL)
 
-    summaries = []
-    for block in json_blocks:
-        try:
-            protocol_data = json.loads(block)
-            protocol_id = protocol_data.get("protocol_id")
-            if protocol_id:
-                summaries.append(f"- `{protocol_id}`")
-        except json.JSONDecodeError:
-            continue
-
-    if not summaries:
+    if not protocol_blocks:
         return ""
 
     child_dir_name = os.path.basename(os.path.dirname(child_agents_md_path))
-    summary_md = f"## Child Module: `{child_dir_name}`\n\n"
-    summary_md += "This module contains the following protocols, which are defined in its own `AGENTS.md` file:\n\n"
-    summary_md += "\n".join(sorted(summaries))
-    summary_md += "\n\n---\n"
+
+    # Prepend a header to clearly mark the beginning of the child module's protocols.
+    summary_md = f"# --- Child Module: `{child_dir_name}` ---\n\n"
+    summary_md += "\n".join(protocol_blocks)
 
     return summary_md
 
@@ -128,6 +124,55 @@ def get_parent_module(module_path, all_module_paths):
         parent_path = os.path.dirname(parent_path)
     return None
 
+def compile_centralized_knowledge_graph():
+    """
+    Finds all protocol.json files in the entire repository, loads them, and
+    compiles them into a single, unified knowledge graph.
+    """
+    print("\n--- Starting Centralized Knowledge Graph Compilation ---")
+    from rdflib import Graph
+    import jsonschema
+
+    schema_file = os.path.join(ROOT_DIR, "protocols", "protocol.schema.json")
+    schema = json.load(open(schema_file))
+
+    all_json_files = []
+    for root, _, files in os.walk(ROOT_DIR):
+        for file in files:
+            if file.endswith('.protocol.json'):
+                all_json_files.append(os.path.join(root, file))
+
+    print(f"Found {len(all_json_files)} protocol.json files for KG compilation.")
+
+    g = Graph()
+    context_path = os.path.join(ROOT_DIR, "protocols", "protocol.context.jsonld")
+
+    for file_path in all_json_files:
+        try:
+            with open(file_path, "r") as f:
+                protocol_data = json.load(f)
+            jsonschema.validate(instance=protocol_data, schema=schema)
+
+            protocol_data_for_ld = protocol_data.copy()
+            if os.path.exists(context_path):
+                relative_context_path = os.path.relpath(context_path, os.path.dirname(file_path))
+                protocol_data_for_ld["@context"] = relative_context_path
+                base_uri = "file://" + os.path.abspath(os.path.dirname(file_path)) + "/"
+                g.parse(data=json.dumps(protocol_data_for_ld), format="json-ld", publicID=base_uri)
+        except Exception as e:
+            print(f"  - Error: Failed to process {os.path.basename(file_path)} for KG: {e}")
+
+    # Serialize the final graph
+    kg_file = os.path.join(ROOT_DIR, "knowledge_core", "protocols.ttl")
+    try:
+        g.serialize(destination=kg_file, format="turtle")
+        print(f"Successfully generated centralized knowledge graph at {kg_file}")
+    except Exception as e:
+        print(f"Error serializing centralized RDF graph: {e}")
+
+    print("--- Centralized Knowledge Graph Compilation Finished ---")
+
+
 def main():
     """
     Main function to orchestrate the hierarchical compilation.
@@ -138,6 +183,7 @@ def main():
 
     compiled_artifacts = {}
 
+    # --- Pass 1: Compile Documentation (AGENTS.md, README.md) ---
     for proto_dir in all_protocol_dirs:
         current_module_path = os.path.dirname(proto_dir)
         print(f"\n--- Processing Module: {current_module_path} ---")
@@ -176,6 +222,8 @@ def main():
         if artifacts.get('readme'):
             print(f"  - Generated: {artifacts['readme']}")
 
+    # --- Pass 2: Compile Centralized Knowledge Graph ---
+    compile_centralized_knowledge_graph()
 
     print("\n--- Hierarchical Build Finished ---")
 

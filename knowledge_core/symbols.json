@@ -549,7 +549,7 @@
       "name": "run_readme_generator",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 58,
+      "line": 57,
       "kind": "function"
     },
     {
@@ -557,7 +557,7 @@
       "name": "generate_summary",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 80,
+      "line": 79,
       "kind": "function"
     },
     {
@@ -565,7 +565,7 @@
       "name": "cleanup_summaries",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 113,
+      "line": 109,
       "kind": "function"
     },
     {
@@ -573,7 +573,15 @@
       "name": "get_parent_module",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 122,
+      "line": 118,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "compile_centralized_knowledge_graph",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 127,
       "kind": "function"
     },
     {
@@ -581,7 +589,7 @@
       "name": "main",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 131,
+      "line": 176,
       "kind": "function"
     },
     {

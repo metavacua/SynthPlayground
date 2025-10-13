@@ -79,6 +79,21 @@ This is not a JSON line and should be skipped.
             expected_tools = ["tool_A", "tooling/some_script.py", "tool_D", "run_in_bash_session"]
             self.assertCountEqual(used_tools, expected_tools)
 
+    @patch('os.walk')
+    @patch('tooling.protocol_auditor.run_protocol_source_check')
+    def test_end_to_end_report_generation(self, mock_source_check, mock_walk):
+        """
+        Run the main function end-to-end and verify the content
+        of the generated Markdown report, mocking a hierarchical file system.
+        """
+        # Mock the source check to return a success state (an empty list)
+        mock_source_check.return_value = []
+
+        # Simulate finding multiple AGENTS.md files
+        mock_walk.return_value = [
+            ('/app', [], ['AGENTS.md', 'some_other_file', 'activity.log.jsonl']),
+            ('/app/core', [], ['AGENTS.md']),
+        ]
     @patch('protocol_auditor.get_protocol_tools_from_agents_md')
     @patch('protocol_auditor.get_used_tools_from_log')
     @patch('protocol_auditor.run_protocol_source_check')
