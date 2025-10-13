@@ -1,3 +1,30 @@
+"""
+Provides a standardized, schema-validated logger for producing structured JSONL logs.
+
+This module contains the `Logger` class, which is responsible for creating all
+entries in the `logs/activity.log.jsonl` file. This is a critical component for
+maintaining an auditable, machine-readable record of the agent's actions.
+
+The logger enforces a strict structure on all log entries by validating them
+against a formal JSON schema, which is extracted from the `LOGGING_SCHEMA.md`
+document. This ensures that every log entry, regardless of its source, is
+consistent and contains the required fields.
+
+Key features of the `Logger` class:
+- **Schema Validation:** Each log entry is validated against the official
+  project schema before being written to disk, preventing data corruption.
+- **Structured Data:** Logs are written in JSONL format, where each line is a
+  valid JSON object, making them easy to parse and query.
+- **Session Management:** It automatically assigns a unique `session_id` to
+  all logs generated during its lifecycle, allowing actions to be traced back
+  to a specific run.
+- **Automatic Timestamps:** It injects a UTC timestamp into every log entry,
+  providing a precise timeline of events.
+
+This centralized logger is the sole mechanism by which the agent should record
+its activities, ensuring a single source of truth for all post-mortem analysis
+and self-improvement activities.
+"""
 import json
 import uuid
 import os
