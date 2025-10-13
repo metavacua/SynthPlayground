@@ -31,12 +31,29 @@ import re
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 LOG_FILE = os.path.join(ROOT_DIR, "logs", "activity.log.jsonl")
 AGENTS_MD_FILENAME = "AGENTS.md"
+# This list must be kept in sync with tooling/hierarchical_compiler.py
+SPECIAL_DIRS = ["protocols/security"]
 
 
 def find_all_agents_md_files(root_dir):
-    """Finds all AGENTS.md files in the repository."""
+    """
+    Finds all AGENTS.md files in the repository, ignoring any special-cased
+    directories that are not part of the standard hierarchical build.
+    """
     agents_files = []
+    # Get absolute paths for robust comparison
+    special_paths = {os.path.join(root_dir, d) for d in SPECIAL_DIRS}
+
     for dirpath, _, filenames in os.walk(root_dir):
+        # Check if the current directory is a special-cased one
+        is_special = False
+        for special in special_paths:
+            if os.path.commonpath([dirpath, special]) == special:
+                is_special = True
+                break
+        if is_special:
+            continue
+
         if AGENTS_MD_FILENAME in filenames:
             agents_files.append(os.path.join(dirpath, AGENTS_MD_FILENAME))
     return agents_files

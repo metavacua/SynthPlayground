@@ -46,8 +46,13 @@ ALL_PROTOCOL_SOURCES = $(shell find . -path '*/protocols/*.protocol.json' -o -pa
 # The AGENTS.md file is a target that depends on the hierarchical compiler
 # and all possible source files it might find.
 AGENTS.md: $(ALL_PROTOCOL_SOURCES) $(HIERARCHICAL_COMPILER_SCRIPT) $(COMPILER_SCRIPT) knowledge_core/SYSTEM_DOCUMENTATION.md
-	@echo "--> Recursively compiling all AGENTS.md and README.md files..."
+	@echo "--> [Protocol Build] Saving current AGENTS.md for diff analysis..."
+	@mv -f AGENTS.md AGENTS.md.old 2>/dev/null || true
+	@echo "--> [Protocol Build] Recursively compiling all AGENTS.md and README.md files..."
 	@python3 $(HIERARCHICAL_COMPILER_SCRIPT)
+	@echo "--> [Protocol Build] Running mandatory re-orientation cycle..."
+	@python3 tooling/reorientation_manager.py --old-agents-file AGENTS.md.old --new-agents-file AGENTS.md
+	@rm -f AGENTS.md.old
 
 # A phony target to easily trigger the main protocol compilation.
 compile-protocols: AGENTS.md

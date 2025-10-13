@@ -158,18 +158,24 @@ class MasterControlGraph:
         """
         print("[MasterControl] State: PLANNING")
 
-        # L4 Check: Does the agent need to perform deep research?
-        research_request_file = "request_deep_research.txt"
-        if os.path.exists(research_request_file):
-            print("  - Detected request for L4 Deep Research Cycle.")
-            with open(research_request_file, "r") as f:
-                topic = f.read().strip()
+        # L4 Check: Has a deep research cycle been programmatically triggered?
+        research_trigger_file = "deep_research_required.json"
+        if os.path.exists(research_trigger_file):
+            print(f"  - Detected programmatic trigger for L4 Deep Research Cycle: '{research_trigger_file}'")
+            with open(research_trigger_file, "r") as f:
+                try:
+                    data = json.load(f)
+                    topic = data["topic"]
+                except (json.JSONDecodeError, KeyError) as e:
+                    agent_state.error = f"Invalid research trigger file: {e}"
+                    return self.get_trigger("PLANNING", "ERROR")
+
             agent_state.research_findings["topic"] = topic
-            os.remove(research_request_file)
-            # Transition to the new RESEARCHING state
+            os.remove(research_trigger_file)
+            # Transition to the RESEARCHING state
             return self.get_trigger("PLANNING", "RESEARCHING")
 
-        # Standard L3 planning process
+        # Standard planning process
         plan_file = "plan.txt"
         agent_state.plan_path = plan_file # Set the root plan path
         print(f"  - Waiting for agent to create '{plan_file}'...")
