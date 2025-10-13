@@ -42,7 +42,7 @@ def run_compiler(source_dir):
         PROTOCOL_COMPILER_PATH,
         "--source-dir", source_dir,
         "--output-file", target_agents_md,
-        "--knowledge-graph-file"
+        "--knowledge-graph-file", os.path.join(ROOT_DIR, "knowledge_core", "protocols.ttl")
     ]
 
     print(f"Running AGENTS.md compiler for: {source_dir}")
@@ -77,36 +77,29 @@ def run_readme_generator(source_agents_md):
         print(e.stderr)
         return None
 
-def generate_summary(child_agents_md_path):
+def generate_summary(child_module_path):
     """
-    Generates a summary of a child AGENTS.md file by extracting protocol IDs.
+    Generates a machine-readable, JSON-LD summary of a child module.
     """
-    if not child_agents_md_path or not os.path.exists(child_agents_md_path):
-        return ""
+    child_dir_name = os.path.basename(child_module_path)
 
-    with open(child_agents_md_path, 'r') as f:
-        content = f.read()
+    summary_data = {
+        "@context": {
+            "prov": "http://www.w3.org/ns/prov#",
+            "agents": "https://www.jules-project.org/agents/ns#",
+            "hasMember": "prov:hasMember"
+        },
+        "@id": f"agents:{child_dir_name}",
+        "@type": "agents:Module",
+        "hasMember": {
+            "@id": f"agents:{child_dir_name}/AGENTS.md"
+        }
+    }
 
-    json_blocks = re.findall(r'```json\n(.*?)\n```', content, re.DOTALL)
-
-    summaries = []
-    for block in json_blocks:
-        try:
-            protocol_data = json.loads(block)
-            protocol_id = protocol_data.get("protocol_id")
-            if protocol_id:
-                summaries.append(f"- `{protocol_id}`")
-        except json.JSONDecodeError:
-            continue
-
-    if not summaries:
-        return ""
-
-    child_dir_name = os.path.basename(os.path.dirname(child_agents_md_path))
     summary_md = f"## Child Module: `{child_dir_name}`\n\n"
-    summary_md += "This module contains the following protocols, which are defined in its own `AGENTS.md` file:\n\n"
-    summary_md += "\n".join(sorted(summaries))
-    summary_md += "\n\n---\n"
+    summary_md += "This module is defined by the protocols in its corresponding `AGENTS.md` file.\n\n"
+    summary_md += f"```json\n{json.dumps(summary_data, indent=2)}\n```\n\n"
+    summary_md += "---\n"
 
     return summary_md
 
@@ -147,7 +140,7 @@ def main():
             parent_module = get_parent_module(child_module_path, module_paths)
             if parent_module == current_module_path:
                 print(f"Found compiled child: {child_module_path}. Generating summary.")
-                summary_content = generate_summary(artifacts['agents_md'])
+                summary_content = generate_summary(child_module_path)
                 if summary_content:
                     summary_filename = f"{SUMMARY_FILE_PREFIX}{os.path.basename(child_module_path)}.protocol.md"
                     summary_filepath = os.path.join(proto_dir, summary_filename)

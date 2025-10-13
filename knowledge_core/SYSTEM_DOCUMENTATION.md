@@ -363,9 +363,9 @@ _No module-level docstring found._
   > ignoring any special-cased directories.
 
 
-- #### `def generate_summary(child_agents_md_path)`
+- #### `def generate_summary(child_module_path)`
 
-  > Generates a summary of a child AGENTS.md file by extracting protocol IDs.
+  > Generates a machine-readable, JSON-LD summary of a child module.
 
 
 - #### `def get_parent_module(module_path, all_module_paths)`

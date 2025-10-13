@@ -97,6 +97,13 @@ def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file
 
     # --- Content Assembly ---
     g = Graph()
+    if knowledge_graph_file and os.path.exists(knowledge_graph_file):
+        try:
+            g.parse(knowledge_graph_file, format="turtle")
+            print(f"Loaded existing knowledge graph from {knowledge_graph_file}")
+        except Exception as e:
+            print(f"Warning: Could not parse existing knowledge graph file. Starting fresh. Error: {e}")
+
     disclaimer = DISCLAIMER_TEMPLATE.format(source_dir_name=os.path.basename(source_dir))
     final_content = [disclaimer]
 
@@ -138,7 +145,7 @@ def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file
                 if os.path.exists(context_path):
                     relative_context_path = os.path.relpath(context_path, os.path.dirname(file_path))
                     protocol_data_for_ld["@context"] = relative_context_path
-                    base_uri = "file://" + os.path.abspath(os.path.dirname(file_path)) + "/"
+                    base_uri = "file://" + os.path.abspath(source_dir) + "/"
                     g.parse(data=json.dumps(protocol_data_for_ld), format="json-ld", publicID=base_uri)
                     print(f"    - Parsed {base_name} into knowledge graph.")
                 else:
