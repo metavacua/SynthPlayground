@@ -259,10 +259,10 @@ def find_python_files(directories: List[str]) -> List[str]:
                     py_files.append(os.path.join(root, file))
     return sorted(py_files)
 
-def main():
+def main(source_dirs, output_file):
     """Main function to find files, parse them, and write documentation."""
     print("--> Finding Python files...")
-    python_files = find_python_files(SCAN_DIRECTORIES)
+    python_files = find_python_files(source_dirs)
     print(f"--> Found {len(python_files)} Python files to document.")
 
     print("--> Parsing files and extracting docstrings...")
@@ -277,18 +277,23 @@ def main():
     documentation = generate_documentation(all_docs_filtered)
 
     # Ensure the output directory exists
-    output_dir = os.path.dirname(OUTPUT_FILE)
+    output_dir = os.path.dirname(output_file)
     if not os.path.exists(output_dir):
         print(f"--> Creating directory: {output_dir}")
         os.makedirs(output_dir)
 
-    print(f"--> Writing documentation to {OUTPUT_FILE}...")
+    print(f"--> Writing documentation to {output_file}...")
     try:
-        with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             f.write(documentation)
         print("--> Documentation generated successfully.")
     except IOError as e:
-        print(f"Error writing to file {OUTPUT_FILE}: {e}")
+        print(f"Error writing to file {output_file}: {e}")
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description="Generate documentation from Python source files.")
+    parser.add_argument("--source-dir", action="append", required=True, help="Directory to scan for Python files.")
+    parser.add_argument("--output-file", required=True, help="The output file for the generated documentation.")
+    args = parser.parse_args()
+    main(args.source_dir, args.output_file)

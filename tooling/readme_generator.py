@@ -108,10 +108,35 @@ def generate_key_components_section(module_path: str) -> str:
 
 # --- Main Execution Logic ---
 
-def main():
+def main(source_file, output_file):
     """
     Main function to generate the README.md content and write it to a file.
     """
+    module_path = os.path.dirname(output_file)
+    print(f"--- Generating README.md for module: {module_path} ---")
+
+    print(f"--> Generating 'Core Protocols' section from {source_file}...")
+    core_protocols_md = generate_core_protocols_section(source_file)
+
+    print("--> Generating 'Key Components' section...")
+    key_components_md = generate_key_components_section(module_path)
+
+    print("--> Assembling final README.md content...")
+    final_readme_content = README_TEMPLATE.format(
+        core_protocols=core_protocols_md,
+        key_components=key_components_md,
+    ).strip()
+
+    print(f"--> Writing README to {output_file}...")
+    try:
+        with open(output_file, "w", encoding="utf-8") as f:
+            f.write(final_readme_content)
+        print("--> README.md generated successfully.")
+    except IOError as e:
+        print(f"Error: Could not write to {output_file}. Reason: {e}")
+
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generates a README.md from a corresponding AGENTS.md file.")
     parser.add_argument(
         "--source-file",
@@ -124,30 +149,4 @@ def main():
         help="Path for the output README.md file."
     )
     args = parser.parse_args()
-
-    module_path = os.path.dirname(args.output_file)
-    print(f"--- Generating README.md for module: {module_path} ---")
-
-    print(f"--> Generating 'Core Protocols' section from {args.source_file}...")
-    core_protocols_md = generate_core_protocols_section(args.source_file)
-
-    print("--> Generating 'Key Components' section...")
-    key_components_md = generate_key_components_section(module_path)
-
-    print("--> Assembling final README.md content...")
-    final_readme_content = README_TEMPLATE.format(
-        core_protocols=core_protocols_md,
-        key_components=key_components_md,
-    ).strip()
-
-    print(f"--> Writing README to {args.output_file}...")
-    try:
-        with open(args.output_file, "w", encoding="utf-8") as f:
-            f.write(final_readme_content)
-        print("--> README.md generated successfully.")
-    except IOError as e:
-        print(f"Error: Could not write to {args.output_file}. Reason: {e}")
-
-
-if __name__ == "__main__":
-    main()
+    main(args.source_file, args.output_file)

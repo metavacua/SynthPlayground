@@ -73,8 +73,7 @@ This module contains the following protocols, which are defined in its own `AGEN
             "--output-file", output_filepath
         ]
 
-        with patch('sys.argv', test_args):
-            readme_generator.main()
+        readme_generator.main(self.agents_md_path, output_filepath)
 
         # Verify the output file was created
         self.assertTrue(os.path.exists(output_filepath))
