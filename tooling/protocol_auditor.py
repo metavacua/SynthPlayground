@@ -31,14 +31,42 @@ import re
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 LOG_FILE = os.path.join(ROOT_DIR, "logs", "activity.log.jsonl")
 AGENTS_MD_FILENAME = "AGENTS.md"
+PROTOCOLS_DIR_NAME = "protocols"
+# Directories to be ignored by the hierarchical scan, same as in the compiler
+SPECIAL_DIRS = ["protocols/security"]
 
 
 def find_all_agents_md_files(root_dir):
-    """Finds all AGENTS.md files in the repository."""
+    """
+    Finds all AGENTS.md files that are associated with a `protocols` directory.
+
+    This function mirrors the logic of the `hierarchical_compiler.py` to ensure
+    the auditor is looking at the exact same set of files that the build
+    system uses. It finds all `protocols` directories and then infers the
+    location of the corresponding `AGENTS.md` file in the parent directory.
+    """
+    protocol_dirs = []
     agents_files = []
-    for dirpath, _, filenames in os.walk(root_dir):
-        if AGENTS_MD_FILENAME in filenames:
-            agents_files.append(os.path.join(dirpath, AGENTS_MD_FILENAME))
+    special_paths = {os.path.join(root_dir, d) for d in SPECIAL_DIRS}
+
+    for dirpath, dirnames, _ in os.walk(root_dir):
+        if PROTOCOLS_DIR_NAME in dirnames:
+            proto_dir_path = os.path.join(dirpath, PROTOCOLS_DIR_NAME)
+            if proto_dir_path in special_paths:
+                continue
+            protocol_dirs.append(proto_dir_path)
+
+    for proto_dir in protocol_dirs:
+        parent_dir = os.path.dirname(proto_dir)
+        agents_md_path = os.path.join(parent_dir, AGENTS_MD_FILENAME)
+        if os.path.exists(agents_md_path):
+            agents_files.append(agents_md_path)
+
+    # Also include the root AGENTS.md if it exists
+    root_agents_md = os.path.join(root_dir, AGENTS_MD_FILENAME)
+    if os.path.exists(root_agents_md) and root_agents_md not in agents_files:
+        agents_files.append(root_agents_md)
+
     return agents_files
 
 

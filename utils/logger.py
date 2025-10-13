@@ -28,6 +28,7 @@ and self-improvement activities.
 import json
 import uuid
 import os
+import fcntl
 from datetime import datetime, timezone
 from jsonschema import validate
 
@@ -130,5 +131,15 @@ class Logger:
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
 
-        with open(self.log_path, "a") as f:
-            f.write(json.dumps(log_entry) + "\n")
+        try:
+            with open(self.log_path, "a") as f:
+                # Acquire an exclusive lock on the file to prevent race conditions
+                # from multiple processes writing at the same time.
+                fcntl.flock(f, fcntl.LOCK_EX)
+                try:
+                    f.write(json.dumps(log_entry) + "\n")
+                finally:
+                    # Always release the lock.
+                    fcntl.flock(f, fcntl.LOCK_UN)
+        except IOError as e:
+            print(f"Error: Could not write to log file {self.log_path}. Error: {e}")
