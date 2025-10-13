@@ -1157,7 +1157,7 @@
       "name": "load_schema",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 55,
+      "line": 56,
       "kind": "function"
     },
     {
@@ -1165,7 +1165,7 @@
       "name": "compile_protocols",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 67,
+      "line": 68,
       "kind": "function"
     },
     {
@@ -1173,7 +1173,7 @@
       "name": "main",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 194,
+      "line": 198,
       "kind": "function"
     },
     {
@@ -1325,7 +1325,7 @@
       "name": "validate_plan",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 329,
+      "line": 332,
       "kind": "function"
     },
     {
@@ -1333,7 +1333,7 @@
       "name": "analyze_plan",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 362,
+      "line": 365,
       "kind": "function"
     },
     {
@@ -1341,7 +1341,7 @@
       "name": "lint_plan",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 403,
+      "line": 406,
       "kind": "function"
     },
     {
@@ -1349,7 +1349,7 @@
       "name": "start_task",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 413,
+      "line": 416,
       "kind": "function"
     },
     {
@@ -1357,7 +1357,7 @@
       "name": "main",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 469,
+      "line": 472,
       "kind": "function"
     },
     {
@@ -1565,7 +1565,7 @@
       "name": "test_end_to_end_report_generation",
       "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
-      "line": 84,
+      "line": 83,
       "kind": "function"
     },
     {
@@ -1573,7 +1573,15 @@
       "name": "test_find_all_agents_md_files_with_special_dirs",
       "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
-      "line": 150,
+      "line": 147,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "open_side_effect",
+      "path": "./tooling/test_protocol_auditor.py",
+      "language": "Python",
+      "line": 106,
       "kind": "function"
     },
     {
@@ -1581,15 +1589,7 @@
       "name": "walk_side_effect",
       "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
-      "line": 166,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "mock_file_open",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 104,
+      "line": 163,
       "kind": "function"
     },
     {
@@ -1798,6 +1798,150 @@
       "path": "./tooling/research_planner.py",
       "language": "Python",
       "line": 15,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "convert_all_latex_files",
+      "path": "./calculus_converter/convert_all.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "Sequent",
+      "path": "./calculus_converter/calculus.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "ProofTree",
+      "path": "./calculus_converter/calculus.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "Document",
+      "path": "./calculus_converter/calculus.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "class"
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./calculus_converter/calculus.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./calculus_converter/calculus.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./calculus_converter/calculus.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./calculus_converter/calculus.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./calculus_converter/calculus.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "add_element",
+      "path": "./calculus_converter/calculus.py",
+      "language": "Python",
+      "line": 31,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "add_proof_tree",
+      "path": "./calculus_converter/calculus.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "_build_tree_recursively",
+      "path": "./calculus_converter/calculus.py",
+      "language": "Python",
+      "line": 38,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "to_json",
+      "path": "./calculus_converter/calculus.py",
+      "language": "Python",
+      "line": 52,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "_prooftree_to_dict",
+      "path": "./calculus_converter/calculus.py",
+      "language": "Python",
+      "line": 66,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "generate_html",
+      "path": "./calculus_converter/generator.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "parse_prooftree_content_final",
+      "path": "./calculus_converter/parser.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "cleanup_latex",
+      "path": "./calculus_converter/parser.py",
+      "language": "Python",
+      "line": 44,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "parse_latex_to_document",
+      "path": "./calculus_converter/parser.py",
+      "language": "Python",
+      "line": 53,
       "kind": "function"
     }
   ]
