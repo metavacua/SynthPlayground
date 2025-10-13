@@ -79,42 +79,39 @@ This is not a JSON line and should be skipped.
             expected_tools = ["tool_A", "tooling/some_script.py", "tool_D", "run_in_bash_session"]
             self.assertCountEqual(used_tools, expected_tools)
 
+    @patch('tooling.protocol_auditor.find_all_agents_md_files')
     @patch('tooling.protocol_auditor.run_protocol_source_check')
-    def test_end_to_end_report_generation(self, mock_source_check):
+    def test_end_to_end_report_generation(self, mock_run_source_check, mock_find_agents):
         """
         Run the main function end-to-end and verify the content
         of the generated Markdown report.
         """
-        # Mock the source check to return a success state
-        mock_source_check.return_value = {
-            "status": "success",
-            "message": "AGENTS.md appears to be up-to-date."
+        mock_find_agents.return_value = ['/app/AGENTS.md']
+        mock_run_source_check.return_value = [{"status": "success", "message": "All AGENTS.md files appear to be up-to-date."}]
+
+        mock_files = {
+            protocol_auditor.LOG_FILE: mock_open(read_data=self.mock_log_content).return_value,
+            '/app/AGENTS.md': mock_open(read_data=self.mock_agents_md_content).return_value,
+            os.path.join(protocol_auditor.ROOT_DIR, "audit_report.md"): mock_open().return_value
         }
 
-        # Create a mock handle specifically for the write operation
-        mock_write_handle = mock_open().return_value
+        def mock_open_side_effect(path, *args, **kwargs):
+            # Normalize the path to handle potential relative vs. absolute mismatches
+            normalized_path = os.path.abspath(path)
+            if normalized_path in mock_files:
+                return mock_files[normalized_path]
+            # Fallback for any other open calls that are not mocked
+            return mock_open().return_value
 
-        # Patch the file reads and the final write
-        m = mock_open()
-        with patch("builtins.open", m) as mock_file:
-            # Configure mock to handle different files
-            mock_file.side_effect = [
-                mock_open(read_data=self.mock_log_content).return_value,
-                mock_open(read_data=self.mock_agents_md_content).return_value,
-                mock_write_handle,  # For the final report write
-            ]
-
+        with patch('builtins.open', side_effect=mock_open_side_effect):
             # Run the main auditor function
             protocol_auditor.main()
 
-        # The auditor calculates an absolute path, so we must check for that.
-        expected_report_path = os.path.abspath(self.mock_report_path)
-
-        # Check that the report was written to the correct file
-        m.assert_any_call(expected_report_path, "w")
+        # Get the mock for the report file to check what was written
+        report_mock_handle = mock_files[os.path.abspath(self.mock_report_path)]
 
         # Get the content that was written to the report file
-        written_content = mock_write_handle.write.call_args[0][0]
+        written_content = report_mock_handle.write.call_args[0][0]
 
         # --- Assertions on Report Content ---
         # Check for unreferenced tools (used but not in protocol)
@@ -130,6 +127,44 @@ This is not a JSON line and should be skipped.
         self.assertIn("| `tool_A` | 1 |", written_content)
         self.assertIn("| `tooling/some_script.py` | 1 |", written_content)
         self.assertIn("| `tool_D` | 1 |", written_content)
+
+    def test_run_enforcement_check(self):
+        """
+        Tests the `run_enforcement_check` function to ensure it flags protocols
+        with prohibitory language but no `enforcement` key.
+        """
+        mock_content_with_violation = """
+```json
+{
+  "protocol_id": "test-prohibit-001",
+  "rules": [
+    {
+      "rule_id": "no-silly-business",
+      "description": "This rule is here to forbid silly business."
+    }
+  ]
+}
+```
+```json
+{
+  "protocol_id": "test-prohibit-002",
+  "rules": [
+    {
+      "rule_id": "must-be-serious",
+      "description": "This rule is to prohibit fun.",
+      "enforcement": "This is enforced by the fun police."
+    }
+  ]
+}
+```
+"""
+        mock_file = mock_open(read_data=mock_content_with_violation)
+        with patch("builtins.open", mock_file):
+            violations = protocol_auditor.run_enforcement_check(["dummy_path"])
+            self.assertEqual(len(violations), 1)
+            self.assertEqual(violations[0]["protocol_id"], "test-prohibit-001")
+            self.assertIn("unenforced prohibition", violations[0]["message"])
+
 
 if __name__ == '__main__':
     unittest.main()

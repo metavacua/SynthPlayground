@@ -135,6 +135,46 @@ def run_centrality_analysis(used_tools):
     return Counter(used_tools)
 
 
+def run_enforcement_check(agents_md_paths):
+    """
+    Scans all protocols for prohibitory language and checks for an enforcement mechanism.
+    Returns a list of violation dictionaries.
+    """
+    violations = []
+    prohibitory_keywords = {"prohibit", "forbid", "disallow", "forbidden"}
+
+    for file_path in agents_md_paths:
+        try:
+            with open(file_path, "r") as f:
+                content = f.read()
+
+            json_blocks = re.findall(r"```json\n(.*?)\n```", content, re.DOTALL)
+            for json_content in json_blocks:
+                try:
+                    data = json.loads(json_content)
+                    protocol_id = data.get("protocol_id", "N/A")
+                    for rule in data.get("rules", []):
+                        rule_id = rule.get("rule_id", "N/A")
+                        description = rule.get("description", "").lower()
+                        enforcement = rule.get("enforcement", "")
+
+                        # Check if the rule description contains prohibitory language
+                        if any(keyword in description for keyword in prohibitory_keywords):
+                            # If it does, check for a meaningful enforcement key
+                            if not enforcement or len(enforcement.strip()) < 10:
+                                violations.append({
+                                    "status": "error",
+                                    "protocol_id": protocol_id,
+                                    "message": f"Protocol '{protocol_id}' has an unenforced prohibition.",
+                                    "details": f"Rule '{rule_id}' uses prohibitory language but lacks a specific enforcement mechanism."
+                                })
+                except json.JSONDecodeError:
+                    continue  # Ignore malformed JSON
+        except Exception:
+            continue # Ignore file read errors, they are handled elsewhere
+    return violations
+
+
 def run_protocol_source_check(all_agents_files):
     """
     Checks if each AGENTS.md file is older than its corresponding source files.
@@ -182,7 +222,7 @@ def run_protocol_source_check(all_agents_files):
     return results
 
 
-def generate_markdown_report(source_checks, unreferenced, unused, centrality):
+def generate_markdown_report(source_checks, enforcement_violations, unreferenced, unused, centrality):
     """Generates a Markdown-formatted string from the audit results."""
     report = ["# Protocol Audit Report"]
 
@@ -202,9 +242,18 @@ def generate_markdown_report(source_checks, unreferenced, unused, centrality):
             elif check['status'] == 'error':
                  report.append(f"- ❌ **Error:** {check['message']}")
 
+    # --- Enforcement Check ---
+    report.append("\n## 2. Prohibition Enforcement Check")
+    if not enforcement_violations:
+        report.append("- ✅ **Success:** All protocols with prohibitory rules appear to have an enforcement mechanism defined.")
+    else:
+        for violation in enforcement_violations:
+            report.append(f"- ❌ **Error:** {violation['message']}")
+            report.append(f"  - {violation['details']}")
+            report.append("  - **Recommendation:** Add a detailed `enforcement` key to the rule definition in the source JSON file.")
 
     # --- Completeness Check ---
-    report.append("\n## 2. Protocol Completeness")
+    report.append("\n## 3. Protocol Completeness")
     report.append("### Tools Used But Not In Protocol")
     if not unreferenced:
         report.append("- ✅ All tools used are associated with a protocol.")
@@ -246,12 +295,14 @@ def main():
 
     # Run analyses
     source_check_results = run_protocol_source_check(all_agents_files)
+    enforcement_violations = run_enforcement_check(all_agents_files)
     unreferenced_tools, unused_protocol_tools = run_completeness_check(used_tools_from_log, protocol_tools_from_agents)
     centrality_analysis = run_centrality_analysis(used_tools_from_log)
 
     # Generate report
     report_content = generate_markdown_report(
         source_check_results,
+        enforcement_violations,
         unreferenced_tools,
         unused_protocol_tools,
         centrality_analysis

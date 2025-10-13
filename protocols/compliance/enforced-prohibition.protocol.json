@@ -1,0 +1,15 @@
+{
+  "protocol_id": "enforced-prohibition-001",
+  "protocol_name": "Enforced Prohibition Meta-Protocol",
+  "description": "A meta-protocol requiring that any protocol that prohibits an action must be linked to an automated enforcement mechanism.",
+  "rules": [
+    {
+      "rule_id": "enforced-prohibition-link",
+      "description": "For any protocol rule that includes the words 'prohibit,' 'forbid,' or 'disallow' in its description, a corresponding technical control must be implemented to enforce it. The protocol definition should cite the tool or module responsible for this enforcement.",
+      "enforcement": "This is a meta-protocol enforced during code and protocol review. A change that adds a prohibition without a corresponding technical control should be rejected."
+    }
+  ],
+  "associated_tools": [
+    "tooling/master_control.py"
+  ]
+}
