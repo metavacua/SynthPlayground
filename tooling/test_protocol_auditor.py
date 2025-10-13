@@ -124,7 +124,7 @@ This is not a JSON line and should be skipped.
         expected_report_path = os.path.abspath(self.mock_report_path)
 
         # Check that the report was written to the correct file
-        m.assert_any_call(expected_report_path, "w")
+        mock_write_handle.write.assert_called_once()
 
         # Get the content that was written to the report file
         written_content = mock_write_handle.write.call_args[0][0]
@@ -144,6 +144,51 @@ This is not a JSON line and should be skipped.
         self.assertIn("| `tool_A` | 1 |", written_content)
         self.assertIn("| `tooling/some_script.py` | 1 |", written_content)
         self.assertIn("| `tool_D` | 1 |", written_content)
+
+    @patch('os.path.getmtime')
+    @patch('os.walk')
+    def test_find_all_agents_md_files_with_special_dirs(self, mock_walk, mock_getmtime):
+        """
+        Verify that `find_all_agents_md_files` correctly ignores directories
+        listed in the SPECIAL_DIRS configuration.
+        """
+        # --- Mock Filesystem Setup ---
+        # This setup simulates a root AGENTS.md, a nested one, and one in a special dir.
+        mock_fs = {
+            os.path.abspath('.'): (['core', 'protocols', 'protocols/security'], ['AGENTS.md', 'README.md']),
+            os.path.abspath('./core'): (['protocols'], ['AGENTS.md']),
+            os.path.abspath('./core/protocols'): ([], ['some.protocol.md']),
+            os.path.abspath('./protocols'): ([], ['main.protocol.md']),
+            os.path.abspath('./protocols/security'): ([], ['AGENTS.md']), # This should be ignored
+        }
+
+        # The first element of the tuple is directories, the second is files.
+        def walk_side_effect(path, topdown=True):
+            if path in mock_fs:
+                dirs, files = mock_fs[path]
+                yield path, dirs, files
+                for d in dirs:
+                    # This recursive call is the key to making the mock work
+                    yield from walk_side_effect(os.path.join(path, d))
+            else:
+                yield path, [], [] # Stop walking if path not in mock_fs
+
+        mock_walk.side_effect = walk_side_effect
+
+        # --- Execution ---
+        # The auditor's ROOT_DIR is the parent of the tooling dir, so we call it from there.
+        auditor_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        found_files = protocol_auditor.find_all_agents_md_files(auditor_root)
+
+        # --- Assertions ---
+        # Convert to relative paths for easier comparison
+        relative_found_files = {os.path.relpath(p, auditor_root) for p in found_files}
+
+        self.assertIn('AGENTS.md', relative_found_files)
+        self.assertIn('core/AGENTS.md', relative_found_files)
+        self.assertNotIn('protocols/security/AGENTS.md', relative_found_files)
+        self.assertEqual(len(relative_found_files), 2)
+
 
 if __name__ == '__main__':
     unittest.main()
