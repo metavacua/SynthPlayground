@@ -6,20 +6,17 @@ meta-cognitive loop. It parses the structured activity log
 (`logs/activity.log.jsonl`) to identify patterns that may indicate
 inefficiencies or errors in the agent's workflow.
 
-The analyses currently implemented are:
+The primary analysis currently implemented is:
 - **Planning Efficiency Analysis:** It scans the logs for tasks that required
   multiple `set_plan` actions. A high number of plan revisions for a single
   task can suggest that the initial planning phase was insufficient, the task
   was poorly understood, or the agent struggled to adapt to unforeseen
   challenges.
-- **Protocol Adherence Analysis:** It checks for violations of key protocols,
-  such as the `best-practices-001` rule which mandates that every filesystem
-  write operation is followed by a read operation to verify the result.
 
-By flagging these issues, the script provides a starting point for a deeper
+By flagging these tasks, the script provides a starting point for a deeper
 post-mortem analysis, helping the agent (or its developers) to understand the
-root causes of planning churn and protocol deviations, fostering a cycle of
-continuous improvement.
+root causes of the planning churn and to develop strategies for more effective
+upfront planning in the future.
 
 The tool is designed to be extensible, with future analyses (such as error
 rate tracking or tool usage anti-patterns) to be added as the system evolves.
@@ -30,16 +27,6 @@ from collections import defaultdict
 
 LOG_FILE_PATH = "logs/activity.log.jsonl"
 ACTION_TYPE_MAP = {"set_plan": "PLAN_UPDATE"}
-
-# Tool categories based on the `best-practices-001` protocol
-WRITE_TOOLS = {
-    "create_file_with_block",
-    "overwrite_file_with_block",
-    "replace_with_git_merge_diff",
-    "delete_file",
-    "rename_file",
-}
-READ_TOOLS = {"read_file", "list_files", "grep"}
 
 
 def analyze_planning_efficiency(log_file):
@@ -133,62 +120,6 @@ def analyze_protocol_violations(log_file):
     return list(violation_tasks)
 
 
-def analyze_verification_adherence(log_file):
-    """
-    Analyzes the log to ensure write actions are followed by read actions.
-
-    This function enforces the `best-practices-001` protocol, which mandates
-    that every filesystem write operation must be followed by a verification
-    step (a read/check operation) to confirm the outcome.
-
-    Args:
-        log_file (str): Path to the activity log file.
-
-    Returns:
-        list: A list of dictionaries, each detailing a violation.
-    """
-    violations = []
-    try:
-        with open(log_file, "r") as f:
-            lines = f.readlines()
-
-        for i, line in enumerate(lines):
-            try:
-                entry = json.loads(line)
-                action = entry.get("action", {})
-                details = action.get("details", {})
-                tool_name = details.get("tool_name")
-
-                if tool_name in WRITE_TOOLS:
-                    # Check the next log entry for verification
-                    is_verified = False
-                    if i + 1 < len(lines):
-                        try:
-                            next_entry = json.loads(lines[i + 1])
-                            next_action = next_entry.get("action", {})
-                            next_details = next_action.get("details", {})
-                            next_tool_name = next_details.get("tool_name")
-                            if next_tool_name in READ_TOOLS:
-                                is_verified = True
-                        except json.JSONDecodeError:
-                            # If the next line is malformed, we can't verify.
-                            pass
-
-                    if not is_verified:
-                        violation = {
-                            "task_id": entry.get("task", {}).get("id"),
-                            "log_id": entry.get("log_id"),
-                            "violating_tool": tool_name,
-                        }
-                        violations.append(violation)
-
-            except json.JSONDecodeError:
-                continue
-    except FileNotFoundError:
-        return []
-    return violations
-
-
 def main():
     """
     Main function to run the self-improvement analysis CLI.
@@ -215,19 +146,7 @@ def main():
         for task_id, count in inefficient_tasks.items():
             print(f"    - Task ID: {task_id}, Plan Revisions: {count}")
 
-    print("\n[2] Analyzing for 'Verify-After-Write' Protocol Adherence...")
-    verification_violations = analyze_verification_adherence(args.log_file)
-    if not verification_violations:
-        print("  - Result: No 'verify-after-write' protocol violations found.")
-    else:
-        print("  - WARNING: Found violations of the 'verify-after-write' protocol:")
-        for v in verification_violations:
-            print(
-                f"    - Task ID: {v['task_id']}, Log ID: {v['log_id']}, "
-                f"Tool: {v['violating_tool']} was not followed by a verification step."
-            )
-
-    print("\n[3] Analyzing for Critical Protocol Violations (reset_all)...")
+    print("\n[2] Analyzing for Critical Protocol Violations...")
     violation_tasks = analyze_protocol_violations(args.log_file)
     if not violation_tasks:
         print("  - Result: No critical protocol violations found.")
