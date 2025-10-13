@@ -533,7 +533,7 @@
       "name": "find_protocol_dirs",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 16,
+      "line": 14,
       "kind": "function"
     },
     {
@@ -541,7 +541,7 @@
       "name": "run_compiler",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 35,
+      "line": 33,
       "kind": "function"
     },
     {
@@ -549,7 +549,7 @@
       "name": "run_readme_generator",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 57,
+      "line": 52,
       "kind": "function"
     },
     {
@@ -557,7 +557,7 @@
       "name": "generate_summary",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 79,
+      "line": 68,
       "kind": "function"
     },
     {
@@ -565,7 +565,7 @@
       "name": "cleanup_summaries",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 109,
+      "line": 98,
       "kind": "function"
     },
     {
@@ -573,7 +573,7 @@
       "name": "get_parent_module",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 118,
+      "line": 107,
       "kind": "function"
     },
     {
@@ -581,7 +581,7 @@
       "name": "compile_centralized_knowledge_graph",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 127,
+      "line": 116,
       "kind": "function"
     },
     {
@@ -589,7 +589,7 @@
       "name": "main",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 176,
+      "line": 165,
       "kind": "function"
     },
     {
@@ -962,6 +962,30 @@
     },
     {
       "_type": "tag",
+      "name": "load_config",
+      "path": "./tooling/builder.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "execute_build",
+      "path": "./tooling/builder.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/builder.py",
+      "language": "Python",
+      "line": 77,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
       "name": "log_catastrophic_failure",
       "path": "./tooling/log_failure.py",
       "language": "Python",
@@ -1274,7 +1298,7 @@
     },
     {
       "_type": "tag",
-      "name": "main",
+      "name": "main_cli",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
       "line": 198,
