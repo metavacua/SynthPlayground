@@ -1573,7 +1573,15 @@
       "name": "test_end_to_end_report_generation",
       "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
-      "line": 83,
+      "line": 84,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "mock_file_open",
+      "path": "./tooling/test_protocol_auditor.py",
+      "language": "Python",
+      "line": 104,
       "kind": "function"
     },
     {
