@@ -30,6 +30,7 @@ import uuid
 import os
 from datetime import datetime, timezone
 from jsonschema import validate
+from filelock import FileLock
 
 
 class Logger:
@@ -130,5 +131,13 @@ class Logger:
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
 
-        with open(self.log_path, "a") as f:
-            f.write(json.dumps(log_entry) + "\n")
+        # Create a lock file path next to the log file
+        lock_path = self.log_path + ".lock"
+        lock = FileLock(lock_path)
+
+        try:
+            with lock:
+                with open(self.log_path, "a") as f:
+                    f.write(json.dumps(log_entry) + "\n")
+        except IOError as e:
+            print(f"Error: Could not write to log file {self.log_path}. Error: {e}")

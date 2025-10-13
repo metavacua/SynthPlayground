@@ -1,8 +1,10 @@
 black
+filelock
+rdflib
 flake8
 jsonschema
-Markdown
+markdown
 pytest
+pyyaml
 rdflib
 requests
-pyyaml

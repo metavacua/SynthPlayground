@@ -6,22 +6,17 @@
       "type": "python-project"
     },
     {
-      "id": "jsonschema",
-      "path": null,
-      "type": "python-external"
-    },
-    {
-      "id": "pyyaml",
-      "path": null,
-      "type": "python-external"
-    },
-    {
-      "id": "requests",
-      "path": null,
-      "type": "python-external"
+      "id": "calculus_converter",
+      "path": "./calculus_converter/requirements.txt",
+      "type": "python-project"
     },
     {
       "id": "black",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "filelock",
       "path": null,
       "type": "python-external"
     },
@@ -36,12 +31,7 @@
       "type": "python-external"
     },
     {
-      "id": "pytest",
-      "path": null,
-      "type": "python-external"
-    },
-    {
-      "id": "Markdown",
+      "id": "jsonschema",
       "path": null,
       "type": "python-external"
     },
@@ -49,28 +39,41 @@
       "id": "markdown",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "pytest",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "pyyaml",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "requests",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "lark",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "jinja2",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
-    {
-      "source": "root-python-project",
-      "target": "jsonschema"
-    },
-    {
-      "source": "root-python-project",
-      "target": "pyyaml"
-    },
-    {
-      "source": "root-python-project",
-      "target": "requests"
-    },
     {
       "source": "root-python-project",
       "target": "black"
     },
     {
       "source": "root-python-project",
-      "target": "jsonschema"
+      "target": "filelock"
     },
     {
       "source": "root-python-project",
@@ -82,11 +85,19 @@
     },
     {
       "source": "root-python-project",
+      "target": "jsonschema"
+    },
+    {
+      "source": "root-python-project",
+      "target": "markdown"
+    },
+    {
+      "source": "root-python-project",
       "target": "pytest"
     },
     {
       "source": "root-python-project",
-      "target": "Markdown"
+      "target": "pyyaml"
     },
     {
       "source": "root-python-project",
@@ -97,8 +108,12 @@
       "target": "requests"
     },
     {
-      "source": "root-python-project",
-      "target": "markdown"
+      "source": "calculus_converter",
+      "target": "lark"
+    },
+    {
+      "source": "calculus_converter",
+      "target": "jinja2"
     }
   ]
 }

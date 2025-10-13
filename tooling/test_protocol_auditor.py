@@ -79,43 +79,45 @@ This is not a JSON line and should be skipped.
             expected_tools = ["tool_A", "tooling/some_script.py", "tool_D", "run_in_bash_session"]
             self.assertCountEqual(used_tools, expected_tools)
 
-    @patch('protocol_auditor.run_protocol_source_check')
-    def test_end_to_end_report_generation(self, mock_source_check):
+    @patch('os.walk')
+    @patch('tooling.protocol_auditor.run_protocol_source_check')
+    def test_end_to_end_report_generation(self, mock_source_check, mock_walk):
         """
         Run the main function end-to-end and verify the content
-        of the generated Markdown report.
+        of the generated Markdown report, mocking a hierarchical file system.
         """
-        # Mock the source check to return a success state
-        mock_source_check.return_value = [{
-            "status": "success",
-            "message": "AGENTS.md appears to be up-to-date."
-        }]
+        # Mock the source check to return a success state (an empty list)
+        mock_source_check.return_value = []
+
+        # Simulate finding multiple AGENTS.md files
+        mock_walk.return_value = [
+            ('/app', [], ['AGENTS.md', 'some_other_file', 'activity.log.jsonl']),
+            ('/app/core', [], ['AGENTS.md']),
+        ]
 
         # Create a mock handle specifically for the write operation
         mock_write_handle = mock_open().return_value
 
-        # This dictionary will map filepaths to their mock content
-        mock_files = {
-            os.path.abspath(protocol_auditor.LOG_FILE): self.mock_log_content,
-            # We will only mock one AGENTS.md for this test to keep it simple
-            os.path.abspath("AGENTS.md"): self.mock_agents_md_content,
-            os.path.abspath(self.mock_report_path): "" # For the write
-        }
+        m = mock_open()
+        with patch("builtins.open", m):
+            # This function will be the side_effect for our mock_open
+            def mock_file_open(filename, *args, **kwargs):
+                if 'activity.log' in filename:
+                    return mock_open(read_data=self.mock_log_content).return_value
+                elif 'core/AGENTS.md' in filename:
+                    # Add a unique tool to this file to check it's being read
+                    return mock_open(read_data="```json\n{\"protocol_id\":\"core-proto\", \"associated_tools\": [\"core_tool\"]}\n```").return_value
+                elif 'AGENTS.md' in filename:
+                    return mock_open(read_data=self.mock_agents_md_content).return_value
+                elif 'audit_report.md' in filename:
+                    return mock_write_handle
+                else:
+                    # Fallback for any other file open calls
+                    return mock_open(read_data="").return_value
 
-        # The new side effect function for `open`
-        def open_side_effect(path, mode='r'):
-            path = os.path.abspath(path)
-            if mode == 'w':
-                # This handles the report writing
-                return mock_write_handle
+            m.side_effect = mock_file_open
 
-            # This handles reading from our mocked files
-            content = mock_files.get(path, "") # Default to empty for other files
-            return mock_open(read_data=content).return_value
-
-        # We also need to mock find_all_agents_md_files to control its output
-        with patch("builtins.open", open_side_effect), \
-             patch("protocol_auditor.find_all_agents_md_files", return_value=[os.path.abspath("AGENTS.md")]):
+            # Run the main auditor function
             protocol_auditor.main()
 
         # The auditor calculates an absolute path, so we must check for that.
@@ -135,6 +137,7 @@ This is not a JSON line and should be skipped.
         # Check for unused protocol tools (in protocol but not used)
         self.assertIn("`tool_B`", written_content)
         self.assertIn("`tool_C`", written_content)
+        self.assertIn("`core_tool`", written_content) # Check for the tool from the mocked core/AGENTS.md
 
         # Check for tool centrality counts
         self.assertIn("| `run_in_bash_session` | 1 |", written_content)
