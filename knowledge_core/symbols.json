@@ -533,7 +533,7 @@
       "name": "find_protocol_dirs",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 14,
+      "line": 21,
       "kind": "function"
     },
     {
@@ -541,7 +541,7 @@
       "name": "run_compiler",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 33,
+      "line": 40,
       "kind": "function"
     },
     {
@@ -549,7 +549,7 @@
       "name": "run_readme_generator",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 52,
+      "line": 59,
       "kind": "function"
     },
     {
@@ -557,7 +557,7 @@
       "name": "generate_summary",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 68,
+      "line": 75,
       "kind": "function"
     },
     {
@@ -565,7 +565,7 @@
       "name": "cleanup_summaries",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 98,
+      "line": 105,
       "kind": "function"
     },
     {
@@ -573,7 +573,7 @@
       "name": "get_parent_module",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 107,
+      "line": 114,
       "kind": "function"
     },
     {
@@ -581,7 +581,7 @@
       "name": "compile_centralized_knowledge_graph",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 116,
+      "line": 123,
       "kind": "function"
     },
     {
@@ -589,7 +589,7 @@
       "name": "main",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 165,
+      "line": 172,
       "kind": "function"
     },
     {
