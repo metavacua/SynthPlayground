@@ -2,7 +2,7 @@ jsonschema
 pyyaml
 requests
 black
-jsonschema
+filelock
 rdflib
 flake8
 pytest
