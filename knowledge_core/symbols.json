@@ -757,7 +757,7 @@
       "name": "find_all_agents_md_files",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 39,
+      "line": 36,
       "kind": "function"
     },
     {
@@ -765,7 +765,7 @@
       "name": "get_used_tools_from_log",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 73,
+      "line": 45,
       "kind": "function"
     },
     {
@@ -773,7 +773,7 @@
       "name": "get_protocol_tools_from_agents_md",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 115,
+      "line": 87,
       "kind": "function"
     },
     {
@@ -781,7 +781,7 @@
       "name": "run_completeness_check",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 151,
+      "line": 123,
       "kind": "function"
     },
     {
@@ -789,7 +789,7 @@
       "name": "run_centrality_analysis",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 159,
+      "line": 131,
       "kind": "function"
     },
     {
@@ -797,7 +797,7 @@
       "name": "run_protocol_source_check",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 166,
+      "line": 138,
       "kind": "function"
     },
     {
@@ -805,7 +805,7 @@
       "name": "generate_markdown_report",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 213,
+      "line": 185,
       "kind": "function"
     },
     {
@@ -813,7 +813,7 @@
       "name": "main",
       "path": "./tooling/protocol_auditor.py",
       "language": "Python",
-      "line": 266,
+      "line": 238,
       "kind": "function"
     },
     {
@@ -1269,7 +1269,7 @@
       "name": "analyze_planning_efficiency",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
-      "line": 45,
+      "line": 32,
       "kind": "function"
     },
     {
@@ -1277,15 +1277,7 @@
       "name": "analyze_protocol_violations",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
-      "line": 86,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "analyze_verification_adherence",
-      "path": "./tooling/self_improvement_cli.py",
-      "language": "Python",
-      "line": 136,
+      "line": 73,
       "kind": "function"
     },
     {
@@ -1293,7 +1285,7 @@
       "name": "main",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
-      "line": 192,
+      "line": 123,
       "kind": "function"
     },
     {

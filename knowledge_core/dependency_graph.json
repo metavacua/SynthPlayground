@@ -16,6 +16,16 @@
       "type": "python-external"
     },
     {
+      "id": "filelock",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "rdflib",
+      "path": null,
+      "type": "python-external"
+    },
+    {
       "id": "flake8",
       "path": null,
       "type": "python-external"
@@ -41,11 +51,6 @@
       "type": "python-external"
     },
     {
-      "id": "rdflib",
-      "path": null,
-      "type": "python-external"
-    },
-    {
       "id": "requests",
       "path": null,
       "type": "python-external"
@@ -65,6 +70,14 @@
     {
       "source": "root-python-project",
       "target": "black"
+    },
+    {
+      "source": "root-python-project",
+      "target": "filelock"
+    },
+    {
+      "source": "root-python-project",
+      "target": "rdflib"
     },
     {
       "source": "root-python-project",
