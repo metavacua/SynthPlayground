@@ -653,7 +653,7 @@
       "name": "_load_plan_registry",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 48,
+      "line": 49,
       "kind": "function"
     },
     {
@@ -661,7 +661,7 @@
       "name": "MasterControlGraph",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 59,
+      "line": 60,
       "kind": "class"
     },
     {
@@ -669,7 +669,7 @@
       "name": "__init__",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 66,
+      "line": 67,
       "kind": "function"
     },
     {
@@ -677,7 +677,7 @@
       "name": "get_trigger",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 71,
+      "line": 72,
       "kind": "function"
     },
     {
@@ -685,7 +685,7 @@
       "name": "do_orientation",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 87,
+      "line": 88,
       "kind": "function"
     },
     {
@@ -693,7 +693,7 @@
       "name": "do_planning",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 123,
+      "line": 125,
       "kind": "function"
     },
     {
@@ -701,7 +701,7 @@
       "name": "_validate_plan_with_cli",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 163,
+      "line": 165,
       "kind": "function"
     },
     {
@@ -709,7 +709,7 @@
       "name": "do_researching",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 184,
+      "line": 186,
       "kind": "function"
     },
     {
@@ -717,7 +717,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 194,
+      "line": 196,
       "kind": "function"
     },
     {
@@ -725,7 +725,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 205,
+      "line": 207,
       "kind": "function"
     },
     {
@@ -733,7 +733,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 243,
+      "line": 245,
       "kind": "function"
     },
     {
@@ -741,7 +741,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 251,
+      "line": 253,
       "kind": "function"
     },
     {
@@ -749,7 +749,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 260,
+      "line": 262,
       "kind": "function"
     },
     {
@@ -757,7 +757,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 268,
+      "line": 270,
       "kind": "function"
     },
     {
@@ -1438,6 +1438,14 @@
       "path": "./tooling/test_refactor.py",
       "language": "Python",
       "line": 29,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "scan_documents",
+      "path": "./tooling/document_scanner.py",
+      "language": "Python",
+      "line": 5,
       "kind": "function"
     },
     {

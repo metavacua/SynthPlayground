@@ -49,6 +49,11 @@
       "id": "pyyaml",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "pypdf",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
@@ -83,6 +88,10 @@
     {
       "source": "root-python-project",
       "target": "pyyaml"
+    },
+    {
+      "source": "root-python-project",
+      "target": "pypdf"
     },
     {
       "source": "tooling",
