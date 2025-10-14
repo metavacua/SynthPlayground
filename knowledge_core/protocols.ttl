@@ -26,15 +26,6 @@
     proto:hasRule <file:///app/compliance/protocols/pre-commit-instructions-mandate> ;
     schema:description "Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission." .
 
-<file:///app/compliance/protocols/protocol-reset-all-pre-check-001> proto:associatedTool <file:///app/compliance/protocols/list_files>,
-        <file:///app/compliance/protocols/reset_all> ;
-    proto:hasRule <file:///app/compliance/protocols/agent-must-verify-token> ;
-    schema:description "A protocol that mandates a pre-execution check for the `reset_all` tool to prevent unauthorized use." .
-
-<file:///app/compliance/protocols/reset-all-authorization-001> proto:associatedTool <file:///app/compliance/protocols/reset_all> ;
-    proto:hasRule <file:///app/compliance/protocols/require-authorization-token> ;
-    schema:description "Requires explicit user authorization via a token file for the use of the destructive `reset_all` tool." .
-
 <file:///app/compliance/protocols/reset-all-prohibition-001> proto:associatedTool <file:///app/compliance/protocols/reset_all> ;
     proto:hasRule <file:///app/compliance/protocols/no-reset-all> ;
     schema:description "A high-priority protocol that unconditionally forbids the use of the `reset_all` tool." .
@@ -69,6 +60,8 @@
 <file:///app/core/protocols/fdc-protocol-001> proto:associatedTool <file:///app/core/protocols/LOGGING_SCHEMA.md>,
         <file:///app/core/protocols/knowledge_core/dependency_graph.json>,
         <file:///app/core/protocols/knowledge_core/symbols.json>,
+        <file:///app/core/protocols/message_user>,
+        <file:///app/core/protocols/set_plan>,
         <file:///app/core/protocols/tooling/fdc_cli.py>,
         <file:///app/core/protocols/tooling/fdc_fsm.json> ;
     proto:hasRule <file:///app/core/protocols/fdc-entry-point>,
@@ -167,9 +160,6 @@
     proto:hasRule <file:///app/protocols/toolchain-audit-on-schema-change> ;
     schema:description "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols." .
 
-<file:///app/compliance/protocols/agent-must-verify-token> proto:enforcement "This rule is enforced by the agent's own decision-making logic. The agent's plan must show the `list_files` check occurring before the `reset_all` call." ;
-    schema:description "Before invoking the `reset_all` tool, the agent MUST first use the `list_files` tool to verify that the `authorization.token` file exists in the repository root. The agent must not proceed with the `reset_all` call if the token is not found." .
-
 <file:///app/compliance/protocols/agents-md-self-awareness> proto:enforcement "The agent should incorporate this check into its standard operating procedure, particularly at the beginning of a task or when unexpected behavior occurs." ;
     schema:description "The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols." .
 
@@ -197,9 +187,6 @@
 
 <file:///app/compliance/protocols/pre-commit-instructions-mandate> proto:enforcement "The agent's core logic should invoke this tool as the entry point to the pre-submission phase." ;
     schema:description "Before submitting changes, the agent MUST execute the `pre_commit_instructions` tool to receive the required sequence of validation steps (e.g., running tests, requesting code review)." .
-
-<file:///app/compliance/protocols/require-authorization-token> proto:enforcement "The `reset_all` tool's implementation must be modified to check for the existence of this file, proceed with its operation, and then delete the token file upon completion. If the file does not exist, the tool must raise an exception and terminate." ;
-    schema:description "The `reset_all` tool must not execute unless a file named `authorization.token` exists in the repository root." .
 
 <file:///app/compliance/protocols/verify-after-write> proto:enforcement "This is a core operational discipline. Future tooling, such as a trace validator, could enforce this by analyzing the execution log against this protocol." ;
     schema:description "After every file creation or modification action (`create_file_with_block`, `overwrite_file_with_block`, `replace_with_git_merge_diff`), the agent MUST use a subsequent read-only tool (`read_file`, `list_files`, `grep`) to verify that the action was executed successfully and had the intended effect. A plan step should only be marked as complete after this verification." .
