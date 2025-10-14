@@ -1,6 +1,7 @@
 (load "QHJ.lisp")
 (setup-dependencies)
 (load "STT.lisp")
+(load "commutative-diagram.lisp")
 
 (in-package #:refuter-api)
 (setf *frontend-directory* #P"/home/madsci/Documents/Weaver/")
