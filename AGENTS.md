@@ -462,6 +462,32 @@ The tool will generate a plan file containing a series of `replace_with_git_merg
 
 ```json
 {
+  "protocol_id": "agent-interaction-001",
+  "description": "A protocol governing the agent's core interaction and planning tools.",
+  "rules": [
+    {
+      "rule_id": "planning-tool-access",
+      "description": "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution.",
+      "enforcement": "The agent's core logic should be designed to use this tool for all planning activities."
+    },
+    {
+      "rule_id": "communication-tool-access",
+      "description": "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow.",
+      "enforcement": "The agent's core logic should be designed to use this tool for all user-facing communication."
+    }
+  ],
+  "associated_tools": [
+    "set_plan",
+    "message_user"
+  ]
+}
+```
+
+
+---
+
+```json
+{
   "protocol_id": "refactor-001",
   "description": "A protocol for using the refactoring tool.",
   "rules": [

@@ -5,6 +5,9 @@
     "PLANNING",
     "RESEARCHING",
     "EXECUTING",
+    "GENERATING_CODE",
+    "RUNNING_TESTS",
+    "DEBUGGING",
     "FINALIZING",
     "AWAITING_SUBMISSION",
     "ERROR"
@@ -56,6 +59,31 @@
       "source": "EXECUTING",
       "dest": "EXECUTING",
       "trigger": "step_op"
+    },
+    {
+      "source": "EXECUTING",
+      "dest": "GENERATING_CODE",
+      "trigger": "code_generation_requested"
+    },
+    {
+      "source": "GENERATING_CODE",
+      "dest": "RUNNING_TESTS",
+      "trigger": "code_generation_completed"
+    },
+    {
+        "source": "RUNNING_TESTS",
+        "dest": "DEBUGGING",
+        "trigger": "tests_failed"
+    },
+    {
+        "source": "RUNNING_TESTS",
+        "dest": "EXECUTING",
+        "trigger": "tests_passed"
+    },
+    {
+        "source": "DEBUGGING",
+        "dest": "EXECUTING",
+        "trigger": "debugging_completed"
     },
     {
       "source": "EXECUTING",

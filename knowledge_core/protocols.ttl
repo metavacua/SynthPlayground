@@ -69,6 +69,8 @@
 <file:///app/core/protocols/fdc-protocol-001> proto:associatedTool <file:///app/core/protocols/LOGGING_SCHEMA.md>,
         <file:///app/core/protocols/knowledge_core/dependency_graph.json>,
         <file:///app/core/protocols/knowledge_core/symbols.json>,
+        <file:///app/core/protocols/message_user>,
+        <file:///app/core/protocols/set_plan>,
         <file:///app/core/protocols/tooling/fdc_cli.py>,
         <file:///app/core/protocols/tooling/fdc_fsm.json> ;
     proto:hasRule <file:///app/core/protocols/fdc-entry-point>,
@@ -142,6 +144,12 @@
 <file:///app/protocols/agent-bootstrap-001> proto:associatedTool <file:///app/protocols/read_file> ;
     proto:hasRule <file:///app/protocols/bootstrap-load-agents-md> ;
     schema:description "A foundational protocol that dictates the agent's initial actions upon starting any task." .
+
+<file:///app/protocols/agent-interaction-001> proto:associatedTool <file:///app/protocols/message_user>,
+        <file:///app/protocols/set_plan> ;
+    proto:hasRule <file:///app/protocols/communication-tool-access>,
+        <file:///app/protocols/planning-tool-access> ;
+    schema:description "A protocol governing the agent's core interaction and planning tools." .
 
 <file:///app/protocols/agent-shell-001> proto:associatedTool <file:///app/protocols/tooling/agent_shell.py> ;
     proto:hasRule <file:///app/protocols/shell-is-primary-entry-point> ;
@@ -321,8 +329,14 @@
 <file:///app/protocols/bootstrap-load-agents-md> proto:enforcement "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase." ;
     schema:description "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins." .
 
+<file:///app/protocols/communication-tool-access> proto:enforcement "The agent's core logic should be designed to use this tool for all user-facing communication." ;
+    schema:description "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow." .
+
 <file:///app/protocols/dependency-install-on-start> proto:enforcement "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions." ;
     schema:description "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed." .
+
+<file:///app/protocols/planning-tool-access> proto:enforcement "The agent's core logic should be designed to use this tool for all planning activities." ;
+    schema:description "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution." .
 
 <file:///app/protocols/refactor-rename-symbol> proto:enforcement "The tool is used by invoking it from the command line with the appropriate arguments. The agent should use this tool when a refactoring task is requested." ;
     schema:description "The `refactor.py` tool can be used to rename a symbol and all of its references." .
