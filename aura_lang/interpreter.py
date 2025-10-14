@@ -1,0 +1,141 @@
+from aura_lang import ast
+import re
+
+# --- Object System ---
+
+class Object:
+    def __init__(self, value):
+        self.value = value
+    def __repr__(self):
+        return f"Object(value={self.value})"
+
+class Integer(Object): pass
+class String(Object): pass
+class ReturnValue(Object): pass
+
+class Function(Object):
+    def __init__(self, params, body, env):
+        self.params, self.body, self.env = params, body, env
+
+class Builtin(Object):
+    def __init__(self, fn):
+        self.fn = self.value = fn
+
+class Environment:
+    def __init__(self, outer=None):
+        self.store, self.outer = {}, outer
+    def get(self, name):
+        val = self.store.get(name)
+        return val if val is not None else self.outer.get(name) if self.outer else None
+    def set(self, name, val):
+        self.store[name] = val
+        return val
+
+# --- Mocked "Standard Library" ---
+
+class MockHttpResponse:
+    def __init__(self, status_code, body):
+        self.status_code, self.body = status_code, body
+
+class MockUser:
+    def __init__(self, id, name, email):
+        self.id, self.name, self.email = id, name, email
+
+def mock_http_get(url):
+    return MockHttpResponse(200, '{"id": 1, "name": "Jules", "email": "jules@example.com"}') if "users/1" in url else MockHttpResponse(404, "Not Found")
+
+def mock_json_decode(json_string):
+    return MockUser(1, "Jules", "jules@example.com") if 'Jules' in json_string else None
+
+# --- Interpreter ---
+
+def evaluate(node, env):
+    node_type = type(node)
+    if node_type == ast.Program: return eval_program(node, env)
+    elif node_type == ast.ExpressionStatement: return evaluate(node.expression, env)
+    elif node_type == ast.LetStatement:
+        val = evaluate(node.value, env)
+        env.set(node.name.value, val)
+    elif node_type == ast.ReturnStatement: return ReturnValue(evaluate(node.value, env))
+    elif node_type == ast.BlockStatement: return eval_block_statement(node, env)
+    elif node_type == ast.FunctionDefinition: env.set(node.name.value, Function(node.params, node.body, env))
+    elif node_type == ast.IfStatement: return eval_if_statement(node, env)
+    elif node_type == ast.ForStatement: return eval_for_statement(node, env)
+    elif node_type == ast.PrintStatement: return eval_print_statement(node, env)
+    elif node_type == ast.IntegerLiteral: return Integer(node.value)
+    elif node_type == ast.StringLiteral: return String(node.value)
+    elif node_type == ast.Identifier: return eval_identifier(node, env)
+    elif node_type == ast.ListLiteral: return Object(eval_expressions(node.elements, env))
+    elif node_type == ast.InfixExpression:
+        left, right = evaluate(node.left, env), evaluate(node.right, env)
+        if node.operator == 'in' and isinstance(right, String):
+            # The 'in' operator returns a raw boolean, not an Object, for the if statement.
+            return left.value in right.value
+        return eval_infix_expression(node.operator, left, right)
+    elif node_type == ast.CallExpression:
+        function = evaluate(node.function, env)
+        args = eval_expressions(node.arguments, env)
+        return apply_function(function, args)
+    elif node_type == ast.MemberAccess:
+        obj = evaluate(node.object, env)
+        prop_name = node.property.value
+        target = obj.value if isinstance(obj, Object) else obj
+        return getattr(target, prop_name, None)
+    return None
+
+def eval_program(program, env):
+    for statement in program.statements:
+        result = evaluate(statement, env)
+        if isinstance(result, ReturnValue): return result.value
+    return result
+
+def eval_block_statement(block, env):
+    for statement in block.statements:
+        result = evaluate(statement, env)
+        if isinstance(result, ReturnValue): return result
+    return result
+
+def eval_if_statement(node, env):
+    condition = evaluate(node.condition, env)
+    # The condition is a raw boolean from the 'in' operator
+    if condition: return evaluate(node.consequence, env)
+    elif node.alternative: return evaluate(node.alternative, env)
+
+def eval_for_statement(node, env):
+    iterable_obj = evaluate(node.iterable, env)
+    loop_env = Environment(outer=env)
+    for item in iterable_obj.value:
+        loop_env.set(node.identifier.value, Integer(item) if isinstance(item, int) else Object(item))
+        evaluate(node.body, loop_env)
+
+def eval_print_statement(node, env):
+    # Simplified version without f-string interpolation.
+    str_obj = evaluate(node.value, env)
+    print(str_obj.value)
+
+def eval_infix_expression(op, left, right):
+    if isinstance(left, Integer) and isinstance(right, Integer):
+        l, r = left.value, right.value
+        if op == '+': return Integer(l + r)
+        if op == '-': return Integer(l - r)
+        if op == '*': return Integer(l * r)
+        if op == '/': return Integer(l // r)
+        if op == '!=': return Object(l != r)
+        if op == '==': return Object(l == r)
+
+def eval_identifier(node, env):
+    return env.get(node.value) or BUILTINS.get(node.value)
+
+def eval_expressions(exps, env): return [evaluate(e, env) for e in exps]
+
+def apply_function(fn, args):
+    if isinstance(fn, Function):
+        extended_env = Environment(outer=fn.env)
+        for param, arg in zip(fn.params, args): extended_env.set(param.value, arg)
+        evaluated = evaluate(fn.body, extended_env)
+        return evaluated.value if isinstance(evaluated, ReturnValue) else evaluated
+    elif isinstance(fn, Builtin):
+        unwrapped_args = [a.value for a in args]
+        return fn.fn(*unwrapped_args)
+
+BUILTINS = {"http.get": Builtin(mock_http_get), "json.decode": Builtin(mock_json_decode)}

@@ -1,0 +1,36 @@
+// Aura-zero Witness Program (Simplified)
+
+func fetch_user(id: u64) -> User {
+    // F-strings removed for simplicity.
+    print("Fetching user...");
+
+    let response = http.get("some_url"); // URL is now static
+
+    if response.status_code != 200 {
+        return "Error: User not found";
+    }
+
+    let user = json.decode(response.body);
+    return user;
+}
+
+func main() {
+    print("Starting Aura-zero Task Processor...");
+
+    let tasks = [1, 4];
+
+    for id in tasks {
+        print("---");
+        let result = fetch_user(id);
+
+        if "Error" in result {
+            print("Task failed: Error: User not found");
+        } else {
+            // No f-string, just printing a static success message.
+            print("Task success: Fetched User.");
+        }
+    }
+
+    print("---");
+    print("All tasks complete.");
+}
