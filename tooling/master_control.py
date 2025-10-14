@@ -1,15 +1,29 @@
 """
-The master orchestrator for the agent's lifecycle, governed by a Finite State Machine.
+The master orchestrator for the agent's lifecycle, implementing the Context-Free Development Cycle (CFDC).
 
 This script, master_control.py, is the heart of the agent's operational loop.
-It implements a strict, protocol-driven workflow defined in a JSON file
-(typically `tooling/fsm.json`). The MasterControlGraph class reads this FSM
-definition and steps through the prescribed states, ensuring that the agent
-cannot deviate from the established protocol.
+It implements the CFDC, a hierarchical planning and execution model based on a
+Pushdown Automaton. This allows the agent to execute complex tasks by calling
+plans as sub-routines.
 
-This version has been refactored to be a library controlled by an external
-shell (e.g., `agent_shell.py`), eliminating all file-based polling and making
-the interaction purely programmatic and fully logged.
+Core Responsibilities:
+- **Hierarchical Plan Execution:** Manages a plan execution stack to enable
+  plans to call other plans via the `call_plan` directive. This allows for
+  modular, reusable, and complex task decomposition. A maximum recursion depth
+  is enforced to guarantee decidability.
+- **Plan Validation:** Contains the in-memory plan validator. Before execution,
+  it parses a plan and simulates its execution against a Finite State Machine
+  (FSM) to ensure it complies with the agent's operational protocols.
+- **"Registry-First" Plan Resolution:** When resolving a `call_plan` directive,
+  it first attempts to look up the plan by its logical name in the
+  `knowledge_core/plan_registry.json`. If not found, it falls back to treating
+  the argument as a direct file path.
+- **FSM-Governed Lifecycle:** The entire workflow, from orientation to
+  finalization, is governed by a strict FSM definition (e.g., `tooling/fsm.json`)
+  to ensure predictable and auditable behavior.
+
+This module is designed as a library to be controlled by an external shell
+(e.g., `agent_shell.py`), making its interaction purely programmatic.
 """
 
 import json
