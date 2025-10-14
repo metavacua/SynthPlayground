@@ -227,6 +227,15 @@
     },
     {
       "_type": "tag",
+      "name": "audit_plan_registry",
+      "path": "./tooling/plan_registry_auditor.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": "Audits the plan registry to find registered plans that point to\nnon-existent files.\n\nArgs:\n    registry_path (str): The path to the plan registry JSON file.\n\nReturns:\n    list: A list of tuples, where each tuple contains the name and\n          path of a dead link."
+    },
+    {
+      "_type": "tag",
       "name": "TestKnowledgeIntegrator",
       "path": "./tooling/test_knowledge_integrator.py",
       "language": "Python",
@@ -503,6 +512,42 @@
       "line": 121,
       "kind": "function",
       "docstring": "Main function to parse arguments and call the appropriate handler."
+    },
+    {
+      "_type": "tag",
+      "name": "TestPlanRegistryAuditor",
+      "path": "./tooling/test_plan_registry_auditor.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_plan_registry_auditor.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_plan_registry_auditor.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_audit_plan_registry",
+      "path": "./tooling/test_plan_registry_auditor.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function",
+      "docstring": "Tests that the auditor correctly identifies valid and invalid plan links."
     },
     {
       "_type": "tag",
@@ -1787,9 +1832,9 @@
       "name": "execute_research_protocol",
       "path": "./tooling/research.py",
       "language": "Python",
-      "line": 6,
+      "line": 17,
       "kind": "function",
-      "docstring": "Executes a research plan.\nFor this stress test, it returns a dummy report."
+      "docstring": "Executes a research task based on a provided constraints dictionary.\n\nArgs:\n    constraints (dict): A dictionary specifying the research target,\n                        scope, and other parameters.\n\nReturns:\n    str: The result of the research action, or an error message."
     },
     {
       "_type": "tag",
@@ -2237,9 +2282,9 @@
       "name": "plan_deep_research",
       "path": "./tooling/research_planner.py",
       "language": "Python",
-      "line": 5,
+      "line": 8,
       "kind": "function",
-      "docstring": "Generates a plan for deep research.\nFor this stress test, it returns a dummy plan."
+      "docstring": "Generates a multi-step, FSM-compliant plan for conducting deep research.\n\nArgs:\n    topic (str): The research topic.\n\nReturns:\n    str: A string containing the executable plan."
     }
   ]
 }
