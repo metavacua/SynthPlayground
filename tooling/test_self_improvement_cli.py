@@ -1,6 +1,7 @@
 """
 Unit tests for the self-improvement analysis CLI tool.
 """
+
 import unittest
 import os
 import json
@@ -39,8 +40,11 @@ class TestPlanningEfficiencyAnalysis(unittest.TestCase):
         with open(self.test_log_path, "w") as f:
             for entry in log_entries:
                 full_entry = {
-                    "log_id": "test-id", "session_id": "test-session", "timestamp": "now",
-                    "phase": "Phase 5", "outcome": {"status": "SUCCESS"},
+                    "log_id": "test-id",
+                    "session_id": "test-session",
+                    "timestamp": "now",
+                    "phase": "Phase 5",
+                    "outcome": {"status": "SUCCESS"},
                 }
                 full_entry.update(entry)
                 f.write(json.dumps(full_entry) + "\n")
@@ -68,7 +72,10 @@ class TestProtocolViolationAnalysis(unittest.TestCase):
             # Case 1: Violation via SYSTEM_FAILURE
             {
                 "task": {"id": "task-violation-1"},
-                "action": {"type": "SYSTEM_FAILURE", "details": {"tool_name": "reset_all"}},
+                "action": {
+                    "type": "SYSTEM_FAILURE",
+                    "details": {"tool_name": "reset_all"},
+                },
             },
             # Case 2: Violation via TOOL_EXEC
             {
@@ -83,14 +90,20 @@ class TestProtocolViolationAnalysis(unittest.TestCase):
             # Case 4: No violation (unrelated system failure)
             {
                 "task": {"id": "task-clean-2"},
-                "action": {"type": "SYSTEM_FAILURE", "details": {"tool_name": "other_tool"}},
+                "action": {
+                    "type": "SYSTEM_FAILURE",
+                    "details": {"tool_name": "other_tool"},
+                },
             },
         ]
         with open(self.test_log_path, "w") as f:
             for entry in log_entries:
                 full_entry = {
-                    "log_id": "test-id", "session_id": "test-session", "timestamp": "now",
-                    "phase": "Phase 5", "outcome": {"status": "SUCCESS"},
+                    "log_id": "test-id",
+                    "session_id": "test-session",
+                    "timestamp": "now",
+                    "phase": "Phase 5",
+                    "outcome": {"status": "SUCCESS"},
                 }
                 full_entry.update(entry)
                 f.write(json.dumps(full_entry) + "\n")

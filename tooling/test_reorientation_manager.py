@@ -1,8 +1,9 @@
 import unittest
-from unittest.mock import patch, mock_open
+from unittest.mock import patch
 import os
 import json
 from tooling.reorientation_manager import main as reorientation_main
+
 
 class TestReorientationManager(unittest.TestCase):
 
@@ -21,16 +22,22 @@ class TestReorientationManager(unittest.TestCase):
         self.cleanup_files()
 
     def cleanup_files(self):
-        for path in [self.old_agents_path, self.new_agents_path, self.trigger_path, self.orientations_path]:
+        for path in [
+            self.old_agents_path,
+            self.new_agents_path,
+            self.trigger_path,
+            self.orientations_path,
+        ]:
             if os.path.exists(path):
                 if os.path.isdir(path):
                     os.rmdir(os.path.dirname(path))
                 else:
                     os.remove(path)
         # Clean up directory if it's empty
-        if os.path.exists(os.path.dirname(self.orientations_path)) and not os.listdir(os.path.dirname(self.orientations_path)):
+        if os.path.exists(os.path.dirname(self.orientations_path)) and not os.listdir(
+            os.path.dirname(self.orientations_path)
+        ):
             os.rmdir(os.path.dirname(self.orientations_path))
-
 
     @patch("subprocess.run")
     def test_temporal_orientation_triggered(self, mock_subprocess_run):
@@ -48,7 +55,16 @@ class TestReorientationManager(unittest.TestCase):
         mock_subprocess_run.return_value.returncode = 0
 
         # Run the manager
-        with patch('sys.argv', ['reorientation_manager.py', '--old-agents-file', self.old_agents_path, '--new-agents-file', self.new_agents_path]):
+        with patch(
+            "sys.argv",
+            [
+                "reorientation_manager.py",
+                "--old-agents-file",
+                self.old_agents_path,
+                "--new-agents-file",
+                self.new_agents_path,
+            ],
+        ):
             reorientation_main()
 
         # Check that the orientations file was created with the correct content
@@ -66,7 +82,9 @@ class TestReorientationManager(unittest.TestCase):
         """Test that deep research is triggered for significant new concepts."""
         old_content = '{"protocol_id": "existing-protocol"}'
         # Add a new protocol with a keyword that should trigger deep research
-        new_content = '{"protocol_id": "existing-protocol"} {"protocol_id": "new-FDC-protocol"}'
+        new_content = (
+            '{"protocol_id": "existing-protocol"} {"protocol_id": "new-FDC-protocol"}'
+        )
 
         with open(self.old_agents_path, "w") as f:
             f.write(old_content)
@@ -74,11 +92,22 @@ class TestReorientationManager(unittest.TestCase):
             f.write(new_content)
 
         # Mock the return value of the temporal orienter
-        mock_subprocess_run.return_value.stdout = "This is a summary for the new FDC protocol."
+        mock_subprocess_run.return_value.stdout = (
+            "This is a summary for the new FDC protocol."
+        )
         mock_subprocess_run.return_value.returncode = 0
 
         # Run the manager
-        with patch('sys.argv', ['reorientation_manager.py', '--old-agents-file', self.old_agents_path, '--new-agents-file', self.new_agents_path]):
+        with patch(
+            "sys.argv",
+            [
+                "reorientation_manager.py",
+                "--old-agents-file",
+                self.old_agents_path,
+                "--new-agents-file",
+                self.new_agents_path,
+            ],
+        ):
             reorientation_main()
 
         # Check that the deep research trigger file was created
@@ -96,12 +125,22 @@ class TestReorientationManager(unittest.TestCase):
             f.write(content)
 
         # Run the manager
-        with patch('sys.argv', ['reorientation_manager.py', '--old-agents-file', self.old_agents_path, '--new-agents-file', self.new_agents_path]):
+        with patch(
+            "sys.argv",
+            [
+                "reorientation_manager.py",
+                "--old-agents-file",
+                self.old_agents_path,
+                "--new-agents-file",
+                self.new_agents_path,
+            ],
+        ):
             reorientation_main()
 
         # Check that no files were created
         self.assertFalse(os.path.exists(self.orientations_path))
         self.assertFalse(os.path.exists(self.trigger_path))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

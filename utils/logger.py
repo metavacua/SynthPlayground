@@ -25,6 +25,7 @@ This centralized logger is the sole mechanism by which the agent should record
 its activities, ensuring a single source of truth for all post-mortem analysis
 and self-improvement activities.
 """
+
 import json
 import uuid
 import os

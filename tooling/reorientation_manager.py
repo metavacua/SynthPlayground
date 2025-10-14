@@ -26,6 +26,7 @@ understanding of its own protocols. It closes the loop between protocol
 modification and the agent's self-awareness, making the system more robust,
 adaptive, and reliable.
 """
+
 import argparse
 import json
 import os
@@ -36,6 +37,7 @@ DEEP_RESEARCH_TRIGGER_FILE = "deep_research_required.json"
 TEMPORAL_ORIENTATIONS_FILE = "knowledge_core/temporal_orientations.json"
 DEEP_RESEARCH_KEYWORDS = ["FDC", "CFDC", "protocol", "agent", "cycle", "architect"]
 
+
 def parse_concepts_from_agents_md(content):
     """
     Parses an AGENTS.md file to extract a set of key concepts.
@@ -44,8 +46,9 @@ def parse_concepts_from_agents_md(content):
     # Regex to find "protocol_id": "some-id"
     protocol_ids = set(re.findall(r'"protocol_id":\s*"([^"]+)"', content))
     # Regex to find tool paths like tooling/some_tool.py
-    tool_names = set(re.findall(r'tooling/([a-zA-Z0-9_]+\.py)', content))
+    tool_names = set(re.findall(r"tooling/([a-zA-Z0-9_]+\.py)", content))
     return protocol_ids.union(tool_names)
+
 
 def run_temporal_orientation(concept):
     """
@@ -54,13 +57,15 @@ def run_temporal_orientation(concept):
     print(f"  - Running temporal orientation for concept: {concept}")
     try:
         # We need to format concepts to be valid for DBpedia (e.g., CamelCase)
-        formatted_concept = "".join(word.capitalize() for word in concept.replace("_", " ").split())
+        formatted_concept = "".join(
+            word.capitalize() for word in concept.replace("_", " ").split()
+        )
         result = subprocess.run(
             ["python3", "tooling/temporal_orienter.py", formatted_concept],
             capture_output=True,
             text=True,
             check=True,
-            timeout=30 # Add a timeout to prevent hanging on network issues
+            timeout=30,  # Add a timeout to prevent hanging on network issues
         )
         summary = result.stdout.strip()
         if "No summary found" in summary or "An error occurred" in summary:
@@ -70,6 +75,7 @@ def run_temporal_orientation(concept):
         print(f"    - Could not get summary for '{concept}': {e}")
         return None
 
+
 def update_temporal_orientations(new_orientations):
     """
     Updates the temporal orientations knowledge base.
@@ -77,7 +83,9 @@ def update_temporal_orientations(new_orientations):
     if not new_orientations:
         return
 
-    print(f"  - Updating '{TEMPORAL_ORIENTATIONS_FILE}' with {len(new_orientations)} new entries.")
+    print(
+        f"  - Updating '{TEMPORAL_ORIENTATIONS_FILE}' with {len(new_orientations)} new entries."
+    )
 
     # Ensure the directory exists
     os.makedirs(os.path.dirname(TEMPORAL_ORIENTATIONS_FILE), exist_ok=True)
@@ -97,6 +105,7 @@ def update_temporal_orientations(new_orientations):
     with open(TEMPORAL_ORIENTATIONS_FILE, "w") as f:
         json.dump(data, f, indent=2)
 
+
 def check_for_deep_research_trigger(new_concepts):
     """
     Checks if any of the new concepts should trigger a deep research cycle.
@@ -104,9 +113,12 @@ def check_for_deep_research_trigger(new_concepts):
     for concept in new_concepts:
         for keyword in DEEP_RESEARCH_KEYWORDS:
             if keyword.lower() in concept.lower():
-                print(f"  - Significant change detected: New concept '{concept}' contains keyword '{keyword}'.")
+                print(
+                    f"  - Significant change detected: New concept '{concept}' contains keyword '{keyword}'."
+                )
                 return concept
     return None
+
 
 def main():
     parser = argparse.ArgumentParser(description="Automated Re-orientation Manager.")
@@ -144,7 +156,9 @@ def main():
         print("[Re-orientation Manager] No new concepts detected. No action needed.")
         return
 
-    print(f"[Re-orientation Manager] Detected {len(added_concepts)} new concepts: {', '.join(added_concepts)}")
+    print(
+        f"[Re-orientation Manager] Detected {len(added_concepts)} new concepts: {', '.join(added_concepts)}"
+    )
 
     # Perform temporal orientation for new concepts
     orientations = {}
@@ -159,13 +173,16 @@ def main():
     # Check if a deep research cycle is needed
     research_topic = check_for_deep_research_trigger(added_concepts)
     if research_topic:
-        print(f"[Re-orientation Manager] Triggering L4 Deep Research Cycle for topic: '{research_topic}'")
+        print(
+            f"[Re-orientation Manager] Triggering L4 Deep Research Cycle for topic: '{research_topic}'"
+        )
         with open(DEEP_RESEARCH_TRIGGER_FILE, "w") as f:
             json.dump({"topic": research_topic}, f, indent=2)
     else:
         print("[Re-orientation Manager] No deep research trigger detected.")
 
     print("[Re-orientation Manager] Process complete.")
+
 
 if __name__ == "__main__":
     main()

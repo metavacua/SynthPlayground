@@ -19,13 +19,16 @@ By providing a simple, standardized interface for managing this library of
 reusable plans, this tool improves the agent's ability to compose complex
 workflows from smaller, validated sub-plans.
 """
+
 import argparse
 import json
 import os
 import sys
 
 REGISTRY_PATH = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "knowledge_core", "plan_registry.json")
+    os.path.join(
+        os.path.dirname(__file__), "..", "knowledge_core", "plan_registry.json"
+    )
 )
 
 
@@ -37,7 +40,10 @@ def get_registry():
         with open(REGISTRY_PATH, "r") as f:
             return json.load(f)
     except (json.JSONDecodeError, IOError):
-        print(f"Warning: Could not read or parse registry at {REGISTRY_PATH}", file=sys.stderr)
+        print(
+            f"Warning: Could not read or parse registry at {REGISTRY_PATH}",
+            file=sys.stderr,
+        )
         return {}
 
 
@@ -65,7 +71,10 @@ def register_plan(name, path):
             file=sys.stderr,
         )
         print(f"  Current path: {registry[name]}", file=sys.stderr)
-        print("  Use a different name or deregister the existing one first.", file=sys.stderr)
+        print(
+            "  Use a different name or deregister the existing one first.",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     registry[name] = path
@@ -77,7 +86,9 @@ def deregister_plan(name):
     """Removes a plan from the registry by its logical name."""
     registry = get_registry()
     if name not in registry:
-        print(f"Error: Logical name '{name}' not found in the registry.", file=sys.stderr)
+        print(
+            f"Error: Logical name '{name}' not found in the registry.", file=sys.stderr
+        )
         sys.exit(1)
 
     del registry[name]

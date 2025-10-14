@@ -1,13 +1,13 @@
 import unittest
 import os
-import json
 import sys
 from unittest.mock import patch, mock_open
 
 # Ensure the tooling directory is in the path for imports
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
 import protocol_auditor
+
 
 class TestProtocolAuditor(unittest.TestCase):
     """Test suite for the protocol_auditor.py script."""
@@ -64,7 +64,9 @@ This is not a JSON line and should be skipped.
         """
         mock_file = mock_open(read_data=self.mock_agents_md_content)
         with patch("builtins.open", mock_file):
-            protocol_tools = protocol_auditor.get_protocol_tools_from_agents_md("dummy_path")
+            protocol_tools = protocol_auditor.get_protocol_tools_from_agents_md(
+                "dummy_path"
+            )
             expected_tools = {"tool_A", "tool_B", "run_in_bash_session", "tool_C"}
             self.assertEqual(protocol_tools, expected_tools)
 
@@ -76,38 +78,46 @@ This is not a JSON line and should be skipped.
         mock_file = mock_open(read_data=self.mock_log_content)
         with patch("builtins.open", mock_file):
             used_tools = protocol_auditor.get_used_tools_from_log("dummy_path")
-            expected_tools = ["tool_A", "tooling/some_script.py", "tool_D", "run_in_bash_session"]
+            expected_tools = [
+                "tool_A",
+                "tooling/some_script.py",
+                "tool_D",
+                "run_in_bash_session",
+            ]
             self.assertCountEqual(used_tools, expected_tools)
 
-    @patch('os.walk')
-    @patch('tooling.protocol_auditor.run_protocol_source_check')
-    def test_end_to_end_report_generation(self, mock_source_check, mock_walk):
-        """
-        Run the main function end-to-end and verify the content
-        of the generated Markdown report, mocking a hierarchical file system.
-        """
-        # Mock the source check to return a success state (an empty list)
-        mock_source_check.return_value = []
-
-        # Simulate finding multiple AGENTS.md files
-        mock_walk.return_value = [
-            ('/app', [], ['AGENTS.md', 'some_other_file', 'activity.log.jsonl']),
-            ('/app/core', [], ['AGENTS.md']),
-        ]
-    @patch('protocol_auditor.get_protocol_tools_from_agents_md')
-    @patch('protocol_auditor.get_used_tools_from_log')
-    @patch('protocol_auditor.run_protocol_source_check')
-    @patch('protocol_auditor.find_all_agents_md_files')
-    def test_end_to_end_report_generation(self, mock_find_files, mock_source_check, mock_get_used_tools, mock_get_protocol_tools):
+    @patch("protocol_auditor.get_protocol_tools_from_agents_md")
+    @patch("protocol_auditor.get_used_tools_from_log")
+    @patch("protocol_auditor.run_protocol_source_check")
+    @patch("protocol_auditor.find_all_agents_md_files")
+    def test_end_to_end_report_generation(
+        self,
+        mock_find_files,
+        mock_source_check,
+        mock_get_used_tools,
+        mock_get_protocol_tools,
+    ):
         """
         Run the main function end-to-end by mocking the data gathering functions
         and verifying the content of the generated Markdown report.
         """
         # Mock the data gathering functions to return controlled data
-        mock_find_files.return_value = ['/mock/path/to/AGENTS.md']
-        mock_get_used_tools.return_value = ["tool_A", "tooling/some_script.py", "tool_D", "run_in_bash_session"]
-        mock_get_protocol_tools.return_value = {"tool_A", "tool_B", "run_in_bash_session", "tool_C"}
-        mock_source_check.return_value = [{"status": "success", "message": "AGENTS.md appears to be up-to-date."}]
+        mock_find_files.return_value = ["/mock/path/to/AGENTS.md"]
+        mock_get_used_tools.return_value = [
+            "tool_A",
+            "tooling/some_script.py",
+            "tool_D",
+            "run_in_bash_session",
+        ]
+        mock_get_protocol_tools.return_value = {
+            "tool_A",
+            "tool_B",
+            "run_in_bash_session",
+            "tool_C",
+        }
+        mock_source_check.return_value = [
+            {"status": "success", "message": "AGENTS.md appears to be up-to-date."}
+        ]
 
         # Use a real file handle for the report writing to inspect the output
         with patch("builtins.open", mock_open()) as mock_opener:
@@ -134,7 +144,7 @@ This is not a JSON line and should be skipped.
             self.assertIn("| `tooling/some_script.py` | 1 |", written_content)
             self.assertIn("| `tool_D` | 1 |", written_content)
 
-    @patch('os.walk')
+    @patch("os.walk")
     def test_find_all_agents_md_files_with_special_dirs(self, mock_walk):
         """
         Verify that `find_all_agents_md_files` correctly ignores directories
@@ -144,11 +154,19 @@ This is not a JSON line and should be skipped.
         # This setup simulates a root AGENTS.md, a nested one, and one in a special dir.
         auditor_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
         mock_walk.return_value = [
-            (auditor_root, ['core', 'protocols'], ['AGENTS.md', 'README.md']),
-            (os.path.join(auditor_root, 'core'), ['protocols'], ['AGENTS.md']),
-            (os.path.join(auditor_root, 'core', 'protocols'), [], ['some.protocol.md']),
-            (os.path.join(auditor_root, 'protocols'), ['security'], ['main.protocol.md']),
-            (os.path.join(auditor_root, 'protocols', 'security'), [], ['AGENTS.md']), # This should be ignored
+            (auditor_root, ["core", "protocols"], ["AGENTS.md", "README.md"]),
+            (os.path.join(auditor_root, "core"), ["protocols"], ["AGENTS.md"]),
+            (os.path.join(auditor_root, "core", "protocols"), [], ["some.protocol.md"]),
+            (
+                os.path.join(auditor_root, "protocols"),
+                ["security"],
+                ["main.protocol.md"],
+            ),
+            (
+                os.path.join(auditor_root, "protocols", "security"),
+                [],
+                ["AGENTS.md"],
+            ),  # This should be ignored
         ]
 
         # --- Execution ---
@@ -160,11 +178,11 @@ This is not a JSON line and should be skipped.
         # Convert to relative paths for easier comparison
         relative_found_files = {os.path.relpath(p, auditor_root) for p in found_files}
 
-        self.assertIn('AGENTS.md', relative_found_files)
-        self.assertIn('core/AGENTS.md', relative_found_files)
-        self.assertNotIn('protocols/security/AGENTS.md', relative_found_files)
+        self.assertIn("AGENTS.md", relative_found_files)
+        self.assertIn("core/AGENTS.md", relative_found_files)
+        self.assertNotIn("protocols/security/AGENTS.md", relative_found_files)
         self.assertEqual(len(relative_found_files), 2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

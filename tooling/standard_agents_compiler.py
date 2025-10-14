@@ -1,5 +1,4 @@
 import os
-import re
 
 """
 Generates a simplified, standard-compliant AGENTS.md file for external tools.
@@ -71,6 +70,7 @@ To automatically format the code, run:
 For more detailed information, please consult the `README.md`.
 """
 
+
 def parse_makefile_command(target_name, makefile_content):
     """
     Parses a Makefile to find the main command for a specific target,
@@ -79,7 +79,9 @@ def parse_makefile_command(target_name, makefile_content):
     lines = makefile_content.splitlines()
     try:
         # Find the line number of the target definition
-        target_line_index = next(i for i, line in enumerate(lines) if line.startswith(f"{target_name}:"))
+        target_line_index = next(
+            i for i, line in enumerate(lines) if line.startswith(f"{target_name}:")
+        )
     except StopIteration:
         # If the target isn't found, fallback to the make command
         return f"make {target_name}"
@@ -89,19 +91,20 @@ def parse_makefile_command(target_name, makefile_content):
         line = lines[i]
 
         # Command blocks end when a line does not start with a tab
-        if not line.startswith('\t'):
+        if not line.startswith("\t"):
             break
 
         command = line.strip()
         # If the line is an echo command, skip to the next line
-        if command.startswith('@echo'):
+        if command.startswith("@echo"):
             continue
 
         # We've found the first non-echo command. Return it after stripping the '@'.
-        return command.lstrip('@').strip()
+        return command.lstrip("@").strip()
 
     # If no suitable command was found in the block, fallback
     return f"make {target_name}"
+
 
 def main():
     """
@@ -135,6 +138,7 @@ def main():
         print(f"Successfully generated standard-compliant AGENTS.md at {TARGET_FILE}")
     except IOError as e:
         print(f"Error: Failed to write to {TARGET_FILE}: {e}")
+
 
 if __name__ == "__main__":
     main()
