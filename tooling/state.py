@@ -87,6 +87,7 @@ class AgentState:
 
     # Meta
     error: Optional[str] = None
+    background_processes: Dict[str, Any] = field(default_factory=dict)
 
     def to_json(self):
         return {

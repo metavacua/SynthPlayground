@@ -102,6 +102,7 @@ def generate_symbols_with_ast(root_dir="."):
 
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef) or isinstance(node, ast.ClassDef):
+                    docstring = ast.get_docstring(node)
                     symbol_entry = {
                         "_type": "tag",
                         "name": node.name,
@@ -111,6 +112,7 @@ def generate_symbols_with_ast(root_dir="."):
                         "kind": (
                             "function" if isinstance(node, ast.FunctionDef) else "class"
                         ),
+                        "docstring": docstring,
                     }
                     symbols.append(symbol_entry)
         except Exception as e:
