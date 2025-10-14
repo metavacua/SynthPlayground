@@ -14,6 +14,7 @@ from rdflib import Graph
 # DBPedia SPARQL endpoint
 DBPEDIA_SPARQL_ENDPOINT = "http://dbpedia.org/sparql"
 
+
 def load_local_graph(graph_file):
     """Loads the local RDF graph from a file."""
     if not os.path.exists(graph_file):
@@ -21,6 +22,7 @@ def load_local_graph(graph_file):
     g = Graph()
     g.parse(graph_file, format="turtle")
     return g, f"Successfully loaded local graph with {len(g)} triples."
+
 
 def extract_concepts(graph):
     """
@@ -54,13 +56,17 @@ def extract_concepts(graph):
         elif concept.endswith(".json"):
             final_concepts.append("JSON")
         elif concept == "git":
-             final_concepts.append("Git")
+            final_concepts.append("Git")
         else:
-             final_concepts.append(concept)
+            final_concepts.append(concept)
 
     # Return unique concepts
     unique_concepts = sorted(list(set(final_concepts)))
-    return unique_concepts, f"Extracted {len(unique_concepts)} unique concepts to query."
+    return (
+        unique_concepts,
+        f"Extracted {len(unique_concepts)} unique concepts to query.",
+    )
+
 
 def query_dbpedia(concept):
     """Queries DBPedia for a given concept and returns a graph of results."""
@@ -83,13 +89,16 @@ def query_dbpedia(concept):
     headers = {"Accept": "application/rdf+xml"}
     params = {"query": query, "format": "application/rdf+xml"}
     try:
-        response = requests.get(DBPEDIA_SPARQL_ENDPOINT, params=params, headers=headers, timeout=15)
+        response = requests.get(
+            DBPEDIA_SPARQL_ENDPOINT, params=params, headers=headers, timeout=15
+        )
         response.raise_for_status()
         sub_graph = Graph()
         sub_graph.parse(data=response.text, format="xml")
         return sub_graph, f"Found {len(sub_graph)} triples for '{concept}'."
     except requests.exceptions.RequestException as e:
         return None, f"Error querying DBPedia for '{concept}': {e}"
+
 
 def run_knowledge_integration(input_graph_path, output_graph_path):
     """

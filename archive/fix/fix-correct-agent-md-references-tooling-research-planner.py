@@ -2,10 +2,13 @@ import sys
 from typing import Literal
 
 # Ensure the tooling directory is in the path to import the research tool
-sys.path.insert(0, './tooling')
+sys.path.insert(0, "./tooling")
 from research import execute_research_protocol
 
-def plan_deep_research(topic: str, repository: Literal['local', 'external'] = 'local') -> str:
+
+def plan_deep_research(
+    topic: str, repository: Literal["local", "external"] = "local"
+) -> str:
     """
     Generates a structured markdown template for a deep research plan.
 
@@ -23,16 +26,13 @@ def plan_deep_research(topic: str, repository: Literal['local', 'external'] = 'l
     workflow_file_path = ""
     workflow_content_snippet = ""
 
-    if repository == 'local':
+    if repository == "local":
         workflow_file_path = "AGENTS.md"
-        with open(workflow_file_path, 'r') as f:
+        with open(workflow_file_path, "r") as f:
             workflow_content_snippet = f.read(500) + "..."
-    elif repository == 'external':
+    elif repository == "external":
         workflow_file_path = "src/open_deep_research/deep_researcher.py"
-        constraints = {
-            "target": "external_repository",
-            "path": workflow_file_path
-        }
+        constraints = {"target": "external_repository", "path": workflow_file_path}
         content = execute_research_protocol(constraints)
         workflow_content_snippet = content[:500] + "..."
     else:
@@ -75,14 +75,19 @@ def plan_deep_research(topic: str, repository: Literal['local', 'external'] = 'l
 """
     return plan_template.strip()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Example usage for testing
     print("--- Generating Local Research Plan ---")
-    local_plan = plan_deep_research("Understand the agent's own protocol", repository='local')
+    local_plan = plan_deep_research(
+        "Understand the agent's own protocol", repository="local"
+    )
     print(local_plan)
 
-    print("\n" + "="*50 + "\n")
+    print("\n" + "=" * 50 + "\n")
 
     print("--- Generating External Research Plan ---")
-    external_plan = plan_deep_research("Understand the external deep research toolchain", repository='external')
+    external_plan = plan_deep_research(
+        "Understand the external deep research toolchain", repository="external"
+    )
     print(external_plan)

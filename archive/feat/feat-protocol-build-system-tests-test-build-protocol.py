@@ -3,6 +3,7 @@ import shutil
 import unittest
 from tooling.build_protocol import build_protocol
 
+
 class TestBuildProtocol(unittest.TestCase):
 
     def setUp(self):
@@ -46,6 +47,7 @@ class TestBuildProtocol(unittest.TestCase):
         build_protocol(source_dir=self.source_dir, output_file=self.output_file)
         # The script should not create an output file
         self.assertFalse(os.path.exists(self.output_file))
+
 
 if __name__ == "__main__":
     unittest.main()

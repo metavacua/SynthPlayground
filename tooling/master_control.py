@@ -11,24 +11,21 @@ This version has been refactored to be a library controlled by an external
 shell (e.g., `agent_shell.py`), eliminating all file-based polling and making
 the interaction purely programmatic and fully logged.
 """
-import json
-import sys
-import os
-import subprocess
-import shutil
-import datetime
-import tempfile
 
+import json
+import os
+import datetime
 from tooling.state import AgentState, PlanContext
 from tooling.research import execute_research_protocol
-from tooling.research_planner import plan_deep_research
 from tooling.plan_parser import parse_plan, Command
 from utils.logger import Logger
 
 MAX_RECURSION_DEPTH = 10
 
 PLAN_REGISTRY_PATH = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "knowledge_core", "plan_registry.json")
+    os.path.join(
+        os.path.dirname(__file__), "..", "knowledge_core", "plan_registry.json"
+    )
 )
 
 
@@ -41,6 +38,7 @@ def _load_plan_registry():
             return json.load(f)
     except (json.JSONDecodeError, IOError):
         return {}
+
 
 class MasterControlGraph:
     """
@@ -70,33 +68,75 @@ class MasterControlGraph:
             f"No trigger found for transition from {source_state} to {dest_state}"
         )
 
-    def do_orientation(self, agent_state: AgentState, logger: Logger) -> str:
+    def do_orientation(self, agent_state: AgentState, logger: Logger, tools: dict) -> str:
         """Executes the L1, L2, and L3 orientation steps."""
-        logger.log("Phase 1", agent_state.task, -1, "INFO", {"state": "ORIENTING"}, "SUCCESS")
+        logger.log(
+            "Phase 1", agent_state.task, -1, "INFO", {"state": "ORIENTING"}, "SUCCESS"
+        )
         try:
-            # L1, L2, L3 steps... (omitted for brevity, assume they log internally or here)
+            # L1: Local filesystem scan
+            execute_research_protocol({"target": "local_filesystem", "scope": "directory"}, tools)
+            # L2: External web scan
+            execute_research_protocol({"target": "external_web", "scope": "narrow", "query": "agentic software"}, tools)
+            # L3: Knowledge graph enrichment
+            execute_research_protocol({"target": "knowledge_graph", "scope": "enrich"}, tools)
+
             agent_state.orientation_complete = True
-            logger.log("Phase 1", agent_state.task, -1, "INFO", {"summary": "Orientation successful."}, "SUCCESS")
+            logger.log(
+                "Phase 1",
+                agent_state.task,
+                -1,
+                "INFO",
+                {"summary": "Orientation successful."},
+                "SUCCESS",
+            )
             return self.get_trigger("ORIENTING", "PLANNING")
         except Exception as e:
             agent_state.error = f"Orientation failed: {e}"
-            logger.log("Phase 1", agent_state.task, -1, "SYSTEM_FAILURE", {"state": "ERROR"}, "FAILURE", str(e))
+            logger.log(
+                "Phase 1",
+                agent_state.task,
+                -1,
+                "SYSTEM_FAILURE",
+                {"state": "ERROR"},
+                "FAILURE",
+                str(e),
+            )
             return self.get_trigger("ORIENTING", "ERROR")
 
-    def do_planning(self, agent_state: AgentState, plan_content: str, logger: Logger) -> str:
+    def do_planning(
+        self, agent_state: AgentState, plan_content: str, logger: Logger
+    ) -> str:
         """
         Validates a given plan, parses it, and initializes the plan stack.
         """
-        logger.log("Phase 2", agent_state.task, 0, "INFO", {"state": "PLANNING"}, "SUCCESS")
+        logger.log(
+            "Phase 2", agent_state.task, 0, "INFO", {"state": "PLANNING"}, "SUCCESS"
+        )
 
         is_valid, error_message = self._validate_plan_in_memory(plan_content)
 
         if not is_valid:
             agent_state.error = error_message
-            logger.log("Phase 2", agent_state.task, 0, "PLAN_UPDATE", {"plan": plan_content}, "FAILURE", error_message)
+            logger.log(
+                "Phase 2",
+                agent_state.task,
+                0,
+                "PLAN_UPDATE",
+                {"plan": plan_content},
+                "FAILURE",
+                error_message,
+            )
             return self.get_trigger("PLANNING", "ERROR")
 
-        logger.log("Phase 2", agent_state.task, 0, "PLAN_UPDATE", {"plan": plan_content}, "SUCCESS")
+        logger.log(
+            "Phase 2",
+            agent_state.task,
+            0,
+            "PLAN_UPDATE",
+            {"plan": plan_content},
+            "SUCCESS",
+        )
         parsed_commands = parse_plan(plan_content)
         agent_state.plan_path = "agent_generated_plan"
         agent_state.plan_stack.append(
@@ -126,7 +166,7 @@ class MasterControlGraph:
         }
 
         commands = parse_plan(plan_content)
-        current_state = "PLANNING" # Validation always starts from the PLANNING state
+        current_state = "PLANNING"  # Validation always starts from the PLANNING state
 
         for command in commands:
             action_type = ACTION_TYPE_MAP.get(command.tool_name)
@@ -135,25 +175,39 @@ class MasterControlGraph:
 
             next_state = None
             for transition in self.fsm["transitions"]:
-                if transition["source"] == current_state and transition["trigger"] == action_type:
+                if (
+                    transition["source"] == current_state
+                    and transition["trigger"] == action_type
+                ):
                     next_state = transition["dest"]
                     break
 
             if not next_state:
-                return False, f"Invalid FSM transition. Cannot perform action '{action_type}' (from tool '{command.tool_name}') from state '{current_state}'."
+                return (
+                    False,
+                    f"Invalid FSM transition. Cannot perform action '{action_type}' (from tool '{command.tool_name}') from state '{current_state}'.",
+                )
 
             current_state = next_state
 
-        if current_state not in self.fsm["final_states"] and current_state != "EXECUTING":
-             return False, f"Plan does not end in a valid state. Final state: '{current_state}'"
+        if (
+            current_state not in self.fsm["final_states"]
+            and current_state != "EXECUTING"
+        ):
+            return (
+                False,
+                f"Plan does not end in a valid state. Final state: '{current_state}'",
+            )
 
         return True, ""
 
-    def do_researching(self, agent_state: AgentState, logger: Logger) -> str:
+    def do_researching(self, agent_state: AgentState, logger: Logger, tools: dict) -> str:
         """
         Generates, validates, and initiates a formal Deep Research FDC.
         """
-        logger.log("Phase 3", agent_state.task, -1, "INFO", {"state": "RESEARCHING"}, "SUCCESS")
+        logger.log(
+            "Phase 3", agent_state.task, -1, "INFO", {"state": "RESEARCHING"}, "SUCCESS"
+        )
         # ... (researching logic) ...
         return self.get_trigger("RESEARCHING", "EXECUTING")
 
@@ -168,11 +222,15 @@ class MasterControlGraph:
             return None
         return current_context.commands[current_context.current_step]
 
-    def do_execution(self, agent_state: AgentState, step_result: str | None, logger: Logger) -> str:
+    def do_execution(
+        self, agent_state: AgentState, step_result: str | None, logger: Logger
+    ) -> str:
         """
         Processes the result of a step and advances the execution state.
         """
-        logger.log("Phase 4", agent_state.task, -1, "INFO", {"state": "EXECUTING"}, "SUCCESS")
+        logger.log(
+            "Phase 4", agent_state.task, -1, "INFO", {"state": "EXECUTING"}, "SUCCESS"
+        )
 
         if not agent_state.plan_stack:
             return self.get_trigger("EXECUTING", "FINALIZING")
@@ -193,17 +251,21 @@ class MasterControlGraph:
             "TOOL_EXEC",
             {"tool_name": command_obj.tool_name, "args_text": command_obj.args_text},
             "SUCCESS",
-            step_result
+            step_result,
         )
 
         current_context.current_step += 1
         return "step_op"
 
-    def do_finalizing(self, agent_state: AgentState, analysis_content: str, logger: Logger) -> str:
+    def do_finalizing(
+        self, agent_state: AgentState, analysis_content: str, logger: Logger
+    ) -> str:
         """
         Handles the finalization of the task with agent-provided analysis.
         """
-        logger.log("Phase 5", agent_state.task, -1, "INFO", {"state": "FINALIZING"}, "SUCCESS")
+        logger.log(
+            "Phase 5", agent_state.task, -1, "INFO", {"state": "FINALIZING"}, "SUCCESS"
+        )
         try:
             task_id = agent_state.task
             final_path = f"postmortems/{datetime.date.today()}-{task_id}.md"
@@ -212,12 +274,27 @@ class MasterControlGraph:
             with open(final_path, "w") as f:
                 f.write(report_content)
 
-            logger.log("Phase 5", task_id, -1, "POST_MORTEM", {"path": final_path, "content": report_content}, "SUCCESS")
+            logger.log(
+                "Phase 5",
+                task_id,
+                -1,
+                "POST_MORTEM",
+                {"path": final_path, "content": report_content},
+                "SUCCESS",
+            )
 
             # Knowledge compilation and self-correction would also be logged here
 
             return self.get_trigger("FINALIZING", "AWAITING_SUBMISSION")
         except Exception as e:
             agent_state.error = f"An unexpected error occurred during finalization: {e}"
-            logger.log("Phase 5", agent_state.task, -1, "SYSTEM_FAILURE", {"state": "ERROR"}, "FAILURE", str(e))
+            logger.log(
+                "Phase 5",
+                agent_state.task,
+                -1,
+                "SYSTEM_FAILURE",
+                {"state": "ERROR"},
+                "FAILURE",
+                str(e),
+            )
             return self.get_trigger("FINALIZING", "finalization_failed")

@@ -16,6 +16,7 @@ The suite covers two primary scenarios:
   `jsonschema` library and that no log file is written, preventing the creation
   of corrupted logs.
 """
+
 import unittest
 import os
 import json

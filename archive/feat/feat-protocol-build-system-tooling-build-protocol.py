@@ -1,5 +1,6 @@
 import os
 
+
 def build_protocol(source_dir="protocol_sources", output_file="AGENTS.md"):
     """
     Reads all markdown files from the specified source directory,
@@ -29,6 +30,7 @@ def build_protocol(source_dir="protocol_sources", output_file="AGENTS.md"):
         f.write(full_protocol)
 
     print(f"Successfully built {output_file} from {len(files)} source files.")
+
 
 if __name__ == "__main__":
     build_protocol()

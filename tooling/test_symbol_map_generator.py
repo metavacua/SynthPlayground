@@ -17,6 +17,7 @@ The tests include:
   function to use the `ast` fallback, ensuring the end-to-end logic works
   correctly when `ctags` is not available.
 """
+
 import unittest
 import os
 import json

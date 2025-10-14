@@ -2,10 +2,9 @@ import unittest
 import os
 import tempfile
 import shutil
-import json
-from unittest.mock import patch, MagicMock
 
 from tooling import readme_generator
+
 
 class TestReadmeGenerator(unittest.TestCase):
     """
@@ -34,7 +33,8 @@ class TestReadmeGenerator(unittest.TestCase):
         # Create a dummy AGENTS.md
         self.agents_md_path = os.path.join(self.test_dir, "AGENTS.md")
         with open(self.agents_md_path, "w") as f:
-            f.write("""
+            f.write(
+                """
 # Test Agents MD
 
 ```json
@@ -51,7 +51,8 @@ This module contains the following protocols, which are defined in its own `AGEN
 - `child-proto-1`
 
 ---
-            """)
+            """
+            )
 
     def tearDown(self):
         """
@@ -65,13 +66,6 @@ This module contains the following protocols, which are defined in its own `AGEN
         by simulating command-line arguments.
         """
         output_filepath = os.path.join(self.test_dir, "TEST_README.md")
-
-        # Mock sys.argv to simulate command-line execution
-        test_args = [
-            "readme_generator.py",
-            "--source-file", self.agents_md_path,
-            "--output-file", output_filepath
-        ]
 
         readme_generator.main(self.agents_md_path, output_filepath)
 
@@ -101,6 +95,7 @@ This module contains the following protocols, which are defined in its own `AGEN
         self.assertIn("> This is the second component.", content)
         self.assertIn("- **`tooling/component_three.py`**:", content)
         self.assertIn("> _No docstring found._", content)
+
 
 if __name__ == "__main__":
     unittest.main()

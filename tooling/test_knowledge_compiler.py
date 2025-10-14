@@ -6,12 +6,14 @@ a mock post-mortem report and generate a structured, machine-readable
 lessons.jsonl file. It ensures that the generated lessons conform to the
 expected JSON schema, including having unique IDs and a 'pending' status.
 """
+
 import unittest
 import os
 import json
 import tempfile
 import shutil
 from tooling.knowledge_compiler import main as compile_knowledge
+
 
 class TestKnowledgeCompiler(unittest.TestCase):
 
@@ -41,11 +43,13 @@ class TestKnowledgeCompiler(unittest.TestCase):
 
         # Monkey-patch the KNOWLEDGE_CORE_PATH to use our temp file
         import tooling.knowledge_compiler
+
         self.original_path = tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH
         tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH = self.lessons_path
 
         # Mock sys.argv
         import sys
+
         self.original_argv = sys.argv
         sys.argv = ["tooling/knowledge_compiler.py", self.postmortem_path]
 
@@ -53,8 +57,10 @@ class TestKnowledgeCompiler(unittest.TestCase):
         """Clean up the temporary directory and restore original state."""
         shutil.rmtree(self.test_dir)
         import tooling.knowledge_compiler
+
         tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH = self.original_path
         import sys
+
         sys.argv = self.original_argv
 
     def test_knowledge_compiler_end_to_end(self):
@@ -78,17 +84,26 @@ class TestKnowledgeCompiler(unittest.TestCase):
 
         # Check lesson 1 (machine-readable)
         self.assertEqual(lesson1["task_id"], "test-task-123")
-        self.assertEqual(lesson1["insight"], "A tool was used that was not in the protocol.")
+        self.assertEqual(
+            lesson1["insight"], "A tool was used that was not in the protocol."
+        )
         self.assertEqual(lesson1["status"], "pending")
         self.assertEqual(lesson1["action"]["command"], "add-tool")
-        self.assertEqual(lesson1["action"]["parameters"]["tool_name"], "newly_used_tool")
-        self.assertEqual(lesson1["action"]["parameters"]["protocol_id"], "fdc-protocol-001")
+        self.assertEqual(
+            lesson1["action"]["parameters"]["tool_name"], "newly_used_tool"
+        )
+        self.assertEqual(
+            lesson1["action"]["parameters"]["protocol_id"], "fdc-protocol-001"
+        )
 
         # Check lesson 2 (placeholder)
         self.assertEqual(lesson2["insight"], "The agent needs to be more careful.")
         self.assertEqual(lesson2["status"], "pending")
         self.assertEqual(lesson2["action"]["command"], "placeholder")
-        self.assertIn("not machine-readable", lesson2["action"]["parameters"]["description"])
+        self.assertIn(
+            "not machine-readable", lesson2["action"]["parameters"]["description"]
+        )
+
 
 class TestKnowledgeCompilerAdvanced(unittest.TestCase):
 
@@ -118,10 +133,12 @@ class TestKnowledgeCompilerAdvanced(unittest.TestCase):
 
         self.lessons_path = os.path.join(self.test_dir, "lessons.jsonl")
         import tooling.knowledge_compiler
+
         self.original_path = tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH
         tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH = self.lessons_path
 
         import sys
+
         self.original_argv = sys.argv
         sys.argv = ["tooling/knowledge_compiler.py", self.postmortem_path]
 
@@ -129,8 +146,10 @@ class TestKnowledgeCompilerAdvanced(unittest.TestCase):
         """Clean up the temporary directory and restore original state."""
         shutil.rmtree(self.test_dir)
         import tooling.knowledge_compiler
+
         tooling.knowledge_compiler.KNOWLEDGE_CORE_PATH = self.original_path
         import sys
+
         sys.argv = self.original_argv
 
     def test_advanced_parsing_and_deprecate_command(self):
@@ -153,12 +172,19 @@ class TestKnowledgeCompilerAdvanced(unittest.TestCase):
         self.assertIn("A tool is no longer suitable", lesson1["insight"])
         self.assertEqual(lesson1["action"]["command"], "deprecate-tool")
         self.assertEqual(lesson1["action"]["parameters"]["tool_name"], "old_tool")
-        self.assertEqual(lesson1["action"]["parameters"]["protocol_id"], "legacy-protocol-002")
+        self.assertEqual(
+            lesson1["action"]["parameters"]["protocol_id"], "legacy-protocol-002"
+        )
 
         # Test 2: Explicit Lesson and Placeholder Action
-        self.assertEqual(lesson2["insight"], "The `reset_all` tool is dangerous and was used incorrectly.")
+        self.assertEqual(
+            lesson2["insight"],
+            "The `reset_all` tool is dangerous and was used incorrectly.",
+        )
         self.assertEqual(lesson2["action"]["command"], "placeholder")
-        self.assertIn("should be updated to flag", lesson2["action"]["parameters"]["description"])
+        self.assertIn(
+            "should be updated to flag", lesson2["action"]["parameters"]["description"]
+        )
 
         # Test 3: No explicit lesson, whole text becomes the action/insight
         self.assertIn("A new protocol", lesson3["insight"])

@@ -30,6 +30,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 # --- Dynamic Content Generation ---
 
+
 def get_module_docstring(filepath: str) -> str:
     """
     Parses a Python file and extracts the module-level docstring.
@@ -43,6 +44,7 @@ def get_module_docstring(filepath: str) -> str:
     except (FileNotFoundError, SyntaxError) as e:
         print(f"Warning: Could not parse {filepath}. Reason: {e}")
         return f"_Error parsing file: {e}_"
+
 
 def generate_core_protocols_section(agents_md_path: str) -> str:
     """
@@ -58,8 +60,9 @@ def generate_core_protocols_section(agents_md_path: str) -> str:
         return f"_Error reading `{agents_md_path}`: {e}_"
 
     protocol_blocks = re.findall(r"```json\n(.*?)\n```", content, re.DOTALL)
-    summary_blocks = re.findall(r"## Child Module: `(.*?)`\n\n(.*?)\n\n---", content, re.DOTALL)
-
+    summary_blocks = re.findall(
+        r"## Child Module: `(.*?)`\n\n(.*?)\n\n---", content, re.DOTALL
+    )
 
     parts = []
     for block in protocol_blocks:
@@ -73,14 +76,16 @@ def generate_core_protocols_section(agents_md_path: str) -> str:
             continue
 
     for child_name, child_protocols in summary_blocks:
-        parts.append(f"\n### Child Module: `{child_name}`\n\nThis module includes protocols from its child module `{child_name}`, as summarized below:")
+        parts.append(
+            f"\n### Child Module: `{child_name}`\n\nThis module includes protocols from its child module `{child_name}`, as summarized below:"
+        )
         parts.append(child_protocols)
-
 
     if not parts:
         return "_No protocols found in this module._"
 
     return "\n".join(parts)
+
 
 def generate_key_components_section(module_path: str) -> str:
     """
@@ -91,7 +96,11 @@ def generate_key_components_section(module_path: str) -> str:
     if not os.path.isdir(tooling_dir):
         return "_No `tooling/` directory found in this module._"
 
-    key_files = [f for f in os.listdir(tooling_dir) if f.endswith(".py") and not f.startswith("test_")]
+    key_files = [
+        f
+        for f in os.listdir(tooling_dir)
+        if f.endswith(".py") and not f.startswith("test_")
+    ]
 
     if not key_files:
         return "_No key component scripts found in the `tooling/` directory._"
@@ -106,7 +115,9 @@ def generate_key_components_section(module_path: str) -> str:
 
     return "\n\n".join(parts)
 
+
 # --- Main Execution Logic ---
+
 
 def main(source_file, output_file):
     """
@@ -137,16 +148,14 @@ def main(source_file, output_file):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Generates a README.md from a corresponding AGENTS.md file.")
-    parser.add_argument(
-        "--source-file",
-        required=True,
-        help="Path to the source AGENTS.md file."
+    parser = argparse.ArgumentParser(
+        description="Generates a README.md from a corresponding AGENTS.md file."
     )
     parser.add_argument(
-        "--output-file",
-        required=True,
-        help="Path for the output README.md file."
+        "--source-file", required=True, help="Path to the source AGENTS.md file."
+    )
+    parser.add_argument(
+        "--output-file", required=True, help="Path for the output README.md file."
     )
     args = parser.parse_args()
     main(args.source_file, args.output_file)
