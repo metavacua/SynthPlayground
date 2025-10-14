@@ -4,32 +4,38 @@ import os
 import sys
 import tempfile
 
+
 def find_symbol_definition(filepath, symbol_name):
     """Finds the definition of a symbol in a Python file."""
-    with open(filepath, 'r') as f:
+    with open(filepath, "r") as f:
         content = f.read()
     tree = ast.parse(content)
     for node in ast.walk(tree):
-        if isinstance(node, (ast.FunctionDef, ast.ClassDef)) and node.name == symbol_name:
+        if (
+            isinstance(node, (ast.FunctionDef, ast.ClassDef))
+            and node.name == symbol_name
+        ):
             return node
     return None
+
 
 def find_references(symbol_name, search_path):
     """Finds all files in a directory that reference a given symbol."""
     references = []
     for root, _, files in os.walk(search_path):
-        if '.git' in root:
+        if ".git" in root:
             continue
         for file in files:
-            if file.endswith('.py'):
+            if file.endswith(".py"):
                 filepath = os.path.join(root, file)
                 try:
-                    with open(filepath, 'r', errors='ignore') as f:
+                    with open(filepath, "r", errors="ignore") as f:
                         if symbol_name in f.read():
                             references.append(filepath)
                 except Exception:
-                    pass # Ignore files that can't be read
+                    pass  # Ignore files that can't be read
     return references
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -38,22 +44,18 @@ def main():
     parser.add_argument(
         "--filepath",
         required=True,
-        help="The path to the file where the symbol is defined."
+        help="The path to the file where the symbol is defined.",
     )
     parser.add_argument(
-        "--old-name",
-        required=True,
-        help="The current name of the symbol to rename."
+        "--old-name", required=True, help="The current name of the symbol to rename."
     )
     parser.add_argument(
-        "--new-name",
-        required=True,
-        help="The new name for the symbol."
+        "--new-name", required=True, help="The new name for the symbol."
     )
     parser.add_argument(
         "--search-path",
         default=".",
-        help="The root directory to search for references."
+        help="The root directory to search for references.",
     )
 
     args = parser.parse_args()
@@ -61,7 +63,10 @@ def main():
     # Find the definition of the symbol
     definition = find_symbol_definition(args.filepath, args.old_name)
     if not definition:
-        print(f"Error: Symbol '{args.old_name}' not found in {args.filepath}", file=sys.stderr)
+        print(
+            f"Error: Symbol '{args.old_name}' not found in {args.filepath}",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     # Find all references to the symbol
@@ -72,7 +77,7 @@ def main():
     # Generate a plan to rename the symbol in all referenced files
     plan_content = ""
     for ref_file in set(reference_files):
-        with open(ref_file, 'r') as f:
+        with open(ref_file, "r") as f:
             original_content = f.read()
 
         if args.old_name not in original_content:
@@ -95,10 +100,11 @@ replace_with_git_merge_diff
 """
     # Write the plan to a temporary file
     fd, plan_path = tempfile.mkstemp(suffix=".plan.txt", text=True)
-    with os.fdopen(fd, 'w') as tmp:
+    with os.fdopen(fd, "w") as tmp:
         tmp.write(plan_content)
 
     print(plan_path)
+
 
 if __name__ == "__main__":
     main()

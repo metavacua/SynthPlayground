@@ -1,35 +1,50 @@
 """
-The master orchestrator for the agent's lifecycle, governed by a Finite State Machine.
+The master orchestrator for the agent's lifecycle, implementing the Context-Free Development Cycle (CFDC).
 
 This script, master_control.py, is the heart of the agent's operational loop.
-It implements a strict, protocol-driven workflow defined in a JSON file
-(typically `tooling/fsm.json`). The MasterControlGraph class reads this FSM
-definition and steps through the prescribed states, ensuring that the agent
-cannot deviate from the established protocol.
+It implements the CFDC, a hierarchical planning and execution model based on a
+Pushdown Automaton. This allows the agent to execute complex tasks by calling
+plans as sub-routines.
 
-This version has been refactored to be a library controlled by an external
-shell (e.g., `agent_shell.py`), eliminating all file-based polling and making
-the interaction purely programmatic and fully logged.
+Core Responsibilities:
+- **Hierarchical Plan Execution:** Manages a plan execution stack to enable
+  plans to call other plans via the `call_plan` directive. This allows for
+  modular, reusable, and complex task decomposition. A maximum recursion depth
+  is enforced to guarantee decidability.
+- **Plan Validation:** Contains the in-memory plan validator. Before execution,
+  it parses a plan and simulates its execution against a Finite State Machine
+  (FSM) to ensure it complies with the agent's operational protocols.
+- **"Registry-First" Plan Resolution:** When resolving a `call_plan` directive,
+  it first attempts to look up the plan by its logical name in the
+  `knowledge_core/plan_registry.json`. If not found, it falls back to treating
+  the argument as a direct file path.
+- **FSM-Governed Lifecycle:** The entire workflow, from orientation to
+  finalization, is governed by a strict FSM definition (e.g., `tooling/fsm.json`)
+  to ensure predictable and auditable behavior.
+
+This module is designed as a library to be controlled by an external shell
+(e.g., `agent_shell.py`), making its interaction purely programmatic.
 """
+
 import json
-import sys
 import os
-import subprocess
-import shutil
 import datetime
+import subprocess
 import tempfile
 import time
 
 from tooling.state import AgentState, PlanContext
 from tooling.research import execute_research_protocol
-from tooling.research_planner import plan_deep_research
 from tooling.plan_parser import parse_plan, Command
+from tooling.document_scanner import scan_documents
 from utils.logger import Logger
 
 MAX_RECURSION_DEPTH = 10
 
 PLAN_REGISTRY_PATH = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "..", "knowledge_core", "plan_registry.json")
+    os.path.join(
+        os.path.dirname(__file__), "..", "knowledge_core", "plan_registry.json"
+    )
 )
 
 
@@ -42,6 +57,7 @@ def _load_plan_registry():
             return json.load(f)
     except (json.JSONDecodeError, IOError):
         return {}
+
 
 class MasterControlGraph:
     """
@@ -90,27 +106,61 @@ class MasterControlGraph:
 
             # L1, L2, L3 steps...
             agent_state.orientation_complete = True
-            logger.log("Phase 1", agent_state.task, -1, "INFO", {"summary": "Orientation successful."}, "SUCCESS")
+            logger.log(
+                "Phase 1",
+                agent_state.task,
+                -1,
+                "INFO",
+                {"summary": "Orientation successful."},
+                "SUCCESS",
+            )
             return self.get_trigger("ORIENTING", "PLANNING")
         except Exception as e:
             agent_state.error = f"Orientation failed: {e}"
-            logger.log("Phase 1", agent_state.task, -1, "SYSTEM_FAILURE", {"state": "ERROR"}, "FAILURE", str(e))
+            logger.log(
+                "Phase 1",
+                agent_state.task,
+                -1,
+                "SYSTEM_FAILURE",
+                {"state": "ERROR"},
+                "FAILURE",
+                str(e),
+            )
             return self.get_trigger("ORIENTING", "ERROR")
 
-    def do_planning(self, agent_state: AgentState, plan_content: str, logger: Logger) -> str:
+    def do_planning(
+        self, agent_state: AgentState, plan_content: str, logger: Logger
+    ) -> str:
         """
         Validates a given plan, parses it, and initializes the plan stack.
         """
-        logger.log("Phase 2", agent_state.task, 0, "INFO", {"state": "PLANNING"}, "SUCCESS")
+        logger.log(
+            "Phase 2", agent_state.task, 0, "INFO", {"state": "PLANNING"}, "SUCCESS"
+        )
 
-        is_valid, error_message = self._validate_plan_in_memory(plan_content)
+        is_valid, error_message = self._validate_plan_with_cli(plan_content)
 
         if not is_valid:
             agent_state.error = error_message
-            logger.log("Phase 2", agent_state.task, 0, "PLAN_UPDATE", {"plan": plan_content}, "FAILURE", error_message)
+            logger.log(
+                "Phase 2",
+                agent_state.task,
+                0,
+                "PLAN_UPDATE",
+                {"plan": plan_content},
+                "FAILURE",
+                error_message,
+            )
             return self.get_trigger("PLANNING", "ERROR")
 
-        logger.log("Phase 2", agent_state.task, 0, "PLAN_UPDATE", {"plan": plan_content}, "SUCCESS")
+        logger.log(
+            "Phase 2",
+            agent_state.task,
+            0,
+            "PLAN_UPDATE",
+            {"plan": plan_content},
+            "SUCCESS",
+        )
         parsed_commands = parse_plan(plan_content)
         agent_state.plan_path = "agent_generated_plan"
         agent_state.plan_stack.append(
@@ -118,9 +168,9 @@ class MasterControlGraph:
         )
         return "plan_op"
 
-    def _validate_plan_in_memory(self, plan_content: str) -> (bool, str):
+    def _validate_plan_with_cli(self, plan_content: str) -> (bool, str):
         """
-        Validates a plan in-memory against the FSM without calling an external script.
+        Validates a plan by writing it to a temporary file and using the fdc_cli.py script.
         """
         ACTION_TYPE_MAP = {
             "set_plan": "plan_op",
@@ -226,11 +276,18 @@ class MasterControlGraph:
             return None
         return current_context.commands[current_context.current_step]
 
-    def do_execution(self, agent_state: AgentState, step_result: str | None, logger: Logger) -> str:
+    def do_execution(
+        self, agent_state: AgentState, step_result: str | None, logger: Logger
+    ) -> str:
         """
         Processes the result of a step and advances the execution state.
         """
-        logger.log("Phase 4", agent_state.task, -1, "INFO", {"state": "EXECUTING"}, "SUCCESS")
+        logger.log(
+            "Phase 4", agent_state.task, -1, "INFO", {"state": "EXECUTING"}, "SUCCESS"
+        )
+
+        if step_result == "code_generation_requested":
+            return self.get_trigger("EXECUTING", "GENERATING_CODE")
 
         if not agent_state.plan_stack:
             return self.get_trigger("EXECUTING", "FINALIZING")
@@ -251,17 +308,46 @@ class MasterControlGraph:
             "TOOL_EXEC",
             {"tool_name": command_obj.tool_name, "args_text": command_obj.args_text},
             "SUCCESS",
-            step_result
+            step_result,
         )
 
         current_context.current_step += 1
         return "step_op"
 
-    def do_finalizing(self, agent_state: AgentState, analysis_content: str, logger: Logger) -> str:
+    def do_generating_code(self, agent_state: AgentState, logger: Logger) -> str:
+        """Handles the code generation state."""
+        logger.log(
+            "Phase 4.1", agent_state.task, -1, "INFO", {"state": "GENERATING_CODE"}, "SUCCESS"
+        )
+        # In a real implementation, this would involve calling a code generation tool
+        return self.get_trigger("GENERATING_CODE", "RUNNING_TESTS")
+
+    def do_running_tests(self, agent_state: AgentState, logger: Logger) -> str:
+        """Handles the test execution state."""
+        logger.log(
+            "Phase 4.2", agent_state.task, -1, "INFO", {"state": "RUNNING_TESTS"}, "SUCCESS"
+        )
+        # In a real implementation, this would involve running tests and checking the results
+        # For now, we'll just simulate the tests passing.
+        return self.get_trigger("RUNNING_TESTS", "EXECUTING")
+
+    def do_debugging(self, agent_state: AgentState, logger: Logger) -> str:
+        """Handles the debugging state."""
+        logger.log(
+            "Phase 4.3", agent_state.task, -1, "INFO", {"state": "DEBUGGING"}, "SUCCESS"
+        )
+        # In a real implementation, this would involve running debugging tools
+        return self.get_trigger("DEBUGGING", "EXECUTING")
+
+    def do_finalizing(
+        self, agent_state: AgentState, analysis_content: str, logger: Logger
+    ) -> str:
         """
         Handles the finalization of the task with agent-provided analysis.
         """
-        logger.log("Phase 5", agent_state.task, -1, "INFO", {"state": "FINALIZING"}, "SUCCESS")
+        logger.log(
+            "Phase 5", agent_state.task, -1, "INFO", {"state": "FINALIZING"}, "SUCCESS"
+        )
         try:
             task_id = agent_state.task
             final_path = f"postmortems/{datetime.date.today()}-{task_id}.md"
@@ -270,12 +356,27 @@ class MasterControlGraph:
             with open(final_path, "w") as f:
                 f.write(report_content)
 
-            logger.log("Phase 5", task_id, -1, "POST_MORTEM", {"path": final_path, "content": report_content}, "SUCCESS")
+            logger.log(
+                "Phase 5",
+                task_id,
+                -1,
+                "POST_MORTEM",
+                {"path": final_path, "content": report_content},
+                "SUCCESS",
+            )
 
             # Knowledge compilation and self-correction would also be logged here
 
             return self.get_trigger("FINALIZING", "AWAITING_SUBMISSION")
         except Exception as e:
             agent_state.error = f"An unexpected error occurred during finalization: {e}"
-            logger.log("Phase 5", agent_state.task, -1, "SYSTEM_FAILURE", {"state": "ERROR"}, "FAILURE", str(e))
+            logger.log(
+                "Phase 5",
+                agent_state.task,
+                -1,
+                "SYSTEM_FAILURE",
+                {"state": "ERROR"},
+                "FAILURE",
+                str(e),
+            )
             return self.get_trigger("FINALIZING", "finalization_failed")

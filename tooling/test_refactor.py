@@ -4,6 +4,7 @@ import unittest
 import tempfile
 import shutil
 
+
 class TestRefactorTool(unittest.TestCase):
 
     def setUp(self):
@@ -53,13 +54,18 @@ class TestRefactorTool(unittest.TestCase):
             plan_content = f.read()
 
         # The plan should contain two replace_with_git_merge_diff blocks
-        self.assertIn(f"replace_with_git_merge_diff\n{self.file_to_refactor}", plan_content)
-        self.assertIn(f"replace_with_git_merge_diff\n{self.referencing_file}", plan_content)
+        self.assertIn(
+            f"replace_with_git_merge_diff\n{self.file_to_refactor}", plan_content
+        )
+        self.assertIn(
+            f"replace_with_git_merge_diff\n{self.referencing_file}", plan_content
+        )
         self.assertIn("def new_function_name():", plan_content)
         self.assertIn("from file1 import new_function_name", plan_content)
 
         # Clean up the plan file
         os.remove(plan_path)
+
 
 if __name__ == "__main__":
     unittest.main()

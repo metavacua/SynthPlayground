@@ -9,8 +9,8 @@ a Table of Contents.
 The final output is a semantic HTML5 document, `index.html`, which serves as
 the main page for the project's GitHub Pages site.
 """
+
 import markdown
-import os
 
 # --- Configuration ---
 README_PATH = "README.md"
@@ -104,6 +104,7 @@ HTML_TEMPLATE = """
 </html>
 """
 
+
 def generate_html_page():
     """
     Reads the source Markdown files, converts them to HTML, and builds the
@@ -143,16 +144,14 @@ def generate_html_page():
     # 'toc' for table of contents, 'fenced_code' for code blocks,
     # 'extra' for features like tables, and 'md_in_html' to process
     # markdown inside the article tags.
-    md = markdown.Markdown(extensions=['toc', 'fenced_code', 'extra', 'md_in_html'])
+    md = markdown.Markdown(extensions=["toc", "fenced_code", "extra", "md_in_html"])
 
     body_html = md.convert(full_md_content)
     toc_html = md.toc
 
     print("--> Assembling final index.html...")
     final_html = HTML_TEMPLATE.format(
-        title=PAGE_TITLE,
-        toc=toc_html,
-        body_content=body_html
+        title=PAGE_TITLE, toc=toc_html, body_content=body_html
     )
 
     try:
@@ -161,6 +160,7 @@ def generate_html_page():
         print(f"--> Successfully generated {OUTPUT_PATH}")
     except IOError as e:
         print(f"Error: Could not write to output file {OUTPUT_PATH}: {e}")
+
 
 if __name__ == "__main__":
     generate_html_page()

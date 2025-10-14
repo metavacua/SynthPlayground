@@ -21,6 +21,7 @@ The script parses all embedded JSON protocol blocks within `AGENTS.md` and reads
 from the standard `logs/activity.log.jsonl` log file, providing a reliable and
 accurate audit.
 """
+
 import json
 import os
 import sys
@@ -93,8 +94,11 @@ def get_used_tools_from_log(log_path):
                     except json.JSONDecodeError:
                         # If raw_decode fails, we assume the rest of the line is not valid JSON.
                         # We only print a warning if the line seemed to start with a JSON-like character.
-                        if line[pos:].lstrip().startswith(('{', '[')):
-                            print(f"Warning: Skipping malformed or unexpected entry in log: {line}", file=sys.stderr)
+                        if line[pos:].lstrip().startswith(("{", "[")):
+                            print(
+                                f"Warning: Skipping malformed or unexpected entry in log: {line}",
+                                file=sys.stderr,
+                            )
                         break  # Move to the next line
     except FileNotFoundError:
         print(f"Error: Log file not found at {log_path}", file=sys.stderr)
@@ -132,7 +136,10 @@ def get_protocol_tools_from_agents_md(agents_md_paths):
             print(f"Error: Protocol file not found at {file_path}", file=sys.stderr)
             continue
         except Exception as e:
-            print(f"An unexpected error occurred while parsing {file_path}: {e}", file=sys.stderr)
+            print(
+                f"An unexpected error occurred while parsing {file_path}: {e}",
+                file=sys.stderr,
+            )
             continue
     return protocol_tools
 
@@ -181,20 +188,29 @@ def run_protocol_source_check(all_agents_files):
                             latest_source_file = path
 
             if latest_source_mtime > agents_md_mtime:
-                results.append({
-                    "status": "warning",
-                    "message": f"`{os.path.relpath(agents_md_path, ROOT_DIR)}` may be out of date.",
-                    "details": f"Latest source file modified: `{os.path.relpath(latest_source_file, ROOT_DIR)}`."
-                })
+                results.append(
+                    {
+                        "status": "warning",
+                        "message": f"`{os.path.relpath(agents_md_path, ROOT_DIR)}` may be out of date.",
+                        "details": f"Latest source file modified: `{os.path.relpath(latest_source_file, ROOT_DIR)}`.",
+                    }
+                )
 
         except Exception as e:
-            results.append({
-                "status": "error",
-                "message": f"Could not perform source check for `{os.path.relpath(agents_md_path, ROOT_DIR)}`: {e}"
-            })
+            results.append(
+                {
+                    "status": "error",
+                    "message": f"Could not perform source check for `{os.path.relpath(agents_md_path, ROOT_DIR)}`: {e}",
+                }
+            )
 
     if not results:
-        return [{"status": "success", "message": "All AGENTS.md files appear to be up-to-date."}]
+        return [
+            {
+                "status": "success",
+                "message": "All AGENTS.md files appear to be up-to-date.",
+            }
+        ]
 
     return results
 
@@ -205,20 +221,21 @@ def generate_markdown_report(source_checks, unreferenced, unused, centrality):
 
     # --- Source Check ---
     report.append("## 1. `AGENTS.md` Source Check")
-    has_warning = any(check['status'] == 'warning' for check in source_checks)
-    has_error = any(check['status'] == 'error' for check in source_checks)
+    has_warning = any(check["status"] == "warning" for check in source_checks)
+    has_error = any(check["status"] == "error" for check in source_checks)
 
     if not has_warning and not has_error:
         report.append("- ✅ **Success:** All AGENTS.md files appear to be up-to-date.")
     else:
         for check in source_checks:
-            if check['status'] == 'warning':
+            if check["status"] == "warning":
                 report.append(f"- ⚠️ **Warning:** {check['message']}")
                 report.append(f"  - {check['details']}")
-                report.append("  - **Recommendation:** Run `make AGENTS.md` to re-compile.")
-            elif check['status'] == 'error':
-                 report.append(f"- ❌ **Error:** {check['message']}")
-
+                report.append(
+                    "  - **Recommendation:** Run `make AGENTS.md` to re-compile."
+                )
+            elif check["status"] == "error":
+                report.append(f"- ❌ **Error:** {check['message']}")
 
     # --- Completeness Check ---
     report.append("\n## 2. Protocol Completeness")
@@ -226,7 +243,9 @@ def generate_markdown_report(source_checks, unreferenced, unused, centrality):
     if not unreferenced:
         report.append("- ✅ All tools used are associated with a protocol.")
     else:
-        report.append("- ⚠️ The following tools were used but are **not** associated with any protocol:")
+        report.append(
+            "- ⚠️ The following tools were used but are **not** associated with any protocol:"
+        )
         for tool in unreferenced:
             report.append(f"  - `{tool}`")
 
@@ -234,7 +253,9 @@ def generate_markdown_report(source_checks, unreferenced, unused, centrality):
     if not unused:
         report.append("- ✅ All tools associated with a protocol were used in the log.")
     else:
-        report.append("- ℹ️ The following tools are associated with a protocol but were **not** used in the log:")
+        report.append(
+            "- ℹ️ The following tools are associated with a protocol but were **not** used in the log:"
+        )
         for tool in unused:
             report.append(f"  - `{tool}`")
 
@@ -263,7 +284,9 @@ def main():
 
     # Run analyses
     source_check_results = run_protocol_source_check(all_agents_files)
-    unreferenced_tools, unused_protocol_tools = run_completeness_check(used_tools_from_log, protocol_tools_from_agents)
+    unreferenced_tools, unused_protocol_tools = run_completeness_check(
+        used_tools_from_log, protocol_tools_from_agents
+    )
     centrality_analysis = run_centrality_analysis(used_tools_from_log)
 
     # Generate report
@@ -271,14 +294,16 @@ def main():
         source_check_results,
         unreferenced_tools,
         unused_protocol_tools,
-        centrality_analysis
+        centrality_analysis,
     )
 
     report_path = os.path.join(ROOT_DIR, "audit_report.md")
     with open(report_path, "w") as f:
         f.write(report_content)
 
-    print(f"--- Audit Complete. Report generated at: {report_path} ---", file=sys.stderr)
+    print(
+        f"--- Audit Complete. Report generated at: {report_path} ---", file=sys.stderr
+    )
 
 
 if __name__ == "__main__":

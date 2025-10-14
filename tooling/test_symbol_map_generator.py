@@ -17,6 +17,7 @@ The tests include:
   function to use the `ast` fallback, ensuring the end-to-end logic works
   correctly when `ctags` is not available.
 """
+
 import unittest
 import os
 import json
@@ -40,7 +41,7 @@ class TestSymbolMapGenerator(unittest.TestCase):
         self.py_file_path = os.path.join(self.test_dir, "module.py")
         with open(self.py_file_path, "w") as f:
             f.write(
-                "class MyClass:\n    def my_method(self):\n        pass\n\ndef my_function():\n    pass"
+                'class MyClass:\n    """A test class."""\n    def my_method(self):\n        """A test method."""\n        pass\n\ndef my_function():\n    """A test function."""\n    pass'
             )
 
         # Mock the output path to be within the test directory
@@ -99,6 +100,17 @@ class TestSymbolMapGenerator(unittest.TestCase):
         )
         self.assertEqual(my_class_symbol["kind"], "class")
         self.assertEqual(my_class_symbol["path"], self.py_file_path)
+        self.assertEqual(my_class_symbol["docstring"], "A test class.")
+
+        my_method_symbol = next(
+            s for s in symbols_data["symbols"] if s["name"] == "my_method"
+        )
+        self.assertEqual(my_method_symbol["docstring"], "A test method.")
+
+        my_function_symbol = next(
+            s for s in symbols_data["symbols"] if s["name"] == "my_function"
+        )
+        self.assertEqual(my_function_symbol["docstring"], "A test function.")
 
     @patch("tooling.symbol_map_generator.has_ctags", return_value=False)
     def test_main_with_ast_fallback(self, mock_has_ctags):

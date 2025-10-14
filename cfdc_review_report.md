@@ -16,11 +16,11 @@ A single, minor recommendation for improving the code-level documentation has be
 The CFDC system is composed of the following key files:
 
 *   **Core Logic & State:**
-    *   `tooling/master_control.py`: The execution engine (Pushdown Automaton).
-    *   `tooling/fdc_cli.py`: The hierarchical plan validator.
+    *   `tooling/master_control.py`: The primary execution engine and hierarchical plan validator (Pushdown Automaton).
+    *   `tooling/agent_shell.py`: The API-driven entry point that wraps `master_control.py`.
     *   `tooling/state.py`: Defines the `AgentState` and `PlanContext` for the plan stack.
 *   **Configuration & Data:**
-    *   `tooling/fdc_fsm.json`: The Finite State Machine definition for plan validation.
+    *   `tooling/fsm.json`: The Finite State Machine definition for plan validation.
     *   `knowledge_core/plan_registry.json`: The central registry mapping logical plan names to file paths.
 *   **Management Tooling:**
     *   `tooling/plan_manager.py`: The CLI tool for managing the Plan Registry.
@@ -38,14 +38,14 @@ The documentation for the CFDC is of high quality across all levels.
     *   **Code-Level Docstrings:** The docstrings in `master_control.py`, `plan_manager.py`, and `state.py` are comprehensive and accurately reflect the code's function within the CFDC framework.
 
 *   **Identified Gaps:**
-    *   There is a minor documentation gap in the module-level docstring of `tooling/fdc_cli.py`. While the function-level docstrings are excellent, the main module docstring does not explicitly mention its crucial role in performing *hierarchical* validation, which is a key feature of the CFDC.
+    *   A documentation gap was identified where the module-level docstring for `tooling/master_control.py` did not fully describe its central role as the engine for the CFDC, including its responsibilities for hierarchical validation and execution.
 
 ## 4. Integration Review
 
 The integration between the CFDC components is robust and correctly implemented.
 
-*   **Validator-Executor Parity:** The most critical integration point—the logic for resolving `call_plan` arguments—is handled identically by both the validator (`fdc_cli.py`) and the executor (`master_control.py`). Both correctly implement the "registry-first" resolution strategy. This ensures that what gets validated is exactly what gets executed.
-*   **Pre-Execution Validation:** The `master_control.py` orchestrator correctly invokes `fdc_cli.py` to validate a plan *before* attempting to execute it. This is a crucial safety feature that is properly enforced.
+*   **Validator-Executor Parity:** The most critical integration point—the logic for resolving `call_plan` arguments and validating plans—is now consolidated within `tooling/master_control.py`. This ensures that what gets validated is exactly what gets executed, as the same module is responsible for both.
+*   **Pre-Execution Validation:** The `master_control.py` orchestrator validates a plan using its own internal `_validate_plan_in_memory` method *before* attempting to execute it. This is a crucial safety feature that is properly enforced.
 *   **Plan Management:** The `plan_manager.py` tool correctly and safely modifies the `plan_registry.json`, serving its purpose as the administrative interface for the plan library.
 
 ## 5. Conclusion & Recommendations
@@ -54,6 +54,6 @@ The Context-Free Development Cycle is a mature and well-engineered feature of th
 
 **Recommendation:**
 
-1.  **Action:** Update the module-level docstring in `tooling/fdc_cli.py`.
-2.  **Change:** Modify the docstring to explicitly state that the tool provides a "hierarchical validator" for the Context-Free Development Cycle (CFDC), capable of recursively validating nested plans invoked via the `call_plan` directive.
-3.  **Justification:** This minor change will make the documentation fully consistent across all components and will immediately clarify the tool's advanced capabilities to any developer reading the file.
+1.  **Action:** The module-level docstring in `tooling/master_control.py` has been updated.
+2.  **Change:** The docstring was rewritten to comprehensively describe the module's role as the central engine for the Context-Free Development Cycle (CFDC). It now explicitly details its function as a hierarchical plan executor and validator.
+3.  **Justification:** This change resolves the identified documentation gap, ensuring that the code is clear, self-documenting, and accurately reflects the system's architecture. This improves maintainability and correctly guides future development.

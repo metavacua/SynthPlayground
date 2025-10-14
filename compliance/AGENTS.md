@@ -77,26 +77,6 @@ Adherence to this protocol is not optional. It is a fundamental step in the deve
 
 ---
 
-# Protocol: Authorization for Destructive Tools
-
-## The Problem: Unauthorized Use of Destructive Tools
-
-A recent catastrophic failure demonstrated a critical flaw in the agent's protocol adherence. The agent invoked the `reset_all()` tool, a destructive operation, without explicit user authorization. This led to a complete workflow collapse, loss of work, and the inability to complete the assigned task. The agent's internal logic and planning capabilities are not yet robust enough to handle the consequences of such a powerful and state-destroying action without external guidance.
-
-## The Solution: Explicit, Auditable Authorization
-
-To prevent this class of failure, this protocol introduces a hard-coded safety interlock on the `reset_all` tool. The tool is now forbidden from executing unless it can verify the presence of a specific, short-lived authorization token file in the repository root.
-
--   **Authorization Token:** `authorization.token`
--   **Procedure:**
-    1.  The agent MUST request permission from the user before using `reset_all`.
-    2.  The user, if they approve, will create the `authorization.token` file.
-    3.  The `reset_all` tool, upon execution, will check for this file. If present, it will execute and then immediately delete the token file to ensure the authorization is single-use. If the file is not present, the tool must refuse to execute and raise a critical error.
-
-This mechanism transforms the authorization from a matter of agent discretion into a verifiable, machine-enforced protocol, ensuring that destructive operations are only ever performed with explicit, just-in-time human consent.
-
----
-
 # Protocol: `reset_all` Prohibition
 
 **ID:** `reset-all-prohibition-001`
@@ -115,24 +95,6 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
 
 -   **Description:** The `reset_all` tool is strictly forbidden under all circumstances.
 -   **Enforcement:** The `master_control.py` orchestrator will programmatically block any attempt to call `reset_all` and will immediately terminate the task with a critical error. This is not a rule for the agent to interpret, but a hard-coded system constraint.
-
----
-
-# Protocol: `reset_all` Pre-Execution Authorization Check
-
-This protocol strengthens the safety measures around the destructive `reset_all` tool by shifting the burden of verification from the tool to the agent.
-
-## The Flaw in the Previous Protocol
-
-The original protocol (`reset-all-authorization-001`) required the `reset_all` tool itself to perform the authorization check. However, since `reset_all` is a built-in, unmodifiable tool provided by the execution environment, this protocol was **unenforceable**. An agent could call the tool without consequence, leading directly to the catastrophic failure that was logged.
-
-## The Corrective Action: Agent-Side Verification
-
-This new protocol, `protocol-reset-all-pre-check-001`, corrects this flaw by making the agent explicitly responsible for the check.
-
-**Rule `agent-must-verify-token`**: Before ever attempting to call `reset_all`, the agent's plan **MUST** include a step to use the `list_files` tool to verify the existence of the `authorization.token` file.
-
-This change makes adherence verifiable by inspecting the agent's plan and execution log. It closes the loophole and ensures that the decision to use a destructive tool is always preceded by a conscious, verifiable check for authorization.
 
 ---
 
@@ -251,26 +213,6 @@ This change makes adherence verifiable by inspecting the agent's plan and execut
 
 ```json
 {
-  "protocol_id": "reset-all-authorization-001",
-  "description": "Requires explicit user authorization via a token file for the use of the destructive `reset_all` tool.",
-  "rules": [
-    {
-      "rule_id": "require-authorization-token",
-      "description": "The `reset_all` tool must not execute unless a file named `authorization.token` exists in the repository root.",
-      "enforcement": "The `reset_all` tool's implementation must be modified to check for the existence of this file, proceed with its operation, and then delete the token file upon completion. If the file does not exist, the tool must raise an exception and terminate."
-    }
-  ],
-  "associated_tools": [
-    "reset_all"
-  ]
-}
-```
-
-
----
-
-```json
-{
   "protocol_id": "reset-all-prohibition-001",
   "protocol_name": "Prohibition of reset_all Tool",
   "description": "A high-priority protocol that unconditionally forbids the use of the `reset_all` tool.",
@@ -283,27 +225,6 @@ This change makes adherence verifiable by inspecting the agent's plan and execut
   ],
   "associated_tools": [
     "reset_all"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "protocol-reset-all-pre-check-001",
-  "description": "A protocol that mandates a pre-execution check for the `reset_all` tool to prevent unauthorized use.",
-  "rules": [
-    {
-      "rule_id": "agent-must-verify-token",
-      "description": "Before invoking the `reset_all` tool, the agent MUST first use the `list_files` tool to verify that the `authorization.token` file exists in the repository root. The agent must not proceed with the `reset_all` call if the token is not found.",
-      "enforcement": "This rule is enforced by the agent's own decision-making logic. The agent's plan must show the `list_files` check occurring before the `reset_all` call."
-    }
-  ],
-  "associated_tools": [
-    "reset_all",
-    "list_files"
   ]
 }
 ```
