@@ -653,7 +653,7 @@
       "name": "_load_plan_registry",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 32,
+      "line": 34,
       "kind": "function"
     },
     {
@@ -661,7 +661,7 @@
       "name": "MasterControlGraph",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 43,
+      "line": 45,
       "kind": "class"
     },
     {
@@ -669,7 +669,7 @@
       "name": "__init__",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 50,
+      "line": 52,
       "kind": "function"
     },
     {
@@ -677,7 +677,7 @@
       "name": "get_trigger",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 55,
+      "line": 57,
       "kind": "function"
     },
     {
@@ -685,7 +685,7 @@
       "name": "do_orientation",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 71,
+      "line": 73,
       "kind": "function"
     },
     {
@@ -693,15 +693,15 @@
       "name": "do_planning",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 107,
+      "line": 109,
       "kind": "function"
     },
     {
       "_type": "tag",
-      "name": "_validate_plan_in_memory",
+      "name": "_validate_plan_with_cli",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 147,
+      "line": 149,
       "kind": "function"
     },
     {
@@ -709,7 +709,7 @@
       "name": "do_researching",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 204,
+      "line": 170,
       "kind": "function"
     },
     {
@@ -717,7 +717,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 214,
+      "line": 180,
       "kind": "function"
     },
     {
@@ -725,7 +725,31 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 225,
+      "line": 191,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "do_generating_code",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 229,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "do_running_tests",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 237,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "do_debugging",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 246,
       "kind": "function"
     },
     {
@@ -733,7 +757,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 260,
+      "line": 254,
       "kind": "function"
     },
     {
@@ -1725,7 +1749,7 @@
       "name": "tearDown",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 93,
+      "line": 118,
       "kind": "function"
     },
     {
@@ -1733,7 +1757,7 @@
       "name": "test_do_orientation",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 102,
+      "line": 127,
       "kind": "function"
     },
     {
@@ -1741,7 +1765,7 @@
       "name": "test_do_planning",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 121,
+      "line": 146,
       "kind": "function"
     },
     {
@@ -1749,7 +1773,15 @@
       "name": "test_do_execution",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 133,
+      "line": 158,
+      "kind": "function"
+    },
+    {
+      "_type": "tag",
+      "name": "test_do_execution_to_generate_code",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 173,
       "kind": "function"
     },
     {
@@ -1757,7 +1789,7 @@
       "name": "test_do_finalizing",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 150,
+      "line": 186,
       "kind": "function"
     },
     {
