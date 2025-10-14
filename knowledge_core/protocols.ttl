@@ -150,6 +150,10 @@
     proto:hasRule <file:///app/protocols/dependency-install-on-start> ;
     schema:description "A protocol for ensuring a reliable execution environment through formal dependency management." .
 
+<file:///app/protocols/plan-registry-audit-001> proto:associatedTool <file:///app/protocols/tooling/plan_registry_auditor.py> ;
+    proto:hasRule <file:///app/protocols/audit-for-dead-links> ;
+    schema:description "A protocol for using the plan registry auditor tool to ensure the integrity of the plan registry." .
+
 <file:///app/protocols/refactor-001> proto:associatedTool <file:///app/protocols/tooling/refactor.py> ;
     proto:hasRule <file:///app/protocols/refactor-rename-symbol> ;
     schema:description "A protocol for using the refactoring tool." .
@@ -310,6 +314,9 @@
 
 <file:///app/critic/protocols/protocol-as-source-code> proto:enforcement "The Code Review Critic must analyze changes in this directory with the same rigor as changes to `.py` files." ;
     schema:description "The `protocols/` directory and all its contents (`.md`, `.json` files) MUST be treated as functional source code. Changes to these files directly alter the agent's operational capabilities and governing rules." .
+
+<file:///app/protocols/audit-for-dead-links> proto:enforcement "The tool is used by invoking it from the command line. It can be run manually for diagnostics or integrated into automated health checks." ;
+    schema:description "The `plan_registry_auditor.py` tool should be used to scan the `knowledge_core/plan_registry.json` file for entries that point to non-existent plan files. This helps maintain the health of the hierarchical planning system." .
 
 <file:///app/protocols/bootstrap-load-agents-md> proto:enforcement "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase." ;
     schema:description "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins." .

@@ -424,23 +424,17 @@ The tool will generate a plan file containing a series of `replace_with_git_merg
 
 ```json
 {
-  "protocol_id": "agent-interaction-001",
-  "description": "A protocol governing the agent's core interaction and planning tools.",
+  "protocol_id": "plan-registry-audit-001",
+  "description": "A protocol for using the plan registry auditor tool to ensure the integrity of the plan registry.",
   "rules": [
     {
-      "rule_id": "planning-tool-access",
-      "description": "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution.",
-      "enforcement": "The agent's core logic should be designed to use this tool for all planning activities."
-    },
-    {
-      "rule_id": "communication-tool-access",
-      "description": "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow.",
-      "enforcement": "The agent's core logic should be designed to use this tool for all user-facing communication."
+      "rule_id": "audit-for-dead-links",
+      "description": "The `plan_registry_auditor.py` tool should be used to scan the `knowledge_core/plan_registry.json` file for entries that point to non-existent plan files. This helps maintain the health of the hierarchical planning system.",
+      "enforcement": "The tool is used by invoking it from the command line. It can be run manually for diagnostics or integrated into automated health checks."
     }
   ],
   "associated_tools": [
-    "set_plan",
-    "message_user"
+    "tooling/plan_registry_auditor.py"
   ]
 }
 ```
