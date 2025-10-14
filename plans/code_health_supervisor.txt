@@ -1,0 +1,19 @@
+# Plan: Code Health Supervisor
+# This plan automates the process of auditing the repository and applying fixes.
+
+# Step 1: Run the Code Health Analyzer to generate a plan with all required fixes.
+# The analyzer script will be responsible for running all necessary audits,
+# identifying issues, and generating the corresponding `replace_with_git_merge_diff`
+# commands for each fix. The output is a single, executable plan file.
+run_in_bash_session
+python tooling/code_health_analyzer.py > /tmp/code_health_fixes.plan.txt
+
+# Step 2: Execute the generated plan to apply all the fixes.
+# The `call_plan` directive allows us to execute the dynamically generated plan,
+# leveraging the master controller's hierarchical planning capabilities.
+call_plan
+/tmp/code_health_fixes.plan.txt
+
+# Step 3: Clean up the generated plan file to keep the environment tidy.
+run_in_bash_session
+rm /tmp/code_health_fixes.plan.txt
