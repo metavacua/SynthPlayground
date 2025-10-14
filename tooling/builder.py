@@ -50,7 +50,8 @@ def execute_build(target_name, config):
 
     print(f"--- Building Target: {target_name.upper()} ---")
     print(f"  - Compiler: {target_config['compiler']}")
-    print(f"  - Output:   {target_config['output']}")
+    if 'output' in target_config:
+        print(f"  - Output:   {target_config['output']}")
     print(f"  - Command:  {' '.join(command)}")
 
     try:

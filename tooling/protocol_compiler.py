@@ -27,9 +27,60 @@ making the agent's protocols robust, verifiable, and maintainable.
 import os
 import glob
 import json
-import jsonschema
 import argparse
+import subprocess
+import sys
+
+# --- Dependency Management ---
+# This section makes the script self-contained by automatically installing
+# its own dependencies. This is a best practice for development tools that
+# need to run in various environments without manual setup.
+
+def install_dependencies():
+    """
+    Checks for required packages from requirements.txt and installs them if missing.
+    """
+    # Correctly locate requirements.txt relative to this script's location.
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    requirements_path = os.path.join(script_dir, "requirements.txt")
+
+    if not os.path.exists(requirements_path):
+        print(f"Warning: requirements.txt not found at {requirements_path}. Skipping dependency check.")
+        return
+
+    try:
+        # Use pip's internal API to check for installed packages if available,
+        # otherwise fall back to calling pip as a subprocess.
+        from pip._internal.operations import freeze
+    except ImportError:
+        freeze = None
+
+    if freeze:
+        installed_packages = [line.split('==')[0] for line in freeze.freeze()]
+    else:
+        # Fallback to slower subprocess call if internal API is not available
+        req = subprocess.run([sys.executable, '-m', 'pip', 'freeze'], capture_output=True, text=True)
+        installed_packages = [line.split('==')[0] for line in req.stdout.split('\n')]
+
+    with open(requirements_path, 'r') as f:
+        required_packages = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+
+    missing_packages = [pkg for pkg in required_packages if pkg.lower() not in [p.lower() for p in installed_packages]]
+
+    if missing_packages:
+        print(f"Installing missing dependencies: {', '.join(missing_packages)}")
+        # Use sys.executable to ensure we install to the correct Python environment
+        subprocess.check_call([sys.executable, "-m", "pip", "install", *missing_packages])
+    else:
+        print("All dependencies are satisfied.")
+
+# --- Auto-install dependencies before importing them ---
+install_dependencies()
+
+# --- Now, it's safe to import the dependencies ---
+import jsonschema
 from rdflib import Graph
+
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))

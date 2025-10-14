@@ -12,6 +12,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`agent-bootstrap-001`**: A foundational protocol that dictates the agent's initial actions upon starting any task.
 - **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
+- **`agent-shell-001`**: A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.
 - **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
 - **`refactor-001`**: A protocol for using the refactoring tool.
 
@@ -24,6 +25,10 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`tooling/agent_shell.py`**:
 
   > The new, interactive, API-driven entry point for the agent.\n  > \n  > This script replaces the old file-based signaling system with a direct,\n  > programmatic interface to the MasterControlGraph FSM. It is responsible for:\n  > 1.  Initializing the agent's state and a centralized logger.\n  > 2.  Instantiating and running the MasterControlGraph.\n  > 3.  Driving the FSM by calling its methods and passing data and the logger.\n  > 4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans\n  >     and respond to requests for action.
+
+- **`tooling/builder.py`**:
+
+  > _No docstring found._
 
 - **`tooling/code_suggester.py`**:
 
