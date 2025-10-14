@@ -3,6 +3,15 @@
     {
       "_type": "tag",
       "name": "main",
+      "path": "./aura.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
       "path": "./run.py",
       "language": "Python",
       "line": 11,
@@ -2303,6 +2312,978 @@
       "line": 8,
       "kind": "function",
       "docstring": "Generates a multi-step, FSM-compliant plan for conducting deep research.\n\nArgs:\n    topic (str): The research topic.\n\nReturns:\n    str: A string containing the executable plan."
+    },
+    {
+      "_type": "tag",
+      "name": "Object",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Integer",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "String",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "ReturnValue",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Function",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Builtin",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Environment",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "MockHttpResponse",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "MockUser",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 40,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "mock_http_get",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 44,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "mock_json_decode",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 47,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "evaluate",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 52,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "eval_program",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 86,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "eval_block_statement",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 92,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "eval_if_statement",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 98,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "eval_for_statement",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 104,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "eval_print_statement",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 111,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "eval_infix_expression",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 116,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "eval_identifier",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 126,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "eval_expressions",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 129,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "apply_function",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 131,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "get",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "set",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 37,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Token",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Lexer",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "advance",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": "Advance the 'pos' pointer and set the 'current_char' variable."
+    },
+    {
+      "_type": "tag",
+      "name": "skip_whitespace",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "skip_comment",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "peek",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "number",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function",
+      "docstring": "Return a (multidigit) integer consumed from the input."
+    },
+    {
+      "_type": "tag",
+      "name": "_id",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 49,
+      "kind": "function",
+      "docstring": "Handle identifiers and reserved keywords"
+    },
+    {
+      "_type": "tag",
+      "name": "string",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 59,
+      "kind": "function",
+      "docstring": "Handle string literals."
+    },
+    {
+      "_type": "tag",
+      "name": "get_next_token",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 70,
+      "kind": "function",
+      "docstring": "Lexical analyzer (also known as scanner or tokenizer)"
+    },
+    {
+      "_type": "tag",
+      "name": "error",
+      "path": "./aura_lang/lexer.py",
+      "language": "Python",
+      "line": 117,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "AST",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Program",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Statement",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Expression",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "FunctionDefinition",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "BlockStatement",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "LetStatement",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "ReturnStatement",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 31,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "ExpressionStatement",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "IfStatement",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "ForStatement",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 45,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "UseStatement",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 51,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "PrintStatement",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 56,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Identifier",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 63,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "IntegerLiteral",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 67,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "StringLiteral",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 71,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "ListLiteral",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 75,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "CallExpression",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 79,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "InfixExpression",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 84,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "MemberAccess",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 90,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 23,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 32,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 40,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 46,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 53,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 58,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 68,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 72,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 76,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 80,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 85,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/ast.py",
+      "language": "Python",
+      "line": 91,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Parser",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "next_token",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 49,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_program",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 53,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_statement",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 62,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_let_statement",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 71,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_return_statement",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 80,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_print_statement",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 86,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_expression_statement",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 91,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_expression",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 96,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_identifier",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 107,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_integer_literal",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 108,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_string_literal",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 109,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_grouped_expression",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 111,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_block_statement",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 117,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_function_definition",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 126,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_function_parameters",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 138,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_if_statement",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 155,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_for_statement",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 167,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_list_literal",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 177,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_call_expression",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 182,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_expression_list",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 187,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_infix_expression",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 198,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_member_access",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 205,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "expect_peek",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 211,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "peek_precedence",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 218,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "current_precedence",
+      "path": "./aura_lang/parser.py",
+      "language": "Python",
+      "line": 219,
+      "kind": "function",
+      "docstring": null
     }
   ]
 }
