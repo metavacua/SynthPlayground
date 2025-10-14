@@ -17,6 +17,7 @@ dependencies) and edges (the dependency links). This artifact is a primary
 input for the agent's orientation and planning phases, allowing it to reason
 about the potential impact of its changes.
 """
+
 import os
 import json
 import glob

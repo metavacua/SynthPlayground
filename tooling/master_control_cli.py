@@ -5,6 +5,7 @@ This script is now a lightweight wrapper that passes control to the new,
 API-driven `agent_shell.py`. It preserves the command-line interface while
 decoupling the entry point from the FSM implementation.
 """
+
 import argparse
 import json
 import sys

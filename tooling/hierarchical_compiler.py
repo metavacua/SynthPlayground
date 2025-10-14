@@ -16,7 +16,10 @@ PROTOCOLS_DIR_NAME = "protocols"
 AGENTS_MD_FILENAME = "AGENTS.md"
 README_FILENAME = "README.md"
 SUMMARY_FILE_PREFIX = "_z_child_summary_"
-SPECIAL_DIRS = ["protocols/security"] # Directories to be ignored by the hierarchical scan
+SPECIAL_DIRS = [
+    "protocols/security"
+]  # Directories to be ignored by the hierarchical scan
+
 
 def find_protocol_dirs(root_dir):
     """
@@ -37,6 +40,7 @@ def find_protocol_dirs(root_dir):
     # Process from the deepest directories upwards to ensure children are built before parents
     return sorted(protocol_dirs, key=lambda x: -x.count(os.sep))
 
+
 def run_compiler(source_dir):
     """Invokes the protocol_compiler.py script as a library."""
     parent_dir = os.path.dirname(source_dir)
@@ -55,6 +59,7 @@ def run_compiler(source_dir):
         print(f"Error compiling AGENTS.md in {source_dir}:")
         print(e)
         return None
+
 
 def run_readme_generator(source_agents_md):
     """Invokes the readme_generator.py script as a library."""
@@ -82,14 +87,14 @@ def generate_summary(child_agents_md_path):
     if not child_agents_md_path or not os.path.exists(child_agents_md_path):
         return ""
 
-    with open(child_agents_md_path, 'r') as f:
+    with open(child_agents_md_path, "r") as f:
         content = f.read()
 
     # Find all protocol blocks, which start with a header and end with a separator.
     # This regex captures the entire block from a header (e.g., #, ##) up to the
     # standard protocol separator '---'. This ensures that the full, unabridged
     # protocol text is captured for inclusion in the parent AGENTS.md.
-    protocol_blocks = re.findall(r'(# Protocol:.*?---\n)', content, re.DOTALL)
+    protocol_blocks = re.findall(r"(# Protocol:.*?---\n)", content, re.DOTALL)
 
     if not protocol_blocks:
         return ""
@@ -102,6 +107,7 @@ def generate_summary(child_agents_md_path):
 
     return summary_md
 
+
 def cleanup_summaries(directory):
     """Removes temporary summary files from a protocols directory."""
     if not os.path.isdir(directory):
@@ -111,6 +117,7 @@ def cleanup_summaries(directory):
             os.remove(os.path.join(directory, filename))
             print(f"Cleaned up summary file: {filename}")
 
+
 def get_parent_module(module_path, all_module_paths):
     """Finds the direct parent module of a given module."""
     parent_path = os.path.dirname(module_path)
@@ -119,6 +126,7 @@ def get_parent_module(module_path, all_module_paths):
             return parent_path
         parent_path = os.path.dirname(parent_path)
     return None
+
 
 def compile_centralized_knowledge_graph():
     """
@@ -135,7 +143,7 @@ def compile_centralized_knowledge_graph():
     all_json_files = []
     for root, _, files in os.walk(ROOT_DIR):
         for file in files:
-            if file.endswith('.protocol.json'):
+            if file.endswith(".protocol.json"):
                 all_json_files.append(os.path.join(root, file))
 
     print(f"Found {len(all_json_files)} protocol.json files for KG compilation.")
@@ -151,12 +159,20 @@ def compile_centralized_knowledge_graph():
 
             protocol_data_for_ld = protocol_data.copy()
             if os.path.exists(context_path):
-                relative_context_path = os.path.relpath(context_path, os.path.dirname(file_path))
+                relative_context_path = os.path.relpath(
+                    context_path, os.path.dirname(file_path)
+                )
                 protocol_data_for_ld["@context"] = relative_context_path
                 base_uri = "file://" + os.path.abspath(os.path.dirname(file_path)) + "/"
-                g.parse(data=json.dumps(protocol_data_for_ld), format="json-ld", publicID=base_uri)
+                g.parse(
+                    data=json.dumps(protocol_data_for_ld),
+                    format="json-ld",
+                    publicID=base_uri,
+                )
         except Exception as e:
-            print(f"  - Error: Failed to process {os.path.basename(file_path)} for KG: {e}")
+            print(
+                f"  - Error: Failed to process {os.path.basename(file_path)} for KG: {e}"
+            )
 
     # Serialize the final graph
     kg_file = os.path.join(ROOT_DIR, "knowledge_core", "protocols.ttl")
@@ -189,13 +205,15 @@ def main():
             parent_module = get_parent_module(child_module_path, module_paths)
             if parent_module == current_module_path:
                 print(f"Found compiled child: {child_module_path}. Generating summary.")
-                summary_content = generate_summary(artifacts['agents_md'])
+                summary_content = generate_summary(artifacts["agents_md"])
                 if summary_content:
                     summary_filename = f"{SUMMARY_FILE_PREFIX}{os.path.basename(child_module_path)}.protocol.md"
                     summary_filepath = os.path.join(proto_dir, summary_filename)
-                    with open(summary_filepath, 'w') as f:
+                    with open(summary_filepath, "w") as f:
                         f.write(summary_content)
-                    print(f"Injected summary for '{child_module_path}' into {summary_filepath}")
+                    print(
+                        f"Injected summary for '{child_module_path}' into {summary_filepath}"
+                    )
 
         # Compile the current module's AGENTS.md
         target_agents_md = run_compiler(proto_dir)
@@ -204,7 +222,7 @@ def main():
             target_readme = run_readme_generator(target_agents_md)
             compiled_artifacts[current_module_path] = {
                 "agents_md": target_agents_md,
-                "readme": target_readme
+                "readme": target_readme,
             }
 
         # Clean up the temporary summary files
@@ -213,15 +231,16 @@ def main():
     print("\n--- Hierarchical Build Summary ---")
     for module, artifacts in sorted(compiled_artifacts.items()):
         print(f"Module: {module}")
-        if artifacts.get('agents_md'):
+        if artifacts.get("agents_md"):
             print(f"  - Compiled: {artifacts['agents_md']}")
-        if artifacts.get('readme'):
+        if artifacts.get("readme"):
             print(f"  - Generated: {artifacts['readme']}")
 
     # --- Pass 2: Compile Centralized Knowledge Graph ---
     compile_centralized_knowledge_graph()
 
     print("\n--- Hierarchical Build Finished ---")
+
 
 if __name__ == "__main__":
     main()

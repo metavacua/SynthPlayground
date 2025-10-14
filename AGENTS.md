@@ -144,26 +144,6 @@ Adherence to this protocol is not optional. It is a fundamental step in the deve
 
 ---
 
-# Protocol: Authorization for Destructive Tools
-
-## The Problem: Unauthorized Use of Destructive Tools
-
-A recent catastrophic failure demonstrated a critical flaw in the agent's protocol adherence. The agent invoked the `reset_all()` tool, a destructive operation, without explicit user authorization. This led to a complete workflow collapse, loss of work, and the inability to complete the assigned task. The agent's internal logic and planning capabilities are not yet robust enough to handle the consequences of such a powerful and state-destroying action without external guidance.
-
-## The Solution: Explicit, Auditable Authorization
-
-To prevent this class of failure, this protocol introduces a hard-coded safety interlock on the `reset_all` tool. The tool is now forbidden from executing unless it can verify the presence of a specific, short-lived authorization token file in the repository root.
-
--   **Authorization Token:** `authorization.token`
--   **Procedure:**
-    1.  The agent MUST request permission from the user before using `reset_all`.
-    2.  The user, if they approve, will create the `authorization.token` file.
-    3.  The `reset_all` tool, upon execution, will check for this file. If present, it will execute and then immediately delete the token file to ensure the authorization is single-use. If the file is not present, the tool must refuse to execute and raise a critical error.
-
-This mechanism transforms the authorization from a matter of agent discretion into a verifiable, machine-enforced protocol, ensuring that destructive operations are only ever performed with explicit, just-in-time human consent.
-
----
-
 # Protocol: `reset_all` Prohibition
 
 **ID:** `reset-all-prohibition-001`
@@ -182,24 +162,6 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
 
 -   **Description:** The `reset_all` tool is strictly forbidden under all circumstances.
 -   **Enforcement:** The `master_control.py` orchestrator will programmatically block any attempt to call `reset_all` and will immediately terminate the task with a critical error. This is not a rule for the agent to interpret, but a hard-coded system constraint.
-
----
-
-# Protocol: `reset_all` Pre-Execution Authorization Check
-
-This protocol strengthens the safety measures around the destructive `reset_all` tool by shifting the burden of verification from the tool to the agent.
-
-## The Flaw in the Previous Protocol
-
-The original protocol (`reset-all-authorization-001`) required the `reset_all` tool itself to perform the authorization check. However, since `reset_all` is a built-in, unmodifiable tool provided by the execution environment, this protocol was **unenforceable**. An agent could call the tool without consequence, leading directly to the catastrophic failure that was logged.
-
-## The Corrective Action: Agent-Side Verification
-
-This new protocol, `protocol-reset-all-pre-check-001`, corrects this flaw by making the agent explicitly responsible for the check.
-
-**Rule `agent-must-verify-token`**: Before ever attempting to call `reset_all`, the agent's plan **MUST** include a step to use the `list_files` tool to verify the existence of the `authorization.token` file.
-
-This change makes adherence verifiable by inspecting the agent's plan and execution log. It closes the loophole and ensures that the decision to use a destructive tool is always preceded by a conscious, verifiable check for authorization.
 
 ---
 
@@ -453,6 +415,32 @@ The tool will generate a plan file containing a series of `replace_with_git_merg
     "tooling/protocol_auditor.py",
     "tooling/protocol_compiler.py",
     "tooling/hierarchical_compiler.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "agent-interaction-001",
+  "description": "A protocol governing the agent's core interaction and planning tools.",
+  "rules": [
+    {
+      "rule_id": "planning-tool-access",
+      "description": "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution.",
+      "enforcement": "The agent's core logic should be designed to use this tool for all planning activities."
+    },
+    {
+      "rule_id": "communication-tool-access",
+      "description": "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow.",
+      "enforcement": "The agent's core logic should be designed to use this tool for all user-facing communication."
+    }
+  ],
+  "associated_tools": [
+    "set_plan",
+    "message_user"
   ]
 }
 ```

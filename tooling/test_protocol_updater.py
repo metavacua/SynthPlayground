@@ -6,12 +6,14 @@ find and modify protocol source files in a controlled, temporary
 environment. It ensures that tools can be added to protocols and that
 edge cases like duplicate additions are handled gracefully.
 """
+
 import unittest
 import os
 import json
 import tempfile
 import shutil
 from tooling.protocol_updater import add_tool_to_protocol, find_protocol_file
+
 
 class TestProtocolUpdater(unittest.TestCase):
 
@@ -26,15 +28,18 @@ class TestProtocolUpdater(unittest.TestCase):
 
         # Point the updater script's PROTOCOLS_DIR to our mock directory
         import tooling.protocol_updater
+
         tooling.protocol_updater.PROTOCOLS_DIR = self.mock_protocols_dir
 
         # Create a mock protocol file
-        self.protocol_file_path = os.path.join(self.mock_protocols_dir, "test.protocol.json")
+        self.protocol_file_path = os.path.join(
+            self.mock_protocols_dir, "test.protocol.json"
+        )
         self.protocol_id = "test-protocol-001"
         self.initial_data = {
             "protocol_id": self.protocol_id,
             "description": "A test protocol.",
-            "associated_tools": ["existing_tool"]
+            "associated_tools": ["existing_tool"],
         }
         with open(self.protocol_file_path, "w") as f:
             json.dump(self.initial_data, f, indent=2)
@@ -43,6 +48,7 @@ class TestProtocolUpdater(unittest.TestCase):
         """Clean up the temporary directory and restore original config."""
         shutil.rmtree(self.test_dir)
         import tooling.protocol_updater
+
         tooling.protocol_updater.PROTOCOLS_DIR = self.protocols_dir_orig
 
     def test_find_protocol_file_success(self):
@@ -78,6 +84,7 @@ class TestProtocolUpdater(unittest.TestCase):
 
         self.assertEqual(len(data["associated_tools"]), 1)
         self.assertEqual(data["associated_tools"].count(existing_tool), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

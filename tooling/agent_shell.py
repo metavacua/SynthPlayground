@@ -9,16 +9,19 @@ programmatic interface to the MasterControlGraph FSM. It is responsible for:
 4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans
     and respond to requests for action.
 """
+
 import uuid
 import os
 import sys
 
 # Add the root directory to the path to allow for absolute imports
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from tooling.master_control import MasterControlGraph
 from tooling.state import AgentState
 from utils.logger import Logger
+from __main__ import read_file, list_files, google_search, view_text_website
+
 
 def find_fsm_transition(fsm, source_state, trigger):
     """Finds the destination state for a given source and trigger."""
@@ -26,6 +29,7 @@ def find_fsm_transition(fsm, source_state, trigger):
         if transition["source"] == source_state and transition["trigger"] == trigger:
             return transition["dest"]
     return None
+
 
 def run_agent_loop(task_description: str):
     """
@@ -52,7 +56,13 @@ def run_agent_loop(task_description: str):
             continue
 
         if current_state == "ORIENTING":
-            trigger = mcg.do_orientation(agent_state, logger)
+            tools = {
+                "read_file": read_file,
+                "list_files": list_files,
+                "google_search": google_search,
+                "view_text_website": view_text_website,
+            }
+            trigger = mcg.do_orientation(agent_state, logger, tools)
 
         elif current_state == "PLANNING":
             # If we have research findings, create a real plan.
@@ -83,12 +93,15 @@ The research findings have been integrated.
         elif current_state == "EXECUTING":
             step_to_execute = mcg.get_current_step(agent_state)
             if step_to_execute:
-                print(f"[AgentShell] Agent must now execute: {step_to_execute.tool_name} {step_to_execute.args_text}")
+                print(
+                    f"[AgentShell] Agent must now execute: {step_to_execute.tool_name} {step_to_execute.args_text}"
+                )
                 step_result = f"Successfully executed {step_to_execute.tool_name}."
                 trigger = mcg.do_execution(agent_state, step_result, logger)
             else:
-                trigger = mcg.do_execution(agent_state, None, logger) # Signals end of plan
-
+                trigger = mcg.do_execution(
+                    agent_state, None, logger
+                )  # Signals end of plan
 
         elif current_state == "FINALIZING":
             print("[AgentShell] Agent must now perform post-mortem analysis.")
@@ -96,7 +109,9 @@ The research findings have been integrated.
             trigger = mcg.do_finalizing(agent_state, analysis_content, logger)
 
         else:
-            agent_state.error = f"Unknown state encountered in AgentShell: {current_state}"
+            agent_state.error = (
+                f"Unknown state encountered in AgentShell: {current_state}"
+            )
             mcg.current_state = "ERROR"
 
 
@@ -112,18 +127,19 @@ The research findings have been integrated.
             print(f"[AgentShell] FSM entered ERROR state. Error: {agent_state.error}")
             break
 
-
-    print(f"--- Agent Task Finished ---")
+    print("--- Agent Task Finished ---")
     print(f"Final FSM State: {mcg.current_state}")
     if agent_state.error:
         print(f"Error: {agent_state.error}")
 
     return agent_state
 
+
 def main():
     """Main entry point for the agent shell."""
     task_description = "Perform a basic self-check and greet the user."
     run_agent_loop(task_description)
+
 
 if __name__ == "__main__":
     main()

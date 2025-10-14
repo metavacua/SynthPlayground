@@ -6,6 +6,7 @@ from rdflib import Graph, Literal, URIRef
 
 from tooling import knowledge_integrator
 
+
 class TestKnowledgeIntegrator(unittest.TestCase):
 
     def setUp(self):
@@ -16,7 +17,13 @@ class TestKnowledgeIntegrator(unittest.TestCase):
 
         # Create a dummy input graph with a tool to be extracted
         g = Graph()
-        g.add((URIRef("ex:some_rule"), URIRef("http://example.org/ontology/associated_tool"), Literal("tooling/research.py")))
+        g.add(
+            (
+                URIRef("ex:some_rule"),
+                URIRef("http://example.org/ontology/associated_tool"),
+                Literal("tooling/research.py"),
+            )
+        )
         g.serialize(self.input_graph_path, format="turtle")
 
     def tearDown(self):
@@ -43,11 +50,17 @@ class TestKnowledgeIntegrator(unittest.TestCase):
         self.assertEqual(concepts, ["Python (programming language)"])
         self.assertIn("Extracted 1 unique concepts", msg)
 
-    @patch('tooling.knowledge_integrator.requests.get')
+    @patch("tooling.knowledge_integrator.requests.get")
     def test_query_dbpedia_success(self, mock_get):
         """Test a successful query to DBPedia, mocking the HTTP request."""
         mock_rdf_response = Graph()
-        mock_rdf_response.add((URIRef("dbr:Git"), URIRef("rdfs:comment"), Literal("Git is a version control system.")))
+        mock_rdf_response.add(
+            (
+                URIRef("dbr:Git"),
+                URIRef("rdfs:comment"),
+                Literal("Git is a version control system."),
+            )
+        )
 
         mock_response = MagicMock()
         mock_response.status_code = 200
@@ -60,22 +73,32 @@ class TestKnowledgeIntegrator(unittest.TestCase):
         self.assertEqual(len(result_graph), 1)
         self.assertIn("Found 1 triples for 'Git'", msg)
 
-    @patch('tooling.knowledge_integrator.requests.get')
+    @patch("tooling.knowledge_integrator.requests.get")
     def test_query_dbpedia_http_error(self, mock_get):
         """Test that a DBPedia query handles HTTP errors gracefully."""
-        mock_get.side_effect = knowledge_integrator.requests.exceptions.RequestException("HTTP Error")
+        mock_get.side_effect = (
+            knowledge_integrator.requests.exceptions.RequestException("HTTP Error")
+        )
         result_graph, msg = knowledge_integrator.query_dbpedia("Git")
         self.assertIsNone(result_graph)
         self.assertIn("Error querying DBPedia", msg)
 
-    @patch('tooling.knowledge_integrator.query_dbpedia')
+    @patch("tooling.knowledge_integrator.query_dbpedia")
     def test_run_knowledge_integration(self, mock_query_dbpedia):
         """Test the main run_knowledge_integration function."""
         mock_external_graph = Graph()
-        mock_external_graph.add((URIRef("dbr:Python"), URIRef("rdfs:comment"), Literal("A programming language.")))
+        mock_external_graph.add(
+            (
+                URIRef("dbr:Python"),
+                URIRef("rdfs:comment"),
+                Literal("A programming language."),
+            )
+        )
         mock_query_dbpedia.return_value = (mock_external_graph, "Mocked DBPedia query")
 
-        summary = knowledge_integrator.run_knowledge_integration(self.input_graph_path, self.output_graph_path)
+        summary = knowledge_integrator.run_knowledge_integration(
+            self.input_graph_path, self.output_graph_path
+        )
 
         self.assertTrue(os.path.exists(self.output_graph_path))
         final_graph = Graph()
@@ -84,5 +107,6 @@ class TestKnowledgeIntegrator(unittest.TestCase):
         self.assertIn("Successfully saved enriched knowledge graph", summary)
         self.assertEqual(len(final_graph), 2)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

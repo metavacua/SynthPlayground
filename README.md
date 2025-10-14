@@ -14,6 +14,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
 - **`agent-shell-001`**: A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.
 - **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
+- **`agent-interaction-001`**: A protocol governing the agent's core interaction and planning tools.
 - **`refactor-001`**: A protocol for using the refactoring tool.
 
 ## Key Components

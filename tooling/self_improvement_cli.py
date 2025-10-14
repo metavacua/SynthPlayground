@@ -21,6 +21,7 @@ upfront planning in the future.
 The tool is designed to be extensible, with future analyses (such as error
 rate tracking or tool usage anti-patterns) to be added as the system evolves.
 """
+
 import argparse
 import json
 from collections import defaultdict

@@ -6,8 +6,8 @@
       "type": "python-project"
     },
     {
-      "id": "calculus_converter",
-      "path": "./calculus_converter/requirements.txt",
+      "id": "tooling",
+      "path": "./tooling/requirements.txt",
       "type": "python-project"
     },
     {
@@ -51,12 +51,7 @@
       "type": "python-external"
     },
     {
-      "id": "lark",
-      "path": null,
-      "type": "python-external"
-    },
-    {
-      "id": "jinja2",
+      "id": "pypdf",
       "path": null,
       "type": "python-external"
     }
@@ -95,12 +90,20 @@
       "target": "pyyaml"
     },
     {
-      "source": "calculus_converter",
-      "target": "lark"
+      "source": "root-python-project",
+      "target": "pypdf"
     },
     {
-      "source": "calculus_converter",
-      "target": "jinja2"
+      "source": "tooling",
+      "target": "jsonschema"
+    },
+    {
+      "source": "tooling",
+      "target": "rdflib"
+    },
+    {
+      "source": "tooling",
+      "target": "requests"
     }
   ]
 }

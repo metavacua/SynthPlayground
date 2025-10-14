@@ -360,7 +360,9 @@ This new protocol provides a robust, reliable, and formally verifiable mechanism
     "tooling/fdc_fsm.json",
     "knowledge_core/symbols.json",
     "knowledge_core/dependency_graph.json",
-    "LOGGING_SCHEMA.md"
+    "LOGGING_SCHEMA.md",
+    "set_plan",
+    "message_user"
   ]
 }
 ```

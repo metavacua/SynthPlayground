@@ -17,10 +17,11 @@ can enhance this tool with more sophisticated code generation capabilities
 (e.g., using an LLM to generate the diff from a natural language description)
 without altering the core orchestration process.
 """
+
 import argparse
-import json
 import os
 import tempfile
+
 
 def generate_suggestion_plan(filepath: str, diff_content: str) -> str:
     """
@@ -40,10 +41,11 @@ replace_with_git_merge_diff
 """
     # Create a temporary file to store the plan
     fd, plan_path = tempfile.mkstemp(suffix=".plan.txt", text=True)
-    with os.fdopen(fd, 'w') as tmp:
+    with os.fdopen(fd, "w") as tmp:
         tmp.write(plan_content)
 
     return plan_path
+
 
 def main():
     """
@@ -54,25 +56,22 @@ def main():
         description="Generate a plan to apply a code change suggestion."
     )
     parser.add_argument(
-        "--filepath",
-        required=True,
-        help="The path to the file to be modified."
+        "--filepath", required=True, help="The path to the file to be modified."
     )
     parser.add_argument(
-        "--diff",
-        required=True,
-        help="The git-style merge diff content to apply."
+        "--diff", required=True, help="The git-style merge diff content to apply."
     )
 
     args = parser.parse_args()
 
     # The diff content might be passed with escaped newlines; un-escape them.
-    diff_content = args.diff.replace('\\n', '\n')
+    diff_content = args.diff.replace("\\n", "\n")
 
     plan_path = generate_suggestion_plan(args.filepath, diff_content)
 
     # The orchestrator will read this path from stdout to know which plan to execute.
     print(plan_path)
+
 
 if __name__ == "__main__":
     main()

@@ -12,6 +12,7 @@ The tests cover:
 - The successful generation of a complete dependency graph, including both
   internal and external dependencies and the correct creation of nodes and edges.
 """
+
 import unittest
 import os
 import json

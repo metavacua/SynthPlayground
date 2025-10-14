@@ -758,7 +758,7 @@
     },
     {
       "_type": "tag",
-      "name": "_validate_plan_in_memory",
+      "name": "_validate_plan_with_cli",
       "path": "./tooling/master_control.py",
       "language": "Python",
       "line": 121,
@@ -1529,6 +1529,14 @@
       "line": 12,
       "kind": "class",
       "docstring": "Tests for the research executor tool, mocking the native tools that are\nglobally injected by the execution environment."
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function"
     },
     {
       "_type": "tag",
