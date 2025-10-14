@@ -34,6 +34,7 @@ import tempfile
 from tooling.state import AgentState, PlanContext
 from tooling.research import execute_research_protocol
 from tooling.plan_parser import parse_plan, Command
+from tooling.document_scanner import scan_documents
 from utils.logger import Logger
 
 MAX_RECURSION_DEPTH = 10
@@ -90,7 +91,8 @@ class MasterControlGraph:
             "Phase 1", agent_state.task, -1, "INFO", {"state": "ORIENTING"}, "SUCCESS"
         )
         try:
-            # L1: Local filesystem scan
+            # L1: Local filesystem scan, including document scanning
+            agent_state.research_findings["scanned_documents"] = scan_documents()
             execute_research_protocol({"target": "local_filesystem", "scope": "directory"}, tools)
             # L2: External web scan
             execute_research_protocol({"target": "external_web", "scope": "narrow", "query": "agentic software"}, tools)

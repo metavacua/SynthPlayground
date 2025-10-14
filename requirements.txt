@@ -6,3 +6,4 @@ pytest
 rdflib
 requests
 pyyaml
+pypdf
