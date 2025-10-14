@@ -14,6 +14,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
 - **`agent-shell-001`**: A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.
 - **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
+- **`plan-registry-audit-001`**: A protocol for using the plan registry auditor tool to ensure the integrity of the plan registry.
 - **`refactor-001`**: A protocol for using the refactoring tool.
 
 ## Key Components
@@ -25,6 +26,10 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`tooling/agent_shell.py`**:
 
   > The new, interactive, API-driven entry point for the agent.\n  > \n  > This script replaces the old file-based signaling system with a direct,\n  > programmatic interface to the MasterControlGraph FSM. It is responsible for:\n  > 1.  Initializing the agent's state and a centralized logger.\n  > 2.  Instantiating and running the MasterControlGraph.\n  > 3.  Driving the FSM by calling its methods and passing data and the logger.\n  > 4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans\n  >     and respond to requests for action.
+
+- **`tooling/background_researcher.py`**:
+
+  > This script performs a simulated research task in the background.\n  > It takes a task ID as a command-line argument and writes its findings\n  > to a temporary file that the main agent can poll.
 
 - **`tooling/builder.py`**:
 
@@ -49,6 +54,10 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`tooling/environmental_probe.py`**:
 
   > Performs a series of checks to assess the capabilities of the execution environment.\n  > \n  > This script is a critical diagnostic tool run at the beginning of a task to\n  > ensure the agent understands its operational sandbox. It verifies fundamental\n  > capabilities required for most software development tasks:\n  > \n  > 1.  **Filesystem I/O:** Confirms that the agent can create, write to, read from,\n  >     and delete files. It also provides a basic latency measurement for these\n  >     operations.\n  > 2.  **Network Connectivity:** Checks for external network access by attempting to\n  >     connect to a highly-available public endpoint (google.com). This is crucial\n  >     for tasks requiring `git` operations, package downloads, or API calls.\n  > 3.  **Environment Variables:** Verifies that standard environment variables are\n  >     accessible, which is a prerequisite for many command-line tools.\n  > \n  > The script generates a human-readable report summarizing the results of these\n  > probes, allowing the agent to quickly identify any environmental constraints\n  > that might impact its ability to complete a task.
+
+- **`tooling/generate_docs.py`**:
+
+  > This script generates comprehensive Markdown documentation for the agent's\n  > architecture, including the FSM, the agent shell, and the master control script.
 
 - **`tooling/hierarchical_compiler.py`**:
 
@@ -86,6 +95,10 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
   > Parses a plan file into a structured list of commands.\n  > \n  > This module provides the `parse_plan` function and the `Command` dataclass,\n  > which are central to the agent's ability to understand and execute plans.\n  > The parser correctly handles multi-line arguments and ignores comments,\n  > allowing for robust and readable plan files.
 
+- **`tooling/plan_registry_auditor.py`**:
+
+  > _No docstring found._
+
 - **`tooling/protocol_auditor.py`**:
 
   > Audits the agent's behavior against its governing protocols and generates a report.\n  > \n  > This script performs a comprehensive analysis to ensure the agent's actions,\n  > as recorded in the activity log, align with the defined protocols in AGENTS.md.\n  > It serves as a critical feedback mechanism for maintaining operational integrity.\n  > The final output is a detailed `audit_report.md` file.\n  > \n  > The auditor performs three main checks:\n  > 1.  **`AGENTS.md` Source Check:** Verifies if the `AGENTS.md` build artifact is\n  >     potentially stale by comparing its modification time against the source\n  >     protocol files in the `protocols/` directory.\n  > 2.  **Protocol Completeness:** It cross-references the tools used in the log\n  >     (`logs/activity.log.jsonl`) against the tools defined in `AGENTS.md` to find:\n  >     - Tools used but not associated with any formal protocol.\n  >     - Tools defined in protocols but never used in the log.\n  > 3.  **Tool Centrality:** It conducts a frequency analysis of tool usage to\n  >     identify which tools are most critical to the agent's workflow.\n  > \n  > The script parses all embedded JSON protocol blocks within `AGENTS.md` and reads\n  > from the standard `logs/activity.log.jsonl` log file, providing a reliable and\n  > accurate audit.
@@ -112,11 +125,11 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/research.py`**:
 
-  > A unified, constraint-based interface for all research and data-gathering operations.\n  > \n  > This script abstracts the various methods an agent might use to gather information\n  > (reading local files, accessing the web, querying a database) into a single,\n  > standardized function: `execute_research_protocol`. It is a core component of\n  > the Advanced Orientation and Research Protocol (AORP), providing the mechanism\n  > by which the agent fulfills the requirements of each orientation level (L1-L4).\n  > \n  > The function operates on a `constraints` dictionary, which specifies the target,\n  > scope, and other parameters of the research task. This design allows the calling\n  > orchestrator (e.g., `master_control.py`) to request information without needing\n  > to know the underlying implementation details of how that information is fetched.\n  > \n  > This script is designed to be executed by a system that has pre-loaded the\n  > following native tools into the execution environment:\n  > - `read_file(filepath: str) -> str`\n  > - `list_files(path: str = ".") -> list[str]`\n  > - `google_search(query: str) -> str`\n  > - `view_text_website(url: str) -> str`
+  > This module is responsible for executing research tasks.
 
 - **`tooling/research_planner.py`**:
 
-  > Generates a structured, executable plan for conducting deep research tasks.\n  > \n  > This script provides a standardized, FSM-compliant workflow for the agent when\n  > it needs to perform in-depth research on a complex topic. The `plan_deep_research`\n  > function creates a plan file that is not just a template, but a formal,\n  > verifiable artifact that can be executed by the `master_control.py` orchestrator.\n  > \n  > The generated plan adheres to the state transitions defined in `research_fsm.json`,\n  > guiding the agent through the phases of GATHERING, SYNTHESIZING, and REPORTING.
+  > This module is responsible for planning deep research tasks.
 
 - **`tooling/self_correction_orchestrator.py`**:
 

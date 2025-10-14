@@ -462,6 +462,26 @@ The tool will generate a plan file containing a series of `replace_with_git_merg
 
 ```json
 {
+  "protocol_id": "plan-registry-audit-001",
+  "description": "A protocol for using the plan registry auditor tool to ensure the integrity of the plan registry.",
+  "rules": [
+    {
+      "rule_id": "audit-for-dead-links",
+      "description": "The `plan_registry_auditor.py` tool should be used to scan the `knowledge_core/plan_registry.json` file for entries that point to non-existent plan files. This helps maintain the health of the hierarchical planning system.",
+      "enforcement": "The tool is used by invoking it from the command line. It can be run manually for diagnostics or integrated into automated health checks."
+    }
+  ],
+  "associated_tools": [
+    "tooling/plan_registry_auditor.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
   "protocol_id": "refactor-001",
   "description": "A protocol for using the refactoring tool.",
   "rules": [

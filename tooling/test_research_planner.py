@@ -24,8 +24,8 @@ class TestNewResearchPlanner(unittest.TestCase):
         self.assertIsInstance(plan, str)
         self.assertTrue(len(plan) > 0)
 
-        # 2. Verify it contains the correct FSM directive as the second line
-        self.assertIn("# FSM: tooling/research_fsm.json", plan_lines[1])
+        # 2. Verify it contains the correct FSM directive as the first line
+        self.assertIn("# FSM: tooling/research_fsm.json", plan_lines[0])
 
         # 3. Verify it contains the core executable commands in order
         executable_lines = [line for line in plan_lines if line.strip() and not line.strip().startswith("#")]
