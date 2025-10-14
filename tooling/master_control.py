@@ -18,6 +18,7 @@ import subprocess
 import shutil
 import datetime
 import tempfile
+import time
 
 from tooling.state import AgentState, PlanContext
 from tooling.research import execute_research_protocol
@@ -71,10 +72,23 @@ class MasterControlGraph:
         )
 
     def do_orientation(self, agent_state: AgentState, logger: Logger) -> str:
-        """Executes the L1, L2, and L3 orientation steps."""
+        """
+        Executes orientation, including analyzing the last post-mortem.
+        """
         logger.log("Phase 1", agent_state.task, -1, "INFO", {"state": "ORIENTING"}, "SUCCESS")
         try:
-            # L1, L2, L3 steps... (omitted for brevity, assume they log internally or here)
+            # Analyze the most recent post-mortem report
+            postmortem_dir = "postmortems/"
+            if os.path.exists(postmortem_dir):
+                postmortem_files = [os.path.join(postmortem_dir, f) for f in os.listdir(postmortem_dir) if f.endswith(".md")]
+                if postmortem_files:
+                    latest_postmortem = max(postmortem_files, key=os.path.getctime)
+                    with open(latest_postmortem, "r") as f:
+                        postmortem_content = f.read()
+                    agent_state.messages.append({"role": "system", "content": f"Reviewing last task's post-mortem:\n{postmortem_content}"})
+                    logger.log("Phase 1", agent_state.task, -1, "INFO", {"summary": f"Analyzed post-mortem: {latest_postmortem}"}, "SUCCESS")
+
+            # L1, L2, L3 steps...
             agent_state.orientation_complete = True
             logger.log("Phase 1", agent_state.task, -1, "INFO", {"summary": "Orientation successful."}, "SUCCESS")
             return self.get_trigger("ORIENTING", "PLANNING")
@@ -123,6 +137,7 @@ class MasterControlGraph:
             "rename_file": "move_op",
             "run_in_bash_session": "tool_exec",
             "call_plan": "call_plan_op",
+            "research": "research_requested",
         }
 
         commands = parse_plan(plan_content)
@@ -151,11 +166,54 @@ class MasterControlGraph:
 
     def do_researching(self, agent_state: AgentState, logger: Logger) -> str:
         """
-        Generates, validates, and initiates a formal Deep Research FDC.
+        Launches the background research process.
         """
         logger.log("Phase 3", agent_state.task, -1, "INFO", {"state": "RESEARCHING"}, "SUCCESS")
-        # ... (researching logic) ...
-        return self.get_trigger("RESEARCHING", "EXECUTING")
+        try:
+            task_id = agent_state.task
+            process = subprocess.Popen(
+                ["python", "tooling/background_researcher.py", task_id],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            agent_state.background_processes["research"] = process
+            logger.log("Phase 3", task_id, -1, "INFO", {"summary": f"Started background research (PID: {process.pid})"}, "SUCCESS")
+            return self.get_trigger("RESEARCHING", "AWAITING_RESULT")
+        except Exception as e:
+            agent_state.error = f"Failed to start research process: {e}"
+            logger.log("Phase 3", agent_state.task, -1, "SYSTEM_FAILURE", {"state": "ERROR"}, "FAILURE", str(e))
+            return self.get_trigger("RESEARCHING", "ERROR")
+
+    def do_awaiting_result(self, agent_state: AgentState, logger: Logger) -> str:
+        """
+        Checks for the result of the background research process.
+        """
+        task_id = agent_state.task
+        result_path = f"/tmp/{task_id}.result"
+        if os.path.exists(result_path):
+            with open(result_path, "r") as f:
+                result = f.read()
+            os.remove(result_path) # Clean up the result file
+            # Store and log the research findings
+            agent_state.research_findings["report"] = result
+            report_path = f"reports/{task_id}-research.md"
+            os.makedirs(os.path.dirname(report_path), exist_ok=True)
+            with open(report_path, "w") as f:
+                f.write(f"# Research Report for Task: {task_id}\n\n{result}")
+            logger.log("Phase 3", task_id, -1, "RESEARCH_REPORT", {"path": report_path}, "SUCCESS")
+            return self.get_trigger("AWAITING_RESULT", "PLANNING")
+        else:
+            # Check if the process is still running
+            process = agent_state.background_processes.get("research")
+            if process and process.poll() is not None: # Process has terminated
+                stdout, stderr = process.communicate()
+                agent_state.error = f"Research process failed with code {process.returncode}.\nStderr: {stderr.decode()}"
+                logger.log("Phase 3", task_id, -1, "SYSTEM_FAILURE", {"state": "ERROR"}, "FAILURE", agent_state.error)
+                return self.get_trigger("AWAITING_RESULT", "ERROR") # Should be a transition from AWAITING_RESULT to ERROR
+
+            logger.log("Phase 3", task_id, -1, "INFO", {"summary": "Waiting for research result..."}, "SUCCESS")
+            time.sleep(1) # Wait before checking again
+            return self.get_trigger("AWAITING_RESULT", "AWAITING_RESULT")
 
     def get_current_step(self, agent_state: AgentState) -> Command | None:
         """

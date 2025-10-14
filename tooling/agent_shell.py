@@ -38,6 +38,7 @@ def run_agent_loop(task_description: str):
     schema_path = os.path.join(os.path.dirname(__file__), "..", "LOGGING_SCHEMA.md")
     logger = Logger(schema_path=schema_path)
     mcg = MasterControlGraph()
+    planning_attempts = 0
 
     print(f"--- Starting Agent Task: {task_description} ({task_id}) ---")
 
@@ -54,20 +55,30 @@ def run_agent_loop(task_description: str):
             trigger = mcg.do_orientation(agent_state, logger)
 
         elif current_state == "PLANNING":
-            print("[AgentShell] Agent is now responsible for creating a plan.")
-            plan_content = """\
+            # If we have research findings, create a real plan.
+            if agent_state.research_findings:
+                print("[AgentShell] Research complete. Now creating an informed plan.")
+                plan_content = """\
 # FSM: tooling/fsm.json
 set_plan
-This is a multi-step test plan.
+This is a plan created with research findings.
 ---
 message_user
-This is the first step.
----
-message_user
-This is the second step, verifying the loop works.
+The research findings have been integrated.
 """
-            trigger = mcg.do_planning(agent_state, plan_content, logger)
+                trigger = mcg.do_planning(agent_state, plan_content, logger)
+            # Otherwise, create a plan to do research first.
+            else:
+                print("[AgentShell] No research found. Planning to do research first.")
+                # This is a meta-command, so we transition directly.
+                mcg.current_state = "RESEARCHING"
+                continue
 
+        elif current_state == "RESEARCHING":
+            trigger = mcg.do_researching(agent_state, logger)
+
+        elif current_state == "AWAITING_RESULT":
+            trigger = mcg.do_awaiting_result(agent_state, logger)
 
         elif current_state == "EXECUTING":
             step_to_execute = mcg.get_current_step(agent_state)
@@ -87,7 +98,7 @@ This is the second step, verifying the loop works.
         else:
             agent_state.error = f"Unknown state encountered in AgentShell: {current_state}"
             mcg.current_state = "ERROR"
-            break
+
 
         # Transition the FSM to the next state
         next_state = find_fsm_transition(mcg.fsm, current_state, trigger)
@@ -96,6 +107,9 @@ This is the second step, verifying the loop works.
         else:
             agent_state.error = f"No transition found for state '{current_state}' with trigger '{trigger}'"
             mcg.current_state = "ERROR"
+
+        if mcg.current_state == "ERROR":
+            print(f"[AgentShell] FSM entered ERROR state. Error: {agent_state.error}")
             break
 
 
