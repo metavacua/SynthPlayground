@@ -11,12 +11,27 @@
       "type": "python-project"
     },
     {
-      "id": "black",
+      "id": "attrs",
       "path": null,
       "type": "python-external"
     },
     {
-      "id": "flake8",
+      "id": "certifi",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "charset-normalizer",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "greenlet",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "idna",
       "path": null,
       "type": "python-external"
     },
@@ -26,12 +41,22 @@
       "type": "python-external"
     },
     {
-      "id": "Markdown",
+      "id": "jsonschema-specifications",
       "path": null,
       "type": "python-external"
     },
     {
-      "id": "pytest",
+      "id": "playwright",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "pyee",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "pyparsing",
       "path": null,
       "type": "python-external"
     },
@@ -41,17 +66,27 @@
       "type": "python-external"
     },
     {
+      "id": "referencing",
+      "path": null,
+      "type": "python-external"
+    },
+    {
       "id": "requests",
       "path": null,
       "type": "python-external"
     },
     {
-      "id": "pyyaml",
+      "id": "rpds-py",
       "path": null,
       "type": "python-external"
     },
     {
-      "id": "pypdf",
+      "id": "typing_extensions",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "urllib3",
       "path": null,
       "type": "python-external"
     }
@@ -59,11 +94,23 @@
   "edges": [
     {
       "source": "root-python-project",
-      "target": "black"
+      "target": "attrs"
     },
     {
       "source": "root-python-project",
-      "target": "flake8"
+      "target": "certifi"
+    },
+    {
+      "source": "root-python-project",
+      "target": "charset-normalizer"
+    },
+    {
+      "source": "root-python-project",
+      "target": "greenlet"
+    },
+    {
+      "source": "root-python-project",
+      "target": "idna"
     },
     {
       "source": "root-python-project",
@@ -71,11 +118,19 @@
     },
     {
       "source": "root-python-project",
-      "target": "Markdown"
+      "target": "jsonschema-specifications"
     },
     {
       "source": "root-python-project",
-      "target": "pytest"
+      "target": "playwright"
+    },
+    {
+      "source": "root-python-project",
+      "target": "pyee"
+    },
+    {
+      "source": "root-python-project",
+      "target": "pyparsing"
     },
     {
       "source": "root-python-project",
@@ -83,15 +138,23 @@
     },
     {
       "source": "root-python-project",
+      "target": "referencing"
+    },
+    {
+      "source": "root-python-project",
       "target": "requests"
     },
     {
       "source": "root-python-project",
-      "target": "pyyaml"
+      "target": "rpds-py"
     },
     {
       "source": "root-python-project",
-      "target": "pypdf"
+      "target": "typing_extensions"
+    },
+    {
+      "source": "root-python-project",
+      "target": "urllib3"
     },
     {
       "source": "tooling",

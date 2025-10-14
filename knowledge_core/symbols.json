@@ -11,84 +11,75 @@
     },
     {
       "_type": "tag",
-      "name": "Logger",
-      "path": "./utils/logger.py",
+      "name": "plan_deep_research",
+      "path": "./archive/agentic-research-experiments/agentic-research-experiments-tooling-research-planner.py",
       "language": "Python",
-      "line": 35,
-      "kind": "class",
-      "docstring": "A class to handle structured logging to a JSONL file, validated against a schema."
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./utils/logger.py",
-      "language": "Python",
-      "line": 40,
+      "line": 9,
       "kind": "function",
-      "docstring": "Initializes the Logger, loading the schema and setting up the session.\n\nArgs:\n    schema_path (str): The path to the Markdown file containing the logging schema.\n    log_path (str): The path to the log file to be written."
+      "docstring": "Generates a structured markdown template for a deep research plan.\n\nThis function reads the relevant protocol document (either local or external)\nto provide context and then generates a pre-formatted markdown plan. This\nplan provides a consistent workflow for conducting deep research.\n\nArgs:\n    topic: The research topic to be investigated.\n    repository: The repository context for the research ('local' or 'external').\n\nReturns:\n    A string containing the markdown-formatted research plan."
     },
     {
       "_type": "tag",
-      "name": "_load_schema",
-      "path": "./utils/logger.py",
+      "name": "TestBuildProtocol",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
-      "line": 56,
-      "kind": "function",
-      "docstring": "Loads the JSON schema from the specified Markdown file.\n\nIt assumes the schema is in a JSON code block.\n\nArgs:\n    schema_path (str): The path to the Markdown file containing the schema.\n\nReturns:\n    dict: The loaded JSON schema."
-    },
-    {
-      "_type": "tag",
-      "name": "log",
-      "path": "./utils/logger.py",
-      "language": "Python",
-      "line": 82,
-      "kind": "function",
-      "docstring": "Constructs, validates, and writes a log entry.\n\nArgs:\n    phase (str): The current protocol phase (e.g., \"Phase 7\").\n    task_id (str): The ID of the current task.\n    plan_step (int): The current plan step number.\n    action_type (str): The type of action (e.g., \"TOOL_EXEC\").\n    action_details (dict): Details specific to the action.\n    outcome_status (str): The outcome of the action (\"SUCCESS\", \"FAILURE\").\n    outcome_message (str, optional): A message describing the outcome. Defaults to \"\".\n    error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.\n    evidence (str, optional): Citation for the action. Defaults to \"\".\n\nRaises:\n    ValidationError: If the generated log entry does not conform to the schema."
-    },
-    {
-      "_type": "tag",
-      "name": "TestLogger",
-      "path": "./utils/test_logger.py",
-      "language": "Python",
-      "line": 27,
+      "line": 7,
       "kind": "class",
       "docstring": null
     },
     {
       "_type": "tag",
       "name": "setUp",
-      "path": "./utils/test_logger.py",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
-      "line": 29,
+      "line": 9,
       "kind": "function",
-      "docstring": "Set up a temporary environment for each test."
+      "docstring": "Set up a temporary test environment."
     },
     {
       "_type": "tag",
       "name": "tearDown",
-      "path": "./utils/test_logger.py",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
-      "line": 91,
+      "line": 15,
       "kind": "function",
-      "docstring": "Clean up the temporary environment after each test."
+      "docstring": "Clean up the test environment."
     },
     {
       "_type": "tag",
-      "name": "test_log_success_with_correct_schema",
-      "path": "./utils/test_logger.py",
+      "name": "test_build_protocol_concatenates_in_order",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
-      "line": 96,
+      "line": 22,
       "kind": "function",
-      "docstring": "Test that a valid log entry is written successfully with the correct schema."
+      "docstring": "Tests that the script correctly concatenates sorted markdown files."
     },
     {
       "_type": "tag",
-      "name": "test_log_failure_with_incorrect_schema_data",
-      "path": "./utils/test_logger.py",
+      "name": "test_no_markdown_files",
+      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
       "language": "Python",
-      "line": 113,
+      "line": 42,
       "kind": "function",
-      "docstring": "Test that logging fails when data violates the v1.1 schema."
+      "docstring": "Tests that the script handles cases with no markdown files gracefully."
+    },
+    {
+      "_type": "tag",
+      "name": "plan_deep_research",
+      "path": "./archive/feat/feat-protocol-build-system-tooling-research-planner.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": "Generates a structured markdown template for a deep research plan.\n\nThis function reads the relevant protocol document (either local or external)\nto provide context and then generates a pre-formatted markdown plan. This\nplan provides a consistent workflow for conducting deep research.\n\nArgs:\n    topic: The research topic to be investigated.\n    repository: The repository context for the research ('local' or 'external').\n\nReturns:\n    A string containing the markdown-formatted research plan."
+    },
+    {
+      "_type": "tag",
+      "name": "build_protocol",
+      "path": "./archive/feat/feat-protocol-build-system-tooling-build-protocol.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Reads all markdown files from the specified source directory,\nconcatenates them in alphabetical order, and writes the\nresult to the specified output file."
     },
     {
       "_type": "tag",
@@ -105,15 +96,6 @@
       "path": "./archive/add-protocol-validation/add-protocol-validation-tooling-research-planner.py",
       "language": "Python",
       "line": 9,
-      "kind": "function",
-      "docstring": "Generates a structured markdown template for a deep research plan.\n\nThis function reads the relevant protocol document (either local or external)\nto provide context and then generates a pre-formatted markdown plan. This\nplan provides a consistent workflow for conducting deep research.\n\nArgs:\n    topic: The research topic to be investigated.\n    repository: The repository context for the research ('local' or 'external').\n\nReturns:\n    A string containing the markdown-formatted research plan."
-    },
-    {
-      "_type": "tag",
-      "name": "plan_deep_research",
-      "path": "./archive/agentic-research-experiments/agentic-research-experiments-tooling-research-planner.py",
-      "language": "Python",
-      "line": 8,
       "kind": "function",
       "docstring": "Generates a structured markdown template for a deep research plan.\n\nThis function reads the relevant protocol document (either local or external)\nto provide context and then generates a pre-formatted markdown plan. This\nplan provides a consistent workflow for conducting deep research.\n\nArgs:\n    topic: The research topic to be investigated.\n    repository: The repository context for the research ('local' or 'external').\n\nReturns:\n    A string containing the markdown-formatted research plan."
     },
@@ -137,246 +119,1821 @@
     },
     {
       "_type": "tag",
-      "name": "build_protocol",
-      "path": "./archive/feat/feat-protocol-build-system-tooling-build-protocol.py",
-      "language": "Python",
-      "line": 3,
-      "kind": "function",
-      "docstring": "Reads all markdown files from the specified source directory,\nconcatenates them in alphabetical order, and writes the\nresult to the specified output file."
-    },
-    {
-      "_type": "tag",
       "name": "plan_deep_research",
-      "path": "./archive/feat/feat-protocol-build-system-tooling-research-planner.py",
+      "path": "./archive/fix/fix-correct-agent-md-references-tooling-research-planner.py",
       "language": "Python",
-      "line": 8,
+      "line": 9,
       "kind": "function",
       "docstring": "Generates a structured markdown template for a deep research plan.\n\nThis function reads the relevant protocol document (either local or external)\nto provide context and then generates a pre-formatted markdown plan. This\nplan provides a consistent workflow for conducting deep research.\n\nArgs:\n    topic: The research topic to be investigated.\n    repository: The repository context for the research ('local' or 'external').\n\nReturns:\n    A string containing the markdown-formatted research plan."
     },
     {
       "_type": "tag",
-      "name": "TestBuildProtocol",
-      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
+      "name": "Logger",
+      "path": "./utils/logger.py",
       "language": "Python",
-      "line": 6,
+      "line": 36,
+      "kind": "class",
+      "docstring": "A class to handle structured logging to a JSONL file, validated against a schema."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./utils/logger.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function",
+      "docstring": "Initializes the Logger, loading the schema and setting up the session.\n\nArgs:\n    schema_path (str): The path to the Markdown file containing the logging schema.\n    log_path (str): The path to the log file to be written."
+    },
+    {
+      "_type": "tag",
+      "name": "_load_schema",
+      "path": "./utils/logger.py",
+      "language": "Python",
+      "line": 57,
+      "kind": "function",
+      "docstring": "Loads the JSON schema from the specified Markdown file.\n\nIt assumes the schema is in a JSON code block.\n\nArgs:\n    schema_path (str): The path to the Markdown file containing the schema.\n\nReturns:\n    dict: The loaded JSON schema."
+    },
+    {
+      "_type": "tag",
+      "name": "log",
+      "path": "./utils/logger.py",
+      "language": "Python",
+      "line": 83,
+      "kind": "function",
+      "docstring": "Constructs, validates, and writes a log entry.\n\nArgs:\n    phase (str): The current protocol phase (e.g., \"Phase 7\").\n    task_id (str): The ID of the current task.\n    plan_step (int): The current plan step number.\n    action_type (str): The type of action (e.g., \"TOOL_EXEC\").\n    action_details (dict): Details specific to the action.\n    outcome_status (str): The outcome of the action (\"SUCCESS\", \"FAILURE\").\n    outcome_message (str, optional): A message describing the outcome. Defaults to \"\".\n    error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.\n    evidence (str, optional): Citation for the action. Defaults to \"\".\n\nRaises:\n    ValidationError: If the generated log entry does not conform to the schema."
+    },
+    {
+      "_type": "tag",
+      "name": "TestLogger",
+      "path": "./utils/test_logger.py",
+      "language": "Python",
+      "line": 28,
       "kind": "class",
       "docstring": null
     },
     {
       "_type": "tag",
       "name": "setUp",
-      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
+      "path": "./utils/test_logger.py",
       "language": "Python",
-      "line": 8,
+      "line": 30,
       "kind": "function",
-      "docstring": "Set up a temporary test environment."
+      "docstring": "Set up a temporary environment for each test."
     },
     {
       "_type": "tag",
       "name": "tearDown",
-      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
+      "path": "./utils/test_logger.py",
+      "language": "Python",
+      "line": 92,
+      "kind": "function",
+      "docstring": "Clean up the temporary environment after each test."
+    },
+    {
+      "_type": "tag",
+      "name": "test_log_success_with_correct_schema",
+      "path": "./utils/test_logger.py",
+      "language": "Python",
+      "line": 97,
+      "kind": "function",
+      "docstring": "Test that a valid log entry is written successfully with the correct schema."
+    },
+    {
+      "_type": "tag",
+      "name": "test_log_failure_with_incorrect_schema_data",
+      "path": "./utils/test_logger.py",
+      "language": "Python",
+      "line": 114,
+      "kind": "function",
+      "docstring": "Test that logging fails when data violates the v1.1 schema."
+    },
+    {
+      "_type": "tag",
+      "name": "parse_makefile_command",
+      "path": "./tooling/standard_agents_compiler.py",
+      "language": "Python",
+      "line": 74,
+      "kind": "function",
+      "docstring": "Parses a Makefile to find the main command for a specific target,\nskipping any 'echo' lines. This version iterates through lines for robustness."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/standard_agents_compiler.py",
+      "language": "Python",
+      "line": 109,
+      "kind": "function",
+      "docstring": "Generates a standard-compliant AGENTS.md file by parsing commands\nfrom the project's Makefile."
+    },
+    {
+      "_type": "tag",
+      "name": "TestKnowledgeIntegrator",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": "Set up a temporary directory and files for testing."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": "Clean up the temporary directory."
+    },
+    {
+      "_type": "tag",
+      "name": "test_load_local_graph_success",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function",
+      "docstring": "Test that the local graph loads successfully."
+    },
+    {
+      "_type": "tag",
+      "name": "test_load_local_graph_not_found",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 40,
+      "kind": "function",
+      "docstring": "Test that loading a non-existent graph returns None."
+    },
+    {
+      "_type": "tag",
+      "name": "test_extract_concepts",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 46,
+      "kind": "function",
+      "docstring": "Test that concepts are extracted and cleaned correctly."
+    },
+    {
+      "_type": "tag",
+      "name": "test_query_dbpedia_success",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 54,
+      "kind": "function",
+      "docstring": "Test a successful query to DBPedia, mocking the HTTP request."
+    },
+    {
+      "_type": "tag",
+      "name": "test_query_dbpedia_http_error",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 77,
+      "kind": "function",
+      "docstring": "Test that a DBPedia query handles HTTP errors gracefully."
+    },
+    {
+      "_type": "tag",
+      "name": "test_run_knowledge_integration",
+      "path": "./tooling/test_knowledge_integrator.py",
+      "language": "Python",
+      "line": 87,
+      "kind": "function",
+      "docstring": "Test the main run_knowledge_integration function."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_html_page",
+      "path": "./tooling/pages_generator.py",
+      "language": "Python",
+      "line": 108,
+      "kind": "function",
+      "docstring": "Reads the source Markdown files, converts them to HTML, and builds the\nfinal index.html page."
+    },
+    {
+      "_type": "tag",
+      "name": "TestNewResearchPlanner",
+      "path": "./tooling/test_research_planner.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "class",
+      "docstring": "Tests for the refactored, FSM-compliant research planner."
+    },
+    {
+      "_type": "tag",
+      "name": "test_plan_deep_research_generates_executable_plan",
+      "path": "./tooling/test_research_planner.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": "Verify that the new plan_deep_research generates a valid, executable\nFSM-compliant plan."
+    },
+    {
+      "_type": "tag",
+      "name": "load_local_graph",
+      "path": "./tooling/knowledge_integrator.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function",
+      "docstring": "Loads the local RDF graph from a file."
+    },
+    {
+      "_type": "tag",
+      "name": "extract_concepts",
+      "path": "./tooling/knowledge_integrator.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": "Extracts key concepts (e.g., tools) from the local graph to query externally.\nThis version dynamically extracts tool names from the graph."
+    },
+    {
+      "_type": "tag",
+      "name": "query_dbpedia",
+      "path": "./tooling/knowledge_integrator.py",
+      "language": "Python",
+      "line": 71,
+      "kind": "function",
+      "docstring": "Queries DBPedia for a given concept and returns a graph of results."
+    },
+    {
+      "_type": "tag",
+      "name": "run_knowledge_integration",
+      "path": "./tooling/knowledge_integrator.py",
+      "language": "Python",
+      "line": 103,
+      "kind": "function",
+      "docstring": "The main library function to run the knowledge integration process.\nIt loads a graph, extracts concepts, queries DBPedia, and saves the\nenriched graph."
+    },
+    {
+      "_type": "tag",
+      "name": "TestReadmeGenerator",
+      "path": "./tooling/test_readme_generator.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "class",
+      "docstring": "Tests for the readme_generator.py script."
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_readme_generator.py",
       "language": "Python",
       "line": 14,
       "kind": "function",
-      "docstring": "Clean up the test environment."
+      "docstring": "Set up a temporary directory and mock source files for testing."
     },
     {
       "_type": "tag",
-      "name": "test_build_protocol_concatenates_in_order",
-      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
+      "name": "tearDown",
+      "path": "./tooling/test_readme_generator.py",
+      "language": "Python",
+      "line": 57,
+      "kind": "function",
+      "docstring": "Clean up the temporary directory after tests are complete."
+    },
+    {
+      "_type": "tag",
+      "name": "test_main_generates_readme_correctly",
+      "path": "./tooling/test_readme_generator.py",
+      "language": "Python",
+      "line": 63,
+      "kind": "function",
+      "docstring": "Test the main function to ensure it generates a complete README.md\nby simulating command-line arguments."
+    },
+    {
+      "_type": "tag",
+      "name": "TestSymbolMapGenerator",
+      "path": "./tooling/test_symbol_map_generator.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_symbol_map_generator.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": "Set up a temporary directory structure for testing."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_symbol_map_generator.py",
+      "language": "Python",
+      "line": 50,
+      "kind": "function",
+      "docstring": "Clean up the temporary directory."
+    },
+    {
+      "_type": "tag",
+      "name": "test_generate_with_ctags_success",
+      "path": "./tooling/test_symbol_map_generator.py",
+      "language": "Python",
+      "line": 56,
+      "kind": "function",
+      "docstring": "Test successful symbol generation using a mocked ctags call."
+    },
+    {
+      "_type": "tag",
+      "name": "test_generate_with_ast_fallback",
+      "path": "./tooling/test_symbol_map_generator.py",
+      "language": "Python",
+      "line": 89,
+      "kind": "function",
+      "docstring": "Test the AST-based fallback for Python files."
+    },
+    {
+      "_type": "tag",
+      "name": "test_main_with_ast_fallback",
+      "path": "./tooling/test_symbol_map_generator.py",
+      "language": "Python",
+      "line": 116,
+      "kind": "function",
+      "docstring": "Test that main function uses the AST fallback when ctags is not present."
+    },
+    {
+      "_type": "tag",
+      "name": "side_effect",
+      "path": "./tooling/test_symbol_map_generator.py",
+      "language": "Python",
+      "line": 60,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "find_protocol_file",
+      "path": "./tooling/protocol_updater.py",
       "language": "Python",
       "line": 21,
       "kind": "function",
-      "docstring": "Tests that the script correctly concatenates sorted markdown files."
+      "docstring": "Finds the protocol file path corresponding to a given protocol_id."
     },
     {
       "_type": "tag",
-      "name": "test_no_markdown_files",
-      "path": "./archive/feat/feat-protocol-build-system-tests-test-build-protocol.py",
-      "language": "Python",
-      "line": 41,
-      "kind": "function",
-      "docstring": "Tests that the script handles cases with no markdown files gracefully."
-    },
-    {
-      "_type": "tag",
-      "name": "plan_deep_research",
-      "path": "./archive/fix/fix-correct-agent-md-references-tooling-research-planner.py",
-      "language": "Python",
-      "line": 8,
-      "kind": "function",
-      "docstring": "Generates a structured markdown template for a deep research plan.\n\nThis function reads the relevant protocol document (either local or external)\nto provide context and then generates a pre-formatted markdown plan. This\nplan provides a consistent workflow for conducting deep research.\n\nArgs:\n    topic: The research topic to be investigated.\n    repository: The repository context for the research ('local' or 'external').\n\nReturns:\n    A string containing the markdown-formatted research plan."
-    },
-    {
-      "_type": "tag",
-      "name": "convert_all_latex_files",
-      "path": "./calculus_converter/convert_all.py",
-      "language": "Python",
-      "line": 5,
-      "kind": "function",
-      "docstring": "Finds all .tex files in the root directory, converts them to HTML,\nand generates an index file for the converted documents."
-    },
-    {
-      "_type": "tag",
-      "name": "parse_prooftree_content_final",
-      "path": "./calculus_converter/parser.py",
-      "language": "Python",
-      "line": 5,
-      "kind": "function",
-      "docstring": "A robust, non-recursive parser for prooftree content. It extracts the\nfinal conclusion and all top-level hypotheses."
-    },
-    {
-      "_type": "tag",
-      "name": "cleanup_latex",
-      "path": "./calculus_converter/parser.py",
-      "language": "Python",
-      "line": 44,
-      "kind": "function",
-      "docstring": "Strips the LaTeX preamble and other noisy commands."
-    },
-    {
-      "_type": "tag",
-      "name": "parse_latex_to_document",
-      "path": "./calculus_converter/parser.py",
-      "language": "Python",
-      "line": 53,
-      "kind": "function",
-      "docstring": "Parses a LaTeX string and returns a Document object with semantic structure."
-    },
-    {
-      "_type": "tag",
-      "name": "Sequent",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 3,
-      "kind": "class",
-      "docstring": "Represents a logical sequent of the form 'antecedent \u22a2 succedent'."
-    },
-    {
-      "_type": "tag",
-      "name": "ProofTree",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 14,
-      "kind": "class",
-      "docstring": "Represents a potentially nested proof tree."
-    },
-    {
-      "_type": "tag",
-      "name": "Document",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 24,
-      "kind": "class",
-      "docstring": "Represents the entire content of a parsed LaTeX file."
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 5,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__repr__",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 11,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 16,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__repr__",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 21,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 26,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "add_element",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 31,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "add_proof_tree",
-      "path": "./calculus_converter/calculus.py",
+      "name": "add_tool_to_protocol",
+      "path": "./tooling/protocol_updater.py",
       "language": "Python",
       "line": 34,
       "kind": "function",
+      "docstring": "Adds a tool to the 'associated_tools' list of a specified protocol."
+    },
+    {
+      "_type": "tag",
+      "name": "update_rule_in_protocol",
+      "path": "./tooling/protocol_updater.py",
+      "language": "Python",
+      "line": 73,
+      "kind": "function",
+      "docstring": "Updates the description of a specific rule within a protocol."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/protocol_updater.py",
+      "language": "Python",
+      "line": 121,
+      "kind": "function",
+      "docstring": "Main function to parse arguments and call the appropriate handler."
+    },
+    {
+      "_type": "tag",
+      "name": "TestSelfCorrectionOrchestrator",
+      "path": "./tooling/test_self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 23,
+      "kind": "class",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "_build_tree_recursively",
-      "path": "./calculus_converter/calculus.py",
+      "name": "setUp",
+      "path": "./tooling/test_self_correction_orchestrator.py",
       "language": "Python",
-      "line": 38,
+      "line": 25,
+      "kind": "function",
+      "docstring": "Set up a temporary directory with mock files."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 72,
+      "kind": "function",
+      "docstring": "Clean up and restore original constants."
+    },
+    {
+      "_type": "tag",
+      "name": "test_process_lessons_end_to_end",
+      "path": "./tooling/test_self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 79,
+      "kind": "function",
+      "docstring": "Verify the entire workflow: loading, processing, saving,\nand checking the side-effects (protocol file updated)."
+    },
+    {
+      "_type": "tag",
+      "name": "test_process_lessons_handles_malformed_lesson_gracefully",
+      "path": "./tooling/test_self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 107,
+      "kind": "function",
+      "docstring": "Verify that the orchestrator can skip a malformed lesson without crashing.\nA malformed lesson, in this context, is one that is pending but is\nmissing the required 'command' key in its action payload."
+    },
+    {
+      "_type": "tag",
+      "name": "extract_lessons_from_postmortem",
+      "path": "./tooling/knowledge_compiler.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": "Parses a post-mortem report to extract lessons learned.\nHandles multiple possible section headers and formats."
+    },
+    {
+      "_type": "tag",
+      "name": "extract_metadata_from_postmortem",
+      "path": "./tooling/knowledge_compiler.py",
+      "language": "Python",
+      "line": 85,
+      "kind": "function",
+      "docstring": "Parses a post-mortem report to extract metadata like Task ID and Date."
+    },
+    {
+      "_type": "tag",
+      "name": "parse_action_to_command",
+      "path": "./tooling/knowledge_compiler.py",
+      "language": "Python",
+      "line": 97,
+      "kind": "function",
+      "docstring": "Parses a natural language action string into a machine-executable command.\n\nThis is the core of translating insights into automated actions. It uses\npattern matching to identify specific, supported commands."
+    },
+    {
+      "_type": "tag",
+      "name": "format_lesson_entry",
+      "path": "./tooling/knowledge_compiler.py",
+      "language": "Python",
+      "line": 162,
+      "kind": "function",
+      "docstring": "Formats an extracted lesson into a structured JSON object."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/knowledge_compiler.py",
+      "language": "Python",
+      "line": 178,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "find_protocol_dirs",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": "Finds all directories named 'protocols' within the root directory,\nignoring any special-cased directories."
+    },
+    {
+      "_type": "tag",
+      "name": "run_compiler",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 44,
+      "kind": "function",
+      "docstring": "Invokes the protocol_compiler.py script as a library."
+    },
+    {
+      "_type": "tag",
+      "name": "run_readme_generator",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function",
+      "docstring": "Invokes the readme_generator.py script as a library."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_summary",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 80,
+      "kind": "function",
+      "docstring": "Extracts the full, rendered protocol blocks from a child AGENTS.md file.\nThis function finds all protocol definitions (human-readable markdown and\nthe associated machine-readable JSON block) and concatenates them into a\nsingle string to be injected into the parent AGENTS.md."
+    },
+    {
+      "_type": "tag",
+      "name": "cleanup_summaries",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 111,
+      "kind": "function",
+      "docstring": "Removes temporary summary files from a protocols directory."
+    },
+    {
+      "_type": "tag",
+      "name": "get_parent_module",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 121,
+      "kind": "function",
+      "docstring": "Finds the direct parent module of a given module."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_centralized_knowledge_graph",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 131,
+      "kind": "function",
+      "docstring": "Finds all protocol.json files in the entire repository, loads them, and\ncompiles them into a single, unified knowledge graph."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/hierarchical_compiler.py",
+      "language": "Python",
+      "line": 188,
+      "kind": "function",
+      "docstring": "Main function to orchestrate the hierarchical compilation."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_suggestion_plan",
+      "path": "./tooling/code_suggester.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": "Generates a temporary, single-step plan file to apply a code change.\n\nArgs:\n    filepath: The path to the file that needs to be modified.\n    diff_content: The git-style merge diff block to be applied.\n\nReturns:\n    The path to the generated temporary plan file."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/code_suggester.py",
+      "language": "Python",
+      "line": 50,
+      "kind": "function",
+      "docstring": "Main entry point for the code suggester tool.\nParses arguments, generates a plan, and prints the plan's path to stdout."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/master_control_cli.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function",
+      "docstring": "The main entry point for the agent.\n\nThis script parses the task description and invokes the agent shell."
+    },
+    {
+      "_type": "tag",
+      "name": "has_ctags",
+      "path": "./tooling/symbol_map_generator.py",
+      "language": "Python",
+      "line": 32,
+      "kind": "function",
+      "docstring": "Check if Universal Ctags is installed and available in the PATH."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_symbols_with_ctags",
+      "path": "./tooling/symbol_map_generator.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function",
+      "docstring": "Generates a symbol map using Universal Ctags."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_symbols_with_ast",
+      "path": "./tooling/symbol_map_generator.py",
+      "language": "Python",
+      "line": 83,
+      "kind": "function",
+      "docstring": "Fallback to generate a symbol map for Python files using the AST module."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/symbol_map_generator.py",
+      "language": "Python",
+      "line": 124,
+      "kind": "function",
+      "docstring": "Main function to generate and save the symbol map."
+    },
+    {
+      "_type": "tag",
+      "name": "_load_plan_registry",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 51,
+      "kind": "function",
+      "docstring": "Loads the plan registry, returning an empty dict if it doesn't exist or is invalid."
+    },
+    {
+      "_type": "tag",
+      "name": "MasterControlGraph",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 62,
+      "kind": "class",
+      "docstring": "A Finite State Machine (FSM) that enforces the agent's protocol.\nThis graph reads a state definition and orchestrates the agent's workflow,\nensuring that all protocol steps are followed in the correct order."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 69,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "get_trigger",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 74,
+      "kind": "function",
+      "docstring": "Finds a trigger in the FSM definition for a transition from a source\nto a destination state. This is a helper to avoid hardcoding trigger\nstrings in the state handlers."
+    },
+    {
+      "_type": "tag",
+      "name": "do_orientation",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 90,
+      "kind": "function",
+      "docstring": "Executes orientation, including analyzing the last post-mortem."
+    },
+    {
+      "_type": "tag",
+      "name": "do_planning",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 131,
+      "kind": "function",
+      "docstring": "Validates a given plan, parses it, and initializes the plan stack."
+    },
+    {
+      "_type": "tag",
+      "name": "_validate_plan_with_cli",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 171,
+      "kind": "function",
+      "docstring": "Validates a plan by writing it to a temporary file and using the fdc_cli.py script."
+    },
+    {
+      "_type": "tag",
+      "name": "do_researching",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 217,
+      "kind": "function",
+      "docstring": "Launches the background research process."
+    },
+    {
+      "_type": "tag",
+      "name": "do_awaiting_result",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 237,
+      "kind": "function",
+      "docstring": "Checks for the result of the background research process."
+    },
+    {
+      "_type": "tag",
+      "name": "get_current_step",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 268,
+      "kind": "function",
+      "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
+    },
+    {
+      "_type": "tag",
+      "name": "do_execution",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 279,
+      "kind": "function",
+      "docstring": "Processes the result of a step and advances the execution state."
+    },
+    {
+      "_type": "tag",
+      "name": "do_generating_code",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 317,
+      "kind": "function",
+      "docstring": "Handles the code generation state."
+    },
+    {
+      "_type": "tag",
+      "name": "do_running_tests",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 325,
+      "kind": "function",
+      "docstring": "Handles the test execution state."
+    },
+    {
+      "_type": "tag",
+      "name": "do_debugging",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 334,
+      "kind": "function",
+      "docstring": "Handles the debugging state."
+    },
+    {
+      "_type": "tag",
+      "name": "do_finalizing",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 342,
+      "kind": "function",
+      "docstring": "Handles the finalization of the task with agent-provided analysis."
+    },
+    {
+      "_type": "tag",
+      "name": "find_all_agents_md_files",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": "Finds all AGENTS.md files in the repository, ignoring any special-cased\ndirectories that are not part of the standard hierarchical build."
+    },
+    {
+      "_type": "tag",
+      "name": "get_used_tools_from_log",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 63,
+      "kind": "function",
+      "docstring": "Parses the JSONL log file to get a list of used tool names.\nIt specifically looks for 'TOOL_EXEC' actions and extracts the tool\nfrom the 'command' field based on the logging schema.\nThis version is robust against malformed lines with multiple JSON objects."
+    },
+    {
+      "_type": "tag",
+      "name": "get_protocol_tools_from_agents_md",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 108,
+      "kind": "function",
+      "docstring": "Parses a list of AGENTS.md files to get a set of all tools associated\nwith protocols."
+    },
+    {
+      "_type": "tag",
+      "name": "run_completeness_check",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 147,
+      "kind": "function",
+      "docstring": "Compares used tools with protocol-defined tools and returns the gaps."
+    },
+    {
+      "_type": "tag",
+      "name": "run_centrality_analysis",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 155,
+      "kind": "function",
+      "docstring": "Performs a frequency analysis on the tool log and returns the counts."
+    },
+    {
+      "_type": "tag",
+      "name": "run_protocol_source_check",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 162,
+      "kind": "function",
+      "docstring": "Checks if each AGENTS.md file is older than its corresponding source files.\nReturns a list of warning/error dictionaries."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_markdown_report",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 218,
+      "kind": "function",
+      "docstring": "Generates a Markdown-formatted string from the audit results."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/protocol_auditor.py",
+      "language": "Python",
+      "line": 276,
+      "kind": "function",
+      "docstring": "Main function to run the protocol auditor and generate a report."
+    },
+    {
+      "_type": "tag",
+      "name": "parse_concepts_from_agents_md",
+      "path": "./tooling/reorientation_manager.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function",
+      "docstring": "Parses an AGENTS.md file to extract a set of key concepts.\nThis version uses a simple regex to find protocol IDs and tool names."
+    },
+    {
+      "_type": "tag",
+      "name": "run_temporal_orientation",
+      "path": "./tooling/reorientation_manager.py",
+      "language": "Python",
+      "line": 53,
+      "kind": "function",
+      "docstring": "Runs the temporal_orienter.py tool for a given concept."
+    },
+    {
+      "_type": "tag",
+      "name": "update_temporal_orientations",
+      "path": "./tooling/reorientation_manager.py",
+      "language": "Python",
+      "line": 79,
+      "kind": "function",
+      "docstring": "Updates the temporal orientations knowledge base."
+    },
+    {
+      "_type": "tag",
+      "name": "check_for_deep_research_trigger",
+      "path": "./tooling/reorientation_manager.py",
+      "language": "Python",
+      "line": 109,
+      "kind": "function",
+      "docstring": "Checks if any of the new concepts should trigger a deep research cycle."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/reorientation_manager.py",
+      "language": "Python",
+      "line": 123,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "PlanContext",
+      "path": "./tooling/state.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "class",
+      "docstring": "Represents the execution context of a single plan file within the plan stack.\n\nThis class holds the state of a specific plan being executed, including its\nfile path, its content (as a list of parsed Command objects), and a pointer\nto the current step being executed."
+    },
+    {
+      "_type": "tag",
+      "name": "AgentState",
+      "path": "./tooling/state.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "class",
+      "docstring": "Represents the complete, serializable state of the agent's workflow.\n\nThis dataclass acts as a central container for all information related to the\nagent's current task. It is designed to be passed between the different states\nof the `MasterControlGraph` FSM, ensuring that context is maintained\nthroughout the lifecycle of a task.\n\nAttributes:\n    task: A string describing the overall objective.\n    plan_path: The file path to the root plan for the current task.\n    plan_stack: A list of `PlanContext` objects, forming the execution\n        stack for the CFDC. The plan at the top of the stack is the one\n        currently being executed.\n    messages: A history of messages, typically for interaction with an LLM.\n    orientation_complete: A flag indicating if the initial orientation\n        phase has been successfully completed.\n    vm_capability_report: A string summarizing the results of the\n        environmental probe.\n    research_findings: A dictionary to store the results of research tasks.\n    draft_postmortem_path: The file path to the draft post-mortem report\n        generated during the AWAITING_ANALYSIS state.\n    final_report: A string containing a summary of the final, completed\n        post-mortem report.\n    error: An optional string that holds an error message if the FSM\n        enters an error state, providing a clear reason for the failure."
     },
     {
       "_type": "tag",
       "name": "to_json",
-      "path": "./calculus_converter/calculus.py",
+      "path": "./tooling/state.py",
       "language": "Python",
-      "line": 52,
-      "kind": "function",
-      "docstring": "Serializes the document to a JSON-friendly format for inspection."
-    },
-    {
-      "_type": "tag",
-      "name": "_prooftree_to_dict",
-      "path": "./calculus_converter/calculus.py",
-      "language": "Python",
-      "line": 66,
+      "line": 92,
       "kind": "function",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "generate_html",
-      "path": "./calculus_converter/generator.py",
+      "name": "probe_filesystem",
+      "path": "./tooling/environmental_probe.py",
       "language": "Python",
-      "line": 5,
+      "line": 29,
       "kind": "function",
-      "docstring": "Generates an HTML file from a LaTeX file."
+      "docstring": "Tests file system write/read/delete capabilities and measures latency."
     },
     {
       "_type": "tag",
-      "name": "plan_deep_research",
-      "path": "./tooling/research_planner.py",
+      "name": "probe_network",
+      "path": "./tooling/environmental_probe.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function",
+      "docstring": "Tests network connectivity and measures latency to a reliable external endpoint."
+    },
+    {
+      "_type": "tag",
+      "name": "probe_environment_variables",
+      "path": "./tooling/environmental_probe.py",
+      "language": "Python",
+      "line": 100,
+      "kind": "function",
+      "docstring": "Checks for the presence of a common environment variable."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/environmental_probe.py",
+      "language": "Python",
+      "line": 111,
+      "kind": "function",
+      "docstring": "Runs all environmental probes and prints a summary report."
+    },
+    {
+      "_type": "tag",
+      "name": "TestPlanningEfficiencyAnalysis",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "class",
+      "docstring": "Tests for the analyze_planning_efficiency function."
+    },
+    {
+      "_type": "tag",
+      "name": "TestProtocolViolationAnalysis",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "class",
+      "docstring": "Tests for the analyze_protocol_violations function."
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": "Set up a temporary log file for testing planning efficiency."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 52,
+      "kind": "function",
+      "docstring": "Clean up the temporary log file."
+    },
+    {
+      "_type": "tag",
+      "name": "test_analyze_planning_efficiency",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 57,
+      "kind": "function",
+      "docstring": "Test that the analysis correctly identifies tasks with multiple plan updates."
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 68,
+      "kind": "function",
+      "docstring": "Set up a temporary log file for testing protocol violations."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 111,
+      "kind": "function",
+      "docstring": "Clean up the temporary log file."
+    },
+    {
+      "_type": "tag",
+      "name": "test_analyze_protocol_violations",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 116,
+      "kind": "function",
+      "docstring": "Test that `reset_all` is detected in both SYSTEM_FAILURE and TOOL_EXEC logs."
+    },
+    {
+      "_type": "tag",
+      "name": "load_config",
+      "path": "./tooling/builder.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": "Loads the build configuration file."
+    },
+    {
+      "_type": "tag",
+      "name": "execute_build",
+      "path": "./tooling/builder.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": "Executes the build process for a specific target defined in the config."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/builder.py",
+      "language": "Python",
+      "line": 85,
+      "kind": "function",
+      "docstring": "Main function to parse arguments and drive the build process."
+    },
+    {
+      "_type": "tag",
+      "name": "log_catastrophic_failure",
+      "path": "./tooling/log_failure.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": "Logs the catastrophic failure event."
+    },
+    {
+      "_type": "tag",
+      "name": "TestReorientationManager",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": "Set up test files and cleanup afterwards."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": "Clean up created files after tests."
+    },
+    {
+      "_type": "tag",
+      "name": "cleanup_files",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_temporal_orientation_triggered",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": "Test that temporal orientation is triggered for new concepts."
+    },
+    {
+      "_type": "tag",
+      "name": "test_deep_research_triggered",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 81,
+      "kind": "function",
+      "docstring": "Test that deep research is triggered for significant new concepts."
+    },
+    {
+      "_type": "tag",
+      "name": "test_no_changes_detected",
+      "path": "./tooling/test_reorientation_manager.py",
+      "language": "Python",
+      "line": 119,
+      "kind": "function",
+      "docstring": "Test that no action is taken when there are no new concepts."
+    },
+    {
+      "_type": "tag",
+      "name": "find_package_json_files",
+      "path": "./tooling/dependency_graph_generator.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": "Finds all package.json files in the repository, excluding node_modules."
+    },
+    {
+      "_type": "tag",
+      "name": "find_requirements_txt_files",
+      "path": "./tooling/dependency_graph_generator.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": "Finds all requirements.txt files in the repository."
+    },
+    {
+      "_type": "tag",
+      "name": "parse_package_json",
+      "path": "./tooling/dependency_graph_generator.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": "Parses a single package.json file to extract its name and dependencies."
+    },
+    {
+      "_type": "tag",
+      "name": "parse_requirements_txt",
+      "path": "./tooling/dependency_graph_generator.py",
+      "language": "Python",
+      "line": 66,
+      "kind": "function",
+      "docstring": "Parses a requirements.txt file to extract its dependencies."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_dependency_graph",
+      "path": "./tooling/dependency_graph_generator.py",
+      "language": "Python",
+      "line": 104,
+      "kind": "function",
+      "docstring": "Generates a dependency graph for all supported dependency files found."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/dependency_graph_generator.py",
+      "language": "Python",
+      "line": 156,
+      "kind": "function",
+      "docstring": "Main function to generate and save the dependency graph."
+    },
+    {
+      "_type": "tag",
+      "name": "get_defined_symbols",
+      "path": "./tooling/context_awareness_scanner.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": "Parses a Python file to find all defined functions and classes."
+    },
+    {
+      "_type": "tag",
+      "name": "get_imported_symbols",
+      "path": "./tooling/context_awareness_scanner.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": "Parses a Python file to find all imported modules and symbols."
+    },
+    {
+      "_type": "tag",
+      "name": "find_references",
+      "path": "./tooling/context_awareness_scanner.py",
+      "language": "Python",
+      "line": 51,
+      "kind": "function",
+      "docstring": "Finds all files in a directory that reference a given symbol."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/context_awareness_scanner.py",
+      "language": "Python",
+      "line": 69,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "FunctionDoc",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "class",
+      "docstring": "Holds documentation for a single function or method."
+    },
+    {
+      "_type": "tag",
+      "name": "ClassDoc",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "class",
+      "docstring": "Holds documentation for a single class."
+    },
+    {
+      "_type": "tag",
+      "name": "ModuleDoc",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 52,
+      "kind": "class",
+      "docstring": "Holds all documentation for a single Python module."
+    },
+    {
+      "_type": "tag",
+      "name": "_format_default_value",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 71,
+      "kind": "function",
+      "docstring": "Safely formats a default argument value from an AST node."
+    },
+    {
+      "_type": "tag",
+      "name": "format_args",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 82,
+      "kind": "function",
+      "docstring": "Formats ast.arguments into a printable string, including defaults."
+    },
+    {
+      "_type": "tag",
+      "name": "DocVisitor",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 131,
+      "kind": "class",
+      "docstring": "AST visitor to extract documentation from classes and functions.\nIt navigates the tree and builds lists of discovered documentation objects."
+    },
+    {
+      "_type": "tag",
+      "name": "parse_file_for_docs",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 182,
+      "kind": "function",
+      "docstring": "Parses a Python file and extracts documentation for its module, classes,\nand functions."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_documentation_for_module",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 211,
+      "kind": "function",
+      "docstring": "Generates Markdown content for a single module."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_documentation",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 257,
+      "kind": "function",
+      "docstring": "Generates a single Markdown string from a list of ModuleDoc objects."
+    },
+    {
+      "_type": "tag",
+      "name": "find_python_files",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 283,
+      "kind": "function",
+      "docstring": "Finds all Python files in the given directories, ignoring test files."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 294,
+      "kind": "function",
+      "docstring": "Main function to find files, parse them, and write documentation."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 37,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 46,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 137,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "visit_FunctionDef",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 142,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "visit_ClassDef",
+      "path": "./tooling/doc_generator.py",
+      "language": "Python",
+      "line": 159,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Command",
+      "path": "./tooling/plan_parser.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "class",
+      "docstring": "Represents a single, parsed command from a plan.\nThis structure correctly handles multi-line arguments for tools."
+    },
+    {
+      "_type": "tag",
+      "name": "parse_plan",
+      "path": "./tooling/plan_parser.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": "Parses the raw text of a plan into a list of Command objects.\nThis parser correctly handles multi-line arguments, comments, and the '---' separator."
+    },
+    {
+      "_type": "tag",
+      "name": "install_dependencies",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": "Checks for required packages from requirements.txt and installs them if missing."
+    },
+    {
+      "_type": "tag",
+      "name": "load_schema",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 111,
+      "kind": "function",
+      "docstring": "Loads the protocol JSON schema."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_protocols",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 124,
+      "kind": "function",
+      "docstring": "Reads all .protocol.json and corresponding .protocol.md files from the\nsource directory, validates them, and compiles them into a target markdown file.\nOptionally, it can also generate a machine-readable knowledge graph."
+    },
+    {
+      "_type": "tag",
+      "name": "main_cli",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 274,
+      "kind": "function",
+      "docstring": "Main function to run the compiler from the command line."
+    },
+    {
+      "_type": "tag",
+      "name": "TestResearchExecutor",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "class",
+      "docstring": "Tests for the research executor tool, mocking the native tools that are\nglobally injected by the execution environment."
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_local_filesystem_file_scope",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function",
+      "docstring": "Verify it calls read_file for local file scope."
+    },
+    {
+      "_type": "tag",
+      "name": "test_local_filesystem_directory_scope",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": "Verify it calls list_files for local directory scope."
+    },
+    {
+      "_type": "tag",
+      "name": "test_external_web_narrow_scope",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 52,
+      "kind": "function",
+      "docstring": "Verify it calls google_search for external narrow scope."
+    },
+    {
+      "_type": "tag",
+      "name": "test_external_web_broad_scope",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function",
+      "docstring": "Verify it calls view_text_website for external broad scope."
+    },
+    {
+      "_type": "tag",
+      "name": "test_external_repository_scope",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 78,
+      "kind": "function",
+      "docstring": "Verify it calls view_text_website for external repository scope."
+    },
+    {
+      "_type": "tag",
+      "name": "test_invalid_target",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 91,
+      "kind": "function",
+      "docstring": "Verify it returns an error for an invalid target."
+    },
+    {
+      "_type": "tag",
+      "name": "test_missing_parameters",
+      "path": "./tooling/test_research.py",
+      "language": "Python",
+      "line": 100,
+      "kind": "function",
+      "docstring": "Verify it returns an error if required parameters are missing."
+    },
+    {
+      "_type": "tag",
+      "name": "TestRefactorTool",
+      "path": "./tooling/test_refactor.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_refactor.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_refactor.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_rename_symbol",
+      "path": "./tooling/test_refactor.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "get_fsm_details",
+      "path": "./tooling/generate_docs.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "function",
+      "docstring": "Extracts FSM states and transitions from fsm.json."
+    },
+    {
+      "_type": "tag",
+      "name": "get_master_control_details",
+      "path": "./tooling/generate_docs.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": "Extracts details about the master control script's state handlers."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_documentation",
+      "path": "./tooling/generate_docs.py",
+      "language": "Python",
+      "line": 31,
+      "kind": "function",
+      "docstring": "Generates the final Markdown documentation."
+    },
+    {
+      "_type": "tag",
+      "name": "scan_documents",
+      "path": "./tooling/document_scanner.py",
       "language": "Python",
       "line": 5,
       "kind": "function",
-      "docstring": "Generates a plan for deep research.\nFor this stress test, it returns a dummy plan."
+      "docstring": "Scans a directory for PDF, Markdown, and text files and extracts their content."
+    },
+    {
+      "_type": "tag",
+      "name": "find_symbol_definition",
+      "path": "./tooling/refactor.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": "Finds the definition of a symbol in a Python file."
+    },
+    {
+      "_type": "tag",
+      "name": "find_references",
+      "path": "./tooling/refactor.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function",
+      "docstring": "Finds all files in a directory that reference a given symbol."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/refactor.py",
+      "language": "Python",
+      "line": 40,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_planning_efficiency",
+      "path": "./tooling/self_improvement_cli.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function",
+      "docstring": "Analyzes the log file to find tasks with multiple plan revisions.\n\nArgs:\n    log_file (str): Path to the activity log file.\n\nReturns:\n    dict: A dictionary mapping task IDs to the number of plan updates."
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_protocol_violations",
+      "path": "./tooling/self_improvement_cli.py",
+      "language": "Python",
+      "line": 74,
+      "kind": "function",
+      "docstring": "Scans the log file for critical protocol violations, such as the\nunauthorized use of `reset_all`.\n\nThis function checks for two conditions:\n1. A `SYSTEM_FAILURE` log explicitly blaming `reset_all`.\n2. A `TOOL_EXEC` log where the command contains \"reset_all\".\n\nArgs:\n    log_file (str): Path to the activity log file.\n\nReturns:\n    list: A list of unique task IDs where `reset_all` was used."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/self_improvement_cli.py",
+      "language": "Python",
+      "line": 124,
+      "kind": "function",
+      "docstring": "Main function to run the self-improvement analysis CLI."
+    },
+    {
+      "_type": "tag",
+      "name": "find_fsm_transition",
+      "path": "./tooling/agent_shell.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": "Finds the destination state for a given source and trigger."
+    },
+    {
+      "_type": "tag",
+      "name": "run_agent_loop",
+      "path": "./tooling/agent_shell.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function",
+      "docstring": "The main loop that drives the agent's lifecycle via the FSM."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/agent_shell.py",
+      "language": "Python",
+      "line": 138,
+      "kind": "function",
+      "docstring": "Main entry point for the agent shell."
+    },
+    {
+      "_type": "tag",
+      "name": "get_module_docstring",
+      "path": "./tooling/readme_generator.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function",
+      "docstring": "Parses a Python file and extracts the module-level docstring."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_core_protocols_section",
+      "path": "./tooling/readme_generator.py",
+      "language": "Python",
+      "line": 49,
+      "kind": "function",
+      "docstring": "Parses a given AGENTS.md file to extract protocol definitions and generate a Markdown summary."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_key_components_section",
+      "path": "./tooling/readme_generator.py",
+      "language": "Python",
+      "line": 90,
+      "kind": "function",
+      "docstring": "Generates the Markdown for the \"Key Components\" section by documenting\nany `.py` files found in a `tooling/` subdirectory of the module."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/readme_generator.py",
+      "language": "Python",
+      "line": 122,
+      "kind": "function",
+      "docstring": "Main function to generate the README.md content and write it to a file."
+    },
+    {
+      "_type": "tag",
+      "name": "execute_research_protocol",
+      "path": "./tooling/research.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": "Executes a research plan.\nFor this stress test, it returns a dummy report."
+    },
+    {
+      "_type": "tag",
+      "name": "perform_research",
+      "path": "./tooling/background_researcher.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": "Simulates a research task and writes the result to a file."
+    },
+    {
+      "_type": "tag",
+      "name": "TestDependencyGraphGenerator",
+      "path": "./tooling/test_dependency_graph_generator.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_dependency_graph_generator.py",
+      "language": "Python",
+      "line": 31,
+      "kind": "function",
+      "docstring": "Set up a temporary directory structure for testing."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_dependency_graph_generator.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function",
+      "docstring": "Clean up the temporary directory."
+    },
+    {
+      "_type": "tag",
+      "name": "test_find_files",
+      "path": "./tooling/test_dependency_graph_generator.py",
+      "language": "Python",
+      "line": 69,
+      "kind": "function",
+      "docstring": "Test finding both package.json and requirements.txt files."
+    },
+    {
+      "_type": "tag",
+      "name": "test_parse_package_json",
+      "path": "./tooling/test_dependency_graph_generator.py",
+      "language": "Python",
+      "line": 79,
+      "kind": "function",
+      "docstring": "Test parsing a single package.json file."
+    },
+    {
+      "_type": "tag",
+      "name": "test_parse_requirements_txt",
+      "path": "./tooling/test_dependency_graph_generator.py",
+      "language": "Python",
+      "line": 88,
+      "kind": "function",
+      "docstring": "Test parsing a single requirements.txt file."
+    },
+    {
+      "_type": "tag",
+      "name": "test_generate_dependency_graph",
+      "path": "./tooling/test_dependency_graph_generator.py",
+      "language": "Python",
+      "line": 102,
+      "kind": "function",
+      "docstring": "Test the full graph generation logic with mixed project types."
+    },
+    {
+      "_type": "tag",
+      "name": "TestKnowledgeCompiler",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestKnowledgeCompilerAdvanced",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 108,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": "Set up a temporary directory with mock files."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 56,
+      "kind": "function",
+      "docstring": "Clean up the temporary directory and restore original state."
+    },
+    {
+      "_type": "tag",
+      "name": "test_knowledge_compiler_end_to_end",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 66,
+      "kind": "function",
+      "docstring": "Verify that the compiler correctly parses a post-mortem and\ngenerates a structured lessons.jsonl file with both machine-readable\nand placeholder commands."
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 110,
+      "kind": "function",
+      "docstring": "Set up a temporary directory for advanced parsing tests."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 145,
+      "kind": "function",
+      "docstring": "Clean up the temporary directory and restore original state."
+    },
+    {
+      "_type": "tag",
+      "name": "test_advanced_parsing_and_deprecate_command",
+      "path": "./tooling/test_knowledge_compiler.py",
+      "language": "Python",
+      "line": 155,
+      "kind": "function",
+      "docstring": "Verify the compiler can handle different section headers and parse\nthe 'deprecate-tool' command."
     },
     {
       "_type": "tag",
@@ -419,7 +1976,7 @@
       "name": "test_get_used_tools_from_log",
       "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
-      "line": 71,
+      "line": 73,
       "kind": "function",
       "docstring": "Verify that `get_used_tools_from_log` correctly extracts tool names\nfrom a mock activity log file using the modern `tool_name` schema."
     },
@@ -428,16 +1985,7 @@
       "name": "test_end_to_end_report_generation",
       "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
-      "line": 84,
-      "kind": "function",
-      "docstring": "Run the main function end-to-end and verify the content\nof the generated Markdown report, mocking a hierarchical file system."
-    },
-    {
-      "_type": "tag",
-      "name": "test_end_to_end_report_generation",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 101,
+      "line": 93,
       "kind": "function",
       "docstring": "Run the main function end-to-end by mocking the data gathering functions\nand verifying the content of the generated Markdown report."
     },
@@ -446,583 +1994,88 @@
       "name": "test_find_all_agents_md_files_with_special_dirs",
       "path": "./tooling/test_protocol_auditor.py",
       "language": "Python",
-      "line": 138,
+      "line": 148,
       "kind": "function",
       "docstring": "Verify that `find_all_agents_md_files` correctly ignores directories\nlisted in the SPECIAL_DIRS configuration."
     },
     {
       "_type": "tag",
-      "name": "find_protocol_file",
-      "path": "./tooling/protocol_updater.py",
+      "name": "TestMasterControlRedesigned",
+      "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 19,
-      "kind": "function",
-      "docstring": "Finds the protocol file path corresponding to a given protocol_id."
-    },
-    {
-      "_type": "tag",
-      "name": "add_tool_to_protocol",
-      "path": "./tooling/protocol_updater.py",
-      "language": "Python",
-      "line": 31,
-      "kind": "function",
-      "docstring": "Adds a tool to the 'associated_tools' list of a specified protocol."
-    },
-    {
-      "_type": "tag",
-      "name": "update_rule_in_protocol",
-      "path": "./tooling/protocol_updater.py",
-      "language": "Python",
-      "line": 63,
-      "kind": "function",
-      "docstring": "Updates the description of a specific rule within a protocol."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/protocol_updater.py",
-      "language": "Python",
-      "line": 101,
-      "kind": "function",
-      "docstring": "Main function to parse arguments and call the appropriate handler."
-    },
-    {
-      "_type": "tag",
-      "name": "load_schema",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 56,
-      "kind": "function",
-      "docstring": "Loads the protocol JSON schema."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_protocols",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 68,
-      "kind": "function",
-      "docstring": "Reads all .protocol.json and corresponding .protocol.md files from the\nsource directory, validates them, and compiles them into a target markdown file.\nOptionally, it can also generate a machine-readable knowledge graph."
-    },
-    {
-      "_type": "tag",
-      "name": "main_cli",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 198,
-      "kind": "function",
-      "docstring": "Main function to run the compiler from the command line."
-    },
-    {
-      "_type": "tag",
-      "name": "TestSelfCorrectionOrchestrator",
-      "path": "./tooling/test_self_correction_orchestrator.py",
-      "language": "Python",
-      "line": 17,
+      "line": 25,
       "kind": "class",
-      "docstring": null
+      "docstring": "Validates the FSM workflow in a single-threaded, deterministic manner."
     },
     {
       "_type": "tag",
       "name": "setUp",
-      "path": "./tooling/test_self_correction_orchestrator.py",
+      "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 19,
-      "kind": "function",
-      "docstring": "Set up a temporary directory with mock files."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_self_correction_orchestrator.py",
-      "language": "Python",
-      "line": 63,
-      "kind": "function",
-      "docstring": "Clean up and restore original constants."
-    },
-    {
-      "_type": "tag",
-      "name": "test_process_lessons_end_to_end",
-      "path": "./tooling/test_self_correction_orchestrator.py",
-      "language": "Python",
-      "line": 69,
-      "kind": "function",
-      "docstring": "Verify the entire workflow: loading, processing, saving,\nand checking the side-effects (protocol file updated)."
-    },
-    {
-      "_type": "tag",
-      "name": "test_process_lessons_handles_malformed_lesson_gracefully",
-      "path": "./tooling/test_self_correction_orchestrator.py",
-      "language": "Python",
-      "line": 97,
-      "kind": "function",
-      "docstring": "Verify that the orchestrator can skip a malformed lesson without crashing.\nA malformed lesson, in this context, is one that is pending but is\nmissing the required 'command' key in its action payload."
-    },
-    {
-      "_type": "tag",
-      "name": "TestPlanningEfficiencyAnalysis",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 13,
-      "kind": "class",
-      "docstring": "Tests for the analyze_planning_efficiency function."
-    },
-    {
-      "_type": "tag",
-      "name": "TestProtocolViolationAnalysis",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 61,
-      "kind": "class",
-      "docstring": "Tests for the analyze_protocol_violations function."
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 16,
-      "kind": "function",
-      "docstring": "Set up a temporary log file for testing planning efficiency."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 48,
-      "kind": "function",
-      "docstring": "Clean up the temporary log file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_analyze_planning_efficiency",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 53,
-      "kind": "function",
-      "docstring": "Test that the analysis correctly identifies tasks with multiple plan updates."
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 64,
-      "kind": "function",
-      "docstring": "Set up a temporary log file for testing protocol violations."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 98,
-      "kind": "function",
-      "docstring": "Clean up the temporary log file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_analyze_protocol_violations",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 103,
-      "kind": "function",
-      "docstring": "Test that `reset_all` is detected in both SYSTEM_FAILURE and TOOL_EXEC logs."
-    },
-    {
-      "_type": "tag",
-      "name": "execute_research_protocol",
-      "path": "./tooling/research.py",
-      "language": "Python",
-      "line": 6,
-      "kind": "function",
-      "docstring": "Executes a research plan.\nFor this stress test, it returns a dummy report."
-    },
-    {
-      "_type": "tag",
-      "name": "find_symbol_definition",
-      "path": "./tooling/refactor.py",
-      "language": "Python",
-      "line": 7,
-      "kind": "function",
-      "docstring": "Finds the definition of a symbol in a Python file."
-    },
-    {
-      "_type": "tag",
-      "name": "find_references",
-      "path": "./tooling/refactor.py",
-      "language": "Python",
-      "line": 17,
-      "kind": "function",
-      "docstring": "Finds all files in a directory that reference a given symbol."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/refactor.py",
-      "language": "Python",
-      "line": 34,
+      "line": 30,
       "kind": "function",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "probe_filesystem",
-      "path": "./tooling/environmental_probe.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "function",
-      "docstring": "Tests file system write/read/delete capabilities and measures latency."
-    },
-    {
-      "_type": "tag",
-      "name": "probe_network",
-      "path": "./tooling/environmental_probe.py",
-      "language": "Python",
-      "line": 64,
-      "kind": "function",
-      "docstring": "Tests network connectivity and measures latency to a reliable external endpoint."
-    },
-    {
-      "_type": "tag",
-      "name": "probe_environment_variables",
-      "path": "./tooling/environmental_probe.py",
-      "language": "Python",
-      "line": 99,
-      "kind": "function",
-      "docstring": "Checks for the presence of a common environment variable."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/environmental_probe.py",
-      "language": "Python",
-      "line": 110,
-      "kind": "function",
-      "docstring": "Runs all environmental probes and prints a summary report."
-    },
-    {
-      "_type": "tag",
-      "name": "_load_plan_registry",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 36,
-      "kind": "function",
-      "docstring": "Loads the plan registry, returning an empty dict if it doesn't exist or is invalid."
-    },
-    {
-      "_type": "tag",
-      "name": "MasterControlGraph",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 46,
-      "kind": "class",
-      "docstring": "A Finite State Machine (FSM) that enforces the agent's protocol.\nThis graph reads a state definition and orchestrates the agent's workflow,\nensuring that all protocol steps are followed in the correct order."
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 53,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "get_trigger",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 58,
-      "kind": "function",
-      "docstring": "Finds a trigger in the FSM definition for a transition from a source\nto a destination state. This is a helper to avoid hardcoding trigger\nstrings in the state handlers."
-    },
-    {
-      "_type": "tag",
-      "name": "do_orientation",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 74,
-      "kind": "function",
-      "docstring": "Executes orientation, including analyzing the last post-mortem."
-    },
-    {
-      "_type": "tag",
-      "name": "do_planning",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 100,
-      "kind": "function",
-      "docstring": "Validates a given plan, parses it, and initializes the plan stack."
-    },
-    {
-      "_type": "tag",
-      "name": "_validate_plan_with_cli",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 121,
-      "kind": "function",
-      "docstring": "Validates a plan in-memory against the FSM without calling an external script."
-    },
-    {
-      "_type": "tag",
-      "name": "do_researching",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 167,
-      "kind": "function",
-      "docstring": "Launches the background research process."
-    },
-    {
-      "_type": "tag",
-      "name": "do_awaiting_result",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 187,
-      "kind": "function",
-      "docstring": "Checks for the result of the background research process."
-    },
-    {
-      "_type": "tag",
-      "name": "get_current_step",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 218,
-      "kind": "function",
-      "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
-    },
-    {
-      "_type": "tag",
-      "name": "do_execution",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 229,
-      "kind": "function",
-      "docstring": "Processes the result of a step and advances the execution state."
-    },
-    {
-      "_type": "tag",
-      "name": "do_finalizing",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 260,
-      "kind": "function",
-      "docstring": "Handles the finalization of the task with agent-provided analysis."
-    },
-    {
-      "_type": "tag",
-      "name": "find_package_json_files",
-      "path": "./tooling/dependency_graph_generator.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "function",
-      "docstring": "Finds all package.json files in the repository, excluding node_modules."
-    },
-    {
-      "_type": "tag",
-      "name": "find_requirements_txt_files",
-      "path": "./tooling/dependency_graph_generator.py",
-      "language": "Python",
-      "line": 34,
-      "kind": "function",
-      "docstring": "Finds all requirements.txt files in the repository."
-    },
-    {
-      "_type": "tag",
-      "name": "parse_package_json",
-      "path": "./tooling/dependency_graph_generator.py",
-      "language": "Python",
-      "line": 42,
-      "kind": "function",
-      "docstring": "Parses a single package.json file to extract its name and dependencies."
-    },
-    {
-      "_type": "tag",
-      "name": "parse_requirements_txt",
-      "path": "./tooling/dependency_graph_generator.py",
-      "language": "Python",
-      "line": 65,
-      "kind": "function",
-      "docstring": "Parses a requirements.txt file to extract its dependencies."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_dependency_graph",
-      "path": "./tooling/dependency_graph_generator.py",
-      "language": "Python",
-      "line": 103,
-      "kind": "function",
-      "docstring": "Generates a dependency graph for all supported dependency files found."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/dependency_graph_generator.py",
-      "language": "Python",
-      "line": 155,
-      "kind": "function",
-      "docstring": "Main function to generate and save the dependency graph."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_html_page",
-      "path": "./tooling/pages_generator.py",
-      "language": "Python",
-      "line": 107,
-      "kind": "function",
-      "docstring": "Reads the source Markdown files, converts them to HTML, and builds the\nfinal index.html page."
-    },
-    {
-      "_type": "tag",
-      "name": "Command",
-      "path": "./tooling/plan_parser.py",
-      "language": "Python",
-      "line": 14,
-      "kind": "class",
-      "docstring": "Represents a single, parsed command from a plan.\nThis structure correctly handles multi-line arguments for tools."
-    },
-    {
-      "_type": "tag",
-      "name": "parse_plan",
-      "path": "./tooling/plan_parser.py",
-      "language": "Python",
-      "line": 24,
-      "kind": "function",
-      "docstring": "Parses the raw text of a plan into a list of Command objects.\nThis parser correctly handles multi-line arguments, comments, and the '---' separator."
-    },
-    {
-      "_type": "tag",
-      "name": "get_defined_symbols",
-      "path": "./tooling/context_awareness_scanner.py",
-      "language": "Python",
-      "line": 8,
-      "kind": "function",
-      "docstring": "Parses a Python file to find all defined functions and classes."
-    },
-    {
-      "_type": "tag",
-      "name": "get_imported_symbols",
-      "path": "./tooling/context_awareness_scanner.py",
-      "language": "Python",
-      "line": 22,
-      "kind": "function",
-      "docstring": "Parses a Python file to find all imported modules and symbols."
-    },
-    {
-      "_type": "tag",
-      "name": "find_references",
-      "path": "./tooling/context_awareness_scanner.py",
-      "language": "Python",
-      "line": 40,
-      "kind": "function",
-      "docstring": "Finds all files in a directory that reference a given symbol."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/context_awareness_scanner.py",
-      "language": "Python",
-      "line": 58,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "perform_research",
-      "path": "./tooling/background_researcher.py",
-      "language": "Python",
-      "line": 10,
-      "kind": "function",
-      "docstring": "Simulates a research task and writes the result to a file."
-    },
-    {
-      "_type": "tag",
-      "name": "TestKnowledgeIntegrator",
-      "path": "./tooling/test_knowledge_integrator.py",
-      "language": "Python",
-      "line": 9,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_knowledge_integrator.py",
-      "language": "Python",
-      "line": 11,
-      "kind": "function",
-      "docstring": "Set up a temporary directory and files for testing."
-    },
-    {
-      "_type": "tag",
       "name": "tearDown",
-      "path": "./tooling/test_knowledge_integrator.py",
+      "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 22,
+      "line": 118,
       "kind": "function",
-      "docstring": "Clean up the temporary directory."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_load_local_graph_success",
-      "path": "./tooling/test_knowledge_integrator.py",
+      "name": "test_do_orientation",
+      "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 26,
+      "line": 127,
       "kind": "function",
-      "docstring": "Test that the local graph loads successfully."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_load_local_graph_not_found",
-      "path": "./tooling/test_knowledge_integrator.py",
+      "name": "test_do_planning",
+      "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 33,
+      "line": 146,
       "kind": "function",
-      "docstring": "Test that loading a non-existent graph returns None."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_extract_concepts",
-      "path": "./tooling/test_knowledge_integrator.py",
+      "name": "test_do_execution",
+      "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 39,
+      "line": 158,
       "kind": "function",
-      "docstring": "Test that concepts are extracted and cleaned correctly."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_query_dbpedia_success",
-      "path": "./tooling/test_knowledge_integrator.py",
+      "name": "test_do_execution_to_generate_code",
+      "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 47,
+      "line": 173,
       "kind": "function",
-      "docstring": "Test a successful query to DBPedia, mocking the HTTP request."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_query_dbpedia_http_error",
-      "path": "./tooling/test_knowledge_integrator.py",
+      "name": "test_do_finalizing",
+      "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 64,
+      "line": 186,
       "kind": "function",
-      "docstring": "Test that a DBPedia query handles HTTP errors gracefully."
-    },
-    {
-      "_type": "tag",
-      "name": "test_run_knowledge_integration",
-      "path": "./tooling/test_knowledge_integrator.py",
-      "language": "Python",
-      "line": 72,
-      "kind": "function",
-      "docstring": "Test the main run_knowledge_integration function."
+      "docstring": null
     },
     {
       "_type": "tag",
       "name": "TestProtocolUpdater",
       "path": "./tooling/test_protocol_updater.py",
       "language": "Python",
-      "line": 16,
+      "line": 18,
       "kind": "class",
       "docstring": null
     },
@@ -1031,7 +2084,7 @@
       "name": "setUp",
       "path": "./tooling/test_protocol_updater.py",
       "language": "Python",
-      "line": 18,
+      "line": 20,
       "kind": "function",
       "docstring": "Set up a temporary directory with a mock protocols structure."
     },
@@ -1040,7 +2093,7 @@
       "name": "tearDown",
       "path": "./tooling/test_protocol_updater.py",
       "language": "Python",
-      "line": 42,
+      "line": 47,
       "kind": "function",
       "docstring": "Clean up the temporary directory and restore original config."
     },
@@ -1049,7 +2102,7 @@
       "name": "test_find_protocol_file_success",
       "path": "./tooling/test_protocol_updater.py",
       "language": "Python",
-      "line": 48,
+      "line": 54,
       "kind": "function",
       "docstring": "Verify that a protocol file can be found by its ID."
     },
@@ -1058,7 +2111,7 @@
       "name": "test_find_protocol_file_not_found",
       "path": "./tooling/test_protocol_updater.py",
       "language": "Python",
-      "line": 53,
+      "line": 59,
       "kind": "function",
       "docstring": "Verify that None is returned for a non-existent protocol ID."
     },
@@ -1067,7 +2120,7 @@
       "name": "test_add_tool_to_protocol_success",
       "path": "./tooling/test_protocol_updater.py",
       "language": "Python",
-      "line": 58,
+      "line": 64,
       "kind": "function",
       "docstring": "Verify that a new tool can be successfully added to a protocol."
     },
@@ -1076,762 +2129,16 @@
       "name": "test_add_duplicate_tool",
       "path": "./tooling/test_protocol_updater.py",
       "language": "Python",
-      "line": 71,
+      "line": 77,
       "kind": "function",
       "docstring": "Verify that adding an existing tool does not create a duplicate."
-    },
-    {
-      "_type": "tag",
-      "name": "TestReadmeGenerator",
-      "path": "./tooling/test_readme_generator.py",
-      "language": "Python",
-      "line": 10,
-      "kind": "class",
-      "docstring": "Tests for the readme_generator.py script."
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_readme_generator.py",
-      "language": "Python",
-      "line": 15,
-      "kind": "function",
-      "docstring": "Set up a temporary directory and mock source files for testing."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_readme_generator.py",
-      "language": "Python",
-      "line": 56,
-      "kind": "function",
-      "docstring": "Clean up the temporary directory after tests are complete."
-    },
-    {
-      "_type": "tag",
-      "name": "test_main_generates_readme_correctly",
-      "path": "./tooling/test_readme_generator.py",
-      "language": "Python",
-      "line": 62,
-      "kind": "function",
-      "docstring": "Test the main function to ensure it generates a complete README.md\nby simulating command-line arguments."
-    },
-    {
-      "_type": "tag",
-      "name": "extract_lessons_from_postmortem",
-      "path": "./tooling/knowledge_compiler.py",
-      "language": "Python",
-      "line": 29,
-      "kind": "function",
-      "docstring": "Parses a post-mortem report to extract lessons learned.\nHandles multiple possible section headers and formats."
-    },
-    {
-      "_type": "tag",
-      "name": "extract_metadata_from_postmortem",
-      "path": "./tooling/knowledge_compiler.py",
-      "language": "Python",
-      "line": 82,
-      "kind": "function",
-      "docstring": "Parses a post-mortem report to extract metadata like Task ID and Date."
-    },
-    {
-      "_type": "tag",
-      "name": "parse_action_to_command",
-      "path": "./tooling/knowledge_compiler.py",
-      "language": "Python",
-      "line": 94,
-      "kind": "function",
-      "docstring": "Parses a natural language action string into a machine-executable command.\n\nThis is the core of translating insights into automated actions. It uses\npattern matching to identify specific, supported commands."
-    },
-    {
-      "_type": "tag",
-      "name": "format_lesson_entry",
-      "path": "./tooling/knowledge_compiler.py",
-      "language": "Python",
-      "line": 158,
-      "kind": "function",
-      "docstring": "Formats an extracted lesson into a structured JSON object."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/knowledge_compiler.py",
-      "language": "Python",
-      "line": 174,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "generate_suggestion_plan",
-      "path": "./tooling/code_suggester.py",
-      "language": "Python",
-      "line": 25,
-      "kind": "function",
-      "docstring": "Generates a temporary, single-step plan file to apply a code change.\n\nArgs:\n    filepath: The path to the file that needs to be modified.\n    diff_content: The git-style merge diff block to be applied.\n\nReturns:\n    The path to the generated temporary plan file."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/code_suggester.py",
-      "language": "Python",
-      "line": 48,
-      "kind": "function",
-      "docstring": "Main entry point for the code suggester tool.\nParses arguments, generates a plan, and prints the plan's path to stdout."
-    },
-    {
-      "_type": "tag",
-      "name": "find_fsm_transition",
-      "path": "./tooling/agent_shell.py",
-      "language": "Python",
-      "line": 23,
-      "kind": "function",
-      "docstring": "Finds the destination state for a given source and trigger."
-    },
-    {
-      "_type": "tag",
-      "name": "run_agent_loop",
-      "path": "./tooling/agent_shell.py",
-      "language": "Python",
-      "line": 30,
-      "kind": "function",
-      "docstring": "The main loop that drives the agent's lifecycle via the FSM."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/agent_shell.py",
-      "language": "Python",
-      "line": 123,
-      "kind": "function",
-      "docstring": "Main entry point for the agent shell."
-    },
-    {
-      "_type": "tag",
-      "name": "find_protocol_dirs",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 21,
-      "kind": "function",
-      "docstring": "Finds all directories named 'protocols' within the root directory,\nignoring any special-cased directories."
-    },
-    {
-      "_type": "tag",
-      "name": "run_compiler",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 40,
-      "kind": "function",
-      "docstring": "Invokes the protocol_compiler.py script as a library."
-    },
-    {
-      "_type": "tag",
-      "name": "run_readme_generator",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 59,
-      "kind": "function",
-      "docstring": "Invokes the readme_generator.py script as a library."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_summary",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 75,
-      "kind": "function",
-      "docstring": "Extracts the full, rendered protocol blocks from a child AGENTS.md file.\nThis function finds all protocol definitions (human-readable markdown and\nthe associated machine-readable JSON block) and concatenates them into a\nsingle string to be injected into the parent AGENTS.md."
-    },
-    {
-      "_type": "tag",
-      "name": "cleanup_summaries",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 105,
-      "kind": "function",
-      "docstring": "Removes temporary summary files from a protocols directory."
-    },
-    {
-      "_type": "tag",
-      "name": "get_parent_module",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 114,
-      "kind": "function",
-      "docstring": "Finds the direct parent module of a given module."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_centralized_knowledge_graph",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 123,
-      "kind": "function",
-      "docstring": "Finds all protocol.json files in the entire repository, loads them, and\ncompiles them into a single, unified knowledge graph."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 172,
-      "kind": "function",
-      "docstring": "Main function to orchestrate the hierarchical compilation."
-    },
-    {
-      "_type": "tag",
-      "name": "get_registry",
-      "path": "./tooling/plan_manager.py",
-      "language": "Python",
-      "line": 32,
-      "kind": "function",
-      "docstring": "Loads the plan registry from its JSON file."
-    },
-    {
-      "_type": "tag",
-      "name": "save_registry",
-      "path": "./tooling/plan_manager.py",
-      "language": "Python",
-      "line": 44,
-      "kind": "function",
-      "docstring": "Saves the given data to the plan registry JSON file."
-    },
-    {
-      "_type": "tag",
-      "name": "register_plan",
-      "path": "./tooling/plan_manager.py",
-      "language": "Python",
-      "line": 55,
-      "kind": "function",
-      "docstring": "Registers a new plan by mapping a logical name to a file path."
-    },
-    {
-      "_type": "tag",
-      "name": "deregister_plan",
-      "path": "./tooling/plan_manager.py",
-      "language": "Python",
-      "line": 76,
-      "kind": "function",
-      "docstring": "Removes a plan from the registry by its logical name."
-    },
-    {
-      "_type": "tag",
-      "name": "list_plans",
-      "path": "./tooling/plan_manager.py",
-      "language": "Python",
-      "line": 88,
-      "kind": "function",
-      "docstring": "Lists all currently registered plans."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/plan_manager.py",
-      "language": "Python",
-      "line": 102,
-      "kind": "function",
-      "docstring": "Main function to run the plan management CLI."
-    },
-    {
-      "_type": "tag",
-      "name": "FunctionDoc",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 32,
-      "kind": "class",
-      "docstring": "Holds documentation for a single function or method."
-    },
-    {
-      "_type": "tag",
-      "name": "ClassDoc",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 39,
-      "kind": "class",
-      "docstring": "Holds documentation for a single class."
-    },
-    {
-      "_type": "tag",
-      "name": "ModuleDoc",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 46,
-      "kind": "class",
-      "docstring": "Holds all documentation for a single Python module."
-    },
-    {
-      "_type": "tag",
-      "name": "_format_default_value",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 56,
-      "kind": "function",
-      "docstring": "Safely formats a default argument value from an AST node."
-    },
-    {
-      "_type": "tag",
-      "name": "format_args",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 66,
-      "kind": "function",
-      "docstring": "Formats ast.arguments into a printable string, including defaults."
-    },
-    {
-      "_type": "tag",
-      "name": "DocVisitor",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 115,
-      "kind": "class",
-      "docstring": "AST visitor to extract documentation from classes and functions.\nIt navigates the tree and builds lists of discovered documentation objects."
-    },
-    {
-      "_type": "tag",
-      "name": "parse_file_for_docs",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 162,
-      "kind": "function",
-      "docstring": "Parses a Python file and extracts documentation for its module, classes,\nand functions."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_documentation_for_module",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 189,
-      "kind": "function",
-      "docstring": "Generates Markdown content for a single module."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_documentation",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 228,
-      "kind": "function",
-      "docstring": "Generates a single Markdown string from a list of ModuleDoc objects."
-    },
-    {
-      "_type": "tag",
-      "name": "find_python_files",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 252,
-      "kind": "function",
-      "docstring": "Finds all Python files in the given directories, ignoring test files."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 262,
-      "kind": "function",
-      "docstring": "Main function to find files, parse them, and write documentation."
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 34,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 41,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 48,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 120,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "visit_FunctionDef",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 125,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "visit_ClassDef",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 142,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "load_local_graph",
-      "path": "./tooling/knowledge_integrator.py",
-      "language": "Python",
-      "line": 17,
-      "kind": "function",
-      "docstring": "Loads the local RDF graph from a file."
-    },
-    {
-      "_type": "tag",
-      "name": "extract_concepts",
-      "path": "./tooling/knowledge_integrator.py",
-      "language": "Python",
-      "line": 25,
-      "kind": "function",
-      "docstring": "Extracts key concepts (e.g., tools) from the local graph to query externally.\nThis version dynamically extracts tool names from the graph."
-    },
-    {
-      "_type": "tag",
-      "name": "query_dbpedia",
-      "path": "./tooling/knowledge_integrator.py",
-      "language": "Python",
-      "line": 65,
-      "kind": "function",
-      "docstring": "Queries DBPedia for a given concept and returns a graph of results."
-    },
-    {
-      "_type": "tag",
-      "name": "run_knowledge_integration",
-      "path": "./tooling/knowledge_integrator.py",
-      "language": "Python",
-      "line": 94,
-      "kind": "function",
-      "docstring": "The main library function to run the knowledge integration process.\nIt loads a graph, extracts concepts, queries DBPedia, and saves the\nenriched graph."
-    },
-    {
-      "_type": "tag",
-      "name": "TestResearchExecutor",
-      "path": "./tooling/test_research.py",
-      "language": "Python",
-      "line": 12,
-      "kind": "class",
-      "docstring": "Tests for the research executor tool, mocking the native tools that are\nglobally injected by the execution environment."
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_research.py",
-      "language": "Python",
-      "line": 14,
-      "kind": "function"
-    },
-    {
-      "_type": "tag",
-      "name": "test_local_filesystem_file_scope",
-      "path": "./tooling/test_research.py",
-      "language": "Python",
-      "line": 18,
-      "kind": "function",
-      "docstring": "Verify it calls read_file for local file scope."
-    },
-    {
-      "_type": "tag",
-      "name": "test_local_filesystem_directory_scope",
-      "path": "./tooling/test_research.py",
-      "language": "Python",
-      "line": 32,
-      "kind": "function",
-      "docstring": "Verify it calls list_files for local directory scope."
-    },
-    {
-      "_type": "tag",
-      "name": "test_external_web_narrow_scope",
-      "path": "./tooling/test_research.py",
-      "language": "Python",
-      "line": 42,
-      "kind": "function",
-      "docstring": "Verify it calls google_search for external narrow scope."
-    },
-    {
-      "_type": "tag",
-      "name": "test_external_web_broad_scope",
-      "path": "./tooling/test_research.py",
-      "language": "Python",
-      "line": 52,
-      "kind": "function",
-      "docstring": "Verify it calls view_text_website for external broad scope."
-    },
-    {
-      "_type": "tag",
-      "name": "test_external_repository_scope",
-      "path": "./tooling/test_research.py",
-      "language": "Python",
-      "line": 62,
-      "kind": "function",
-      "docstring": "Verify it calls view_text_website for external repository scope."
-    },
-    {
-      "_type": "tag",
-      "name": "test_invalid_target",
-      "path": "./tooling/test_research.py",
-      "language": "Python",
-      "line": 72,
-      "kind": "function",
-      "docstring": "Verify it returns an error for an invalid target."
-    },
-    {
-      "_type": "tag",
-      "name": "test_missing_parameters",
-      "path": "./tooling/test_research.py",
-      "language": "Python",
-      "line": 78,
-      "kind": "function",
-      "docstring": "Verify it returns an error if required parameters are missing."
-    },
-    {
-      "_type": "tag",
-      "name": "parse_concepts_from_agents_md",
-      "path": "./tooling/reorientation_manager.py",
-      "language": "Python",
-      "line": 39,
-      "kind": "function",
-      "docstring": "Parses an AGENTS.md file to extract a set of key concepts.\nThis version uses a simple regex to find protocol IDs and tool names."
-    },
-    {
-      "_type": "tag",
-      "name": "run_temporal_orientation",
-      "path": "./tooling/reorientation_manager.py",
-      "language": "Python",
-      "line": 50,
-      "kind": "function",
-      "docstring": "Runs the temporal_orienter.py tool for a given concept."
-    },
-    {
-      "_type": "tag",
-      "name": "update_temporal_orientations",
-      "path": "./tooling/reorientation_manager.py",
-      "language": "Python",
-      "line": 73,
-      "kind": "function",
-      "docstring": "Updates the temporal orientations knowledge base."
-    },
-    {
-      "_type": "tag",
-      "name": "check_for_deep_research_trigger",
-      "path": "./tooling/reorientation_manager.py",
-      "language": "Python",
-      "line": 100,
-      "kind": "function",
-      "docstring": "Checks if any of the new concepts should trigger a deep research cycle."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/reorientation_manager.py",
-      "language": "Python",
-      "line": 111,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "log_catastrophic_failure",
-      "path": "./tooling/log_failure.py",
-      "language": "Python",
-      "line": 9,
-      "kind": "function",
-      "docstring": "Logs the catastrophic failure event."
-    },
-    {
-      "_type": "tag",
-      "name": "find_all_agents_md_files",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 38,
-      "kind": "function",
-      "docstring": "Finds all AGENTS.md files in the repository, ignoring any special-cased\ndirectories that are not part of the standard hierarchical build."
-    },
-    {
-      "_type": "tag",
-      "name": "get_used_tools_from_log",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 62,
-      "kind": "function",
-      "docstring": "Parses the JSONL log file to get a list of used tool names.\nIt specifically looks for 'TOOL_EXEC' actions and extracts the tool\nfrom the 'command' field based on the logging schema.\nThis version is robust against malformed lines with multiple JSON objects."
-    },
-    {
-      "_type": "tag",
-      "name": "get_protocol_tools_from_agents_md",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 104,
-      "kind": "function",
-      "docstring": "Parses a list of AGENTS.md files to get a set of all tools associated\nwith protocols."
-    },
-    {
-      "_type": "tag",
-      "name": "run_completeness_check",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 140,
-      "kind": "function",
-      "docstring": "Compares used tools with protocol-defined tools and returns the gaps."
-    },
-    {
-      "_type": "tag",
-      "name": "run_centrality_analysis",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 148,
-      "kind": "function",
-      "docstring": "Performs a frequency analysis on the tool log and returns the counts."
-    },
-    {
-      "_type": "tag",
-      "name": "run_protocol_source_check",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 155,
-      "kind": "function",
-      "docstring": "Checks if each AGENTS.md file is older than its corresponding source files.\nReturns a list of warning/error dictionaries."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_markdown_report",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 202,
-      "kind": "function",
-      "docstring": "Generates a Markdown-formatted string from the audit results."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 255,
-      "kind": "function",
-      "docstring": "Main function to run the protocol auditor and generate a report."
-    },
-    {
-      "_type": "tag",
-      "name": "TestRefactorTool",
-      "path": "./tooling/test_refactor.py",
-      "language": "Python",
-      "line": 7,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_refactor.py",
-      "language": "Python",
-      "line": 9,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_refactor.py",
-      "language": "Python",
-      "line": 24,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_rename_symbol",
-      "path": "./tooling/test_refactor.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "TestSymbolMapGenerator",
-      "path": "./tooling/test_symbol_map_generator.py",
-      "language": "Python",
-      "line": 32,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_symbol_map_generator.py",
-      "language": "Python",
-      "line": 34,
-      "kind": "function",
-      "docstring": "Set up a temporary directory structure for testing."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_symbol_map_generator.py",
-      "language": "Python",
-      "line": 49,
-      "kind": "function",
-      "docstring": "Clean up the temporary directory."
-    },
-    {
-      "_type": "tag",
-      "name": "test_generate_with_ctags_success",
-      "path": "./tooling/test_symbol_map_generator.py",
-      "language": "Python",
-      "line": 55,
-      "kind": "function",
-      "docstring": "Test successful symbol generation using a mocked ctags call."
-    },
-    {
-      "_type": "tag",
-      "name": "test_generate_with_ast_fallback",
-      "path": "./tooling/test_symbol_map_generator.py",
-      "language": "Python",
-      "line": 88,
-      "kind": "function",
-      "docstring": "Test the AST-based fallback for Python files."
-    },
-    {
-      "_type": "tag",
-      "name": "test_main_with_ast_fallback",
-      "path": "./tooling/test_symbol_map_generator.py",
-      "language": "Python",
-      "line": 115,
-      "kind": "function",
-      "docstring": "Test that main function uses the AST fallback when ctags is not present."
-    },
-    {
-      "_type": "tag",
-      "name": "side_effect",
-      "path": "./tooling/test_symbol_map_generator.py",
-      "language": "Python",
-      "line": 59,
-      "kind": "function",
-      "docstring": null
     },
     {
       "_type": "tag",
       "name": "load_lessons",
       "path": "./tooling/self_correction_orchestrator.py",
       "language": "Python",
-      "line": 16,
+      "line": 18,
       "kind": "function",
       "docstring": "Loads all lessons from the JSONL file."
     },
@@ -1840,7 +2147,7 @@
       "name": "save_lessons",
       "path": "./tooling/self_correction_orchestrator.py",
       "language": "Python",
-      "line": 24,
+      "line": 27,
       "kind": "function",
       "docstring": "Saves a list of lessons back to the JSONL file, overwriting it."
     },
@@ -1849,7 +2156,7 @@
       "name": "run_command",
       "path": "./tooling/self_correction_orchestrator.py",
       "language": "Python",
-      "line": 30,
+      "line": 34,
       "kind": "function",
       "docstring": "Runs a command and returns True on success, False on failure."
     },
@@ -1867,495 +2174,72 @@
       "name": "main",
       "path": "./tooling/self_correction_orchestrator.py",
       "language": "Python",
-      "line": 132,
+      "line": 159,
       "kind": "function",
       "docstring": "Main function to run the self-correction workflow."
     },
     {
       "_type": "tag",
-      "name": "TestNewResearchPlanner",
-      "path": "./tooling/test_research_planner.py",
+      "name": "get_registry",
+      "path": "./tooling/plan_manager.py",
       "language": "Python",
-      "line": 4,
-      "kind": "class",
-      "docstring": "Tests for the refactored, FSM-compliant research planner."
-    },
-    {
-      "_type": "tag",
-      "name": "test_plan_deep_research_generates_executable_plan",
-      "path": "./tooling/test_research_planner.py",
-      "language": "Python",
-      "line": 9,
+      "line": 35,
       "kind": "function",
-      "docstring": "Verify that the new plan_deep_research generates a valid, executable\nFSM-compliant plan."
+      "docstring": "Loads the plan registry from its JSON file."
     },
     {
       "_type": "tag",
-      "name": "parse_makefile_command",
-      "path": "./tooling/standard_agents_compiler.py",
+      "name": "save_registry",
+      "path": "./tooling/plan_manager.py",
       "language": "Python",
-      "line": 74,
+      "line": 50,
       "kind": "function",
-      "docstring": "Parses a Makefile to find the main command for a specific target,\nskipping any 'echo' lines. This version iterates through lines for robustness."
+      "docstring": "Saves the given data to the plan registry JSON file."
     },
     {
       "_type": "tag",
-      "name": "main",
-      "path": "./tooling/standard_agents_compiler.py",
+      "name": "register_plan",
+      "path": "./tooling/plan_manager.py",
       "language": "Python",
-      "line": 106,
+      "line": 61,
       "kind": "function",
-      "docstring": "Generates a standard-compliant AGENTS.md file by parsing commands\nfrom the project's Makefile."
+      "docstring": "Registers a new plan by mapping a logical name to a file path."
     },
     {
       "_type": "tag",
-      "name": "TestReorientationManager",
-      "path": "./tooling/test_reorientation_manager.py",
-      "language": "Python",
-      "line": 7,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_reorientation_manager.py",
-      "language": "Python",
-      "line": 9,
-      "kind": "function",
-      "docstring": "Set up test files and cleanup afterwards."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_reorientation_manager.py",
-      "language": "Python",
-      "line": 19,
-      "kind": "function",
-      "docstring": "Clean up created files after tests."
-    },
-    {
-      "_type": "tag",
-      "name": "cleanup_files",
-      "path": "./tooling/test_reorientation_manager.py",
-      "language": "Python",
-      "line": 23,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_temporal_orientation_triggered",
-      "path": "./tooling/test_reorientation_manager.py",
-      "language": "Python",
-      "line": 36,
-      "kind": "function",
-      "docstring": "Test that temporal orientation is triggered for new concepts."
-    },
-    {
-      "_type": "tag",
-      "name": "test_deep_research_triggered",
-      "path": "./tooling/test_reorientation_manager.py",
-      "language": "Python",
-      "line": 65,
-      "kind": "function",
-      "docstring": "Test that deep research is triggered for significant new concepts."
-    },
-    {
-      "_type": "tag",
-      "name": "test_no_changes_detected",
-      "path": "./tooling/test_reorientation_manager.py",
-      "language": "Python",
-      "line": 90,
-      "kind": "function",
-      "docstring": "Test that no action is taken when there are no new concepts."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/master_control_cli.py",
-      "language": "Python",
-      "line": 17,
-      "kind": "function",
-      "docstring": "The main entry point for the agent.\n\nThis script parses the task description and invokes the agent shell."
-    },
-    {
-      "_type": "tag",
-      "name": "TestDependencyGraphGenerator",
-      "path": "./tooling/test_dependency_graph_generator.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_dependency_graph_generator.py",
-      "language": "Python",
-      "line": 30,
-      "kind": "function",
-      "docstring": "Set up a temporary directory structure for testing."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_dependency_graph_generator.py",
-      "language": "Python",
-      "line": 63,
-      "kind": "function",
-      "docstring": "Clean up the temporary directory."
-    },
-    {
-      "_type": "tag",
-      "name": "test_find_files",
-      "path": "./tooling/test_dependency_graph_generator.py",
-      "language": "Python",
-      "line": 68,
-      "kind": "function",
-      "docstring": "Test finding both package.json and requirements.txt files."
-    },
-    {
-      "_type": "tag",
-      "name": "test_parse_package_json",
-      "path": "./tooling/test_dependency_graph_generator.py",
-      "language": "Python",
-      "line": 78,
-      "kind": "function",
-      "docstring": "Test parsing a single package.json file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_parse_requirements_txt",
-      "path": "./tooling/test_dependency_graph_generator.py",
-      "language": "Python",
-      "line": 87,
-      "kind": "function",
-      "docstring": "Test parsing a single requirements.txt file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_generate_dependency_graph",
-      "path": "./tooling/test_dependency_graph_generator.py",
-      "language": "Python",
-      "line": 101,
-      "kind": "function",
-      "docstring": "Test the full graph generation logic with mixed project types."
-    },
-    {
-      "_type": "tag",
-      "name": "get_fsm_details",
-      "path": "./tooling/generate_docs.py",
-      "language": "Python",
-      "line": 15,
-      "kind": "function",
-      "docstring": "Extracts FSM states and transitions from fsm.json."
-    },
-    {
-      "_type": "tag",
-      "name": "get_master_control_details",
-      "path": "./tooling/generate_docs.py",
-      "language": "Python",
-      "line": 21,
-      "kind": "function",
-      "docstring": "Extracts details about the master control script's state handlers."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_documentation",
-      "path": "./tooling/generate_docs.py",
-      "language": "Python",
-      "line": 31,
-      "kind": "function",
-      "docstring": "Generates the final Markdown documentation."
-    },
-    {
-      "_type": "tag",
-      "name": "has_ctags",
-      "path": "./tooling/symbol_map_generator.py",
-      "language": "Python",
-      "line": 31,
-      "kind": "function",
-      "docstring": "Check if Universal Ctags is installed and available in the PATH."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_symbols_with_ctags",
-      "path": "./tooling/symbol_map_generator.py",
-      "language": "Python",
-      "line": 40,
-      "kind": "function",
-      "docstring": "Generates a symbol map using Universal Ctags."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_symbols_with_ast",
-      "path": "./tooling/symbol_map_generator.py",
-      "language": "Python",
-      "line": 82,
-      "kind": "function",
-      "docstring": "Fallback to generate a symbol map for Python files using the AST module."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/symbol_map_generator.py",
-      "language": "Python",
-      "line": 123,
-      "kind": "function",
-      "docstring": "Main function to generate and save the symbol map."
-    },
-    {
-      "_type": "tag",
-      "name": "analyze_planning_efficiency",
-      "path": "./tooling/self_improvement_cli.py",
-      "language": "Python",
-      "line": 32,
-      "kind": "function",
-      "docstring": "Analyzes the log file to find tasks with multiple plan revisions.\n\nArgs:\n    log_file (str): Path to the activity log file.\n\nReturns:\n    dict: A dictionary mapping task IDs to the number of plan updates."
-    },
-    {
-      "_type": "tag",
-      "name": "analyze_protocol_violations",
-      "path": "./tooling/self_improvement_cli.py",
-      "language": "Python",
-      "line": 73,
-      "kind": "function",
-      "docstring": "Scans the log file for critical protocol violations, such as the\nunauthorized use of `reset_all`.\n\nThis function checks for two conditions:\n1. A `SYSTEM_FAILURE` log explicitly blaming `reset_all`.\n2. A `TOOL_EXEC` log where the command contains \"reset_all\".\n\nArgs:\n    log_file (str): Path to the activity log file.\n\nReturns:\n    list: A list of unique task IDs where `reset_all` was used."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/self_improvement_cli.py",
-      "language": "Python",
-      "line": 123,
-      "kind": "function",
-      "docstring": "Main function to run the self-improvement analysis CLI."
-    },
-    {
-      "_type": "tag",
-      "name": "load_config",
-      "path": "./tooling/builder.py",
-      "language": "Python",
-      "line": 11,
-      "kind": "function",
-      "docstring": "Loads the build configuration file."
-    },
-    {
-      "_type": "tag",
-      "name": "execute_build",
-      "path": "./tooling/builder.py",
-      "language": "Python",
-      "line": 18,
-      "kind": "function",
-      "docstring": "Executes the build process for a specific target defined in the config."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/builder.py",
-      "language": "Python",
-      "line": 79,
-      "kind": "function",
-      "docstring": "Main function to parse arguments and drive the build process."
-    },
-    {
-      "_type": "tag",
-      "name": "get_module_docstring",
-      "path": "./tooling/readme_generator.py",
-      "language": "Python",
-      "line": 33,
-      "kind": "function",
-      "docstring": "Parses a Python file and extracts the module-level docstring."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_core_protocols_section",
-      "path": "./tooling/readme_generator.py",
-      "language": "Python",
-      "line": 47,
-      "kind": "function",
-      "docstring": "Parses a given AGENTS.md file to extract protocol definitions and generate a Markdown summary."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_key_components_section",
-      "path": "./tooling/readme_generator.py",
+      "name": "deregister_plan",
+      "path": "./tooling/plan_manager.py",
       "language": "Python",
       "line": 85,
       "kind": "function",
-      "docstring": "Generates the Markdown for the \"Key Components\" section by documenting\nany `.py` files found in a `tooling/` subdirectory of the module."
+      "docstring": "Removes a plan from the registry by its logical name."
+    },
+    {
+      "_type": "tag",
+      "name": "list_plans",
+      "path": "./tooling/plan_manager.py",
+      "language": "Python",
+      "line": 99,
+      "kind": "function",
+      "docstring": "Lists all currently registered plans."
     },
     {
       "_type": "tag",
       "name": "main",
-      "path": "./tooling/readme_generator.py",
+      "path": "./tooling/plan_manager.py",
       "language": "Python",
-      "line": 111,
+      "line": 113,
       "kind": "function",
-      "docstring": "Main function to generate the README.md content and write it to a file."
+      "docstring": "Main function to run the plan management CLI."
     },
     {
       "_type": "tag",
-      "name": "TestMasterControlRedesigned",
-      "path": "./tooling/test_master_control.py",
+      "name": "plan_deep_research",
+      "path": "./tooling/research_planner.py",
       "language": "Python",
-      "line": 23,
-      "kind": "class",
-      "docstring": "Validates the FSM workflow in a single-threaded, deterministic manner."
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_master_control.py",
-      "language": "Python",
-      "line": 28,
+      "line": 5,
       "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_master_control.py",
-      "language": "Python",
-      "line": 70,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_do_orientation",
-      "path": "./tooling/test_master_control.py",
-      "language": "Python",
-      "line": 76,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_do_planning",
-      "path": "./tooling/test_master_control.py",
-      "language": "Python",
-      "line": 84,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_do_execution",
-      "path": "./tooling/test_master_control.py",
-      "language": "Python",
-      "line": 92,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_do_finalizing",
-      "path": "./tooling/test_master_control.py",
-      "language": "Python",
-      "line": 107,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "PlanContext",
-      "path": "./tooling/state.py",
-      "language": "Python",
-      "line": 26,
-      "kind": "class",
-      "docstring": "Represents the execution context of a single plan file within the plan stack.\n\nThis class holds the state of a specific plan being executed, including its\nfile path, its content (as a list of parsed Command objects), and a pointer\nto the current step being executed."
-    },
-    {
-      "_type": "tag",
-      "name": "AgentState",
-      "path": "./tooling/state.py",
-      "language": "Python",
-      "line": 42,
-      "kind": "class",
-      "docstring": "Represents the complete, serializable state of the agent's workflow.\n\nThis dataclass acts as a central container for all information related to the\nagent's current task. It is designed to be passed between the different states\nof the `MasterControlGraph` FSM, ensuring that context is maintained\nthroughout the lifecycle of a task.\n\nAttributes:\n    task: A string describing the overall objective.\n    plan_path: The file path to the root plan for the current task.\n    plan_stack: A list of `PlanContext` objects, forming the execution\n        stack for the CFDC. The plan at the top of the stack is the one\n        currently being executed.\n    messages: A history of messages, typically for interaction with an LLM.\n    orientation_complete: A flag indicating if the initial orientation\n        phase has been successfully completed.\n    vm_capability_report: A string summarizing the results of the\n        environmental probe.\n    research_findings: A dictionary to store the results of research tasks.\n    draft_postmortem_path: The file path to the draft post-mortem report\n        generated during the AWAITING_ANALYSIS state.\n    final_report: A string containing a summary of the final, completed\n        post-mortem report.\n    error: An optional string that holds an error message if the FSM\n        enters an error state, providing a clear reason for the failure."
-    },
-    {
-      "_type": "tag",
-      "name": "to_json",
-      "path": "./tooling/state.py",
-      "language": "Python",
-      "line": 91,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "TestKnowledgeCompiler",
-      "path": "./tooling/test_knowledge_compiler.py",
-      "language": "Python",
-      "line": 16,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "TestKnowledgeCompilerAdvanced",
-      "path": "./tooling/test_knowledge_compiler.py",
-      "language": "Python",
-      "line": 93,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_knowledge_compiler.py",
-      "language": "Python",
-      "line": 18,
-      "kind": "function",
-      "docstring": "Set up a temporary directory with mock files."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_knowledge_compiler.py",
-      "language": "Python",
-      "line": 52,
-      "kind": "function",
-      "docstring": "Clean up the temporary directory and restore original state."
-    },
-    {
-      "_type": "tag",
-      "name": "test_knowledge_compiler_end_to_end",
-      "path": "./tooling/test_knowledge_compiler.py",
-      "language": "Python",
-      "line": 60,
-      "kind": "function",
-      "docstring": "Verify that the compiler correctly parses a post-mortem and\ngenerates a structured lessons.jsonl file with both machine-readable\nand placeholder commands."
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_knowledge_compiler.py",
-      "language": "Python",
-      "line": 95,
-      "kind": "function",
-      "docstring": "Set up a temporary directory for advanced parsing tests."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_knowledge_compiler.py",
-      "language": "Python",
-      "line": 128,
-      "kind": "function",
-      "docstring": "Clean up the temporary directory and restore original state."
-    },
-    {
-      "_type": "tag",
-      "name": "test_advanced_parsing_and_deprecate_command",
-      "path": "./tooling/test_knowledge_compiler.py",
-      "language": "Python",
-      "line": 136,
-      "kind": "function",
-      "docstring": "Verify the compiler can handle different section headers and parse\nthe 'deprecate-tool' command."
+      "docstring": "Generates a plan for deep research.\nFor this stress test, it returns a dummy plan."
     }
   ]
 }
