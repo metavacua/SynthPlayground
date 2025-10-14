@@ -57,6 +57,31 @@ class TestMasterControlRedesigned(unittest.TestCase):
                 {"source": "EXECUTING", "dest": "EXECUTING", "trigger": "step_op"},
                 {
                     "source": "EXECUTING",
+                    "dest": "GENERATING_CODE",
+                    "trigger": "code_generation_requested",
+                },
+                {
+                    "source": "GENERATING_CODE",
+                    "dest": "RUNNING_TESTS",
+                    "trigger": "code_generation_completed",
+                },
+                {
+                    "source": "RUNNING_TESTS",
+                    "dest": "DEBUGGING",
+                    "trigger": "tests_failed",
+                },
+                {
+                    "source": "RUNNING_TESTS",
+                    "dest": "EXECUTING",
+                    "trigger": "tests_passed",
+                },
+                {
+                    "source": "DEBUGGING",
+                    "dest": "EXECUTING",
+                    "trigger": "debugging_completed",
+                },
+                {
+                    "source": "EXECUTING",
                     "dest": "FINALIZING",
                     "trigger": "all_steps_completed",
                 },
@@ -115,7 +140,7 @@ class TestMasterControlRedesigned(unittest.TestCase):
         self.mock_logger.log.assert_called()
 
     @patch(
-        "tooling.master_control.MasterControlGraph._validate_plan_in_memory",
+        "tooling.master_control.MasterControlGraph._validate_plan_with_cli",
         return_value=(True, ""),
     )
     def test_do_planning(self, mock_validate):
@@ -145,13 +170,21 @@ class TestMasterControlRedesigned(unittest.TestCase):
         self.assertEqual(trigger, self.graph.get_trigger("EXECUTING", "FINALIZING"))
         self.mock_logger.log.assert_called()
 
-    @patch("tooling.master_control.subprocess.run")
-    @patch("tooling.master_control.datetime")
-    def test_do_finalizing(self, mock_datetime, mock_subprocess):
-        mock_datetime.date.today.return_value = datetime.date(2025, 10, 13)
-        mock_subprocess.return_value = subprocess.CompletedProcess(
-            args=[], returncode=0, stdout="", stderr=""
+    def test_do_execution_to_generate_code(self):
+        self.agent_state.plan_stack.append(
+            PlanContext(
+                plan_path="test_plan",
+                commands=[Command(tool_name="message_user", args_text="test1")],
+            )
         )
+        trigger = self.graph.do_execution(
+            self.agent_state, "code_generation_requested", self.mock_logger
+        )
+        self.assertEqual(trigger, self.graph.get_trigger("EXECUTING", "GENERATING_CODE"))
+
+    @patch("tooling.master_control.datetime")
+    def test_do_finalizing(self, mock_datetime):
+        mock_datetime.date.today.return_value = datetime.date(2025, 10, 13)
         analysis_content = "The task was completed successfully."
         trigger = self.graph.do_finalizing(
             self.agent_state, analysis_content, self.mock_logger

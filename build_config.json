@@ -23,7 +23,11 @@
     "agents": {
       "output": "AGENTS.md",
       "compiler": "tooling/hierarchical_compiler.py",
-      "sources": [],
+      "sources": [
+        "protocols/",
+        "core/protocols/",
+        "compliance/protocols/"
+      ],
       "description": "Recursively compiles all AGENTS.md files."
     },
     "readme": {

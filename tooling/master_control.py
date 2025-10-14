@@ -15,6 +15,8 @@ the interaction purely programmatic and fully logged.
 import json
 import os
 import datetime
+import subprocess
+import tempfile
 from tooling.state import AgentState, PlanContext
 from tooling.research import execute_research_protocol
 from tooling.plan_parser import parse_plan, Command
@@ -114,7 +116,7 @@ class MasterControlGraph:
             "Phase 2", agent_state.task, 0, "INFO", {"state": "PLANNING"}, "SUCCESS"
         )
 
-        is_valid, error_message = self._validate_plan_in_memory(plan_content)
+        is_valid, error_message = self._validate_plan_with_cli(plan_content)
 
         if not is_valid:
             agent_state.error = error_message
@@ -144,62 +146,26 @@ class MasterControlGraph:
         )
         return "plan_op"
 
-    def _validate_plan_in_memory(self, plan_content: str) -> (bool, str):
+    def _validate_plan_with_cli(self, plan_content: str) -> (bool, str):
         """
-        Validates a plan in-memory against the FSM without calling an external script.
+        Validates a plan by writing it to a temporary file and using the fdc_cli.py script.
         """
-        ACTION_TYPE_MAP = {
-            "set_plan": "plan_op",
-            "message_user": "step_op",
-            "plan_step_complete": "step_op",
-            "submit": "submit_op",
-            "create_file_with_block": "write_op",
-            "overwrite_file_with_block": "write_op",
-            "replace_with_git_merge_diff": "write_op",
-            "read_file": "read_op",
-            "list_files": "read_op",
-            "grep": "read_op",
-            "delete_file": "delete_op",
-            "rename_file": "move_op",
-            "run_in_bash_session": "tool_exec",
-            "call_plan": "call_plan_op",
-        }
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix=".txt") as temp_plan:
+            temp_plan.write(plan_content)
+            temp_plan_path = temp_plan.name
 
-        commands = parse_plan(plan_content)
-        current_state = "PLANNING"  # Validation always starts from the PLANNING state
-
-        for command in commands:
-            action_type = ACTION_TYPE_MAP.get(command.tool_name)
-            if not action_type:
-                return False, f"Unknown command '{command.tool_name}' in plan."
-
-            next_state = None
-            for transition in self.fsm["transitions"]:
-                if (
-                    transition["source"] == current_state
-                    and transition["trigger"] == action_type
-                ):
-                    next_state = transition["dest"]
-                    break
-
-            if not next_state:
-                return (
-                    False,
-                    f"Invalid FSM transition. Cannot perform action '{action_type}' (from tool '{command.tool_name}') from state '{current_state}'.",
-                )
-
-            current_state = next_state
-
-        if (
-            current_state not in self.fsm["final_states"]
-            and current_state != "EXECUTING"
-        ):
-            return (
-                False,
-                f"Plan does not end in a valid state. Final state: '{current_state}'",
+        try:
+            result = subprocess.run(
+                ["python3", "tooling/fdc_cli.py", "validate", temp_plan_path],
+                capture_output=True,
+                text=True,
+                check=True
             )
-
-        return True, ""
+            return True, result.stdout
+        except subprocess.CalledProcessError as e:
+            return False, e.stderr
+        finally:
+            os.remove(temp_plan_path)
 
     def do_researching(self, agent_state: AgentState, logger: Logger, tools: dict) -> str:
         """
@@ -232,6 +198,9 @@ class MasterControlGraph:
             "Phase 4", agent_state.task, -1, "INFO", {"state": "EXECUTING"}, "SUCCESS"
         )
 
+        if step_result == "code_generation_requested":
+            return self.get_trigger("EXECUTING", "GENERATING_CODE")
+
         if not agent_state.plan_stack:
             return self.get_trigger("EXECUTING", "FINALIZING")
 
@@ -256,6 +225,31 @@ class MasterControlGraph:
 
         current_context.current_step += 1
         return "step_op"
+
+    def do_generating_code(self, agent_state: AgentState, logger: Logger) -> str:
+        """Handles the code generation state."""
+        logger.log(
+            "Phase 4.1", agent_state.task, -1, "INFO", {"state": "GENERATING_CODE"}, "SUCCESS"
+        )
+        # In a real implementation, this would involve calling a code generation tool
+        return self.get_trigger("GENERATING_CODE", "RUNNING_TESTS")
+
+    def do_running_tests(self, agent_state: AgentState, logger: Logger) -> str:
+        """Handles the test execution state."""
+        logger.log(
+            "Phase 4.2", agent_state.task, -1, "INFO", {"state": "RUNNING_TESTS"}, "SUCCESS"
+        )
+        # In a real implementation, this would involve running tests and checking the results
+        # For now, we'll just simulate the tests passing.
+        return self.get_trigger("RUNNING_TESTS", "EXECUTING")
+
+    def do_debugging(self, agent_state: AgentState, logger: Logger) -> str:
+        """Handles the debugging state."""
+        logger.log(
+            "Phase 4.3", agent_state.task, -1, "INFO", {"state": "DEBUGGING"}, "SUCCESS"
+        )
+        # In a real implementation, this would involve running debugging tools
+        return self.get_trigger("DEBUGGING", "EXECUTING")
 
     def do_finalizing(
         self, agent_state: AgentState, analysis_content: str, logger: Logger
