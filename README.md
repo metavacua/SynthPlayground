@@ -14,8 +14,10 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
 - **`agent-shell-001`**: A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.
 - **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
+- **`agent-interaction-001`**: A protocol governing the agent's core interaction and planning tools.
 - **`plan-registry-audit-001`**: A protocol for using the plan registry auditor tool to ensure the integrity of the plan registry.
 - **`refactor-001`**: A protocol for using the refactoring tool.
+- **`speculative-execution-001`**: A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.
 
 ## Key Components
 
@@ -51,9 +53,17 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
   > Generates detailed system documentation from Python source files.\n  > \n  > This script scans specified directories for Python files, parses their\n  > Abstract Syntax Trees (ASTs), and extracts documentation for the module,\n  > classes, and functions. The output is a structured Markdown file.\n  > \n  > This is a key component of the project's self-documentation capabilities,\n  > powering the `SYSTEM_DOCUMENTATION.md` artifact in the `knowledge_core`.\n  > \n  > The script is configured via top-level constants:\n  > - `SCAN_DIRECTORIES`: A list of directories to search for .py files.\n  > - `OUTPUT_FILE`: The path where the final Markdown file will be written.\n  > - `DOC_TITLE`: The main title for the generated documentation file.\n  > \n  > It uses Python's `ast` module to reliably parse source files without\n  > importing them, which avoids issues with dependencies or script side-effects.
 
+- **`tooling/document_scanner.py`**:
+
+  > _No docstring found._
+
 - **`tooling/environmental_probe.py`**:
 
   > Performs a series of checks to assess the capabilities of the execution environment.\n  > \n  > This script is a critical diagnostic tool run at the beginning of a task to\n  > ensure the agent understands its operational sandbox. It verifies fundamental\n  > capabilities required for most software development tasks:\n  > \n  > 1.  **Filesystem I/O:** Confirms that the agent can create, write to, read from,\n  >     and delete files. It also provides a basic latency measurement for these\n  >     operations.\n  > 2.  **Network Connectivity:** Checks for external network access by attempting to\n  >     connect to a highly-available public endpoint (google.com). This is crucial\n  >     for tasks requiring `git` operations, package downloads, or API calls.\n  > 3.  **Environment Variables:** Verifies that standard environment variables are\n  >     accessible, which is a prerequisite for many command-line tools.\n  > \n  > The script generates a human-readable report summarizing the results of these\n  > probes, allowing the agent to quickly identify any environmental constraints\n  > that might impact its ability to complete a task.
+
+- **`tooling/fdc_cli.py`**:
+
+  > _Error parsing file: invalid syntax. Perhaps you forgot a comma? (fdc_cli.py, line 178)_
 
 - **`tooling/generate_docs.py`**:
 
@@ -77,7 +87,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/master_control.py`**:
 
-  > The master orchestrator for the agent's lifecycle, governed by a Finite State Machine.\n  > \n  > This script, master_control.py, is the heart of the agent's operational loop.\n  > It implements a strict, protocol-driven workflow defined in a JSON file\n  > (typically `tooling/fsm.json`). The MasterControlGraph class reads this FSM\n  > definition and steps through the prescribed states, ensuring that the agent\n  > cannot deviate from the established protocol.\n  > \n  > This version has been refactored to be a library controlled by an external\n  > shell (e.g., `agent_shell.py`), eliminating all file-based polling and making\n  > the interaction purely programmatic and fully logged.
+  > The master orchestrator for the agent's lifecycle, implementing the Context-Free Development Cycle (CFDC).\n  > \n  > This script, master_control.py, is the heart of the agent's operational loop.\n  > It implements the CFDC, a hierarchical planning and execution model based on a\n  > Pushdown Automaton. This allows the agent to execute complex tasks by calling\n  > plans as sub-routines.\n  > \n  > Core Responsibilities:\n  > - **Hierarchical Plan Execution:** Manages a plan execution stack to enable\n  >   plans to call other plans via the `call_plan` directive. This allows for\n  >   modular, reusable, and complex task decomposition. A maximum recursion depth\n  >   is enforced to guarantee decidability.\n  > - **Plan Validation:** Contains the in-memory plan validator. Before execution,\n  >   it parses a plan and simulates its execution against a Finite State Machine\n  >   (FSM) to ensure it complies with the agent's operational protocols.\n  > - **"Registry-First" Plan Resolution:** When resolving a `call_plan` directive,\n  >   it first attempts to look up the plan by its logical name in the\n  >   `knowledge_core/plan_registry.json`. If not found, it falls back to treating\n  >   the argument as a direct file path.\n  > - **FSM-Governed Lifecycle:** The entire workflow, from orientation to\n  >   finalization, is governed by a strict FSM definition (e.g., `tooling/fsm.json`)\n  >   to ensure predictable and auditable behavior.\n  > \n  > This module is designed as a library to be controlled by an external shell\n  > (e.g., `agent_shell.py`), making its interaction purely programmatic.
 
 - **`tooling/master_control_cli.py`**:
 
@@ -125,11 +135,11 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/research.py`**:
 
-  > This module is responsible for executing research tasks.
+  > This module contains the logic for executing research tasks based on a set of\n  > constraints. It acts as a dispatcher, calling the appropriate tool (e.g.,\n  > read_file, google_search) based on the specified target and scope.
 
 - **`tooling/research_planner.py`**:
 
-  > This module is responsible for planning deep research tasks.
+  > This module is responsible for generating a formal, FSM-compliant research plan\n  > for a given topic. The output is a string that can be executed by the agent's\n  > master controller.
 
 - **`tooling/self_correction_orchestrator.py`**:
 

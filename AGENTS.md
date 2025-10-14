@@ -24,6 +24,15 @@
 3.  The plan for the user's request must be formulated *after* and *in accordance with* the protocols loaded from `AGENTS.md`.
 4.  If `AGENTS.md` is not found, the agent should notify the user of a critical configuration error.
 
+**Rule `bootstrap-scan-for-documents`**: After processing `AGENTS.md`, the agent should perform a scan of the repository for document files that could contain relevant information.
+
+**Rationale**: Important project documentation, specifications, or other relevant information may be contained in various document formats. Proactively scanning for and processing these documents will provide the agent with a more complete context for the task at hand.
+
+**Procedure**:
+1.  The agent will perform a file listing to identify potential documents of interest (e.g., `.pdf`, `.md`, `.txt`).
+2.  For each identified document, the agent will use the appropriate tool to read and summarize its contents. For PDF files, this will involve using a PDF reading library.
+3.  The agent will incorporate the summarized information into its understanding of the project and use it to inform the planning process.
+
 ---
 
 # Protocol: Dependency Management
@@ -267,11 +276,12 @@ This new, automated cycle—**Analyze -> Structure Lesson -> Execute Correction 
 
 This protocol defines a standardized, multi-step plan for conducting in-depth research on a complex topic. It is designed to be a reusable, callable plan that ensures a systematic and thorough investigation.
 
-The cycle consists of four main phases:
-1.  **Initial Scoping & Keyword Generation:** The agent uses its initial understanding of the topic to generate a set of search keywords.
-2.  **Broad Information Gathering:** The agent uses the keywords to perform broad web searches and collect a list of relevant URLs.
-3.  **Targeted Information Extraction:** The agent visits the most promising URLs to extract detailed information.
-4.  **Synthesis & Summary:** The agent synthesizes the gathered information into a coherent summary, which is saved to a research report file.
+The cycle consists of five main phases:
+1.  **Review Scanned Documents:** The agent first reviews the content of documents found in the repository during the initial scan. This provides immediate, project-specific context.
+2.  **Initial Scoping & Keyword Generation:** Based on the initial topic and the information from scanned documents, the agent generates a set of search keywords.
+3.  **Broad Information Gathering:** The agent uses the keywords to perform broad web searches and collect a list of relevant URLs.
+4.  **Targeted Information Extraction:** The agent visits the most promising URLs to extract detailed information.
+5.  **Synthesis & Summary:** The agent synthesizes the gathered information into a coherent summary, which is saved to a research report file.
 
 This structured approach ensures that research is not ad-hoc but is instead a repeatable and verifiable process.
 
@@ -337,6 +347,22 @@ python tooling/refactor.py --filepath <path_to_file> --old-name <old_symbol_name
 ```
 
 The tool will generate a plan file containing a series of `replace_with_git_merge_diff` commands to perform the renaming. This plan can then be executed by the agent's master controller.
+
+---
+
+# Protocol: Speculative Execution
+
+This protocol empowers the agent to engage in creative and exploratory tasks when it is otherwise idle. It provides a formal framework for the agent to generate novel ideas, plans, or artifacts that are not direct responses to a user request, but are instead products of its own "imagination" and analysis of the repository.
+
+The goal is to enable proactive, creative problem-solving and self-improvement, allowing the agent to "dream" productively within safe and well-defined boundaries.
+
+## Rules
+
+- **`idle-state-trigger`**: The Speculative Execution Protocol can only be invoked when the agent has no active, user-assigned task. This ensures that speculative work never interferes with primary duties.
+- **`formal-proposal-required`**: The first action in any speculative task must be the creation of a formal proposal document. This document must outline the objective, rationale, and a detailed plan for the task.
+- **`resource-constraints`**: All speculative tasks must operate under predefined resource constraints (e.g., time limits, computational resources) to prevent runaway processes.
+- **`user-review-gate`**: The final output or artifact of a speculative task cannot be integrated or submitted directly. It must be presented to the user for formal review and approval.
+- **`speculative-logging`**: All logs, artifacts, and actions generated during a speculative task must be clearly tagged with a `speculative` flag to distinguish them from standard, user-directed work.
 
 ---
 
@@ -424,6 +450,32 @@ The tool will generate a plan file containing a series of `replace_with_git_merg
 
 ```json
 {
+  "protocol_id": "agent-interaction-001",
+  "description": "A protocol governing the agent's core interaction and planning tools.",
+  "rules": [
+    {
+      "rule_id": "planning-tool-access",
+      "description": "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution.",
+      "enforcement": "The agent's core logic should be designed to use this tool for all planning activities."
+    },
+    {
+      "rule_id": "communication-tool-access",
+      "description": "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow.",
+      "enforcement": "The agent's core logic should be designed to use this tool for all user-facing communication."
+    }
+  ],
+  "associated_tools": [
+    "set_plan",
+    "message_user"
+  ]
+}
+```
+
+
+---
+
+```json
+{
   "protocol_id": "plan-registry-audit-001",
   "description": "A protocol for using the plan registry auditor tool to ensure the integrity of the plan registry.",
   "rules": [
@@ -455,6 +507,48 @@ The tool will generate a plan file containing a series of `replace_with_git_merg
   ],
   "associated_tools": [
     "tooling/refactor.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "speculative-execution-001",
+  "description": "A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.",
+  "rules": [
+    {
+      "rule_id": "idle-state-trigger",
+      "description": "The agent may only initiate a speculative task when it has no active, user-assigned tasks.",
+      "enforcement": "The agent's main control loop must verify an idle state before allowing the invocation of a speculative plan."
+    },
+    {
+      "rule_id": "formal-proposal-required",
+      "description": "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan.",
+      "enforcement": "The initial plan for any speculative task must include a step to generate and save a proposal artifact."
+    },
+    {
+      "rule_id": "resource-constraints",
+      "description": "Speculative tasks must operate under defined resource limits.",
+      "enforcement": "This is a system-level constraint that the agent orchestrator must enforce."
+    },
+    {
+      "rule_id": "user-review-gate",
+      "description": "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly.",
+      "enforcement": "The agent is forbidden from using tools like 'submit' or 'merge' within a speculative context. It must use 'request_user_input' to present the results."
+    },
+    {
+      "rule_id": "speculative-logging",
+      "description": "All logs and artifacts generated during a speculative task must be tagged as 'speculative'.",
+      "enforcement": "The agent's logging and file-creation tools should be context-aware and apply this tag when in a speculative mode."
+    }
+  ],
+  "associated_tools": [
+    "set_plan",
+    "create_file_with_block",
+    "request_user_input"
   ]
 }
 ```

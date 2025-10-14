@@ -164,6 +164,16 @@
         <file:///app/protocols/security/vuln-reporting-channel> ;
     schema:description "Defines the official policy and procedure for reporting security vulnerabilities." .
 
+<file:///app/protocols/speculative-execution-001> proto:associatedTool <file:///app/protocols/create_file_with_block>,
+        <file:///app/protocols/request_user_input>,
+        <file:///app/protocols/set_plan> ;
+    proto:hasRule <file:///app/protocols/formal-proposal-required>,
+        <file:///app/protocols/idle-state-trigger>,
+        <file:///app/protocols/resource-constraints>,
+        <file:///app/protocols/speculative-logging>,
+        <file:///app/protocols/user-review-gate> ;
+    schema:description "A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods." .
+
 <file:///app/protocols/toolchain-review-on-schema-change-001> proto:associatedTool <file:///app/protocols/tooling/hierarchical_compiler.py>,
         <file:///app/protocols/tooling/protocol_auditor.py>,
         <file:///app/protocols/tooling/protocol_compiler.py> ;
@@ -327,11 +337,20 @@
 <file:///app/protocols/dependency-install-on-start> proto:enforcement "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions." ;
     schema:description "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed." .
 
+<file:///app/protocols/formal-proposal-required> proto:enforcement "The initial plan for any speculative task must include a step to generate and save a proposal artifact." ;
+    schema:description "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan." .
+
+<file:///app/protocols/idle-state-trigger> proto:enforcement "The agent's main control loop must verify an idle state before allowing the invocation of a speculative plan." ;
+    schema:description "The agent may only initiate a speculative task when it has no active, user-assigned tasks." .
+
 <file:///app/protocols/planning-tool-access> proto:enforcement "The agent's core logic should be designed to use this tool for all planning activities." ;
     schema:description "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution." .
 
 <file:///app/protocols/refactor-rename-symbol> proto:enforcement "The tool is used by invoking it from the command line with the appropriate arguments. The agent should use this tool when a refactoring task is requested." ;
     schema:description "The `refactor.py` tool can be used to rename a symbol and all of its references." .
+
+<file:///app/protocols/resource-constraints> proto:enforcement "This is a system-level constraint that the agent orchestrator must enforce." ;
+    schema:description "Speculative tasks must operate under defined resource limits." .
 
 <file:///app/protocols/security/no-public-disclosure> proto:enforcement "Violation of this rule may result in being banned from the project community." ;
     schema:description "Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed." .
@@ -342,6 +361,11 @@
 <file:///app/protocols/shell-is-primary-entry-point> proto:enforcement "This is a procedural rule. The agent's operational framework should only expose the agent_shell.py as the means of starting a new task." ;
     schema:description "All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation." .
 
+<file:///app/protocols/speculative-logging> proto:enforcement "The agent's logging and file-creation tools should be context-aware and apply this tag when in a speculative mode." ;
+    schema:description "All logs and artifacts generated during a speculative task must be tagged as 'speculative'." .
+
 <file:///app/protocols/toolchain-audit-on-schema-change> proto:enforcement "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files." ;
     schema:description "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure." .
 
+<file:///app/protocols/user-review-gate> proto:enforcement "The agent is forbidden from using tools like 'submit' or 'merge' within a speculative context. It must use 'request_user_input' to present the results." ;
+    schema:description "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly." .
