@@ -1562,25 +1562,16 @@
       "name": "TestResearchExecutor",
       "path": "./tooling/test_research.py",
       "language": "Python",
-      "line": 8,
+      "line": 6,
       "kind": "class",
       "docstring": "Tests for the research executor tool, mocking the native tools that are\nglobally injected by the execution environment."
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_research.py",
-      "language": "Python",
-      "line": 14,
-      "kind": "function",
-      "docstring": null
     },
     {
       "_type": "tag",
       "name": "test_local_filesystem_file_scope",
       "path": "./tooling/test_research.py",
       "language": "Python",
-      "line": 22,
+      "line": 13,
       "kind": "function",
       "docstring": "Verify it calls read_file for local file scope."
     },
@@ -1589,7 +1580,7 @@
       "name": "test_local_filesystem_directory_scope",
       "path": "./tooling/test_research.py",
       "language": "Python",
-      "line": 39,
+      "line": 25,
       "kind": "function",
       "docstring": "Verify it calls list_files for local directory scope."
     },
@@ -1598,7 +1589,7 @@
       "name": "test_external_web_narrow_scope",
       "path": "./tooling/test_research.py",
       "language": "Python",
-      "line": 52,
+      "line": 37,
       "kind": "function",
       "docstring": "Verify it calls google_search for external narrow scope."
     },
@@ -1607,7 +1598,7 @@
       "name": "test_external_web_broad_scope",
       "path": "./tooling/test_research.py",
       "language": "Python",
-      "line": 65,
+      "line": 49,
       "kind": "function",
       "docstring": "Verify it calls view_text_website for external broad scope."
     },
@@ -1616,7 +1607,7 @@
       "name": "test_external_repository_scope",
       "path": "./tooling/test_research.py",
       "language": "Python",
-      "line": 78,
+      "line": 61,
       "kind": "function",
       "docstring": "Verify it calls view_text_website for external repository scope."
     },
@@ -1625,7 +1616,7 @@
       "name": "test_invalid_target",
       "path": "./tooling/test_research.py",
       "language": "Python",
-      "line": 91,
+      "line": 73,
       "kind": "function",
       "docstring": "Verify it returns an error for an invalid target."
     },
@@ -1634,7 +1625,7 @@
       "name": "test_missing_parameters",
       "path": "./tooling/test_research.py",
       "language": "Python",
-      "line": 100,
+      "line": 82,
       "kind": "function",
       "docstring": "Verify it returns an error if required parameters are missing."
     },
@@ -1835,6 +1826,33 @@
       "line": 17,
       "kind": "function",
       "docstring": "Executes a research task based on a provided constraints dictionary.\n\nArgs:\n    constraints (dict): A dictionary specifying the research target,\n                        scope, and other parameters.\n\nReturns:\n    str: The result of the research action, or an error message."
+    },
+    {
+      "_type": "tag",
+      "name": "get_dead_links_and_content",
+      "path": "./tooling/code_health_analyzer.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": "Audits the plan registry, returns a list of dead links and the original content."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_plan_to_fix_dead_links",
+      "path": "./tooling/code_health_analyzer.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": "Generates a plan using `overwrite_file_with_block` to fix dead links."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/code_health_analyzer.py",
+      "language": "Python",
+      "line": 57,
+      "kind": "function",
+      "docstring": "Main entry point for the code health analyzer.\nIdentifies dead links and prints a plan to fix them."
     },
     {
       "_type": "tag",
