@@ -2315,6 +2315,60 @@
     },
     {
       "_type": "tag",
+      "name": "fizzbuzz",
+      "path": "./self_improvement_project/main.py",
+      "language": "Python",
+      "line": 1,
+      "kind": "function",
+      "docstring": "This function implements the FizzBuzz logic.\nFor multiples of 3, it returns \"Fizz\".\nFor multiples of 5, it returns \"Buzz\".\nFor multiples of both 3 and 5, it returns \"FizzBuzz\".\nOtherwise, it returns the number."
+    },
+    {
+      "_type": "tag",
+      "name": "TestFizzBuzz",
+      "path": "./self_improvement_project/test_main.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_fizz",
+      "path": "./self_improvement_project/test_main.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_buzz",
+      "path": "./self_improvement_project/test_main.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_fizzbuzz",
+      "path": "./self_improvement_project/test_main.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_number",
+      "path": "./self_improvement_project/test_main.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "Object",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
