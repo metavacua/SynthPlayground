@@ -30,6 +30,10 @@ import argparse
 from collections import Counter
 from datetime import datetime
 
+# Add the root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.file_system_utils import find_files
+
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 LOG_FILE = os.path.join(ROOT_DIR, "logs", "activity.log.jsonl")
@@ -41,15 +45,7 @@ SPECIAL_DIRS = ["protocols/security"] # from protocol_auditor.py
 # --- Protocol Audit Logic ---
 
 def find_all_agents_md_files(root_dir):
-    agents_files = []
-    special_paths = {os.path.join(root_dir, d) for d in SPECIAL_DIRS}
-    for dirpath, _, filenames in os.walk(root_dir):
-        is_special = any(os.path.commonpath([dirpath, special]) == special for special in special_paths)
-        if is_special:
-            continue
-        if AGENTS_MD_FILENAME in filenames:
-            agents_files.append(os.path.join(dirpath, AGENTS_MD_FILENAME))
-    return agents_files
+    return [os.path.join(root_dir, f) for f in find_files(AGENTS_MD_FILENAME, root_dir)]
 
 def get_used_tools_from_log(log_path):
     used_tools = []
@@ -106,14 +102,14 @@ def run_protocol_audit():
         if not os.path.isdir(protocols_dir): continue
         try:
             agents_md_mtime = os.path.getmtime(agents_md_path)
-            for root, _, files in os.walk(protocols_dir):
-                for file in files:
-                    if file.endswith((".json", ".md")):
-                        path = os.path.join(root, file)
-                        if os.path.getmtime(path) > agents_md_mtime:
-                            stale_files.append(os.path.relpath(agents_md_path, ROOT_DIR))
-                            raise StopIteration
-        except StopIteration:
+            protocol_files = find_files("*.json", protocols_dir) + find_files("*.md", protocols_dir)
+            for proto_file in protocol_files:
+                path = os.path.join(ROOT_DIR, proto_file)
+                if os.path.getmtime(path) > agents_md_mtime:
+                    stale_files.append(os.path.relpath(agents_md_path, ROOT_DIR))
+                    break
+        except FileNotFoundError:
+            # This can happen if a file is deleted during the audit
             continue
     if stale_files:
         report.append("- ⚠️ **Stale Artifacts:** The following `AGENTS.md` files may be out of date. Run the `agents` build target.")

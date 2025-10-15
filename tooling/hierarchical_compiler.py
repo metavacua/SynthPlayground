@@ -47,6 +47,8 @@ if ROOT_DIR not in sys.path:
 
 import subprocess
 from tooling import protocol_compiler
+from utils.file_system_utils import find_files, get_ignore_patterns
+import fnmatch
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -65,9 +67,12 @@ def find_protocol_dirs(root_dir):
     ignoring any special-cased directories.
     """
     protocol_dirs = []
+    dir_patterns, _ = get_ignore_patterns(root_dir)
     special_paths = {os.path.join(root_dir, d) for d in SPECIAL_DIRS}
 
     for dirpath, dirnames, _ in os.walk(root_dir):
+        # Exclude ignored directories from traversal
+        dirnames[:] = [d for d in dirnames if not any(fnmatch.fnmatch(d, p) for p in dir_patterns)]
         if PROTOCOLS_DIR_NAME in dirnames:
             proto_dir_path = os.path.join(dirpath, PROTOCOLS_DIR_NAME)
             if proto_dir_path in special_paths:
@@ -188,11 +193,7 @@ def compile_centralized_knowledge_graph():
     schema_file = os.path.join(ROOT_DIR, "protocols", "protocol.schema.json")
     schema = json.load(open(schema_file))
 
-    all_json_files = []
-    for root, _, files in os.walk(ROOT_DIR):
-        for file in files:
-            if file.endswith(".protocol.json"):
-                all_json_files.append(os.path.join(root, file))
+    all_json_files = [os.path.join(ROOT_DIR, f) for f in find_files("*.protocol.json")]
 
     print(f"Found {len(all_json_files)} protocol.json files for KG compilation.")
 

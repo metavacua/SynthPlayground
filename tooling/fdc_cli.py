@@ -25,6 +25,10 @@ import shutil
 import sys
 import uuid
 
+# Add the root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.file_system_utils import find_files
+
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 POSTMORTEM_TEMPLATE_PATH = os.path.join(ROOT_DIR, "postmortem.md")
@@ -235,32 +239,7 @@ def _validate_plan_recursive(
     return state, fs, i
 
 
-def _load_file_index():
-    """Loads the file index from the .file_index.json file."""
-    index_path = os.path.join(ROOT_DIR, ".file_index.json")
-    try:
-        with open(index_path, "r") as f:
-            return set(json.load(f))
-    except FileNotFoundError:
-        print(
-            "Error: File index '.file_index.json' not found.",
-            "Please run 'python tooling/file_indexer.py build' to create it.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-    except json.JSONDecodeError:
-        print(
-            f"Error: Could not parse file index at {index_path}.",
-            "It may be corrupted. Please rebuild it.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-
-
 def validate_plan(plan_filepath):
-    """
-    Validates a plan file against the FDC FSM using a pre-built file index.
-    """
     try:
         with open(FSM_DEF_PATH, "r") as f:
             fsm = json.load(f)
@@ -270,10 +249,10 @@ def validate_plan(plan_filepath):
         print(f"Error: Could not find file {e.filename}", file=sys.stderr)
         sys.exit(1)
 
-    # Initialize the simulated file system from the pre-built index
-    simulated_fs = _load_file_index()
+    # Initialize the simulated file system with the actual state of the repository
+    simulated_fs = set(find_files("*"))
 
-    print(f"Starting validation with {len(simulated_fs)} files loaded from index...")
+    print(f"Starting validation with {len(simulated_fs)} files pre-loaded...")
     final_state, _, _ = _validate_plan_recursive(
         lines, 0, 0, fsm["start_state"], simulated_fs, {}, fsm
     )
@@ -359,10 +338,11 @@ def start_task(task_id):
     print("\n--- L2: Repository State Synchronization ---")
     try:
         kc_path = os.path.join(ROOT_DIR, "knowledge_core")
-        artifacts = [f for f in os.listdir(kc_path) if os.path.isfile(os.path.join(kc_path, f)) and f != 'agent_meta.json']
+        artifacts = find_files("*", base_dir=kc_path)
+        artifacts = [f for f in artifacts if os.path.basename(f) != 'agent_meta.json']
         print("Found knowledge_core artifacts:")
         for artifact in artifacts:
-            print(f"- {artifact}")
+            print(f"- {os.path.basename(artifact)}")
     except FileNotFoundError as e:
         print(f"Error during L2: Could not list knowledge_core directory. {e}", file=sys.stderr)
         sys.exit(1)

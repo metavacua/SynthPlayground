@@ -43,7 +43,7 @@ class TestProtocolEnforcement(unittest.TestCase):
         # We expect the plan to be rejected and the FSM to transition to the ERROR state.
         expected_trigger = self.mcg.get_trigger("PLANNING", "ERROR")
         self.assertEqual(trigger, expected_trigger)
-        self.assertIn("Unknown command 'reset_all'", self.agent_state.error)
+        self.assertIn("CRITICAL: Use of the forbidden tool `reset_all` was detected in the plan.", self.agent_state.error)
 
 if __name__ == "__main__":
     unittest.main()
