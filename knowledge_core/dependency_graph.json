@@ -6,11 +6,6 @@
       "type": "python-project"
     },
     {
-      "id": "tooling",
-      "path": "./tooling/requirements.txt",
-      "type": "python-project"
-    },
-    {
       "id": "attrs",
       "path": null,
       "type": "python-external"
@@ -99,6 +94,21 @@
       "id": "watchdog",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "markdown",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "black",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "flake8",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
@@ -175,20 +185,16 @@
       "target": "watchdog"
     },
     {
-      "source": "tooling",
-      "target": "jsonschema"
+      "source": "root-python-project",
+      "target": "markdown"
     },
     {
-      "source": "tooling",
-      "target": "rdflib"
+      "source": "root-python-project",
+      "target": "black"
     },
     {
-      "source": "tooling",
-      "target": "requests"
-    },
-    {
-      "source": "tooling",
-      "target": "watchdog"
+      "source": "root-python-project",
+      "target": "flake8"
     }
   ]
 }

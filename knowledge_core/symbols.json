@@ -218,12 +218,156 @@
     },
     {
       "_type": "tag",
+      "name": "TestNewSelfImprovementCLI",
+      "path": "./tooling/test_new_self_improvement_cli.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_run_improvement_for_model_a",
+      "path": "./tooling/test_new_self_improvement_cli.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_run_improvement_for_model_b",
+      "path": "./tooling/test_new_self_improvement_cli.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "find_all_agents_md_files",
+      "path": "./tooling/auditor.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "get_used_tools_from_log",
+      "path": "./tooling/auditor.py",
+      "language": "Python",
+      "line": 54,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "get_protocol_tools_from_agents_md",
+      "path": "./tooling/auditor.py",
+      "language": "Python",
+      "line": 78,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "run_protocol_audit",
+      "path": "./tooling/auditor.py",
+      "language": "Python",
+      "line": 97,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "run_plan_registry_audit",
+      "path": "./tooling/auditor.py",
+      "language": "Python",
+      "line": 157,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "run_doc_audit",
+      "path": "./tooling/auditor.py",
+      "language": "Python",
+      "line": 183,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/auditor.py",
+      "language": "Python",
+      "line": 208,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "main",
       "path": "./tooling/message_user.py",
       "language": "Python",
       "line": 15,
       "kind": "function",
       "docstring": "Prints the first command-line argument to simulate a user message."
+    },
+    {
+      "_type": "tag",
+      "name": "TestUnifiedDocBuilder",
+      "path": "./tooling/test_doc_builder.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_doc_builder.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_doc_builder.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_generate_system_docs",
+      "path": "./tooling/test_doc_builder.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_generate_readme",
+      "path": "./tooling/test_doc_builder.py",
+      "language": "Python",
+      "line": 42,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_generate_pages",
+      "path": "./tooling/test_doc_builder.py",
+      "language": "Python",
+      "line": 50,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -242,15 +386,6 @@
       "line": 122,
       "kind": "function",
       "docstring": "Generates a standard-compliant AGENTS.md file by parsing commands\nfrom the project's Makefile."
-    },
-    {
-      "_type": "tag",
-      "name": "audit_plan_registry",
-      "path": "./tooling/plan_registry_auditor.py",
-      "language": "Python",
-      "line": 29,
-      "kind": "function",
-      "docstring": "Audits the plan registry to find registered plans that point to\nnon-existent files.\n\nArgs:\n    registry_path (str): The path to the plan registry JSON file.\n\nReturns:\n    list: A list of tuples, where each tuple contains the name and\n          path of a dead link."
     },
     {
       "_type": "tag",
@@ -335,15 +470,6 @@
     },
     {
       "_type": "tag",
-      "name": "generate_html_page",
-      "path": "./tooling/pages_generator.py",
-      "language": "Python",
-      "line": 108,
-      "kind": "function",
-      "docstring": "Reads the source Markdown files, converts them to HTML, and builds the\nfinal index.html page."
-    },
-    {
-      "_type": "tag",
       "name": "TestNewResearchPlanner",
       "path": "./tooling/test_research_planner.py",
       "language": "Python",
@@ -386,6 +512,60 @@
       "line": 29,
       "kind": "function",
       "docstring": "A tool to verify that the agent can monotonically improve its capabilities.\n\nThis tool works by:\n1. Running a target test file that is known to fail, confirming the agent lacks a capability.\n2. Invoking the agent's self-correction mechanism to learn the new capability.\n3. Running the target test again to confirm it now passes.\n4. Running the full test suite to ensure no existing capabilities were lost."
+    },
+    {
+      "_type": "tag",
+      "name": "TestUnifiedAuditor",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_protocol_audit",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_plan_registry_audit",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_doc_audit",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 50,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -434,39 +614,39 @@
     },
     {
       "_type": "tag",
-      "name": "TestReadmeGenerator",
-      "path": "./tooling/test_readme_generator.py",
+      "name": "TestAgentShell",
+      "path": "./tooling/test_agent_shell.py",
       "language": "Python",
-      "line": 9,
+      "line": 15,
       "kind": "class",
-      "docstring": "Tests for the readme_generator.py script."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_readme_generator.py",
+      "name": "test_run_agent_loop_with_model_a",
+      "path": "./tooling/test_agent_shell.py",
       "language": "Python",
-      "line": 14,
+      "line": 18,
       "kind": "function",
-      "docstring": "Set up a temporary directory and mock source files for testing."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_readme_generator.py",
+      "name": "test_run_agent_loop_with_model_b",
+      "path": "./tooling/test_agent_shell.py",
       "language": "Python",
-      "line": 57,
+      "line": 24,
       "kind": "function",
-      "docstring": "Clean up the temporary directory after tests are complete."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_main_generates_readme_correctly",
-      "path": "./tooling/test_readme_generator.py",
+      "name": "test_run_agent_loop_with_no_model",
+      "path": "./tooling/test_agent_shell.py",
       "language": "Python",
-      "line": 63,
+      "line": 30,
       "kind": "function",
-      "docstring": "Test the main function to ensure it generates a complete README.md\nby simulating command-line arguments."
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -536,16 +716,16 @@
       "name": "find_protocol_file",
       "path": "./tooling/protocol_updater.py",
       "language": "Python",
-      "line": 21,
+      "line": 22,
       "kind": "function",
-      "docstring": "Finds the protocol file path corresponding to a given protocol_id."
+      "docstring": "Recursively finds the protocol file path corresponding to a given protocol_id."
     },
     {
       "_type": "tag",
       "name": "add_tool_to_protocol",
       "path": "./tooling/protocol_updater.py",
       "language": "Python",
-      "line": 34,
+      "line": 39,
       "kind": "function",
       "docstring": "Adds a tool to the 'associated_tools' list of a specified protocol."
     },
@@ -554,7 +734,7 @@
       "name": "update_rule_in_protocol",
       "path": "./tooling/protocol_updater.py",
       "language": "Python",
-      "line": 73,
+      "line": 78,
       "kind": "function",
       "docstring": "Updates the description of a specific rule within a protocol."
     },
@@ -563,63 +743,9 @@
       "name": "main",
       "path": "./tooling/protocol_updater.py",
       "language": "Python",
-      "line": 121,
+      "line": 126,
       "kind": "function",
       "docstring": "Main function to parse arguments and call the appropriate handler."
-    },
-    {
-      "_type": "tag",
-      "name": "TestPlanRegistryAuditor",
-      "path": "./tooling/test_plan_registry_auditor.py",
-      "language": "Python",
-      "line": 6,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_plan_registry_auditor.py",
-      "language": "Python",
-      "line": 8,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_plan_registry_auditor.py",
-      "language": "Python",
-      "line": 26,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_audit_plan_registry",
-      "path": "./tooling/test_plan_registry_auditor.py",
-      "language": "Python",
-      "line": 33,
-      "kind": "function",
-      "docstring": "Tests that the auditor correctly identifies valid and invalid plan links."
-    },
-    {
-      "_type": "tag",
-      "name": "audit_documentation",
-      "path": "./tooling/doc_auditor.py",
-      "language": "Python",
-      "line": 16,
-      "kind": "function",
-      "docstring": "Scans the system documentation file for modules missing docstrings.\n\nArgs:\n    filepath: The path to the SYSTEM_DOCUMENTATION.md file.\n\nReturns:\n    A list of file paths for modules that are missing docstrings."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/doc_auditor.py",
-      "language": "Python",
-      "line": 46,
-      "kind": "function",
-      "docstring": "Command-line interface for the documentation auditor."
     },
     {
       "_type": "tag",
@@ -716,7 +842,7 @@
       "name": "find_protocol_dirs",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 61,
+      "line": 62,
       "kind": "function",
       "docstring": "Finds all directories named 'protocols' within the root directory,\nignoring any special-cased directories."
     },
@@ -725,7 +851,7 @@
       "name": "run_compiler",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 81,
+      "line": 82,
       "kind": "function",
       "docstring": "Invokes the protocol_compiler.py script as a library."
     },
@@ -734,16 +860,16 @@
       "name": "run_readme_generator",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 101,
+      "line": 102,
       "kind": "function",
-      "docstring": "Invokes the readme_generator.py script as a library."
+      "docstring": "Invokes the doc_builder.py script to generate a README."
     },
     {
       "_type": "tag",
       "name": "generate_summary",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 117,
+      "line": 128,
       "kind": "function",
       "docstring": "Extracts the full, rendered protocol blocks from a child AGENTS.md file.\nThis function finds all protocol definitions (human-readable markdown and\nthe associated machine-readable JSON block) and concatenates them into a\nsingle string to be injected into the parent AGENTS.md."
     },
@@ -752,7 +878,7 @@
       "name": "cleanup_summaries",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 148,
+      "line": 159,
       "kind": "function",
       "docstring": "Removes temporary summary files from a protocols directory."
     },
@@ -761,7 +887,7 @@
       "name": "get_parent_module",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 158,
+      "line": 169,
       "kind": "function",
       "docstring": "Finds the direct parent module of a given module."
     },
@@ -770,7 +896,7 @@
       "name": "compile_centralized_knowledge_graph",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 168,
+      "line": 179,
       "kind": "function",
       "docstring": "Finds all protocol.json files in the entire repository, loads them, and\ncompiles them into a single, unified knowledge graph."
     },
@@ -779,9 +905,198 @@
       "name": "main",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 225,
+      "line": 236,
       "kind": "function",
       "docstring": "Main function to orchestrate the hierarchical compilation."
+    },
+    {
+      "_type": "tag",
+      "name": "get_module_docstring",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function",
+      "docstring": "Parses a Python file and extracts its module-level docstring."
+    },
+    {
+      "_type": "tag",
+      "name": "get_protocol_summary",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": "Parses an AGENTS.md file and extracts a list of protocol summaries."
+    },
+    {
+      "_type": "tag",
+      "name": "FunctionDoc",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 54,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "ClassDoc",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 60,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "ModuleDoc",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 66,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_format_default_value",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 73,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "format_args",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 78,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "DocVisitor",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 106,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_file_for_docs",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 133,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_documentation_for_module",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 146,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "find_python_files",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 166,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_system_docs",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 175,
+      "kind": "function",
+      "docstring": "Generates the detailed SYSTEM_DOCUMENTATION.md."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_readme",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 200,
+      "kind": "function",
+      "docstring": "Generates the high-level README.md for a module."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_pages",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 228,
+      "kind": "function",
+      "docstring": "Generates the index.html for GitHub Pages."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 258,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 61,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 67,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 107,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "visit_FunctionDef",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 112,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "visit_ClassDef",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 123,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -929,10 +1244,19 @@
     },
     {
       "_type": "tag",
-      "name": "do_researching",
+      "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
       "line": 302,
+      "kind": "function",
+      "docstring": "Validates a plan against a specific model's FSM."
+    },
+    {
+      "_type": "tag",
+      "name": "do_researching",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 356,
       "kind": "function",
       "docstring": "Launches the background research process."
     },
@@ -941,7 +1265,7 @@
       "name": "do_awaiting_result",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 325,
+      "line": 379,
       "kind": "function",
       "docstring": "Checks for the result of the background research process."
     },
@@ -950,7 +1274,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 359,
+      "line": 413,
       "kind": "function",
       "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
     },
@@ -959,7 +1283,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 370,
+      "line": 424,
       "kind": "function",
       "docstring": "Processes the result of a step and advances the execution state."
     },
@@ -968,7 +1292,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 414,
+      "line": 468,
       "kind": "function",
       "docstring": "Handles the code generation state."
     },
@@ -977,7 +1301,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 423,
+      "line": 477,
       "kind": "function",
       "docstring": "Handles the test execution state."
     },
@@ -986,7 +1310,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 433,
+      "line": 487,
       "kind": "function",
       "docstring": "Handles the debugging state."
     },
@@ -995,81 +1319,9 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 442,
+      "line": 496,
       "kind": "function",
       "docstring": "Handles the finalization of the task, guiding the agent through\nthe structured post-mortem process."
-    },
-    {
-      "_type": "tag",
-      "name": "find_all_agents_md_files",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 39,
-      "kind": "function",
-      "docstring": "Finds all AGENTS.md files in the repository, ignoring any special-cased\ndirectories that are not part of the standard hierarchical build."
-    },
-    {
-      "_type": "tag",
-      "name": "get_used_tools_from_log",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 63,
-      "kind": "function",
-      "docstring": "Parses the JSONL log file to get a list of used tool names.\nIt specifically looks for 'TOOL_EXEC' actions and extracts the tool\nfrom the 'command' field based on the logging schema.\nThis version is robust against malformed lines with multiple JSON objects."
-    },
-    {
-      "_type": "tag",
-      "name": "get_protocol_tools_from_agents_md",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 108,
-      "kind": "function",
-      "docstring": "Parses a list of AGENTS.md files to get a set of all tools associated\nwith protocols."
-    },
-    {
-      "_type": "tag",
-      "name": "run_completeness_check",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 147,
-      "kind": "function",
-      "docstring": "Compares used tools with protocol-defined tools and returns the gaps."
-    },
-    {
-      "_type": "tag",
-      "name": "run_centrality_analysis",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 155,
-      "kind": "function",
-      "docstring": "Performs a frequency analysis on the tool log and returns the counts."
-    },
-    {
-      "_type": "tag",
-      "name": "run_protocol_source_check",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 162,
-      "kind": "function",
-      "docstring": "Checks if each AGENTS.md file is older than its corresponding source files.\nReturns a list of warning/error dictionaries."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_markdown_report",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 218,
-      "kind": "function",
-      "docstring": "Generates a Markdown-formatted string from the audit results."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/protocol_auditor.py",
-      "language": "Python",
-      "line": 276,
-      "kind": "function",
-      "docstring": "Main function to run the protocol auditor and generate a report."
     },
     {
       "_type": "tag",
@@ -1292,25 +1544,43 @@
       "name": "load_config",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 39,
+      "line": 37,
       "kind": "function",
       "docstring": "Loads the build configuration file."
+    },
+    {
+      "_type": "tag",
+      "name": "execute_compiler_target",
+      "path": "./tooling/builder.py",
+      "language": "Python",
+      "line": 45,
+      "kind": "function",
+      "docstring": "Executes a 'compiler' type build target."
+    },
+    {
+      "_type": "tag",
+      "name": "execute_command_target",
+      "path": "./tooling/builder.py",
+      "language": "Python",
+      "line": 77,
+      "kind": "function",
+      "docstring": "Executes a 'command' type build target."
     },
     {
       "_type": "tag",
       "name": "execute_build",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 47,
+      "line": 83,
       "kind": "function",
-      "docstring": "Executes the build process for a specific target defined in the config."
+      "docstring": "Executes the build process for a specific target."
     },
     {
       "_type": "tag",
       "name": "main",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 121,
+      "line": 140,
       "kind": "function",
       "docstring": "Main function to parse arguments and drive the build process."
     },
@@ -1478,159 +1748,6 @@
     },
     {
       "_type": "tag",
-      "name": "FunctionDoc",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 34,
-      "kind": "class",
-      "docstring": "Holds documentation for a single function or method."
-    },
-    {
-      "_type": "tag",
-      "name": "ClassDoc",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 43,
-      "kind": "class",
-      "docstring": "Holds documentation for a single class."
-    },
-    {
-      "_type": "tag",
-      "name": "ModuleDoc",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 52,
-      "kind": "class",
-      "docstring": "Holds all documentation for a single Python module."
-    },
-    {
-      "_type": "tag",
-      "name": "_format_default_value",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 71,
-      "kind": "function",
-      "docstring": "Safely formats a default argument value from an AST node."
-    },
-    {
-      "_type": "tag",
-      "name": "format_args",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 82,
-      "kind": "function",
-      "docstring": "Formats ast.arguments into a printable string, including defaults."
-    },
-    {
-      "_type": "tag",
-      "name": "DocVisitor",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 131,
-      "kind": "class",
-      "docstring": "AST visitor to extract documentation from classes and functions.\nIt navigates the tree and builds lists of discovered documentation objects."
-    },
-    {
-      "_type": "tag",
-      "name": "parse_file_for_docs",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 182,
-      "kind": "function",
-      "docstring": "Parses a Python file and extracts documentation for its module, classes,\nand functions."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_documentation_for_module",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 211,
-      "kind": "function",
-      "docstring": "Generates Markdown content for a single module."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_documentation",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 257,
-      "kind": "function",
-      "docstring": "Generates a single Markdown string from a list of ModuleDoc objects."
-    },
-    {
-      "_type": "tag",
-      "name": "find_python_files",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 283,
-      "kind": "function",
-      "docstring": "Finds all Python files in the given directories, ignoring test files."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 294,
-      "kind": "function",
-      "docstring": "Main function to find files, parse them, and write documentation."
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 37,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 46,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 55,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 137,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "visit_FunctionDef",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 142,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "visit_ClassDef",
-      "path": "./tooling/doc_generator.py",
-      "language": "Python",
-      "line": 159,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
       "name": "Command",
       "path": "./tooling/plan_parser.py",
       "language": "Python",
@@ -1784,69 +1901,6 @@
     },
     {
       "_type": "tag",
-      "name": "TestRefactorTool",
-      "path": "./tooling/test_refactor.py",
-      "language": "Python",
-      "line": 8,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_refactor.py",
-      "language": "Python",
-      "line": 10,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_refactor.py",
-      "language": "Python",
-      "line": 25,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_rename_symbol",
-      "path": "./tooling/test_refactor.py",
-      "language": "Python",
-      "line": 29,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "get_fsm_details",
-      "path": "./tooling/generate_docs.py",
-      "language": "Python",
-      "line": 15,
-      "kind": "function",
-      "docstring": "Extracts FSM states and transitions from fsm.json."
-    },
-    {
-      "_type": "tag",
-      "name": "get_master_control_details",
-      "path": "./tooling/generate_docs.py",
-      "language": "Python",
-      "line": 21,
-      "kind": "function",
-      "docstring": "Extracts details about the master control script's state handlers."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_documentation",
-      "path": "./tooling/generate_docs.py",
-      "language": "Python",
-      "line": 31,
-      "kind": "function",
-      "docstring": "Generates the final Markdown documentation."
-    },
-    {
-      "_type": "tag",
       "name": "parse_formula",
       "path": "./tooling/hdl_prover.py",
       "language": "Python",
@@ -1946,10 +2000,19 @@
     },
     {
       "_type": "tag",
+      "name": "run_self_improvement_task",
+      "path": "./tooling/self_improvement_cli.py",
+      "language": "Python",
+      "line": 177,
+      "kind": "function",
+      "docstring": "Invokes the agent_shell.py to run a self-improvement task for a specific model."
+    },
+    {
+      "_type": "tag",
       "name": "main",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
-      "line": 175,
+      "line": 198,
       "kind": "function",
       "docstring": "Main function to run the self-improvement analysis CLI."
     },
@@ -2048,7 +2111,7 @@
       "name": "run_agent_loop",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 34,
+      "line": 36,
       "kind": "function",
       "docstring": "The main loop that drives the agent's lifecycle via the FSM."
     },
@@ -2057,45 +2120,9 @@
       "name": "main",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 138,
+      "line": 164,
       "kind": "function",
       "docstring": "Main entry point for the agent shell."
-    },
-    {
-      "_type": "tag",
-      "name": "get_module_docstring",
-      "path": "./tooling/readme_generator.py",
-      "language": "Python",
-      "line": 61,
-      "kind": "function",
-      "docstring": "Parses a Python file and extracts the module-level docstring."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_core_protocols_section",
-      "path": "./tooling/readme_generator.py",
-      "language": "Python",
-      "line": 76,
-      "kind": "function",
-      "docstring": "Parses a given AGENTS.md file to extract protocol definitions and generate a Markdown summary."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_key_components_section",
-      "path": "./tooling/readme_generator.py",
-      "language": "Python",
-      "line": 117,
-      "kind": "function",
-      "docstring": "Generates the Markdown for the \"Key Components\" section by documenting\nany `.py` files found in a `tooling/` subdirectory of the module."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/readme_generator.py",
-      "language": "Python",
-      "line": 149,
-      "kind": "function",
-      "docstring": "Main function to generate the README.md content and write it to a file."
     },
     {
       "_type": "tag",
@@ -2105,33 +2132,6 @@
       "line": 17,
       "kind": "function",
       "docstring": "Executes a research task based on a provided constraints dictionary.\n\nArgs:\n    constraints (dict): A dictionary specifying the research target,\n                        scope, and other parameters.\n\nReturns:\n    str: The result of the research action, or an error message."
-    },
-    {
-      "_type": "tag",
-      "name": "get_dead_links_and_content",
-      "path": "./tooling/code_health_analyzer.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "function",
-      "docstring": "Audits the plan registry, returns a list of dead links and the original content."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_plan_to_fix_dead_links",
-      "path": "./tooling/code_health_analyzer.py",
-      "language": "Python",
-      "line": 55,
-      "kind": "function",
-      "docstring": "Generates a plan using `overwrite_file_with_block` to fix dead links."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/code_health_analyzer.py",
-      "language": "Python",
-      "line": 77,
-      "kind": "function",
-      "docstring": "Main entry point for the code health analyzer.\nIdentifies dead links and prints a plan to fix them."
     },
     {
       "_type": "tag",
@@ -2276,69 +2276,6 @@
       "line": 155,
       "kind": "function",
       "docstring": "Verify the compiler can handle different section headers and parse\nthe 'deprecate-tool' command."
-    },
-    {
-      "_type": "tag",
-      "name": "TestProtocolAuditor",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 12,
-      "kind": "class",
-      "docstring": "Test suite for the protocol_auditor.py script."
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 15,
-      "kind": "function",
-      "docstring": "Set up mock files for testing."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 55,
-      "kind": "function",
-      "docstring": "Clean up any created files."
-    },
-    {
-      "_type": "tag",
-      "name": "test_get_protocol_tools_from_agents_md",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 60,
-      "kind": "function",
-      "docstring": "Verify that `get_protocol_tools_from_agents_md` correctly parses all\nJSON blocks from a mock AGENTS.md file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_get_used_tools_from_log",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 73,
-      "kind": "function",
-      "docstring": "Verify that `get_used_tools_from_log` correctly extracts tool names\nfrom a mock activity log file using the modern `tool_name` schema."
-    },
-    {
-      "_type": "tag",
-      "name": "test_end_to_end_report_generation",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 93,
-      "kind": "function",
-      "docstring": "Run the main function end-to-end by mocking the data gathering functions\nand verifying the content of the generated Markdown report."
-    },
-    {
-      "_type": "tag",
-      "name": "test_find_all_agents_md_files_with_special_dirs",
-      "path": "./tooling/test_protocol_auditor.py",
-      "language": "Python",
-      "line": 148,
-      "kind": "function",
-      "docstring": "Verify that `find_all_agents_md_files` correctly ignores directories\nlisted in the SPECIAL_DIRS configuration."
     },
     {
       "_type": "tag",
