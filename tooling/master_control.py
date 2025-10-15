@@ -197,53 +197,27 @@ class MasterControlGraph:
         """
         Validates a plan by writing it to a temporary file and using the fdc_cli.py script.
         """
-        ACTION_TYPE_MAP = {
-            "set_plan": "plan_op",
-            "message_user": "step_op",
-            "plan_step_complete": "step_op",
-            "submit": "submit_op",
-            "create_file_with_block": "write_op",
-            "overwrite_file_with_block": "write_op",
-            "replace_with_git_merge_diff": "write_op",
-            "read_file": "read_op",
-            "list_files": "read_op",
-            "grep": "read_op",
-            "delete_file": "delete_op",
-            "rename_file": "move_op",
-            "run_in_bash_session": "tool_exec",
-            "call_plan": "call_plan_op",
-            "research": "research_requested",
-        }
+        with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".txt") as tmp:
+            tmp.write(plan_content)
+            tmp_path = tmp.name
 
-        commands = parse_plan(plan_content)
-
-        # Enforce the 'reset-all-prohibition-001' protocol
-        for command in commands:
-            if command.tool_name == "reset_all":
-                return False, "CRITICAL: Use of the forbidden tool `reset_all` was detected in the plan."
-
-        current_state = "PLANNING" # Validation always starts from the PLANNING state
-
-        for command in commands:
-            action_type = ACTION_TYPE_MAP.get(command.tool_name)
-            if not action_type:
-                return False, f"Unknown command '{command.tool_name}' in plan."
-
-            next_state = None
-            for transition in self.fsm["transitions"]:
-                if transition["source"] == current_state and transition["trigger"] == action_type:
-                    next_state = transition["dest"]
-                    break
-
-            if not next_state:
-                return False, f"Invalid FSM transition. Cannot perform action '{action_type}' (from tool '{command.tool_name}') from state '{current_state}'."
-
-            current_state = next_state
-
-        if current_state not in self.fsm["final_states"] and current_state != "EXECUTING":
-             return False, f"Plan does not end in a valid state. Final state: '{current_state}'"
-
-        return True, ""
+        try:
+            result = subprocess.run(
+                ["python3", "tooling/fdc_cli.py", "validate", tmp_path],
+                capture_output=True,
+                text=True,
+                check=False,  # Don't raise exception on non-zero exit
+            )
+            if result.returncode == 0:
+                return True, result.stdout
+            else:
+                error_message = result.stderr
+                if not error_message:
+                    # Sometimes the error might go to stdout on failure
+                    error_message = result.stdout
+                return False, f"Plan validation failed:\n{error_message}"
+        finally:
+            os.unlink(tmp_path)
 
     def validate_plan_for_model(self, plan_content: str, model: str) -> (bool, str):
         """

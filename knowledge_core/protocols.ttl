@@ -165,6 +165,10 @@
     proto:hasRule <file:///app/protocols/dependency-install-on-start> ;
     schema:description "A protocol for ensuring a reliable execution environment through formal dependency management." .
 
+<file:///app/protocols/file-indexing-001> proto:associatedTool <file:///app/protocols/tooling/file_indexer.py> ;
+    proto:hasRule <file:///app/protocols/update-index-before-submit> ;
+    schema:description "A protocol for maintaining an up-to-date file index to accelerate tool performance." .
+
 <file:///app/protocols/hdl-proving-001> proto:associatedTool <file:///app/protocols/tooling/hdl_prover.py> ;
     proto:hasRule <file:///app/protocols/prove-sequent> ;
     schema:description "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs." .
@@ -394,6 +398,9 @@
 
 <file:///app/protocols/toolchain-audit-on-schema-change> proto:enforcement "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files." ;
     schema:description "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure." .
+
+<file:///app/protocols/update-index-before-submit> proto:enforcement "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/file_indexer.py build'." ;
+    schema:description "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem." .
 
 <file:///app/protocols/use-csdc-cli> proto:enforcement "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments." ;
     schema:description "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP)." .
