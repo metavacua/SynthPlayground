@@ -560,6 +560,24 @@
     },
     {
       "_type": "tag",
+      "name": "audit_documentation",
+      "path": "./tooling/doc_auditor.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Scans the system documentation file for modules missing docstrings.\n\nArgs:\n    filepath: The path to the SYSTEM_DOCUMENTATION.md file.\n\nReturns:\n    A list of file paths for modules that are missing docstrings."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/doc_auditor.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function",
+      "docstring": "Command-line interface for the documentation auditor."
+    },
+    {
+      "_type": "tag",
       "name": "TestSelfCorrectionOrchestrator",
       "path": "./tooling/test_self_correction_orchestrator.py",
       "language": "Python",
