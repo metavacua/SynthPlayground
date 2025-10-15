@@ -560,6 +560,24 @@
     },
     {
       "_type": "tag",
+      "name": "audit_documentation",
+      "path": "./tooling/doc_auditor.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Scans the system documentation file for modules missing docstrings.\n\nArgs:\n    filepath: The path to the SYSTEM_DOCUMENTATION.md file.\n\nReturns:\n    A list of file paths for modules that are missing docstrings."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/doc_auditor.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function",
+      "docstring": "Command-line interface for the documentation auditor."
+    },
+    {
+      "_type": "tag",
       "name": "TestSelfCorrectionOrchestrator",
       "path": "./tooling/test_self_correction_orchestrator.py",
       "language": "Python",
@@ -1766,6 +1784,87 @@
     },
     {
       "_type": "tag",
+      "name": "_log_event",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": "Appends a new log entry to the activity log, ensuring it's on a new line."
+    },
+    {
+      "_type": "tag",
+      "name": "_create_log_entry",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 49,
+      "kind": "function",
+      "docstring": "Creates a structured log entry dictionary."
+    },
+    {
+      "_type": "tag",
+      "name": "close_task",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function",
+      "docstring": "Automates the closing of a Finite Development Cycle."
+    },
+    {
+      "_type": "tag",
+      "name": "_validate_action",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 99,
+      "kind": "function",
+      "docstring": "Validates a single, non-loop action."
+    },
+    {
+      "_type": "tag",
+      "name": "_validate_plan_recursive",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 156,
+      "kind": "function",
+      "docstring": "Recursively validates a block of a plan."
+    },
+    {
+      "_type": "tag",
+      "name": "validate_plan",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 217,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_plan",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 251,
+      "kind": "function",
+      "docstring": "Analyzes a plan file to determine its complexity class and modality."
+    },
+    {
+      "_type": "tag",
+      "name": "start_task",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 292,
+      "kind": "function",
+      "docstring": "Initiates the AORP cascade for a new task."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 348,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "find_fsm_transition",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
@@ -2312,6 +2411,870 @@
       "line": 8,
       "kind": "function",
       "docstring": "Generates a multi-step, FSM-compliant plan for conducting deep research.\n\nArgs:\n    topic (str): The research topic.\n\nReturns:\n    str: A string containing the executable plan."
+    },
+    {
+      "_type": "tag",
+      "name": "lj_to_lk",
+      "path": "./logic_system/src/translations.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "Translates a proof from the LJ calculus to the LK calculus.\nThis is a direct embedding, as any valid LJ proof is also a valid LK proof."
+    },
+    {
+      "_type": "tag",
+      "name": "translate_formula_lj_to_ill",
+      "path": "./logic_system/src/translations.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": "Translates a formula from Intuitionistic Logic (LJ) to Intuitionistic Linear Logic (ILL)\nusing a standard Girard-style translation."
+    },
+    {
+      "_type": "tag",
+      "name": "lj_to_ill_proof",
+      "path": "./logic_system/src/translations.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": "Translates a full proof from LJ to ILL.\nA proof of \u0393 \u22a2 A in LJ becomes a proof of !\u0393* \u22a2 A* in ILL.\n\nNOTE: This is a placeholder implementation for the proof-of-concept.\nA full, correct implementation of this translation is highly non-trivial\nand would require a dedicated theorem prover or proof synthesizer for\nIntuitionistic Linear Logic. This function demonstrates the principle for\na few key rules but is not guaranteed to be correct or complete."
+    },
+    {
+      "_type": "tag",
+      "name": "ill_to_ll",
+      "path": "./logic_system/src/translations.py",
+      "language": "Python",
+      "line": 111,
+      "kind": "function",
+      "docstring": "Translates a proof from the ILL calculus to the LL calculus.\nThis is a direct embedding, as any valid ILL proof is also a valid LL proof."
+    },
+    {
+      "_type": "tag",
+      "name": "Sequent",
+      "path": "./logic_system/src/sequents.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./logic_system/src/sequents.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/sequents.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./logic_system/src/sequents.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__hash__",
+      "path": "./logic_system/src/sequents.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "axiom",
+      "path": "./logic_system/src/ll.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": "A \u22a2 A"
+    },
+    {
+      "_type": "tag",
+      "name": "tensor_right",
+      "path": "./logic_system/src/ll.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 \u0394, A   and   \u0393' \u22a2 \u0394', B\n--------------------------------\n      \u0393, \u0393' \u22a2 \u0394, \u0394', A \u2297 B"
+    },
+    {
+      "_type": "tag",
+      "name": "tensor_left",
+      "path": "./logic_system/src/ll.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function",
+      "docstring": "\u0393, A, B \u22a2 \u0394\n---------------\n \u0393, A \u2297 B \u22a2 \u0394"
+    },
+    {
+      "_type": "tag",
+      "name": "par_right",
+      "path": "./logic_system/src/ll.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 \u0394, A, B\n---------------\n \u0393 \u22a2 \u0394, A \u214b B"
+    },
+    {
+      "_type": "tag",
+      "name": "par_left",
+      "path": "./logic_system/src/ll.py",
+      "language": "Python",
+      "line": 50,
+      "kind": "function",
+      "docstring": "\u0393, A \u22a2 \u0394   and   \u0393', B \u22a2 \u0394'\n--------------------------------\n      \u0393, \u0393', A \u214b B \u22a2 \u0394, \u0394'"
+    },
+    {
+      "_type": "tag",
+      "name": "cut",
+      "path": "./logic_system/src/ll.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 \u0394, A   and   A, \u0393' \u22a2 \u0394'\n--------------------------------\n         \u0393, \u0393' \u22a2 \u0394, \u0394'"
+    },
+    {
+      "_type": "tag",
+      "name": "LJSequent",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "axiom",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": "A \u22a2 A"
+    },
+    {
+      "_type": "tag",
+      "name": "weak_left",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 31,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 \u0394  /  \u0393, A \u22a2 \u0394"
+    },
+    {
+      "_type": "tag",
+      "name": "cut",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 A   and   A, \u0393' \u22a2 B / \u0393, \u0393' \u22a2 B"
+    },
+    {
+      "_type": "tag",
+      "name": "and_left",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 45,
+      "kind": "function",
+      "docstring": "\u0393, A, B \u22a2 \u0394 / \u0393, A \u2227 B \u22a2 \u0394"
+    },
+    {
+      "_type": "tag",
+      "name": "and_right",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 51,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 A   and   \u0393 \u22a2 B / \u0393 \u22a2 A \u2227 B"
+    },
+    {
+      "_type": "tag",
+      "name": "or_left",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 58,
+      "kind": "function",
+      "docstring": "\u0393, A \u22a2 \u0394   and   \u0393, B \u22a2 \u0394 / \u0393, A \u2228 B \u22a2 \u0394"
+    },
+    {
+      "_type": "tag",
+      "name": "or_right",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 A / \u0393 \u22a2 A \u2228 B  or  \u0393 \u22a2 B / \u0393 \u22a2 A \u2228 B"
+    },
+    {
+      "_type": "tag",
+      "name": "implies_left",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 71,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 A   and   B, \u0393' \u22a2 C / A \u2192 B, \u0393, \u0393' \u22a2 C"
+    },
+    {
+      "_type": "tag",
+      "name": "implies_right",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 78,
+      "kind": "function",
+      "docstring": "A, \u0393 \u22a2 B / \u0393 \u22a2 A \u2192 B"
+    },
+    {
+      "_type": "tag",
+      "name": "not_left",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 84,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 A / \u00acA, \u0393 \u22a2"
+    },
+    {
+      "_type": "tag",
+      "name": "not_right",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 90,
+      "kind": "function",
+      "docstring": "A, \u0393 \u22a2 / \u0393 \u22a2 \u00acA"
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "succedent_formula",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/lj.py",
+      "language": "Python",
+      "line": 19,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "axiom",
+      "path": "./logic_system/src/lk.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": "A \u22a2 A"
+    },
+    {
+      "_type": "tag",
+      "name": "weak_left",
+      "path": "./logic_system/src/lk.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 \u0394  /  \u0393, A \u22a2 \u0394"
+    },
+    {
+      "_type": "tag",
+      "name": "weak_right",
+      "path": "./logic_system/src/lk.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 \u0394  /  \u0393 \u22a2 \u0394, A"
+    },
+    {
+      "_type": "tag",
+      "name": "and_left",
+      "path": "./logic_system/src/lk.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": "\u0393, A, B \u22a2 \u0394 / \u0393, A \u2227 B \u22a2 \u0394"
+    },
+    {
+      "_type": "tag",
+      "name": "and_right",
+      "path": "./logic_system/src/lk.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 \u0394, A   and   \u0393 \u22a2 \u0394, B / \u0393 \u22a2 \u0394, A \u2227 B"
+    },
+    {
+      "_type": "tag",
+      "name": "or_left",
+      "path": "./logic_system/src/lk.py",
+      "language": "Python",
+      "line": 38,
+      "kind": "function",
+      "docstring": "\u0393, A \u22a2 \u0394   and   \u0393, B \u22a2 \u0394 / \u0393, A \u2228 B \u22a2 \u0394"
+    },
+    {
+      "_type": "tag",
+      "name": "or_right",
+      "path": "./logic_system/src/lk.py",
+      "language": "Python",
+      "line": 46,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 \u0394, A, B / \u0393 \u22a2 \u0394, A \u2228 B"
+    },
+    {
+      "_type": "tag",
+      "name": "implies_left",
+      "path": "./logic_system/src/lk.py",
+      "language": "Python",
+      "line": 52,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 \u0394, A   and   B, \u0393 \u22a2 \u0394 / A \u2192 B, \u0393 \u22a2 \u0394"
+    },
+    {
+      "_type": "tag",
+      "name": "implies_right",
+      "path": "./logic_system/src/lk.py",
+      "language": "Python",
+      "line": 59,
+      "kind": "function",
+      "docstring": "A, \u0393 \u22a2 \u0394, B / \u0393 \u22a2 \u0394, A \u2192 B"
+    },
+    {
+      "_type": "tag",
+      "name": "not_left",
+      "path": "./logic_system/src/lk.py",
+      "language": "Python",
+      "line": 66,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 \u0394, A / \u00acA, \u0393 \u22a2 \u0394"
+    },
+    {
+      "_type": "tag",
+      "name": "not_right",
+      "path": "./logic_system/src/lk.py",
+      "language": "Python",
+      "line": 73,
+      "kind": "function",
+      "docstring": "A, \u0393 \u22a2 \u0394 / \u0393 \u22a2 \u0394, \u00acA"
+    },
+    {
+      "_type": "tag",
+      "name": "Formula",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Prop",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "UnaryOp",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Not",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "BinaryOp",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "And",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Or",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 38,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Implies",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 42,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Tensor",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 48,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Par",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 52,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "LinImplies",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 56,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "OfCourse",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 60,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "With",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "class",
+      "docstring": "Additive Conjunction"
+    },
+    {
+      "_type": "tag",
+      "name": "Plus",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 69,
+      "kind": "class",
+      "docstring": "Additive Disjunction"
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__hash__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 49,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 53,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 57,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 61,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 66,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/formulas.py",
+      "language": "Python",
+      "line": 71,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "ILLSequent",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "axiom",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": "A \u22a2 A"
+    },
+    {
+      "_type": "tag",
+      "name": "tensor_right",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 A   and   \u0394 \u22a2 B\n-----------------------\n     \u0393, \u0394 \u22a2 A \u2297 B"
+    },
+    {
+      "_type": "tag",
+      "name": "tensor_left",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 38,
+      "kind": "function",
+      "docstring": "\u0393, A, B \u22a2 C\n---------------\n \u0393, A \u2297 B \u22a2 C"
+    },
+    {
+      "_type": "tag",
+      "name": "lin_implies_right",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 49,
+      "kind": "function",
+      "docstring": "\u0393, A \u22a2 B\n------------\n\u0393 \u22a2 A \u22b8 B"
+    },
+    {
+      "_type": "tag",
+      "name": "lin_implies_left",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 60,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 A   and   \u0394, B \u22a2 C\n--------------------------\n   \u0393, \u0394, A \u22b8 B \u22a2 C"
+    },
+    {
+      "_type": "tag",
+      "name": "of_course_right",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 73,
+      "kind": "function",
+      "docstring": "!\u0393 \u22a2 A\n----------\n!\u0393 \u22a2 !A"
+    },
+    {
+      "_type": "tag",
+      "name": "dereliction",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 86,
+      "kind": "function",
+      "docstring": "\u0393, A \u22a2 B\n------------\n\u0393, !A \u22a2 B"
+    },
+    {
+      "_type": "tag",
+      "name": "contraction",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 97,
+      "kind": "function",
+      "docstring": "\u0393, !A, !A \u22a2 B\n----------------\n   \u0393, !A \u22a2 B"
+    },
+    {
+      "_type": "tag",
+      "name": "weakening",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 117,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 B\n------------\n\u0393, !A \u22a2 B"
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "succedent_formula",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Rule",
+      "path": "./logic_system/src/proof.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "ProofTree",
+      "path": "./logic_system/src/proof.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./logic_system/src/proof.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/proof.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./logic_system/src/proof.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./logic_system/src/proof.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Logic",
+      "path": "./logic_system/src/diagram.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Diagram",
+      "path": "./logic_system/src/diagram.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./logic_system/src/diagram.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "find_path",
+      "path": "./logic_system/src/diagram.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function",
+      "docstring": "Finds a path of translations from a start logic to an end logic using BFS."
+    },
+    {
+      "_type": "tag",
+      "name": "translate",
+      "path": "./logic_system/src/diagram.py",
+      "language": "Python",
+      "line": 49,
+      "kind": "function",
+      "docstring": "Translates a proof from a starting logic to an ending logic."
     },
     {
       "_type": "tag",
