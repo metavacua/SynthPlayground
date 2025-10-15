@@ -248,7 +248,7 @@
       "name": "audit_plan_registry",
       "path": "./tooling/plan_registry_auditor.py",
       "language": "Python",
-      "line": 8,
+      "line": 16,
       "kind": "function",
       "docstring": "Audits the plan registry to find registered plans that point to\nnon-existent files.\n\nArgs:\n    registry_path (str): The path to the plan registry JSON file.\n\nReturns:\n    list: A list of tuples, where each tuple contains the name and\n          path of a dead link."
     },
@@ -680,7 +680,7 @@
       "name": "find_protocol_dirs",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 24,
+      "line": 44,
       "kind": "function",
       "docstring": "Finds all directories named 'protocols' within the root directory,\nignoring any special-cased directories."
     },
@@ -689,7 +689,7 @@
       "name": "run_compiler",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 44,
+      "line": 64,
       "kind": "function",
       "docstring": "Invokes the protocol_compiler.py script as a library."
     },
@@ -698,7 +698,7 @@
       "name": "run_readme_generator",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 64,
+      "line": 84,
       "kind": "function",
       "docstring": "Invokes the readme_generator.py script as a library."
     },
@@ -707,7 +707,7 @@
       "name": "generate_summary",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 80,
+      "line": 100,
       "kind": "function",
       "docstring": "Extracts the full, rendered protocol blocks from a child AGENTS.md file.\nThis function finds all protocol definitions (human-readable markdown and\nthe associated machine-readable JSON block) and concatenates them into a\nsingle string to be injected into the parent AGENTS.md."
     },
@@ -716,7 +716,7 @@
       "name": "cleanup_summaries",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 111,
+      "line": 131,
       "kind": "function",
       "docstring": "Removes temporary summary files from a protocols directory."
     },
@@ -725,7 +725,7 @@
       "name": "get_parent_module",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 121,
+      "line": 141,
       "kind": "function",
       "docstring": "Finds the direct parent module of a given module."
     },
@@ -734,7 +734,7 @@
       "name": "compile_centralized_knowledge_graph",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 131,
+      "line": 151,
       "kind": "function",
       "docstring": "Finds all protocol.json files in the entire repository, loads them, and\ncompiles them into a single, unified knowledge graph."
     },
@@ -743,7 +743,7 @@
       "name": "main",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 188,
+      "line": 208,
       "kind": "function",
       "docstring": "Main function to orchestrate the hierarchical compilation."
     },
@@ -1202,7 +1202,7 @@
       "name": "load_config",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 12,
+      "line": 20,
       "kind": "function",
       "docstring": "Loads the build configuration file."
     },
@@ -1211,7 +1211,7 @@
       "name": "execute_build",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 20,
+      "line": 28,
       "kind": "function",
       "docstring": "Executes the build process for a specific target defined in the config."
     },
@@ -1220,7 +1220,7 @@
       "name": "main",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 85,
+      "line": 93,
       "kind": "function",
       "docstring": "Main function to parse arguments and drive the build process."
     },
@@ -1229,7 +1229,7 @@
       "name": "log_catastrophic_failure",
       "path": "./tooling/log_failure.py",
       "language": "Python",
-      "line": 10,
+      "line": 19,
       "kind": "function",
       "docstring": "Logs the catastrophic failure event."
     },
@@ -1355,7 +1355,7 @@
       "name": "get_defined_symbols",
       "path": "./tooling/context_awareness_scanner.py",
       "language": "Python",
-      "line": 8,
+      "line": 20,
       "kind": "function",
       "docstring": "Parses a Python file to find all defined functions and classes."
     },
@@ -1364,7 +1364,7 @@
       "name": "get_imported_symbols",
       "path": "./tooling/context_awareness_scanner.py",
       "language": "Python",
-      "line": 25,
+      "line": 37,
       "kind": "function",
       "docstring": "Parses a Python file to find all imported modules and symbols."
     },
@@ -1373,7 +1373,7 @@
       "name": "find_references",
       "path": "./tooling/context_awareness_scanner.py",
       "language": "Python",
-      "line": 51,
+      "line": 63,
       "kind": "function",
       "docstring": "Finds all files in a directory that reference a given symbol."
     },
@@ -1382,7 +1382,7 @@
       "name": "main",
       "path": "./tooling/context_awareness_scanner.py",
       "language": "Python",
-      "line": 69,
+      "line": 81,
       "kind": "function",
       "docstring": null
     },
@@ -1796,7 +1796,7 @@
       "name": "scan_documents",
       "path": "./tooling/document_scanner.py",
       "language": "Python",
-      "line": 5,
+      "line": 13,
       "kind": "function",
       "docstring": "Scans a directory for PDF, Markdown, and text files and extracts their content."
     },
@@ -1805,7 +1805,7 @@
       "name": "find_symbol_definition",
       "path": "./tooling/refactor.py",
       "language": "Python",
-      "line": 8,
+      "line": 24,
       "kind": "function",
       "docstring": "Finds the definition of a symbol in a Python file."
     },
@@ -1814,7 +1814,7 @@
       "name": "find_references",
       "path": "./tooling/refactor.py",
       "language": "Python",
-      "line": 22,
+      "line": 38,
       "kind": "function",
       "docstring": "Finds all files in a directory that reference a given symbol."
     },
@@ -1823,7 +1823,7 @@
       "name": "main",
       "path": "./tooling/refactor.py",
       "language": "Python",
-      "line": 40,
+      "line": 56,
       "kind": "function",
       "docstring": null
     },
@@ -1967,7 +1967,7 @@
       "name": "get_module_docstring",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 34,
+      "line": 51,
       "kind": "function",
       "docstring": "Parses a Python file and extracts the module-level docstring."
     },
@@ -1976,7 +1976,7 @@
       "name": "generate_core_protocols_section",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 49,
+      "line": 66,
       "kind": "function",
       "docstring": "Parses a given AGENTS.md file to extract protocol definitions and generate a Markdown summary."
     },
@@ -1985,7 +1985,7 @@
       "name": "generate_key_components_section",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 90,
+      "line": 107,
       "kind": "function",
       "docstring": "Generates the Markdown for the \"Key Components\" section by documenting\nany `.py` files found in a `tooling/` subdirectory of the module."
     },
@@ -1994,7 +1994,7 @@
       "name": "main",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 122,
+      "line": 139,
       "kind": "function",
       "docstring": "Main function to generate the README.md content and write it to a file."
     },
@@ -2012,7 +2012,7 @@
       "name": "get_dead_links_and_content",
       "path": "./tooling/code_health_analyzer.py",
       "language": "Python",
-      "line": 8,
+      "line": 15,
       "kind": "function",
       "docstring": "Audits the plan registry, returns a list of dead links and the original content."
     },
@@ -2021,7 +2021,7 @@
       "name": "generate_plan_to_fix_dead_links",
       "path": "./tooling/code_health_analyzer.py",
       "language": "Python",
-      "line": 35,
+      "line": 42,
       "kind": "function",
       "docstring": "Generates a plan using `overwrite_file_with_block` to fix dead links."
     },
@@ -2030,7 +2030,7 @@
       "name": "main",
       "path": "./tooling/code_health_analyzer.py",
       "language": "Python",
-      "line": 57,
+      "line": 64,
       "kind": "function",
       "docstring": "Main entry point for the code health analyzer.\nIdentifies dead links and prints a plan to fix them."
     },
