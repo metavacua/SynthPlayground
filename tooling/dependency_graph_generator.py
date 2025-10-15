@@ -26,15 +26,21 @@ import re
 # --- Finder Functions ---
 
 
-def find_package_json_files(root_dir):
-    """Finds all package.json files in the repository, excluding node_modules."""
-    all_files = glob.glob(os.path.join(root_dir, "**", "package.json"), recursive=True)
-    return [f for f in all_files if "node_modules" not in f]
+def find_dependency_files(root_dir):
+    """Finds all package.json and requirements.txt files, excluding node_modules."""
+    package_json_files = []
+    requirements_txt_files = []
+    for root, dirs, files in os.walk(root_dir):
+        # Exclude node_modules directories from the search
+        if "node_modules" in dirs:
+            dirs.remove("node_modules")
 
-
-def find_requirements_txt_files(root_dir):
-    """Finds all requirements.txt files in the repository."""
-    return glob.glob(os.path.join(root_dir, "**", "requirements.txt"), recursive=True)
+        for file in files:
+            if file == "package.json":
+                package_json_files.append(os.path.join(root, file))
+            elif file == "requirements.txt":
+                requirements_txt_files.append(os.path.join(root, file))
+    return package_json_files, requirements_txt_files
 
 
 # --- Parser Functions ---
@@ -107,12 +113,14 @@ def generate_dependency_graph(root_dir="."):
     all_projects = []
 
     # Consolidate all discovered projects
-    for pf in find_package_json_files(root_dir):
+    package_json_files, requirements_txt_files = find_dependency_files(root_dir)
+
+    for pf in package_json_files:
         info = parse_package_json(pf)
         if info:
             all_projects.append(info)
 
-    for rf in find_requirements_txt_files(root_dir):
+    for rf in requirements_txt_files:
         info = parse_requirements_txt(rf, root_dir)
         if info:
             all_projects.append(info)
@@ -129,6 +137,8 @@ def generate_dependency_graph(root_dir="."):
         )
 
     # Add dependencies as nodes and create edges
+    node_ids = {n["id"] for n in graph["nodes"]}
+
     for proj in all_projects:
         source_id = proj["project_name"]
         for dep in proj["dependencies"]:
@@ -140,7 +150,7 @@ def generate_dependency_graph(root_dir="."):
             # Otherwise, it's an external dependency
             else:
                 # Add the external dependency as a node if it doesn't exist yet
-                if not any(n["id"] == target_id for n in graph["nodes"]):
+                if target_id not in node_ids:
                     graph["nodes"].append(
                         {
                             "id": target_id,
@@ -148,6 +158,7 @@ def generate_dependency_graph(root_dir="."):
                             "type": f"{proj['type']}-external",
                         }
                     )
+                    node_ids.add(target_id)
                 graph["edges"].append({"source": source_id, "target": target_id})
 
     return graph
