@@ -1,78 +1,80 @@
 import argparse
 import sys
-import os
+from pathlib import Path
 
-# Add the project root to the Python path to allow imports from aura_lang
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Add the parent directory to the path to allow imports from aura_lang
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from aura_lang import lexer, parser
+import importlib
+
+from aura_lang.lexer import Lexer
+from aura_lang.parser import Parser
+import aura_lang.interpreter as interpreter
+
+def dynamic_agent_call_tool(tool_name, *args):
+    """
+    Dynamically imports and calls a tool from the 'tooling' directory.
+    Tool name should be the module name, without .py.
+    """
+    try:
+        # Sanitize the tool_name to prevent directory traversal
+        if '..' in tool_name or '/' in tool_name or '.py' in tool_name:
+            raise ValueError("Invalid tool name. Should be module name without path or extension.")
+
+        module_name = f"tooling.{tool_name}"
+        func_name = "main"
+        tool_module = importlib.import_module(module_name)
+        tool_func = getattr(tool_module, func_name)
+
+        original_argv = sys.argv
+        sys.argv = [f"tooling/{tool_name}.py"] + list(args)
+
+        print(f"[Aura Executor]: Calling tool '{tool_name}' with args {args}...")
+        result = tool_func()
+
+        sys.argv = original_argv
+        return result
+    except (ModuleNotFoundError, AttributeError) as e:
+        print(f"Error calling tool '{tool_name}': {e}", file=sys.stderr)
+        return None
+    except Exception as e:
+        print(f"An unexpected error occurred when calling tool '{tool_name}': {e}", file=sys.stderr)
+        return None
+
 
 def main():
     """
-    Parses and executes an Aura script.
+    Main entry point for the Aura script executor.
     """
-    arg_parser = argparse.ArgumentParser(description="Aura Executor")
-    arg_parser.add_argument("filepath", type=str, help="Path to the .aura file to execute.")
-    args = arg_parser.parse_args()
+    parser = argparse.ArgumentParser(description="Execute an Aura script.")
+    parser.add_argument("filepath", type=str, help="The path to the .aura script file.")
+    args = parser.parse_args()
 
     try:
-        with open(args.filepath, "r") as f:
-            source_code = f.read()
+        with open(args.filepath, 'r') as f:
+            script_content = f.read()
     except FileNotFoundError:
-        print(f"Error: File not found at {args.filepath}")
-        return
+        print(f"Error: File not found at {args.filepath}", file=sys.stderr)
+        sys.exit(1)
 
-    print(f"Executing Aura script: {args.filepath}")
-    l = lexer.Lexer(source_code)
-    p = parser.Parser(l)
-    program = p.parse_program()
+    # Directly replace the function in the interpreter's BUILTINS object.
+    # This is the most reliable way to ensure the correct function is called.
+    interpreter.BUILTINS["agent"].call_tool.fn = dynamic_agent_call_tool
 
-    if p.errors:
-        for error in p.errors:
-            print(f"Parser error: {error}")
-        return
+    lexer = Lexer(script_content)
+    parser = Parser(lexer)
+    program = parser.parse_program()
 
-    # --- Tooling and Execution Environment ---
-    from aura_lang import interpreter
-    from tooling import hdl_prover # Import the tool we want to expose
+    if parser.errors:
+        for error in parser.errors:
+            print(f"Parser Error: {error}", file=sys.stderr)
+        sys.exit(1)
 
-    def dynamic_agent_call_tool(tool_name, *args):
-        """
-        Dynamically calls an agent tool and wraps the result in an Aura object.
-        """
-        print(f"[Aura Executor]: Received call for tool '{tool_name}' with args {args}")
-        try:
-            # For simplicity, we'll use a hardcoded map.
-            # A real implementation would use a more dynamic discovery mechanism.
-            if tool_name == "hdl_prover.prove_sequent":
-                # The arguments from Aura arrive as a tuple.
-                result = hdl_prover.prove_sequent(args[0])
-                return interpreter.Object(result) # Wrap the raw boolean in an Object
-            elif tool_name == "environmental_probe.probe_network":
-                from tooling import environmental_probe
-                result = environmental_probe.probe_network()
-                return interpreter.Object(result)
-            else:
-                print(f"Error: Tool '{tool_name}' not found.")
-                return interpreter.Object(None)
-        except Exception as e:
-            print(f"Error executing tool '{tool_name}': {e}")
-            return interpreter.Object(None)
-
-    # --- Execute the Program ---
+    # Create a global environment for the script
     env = interpreter.Environment()
-    # Manually load built-ins into the environment for now.
-    for key, value in interpreter.BUILTINS.items():
-        env.set(key, value)
 
-    # Inject the real tool-calling function into the interpreter's context
-    # by replacing the placeholder on the agent object.
-    agent_obj = env.get("agent")
-    agent_obj.call_tool = interpreter.Builtin(dynamic_agent_call_tool)
-
-    print("Starting execution...")
-    result = interpreter.evaluate(program, env)
-    print(f"Execution finished. Final result: {result}")
+    # Execute the script
+    interpreter.evaluate(program, env)
 
 if __name__ == "__main__":
     main()
