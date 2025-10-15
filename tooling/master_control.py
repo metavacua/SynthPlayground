@@ -274,6 +274,60 @@ class MasterControlGraph:
 
         return True, ""
 
+    def validate_plan_for_model(self, plan_content: str, model: str) -> (bool, str):
+        """
+        Validates a plan against a specific model's FSM.
+        """
+        fsm_path = f"tooling/fsm_model_{model.lower()}.json"
+        if not os.path.exists(fsm_path):
+            return False, f"FSM for model '{model}' not found at '{fsm_path}'."
+        with open(fsm_path, "r") as f:
+            fsm = json.load(f)
+
+        ACTION_TYPE_MAP = {
+            "set_plan": "plan_op",
+            "message_user": "step_op",
+            "plan_step_complete": "step_op",
+            "submit": "submit_op",
+            "create_file_with_block": "write_op",
+            "overwrite_file_with_block": "write_op",
+            "replace_with_git_merge_diff": "write_op",
+            "read_file": "read_op",
+            "list_files": "read_op",
+            "grep": "read_op",
+            "delete_file": "delete_op",
+            "rename_file": "move_op",
+            "run_in_bash_session": "tool_exec",
+            "call_plan": "call_plan_op",
+            "research": "research_requested",
+            "define_set_of_names": "define_names_op",
+            "define_diagonalization_function": "define_diag_op",
+        }
+
+        commands = parse_plan(plan_content)
+        current_state = "PLANNING" # Validation always starts from the PLANNING state
+
+        for command in commands:
+            action_type = ACTION_TYPE_MAP.get(command.tool_name)
+            if not action_type:
+                return False, f"Unknown command '{command.tool_name}' in plan."
+
+            next_state = None
+            for transition in fsm["transitions"]:
+                if transition["source"] == current_state and transition["trigger"] == action_type:
+                    next_state = transition["dest"]
+                    break
+
+            if not next_state:
+                return False, f"Invalid FSM transition for model '{model}'. Cannot perform action '{action_type}' (from tool '{command.tool_name}') from state '{current_state}'."
+
+            current_state = next_state
+
+        if current_state not in fsm["final_states"] and current_state != "EXECUTING":
+             return False, f"Plan does not end in a valid state for model '{model}'. Final state: '{current_state}'"
+
+        return True, ""
+
     def do_researching(self, agent_state: AgentState, logger: Logger) -> str:
         """
         Launches the background research process.

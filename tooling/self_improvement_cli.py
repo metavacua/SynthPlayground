@@ -172,19 +172,52 @@ def analyze_error_rates(log_file):
     }
 
 
+import subprocess
+
+def run_self_improvement_task(model: str):
+    """
+    Invokes the agent_shell.py to run a self-improvement task for a specific model.
+    """
+    print(f"\n--- Initiating Self-Improvement Task for Model {model} ---")
+    try:
+        # We construct the command to call the agent shell
+        command = ["python", "tooling/agent_shell.py", "--model", model]
+        # We use subprocess.run to execute the command
+        result = subprocess.run(command, check=True, capture_output=True, text=True)
+        print("--- Self-Improvement Task Output ---")
+        print(result.stdout)
+        print("--- Self-Improvement Task Completed ---")
+    except FileNotFoundError:
+        print("\n[ERROR] `python` command not found. Make sure Python is in your PATH.")
+    except subprocess.CalledProcessError as e:
+        print(f"\n[ERROR] The self-improvement task for Model {model} failed.")
+        print(f"  - Return Code: {e.returncode}")
+        print(f"  - STDOUT: {e.stdout}")
+        print(f"  - STDERR: {e.stderr}")
+
 def main():
     """
     Main function to run the self-improvement analysis CLI.
     """
     parser = argparse.ArgumentParser(
-        description="Analyzes agent activity logs to identify areas for improvement."
+        description="Analyzes agent activity logs or runs new self-improvement tasks."
     )
     parser.add_argument(
         "--log-file",
         default=LOG_FILE_PATH,
-        help=f"Path to the log file. Defaults to {LOG_FILE_PATH}",
+        help=f"Path to the log file for analysis. Defaults to {LOG_FILE_PATH}",
+    )
+    parser.add_argument(
+        "--run-improvement-for-model",
+        choices=["A", "B"],
+        default=None,
+        help="If specified, runs a new self-improvement task under the given CSDC model (A or B), bypassing log analysis.",
     )
     args = parser.parse_args()
+
+    if args.run_improvement_for_model:
+        run_self_improvement_task(args.run_improvement_for_model)
+        return
 
     # --- Run Analyses ---
     print("--- Running Self-Improvement Analysis ---")
