@@ -121,6 +121,57 @@ def analyze_protocol_violations(log_file):
     return list(violation_tasks)
 
 
+def analyze_error_rates(log_file):
+    """
+    Analyzes the log file to calculate action success/failure rates.
+
+    Args:
+        log_file (str): Path to the activity log file.
+
+    Returns:
+        dict: A dictionary containing total counts, success/failure counts,
+              and a breakdown of failures by action type.
+    """
+    total_actions = 0
+    success_count = 0
+    failure_count = 0
+    failures_by_type = defaultdict(int)
+
+    try:
+        with open(log_file, "r") as f:
+            for line in f:
+                try:
+                    entry = json.loads(line)
+                    total_actions += 1
+                    outcome = entry.get("outcome", {})
+                    status = outcome.get("status")
+                    action_type = entry.get("action", {}).get("type")
+
+                    if status == "SUCCESS":
+                        success_count += 1
+                    elif status == "FAILURE":
+                        failure_count += 1
+                        if action_type:
+                            failures_by_type[action_type] += 1
+
+                except json.JSONDecodeError:
+                    continue  # Ignore malformed lines
+    except FileNotFoundError:
+        return {}
+
+    if total_actions == 0:
+        return {}
+
+    return {
+        "total_actions": total_actions,
+        "success_count": success_count,
+        "failure_count": failure_count,
+        "success_rate": (success_count / total_actions) * 100,
+        "failure_rate": (failure_count / total_actions) * 100,
+        "failures_by_type": dict(failures_by_type),
+    }
+
+
 def main():
     """
     Main function to run the self-improvement analysis CLI.
@@ -157,6 +208,18 @@ def main():
         )
         for task_id in violation_tasks:
             print(f"    - Task ID: {task_id}")
+
+    print("\n[3] Analyzing for Error Rates...")
+    error_stats = analyze_error_rates(args.log_file)
+    if not error_stats:
+        print("  - Result: No actions logged or log file not found.")
+    else:
+        print(f"  - Overall Success Rate: {error_stats['success_rate']:.2f}%")
+        print(f"  - Overall Failure Rate: {error_stats['failure_rate']:.2f}%")
+        if error_stats['failures_by_type']:
+            print("  - Failures by Action Type:")
+            for action_type, count in sorted(error_stats['failures_by_type'].items()):
+                print(f"    - {action_type}: {count} failure(s)")
 
     print("\n--- Analysis Complete ---")
 

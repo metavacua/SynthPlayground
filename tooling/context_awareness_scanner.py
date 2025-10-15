@@ -1,15 +1,3 @@
-"""
-A tool for scanning a Python file to understand its context within a repository.
-
-This script performs static analysis on a given file to:
-1.  Identify all functions and classes defined within it.
-2.  Identify all modules and symbols it imports.
-3.  Search the repository for references to the symbols defined in the file.
-
-The output is a JSON report that provides a snapshot of the file's role and
-dependencies, which is useful for understanding its impact and for planning
-refactoring efforts.
-"""
 import argparse
 import ast
 import json

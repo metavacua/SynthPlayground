@@ -1,11 +1,3 @@
-"""
-A tool for scanning the repository for document files (.pdf, .md, .txt)
-and extracting their text content.
-
-This scanner is a crucial part of the agent's bootstrap process, allowing it
-to gather initial context from human-written documents found within the
-project structure.
-"""
 import os
 import pypdf
 from pypdf import PdfReader

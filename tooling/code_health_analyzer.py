@@ -1,10 +1,3 @@
-"""
-A tool for analyzing the overall health of the codebase.
-
-This module currently focuses on the integrity of the plan registry,
-providing functionality to detect and generate plans to fix "dead links"
-(registry entries that point to non-existent files).
-"""
 import json
 import os
 

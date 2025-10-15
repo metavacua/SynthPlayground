@@ -1,11 +1,3 @@
-"""
-A tool for auditing the plan registry.
-
-This script reads the `plan_registry.json` file and verifies that every
-registered plan name points to a file that actually exists in the filesystem.
-It provides a clear report of any "dead links," helping to maintain the
-integrity of the hierarchical planning system.
-"""
 import json
 import os
 import argparse
