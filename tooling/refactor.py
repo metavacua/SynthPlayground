@@ -1,3 +1,24 @@
+"""
+This script provides a simple, automated refactoring tool for renaming symbols.
+
+It is designed to be used from the command line to rename a Python function or
+class and all of its references throughout the repository.
+
+The process is as follows:
+1.  **Find Definition:** It first locates the definition of the target symbol
+    (the "old name") in the specified file.
+2.  **Find References:** It then searches the entire repository for any files
+    that mention the old name.
+3.  **Generate Plan:** For each file where the name is found, it generates a
+    `replace_with_git_merge_diff` command. This command encapsulates the change
+    from the old content to the new content (with the name replaced).
+4.  **Output Plan File:** It writes all these commands into a single, temporary
+    plan file.
+
+The path to this generated plan file is printed to standard output. The agent's
+master controller can then be instructed to execute this plan, applying the
+refactoring changes in a controlled and verifiable way.
+"""
 import argparse
 import ast
 import os

@@ -1,3 +1,16 @@
+"""
+This script provides a command-line tool to audit the agent's Plan Registry.
+
+The Plan Registry (`knowledge_core/plan_registry.json`) is a critical file that
+maps human-readable, logical plan names to the file paths of the actual plan
+scripts. This allows the agent to call plans by name (e.g., `call_plan "deep-research"`)
+without hardcoding file paths.
+
+This auditor ensures the integrity of the registry by checking that every file
+path listed in it actually exists. It identifies and reports any "dead links"
+where a plan name points to a non-existent file, helping to maintain the
+reliability of the agent's hierarchical planning system.
+"""
 import json
 import os
 import argparse
