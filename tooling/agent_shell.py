@@ -19,8 +19,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from tooling.master_control import MasterControlGraph
 from tooling.state import AgentState
+from tooling.filesystem_lister import list_all_files_and_dirs
 from utils.logger import Logger
-from __main__ import read_file, list_files, google_search, view_text_website
+from __main__ import read_file, google_search, view_text_website
 
 
 def find_fsm_transition(fsm, source_state, trigger):
@@ -62,7 +63,7 @@ def run_agent_loop(task_description: str, model: str = None):
         if current_state == "ORIENTING":
             tools = {
                 "read_file": read_file,
-                "list_files": list_files,
+                "list_files": list_all_files_and_dirs,
                 "google_search": google_search,
                 "view_text_website": view_text_website,
             }
