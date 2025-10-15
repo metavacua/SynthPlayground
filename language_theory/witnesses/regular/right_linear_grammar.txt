@@ -1,0 +1,11 @@
+# Corrected Right-Linear Grammar for the language a^n b^m where n, m > 0
+# e.g., ab, aab, abbb
+# Productions are of the form A -> tB or A -> t.
+
+# S: Start symbol
+# A: Generates the rest of the a's (a*) and transitions to the b's (b+)
+# B: Generates the rest of the b's (b*)
+
+S -> aA
+A -> aA | bB
+B -> bB | b
