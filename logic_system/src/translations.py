@@ -64,8 +64,6 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
     elif rule_name == "∧-R":
         left_premise = lj_to_ill_proof(premises[0])
         right_premise = lj_to_ill_proof(premises[1])
-        formula = conclusion.succedent_formula
-        formula_star = translate_formula_lj_to_ill(formula)
         return ill.with_right(left_premise, right_premise)
 
     elif rule_name == "∧-L":
@@ -105,15 +103,15 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
         implication_star = translate_formula_lj_to_ill(implication)
 
         goal_succedent = right_premise.conclusion.succedent_formula
-        goal_antecedent = left_premise.conclusion.antecedent + (right_premise.conclusion.antecedent - Counter([translate_formula_lj_to_ill(implication.right)])) + Counter([implication_star])
+        goal_antecedent = left_premise.conclusion.antecedent + (right_premise.conclusion.antecedent - Counter([OfCourse(translate_formula_lj_to_ill(implication.right))])) + Counter([implication_star])
         goal = ill.ILLSequent(goal_antecedent, goal_succedent)
 
-        # Use the synthesizer to find the proof
         return ill_synthesizer.synthesize(goal)
 
     elif rule_name == "¬-L":
         premise = lj_to_ill_proof(premises[0])
-        return ProofTree(conclusion=ill.ILLSequent(premise.conclusion.antecedent, OfCourse(Prop("⊥"))), rule=Rule("¬-L (Translated)"), premises=[premise])
+        goal = ill.ILLSequent(premise.conclusion.antecedent, OfCourse(Prop("⊥")))
+        return ill_synthesizer.synthesize(goal)
 
     elif rule_name == "¬-R":
         premise = lj_to_ill_proof(premises[0])

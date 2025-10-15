@@ -43,16 +43,20 @@ class TestAgentShellIntegration(unittest.TestCase):
 
         # Configure the mock to simulate the FSM flow
         mock_mcg.do_orientation.return_value = "oriented"
+
+        plan_step_index = 0
         def get_current_step_side_effect(agent_state):
-            if agent_state.plan_step < len(plan):
-                return plan[agent_state.plan_step]
+            nonlocal plan_step_index
+            if plan_step_index < len(plan):
+                return plan[plan_step_index]
             return None
 
         mock_mcg.get_current_step.side_effect = get_current_step_side_effect
 
         def do_execution_side_effect(agent_state, result, logger):
-            agent_state.plan_step += 1
-            if agent_state.plan_step >= len(plan):
+            nonlocal plan_step_index
+            plan_step_index += 1
+            if plan_step_index >= len(plan):
                 return "plan_complete"
             return "step_complete"
 

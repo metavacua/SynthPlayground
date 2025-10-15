@@ -1,6 +1,5 @@
 pypdf
 rdflib
-lark
 pytest
 pytest-mock
 jsonschema
