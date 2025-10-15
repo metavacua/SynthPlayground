@@ -3740,7 +3740,7 @@
       "name": "diagonalization",
       "path": "./self_improvement_project/main.py",
       "language": "Python",
-      "line": 31,
+      "line": 58,
       "kind": "function",
       "docstring": "A simple diagonalization function.\nIt creates a new element by hashing the concatenation of all elements in the set."
     },
@@ -3749,7 +3749,7 @@
       "name": "main",
       "path": "./self_improvement_project/main.py",
       "language": "Python",
-      "line": 39,
+      "line": 66,
       "kind": "function",
       "docstring": "The main loop for the self-improvement process."
     },
@@ -3785,25 +3785,34 @@
       "name": "run",
       "path": "./self_improvement_project/main.py",
       "language": "Python",
-      "line": 19,
+      "line": 21,
       "kind": "function",
       "docstring": "Analyzes and integrates the new element."
+    },
+    {
+      "_type": "tag",
+      "name": "_count_leading_zeros",
+      "path": "./self_improvement_project/main.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": "Counts the number of leading '0' characters in a hex string."
     },
     {
       "_type": "tag",
       "name": "is_beneficial",
       "path": "./self_improvement_project/main.py",
       "language": "Python",
-      "line": 26,
+      "line": 40,
       "kind": "function",
-      "docstring": "Determines if the new element is beneficial."
+      "docstring": "Determines if the new element is beneficial.\nA new element is beneficial if adding it to the system state\nresults in a new state whose hash has more leading zeros than the current best."
     },
     {
       "_type": "tag",
       "name": "TestSelfImprovement",
       "path": "./self_improvement_project/test_main.py",
       "language": "Python",
-      "line": 5,
+      "line": 6,
       "kind": "class",
       "docstring": null
     },
@@ -3812,7 +3821,7 @@
       "name": "test_diagonalization",
       "path": "./self_improvement_project/test_main.py",
       "language": "Python",
-      "line": 7,
+      "line": 8,
       "kind": "function",
       "docstring": null
     },
@@ -3821,16 +3830,34 @@
       "name": "test_process_a",
       "path": "./self_improvement_project/test_main.py",
       "language": "Python",
-      "line": 25,
+      "line": 15,
       "kind": "function",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_process_b",
+      "name": "test_count_leading_zeros",
       "path": "./self_improvement_project/test_main.py",
       "language": "Python",
-      "line": 34,
+      "line": 23,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_process_b_beneficial_integration",
+      "path": "./self_improvement_project/test_main.py",
+      "language": "Python",
+      "line": 32,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_process_b_non_beneficial_rejection",
+      "path": "./self_improvement_project/test_main.py",
+      "language": "Python",
+      "line": 67,
       "kind": "function",
       "docstring": null
     },
