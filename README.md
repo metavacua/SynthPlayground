@@ -67,7 +67,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/fdc_cli.py`**:
 
-  > _Error parsing file: invalid syntax. Perhaps you forgot a comma? (fdc_cli.py, line 178)_
+  > _No docstring found._
 
 - **`tooling/generate_docs.py`**:
 

@@ -384,6 +384,35 @@ that might impact its ability to complete a task.
   > Tests network connectivity and measures latency to a reliable external endpoint.
 
 
+### `/app/tooling/fdc_cli.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def analyze_plan(plan_filepath)`
+
+  > Analyzes a plan file to determine its complexity class and modality.
+
+
+- #### `def close_task(task_id)`
+
+  > Automates the closing of a Finite Development Cycle.
+
+
+- #### `def main()`
+
+
+- #### `def start_task(task_id)`
+
+  > Initiates the AORP cascade for a new task.
+
+
+- #### `def validate_plan(plan_filepath)`
+
+
 ### `/app/tooling/generate_docs.py`
 
 This script generates comprehensive Markdown documentation for the agent's
