@@ -9,7 +9,7 @@
 # retaining the convenience of traditional `make` commands.
 # ==============================================================================
 
-.PHONY: all install format lint test build clean docs security agents readme audit audit-docs quality
+.PHONY: all install format lint test build clean docs security agents readme audit audit-docs quality pre-submit-check
 
 # --- Variables ---
 BUILDER = python3 tooling/builder.py
@@ -61,6 +61,9 @@ audit-docs:
 
 clean:
 	@$(BUILDER) --target clean
+
+pre-submit-check:
+	@python3 tooling/pre_submit_check.py
 
 # --- Help/Discovery ---
 
