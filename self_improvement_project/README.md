@@ -1,26 +1,23 @@
-# Self Improvement Project: FizzBuzz
+# Self Improvement Project: A Dichotomy of Definability
 
-This project is a small demonstration of core software engineering skills. It was created in response to the general directive to "Self improve."
+This project is a practical demonstration of a fundamental trade-off in formal systems, inspired by the implications of Tarski's undefinability theorem. It architects two mutually exclusive, independent systems to illustrate this principle.
 
-## Purpose
+## Core Concept
 
-The goal of this project is to showcase the ability to:
+The project showcases the dichotomy between a system's ability to define its own state (its "set of names") and its ability to generate novel elements guaranteed to be outside that state (its "diagonalization function"). A system cannot have both.
 
-*   Create a new, self-contained project.
-*   Implement a well-known algorithm (FizzBuzz).
-*   Write unit tests to verify the correctness of the implementation.
-*   Follow a structured development process.
+This project contains two systems, each representing one side of this trade-off:
 
-This project is not intended to be integrated into a larger application but rather to serve as a standalone example of a complete, tested feature.
+1.  **System A (`system_a/`): The Creator**
+    *   Has a **definable** diagonalization function.
+    *   Has an **undefinable** set of names (it is stateless and cannot read its own history).
 
-## How to run
+2.  **System B (`system_b/`): The Curator**
+    *   Has an **undefinable** diagonalization function (creation must come from an external source).
+    *   Has a **definable** set of names (it can read and write its complete state).
 
-To run the main program:
-```bash
-python main.py
-```
+## Further Reading
 
-To run the tests:
-```bash
-python test_main.py
-```
+For a detailed explanation of the architecture and the underlying principles, please see the [architecture.md](./architecture.md) file.
+
+For details on each implementation, please see the `README.md` files within the `system_a/` and `system_b/` directories.
