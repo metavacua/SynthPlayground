@@ -1,6 +1,6 @@
-# Structured Activity Log Schema v1.1
+# Structured Activity Log Schema v1.2
 
-This document defines the JSON schema for entries in `logs/activity.log.jsonl`. Each line in the log file is a JSON object that must conform to this schema. The goal of this schema is to provide a rich, structured dataset for post-mortem analysis and to power the proactive task generation in Phase 7.
+This document defines the JSON schema for entries in `logs/activity.log.jsonl`. Each line in the log file is a JSON object that must conform to this schema. The goal of this schema is to provide a rich, structured dataset for post-mortem analysis, proactive task generation, and deep debugging of the agent's reasoning process.
 
 ## Schema Definition
 
@@ -95,6 +95,25 @@ This document defines the JSON schema for entries in `logs/activity.log.jsonl`. 
     "evidence_citation": {
       "type": "string",
       "description": "A citation to the source (e.g., external documentation, internal artifact) that justifies the action, as per protocol."
+    },
+    "context": {
+      "type": "object",
+      "description": "Captures the agent's internal state and reasoning at the time of the action. This is crucial for debugging and understanding the 'why' behind an action.",
+      "properties": {
+        "current_thought": {
+          "type": "string",
+          "description": "A brief, natural-language description of the agent's immediate thought process or hypothesis being tested by the action."
+        },
+        "active_memory_summary": {
+          "type": "string",
+          "description": "A summary of the key information the agent is currently holding in its active memory or scratchpad."
+        },
+        "plan_execution_stack": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "An array representing the current plan execution stack, showing the hierarchy of active plans (e.g., ['main_plan.txt', 'sub_plan_a.txt'])."
+        }
+      }
     }
   },
   "required": ["log_id", "session_id", "timestamp", "phase", "task", "action", "outcome"]
@@ -115,5 +134,5 @@ This document defines the JSON schema for entries in `logs/activity.log.jsonl`. 
 ## Example Entry
 
 ```json
-{"log_id":"...","session_id":"...","timestamp":"2025-10-05T18:00:00Z","phase":"Phase 2","task":{"id":"improve-logging-01","plan_step":3},"action":{"type":"FILE_WRITE","details":{"path":"LOGGING_SCHEMA.md","content_hash":"..."}},"outcome":{"status":"SUCCESS","message":"Updated logging schema to v1.1."},"evidence_citation":"AGENTS.md, Phase 7 analysis"}
+{"log_id":"...","session_id":"...","timestamp":"2025-10-05T18:00:00Z","phase":"Phase 2","task":{"id":"improve-logging-01","plan_step":1},"action":{"type":"FILE_WRITE","details":{"path":"LOGGING_SCHEMA.md","content_hash":"..."}},"outcome":{"status":"SUCCESS","message":"Updated logging schema to v1.2 to include context field."},"evidence_citation":"AGENTS.md, meta-protocol-001","context":{"current_thought":"The existing logging schema lacks fields to capture the agent's internal state. Adding a 'context' object will provide deeper insight for post-mortem analysis.","active_memory_summary":"User requested improvements to logging. Current file is LOGGING_SCHEMA.md. Plan is to add a 'context' field with 'current_thought' and 'plan_execution_stack'.","plan_execution_stack":["improve-agent-processes.txt"]}}
 ```
