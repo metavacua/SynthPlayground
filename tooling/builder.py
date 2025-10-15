@@ -1,3 +1,30 @@
+"""
+A unified, configuration-driven build script for the project.
+
+This script serves as the central entry point for all build-related tasks, such
+as generating documentation, compiling protocols, and creating other project
+artifacts. It replaces a traditional Makefile's direct command execution with a
+more structured, maintainable, and introspectable approach.
+
+The core logic is driven by a `build_config.json` file, which defines a series
+of "targets." Each target specifies:
+- The `compiler` script to execute (e.g., `doc_generator.py`).
+- The `output` file to generate.
+- The `source` directories or files.
+- Any additional command-line `options`.
+
+This centralized builder provides several advantages:
+- **Single Source of Truth:** The `build_config.json` file is the definitive
+  source for all build logic, making the process easy to understand and modify.
+- **Consistency:** Ensures all build tasks are executed in a uniform way.
+- **Extensibility:** New build targets can be added by simply updating the
+  configuration file, without changing the script itself.
+- **Discoverability:** The script can list all available targets, making the
+  build system self-documenting.
+
+It is intended to be the primary interface for both human developers (via `make`
+targets that call this script) and automated systems.
+"""
 import os
 import json
 import argparse

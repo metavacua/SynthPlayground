@@ -6,7 +6,17 @@
 
 ### `/app/tooling/__init__.py`
 
-_No module-level docstring found._
+This module contains the various tools and utilities that support the agent's
+development, testing, and operational workflows.
+
+The tools in this package are the building blocks of the agent's capabilities,
+ranging from code analysis and refactoring to protocol compilation and
+self-correction. Each script is designed to be a self-contained unit of
+functionality that can be invoked either from the command line or programmatically
+by the agent's master control system.
+
+This __init__.py file marks the 'tooling' directory as a Python package,
+allowing for the organized import of its various modules.
 
 ### `/app/tooling/agent_shell.py`
 
@@ -88,7 +98,31 @@ to a temporary file that the main agent can poll.
 
 ### `/app/tooling/builder.py`
 
-_No module-level docstring found._
+A unified, configuration-driven build script for the project.
+
+This script serves as the central entry point for all build-related tasks, such
+as generating documentation, compiling protocols, and creating other project
+artifacts. It replaces a traditional Makefile's direct command execution with a
+more structured, maintainable, and introspectable approach.
+
+The core logic is driven by a `build_config.json` file, which defines a series
+of "targets." Each target specifies:
+- The `compiler` script to execute (e.g., `doc_generator.py`).
+- The `output` file to generate.
+- The `source` directories or files.
+- Any additional command-line `options`.
+
+This centralized builder provides several advantages:
+- **Single Source of Truth:** The `build_config.json` file is the definitive
+  source for all build logic, making the process easy to understand and modify.
+- **Consistency:** Ensures all build tasks are executed in a uniform way.
+- **Extensibility:** New build targets can be added by simply updating the
+  configuration file, without changing the script itself.
+- **Discoverability:** The script can list all available targets, making the
+  build system self-documenting.
+
+It is intended to be the primary interface for both human developers (via `make`
+targets that call this script) and automated systems.
 
 
 **Public Functions:**
@@ -109,9 +143,66 @@ _No module-level docstring found._
   > Main function to parse arguments and drive the build process.
 
 
+### `/app/tooling/capability_verifier.py`
+
+A tool to verify that the agent can monotonically improve its capabilities.
+
+This script is designed to provide a formal, automated test for the agent's
+self-correction and learning mechanisms. It ensures that when the agent learns
+a new capability, it does so without losing (regressing) any of its existing
+capabilities. This is a critical safeguard for ensuring robust and reliable
+agent evolution.
+
+The tool works by orchestrating a four-step process:
+1.  **Confirm Initial Failure:** It runs a specific test file that is known to
+    fail, verifying that the agent currently lacks the target capability.
+2.  **Invoke Self-Correction:** It simulates the discovery of a new "lesson" and
+    triggers the `self_correction_orchestrator.py` script, which is responsible
+    for integrating new knowledge and skills.
+3.  **Confirm Final Success:** It runs the same test file again, confirming that
+    the agent has successfully learned the new capability and the test now passes.
+4.  **Check for Regressions:** It runs the full, existing test suite to ensure
+    that the process of learning the new skill has not inadvertently broken any
+    previously functional capabilities.
+
+This provides a closed-loop verification of monotonic improvement, which is a
+cornerstone of the agent's design philosophy.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > A tool to verify that the agent can monotonically improve its capabilities.
+  >
+  > This tool works by:
+  > 1. Running a target test file that is known to fail, confirming the agent lacks a capability.
+  > 2. Invoking the agent's self-correction mechanism to learn the new capability.
+  > 3. Running the target test again to confirm it now passes.
+  > 4. Running the full test suite to ensure no existing capabilities were lost.
+
+
 ### `/app/tooling/code_health_analyzer.py`
 
-_No module-level docstring found._
+A tool for analyzing and reporting on the overall health of the codebase.
+
+This module provides functionality to perform various checks on the repository's
+artifacts to ensure their integrity and consistency. The primary focus of this
+tool is to identify and, where possible, generate plans to fix common issues
+that can arise from automated or manual changes.
+
+Currently, this analyzer focuses on the health of the Plan Registry:
+- **Dead Link Detection:** It scans the `knowledge_core/plan_registry.json` file
+  to find any registered plan names that point to file paths that no longer
+  exist in the filesystem. These "dead links" can break the hierarchical
+  planning system.
+
+When dead links are found, the tool can generate a corrective plan. This plan
+consists of a `overwrite_file_with_block` command that will replace the
+contents of the plan registry with a new version that has the invalid entries
+removed. This automated detection and remediation capability is a key part of
+maintaining the long-term health and reliability of the agent's knowledge base.
 
 
 **Public Functions:**
@@ -177,7 +268,27 @@ without altering the core orchestration process.
 
 ### `/app/tooling/context_awareness_scanner.py`
 
-_No module-level docstring found._
+A tool for performing static analysis on a Python file to understand its context.
+
+This script provides a "contextual awareness" scan of a specified Python file
+to help an agent (or a human) understand its role, dependencies, and connections
+within a larger codebase. This is crucial for planning complex changes or
+refactoring efforts, as it provides a snapshot of the potential impact of
+modifying a file.
+
+The scanner performs three main functions:
+1.  **Symbol Definition Analysis:** It uses Python's Abstract Syntax Tree (AST)
+    module to parse the target file and identify all the functions and classes
+    that are defined within it.
+2.  **Import Analysis:** It also uses the AST to find all modules and symbols
+    that the target file imports, revealing its dependencies on other parts of
+    the codebase or external libraries.
+3.  **Reference Finding:** It performs a repository-wide search to find all other
+    files that reference the symbols defined in the target file. This helps to
+    understand how the file is used by the rest of the system.
+
+The final output is a detailed JSON report containing all of this information,
+which can be used as a foundational artifact for automated planning or human review.
 
 
 **Public Functions:**
@@ -203,7 +314,23 @@ _No module-level docstring found._
 
 ### `/app/tooling/csdc_cli.py`
 
-_No module-level docstring found._
+A command-line tool for managing the Context-Sensitive Development Cycle (CSDC).
+
+This script provides an interface to validate a development plan against a specific
+CSDC model (A or B) and a given complexity class (P or EXP). It ensures that a
+plan adheres to the strict logical and computational constraints defined by the
+CSDC protocol before it is executed.
+
+The tool performs two main checks:
+1.  **Complexity Analysis:** It analyzes the plan to determine its computational
+    complexity and verifies that it matches the expected complexity class.
+2.  **Model Validation:** It validates the plan's commands against the rules of
+    the specified CSDC model, ensuring that it does not violate any of the
+    model's constraints (e.g., forbidding certain functions).
+
+This serves as a critical gateway for ensuring that all development work within
+the CSDC framework is sound, predictable, and compliant with the governing
+meta-mathematical principles.
 
 
 **Public Functions:**
@@ -404,7 +531,23 @@ importing them, which avoids issues with dependencies or script side-effects.
 
 ### `/app/tooling/document_scanner.py`
 
-_No module-level docstring found._
+A tool for scanning the repository for human-readable documents and extracting their text content.
+
+This script is a crucial component of the agent's initial information-gathering
+and orientation phase. It allows the agent to ingest knowledge from unstructured
+or semi-structured documents that are not part of the formal codebase, but which
+may contain critical context, requirements, or specifications.
+
+The scanner searches a given directory for files with common document extensions:
+- `.pdf`: Uses the `pypdf` library to extract text from PDF files.
+- `.md`: Reads Markdown files.
+- `.txt`: Reads plain text files.
+
+The output is a dictionary where the keys are the file paths of the discovered
+documents and the values are their extracted text content. This data can then
+be used by the agent to inform its planning and execution process. This tool
+is essential for bridging the gap between human-written documentation and the
+agent's operational awareness.
 
 
 **Public Functions:**
@@ -531,7 +674,20 @@ architecture, including the FSM, the agent shell, and the master control script.
 
 ### `/app/tooling/hdl_prover.py`
 
-_No module-level docstring found._
+A command-line tool for proving sequents in Intuitionistic Linear Logic.
+
+This script provides a basic interface to a simple logic prover. It takes a
+sequent as a command-line argument, parses it into a logical structure, and
+then attempts to prove it using a rudimentary proof search algorithm.
+
+The primary purpose of this tool is to allow the agent to perform formal
+reasoning and verification tasks by checking the validity of logical entailments.
+For example, it can be used to verify that a certain conclusion follows from a
+set of premises according to the rules of linear logic.
+
+The current implementation uses a very basic parser and proof algorithm,
+serving as a placeholder and demonstration for a more sophisticated, underlying
+logic engine.
 
 
 **Public Functions:**
@@ -558,7 +714,41 @@ _No module-level docstring found._
 
 ### `/app/tooling/hierarchical_compiler.py`
 
-_No module-level docstring found._
+A hierarchical build system for compiling nested protocol modules.
+
+This script orchestrates the compilation of `AGENTS.md` and `README.md` files
+across a repository with a nested or hierarchical module structure. It is a key
+component of the system's ability to manage complexity by allowing protocols to
+be defined in a modular, distributed way while still being presented as a unified,
+coherent whole at each level of the hierarchy.
+
+The compiler operates in two main passes:
+
+**Pass 1: Documentation Compilation (Bottom-Up)**
+1.  **Discovery:** It finds all `protocols` directories in the repository, which
+    signify the root of a documentation module.
+2.  **Bottom-Up Traversal:** It processes these directories from the most deeply
+    nested ones upwards. This ensures that child modules are always built before
+    their parents.
+3.  **Child Summary Injection:** For each compiled child module, it generates a
+    summary of its protocols and injects this summary into the parent's
+    `protocols` directory as a temporary file.
+4.  **Parent Compilation:** When the parent module is compiled, the standard
+    `protocol_compiler.py` automatically includes the injected child summaries,
+    creating a single `AGENTS.md` file that contains both the parent's native
+    protocols and the full protocols of all its direct children.
+5.  **README Generation:** After each `AGENTS.md` is compiled, the corresponding
+    `README.md` is generated.
+
+**Pass 2: Centralized Knowledge Graph Compilation**
+1.  After all documentation is built, it performs a full repository scan to find
+    every `*.protocol.json` file.
+2.  It parses all of these files and compiles them into a single, centralized
+    RDF knowledge graph (`protocols.ttl`). This provides a unified,
+    machine-readable view of every protocol defined anywhere in the system.
+
+This hierarchical approach allows for both localized, context-specific protocol
+definitions and a holistic, system-wide understanding of the agent's governing rules.
 
 
 **Public Functions:**
@@ -697,7 +887,22 @@ enriched knowledge graph.
 
 ### `/app/tooling/log_failure.py`
 
-_No module-level docstring found._
+A dedicated script to log a catastrophic failure event to the main activity log.
+
+This tool is designed to be invoked in the rare case of a severe, unrecoverable
+error that violates a core protocol. Its primary purpose is to ensure that such
+a critical event is formally and structurally documented in the standard agent
+activity log (`logs/activity.log.jsonl`), even if the main agent loop has
+crashed or been terminated.
+
+The script is pre-configured to log a `SYSTEM_FAILURE` event, specifically
+attributing it to the "Unauthorized use of the `reset_all` tool." This creates a
+permanent, machine-readable record of the failure, which is essential for
+post-mortem analysis, debugging, and the development of future safeguards.
+
+By using the standard `Logger` class, it ensures that the failure log entry
+conforms to the established `LOGGING_SCHEMA.md`, making it processable by
+auditing and analysis tools.
 
 
 **Public Functions:**
@@ -775,7 +980,7 @@ This module is designed as a library to be controlled by an external shell
 
     > Executes orientation, including analyzing the last post-mortem.
 
-  - ##### `def do_planning(self, agent_state, plan_content, logger, model='A')`
+  - ##### `def do_planning(self, agent_state, plan_content, logger)`
 
     > Validates a given plan, parses it, and initializes the plan stack.
 
@@ -796,6 +1001,10 @@ This module is designed as a library to be controlled by an external shell
     > Finds a trigger in the FSM definition for a transition from a source
     > to a destination state. This is a helper to avoid hardcoding trigger
     > strings in the state handlers.
+
+  - ##### `def validate_plan_for_model(self, plan_content, model)`
+
+    > Validates a plan against a specific model's FSM.
 
 
 ### `/app/tooling/master_control_cli.py`
@@ -819,7 +1028,16 @@ decoupling the entry point from the FSM implementation.
 
 ### `/app/tooling/message_user.py`
 
-_No module-level docstring found._
+A dummy tool that prints its arguments to simulate the message_user tool.
+
+This script is a simple command-line utility that takes a string as an
+argument and prints it to standard output, prefixed with "[Message User]:".
+Its purpose is to serve as a stand-in or mock for the actual `message_user`
+tool in testing environments where the full agent framework is not required.
+
+This allows for the testing of scripts or workflows that call the
+`message_user` tool without needing to invoke the entire agent messaging
+subsystem.
 
 
 **Public Functions:**
@@ -827,8 +1045,7 @@ _No module-level docstring found._
 
 - #### `def main()`
 
-  > A dummy tool that prints its arguments.
-  > This is to simulate the message_user tool for testing purposes.
+  > Prints the first command-line argument to simulate a user message.
 
 
 ### `/app/tooling/pages_generator.py`
@@ -940,7 +1157,25 @@ allowing for robust and readable plan files.
 
 ### `/app/tooling/plan_registry_auditor.py`
 
-_No module-level docstring found._
+A tool for auditing the agent's Plan Registry to ensure its integrity.
+
+This script is a diagnostic and maintenance tool designed to validate the
+`knowledge_core/plan_registry.json` file. The Plan Registry is a critical
+component of the hierarchical planning system (CFDC), as it maps logical plan
+names to their physical file paths. If this registry contains "dead links"
+(i.e., entries that point to files that have been moved, renamed, or deleted),
+the agent's ability to execute complex, multi-stage plans will be compromised.
+
+This auditor performs one key function:
+- **Dead Link Detection:** It reads every entry in the plan registry and verifies
+  that the file path associated with each logical name actually exists in the
+  filesystem.
+
+The script provides a clear, human-readable report of which registry entries are
+valid and which are invalid. This allows for quick identification and correction
+of issues, helping to maintain the health and reliability of the agent's core
+planning capabilities. It can be run manually for diagnostics or integrated into
+automated health checks.
 
 
 **Public Functions:**
@@ -1129,7 +1364,31 @@ directory, performing targeted updates based on command-line arguments.
 
 ### `/app/tooling/readme_generator.py`
 
-_No module-level docstring found._
+A tool for automatically generating a `README.md` file for a given module.
+
+This script creates a structured and human-readable `README.md` file by
+combining static templates with dynamically generated content extracted from the
+module's own source files. It is a key part of the project's "self-documenting"
+philosophy, ensuring that the high-level documentation stays synchronized with
+the source of truth (the code and protocols).
+
+The generator performs two main dynamic functions:
+
+1.  **Protocol Summary Generation:** It parses the module's `AGENTS.md` file to
+    find all defined protocol blocks (both those native to the module and those
+    imported from child modules). It then formats this information into a clear,
+    list-based summary that provides a high-level overview of the module's
+    governing rules.
+
+2.  **Key Component Documentation:** It scans the module's `tooling/` subdirectory
+    (if it exists) and finds all Python scripts within it. For each script, it
+    parses the source code to extract the module-level docstring. This provides
+    a concise summary of the key tools and components that make up the module's
+    functionality.
+
+The final output is a consistent, auto-updating README that serves as the primary
+entry point for any human or agent seeking to understand the purpose, rules, and
+capabilities of the module.
 
 
 **Public Functions:**
@@ -1158,7 +1417,29 @@ _No module-level docstring found._
 
 ### `/app/tooling/refactor.py`
 
-_No module-level docstring found._
+A tool for performing automated symbol renaming in Python code.
+
+This script provides a command-line interface to find a specific symbol
+(a function or a class) in a given Python file and rename it, along with all of
+its textual references throughout the entire repository. This provides a safe
+and automated way to perform a common refactoring task, reducing the risk of
+manual errors.
+
+The tool operates in three main stages:
+1.  **Definition Finding:** It uses Python's Abstract Syntax Tree (AST) module
+    to parse the source file and precisely locate the definition of the target
+    symbol. This ensures that the tool is targeting the correct code construct.
+2.  **Reference Finding:** It performs a text-based search across the specified
+    search path (defaulting to the entire repository) to find all files that
+    mention the symbol's old name.
+3.  **Plan Generation:** Instead of modifying files directly, it generates a
+    refactoring "plan." This plan is a sequence of `replace_with_git_merge_diff`
+    commands, one for each file that needs to be changed. The path to this
+    generated plan file is printed to standard output.
+
+This plan-based approach allows the agent's master controller to execute the
+refactoring in a controlled, verifiable, and atomic way, consistent with its
+standard operational procedures.
 
 
 **Public Functions:**
@@ -1389,7 +1670,13 @@ rate tracking or tool usage anti-patterns) to be added as the system evolves.
 
 ### `/app/tooling/standard_agents_compiler.py`
 
-_No module-level docstring found._
+Generates a simplified, standard-compliant AGENTS.md file for external tools.
+
+This script parses the project's Makefile to extract key commands (install, test,
+lint, format) and injects them into a human-readable Markdown template. The
+output, AGENTS.standard.md, is designed to provide a quick, conventional entry
+point for third-party AI agents, bridging the gap between our complex internal
+protocol system and the broader ecosystem's expectations.
 
 
 **Public Functions:**

@@ -1,3 +1,30 @@
+"""
+A tool for automatically generating a `README.md` file for a given module.
+
+This script creates a structured and human-readable `README.md` file by
+combining static templates with dynamically generated content extracted from the
+module's own source files. It is a key part of the project's "self-documenting"
+philosophy, ensuring that the high-level documentation stays synchronized with
+the source of truth (the code and protocols).
+
+The generator performs two main dynamic functions:
+
+1.  **Protocol Summary Generation:** It parses the module's `AGENTS.md` file to
+    find all defined protocol blocks (both those native to the module and those
+    imported from child modules). It then formats this information into a clear,
+    list-based summary that provides a high-level overview of the module's
+    governing rules.
+
+2.  **Key Component Documentation:** It scans the module's `tooling/` subdirectory
+    (if it exists) and finds all Python scripts within it. For each script, it
+    parses the source code to extract the module-level docstring. This provides
+    a concise summary of the key tools and components that make up the module's
+    functionality.
+
+The final output is a consistent, auto-updating README that serves as the primary
+entry point for any human or agent seeking to understand the purpose, rules, and
+capabilities of the module.
+"""
 import ast
 import os
 import re

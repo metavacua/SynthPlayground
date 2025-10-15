@@ -1,3 +1,21 @@
+"""
+A dedicated script to log a catastrophic failure event to the main activity log.
+
+This tool is designed to be invoked in the rare case of a severe, unrecoverable
+error that violates a core protocol. Its primary purpose is to ensure that such
+a critical event is formally and structurally documented in the standard agent
+activity log (`logs/activity.log.jsonl`), even if the main agent loop has
+crashed or been terminated.
+
+The script is pre-configured to log a `SYSTEM_FAILURE` event, specifically
+attributing it to the "Unauthorized use of the `reset_all` tool." This creates a
+permanent, machine-readable record of the failure, which is essential for
+post-mortem analysis, debugging, and the development of future safeguards.
+
+By using the standard `Logger` class, it ensures that the failure log entry
+conforms to the established `LOGGING_SCHEMA.md`, making it processable by
+auditing and analysis tools.
+"""
 import sys
 import os
 

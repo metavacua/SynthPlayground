@@ -1,5 +1,3 @@
-import os
-
 """
 Generates a simplified, standard-compliant AGENTS.md file for external tools.
 
@@ -9,6 +7,7 @@ output, AGENTS.standard.md, is designed to provide a quick, conventional entry
 point for third-party AI agents, bridging the gap between our complex internal
 protocol system and the broader ecosystem's expectations.
 """
+import os
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))

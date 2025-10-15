@@ -1,3 +1,26 @@
+"""
+A tool for performing static analysis on a Python file to understand its context.
+
+This script provides a "contextual awareness" scan of a specified Python file
+to help an agent (or a human) understand its role, dependencies, and connections
+within a larger codebase. This is crucial for planning complex changes or
+refactoring efforts, as it provides a snapshot of the potential impact of
+modifying a file.
+
+The scanner performs three main functions:
+1.  **Symbol Definition Analysis:** It uses Python's Abstract Syntax Tree (AST)
+    module to parse the target file and identify all the functions and classes
+    that are defined within it.
+2.  **Import Analysis:** It also uses the AST to find all modules and symbols
+    that the target file imports, revealing its dependencies on other parts of
+    the codebase or external libraries.
+3.  **Reference Finding:** It performs a repository-wide search to find all other
+    files that reference the symbols defined in the target file. This helps to
+    understand how the file is used by the rest of the system.
+
+The final output is a detailed JSON report containing all of this information,
+which can be used as a foundational artifact for automated planning or human review.
+"""
 import argparse
 import ast
 import json

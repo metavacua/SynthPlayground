@@ -1,3 +1,28 @@
+"""
+A tool for performing automated symbol renaming in Python code.
+
+This script provides a command-line interface to find a specific symbol
+(a function or a class) in a given Python file and rename it, along with all of
+its textual references throughout the entire repository. This provides a safe
+and automated way to perform a common refactoring task, reducing the risk of
+manual errors.
+
+The tool operates in three main stages:
+1.  **Definition Finding:** It uses Python's Abstract Syntax Tree (AST) module
+    to parse the source file and precisely locate the definition of the target
+    symbol. This ensures that the tool is targeting the correct code construct.
+2.  **Reference Finding:** It performs a text-based search across the specified
+    search path (defaulting to the entire repository) to find all files that
+    mention the symbol's old name.
+3.  **Plan Generation:** Instead of modifying files directly, it generates a
+    refactoring "plan." This plan is a sequence of `replace_with_git_merge_diff`
+    commands, one for each file that needs to be changed. The path to this
+    generated plan file is printed to standard output.
+
+This plan-based approach allows the agent's master controller to execute the
+refactoring in a controlled, verifiable, and atomic way, consistent with its
+standard operational procedures.
+"""
 import argparse
 import ast
 import os
