@@ -26,20 +26,13 @@ import re
 # --- Finder Functions ---
 
 
-def find_dependency_files(root_dir):
-    """Finds all package.json and requirements.txt files, excluding node_modules."""
-    package_json_files = []
-    requirements_txt_files = []
-    for root, dirs, files in os.walk(root_dir):
-        # Exclude node_modules directories from the search
-        if "node_modules" in dirs:
-            dirs.remove("node_modules")
+from tooling.filesystem_lister import list_all_files_and_dirs
 
-        for file in files:
-            if file == "package.json":
-                package_json_files.append(os.path.join(root, file))
-            elif file == "requirements.txt":
-                requirements_txt_files.append(os.path.join(root, file))
+def find_dependency_files(root_dir):
+    """Finds all package.json and requirements.txt files using the authoritative lister."""
+    all_files = list_all_files_and_dirs(root_dir=root_dir, use_gitignore=True)
+    package_json_files = [f for f in all_files if f.endswith("package.json")]
+    requirements_txt_files = [f for f in all_files if f.endswith("requirements.txt")]
     return package_json_files, requirements_txt_files
 
 
@@ -115,13 +108,15 @@ def generate_dependency_graph(root_dir="."):
     # Consolidate all discovered projects
     package_json_files, requirements_txt_files = find_dependency_files(root_dir)
 
-    for pf in package_json_files:
-        info = parse_package_json(pf)
+    for pf_rel in package_json_files:
+        pf_abs = os.path.join(root_dir, pf_rel)
+        info = parse_package_json(pf_abs)
         if info:
             all_projects.append(info)
 
-    for rf in requirements_txt_files:
-        info = parse_requirements_txt(rf, root_dir)
+    for rf_rel in requirements_txt_files:
+        rf_abs = os.path.join(root_dir, rf_rel)
+        info = parse_requirements_txt(rf_abs, root_dir)
         if info:
             all_projects.append(info)
 

@@ -101,6 +101,17 @@ class TestMasterControlRedesigned(unittest.TestCase):
         with open("tooling/fsm.json", "w") as f:
             json.dump(fsm_content, f)
 
+        # Create a dummy structured post-mortem file
+        with open("postmortems/structured_postmortem.md", "w") as f:
+            f.write("""\
+# Structured Post-Mortem
+- Task ID: [TASK_ID]
+- Completion Date: [COMPLETION_DATE]
+- Outcome: [SUCCESS | FAILURE]
+- Objective: *A concise, one-sentence summary of the original goal.*
+## 4. General Reflections
+""")
+
         # Create dummy dependencies that are called by the master_control
         with open("tooling/environmental_probe.py", "w") as f:
             f.write(" ")
@@ -137,7 +148,7 @@ class TestMasterControlRedesigned(unittest.TestCase):
             "google_search": MagicMock(),
             "view_text_website": MagicMock(),
         }
-        trigger = self.graph.do_orientation(self.agent_state, self.mock_logger)
+        trigger = self.graph.do_orientation(self.agent_state, self.mock_logger, tools)
         # In the new system, do_orientation directly returns the next state, not a trigger.
         self.assertEqual(trigger, self.graph.get_trigger("ORIENTING", "PLANNING"))
         self.mock_logger.log.assert_called()

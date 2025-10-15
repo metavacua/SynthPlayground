@@ -19,6 +19,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from tooling.master_control import MasterControlGraph
 from tooling.state import AgentState
+from tooling.filesystem_lister import list_all_files_and_dirs
 from utils.logger import Logger
 def find_fsm_transition(fsm, source_state, trigger):
     """Finds the destination state for a given source and trigger."""
