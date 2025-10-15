@@ -533,7 +533,7 @@ commands to:
 **Public Functions:**
 
 
-- #### `def analyze_plan(plan_filepath)`
+- #### `def analyze_plan(plan_filepath, return_results=False)`
 
   > Analyzes a plan file to determine its complexity class and modality.
 
@@ -883,7 +883,7 @@ This module is designed as a library to be controlled by an external shell
 
     > Executes orientation, including analyzing the last post-mortem.
 
-  - ##### `def do_planning(self, agent_state, plan_content, logger)`
+  - ##### `def do_planning(self, agent_state, plan_content, logger, model='A')`
 
     > Validates a given plan, parses it, and initializes the plan stack.
 
@@ -1512,6 +1512,18 @@ rate tracking or tool usage anti-patterns) to be added as the system evolves.
 
 
 **Public Functions:**
+
+
+- #### `def analyze_error_rates(log_file)`
+
+  > Analyzes the log file to calculate action success/failure rates.
+  >
+  > Args:
+  >     log_file (str): Path to the activity log file.
+  >
+  > Returns:
+  >     dict: A dictionary containing total counts, success/failure counts,
+  >           and a breakdown of failures by action type.
 
 
 - #### `def analyze_planning_efficiency(log_file)`

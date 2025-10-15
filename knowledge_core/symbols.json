@@ -362,6 +362,24 @@
     },
     {
       "_type": "tag",
+      "name": "main",
+      "path": "./tooling/capability_verifier.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "A tool to verify that the agent can monotonically improve its capabilities.\n\nThis tool works by:\n1. Running a target test file that is known to fail, confirming the agent lacks a capability.\n2. Invoking the agent's self-correction mechanism to learn the new capability.\n3. Running the target test again to confirm it now passes.\n4. Running the full test suite to ensure no existing capabilities were lost."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/csdc_cli.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "load_local_graph",
       "path": "./tooling/knowledge_integrator.py",
       "language": "Python",
@@ -875,10 +893,19 @@
     },
     {
       "_type": "tag",
-      "name": "do_researching",
+      "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
       "line": 217,
+      "kind": "function",
+      "docstring": "Validates a plan against a specific model's FSM."
+    },
+    {
+      "_type": "tag",
+      "name": "do_researching",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 271,
       "kind": "function",
       "docstring": "Launches the background research process."
     },
@@ -887,7 +914,7 @@
       "name": "do_awaiting_result",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 237,
+      "line": 291,
       "kind": "function",
       "docstring": "Checks for the result of the background research process."
     },
@@ -896,7 +923,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 268,
+      "line": 322,
       "kind": "function",
       "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
     },
@@ -905,7 +932,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 279,
+      "line": 333,
       "kind": "function",
       "docstring": "Processes the result of a step and advances the execution state."
     },
@@ -914,7 +941,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 317,
+      "line": 371,
       "kind": "function",
       "docstring": "Handles the code generation state."
     },
@@ -923,7 +950,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 325,
+      "line": 379,
       "kind": "function",
       "docstring": "Handles the test execution state."
     },
@@ -932,7 +959,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 334,
+      "line": 388,
       "kind": "function",
       "docstring": "Handles the debugging state."
     },
@@ -941,7 +968,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 342,
+      "line": 396,
       "kind": "function",
       "docstring": "Handles the finalization of the task with agent-provided analysis."
     },
@@ -1130,7 +1157,7 @@
       "name": "TestPlanningEfficiencyAnalysis",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 14,
+      "line": 15,
       "kind": "class",
       "docstring": "Tests for the analyze_planning_efficiency function."
     },
@@ -1139,16 +1166,25 @@
       "name": "TestProtocolViolationAnalysis",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 65,
+      "line": 66,
       "kind": "class",
       "docstring": "Tests for the analyze_protocol_violations function."
+    },
+    {
+      "_type": "tag",
+      "name": "TestErrorRateAnalysis",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 125,
+      "kind": "class",
+      "docstring": "Tests for the analyze_error_rates function."
     },
     {
       "_type": "tag",
       "name": "setUp",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 17,
+      "line": 18,
       "kind": "function",
       "docstring": "Set up a temporary log file for testing planning efficiency."
     },
@@ -1157,7 +1193,7 @@
       "name": "tearDown",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 52,
+      "line": 53,
       "kind": "function",
       "docstring": "Clean up the temporary log file."
     },
@@ -1166,7 +1202,7 @@
       "name": "test_analyze_planning_efficiency",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 57,
+      "line": 58,
       "kind": "function",
       "docstring": "Test that the analysis correctly identifies tasks with multiple plan updates."
     },
@@ -1175,7 +1211,7 @@
       "name": "setUp",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 68,
+      "line": 69,
       "kind": "function",
       "docstring": "Set up a temporary log file for testing protocol violations."
     },
@@ -1184,7 +1220,7 @@
       "name": "tearDown",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 111,
+      "line": 112,
       "kind": "function",
       "docstring": "Clean up the temporary log file."
     },
@@ -1193,9 +1229,36 @@
       "name": "test_analyze_protocol_violations",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 116,
+      "line": 117,
       "kind": "function",
       "docstring": "Test that `reset_all` is detected in both SYSTEM_FAILURE and TOOL_EXEC logs."
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 128,
+      "kind": "function",
+      "docstring": "Set up a temporary log file for testing error rate analysis."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 158,
+      "kind": "function",
+      "docstring": "Clean up the temporary log file."
+    },
+    {
+      "_type": "tag",
+      "name": "test_analyze_error_rates",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 163,
+      "kind": "function",
+      "docstring": "Test that error rates and failure types are calculated correctly."
     },
     {
       "_type": "tag",
@@ -1847,10 +1910,19 @@
     },
     {
       "_type": "tag",
-      "name": "main",
+      "name": "analyze_error_rates",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
       "line": 124,
+      "kind": "function",
+      "docstring": "Analyzes the log file to calculate action success/failure rates.\n\nArgs:\n    log_file (str): Path to the activity log file.\n\nReturns:\n    dict: A dictionary containing total counts, success/failure counts,\n          and a breakdown of failures by action type."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/self_improvement_cli.py",
+      "language": "Python",
+      "line": 175,
       "kind": "function",
       "docstring": "Main function to run the self-improvement analysis CLI."
     },
@@ -1859,7 +1931,7 @@
       "name": "_log_event",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 54,
+      "line": 56,
       "kind": "function",
       "docstring": "Appends a new log entry to the activity log, ensuring it's on a new line."
     },
@@ -1868,7 +1940,7 @@
       "name": "_create_log_entry",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 68,
+      "line": 70,
       "kind": "function",
       "docstring": "Creates a structured log entry dictionary."
     },
@@ -1877,7 +1949,7 @@
       "name": "close_task",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 84,
+      "line": 86,
       "kind": "function",
       "docstring": "Automates the closing of a Finite Development Cycle."
     },
@@ -1886,7 +1958,7 @@
       "name": "_validate_action",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 118,
+      "line": 120,
       "kind": "function",
       "docstring": "Validates a single, non-loop action."
     },
@@ -1895,7 +1967,7 @@
       "name": "_validate_plan_recursive",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 175,
+      "line": 177,
       "kind": "function",
       "docstring": "Recursively validates a block of a plan."
     },
@@ -1904,7 +1976,7 @@
       "name": "validate_plan",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 236,
+      "line": 238,
       "kind": "function",
       "docstring": null
     },
@@ -1913,7 +1985,7 @@
       "name": "analyze_plan",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 270,
+      "line": 272,
       "kind": "function",
       "docstring": "Analyzes a plan file to determine its complexity class and modality."
     },
@@ -1922,7 +1994,7 @@
       "name": "start_task",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 311,
+      "line": 319,
       "kind": "function",
       "docstring": "Initiates the AORP cascade for a new task."
     },
@@ -1931,7 +2003,7 @@
       "name": "main",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 367,
+      "line": 375,
       "kind": "function",
       "docstring": null
     },
@@ -3395,6 +3467,15 @@
     },
     {
       "_type": "tag",
+      "name": "fibonacci",
+      "path": "./self_improvement_project/main.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": "Calculates the nth Fibonacci number."
+    },
+    {
+      "_type": "tag",
       "name": "TestFizzBuzz",
       "path": "./self_improvement_project/test_main.py",
       "language": "Python",
@@ -3435,6 +3516,15 @@
       "path": "./self_improvement_project/test_main.py",
       "language": "Python",
       "line": 18,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_fibonacci",
+      "path": "./self_improvement_project/test_main.py",
+      "language": "Python",
+      "line": 23,
       "kind": "function",
       "docstring": null
     },
