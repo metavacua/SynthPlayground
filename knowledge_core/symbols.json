@@ -2588,7 +2588,7 @@
       "name": "lj_to_lk",
       "path": "./logic_system/src/translations.py",
       "language": "Python",
-      "line": 5,
+      "line": 9,
       "kind": "function",
       "docstring": "Translates a proof from the LJ calculus to the LK calculus.\nThis is a direct embedding, as any valid LJ proof is also a valid LK proof."
     },
@@ -2597,25 +2597,34 @@
       "name": "translate_formula_lj_to_ill",
       "path": "./logic_system/src/translations.py",
       "language": "Python",
-      "line": 20,
+      "line": 22,
       "kind": "function",
       "docstring": "Translates a formula from Intuitionistic Logic (LJ) to Intuitionistic Linear Logic (ILL)\nusing a standard Girard-style translation."
+    },
+    {
+      "_type": "tag",
+      "name": "bang_context",
+      "path": "./logic_system/src/translations.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": "Applies ! to every formula in a context."
     },
     {
       "_type": "tag",
       "name": "lj_to_ill_proof",
       "path": "./logic_system/src/translations.py",
       "language": "Python",
-      "line": 43,
+      "line": 47,
       "kind": "function",
-      "docstring": "Translates a full proof from LJ to ILL.\nA proof of \u0393 \u22a2 A in LJ becomes a proof of !\u0393* \u22a2 A* in ILL.\n\nNOTE: This is a placeholder implementation for the proof-of-concept.\nA full, correct implementation of this translation is highly non-trivial\nand would require a dedicated theorem prover or proof synthesizer for\nIntuitionistic Linear Logic. This function demonstrates the principle for\na few key rules but is not guaranteed to be correct or complete."
+      "docstring": "Translates a full proof from LJ to ILL.\nA proof of \u0393 \u22a2 A in LJ becomes a proof of !\u0393* \u22a2 A* in ILL."
     },
     {
       "_type": "tag",
       "name": "ill_to_ll",
       "path": "./logic_system/src/translations.py",
       "language": "Python",
-      "line": 111,
+      "line": 123,
       "kind": "function",
       "docstring": "Translates a proof from the ILL calculus to the LL calculus.\nThis is a direct embedding, as any valid ILL proof is also a valid LL proof."
     },
@@ -2624,7 +2633,7 @@
       "name": "Sequent",
       "path": "./logic_system/src/sequents.py",
       "language": "Python",
-      "line": 4,
+      "line": 5,
       "kind": "class",
       "docstring": null
     },
@@ -2633,7 +2642,7 @@
       "name": "__init__",
       "path": "./logic_system/src/sequents.py",
       "language": "Python",
-      "line": 5,
+      "line": 6,
       "kind": "function",
       "docstring": null
     },
@@ -2642,7 +2651,7 @@
       "name": "__repr__",
       "path": "./logic_system/src/sequents.py",
       "language": "Python",
-      "line": 9,
+      "line": 10,
       "kind": "function",
       "docstring": null
     },
@@ -2651,7 +2660,7 @@
       "name": "__eq__",
       "path": "./logic_system/src/sequents.py",
       "language": "Python",
-      "line": 14,
+      "line": 24,
       "kind": "function",
       "docstring": null
     },
@@ -2660,7 +2669,16 @@
       "name": "__hash__",
       "path": "./logic_system/src/sequents.py",
       "language": "Python",
-      "line": 17,
+      "line": 27,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "format_multiset",
+      "path": "./logic_system/src/sequents.py",
+      "language": "Python",
+      "line": 11,
       "kind": "function",
       "docstring": null
     },
@@ -2669,7 +2687,7 @@
       "name": "axiom",
       "path": "./logic_system/src/ll.py",
       "language": "Python",
-      "line": 6,
+      "line": 7,
       "kind": "function",
       "docstring": "A \u22a2 A"
     },
@@ -2678,7 +2696,7 @@
       "name": "tensor_right",
       "path": "./logic_system/src/ll.py",
       "language": "Python",
-      "line": 13,
+      "line": 14,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394, A   and   \u0393' \u22a2 \u0394', B\n--------------------------------\n      \u0393, \u0393' \u22a2 \u0394, \u0394', A \u2297 B"
     },
@@ -2687,7 +2705,7 @@
       "name": "tensor_left",
       "path": "./logic_system/src/ll.py",
       "language": "Python",
-      "line": 28,
+      "line": 29,
       "kind": "function",
       "docstring": "\u0393, A, B \u22a2 \u0394\n---------------\n \u0393, A \u2297 B \u22a2 \u0394"
     },
@@ -2696,7 +2714,7 @@
       "name": "par_right",
       "path": "./logic_system/src/ll.py",
       "language": "Python",
-      "line": 39,
+      "line": 40,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394, A, B\n---------------\n \u0393 \u22a2 \u0394, A \u214b B"
     },
@@ -2705,7 +2723,7 @@
       "name": "par_left",
       "path": "./logic_system/src/ll.py",
       "language": "Python",
-      "line": 50,
+      "line": 51,
       "kind": "function",
       "docstring": "\u0393, A \u22a2 \u0394   and   \u0393', B \u22a2 \u0394'\n--------------------------------\n      \u0393, \u0393', A \u214b B \u22a2 \u0394, \u0394'"
     },
@@ -2714,7 +2732,7 @@
       "name": "cut",
       "path": "./logic_system/src/ll.py",
       "language": "Python",
-      "line": 65,
+      "line": 66,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394, A   and   A, \u0393' \u22a2 \u0394'\n--------------------------------\n         \u0393, \u0393' \u22a2 \u0394, \u0394'"
     },
@@ -2723,7 +2741,7 @@
       "name": "LJSequent",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 6,
+      "line": 7,
       "kind": "class",
       "docstring": null
     },
@@ -2732,7 +2750,7 @@
       "name": "axiom",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 25,
+      "line": 26,
       "kind": "function",
       "docstring": "A \u22a2 A"
     },
@@ -2741,7 +2759,7 @@
       "name": "weak_left",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 31,
+      "line": 32,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394  /  \u0393, A \u22a2 \u0394"
     },
@@ -2750,7 +2768,7 @@
       "name": "cut",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 36,
+      "line": 37,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A   and   A, \u0393' \u22a2 B / \u0393, \u0393' \u22a2 B"
     },
@@ -2759,7 +2777,7 @@
       "name": "and_left",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 45,
+      "line": 46,
       "kind": "function",
       "docstring": "\u0393, A, B \u22a2 \u0394 / \u0393, A \u2227 B \u22a2 \u0394"
     },
@@ -2768,7 +2786,7 @@
       "name": "and_right",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 51,
+      "line": 52,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A   and   \u0393 \u22a2 B / \u0393 \u22a2 A \u2227 B"
     },
@@ -2777,7 +2795,7 @@
       "name": "or_left",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 58,
+      "line": 59,
       "kind": "function",
       "docstring": "\u0393, A \u22a2 \u0394   and   \u0393, B \u22a2 \u0394 / \u0393, A \u2228 B \u22a2 \u0394"
     },
@@ -2786,7 +2804,7 @@
       "name": "or_right",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 65,
+      "line": 66,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A / \u0393 \u22a2 A \u2228 B  or  \u0393 \u22a2 B / \u0393 \u22a2 A \u2228 B"
     },
@@ -2795,7 +2813,7 @@
       "name": "implies_left",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 71,
+      "line": 72,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A   and   B, \u0393' \u22a2 C / A \u2192 B, \u0393, \u0393' \u22a2 C"
     },
@@ -2804,7 +2822,7 @@
       "name": "implies_right",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 78,
+      "line": 79,
       "kind": "function",
       "docstring": "A, \u0393 \u22a2 B / \u0393 \u22a2 A \u2192 B"
     },
@@ -2813,7 +2831,7 @@
       "name": "not_left",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 84,
+      "line": 85,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A / \u00acA, \u0393 \u22a2"
     },
@@ -2822,7 +2840,7 @@
       "name": "not_right",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 90,
+      "line": 91,
       "kind": "function",
       "docstring": "A, \u0393 \u22a2 / \u0393 \u22a2 \u00acA"
     },
@@ -2831,7 +2849,7 @@
       "name": "__init__",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 7,
+      "line": 8,
       "kind": "function",
       "docstring": null
     },
@@ -2903,7 +2921,7 @@
       "name": "or_left",
       "path": "./logic_system/src/lk.py",
       "language": "Python",
-      "line": 38,
+      "line": 42,
       "kind": "function",
       "docstring": "\u0393, A \u22a2 \u0394   and   \u0393, B \u22a2 \u0394 / \u0393, A \u2228 B \u22a2 \u0394"
     },
@@ -2912,7 +2930,7 @@
       "name": "or_right",
       "path": "./logic_system/src/lk.py",
       "language": "Python",
-      "line": 46,
+      "line": 52,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394, A, B / \u0393 \u22a2 \u0394, A \u2228 B"
     },
@@ -2921,7 +2939,7 @@
       "name": "implies_left",
       "path": "./logic_system/src/lk.py",
       "language": "Python",
-      "line": 52,
+      "line": 58,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394, A   and   B, \u0393 \u22a2 \u0394 / A \u2192 B, \u0393 \u22a2 \u0394"
     },
@@ -2930,7 +2948,7 @@
       "name": "implies_right",
       "path": "./logic_system/src/lk.py",
       "language": "Python",
-      "line": 59,
+      "line": 65,
       "kind": "function",
       "docstring": "A, \u0393 \u22a2 \u0394, B / \u0393 \u22a2 \u0394, A \u2192 B"
     },
@@ -2939,7 +2957,7 @@
       "name": "not_left",
       "path": "./logic_system/src/lk.py",
       "language": "Python",
-      "line": 66,
+      "line": 72,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394, A / \u00acA, \u0393 \u22a2 \u0394"
     },
@@ -2948,7 +2966,7 @@
       "name": "not_right",
       "path": "./logic_system/src/lk.py",
       "language": "Python",
-      "line": 73,
+      "line": 79,
       "kind": "function",
       "docstring": "A, \u0393 \u22a2 \u0394 / \u0393 \u22a2 \u0394, \u00acA"
     },
@@ -3236,7 +3254,7 @@
       "name": "ILLSequent",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 6,
+      "line": 7,
       "kind": "class",
       "docstring": null
     },
@@ -3245,7 +3263,7 @@
       "name": "axiom",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 21,
+      "line": 24,
       "kind": "function",
       "docstring": "A \u22a2 A"
     },
@@ -3254,7 +3272,7 @@
       "name": "tensor_right",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 27,
+      "line": 30,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A   and   \u0394 \u22a2 B\n-----------------------\n     \u0393, \u0394 \u22a2 A \u2297 B"
     },
@@ -3263,7 +3281,7 @@
       "name": "tensor_left",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 38,
+      "line": 41,
       "kind": "function",
       "docstring": "\u0393, A, B \u22a2 C\n---------------\n \u0393, A \u2297 B \u22a2 C"
     },
@@ -3272,7 +3290,7 @@
       "name": "lin_implies_right",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 49,
+      "line": 52,
       "kind": "function",
       "docstring": "\u0393, A \u22a2 B\n------------\n\u0393 \u22a2 A \u22b8 B"
     },
@@ -3281,16 +3299,61 @@
       "name": "lin_implies_left",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 60,
+      "line": 63,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A   and   \u0394, B \u22a2 C\n--------------------------\n   \u0393, \u0394, A \u22b8 B \u22a2 C"
+    },
+    {
+      "_type": "tag",
+      "name": "with_right",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 76,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 A   and   \u0393 \u22a2 B\n-----------------------\n      \u0393 \u22a2 A & B"
+    },
+    {
+      "_type": "tag",
+      "name": "with_left",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 89,
+      "kind": "function",
+      "docstring": "\u0393, A \u22a2 C\n------------\n\u0393, A & B \u22a2 C\nor\n\u0393, B \u22a2 C\n------------\n\u0393, A & B \u22a2 C"
+    },
+    {
+      "_type": "tag",
+      "name": "plus_right_1",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 108,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 A\n------------\n\u0393 \u22a2 A \u2295 B"
+    },
+    {
+      "_type": "tag",
+      "name": "plus_right_2",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 118,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 B\n------------\n\u0393 \u22a2 A \u2295 B"
+    },
+    {
+      "_type": "tag",
+      "name": "plus_left",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 128,
+      "kind": "function",
+      "docstring": "\u0393, A \u22a2 C   and   \u0393, B \u22a2 C\n--------------------------\n     \u0393, A \u2295 B \u22a2 C"
     },
     {
       "_type": "tag",
       "name": "of_course_right",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 73,
+      "line": 148,
       "kind": "function",
       "docstring": "!\u0393 \u22a2 A\n----------\n!\u0393 \u22a2 !A"
     },
@@ -3299,7 +3362,7 @@
       "name": "dereliction",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 86,
+      "line": 161,
       "kind": "function",
       "docstring": "\u0393, A \u22a2 B\n------------\n\u0393, !A \u22a2 B"
     },
@@ -3308,7 +3371,7 @@
       "name": "contraction",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 97,
+      "line": 172,
       "kind": "function",
       "docstring": "\u0393, !A, !A \u22a2 B\n----------------\n   \u0393, !A \u22a2 B"
     },
@@ -3317,7 +3380,7 @@
       "name": "weakening",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 117,
+      "line": 185,
       "kind": "function",
       "docstring": "\u0393 \u22a2 B\n------------\n\u0393, !A \u22a2 B"
     },
@@ -3326,7 +3389,7 @@
       "name": "__init__",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 7,
+      "line": 8,
       "kind": "function",
       "docstring": null
     },
@@ -3335,7 +3398,7 @@
       "name": "succedent_formula",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 11,
+      "line": 14,
       "kind": "function",
       "docstring": null
     },
@@ -3344,7 +3407,7 @@
       "name": "__repr__",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 15,
+      "line": 17,
       "kind": "function",
       "docstring": null
     },
