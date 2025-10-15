@@ -70,3 +70,8 @@ class Plus(BinaryOp):
     """Additive Disjunction"""
     def __repr__(self):
         return f"({self.left} ⊕ {self.right})"
+
+class Bottom(Formula):
+    """Linear Logic bottom/zero. Also used as LJ's Bottom."""
+    def __repr__(self):
+        return "⊥"

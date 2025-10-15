@@ -2,9 +2,8 @@ from . import lj
 from . import lk
 from . import ill
 from .proof import ProofTree, Rule
-from .formulas import Formula, Prop, And, Or, Implies, Not, Tensor, Par, LinImplies, OfCourse, With, Plus
+from .formulas import Formula, Prop, And, Or, Implies, Not, Bottom, Tensor, Par, LinImplies, OfCourse, With, Plus
 from .sequents import Sequent
-from .synthesizer import Synthesizer
 from collections import Counter
 
 def lj_to_lk(lj_proof: ProofTree) -> ProofTree:
@@ -26,20 +25,23 @@ def translate_formula_lj_to_ill(formula: Formula) -> Formula:
     using a standard Girard-style translation.
     """
     if isinstance(formula, Prop):
-        return formula # Atoms are translated to themselves
+        return formula  # A* = A
     elif isinstance(formula, And):
+        # (A & B)* = A* & B*
         return With(translate_formula_lj_to_ill(formula.left), translate_formula_lj_to_ill(formula.right))
     elif isinstance(formula, Or):
+        # (A v B)* = !A* + !B*
         return Plus(OfCourse(translate_formula_lj_to_ill(formula.left)), OfCourse(translate_formula_lj_to_ill(formula.right)))
     elif isinstance(formula, Implies):
-        # A -> B becomes !(A* -o B*)
-        return OfCourse(LinImplies(OfCourse(translate_formula_lj_to_ill(formula.left)), OfCourse(translate_formula_lj_to_ill(formula.right))))
+        # (A -> B)* = !A* -o B*
+        return LinImplies(OfCourse(translate_formula_lj_to_ill(formula.left)), translate_formula_lj_to_ill(formula.right))
     elif isinstance(formula, Not):
-        # Not A is A -> bottom, so !(A* -o bottom)
-        bottom = Prop("⊥")
-        return OfCourse(LinImplies(OfCourse(translate_formula_lj_to_ill(formula.operand)), OfCourse(bottom)))
+        # (~A)* = !A* -o 0
+        return LinImplies(OfCourse(translate_formula_lj_to_ill(formula.operand)), Bottom())
+    elif isinstance(formula, Bottom):
+        return Bottom() # ⊥* = 0
     else:
-        raise TypeError(f"Unknown formula type for translation: {type(formula)}")
+        raise TypeError(f"Formula type {type(formula)} not supported for LJ to ILL translation")
 
 def bang_context(context: Counter) -> Counter:
     """Applies ! to every formula in a context."""
@@ -53,13 +55,20 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
     rule_name = lj_proof.rule.name
     conclusion = lj_proof.conclusion
     premises = lj_proof.premises
-    ill_synthesizer = Synthesizer(ill)
 
     if rule_name == "Axiom":
+        # An LJ axiom A ⊢ A translates to an ILL proof of !A* ⊢ A*
         formula = list(conclusion.antecedent.elements())[0]
         formula_star = translate_formula_lj_to_ill(formula)
+
+        # Start with an ILL axiom A* ⊢ A*
         axiom_proof = ill.axiom(formula_star)
-        return ill.dereliction(axiom_proof, OfCourse(formula_star))
+
+        # The formula to be derelicted is !A*
+        dereliction_formula = OfCourse(formula_star)
+
+        # Apply dereliction on the left to get !A* ⊢ A*
+        return ill.dereliction(axiom_proof, dereliction_formula)
 
     elif rule_name == "∧-R":
         left_premise = lj_to_ill_proof(premises[0])
@@ -92,7 +101,7 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
         premise = lj_to_ill_proof(premises[0])
         implication = conclusion.succedent_formula
         implication_star = translate_formula_lj_to_ill(implication)
-        proof = ill.lin_implies_right(premise, implication_star.operand)
+        proof = ill.lin_implies_right(premise, implication_star)
         return ill.of_course_right(proof)
 
     elif rule_name == "→-L":
@@ -102,23 +111,19 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
         implication = [f for f in conclusion.antecedent if isinstance(f, Implies)][0]
         implication_star = translate_formula_lj_to_ill(implication)
 
-        goal_succedent = right_premise.conclusion.succedent_formula
-        goal_antecedent = left_premise.conclusion.antecedent + (right_premise.conclusion.antecedent - Counter([OfCourse(translate_formula_lj_to_ill(implication.right))])) + Counter([implication_star])
-        goal = ill.ILLSequent(goal_antecedent, goal_succedent)
+        # A* |- A*
+        axiom1 = ill.axiom(implication_star.operand.left)
+        # B* |- B*
+        axiom2 = ill.axiom(implication_star.operand.right)
 
-        return ill_synthesizer.synthesize(goal)
+        # A*, A* -o B* |- B*
+        p1 = ill.lin_implies_left(axiom1, axiom2, implication_star.operand)
 
-    elif rule_name == "¬-L":
-        premise = lj_to_ill_proof(premises[0])
-        goal = ill.ILLSequent(premise.conclusion.antecedent, OfCourse(Prop("⊥")))
-        return ill_synthesizer.synthesize(goal)
+        # !Gamma* |- A* and A*, A* -o B* |- B*
+        # Cut on A* -> !Gamma*, A* -o B* |- B*
+        p2 = ill.cut(left_premise, p1)
 
-    elif rule_name == "¬-R":
-        premise = lj_to_ill_proof(premises[0])
-        formula = conclusion.succedent_formula
-        formula_star = translate_formula_lj_to_ill(formula)
-        proof = ill.lin_implies_right(premise, formula_star.operand)
-        return ill.of_course_right(proof)
+        return ill.cut(p2, right_premise)
 
     else:
         raise NotImplementedError(f"Translation for rule '{rule_name}' is not yet implemented.")

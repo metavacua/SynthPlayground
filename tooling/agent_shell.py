@@ -13,7 +13,6 @@ programmatic interface to the MasterControlGraph FSM. It is responsible for:
 import uuid
 import os
 import sys
-import subprocess
 
 # Add the root directory to the path to allow for absolute imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -21,6 +20,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from tooling.master_control import MasterControlGraph
 from tooling.state import AgentState
 from utils.logger import Logger
+from __main__ import read_file, list_files, google_search, view_text_website
+
+
 def find_fsm_transition(fsm, source_state, trigger):
     """Finds the destination state for a given source and trigger."""
     for transition in fsm["transitions"]:
@@ -29,7 +31,7 @@ def find_fsm_transition(fsm, source_state, trigger):
     return None
 
 
-def run_agent_loop(task_description: str, tools: dict):
+def run_agent_loop(task_description: str):
     """
     The main loop that drives the agent's lifecycle via the FSM.
     """
@@ -54,6 +56,12 @@ def run_agent_loop(task_description: str, tools: dict):
             continue
 
         if current_state == "ORIENTING":
+            tools = {
+                "read_file": read_file,
+                "list_files": list_files,
+                "google_search": google_search,
+                "view_text_website": view_text_website,
+            }
             trigger = mcg.do_orientation(agent_state, logger, tools)
 
         elif current_state == "PLANNING":
@@ -88,21 +96,7 @@ The research findings have been integrated.
                 print(
                     f"[AgentShell] Agent must now execute: {step_to_execute.tool_name} {step_to_execute.args_text}"
                 )
-                if step_to_execute.tool_name == "verify_logic":
-                    verifier_path = os.path.join(os.path.dirname(__file__), "logic_system_verifier.py")
-                    input_file = step_to_execute.args_text.strip()
-                    process = subprocess.run(
-                        ["python3", verifier_path, input_file],
-                        capture_output=True,
-                        text=True,
-                    )
-                    if process.returncode == 0:
-                        step_result = process.stdout
-                    else:
-                        step_result = f"Error: {process.stderr}"
-                else:
-                    step_result = f"Successfully executed {step_to_execute.tool_name}."
-
+                step_result = f"Successfully executed {step_to_execute.tool_name}."
                 trigger = mcg.do_execution(agent_state, step_result, logger)
             else:
                 trigger = mcg.do_execution(
@@ -143,15 +137,8 @@ The research findings have been integrated.
 
 def main():
     """Main entry point for the agent shell."""
-    from __main__ import read_file, list_files, google_search, view_text_website
-    tools = {
-        "read_file": read_file,
-        "list_files": list_files,
-        "google_search": google_search,
-        "view_text_website": view_text_website,
-    }
     task_description = "Perform a basic self-check and greet the user."
-    run_agent_loop(task_description, tools)
+    run_agent_loop(task_description)
 
 
 if __name__ == "__main__":

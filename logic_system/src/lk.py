@@ -20,6 +20,28 @@ def weak_right(proof: ProofTree, formula: Formula) -> ProofTree:
     conclusion = Sequent(proof.conclusion.antecedent, proof.conclusion.succedent + Counter([formula]))
     return ProofTree(conclusion, Rule("Weak-R"), [proof])
 
+def contraction_left(proof: ProofTree, formula: Formula) -> ProofTree:
+    """Γ, A, A ⊢ Δ / Γ, A ⊢ Δ"""
+    new_antecedent = proof.conclusion.antecedent - Counter([formula])
+    conclusion = Sequent(new_antecedent, proof.conclusion.succedent)
+    return ProofTree(conclusion, Rule("Contraction-L"), [proof])
+
+def cut(left_proof: ProofTree, right_proof: ProofTree) -> ProofTree:
+    """Γ ⊢ Δ, A   and   A, Γ' ⊢ Δ'
+    --------------------------------
+             Γ, Γ' ⊢ Δ, Δ'
+    """
+    cut_formulas = left_proof.conclusion.succedent & right_proof.conclusion.antecedent
+    if not cut_formulas:
+        raise ValueError("Cut rule requires a common formula.")
+
+    cut_formula = list(cut_formulas.elements())[0]
+
+    antecedent = (left_proof.conclusion.antecedent + right_proof.conclusion.antecedent) - Counter([cut_formula])
+    succedent = (left_proof.conclusion.succedent + right_proof.conclusion.succedent) - Counter([cut_formula])
+    conclusion = Sequent(antecedent, succedent)
+    return ProofTree(conclusion, Rule("Cut"), [left_proof, right_proof])
+
 # Logical Rules
 def and_left(proof: ProofTree, formula: And) -> ProofTree:
     """Γ, A, B ⊢ Δ / Γ, A ∧ B ⊢ Δ"""

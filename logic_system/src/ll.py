@@ -68,10 +68,11 @@ def cut(left_proof: ProofTree, right_proof: ProofTree) -> ProofTree:
     --------------------------------
              Γ, Γ' ⊢ Δ, Δ'
     """
-    cut_formulas = left_proof.conclusion.succedent.keys() & right_proof.conclusion.antecedent.keys()
-    if len(cut_formulas) != 1:
-        raise ValueError(f"Cut rule requires exactly one common formula, but found {len(cut_formulas)}")
-    cut_formula = list(cut_formulas)[0]
+    cut_formulas = left_proof.conclusion.succedent & right_proof.conclusion.antecedent
+    if not cut_formulas:
+        raise ValueError("Cut rule requires a common formula.")
+
+    cut_formula = list(cut_formulas.elements())[0]
 
     antecedent = (left_proof.conclusion.antecedent + right_proof.conclusion.antecedent) - Counter([cut_formula])
     succedent = (left_proof.conclusion.succedent + right_proof.conclusion.succedent) - Counter([cut_formula])
