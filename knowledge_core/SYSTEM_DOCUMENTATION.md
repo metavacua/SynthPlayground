@@ -49,6 +49,56 @@ programmatic interface to the MasterControlGraph FSM. It is responsible for:
   > The main loop that drives the agent's lifecycle via the FSM.
 
 
+### `/app/tooling/auditor.py`
+
+A unified auditing tool for maintaining repository health and compliance.
+
+This script combines the functionality of several disparate auditing tools into a
+single, comprehensive command-line interface. It serves as the central tool for
+validating the key components of the agent's architecture, including protocols,
+plans, and documentation.
+
+The auditor can perform the following checks:
+1.  **Protocol Audit (`protocol`):**
+    - Checks if `AGENTS.md` artifacts are stale compared to their source files.
+    - Verifies protocol completeness by comparing tools used in logs against
+      tools defined in protocols.
+    - Analyzes tool usage frequency (centrality).
+2.  **Plan Registry Audit (`plans`):**
+    - Scans `knowledge_core/plan_registry.json` for "dead links" where the
+      target plan file does not exist.
+3.  **Documentation Audit (`docs`):**
+    - Scans the generated `SYSTEM_DOCUMENTATION.md` to find Python modules
+      that are missing module-level docstrings.
+
+The tool is designed to be run from the command line and can execute specific
+audits or all of them, generating a consolidated `audit_report.md` file.
+
+
+**Public Functions:**
+
+
+- #### `def find_all_agents_md_files(root_dir)`
+
+
+- #### `def get_protocol_tools_from_agents_md(agents_md_paths)`
+
+
+- #### `def get_used_tools_from_log(log_path)`
+
+
+- #### `def main()`
+
+
+- #### `def run_doc_audit()`
+
+
+- #### `def run_plan_registry_audit()`
+
+
+- #### `def run_protocol_audit()`
+
+
 ### `/app/tooling/aura_executor.py`
 
 This script serves as the command-line executor for `.aura` files.
@@ -70,10 +120,20 @@ automation scripts for the agent.
 **Public Functions:**
 
 
-- #### `def dynamic_agent_call_tool(tool_name, *args)`
+- #### `def dynamic_agent_call_tool(tool_name_obj, *args)`
 
-  > Dynamically imports and calls a tool from the 'tooling' directory.
-  > Tool name should be the module name, without .py.
+  > Dynamically imports and calls a tool from the 'tooling' directory and wraps the result.
+  >
+  > This function provides the bridge between the Aura scripting environment and the
+  > Python-based agent tools. It takes the tool's module name and arguments,
+  > runs the tool in a subprocess, and wraps the captured output in an Aura `Object`.
+  >
+  > Args:
+  >     tool_name_obj: An Aura Object containing the tool's module name (e.g., 'hdl_prover').
+  >     *args: A variable number of Aura Objects to be passed as string arguments to the tool.
+  >
+  > Returns:
+  >     An Aura `Object` containing the tool's stdout as a string, or an error message.
 
 
 - #### `def main()`
@@ -101,28 +161,26 @@ to a temporary file that the main agent can poll.
 A unified, configuration-driven build script for the project.
 
 This script serves as the central entry point for all build-related tasks, such
-as generating documentation, compiling protocols, and creating other project
-artifacts. It replaces a traditional Makefile's direct command execution with a
-more structured, maintainable, and introspectable approach.
+as generating documentation, compiling protocols, and running code quality checks.
+It replaces a traditional Makefile's direct command execution with a more
+structured, maintainable, and introspectable approach.
 
 The core logic is driven by a `build_config.json` file, which defines a series
 of "targets." Each target specifies:
-- The `compiler` script to execute (e.g., `doc_generator.py`).
-- The `output` file to generate.
-- The `source` directories or files.
-- Any additional command-line `options`.
+- The `type` of target: "compiler" or "command".
+- For "compiler" types: `compiler` script, `output`, `sources`, and `options`.
+- For "command" types: the `command` to execute.
+
+The configuration also defines "build_groups", which are ordered collections of
+targets (e.g., "all", "quality").
 
 This centralized builder provides several advantages:
 - **Single Source of Truth:** The `build_config.json` file is the definitive
-  source for all build logic, making the process easy to understand and modify.
+  source for all build logic.
 - **Consistency:** Ensures all build tasks are executed in a uniform way.
 - **Extensibility:** New build targets can be added by simply updating the
-  configuration file, without changing the script itself.
-- **Discoverability:** The script can list all available targets, making the
-  build system self-documenting.
-
-It is intended to be the primary interface for both human developers (via `make`
-targets that call this script) and automated systems.
+  configuration file.
+- **Discoverability:** The script can list all available targets and groups.
 
 
 **Public Functions:**
@@ -130,7 +188,17 @@ targets that call this script) and automated systems.
 
 - #### `def execute_build(target_name, config)`
 
-  > Executes the build process for a specific target defined in the config.
+  > Executes the build process for a specific target.
+
+
+- #### `def execute_command_target(target_name, target_config)`
+
+  > Executes a 'command' type build target.
+
+
+- #### `def execute_compiler_target(target_name, target_config)`
+
+  > Executes a 'compiler' type build target.
 
 
 - #### `def load_config()`
@@ -181,47 +249,6 @@ cornerstone of the agent's design philosophy.
   > 2. Invoking the agent's self-correction mechanism to learn the new capability.
   > 3. Running the target test again to confirm it now passes.
   > 4. Running the full test suite to ensure no existing capabilities were lost.
-
-
-### `/app/tooling/code_health_analyzer.py`
-
-A tool for analyzing and reporting on the overall health of the codebase.
-
-This module provides functionality to perform various checks on the repository's
-artifacts to ensure their integrity and consistency. The primary focus of this
-tool is to identify and, where possible, generate plans to fix common issues
-that can arise from automated or manual changes.
-
-Currently, this analyzer focuses on the health of the Plan Registry:
-- **Dead Link Detection:** It scans the `knowledge_core/plan_registry.json` file
-  to find any registered plan names that point to file paths that no longer
-  exist in the filesystem. These "dead links" can break the hierarchical
-  planning system.
-
-When dead links are found, the tool can generate a corrective plan. This plan
-consists of a `overwrite_file_with_block` command that will replace the
-contents of the plan registry with a new version that has the invalid entries
-removed. This automated detection and remediation capability is a key part of
-maintaining the long-term health and reliability of the agent's knowledge base.
-
-
-**Public Functions:**
-
-
-- #### `def generate_plan_to_fix_dead_links(dead_links, current_registry)`
-
-  > Generates a plan using `overwrite_file_with_block` to fix dead links.
-
-
-- #### `def get_dead_links_and_content()`
-
-  > Audits the plan registry, returns a list of dead links and the original content.
-
-
-- #### `def main()`
-
-  > Main entry point for the code health analyzer.
-  > Identifies dead links and prints a plan to fix them.
 
 
 ### `/app/tooling/code_suggester.py`
@@ -393,57 +420,10 @@ about the potential impact of its changes.
   > Parses a requirements.txt file to extract its dependencies.
 
 
-### `/app/tooling/doc_auditor.py`
+### `/app/tooling/doc_builder.py`
 
-This script provides a tool for auditing the completeness of the system documentation.
-
-It scans the generated `SYSTEM_DOCUMENTATION.md` file and searches for a specific
-pattern: a module header followed immediately by the text "_No module-level
-docstring found._". This pattern indicates that the `doc_generator.py` script
-was unable to find a docstring for that particular Python module.
-
-The auditor then prints a list of all such files, providing a clear and
-actionable report of which modules require documentation. This is a key tool for
-maintaining code health and ensuring that the agent's knowledge base is complete.
-
-
-**Public Functions:**
-
-
-- #### `def audit_documentation(filepath)`
-
-  > Scans the system documentation file for modules missing docstrings.
-  >
-  > Args:
-  >     filepath: The path to the SYSTEM_DOCUMENTATION.md file.
-  >
-  > Returns:
-  >     A list of file paths for modules that are missing docstrings.
-
-
-- #### `def main()`
-
-  > Command-line interface for the documentation auditor.
-
-
-### `/app/tooling/doc_generator.py`
-
-Generates detailed system documentation from Python source files.
-
-This script scans specified directories for Python files, parses their
-Abstract Syntax Trees (ASTs), and extracts documentation for the module,
-classes, and functions. The output is a structured Markdown file.
-
-This is a key component of the project's self-documentation capabilities,
-powering the `SYSTEM_DOCUMENTATION.md` artifact in the `knowledge_core`.
-
-The script is configured via top-level constants:
-- `SCAN_DIRECTORIES`: A list of directories to search for .py files.
-- `OUTPUT_FILE`: The path where the final Markdown file will be written.
-- `DOC_TITLE`: The main title for the generated documentation file.
-
-It uses Python's `ast` module to reliably parse source files without
-importing them, which avoids issues with dependencies or script side-effects.
+A unified documentation builder for the project.
+...
 
 
 **Public Functions:**
@@ -451,33 +431,42 @@ importing them, which avoids issues with dependencies or script side-effects.
 
 - #### `def find_python_files(directories)`
 
-  > Finds all Python files in the given directories, ignoring test files.
-
 
 - #### `def format_args(args)`
-
-  > Formats ast.arguments into a printable string, including defaults.
-
-
-- #### `def generate_documentation(all_docs)`
-
-  > Generates a single Markdown string from a list of ModuleDoc objects.
 
 
 - #### `def generate_documentation_for_module(mod_doc)`
 
-  > Generates Markdown content for a single module.
+
+- #### `def generate_pages(readme_path, agents_md_path, output_file)`
+
+  > Generates the index.html for GitHub Pages.
 
 
-- #### `def main(source_dirs, output_file)`
+- #### `def generate_readme(agents_md_path, output_file)`
 
-  > Main function to find files, parse them, and write documentation.
+  > Generates the high-level README.md for a module.
+
+
+- #### `def generate_system_docs(source_dirs, output_file)`
+
+  > Generates the detailed SYSTEM_DOCUMENTATION.md.
+
+
+- #### `def get_module_docstring(filepath)`
+
+  > Parses a Python file and extracts its module-level docstring.
+
+
+- #### `def get_protocol_summary(agents_md_path)`
+
+  > Parses an AGENTS.md file and extracts a list of protocol summaries.
+
+
+- #### `def main()`
 
 
 - #### `def parse_file_for_docs(filepath)`
-
-  > Parses a Python file and extracts documentation for its module, classes,
-  > and functions.
 
 
 
@@ -486,8 +475,6 @@ importing them, which avoids issues with dependencies or script side-effects.
 
 - #### `class ClassDoc`
 
-  > Holds documentation for a single class.
-
 
   **Methods:**
 
@@ -495,9 +482,6 @@ importing them, which avoids issues with dependencies or script side-effects.
 
 
 - #### `class DocVisitor`
-
-  > AST visitor to extract documentation from classes and functions.
-  > It navigates the tree and builds lists of discovered documentation objects.
 
 
   **Methods:**
@@ -511,8 +495,6 @@ importing them, which avoids issues with dependencies or script side-effects.
 
 - #### `class FunctionDoc`
 
-  > Holds documentation for a single function or method.
-
 
   **Methods:**
 
@@ -520,8 +502,6 @@ importing them, which avoids issues with dependencies or script side-effects.
 
 
 - #### `class ModuleDoc`
-
-  > Holds all documentation for a single Python module.
 
 
   **Methods:**
@@ -648,30 +628,6 @@ commands to:
 - #### `def validate_plan(plan_filepath)`
 
 
-### `/app/tooling/generate_docs.py`
-
-This script generates comprehensive Markdown documentation for the agent's
-architecture, including the FSM, the agent shell, and the master control script.
-
-
-**Public Functions:**
-
-
-- #### `def generate_documentation()`
-
-  > Generates the final Markdown documentation.
-
-
-- #### `def get_fsm_details()`
-
-  > Extracts FSM states and transitions from fsm.json.
-
-
-- #### `def get_master_control_details()`
-
-  > Extracts details about the master control script's state handlers.
-
-
 ### `/app/tooling/hdl_prover.py`
 
 A command-line tool for proving sequents in Intuitionistic Linear Logic.
@@ -796,7 +752,7 @@ definitions and a holistic, system-wide understanding of the agent's governing r
 
 - #### `def run_readme_generator(source_agents_md)`
 
-  > Invokes the readme_generator.py script as a library.
+  > Invokes the doc_builder.py script to generate a README.
 
 
 ### `/app/tooling/knowledge_compiler.py`
@@ -1048,28 +1004,6 @@ subsystem.
   > Prints the first command-line argument to simulate a user message.
 
 
-### `/app/tooling/pages_generator.py`
-
-Generates a single HTML file for GitHub Pages from the repository's metalanguage.
-
-This script combines the human-readable `README.md` and the machine-readable
-`AGENTS.md` into a single, navigable HTML document. It uses the `markdown`
-library to convert the Markdown content to HTML and to automatically generate
-a Table of Contents.
-
-The final output is a semantic HTML5 document, `index.html`, which serves as
-the main page for the project's GitHub Pages site.
-
-
-**Public Functions:**
-
-
-- #### `def generate_html_page()`
-
-  > Reads the source Markdown files, converts them to HTML, and builds the
-  > final index.html page.
-
-
 ### `/app/tooling/plan_manager.py`
 
 Provides a command-line interface for managing the agent's Plan Registry.
@@ -1155,119 +1089,6 @@ allowing for robust and readable plan files.
   > This structure correctly handles multi-line arguments for tools.
 
 
-### `/app/tooling/plan_registry_auditor.py`
-
-A tool for auditing the agent's Plan Registry to ensure its integrity.
-
-This script is a diagnostic and maintenance tool designed to validate the
-`knowledge_core/plan_registry.json` file. The Plan Registry is a critical
-component of the hierarchical planning system (CFDC), as it maps logical plan
-names to their physical file paths. If this registry contains "dead links"
-(i.e., entries that point to files that have been moved, renamed, or deleted),
-the agent's ability to execute complex, multi-stage plans will be compromised.
-
-This auditor performs one key function:
-- **Dead Link Detection:** It reads every entry in the plan registry and verifies
-  that the file path associated with each logical name actually exists in the
-  filesystem.
-
-The script provides a clear, human-readable report of which registry entries are
-valid and which are invalid. This allows for quick identification and correction
-of issues, helping to maintain the health and reliability of the agent's core
-planning capabilities. It can be run manually for diagnostics or integrated into
-automated health checks.
-
-
-**Public Functions:**
-
-
-- #### `def audit_plan_registry(registry_path=DEFAULT_PLAN_REGISTRY_PATH)`
-
-  > Audits the plan registry to find registered plans that point to
-  > non-existent files.
-  >
-  > Args:
-  >     registry_path (str): The path to the plan registry JSON file.
-  >
-  > Returns:
-  >     list: A list of tuples, where each tuple contains the name and
-  >           path of a dead link.
-
-
-### `/app/tooling/protocol_auditor.py`
-
-Audits the agent's behavior against its governing protocols and generates a report.
-
-This script performs a comprehensive analysis to ensure the agent's actions,
-as recorded in the activity log, align with the defined protocols in AGENTS.md.
-It serves as a critical feedback mechanism for maintaining operational integrity.
-The final output is a detailed `audit_report.md` file.
-
-The auditor performs three main checks:
-1.  **`AGENTS.md` Source Check:** Verifies if the `AGENTS.md` build artifact is
-    potentially stale by comparing its modification time against the source
-    protocol files in the `protocols/` directory.
-2.  **Protocol Completeness:** It cross-references the tools used in the log
-    (`logs/activity.log.jsonl`) against the tools defined in `AGENTS.md` to find:
-    - Tools used but not associated with any formal protocol.
-    - Tools defined in protocols but never used in the log.
-3.  **Tool Centrality:** It conducts a frequency analysis of tool usage to
-    identify which tools are most critical to the agent's workflow.
-
-The script parses all embedded JSON protocol blocks within `AGENTS.md` and reads
-from the standard `logs/activity.log.jsonl` log file, providing a reliable and
-accurate audit.
-
-
-**Public Functions:**
-
-
-- #### `def find_all_agents_md_files(root_dir)`
-
-  > Finds all AGENTS.md files in the repository, ignoring any special-cased
-  > directories that are not part of the standard hierarchical build.
-
-
-- #### `def generate_markdown_report(source_checks, unreferenced, unused, centrality)`
-
-  > Generates a Markdown-formatted string from the audit results.
-
-
-- #### `def get_protocol_tools_from_agents_md(agents_md_paths)`
-
-  > Parses a list of AGENTS.md files to get a set of all tools associated
-  > with protocols.
-
-
-- #### `def get_used_tools_from_log(log_path)`
-
-  > Parses the JSONL log file to get a list of used tool names.
-  > It specifically looks for 'TOOL_EXEC' actions and extracts the tool
-  > from the 'command' field based on the logging schema.
-  > This version is robust against malformed lines with multiple JSON objects.
-
-
-- #### `def main()`
-
-  > Main function to run the protocol auditor and generate a report.
-
-
-- #### `def run_centrality_analysis(used_tools)`
-
-  > Performs a frequency analysis on the tool log and returns the counts.
-
-
-- #### `def run_completeness_check(used_tools, protocol_tools)`
-
-  > Compares used tools with protocol-defined tools and returns the gaps.
-
-
-- #### `def run_protocol_source_check(all_agents_files)`
-
-  > Checks if each AGENTS.md file is older than its corresponding source files.
-  > Returns a list of warning/error dictionaries.
-
-
 ### `/app/tooling/protocol_compiler.py`
 
 Compiles source protocol files into unified, human-readable and machine-readable artifacts.
@@ -1349,7 +1170,7 @@ directory, performing targeted updates based on command-line arguments.
 
 - #### `def find_protocol_file(protocol_id, protocols_dir)`
 
-  > Finds the protocol file path corresponding to a given protocol_id.
+  > Recursively finds the protocol file path corresponding to a given protocol_id.
 
 
 - #### `def main()`
@@ -1360,59 +1181,6 @@ directory, performing targeted updates based on command-line arguments.
 - #### `def update_rule_in_protocol(protocol_id, rule_id, new_description, protocols_dir)`
 
   > Updates the description of a specific rule within a protocol.
-
-
-### `/app/tooling/readme_generator.py`
-
-A tool for automatically generating a `README.md` file for a given module.
-
-This script creates a structured and human-readable `README.md` file by
-combining static templates with dynamically generated content extracted from the
-module's own source files. It is a key part of the project's "self-documenting"
-philosophy, ensuring that the high-level documentation stays synchronized with
-the source of truth (the code and protocols).
-
-The generator performs two main dynamic functions:
-
-1.  **Protocol Summary Generation:** It parses the module's `AGENTS.md` file to
-    find all defined protocol blocks (both those native to the module and those
-    imported from child modules). It then formats this information into a clear,
-    list-based summary that provides a high-level overview of the module's
-    governing rules.
-
-2.  **Key Component Documentation:** It scans the module's `tooling/` subdirectory
-    (if it exists) and finds all Python scripts within it. For each script, it
-    parses the source code to extract the module-level docstring. This provides
-    a concise summary of the key tools and components that make up the module's
-    functionality.
-
-The final output is a consistent, auto-updating README that serves as the primary
-entry point for any human or agent seeking to understand the purpose, rules, and
-capabilities of the module.
-
-
-**Public Functions:**
-
-
-- #### `def generate_core_protocols_section(agents_md_path)`
-
-  > Parses a given AGENTS.md file to extract protocol definitions and generate a Markdown summary.
-
-
-- #### `def generate_key_components_section(module_path)`
-
-  > Generates the Markdown for the "Key Components" section by documenting
-  > any `.py` files found in a `tooling/` subdirectory of the module.
-
-
-- #### `def get_module_docstring(filepath)`
-
-  > Parses a Python file and extracts the module-level docstring.
-
-
-- #### `def main(source_file, output_file)`
-
-  > Main function to generate the README.md content and write it to a file.
 
 
 ### `/app/tooling/refactor.py`
@@ -1670,13 +1438,27 @@ rate tracking or tool usage anti-patterns) to be added as the system evolves.
 
 ### `/app/tooling/standard_agents_compiler.py`
 
-Generates a simplified, standard-compliant AGENTS.md file for external tools.
+A compiler that generates a simplified, standard-compliant `AGENTS.md` file.
 
-This script parses the project's Makefile to extract key commands (install, test,
-lint, format) and injects them into a human-readable Markdown template. The
-output, AGENTS.standard.md, is designed to provide a quick, conventional entry
-point for third-party AI agents, bridging the gap between our complex internal
-protocol system and the broader ecosystem's expectations.
+This script acts as an "adapter" to make the repository more accessible to
+third-party AI agents that expect a conventional set of instructions. While the
+repository's primary `AGENTS.md` is a complex, hierarchical, and
+machine-readable artifact for its own specialized agent, the `AGENTS.standard.md`
+file produced by this script offers a simple, human-readable summary of the
+most common development commands.
+
+The script works by:
+1.  **Parsing the Makefile:** It dynamically parses the project's `Makefile`,
+    which is the single source of truth for high-level commands. It specifically
+    extracts the exact commands for common targets like `install`, `test`,
+    `lint`, and `format`. This ensures the generated instructions are never
+    stale.
+2.  **Injecting into a Template:** It injects these extracted commands into a
+    pre-defined, user-friendly Markdown template.
+3.  **Generating the Artifact:** The final output is written to
+    `AGENTS.standard.md`, providing a simple, stable, and conventional entry
+    point for external tools, effectively bridging the gap between the complex
+    internal protocol system and the broader agent ecosystem.
 
 
 **Public Functions:**
@@ -1805,3 +1587,77 @@ and understand the structure of the repository without having to read every file
 - #### `def main()`
 
   > Main function to generate and save the symbol map.
+
+
+---
+
+## `/app/utils/` Directory
+
+### `/app/utils/__init__.py`
+
+_No module-level docstring found._
+
+### `/app/utils/logger.py`
+
+Provides a standardized, schema-validated logger for producing structured JSONL logs.
+
+This module contains the `Logger` class, which is responsible for creating all
+entries in the `logs/activity.log.jsonl` file. This is a critical component for
+maintaining an auditable, machine-readable record of the agent's actions.
+
+The logger enforces a strict structure on all log entries by validating them
+against a formal JSON schema, which is extracted from the `LOGGING_SCHEMA.md`
+document. This ensures that every log entry, regardless of its source, is
+consistent and contains the required fields.
+
+Key features of the `Logger` class:
+- **Schema Validation:** Each log entry is validated against the official
+  project schema before being written to disk, preventing data corruption.
+- **Structured Data:** Logs are written in JSONL format, where each line is a
+  valid JSON object, making them easy to parse and query.
+- **Session Management:** It automatically assigns a unique `session_id` to
+  all logs generated during its lifecycle, allowing actions to be traced back
+  to a specific run.
+- **Automatic Timestamps:** It injects a UTC timestamp into every log entry,
+  providing a precise timeline of events.
+
+This centralized logger is the sole mechanism by which the agent should record
+its activities, ensuring a single source of truth for all post-mortem analysis
+and self-improvement activities.
+
+
+**Public Classes:**
+
+
+- #### `class Logger`
+
+  > A class to handle structured logging to a JSONL file, validated against a schema.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, schema_path='LOGGING_SCHEMA.md', log_path='logs/activity.log.jsonl')`
+
+    > Initializes the Logger, loading the schema and setting up the session.
+    >
+    > Args:
+    >     schema_path (str): The path to the Markdown file containing the logging schema.
+    >     log_path (str): The path to the log file to be written.
+
+  - ##### `def log(self, phase, task_id, plan_step, action_type, action_details, outcome_status, outcome_message='', error_details=None, evidence='')`
+
+    > Constructs, validates, and writes a log entry.
+    >
+    > Args:
+    >     phase (str): The current protocol phase (e.g., "Phase 7").
+    >     task_id (str): The ID of the current task.
+    >     plan_step (int): The current plan step number.
+    >     action_type (str): The type of action (e.g., "TOOL_EXEC").
+    >     action_details (dict): Details specific to the action.
+    >     outcome_status (str): The outcome of the action ("SUCCESS", "FAILURE").
+    >     outcome_message (str, optional): A message describing the outcome. Defaults to "".
+    >     error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.
+    >     evidence (str, optional): Citation for the action. Defaults to "".
+    >
+    > Raises:
+    >     ValidationError: If the generated log entry does not conform to the schema.

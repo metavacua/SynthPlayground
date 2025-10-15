@@ -1,4 +1,0 @@
-jsonschema
-rdflib
-requests
-watchdog

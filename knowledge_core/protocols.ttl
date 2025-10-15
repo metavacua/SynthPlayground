@@ -22,7 +22,8 @@
         <file:///app/compliance/protocols/non-compliance-test-procedure> ;
     schema:description "A protocol that defines non-compliance with AGENTS.md and specifies corrective actions." .
 
-<file:///app/compliance/protocols/pre-commit-protocol-001> proto:associatedTool <file:///app/compliance/protocols/pre_commit_instructions> ;
+<file:///app/compliance/protocols/pre-commit-protocol-001> proto:associatedTool <file:///app/compliance/protocols/code_linter>,
+        <file:///app/compliance/protocols/pre_commit_instructions> ;
     proto:hasRule <file:///app/compliance/protocols/pre-commit-instructions-mandate> ;
     schema:description "Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission." .
 
@@ -150,6 +151,10 @@
     proto:hasRule <file:///app/protocols/execute-aura-script> ;
     schema:description "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent." .
 
+<file:///app/protocols/capability-verification-001> proto:associatedTool <file:///app/protocols/tooling/capability_verifier.py> ;
+    proto:hasRule <file:///app/protocols/verify-capability-acquisition> ;
+    schema:description "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement." .
+
 <file:///app/protocols/csdc-001> proto:associatedTool <file:///app/protocols/tooling/csdc_cli.py> ;
     proto:hasRule <file:///app/protocols/model-a-constraints>,
         <file:///app/protocols/model-b-constraints>,
@@ -160,21 +165,9 @@
     proto:hasRule <file:///app/protocols/dependency-install-on-start> ;
     schema:description "A protocol for ensuring a reliable execution environment through formal dependency management." .
 
-<file:///app/protocols/doc-audit-001> proto:associatedTool <file:///app/protocols/tooling/doc_auditor.py> ;
-    proto:hasRule <file:///app/protocols/audit-for-missing-docstrings> ;
-    schema:description "A protocol to ensure the completeness of system documentation." .
-
 <file:///app/protocols/hdl-proving-001> proto:associatedTool <file:///app/protocols/tooling/hdl_prover.py> ;
     proto:hasRule <file:///app/protocols/prove-sequent> ;
     schema:description "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs." .
-
-<file:///app/protocols/plan-registry-audit-001> proto:associatedTool <file:///app/protocols/tooling/plan_registry_auditor.py> ;
-    proto:hasRule <file:///app/protocols/audit-for-dead-links> ;
-    schema:description "A protocol for using the plan registry auditor tool to ensure the integrity of the plan registry." .
-
-<file:///app/protocols/refactor-001> proto:associatedTool <file:///app/protocols/tooling/refactor.py> ;
-    proto:hasRule <file:///app/protocols/refactor-rename-symbol> ;
-    schema:description "A protocol for using the refactoring tool." .
 
 <file:///app/protocols/security/security-header> schema:description "Defines the identity and purpose of the Security Protocol document." .
 
@@ -197,6 +190,14 @@
         <file:///app/protocols/tooling/protocol_compiler.py> ;
     proto:hasRule <file:///app/protocols/toolchain-audit-on-schema-change> ;
     schema:description "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols." .
+
+<file:///app/protocols/unified-auditor-001> proto:associatedTool <file:///app/protocols/tooling/auditor.py> ;
+    proto:hasRule <file:///app/protocols/run-all-audits> ;
+    schema:description "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface." .
+
+<file:///app/protocols/unified-doc-builder-001> proto:associatedTool <file:///app/protocols/tooling/doc_builder.py> ;
+    proto:hasRule <file:///app/protocols/use-doc-builder-for-all-docs> ;
+    schema:description "A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth." .
 
 <file:///app/compliance/protocols/agents-md-self-awareness> proto:enforcement "The agent should incorporate this check into its standard operating procedure, particularly at the beginning of a task or when unexpected behavior occurs." ;
     schema:description "The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols." .
@@ -343,12 +344,6 @@
 <file:///app/critic/protocols/protocol-as-source-code> proto:enforcement "The Code Review Critic must analyze changes in this directory with the same rigor as changes to `.py` files." ;
     schema:description "The `protocols/` directory and all its contents (`.md`, `.json` files) MUST be treated as functional source code. Changes to these files directly alter the agent's operational capabilities and governing rules." .
 
-<file:///app/protocols/audit-for-dead-links> proto:enforcement "The tool is used by invoking it from the command line. It can be run manually for diagnostics or integrated into automated health checks." ;
-    schema:description "The `plan_registry_auditor.py` tool should be used to scan the `knowledge_core/plan_registry.json` file for entries that point to non-existent plan files. This helps maintain the health of the hierarchical planning system." .
-
-<file:///app/protocols/audit-for-missing-docstrings> proto:enforcement "This check should be performed by running `make audit-docs`. This can be done periodically or as part of a pre-commit workflow." ;
-    schema:description "A check for missing module-level docstrings must be performed to ensure documentation completeness. All modules should have comprehensive documentation to aid agents and human users." .
-
 <file:///app/protocols/bootstrap-load-agents-md> proto:enforcement "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase." ;
     schema:description "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins." .
 
@@ -379,11 +374,11 @@
 <file:///app/protocols/prove-sequent> proto:enforcement "The tool is used by invoking it from the command line with the sequent to be proved as an argument." ;
     schema:description "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover." .
 
-<file:///app/protocols/refactor-rename-symbol> proto:enforcement "The tool is used by invoking it from the command line with the appropriate arguments. The agent should use this tool when a refactoring task is requested." ;
-    schema:description "The `refactor.py` tool can be used to rename a symbol and all of its references." .
-
 <file:///app/protocols/resource-constraints> proto:enforcement "This is a system-level constraint that the agent orchestrator must enforce." ;
     schema:description "Speculative tasks must operate under defined resource limits." .
+
+<file:///app/protocols/run-all-audits> proto:enforcement "The tool is invoked via the command line, typically through the `make audit` target." ;
+    schema:description "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness." .
 
 <file:///app/protocols/security/no-public-disclosure> proto:enforcement "Violation of this rule may result in being banned from the project community." ;
     schema:description "Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed." .
@@ -402,6 +397,9 @@
 
 <file:///app/protocols/use-csdc-cli> proto:enforcement "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments." ;
     schema:description "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP)." .
+
+<file:///app/protocols/use-doc-builder-for-all-docs> proto:enforcement "The tool is invoked via the command line, typically through the `make docs`, `make readme`, or `make pages` targets." ;
+    schema:description "The `doc_builder.py` script is the single entry point for generating all user-facing documentation, including system-level docs, README files, and GitHub Pages. It should be called with the appropriate '--format' argument." .
 
 <file:///app/protocols/user-review-gate> proto:enforcement "The agent is forbidden from using tools like 'submit' or 'merge' within a speculative context. It must use 'request_user_input' to present the results." ;
     schema:description "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly." .

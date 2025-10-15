@@ -162,8 +162,8 @@ def main():
     """
     # This script is intended to be called from a controlled environment
     # like a test or a dedicated plan, so we don't use argparse here.
-    # The protocols directory is assumed to be the default one.
-    protocols_directory = "protocols/"
+    # The search for protocols should start from the repository root.
+    protocols_directory = "."
 
     print("--- Starting Protocol-Driven Self-Correction Cycle ---")
     lessons = load_lessons()

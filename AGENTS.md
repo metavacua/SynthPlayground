@@ -365,23 +365,6 @@ The CSDC is enforced by the `tooling/csdc_cli.py` tool. This tool validates a pl
 
 ---
 
-# Protocol: Code Refactoring
-
-This protocol defines the use of the `refactor.py` tool, which provides a simple way to perform automated refactoring of Python code.
-
-## Rule: `refactor-rename-symbol`
-
-The `refactor.py` tool can be used to rename a symbol (a function or class) and all of its references within a given search path.
-
-**Usage:**
-```
-python tooling/refactor.py --filepath <path_to_file> --old-name <old_symbol_name> --new-name <new_symbol_name> [--search-path <path>]
-```
-
-The tool will generate a plan file containing a series of `replace_with_git_merge_diff` commands to perform the renaming. This plan can then be executed by the agent's master controller.
-
----
-
 # Protocol: Speculative Execution
 
 This protocol empowers the agent to engage in creative and exploratory tasks when it is otherwise idle. It provides a formal framework for the agent to generate novel ideas, plans, or artifacts that are not direct responses to a user request, but are instead products of its own "imagination" and analysis of the repository.
@@ -482,6 +465,26 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ```json
 {
+  "protocol_id": "unified-auditor-001",
+  "description": "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.",
+  "rules": [
+    {
+      "rule_id": "run-all-audits",
+      "description": "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness.",
+      "enforcement": "The tool is invoked via the command line, typically through the `make audit` target."
+    }
+  ],
+  "associated_tools": [
+    "tooling/auditor.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
   "protocol_id": "aura-execution-001",
   "description": "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.",
   "rules": [
@@ -493,6 +496,26 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
   ],
   "associated_tools": [
     "tooling/aura_executor.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "capability-verification-001",
+  "description": "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.",
+  "rules": [
+    {
+      "rule_id": "verify-capability-acquisition",
+      "description": "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process.",
+      "enforcement": "The tool is used by invoking it from the command line with the path to the target test file."
+    }
+  ],
+  "associated_tools": [
+    "tooling/capability_verifier.py"
   ]
 }
 ```
@@ -532,17 +555,17 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ```json
 {
-  "protocol_id": "doc-audit-001",
-  "description": "A protocol to ensure the completeness of system documentation.",
+  "protocol_id": "unified-doc-builder-001",
+  "description": "A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth.",
   "rules": [
     {
-      "rule_id": "audit-for-missing-docstrings",
-      "description": "A check for missing module-level docstrings must be performed to ensure documentation completeness. All modules should have comprehensive documentation to aid agents and human users.",
-      "enforcement": "This check should be performed by running `make audit-docs`. This can be done periodically or as part of a pre-commit workflow."
+      "rule_id": "use-doc-builder-for-all-docs",
+      "description": "The `doc_builder.py` script is the single entry point for generating all user-facing documentation, including system-level docs, README files, and GitHub Pages. It should be called with the appropriate '--format' argument.",
+      "enforcement": "The tool is invoked via the command line, typically through the `make docs`, `make readme`, or `make pages` targets."
     }
   ],
   "associated_tools": [
-    "tooling/doc_auditor.py"
+    "tooling/doc_builder.py"
   ]
 }
 ```
@@ -589,46 +612,6 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
   "associated_tools": [
     "set_plan",
     "message_user"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "plan-registry-audit-001",
-  "description": "A protocol for using the plan registry auditor tool to ensure the integrity of the plan registry.",
-  "rules": [
-    {
-      "rule_id": "audit-for-dead-links",
-      "description": "The `plan_registry_auditor.py` tool should be used to scan the `knowledge_core/plan_registry.json` file for entries that point to non-existent plan files. This helps maintain the health of the hierarchical planning system.",
-      "enforcement": "The tool is used by invoking it from the command line. It can be run manually for diagnostics or integrated into automated health checks."
-    }
-  ],
-  "associated_tools": [
-    "tooling/plan_registry_auditor.py"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "refactor-001",
-  "description": "A protocol for using the refactoring tool.",
-  "rules": [
-    {
-      "rule_id": "refactor-rename-symbol",
-      "description": "The `refactor.py` tool can be used to rename a symbol and all of its references.",
-      "enforcement": "The tool is used by invoking it from the command line with the appropriate arguments. The agent should use this tool when a refactoring task is requested."
-    }
-  ],
-  "associated_tools": [
-    "tooling/refactor.py"
   ]
 }
 ```

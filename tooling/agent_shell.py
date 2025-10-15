@@ -31,7 +31,9 @@ def find_fsm_transition(fsm, source_state, trigger):
     return None
 
 
-def run_agent_loop(task_description: str):
+import argparse
+
+def run_agent_loop(task_description: str, model: str = None):
     """
     The main loop that drives the agent's lifecycle via the FSM.
     """
@@ -45,6 +47,8 @@ def run_agent_loop(task_description: str):
     planning_attempts = 0
 
     print(f"--- Starting Agent Task: {task_description} ({task_id}) ---")
+    if model:
+        print(f"--- Running under CSDC Model: {model} ---")
 
     while mcg.current_state not in mcg.fsm["final_states"]:
         current_state = mcg.current_state
@@ -65,8 +69,30 @@ def run_agent_loop(task_description: str):
             trigger = mcg.do_orientation(agent_state, logger, tools)
 
         elif current_state == "PLANNING":
+            # If a CSDC model is specified, load the corresponding plan
+            if model:
+                plan_path = f"plans/self_improvement_model_{model.lower()}.txt"
+                print(f"[AgentShell] Loading CSDC plan from: {plan_path}")
+                try:
+                    with open(plan_path, "r") as f:
+                        plan_content = f.read()
+
+                    # Validate the plan against the specified model
+                    is_valid, error_message = mcg.validate_plan_for_model(plan_content, model)
+                    if not is_valid:
+                        agent_state.error = f"Plan validation failed for model {model}: {error_message}"
+                        mcg.current_state = "ERROR"
+                        continue
+
+                    print(f"[AgentShell] Plan is valid for Model {model}.")
+                    trigger = mcg.do_planning(agent_state, plan_content, logger)
+
+                except FileNotFoundError:
+                    agent_state.error = f"Plan file not found: {plan_path}"
+                    mcg.current_state = "ERROR"
+                    continue
             # If we have research findings, create a real plan.
-            if agent_state.research_findings:
+            elif agent_state.research_findings:
                 print("[AgentShell] Research complete. Now creating an informed plan.")
                 plan_content = """\
 # FSM: tooling/fsm.json
@@ -137,8 +163,20 @@ The research findings have been integrated.
 
 def main():
     """Main entry point for the agent shell."""
+    parser = argparse.ArgumentParser(description="The main entry point for the agent.")
+    parser.add_argument(
+        "--model",
+        choices=["A", "B"],
+        default=None,
+        help="The CSDC model to run the agent under (A or B).",
+    )
+    args = parser.parse_args()
+
     task_description = "Perform a basic self-check and greet the user."
-    run_agent_loop(task_description)
+    if args.model:
+        task_description = f"Execute a self-improvement task under CSDC Model {args.model}."
+
+    run_agent_loop(task_description, model=args.model)
 
 
 if __name__ == "__main__":
