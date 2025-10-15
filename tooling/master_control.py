@@ -101,13 +101,24 @@ class MasterControlGraph:
             f"No trigger found for transition from {source_state} to {dest_state}"
         )
 
-    def do_orientation(self, agent_state: AgentState, logger: Logger) -> str:
+    def do_orientation(self, agent_state: AgentState, logger: Logger, tools: dict) -> str:
         """
-        Executes orientation, including analyzing the last post-mortem.
+        Executes orientation, including analyzing the last post-mortem and scanning the filesystem.
         """
-        agent_state.current_thought = "Starting orientation. Will review previous task outcomes."
+        agent_state.current_thought = "Starting orientation. Will review previous task outcomes and scan filesystem."
         logger.log("Phase 1", agent_state.task, -1, "INFO", {"state": "ORIENTING"}, "SUCCESS", context=_get_log_context(agent_state))
         try:
+            # Use the provided list_files tool to scan the directory
+            list_files = tools.get("list_files")
+            if list_files:
+                file_list = list_files()
+                # Ensure the file_list is serializable for the message
+                agent_state.messages.append({"role": "system", "content": f"Initial file listing:\n{str(file_list)}"})
+                agent_state.current_thought = "Initial file scan complete."
+                logger.log("Phase 1", agent_state.task, -1, "INFO", {"summary": "Performed initial file scan."}, "SUCCESS", context=_get_log_context(agent_state))
+            else:
+                logger.log("Phase 1", agent_state.task, -1, "WARNING", {"summary": "`list_files` tool not provided to orientation."}, "SUCCESS")
+
             # Analyze the most recent post-mortem report
             postmortem_dir = "postmortems/"
             if os.path.exists(postmortem_dir):
