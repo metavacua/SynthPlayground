@@ -150,6 +150,10 @@
     proto:hasRule <file:///app/protocols/execute-aura-script> ;
     schema:description "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent." .
 
+<file:///app/protocols/capability-verification-001> proto:associatedTool <file:///app/protocols/tooling/capability_verifier.py> ;
+    proto:hasRule <file:///app/protocols/verify-capability-acquisition> ;
+    schema:description "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement." .
+
 <file:///app/protocols/dependency-management-001> proto:associatedTool <file:///app/protocols/run_in_bash_session> ;
     proto:hasRule <file:///app/protocols/dependency-install-on-start> ;
     schema:description "A protocol for ensuring a reliable execution environment through formal dependency management." .
@@ -390,3 +394,6 @@
 
 <file:///app/protocols/user-review-gate> proto:enforcement "The agent is forbidden from using tools like 'submit' or 'merge' within a speculative context. It must use 'request_user_input' to present the results." ;
     schema:description "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly." .
+
+<file:///app/protocols/verify-capability-acquisition> proto:enforcement "The tool is used by invoking it from the command line with the path to the target test file." ;
+    schema:description "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process." .

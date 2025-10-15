@@ -12,46 +12,6 @@
 
 ---
 
-```json
-{
-  "protocol_id": "aura-execution-001",
-  "description": "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.",
-  "rules": [
-    {
-      "rule_id": "execute-aura-script",
-      "description": "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter.",
-      "enforcement": "The tool is used by invoking it from the command line with the path to the Aura script as an argument."
-    }
-  ],
-  "associated_tools": [
-    "tooling/aura_executor.py"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "hdl-proving-001",
-  "description": "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.",
-  "rules": [
-    {
-      "rule_id": "prove-sequent",
-      "description": "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover.",
-      "enforcement": "The tool is used by invoking it from the command line with the sequent to be proved as an argument."
-    }
-  ],
-  "associated_tools": [
-    "tooling/hdl_prover.py"
-  ]
-}
-```
-
-
----
-
 # Protocol: Agent Bootstrap
 
 **Rule `bootstrap-load-agents-md`**: Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the `AGENTS.md` file in the repository root.
@@ -501,6 +461,26 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
   ],
   "associated_tools": [
     "tooling/aura_executor.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "capability-verification-001",
+  "description": "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.",
+  "rules": [
+    {
+      "rule_id": "verify-capability-acquisition",
+      "description": "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process.",
+      "enforcement": "The tool is used by invoking it from the command line with the path to the target test file."
+    }
+  ],
+  "associated_tools": [
+    "tooling/capability_verifier.py"
   ]
 }
 ```
