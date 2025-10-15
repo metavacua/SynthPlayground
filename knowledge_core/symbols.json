@@ -1721,6 +1721,24 @@
     },
     {
       "_type": "tag",
+      "name": "prove_sequent",
+      "path": "./tooling/hdl_prover.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "Calls the HDL Lisp prover to determine if a sequent is provable.\n\nArgs:\n    sequent_string: A string representing the sequent in Lisp format,\n                  e.g., \"'(() (con))'\".\n\nReturns:\n    A boolean indicating whether the sequent is provable, or None on error."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/hdl_prover.py",
+      "language": "Python",
+      "line": 61,
+      "kind": "function",
+      "docstring": "Provides a command-line interface for the HDL prover tool."
+    },
+    {
+      "_type": "tag",
       "name": "scan_documents",
       "path": "./tooling/document_scanner.py",
       "language": "Python",
@@ -2168,6 +2186,24 @@
       "line": 148,
       "kind": "function",
       "docstring": "Verify that `find_all_agents_md_files` correctly ignores directories\nlisted in the SPECIAL_DIRS configuration."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/aura_executor.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": "Parses and executes an Aura script."
+    },
+    {
+      "_type": "tag",
+      "name": "dynamic_agent_call_tool",
+      "path": "./tooling/aura_executor.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": "Dynamically calls an agent tool and wraps the result in an Aura object."
     },
     {
       "_type": "tag",
@@ -3395,46 +3431,19 @@
     },
     {
       "_type": "tag",
-      "name": "MockHttpResponse",
+      "name": "agent_call_tool",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
       "line": 36,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "MockUser",
-      "path": "./aura_lang/interpreter.py",
-      "language": "Python",
-      "line": 40,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "mock_http_get",
-      "path": "./aura_lang/interpreter.py",
-      "language": "Python",
-      "line": 44,
       "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "mock_json_decode",
-      "path": "./aura_lang/interpreter.py",
-      "language": "Python",
-      "line": 47,
-      "kind": "function",
-      "docstring": null
+      "docstring": "Placeholder for calling the agent's real tools.\nThis will be replaced by a real implementation provided by the executor."
     },
     {
       "_type": "tag",
       "name": "evaluate",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 52,
+      "line": 49,
       "kind": "function",
       "docstring": null
     },
@@ -3443,7 +3452,7 @@
       "name": "eval_program",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 86,
+      "line": 83,
       "kind": "function",
       "docstring": null
     },
@@ -3452,7 +3461,7 @@
       "name": "eval_block_statement",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 92,
+      "line": 89,
       "kind": "function",
       "docstring": null
     },
@@ -3461,7 +3470,7 @@
       "name": "eval_if_statement",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 98,
+      "line": 95,
       "kind": "function",
       "docstring": null
     },
@@ -3470,7 +3479,7 @@
       "name": "eval_for_statement",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 104,
+      "line": 116,
       "kind": "function",
       "docstring": null
     },
@@ -3479,7 +3488,7 @@
       "name": "eval_print_statement",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 111,
+      "line": 123,
       "kind": "function",
       "docstring": null
     },
@@ -3488,7 +3497,7 @@
       "name": "eval_infix_expression",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 116,
+      "line": 132,
       "kind": "function",
       "docstring": null
     },
@@ -3497,7 +3506,7 @@
       "name": "eval_identifier",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 126,
+      "line": 142,
       "kind": "function",
       "docstring": null
     },
@@ -3506,7 +3515,7 @@
       "name": "eval_expressions",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 129,
+      "line": 145,
       "kind": "function",
       "docstring": null
     },
@@ -3515,8 +3524,17 @@
       "name": "apply_function",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 131,
+      "line": 147,
       "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Agent",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 158,
+      "kind": "class",
       "docstring": null
     },
     {
@@ -3587,16 +3605,7 @@
       "name": "__init__",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 37,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./aura_lang/interpreter.py",
-      "language": "Python",
-      "line": 41,
+      "line": 159,
       "kind": "function",
       "docstring": null
     },
