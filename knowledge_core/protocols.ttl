@@ -150,6 +150,12 @@
     proto:hasRule <file:///app/protocols/execute-aura-script> ;
     schema:description "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent." .
 
+<file:///app/protocols/csdc-001> proto:associatedTool <file:///app/protocols/tooling/csdc_cli.py> ;
+    proto:hasRule <file:///app/protocols/model-a-constraints>,
+        <file:///app/protocols/model-b-constraints>,
+        <file:///app/protocols/use-csdc-cli> ;
+    schema:description "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints." .
+
 <file:///app/protocols/dependency-management-001> proto:associatedTool <file:///app/protocols/run_in_bash_session> ;
     proto:hasRule <file:///app/protocols/dependency-install-on-start> ;
     schema:description "A protocol for ensuring a reliable execution environment through formal dependency management." .
@@ -361,6 +367,12 @@
 <file:///app/protocols/idle-state-trigger> proto:enforcement "The agent's main control loop must verify an idle state before allowing the invocation of a speculative plan." ;
     schema:description "The agent may only initiate a speculative task when it has no active, user-assigned tasks." .
 
+<file:///app/protocols/model-a-constraints> proto:enforcement "Enforced by the `fsm_model_a.json` FSM used by the `csdc_cli.py` tool." ;
+    schema:description "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`." .
+
+<file:///app/protocols/model-b-constraints> proto:enforcement "Enforced by the `fsm_model_b.json` FSM used by the `csdc_cli.py` tool." ;
+    schema:description "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`." .
+
 <file:///app/protocols/planning-tool-access> proto:enforcement "The agent's core logic should be designed to use this tool for all planning activities." ;
     schema:description "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution." .
 
@@ -387,6 +399,9 @@
 
 <file:///app/protocols/toolchain-audit-on-schema-change> proto:enforcement "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files." ;
     schema:description "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure." .
+
+<file:///app/protocols/use-csdc-cli> proto:enforcement "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments." ;
+    schema:description "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP)." .
 
 <file:///app/protocols/user-review-gate> proto:enforcement "The agent is forbidden from using tools like 'submit' or 'merge' within a speculative context. It must use 'request_user_input' to present the results." ;
     schema:description "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly." .

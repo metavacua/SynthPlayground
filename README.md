@@ -15,6 +15,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`agent-shell-001`**: A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.
 - **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
 - **`aura-execution-001`**: A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.
+- **`csdc-001`**: A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.
 - **`doc-audit-001`**: A protocol to ensure the completeness of system documentation.
 - **`hdl-proving-001`**: A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.
 - **`agent-interaction-001`**: A protocol governing the agent's core interaction and planning tools.
@@ -53,6 +54,10 @@ This module is governed by a series of machine-readable protocols defined in `AG
   > Handles the generation and application of autonomous code change suggestions.\n  > \n  > This tool is a key component of the advanced self-correction loop. It is\n  > designed to be invoked by the self-correction orchestrator when a lesson\n  > contains a 'propose-code-change' action.\n  > \n  > For its initial implementation, this tool acts as a structured executor. It\n  > takes a lesson where the 'details' field contains a fully-formed git-style\n  > merge diff and applies it to the target file. It does this by generating a\n  > temporary, single-step plan file and signaling its location for the master\n  > controller to execute.\n  > \n  > This establishes the fundamental workflow for autonomous code modification,\n  > decoupling the suggestion logic from the execution logic. Future iterations\n  > can enhance this tool with more sophisticated code generation capabilities\n  > (e.g., using an LLM to generate the diff from a natural language description)\n  > without altering the core orchestration process.
 
 - **`tooling/context_awareness_scanner.py`**:
+
+  > _No docstring found._
+
+- **`tooling/csdc_cli.py`**:
 
   > _No docstring found._
 
@@ -111,6 +116,10 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`tooling/master_control_cli.py`**:
 
   > The official command-line interface for the agent's master control loop.\n  > \n  > This script is now a lightweight wrapper that passes control to the new,\n  > API-driven `agent_shell.py`. It preserves the command-line interface while\n  > decoupling the entry point from the FSM implementation.
+
+- **`tooling/message_user.py`**:
+
+  > _No docstring found._
 
 - **`tooling/pages_generator.py`**:
 
