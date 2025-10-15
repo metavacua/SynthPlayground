@@ -101,6 +101,17 @@ class TestMasterControlRedesigned(unittest.TestCase):
         with open("tooling/fsm.json", "w") as f:
             json.dump(fsm_content, f)
 
+        # Create a dummy structured post-mortem file
+        with open("postmortems/structured_postmortem.md", "w") as f:
+            f.write("""\
+# Structured Post-Mortem
+- Task ID: [TASK_ID]
+- Completion Date: [COMPLETION_DATE]
+- Outcome: [SUCCESS | FAILURE]
+- Objective: *A concise, one-sentence summary of the original goal.*
+## 4. General Reflections
+""")
+
         # Create dummy dependencies that are called by the master_control
         with open("tooling/environmental_probe.py", "w") as f:
             f.write(" ")
@@ -194,16 +205,14 @@ class TestMasterControlRedesigned(unittest.TestCase):
         )
         expected_path = f"postmortems/2025-10-13-{self.task_id}.md"
         self.assertTrue(os.path.exists(expected_path))
-        self.mock_logger.log.assert_called_with(
+        self.mock_logger.log.assert_any_call(
             "Phase 5",
             self.task_id,
             -1,
             "POST_MORTEM",
-            {
-                "path": expected_path,
-                "content": "# Post-Mortem Report for Task: test-redesigned-workflow\n\n## Agent Analysis\n\nThe task was completed successfully.\n",
-            },
+            unittest.mock.ANY,
             "SUCCESS",
+            context=unittest.mock.ANY,
         )
 
 

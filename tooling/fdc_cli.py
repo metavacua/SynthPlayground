@@ -235,7 +235,32 @@ def _validate_plan_recursive(
     return state, fs, i
 
 
+def _load_file_index():
+    """Loads the file index from the .file_index.json file."""
+    index_path = os.path.join(ROOT_DIR, ".file_index.json")
+    try:
+        with open(index_path, "r") as f:
+            return set(json.load(f))
+    except FileNotFoundError:
+        print(
+            "Error: File index '.file_index.json' not found.",
+            "Please run 'python tooling/file_indexer.py build' to create it.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+    except json.JSONDecodeError:
+        print(
+            f"Error: Could not parse file index at {index_path}.",
+            "It may be corrupted. Please rebuild it.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+
 def validate_plan(plan_filepath):
+    """
+    Validates a plan file against the FDC FSM using a pre-built file index.
+    """
     try:
         with open(FSM_DEF_PATH, "r") as f:
             fsm = json.load(f)
@@ -245,16 +270,10 @@ def validate_plan(plan_filepath):
         print(f"Error: Could not find file {e.filename}", file=sys.stderr)
         sys.exit(1)
 
-    # Initialize the simulated file system with the actual state of the repository
-    simulated_fs = set()
-    for root, dirs, files in os.walk("."):
-        # Exclude .git directory from the walk
-        if ".git" in dirs:
-            dirs.remove(".git")
-        for name in files:
-            simulated_fs.add(os.path.join(root, name).replace("./", ""))
+    # Initialize the simulated file system from the pre-built index
+    simulated_fs = _load_file_index()
 
-    print(f"Starting validation with {len(simulated_fs)} files pre-loaded...")
+    print(f"Starting validation with {len(simulated_fs)} files loaded from index...")
     final_state, _, _ = _validate_plan_recursive(
         lines, 0, 0, fsm["start_state"], simulated_fs, {}, fsm
     )
