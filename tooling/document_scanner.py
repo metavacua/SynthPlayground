@@ -1,3 +1,20 @@
+"""
+Recursively scans a directory to find and extract text from documents.
+
+This script provides a crucial capability for the agent's orientation phase.
+It walks through a given directory structure and identifies files with common
+document extensions: `.pdf`, `.md`, and `.txt`.
+
+For each file found, it attempts to extract the full text content:
+- For `.pdf` files, it uses the `pypdf` library to parse the document and
+  extract text from each page.
+- For `.md` and `.txt` files, it reads the raw text content.
+
+The script returns a dictionary where the keys are the file paths of the
+scanned documents and the values are their extracted text content. This allows
+the agent to gather a broad base of knowledge from the human-readable
+documentation available in a repository.
+"""
 import os
 import pypdf
 from pypdf import PdfReader

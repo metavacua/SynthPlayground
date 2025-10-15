@@ -6,7 +6,8 @@
 
 ### `/app/tooling/__init__.py`
 
-_No module-level docstring found._
+This directory contains the core tooling for the agent's development,
+build, and self-analysis capabilities.
 
 ### `/app/tooling/agent_shell.py`
 
@@ -88,7 +89,20 @@ to a temporary file that the main agent can poll.
 
 ### `/app/tooling/builder.py`
 
-_No module-level docstring found._
+The unified build script for this repository.
+
+This script replaces a complex Makefile with a single, data-driven entry point
+for all build-related tasks. It reads its configuration from `build_config.json`,
+which defines a series of build "targets."
+
+Each target specifies a "compiler" (a Python script in the `tooling/` directory),
+input sources, and an output artifact. This script is responsible for
+orchestrating the execution of these compilers in the correct order to generate
+all necessary project artifacts, such as `AGENTS.md`, `README.md`, and
+`SYSTEM_DOCUMENTATION.md`.
+
+This centralized approach makes the build process more transparent, maintainable,
+and easier to extend.
 
 
 **Public Functions:**
@@ -111,7 +125,23 @@ _No module-level docstring found._
 
 ### `/app/tooling/code_health_analyzer.py`
 
-_No module-level docstring found._
+Audits the Plan Registry for dead links and generates a corrective plan.
+
+This script scans the `knowledge_core/plan_registry.json` file, which maps
+logical plan names to their file paths. It checks if each file path in the
+registry points to an existing file.
+
+If any "dead links" (entries pointing to non-existent files) are found,
+this script will:
+1.  Identify the invalid entries.
+2.  Generate a new, corrected version of the plan registry with the dead links
+    removed.
+3.  Print a complete, executable plan to the console. This plan uses the
+    `overwrite_file_with_block` command to replace the old registry with the
+    new, corrected version.
+
+This provides a semi-automated way to maintain the integrity of the Plan
+Registry, a key component of the hierarchical planning system.
 
 
 **Public Functions:**
@@ -177,7 +207,23 @@ without altering the core orchestration process.
 
 ### `/app/tooling/context_awareness_scanner.py`
 
-_No module-level docstring found._
+Performs static analysis on a Python file to map its contextual role.
+
+This script acts as a code intelligence tool. Given a Python file, it performs
+a static analysis to understand its connections to the rest of the codebase.
+It generates a detailed JSON report that includes:
+
+1.  **Defined Symbols:** All functions and classes defined within the target file,
+    along with their line numbers.
+2.  **Imported Symbols:** All modules and symbols that the target file imports
+    from other modules.
+3.  **Cross-Repository References:** For each function and class defined in the
+    target file, it finds all other Python files in the repository that
+    reference that symbol.
+
+The resulting report provides a comprehensive "contextual awareness map" for a
+single file, showing what it provides to the system and what it consumes from
+it. This is invaluable for understanding the impact of potential changes.
 
 
 **Public Functions:**
@@ -196,17 +242,6 @@ _No module-level docstring found._
 - #### `def get_imported_symbols(filepath)`
 
   > Parses a Python file to find all imported modules and symbols.
-
-
-- #### `def main()`
-
-
-### `/app/tooling/csdc_cli.py`
-
-_No module-level docstring found._
-
-
-**Public Functions:**
 
 
 - #### `def main()`
@@ -404,7 +439,21 @@ importing them, which avoids issues with dependencies or script side-effects.
 
 ### `/app/tooling/document_scanner.py`
 
-_No module-level docstring found._
+Recursively scans a directory to find and extract text from documents.
+
+This script provides a crucial capability for the agent's orientation phase.
+It walks through a given directory structure and identifies files with common
+document extensions: `.pdf`, `.md`, and `.txt`.
+
+For each file found, it attempts to extract the full text content:
+- For `.pdf` files, it uses the `pypdf` library to parse the document and
+  extract text from each page.
+- For `.md` and `.txt` files, it reads the raw text content.
+
+The script returns a dictionary where the keys are the file paths of the
+scanned documents and the values are their extracted text content. This allows
+the agent to gather a broad base of knowledge from the human-readable
+documentation available in a repository.
 
 
 **Public Functions:**
@@ -531,7 +580,19 @@ architecture, including the FSM, the agent shell, and the master control script.
 
 ### `/app/tooling/hdl_prover.py`
 
-_No module-level docstring found._
+A command-line interface for a simple Hypersequent-calculus-based logic prover.
+
+This script provides a tool for checking the provability of a logical sequent
+formatted for a subset of Intuitionistic Linear Logic. It is governed by the
+`hdl-proving-001` protocol.
+
+The script takes a sequent as a command-line argument (e.g., "A, A -> B |- B"),
+parses it into a formal data structure, and then uses a simple proof search
+algorithm to determine if the sequent is provable.
+
+NOTE: The current proof search implementation is a basic placeholder and is not
+a complete or sound prover. It is intended as a scaffold for a more
+sophisticated logic engine.
 
 
 **Public Functions:**
@@ -558,7 +619,39 @@ _No module-level docstring found._
 
 ### `/app/tooling/hierarchical_compiler.py`
 
-_No module-level docstring found._
+A two-pass compiler for building hierarchical agent protocol documentation.
+
+This script is the master engine for the "protocol as code" architecture. It
+orchestrates the compilation of `AGENTS.md` and `README.md` files across a
+nested directory structure and generates a unified, repository-wide knowledge
+graph of all defined protocols.
+
+The process works in two main passes:
+
+**Pass 1: Hierarchical Documentation Build**
+1.  **Discovery:** It recursively finds all directories named `protocols`,
+    starting from the most deeply nested ones and working its way up to the root.
+2.  **Child-First Compilation:** For each `protocols` directory, it invokes the
+    `protocol_compiler.py` and `readme_generator.py` scripts to build the
+    `AGENTS.md` and `README.md` for that specific module.
+3.  **Summary Injection:** After a child module is built, the script extracts the
+    full, rendered text of its protocols from its `AGENTS.md`. It then injects
+    this text into a temporary file within the parent's `protocols` directory.
+4.  **Parent Compilation:** The parent module is then compiled. Its `AGENTS.md`
+    now seamlessly includes the complete, unabridged protocols of all its
+    children, creating a single, comprehensive `AGENTS.md` at each level of the
+    hierarchy.
+
+**Pass 2: Centralized Knowledge Graph Compilation**
+1.  **Discovery:** The script finds every `*.protocol.json` file in the entire
+    repository.
+2.  **Validation & Aggregation:** It validates each file against the master
+    `protocol.schema.json`.
+3.  **RDF Generation:** It uses `rdflib` to parse all validated JSON-LD protocol
+    definitions into a single RDF graph.
+4.  **Serialization:** The final, unified graph is serialized to
+    `knowledge_core/protocols.ttl`, creating a machine-queryable single source
+    of truth for all agent protocols in the repository.
 
 
 **Public Functions:**
@@ -697,7 +790,22 @@ enriched knowledge graph.
 
 ### `/app/tooling/log_failure.py`
 
-_No module-level docstring found._
+A special-purpose script to log a pre-defined catastrophic failure event.
+
+This is not a general-purpose tool. Its sole function is to create a very
+specific log entry in `logs/activity.log.jsonl` that represents a
+catastrophic, unrecoverable system failure.
+
+The logged event is hard-coded to represent a critical protocol violation: the
+unauthorized use of the `reset_all` tool, which is documented as a cause of
+past workflow collapses.
+
+This script is likely used for:
+1.  Testing the logging and auditing systems' ability to handle critical failure
+    events.
+2.  Seeding the log with a known failure event for post-mortem analysis drills.
+3.  Providing a programmatic way to signal a system-wide halt in a controlled
+    manner during simulations.
 
 
 **Public Functions:**
@@ -819,16 +927,23 @@ decoupling the entry point from the FSM implementation.
 
 ### `/app/tooling/message_user.py`
 
-_No module-level docstring found._
+A simple, local simulation of the `message_user` tool.
+
+In a real agent execution environment, the `message_user` tool would be a
+special function provided by the environment to communicate with the end-user.
+This script provides a lightweight, standalone equivalent for local testing
+and development.
+
+Its sole purpose is to take a string as a command-line argument and print it
+to standard output, prefixed with "[Message User]:". This allows developers to
+test plans and scripts that involve user communication without needing the full
+agent framework.
 
 
 **Public Functions:**
 
 
 - #### `def main()`
-
-  > A dummy tool that prints its arguments.
-  > This is to simulate the message_user tool for testing purposes.
 
 
 ### `/app/tooling/pages_generator.py`
@@ -940,7 +1055,20 @@ allowing for robust and readable plan files.
 
 ### `/app/tooling/plan_registry_auditor.py`
 
-_No module-level docstring found._
+A command-line tool to audit the Plan Registry for broken links.
+
+This script is the reference implementation for the `plan-registry-audit-001`
+protocol. Its purpose is to ensure the integrity of the hierarchical planning
+system by verifying the `knowledge_core/plan_registry.json` file.
+
+The Plan Registry maps logical, human-readable names to the file paths of
+reusable plans. This auditor reads the registry and checks every entry to
+confirm that the specified file path points to an actual, existing file.
+
+It prints a report to the console, listing all valid entries and flagging any
+"dead links" where the target file is missing. This allows for quick diagnosis
+and correction of the plan library, preventing runtime errors when the agent
+tries to execute a plan that no longer exists.
 
 
 **Public Functions:**
@@ -1129,7 +1257,27 @@ directory, performing targeted updates based on command-line arguments.
 
 ### `/app/tooling/readme_generator.py`
 
-_No module-level docstring found._
+A documentation generator that creates a module's README.md file.
+
+This script is a key component of the "documentation as code" pipeline. It
+automates the creation of a `README.md` file by dynamically combining content
+from both machine-readable protocols and Python source code docstrings.
+
+The generation process is as follows:
+1.  **Parse `AGENTS.md`:** It reads the module's `AGENTS.md` file and extracts
+    the `protocol_id` and `description` from every JSON protocol block to create
+    a summary of the module's core protocols.
+2.  **Parse Source Code:** It scans the module's `tooling/` subdirectory for all
+    Python (`.py`) files. For each file, it parses the Abstract Syntax Tree (AST)
+    to extract the module-level docstring.
+3.  **Inject into Template:** It takes the generated protocol summaries and the
+    extracted docstrings and injects them into a static Markdown template.
+4.  **Write `README.md`:** The final, combined content is written to the
+    `README.md` file in the same directory.
+
+This ensures that the high-level `README.md` documentation always stays
+synchronized with the ground-truth definitions in the `AGENTS.md` protocols and
+the inline documentation within the tools themselves.
 
 
 **Public Functions:**
@@ -1158,7 +1306,30 @@ _No module-level docstring found._
 
 ### `/app/tooling/refactor.py`
 
-_No module-level docstring found._
+A command-line tool for automated, plan-based code refactoring.
+
+This script provides a safe and repeatable way to perform common refactoring
+tasks, such as renaming a symbol, across the entire codebase. It is the
+reference implementation for the `refactor-001` protocol.
+
+The tool operates by generating a detailed, executable plan file that the
+agent's master controller can then execute. This decouples the analysis of the
+refactoring from its execution.
+
+Workflow for renaming a symbol:
+1.  **AST-based Definition Finding:** It first parses the source file using
+    Python's Abstract Syntax Tree (AST) to reliably locate the precise
+    definition of the target function or class. This avoids the ambiguity of
+    simple text searches.
+2.  **Reference Searching:** It then searches the entire repository to find all
+    files that contain the old symbol name, creating a list of potential
+    references.
+3.  **Plan Generation:** For each file that contains the old name, it generates a
+    `replace_with_git_merge_diff` command. This command is a highly-specific
+    search-and-replace that will substitute the old name for the new one.
+4.  **Plan Output:** All generated commands are written to a single `.plan.txt`
+    file. The script outputs the path to this file, which can then be passed to
+    the agent's execution engine.
 
 
 **Public Functions:**
@@ -1389,7 +1560,27 @@ rate tracking or tool usage anti-patterns) to be added as the system evolves.
 
 ### `/app/tooling/standard_agents_compiler.py`
 
-_No module-level docstring found._
+A compiler that generates a simplified, standard-compliant `AGENTS.md` file.
+
+This script acts as an "adapter" to make the repository more accessible to
+third-party AI agents that expect a conventional set of instructions. While the
+repository's primary `AGENTS.md` is a complex, hierarchical, and
+machine-readable artifact for its own specialized agent, the `AGENTS.standard.md`
+file produced by this script offers a simple, human-readable summary of the
+most common development commands.
+
+The script works by:
+1.  **Parsing the Makefile:** It dynamically parses the project's `Makefile`,
+    which is the single source of truth for high-level commands. It specifically
+    extracts the exact commands for common targets like `install`, `test`,
+    `lint`, and `format`. This ensures the generated instructions are never
+    stale.
+2.  **Injecting into a Template:** It injects these extracted commands into a
+    pre-defined, user-friendly Markdown template.
+3.  **Generating the Artifact:** The final output is written to
+    `AGENTS.standard.md`, providing a simple, stable, and conventional entry
+    point for external tools, effectively bridging the gap between the complex
+    internal protocol system and the broader agent ecosystem.
 
 
 **Public Functions:**

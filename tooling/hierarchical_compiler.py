@@ -1,3 +1,38 @@
+"""
+A two-pass compiler for building hierarchical agent protocol documentation.
+
+This script is the master engine for the "protocol as code" architecture. It
+orchestrates the compilation of `AGENTS.md` and `README.md` files across a
+nested directory structure and generates a unified, repository-wide knowledge
+graph of all defined protocols.
+
+The process works in two main passes:
+
+**Pass 1: Hierarchical Documentation Build**
+1.  **Discovery:** It recursively finds all directories named `protocols`,
+    starting from the most deeply nested ones and working its way up to the root.
+2.  **Child-First Compilation:** For each `protocols` directory, it invokes the
+    `protocol_compiler.py` and `readme_generator.py` scripts to build the
+    `AGENTS.md` and `README.md` for that specific module.
+3.  **Summary Injection:** After a child module is built, the script extracts the
+    full, rendered text of its protocols from its `AGENTS.md`. It then injects
+    this text into a temporary file within the parent's `protocols` directory.
+4.  **Parent Compilation:** The parent module is then compiled. Its `AGENTS.md`
+    now seamlessly includes the complete, unabridged protocols of all its
+    children, creating a single, comprehensive `AGENTS.md` at each level of the
+    hierarchy.
+
+**Pass 2: Centralized Knowledge Graph Compilation**
+1.  **Discovery:** The script finds every `*.protocol.json` file in the entire
+    repository.
+2.  **Validation & Aggregation:** It validates each file against the master
+    `protocol.schema.json`.
+3.  **RDF Generation:** It uses `rdflib` to parse all validated JSON-LD protocol
+    definitions into a single RDF graph.
+4.  **Serialization:** The final, unified graph is serialized to
+    `knowledge_core/protocols.ttl`, creating a machine-queryable single source
+    of truth for all agent protocols in the repository.
+"""
 import os
 import sys
 import json

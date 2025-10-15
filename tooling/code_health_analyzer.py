@@ -1,3 +1,22 @@
+"""
+Audits the Plan Registry for dead links and generates a corrective plan.
+
+This script scans the `knowledge_core/plan_registry.json` file, which maps
+logical plan names to their file paths. It checks if each file path in the
+registry points to an existing file.
+
+If any "dead links" (entries pointing to non-existent files) are found,
+this script will:
+1.  Identify the invalid entries.
+2.  Generate a new, corrected version of the plan registry with the dead links
+    removed.
+3.  Print a complete, executable plan to the console. This plan uses the
+    `overwrite_file_with_block` command to replace the old registry with the
+    new, corrected version.
+
+This provides a semi-automated way to maintain the integrity of the Plan
+Registry, a key component of the hierarchical planning system.
+"""
 import json
 import os
 

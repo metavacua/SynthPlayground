@@ -1,3 +1,19 @@
+"""
+A command-line tool to audit the Plan Registry for broken links.
+
+This script is the reference implementation for the `plan-registry-audit-001`
+protocol. Its purpose is to ensure the integrity of the hierarchical planning
+system by verifying the `knowledge_core/plan_registry.json` file.
+
+The Plan Registry maps logical, human-readable names to the file paths of
+reusable plans. This auditor reads the registry and checks every entry to
+confirm that the specified file path points to an actual, existing file.
+
+It prints a report to the console, listing all valid entries and flagging any
+"dead links" where the target file is missing. This allows for quick diagnosis
+and correction of the plan library, preventing runtime errors when the agent
+tries to execute a plan that no longer exists.
+"""
 import json
 import os
 import argparse
