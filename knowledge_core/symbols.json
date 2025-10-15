@@ -362,28 +362,37 @@
     },
     {
       "_type": "tag",
+      "name": "get_productions_dict",
+      "path": "./language_theory/toolchain/grammar.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function",
+      "docstring": "Returns productions grouped by LHS, for parser use."
+    },
+    {
+      "_type": "tag",
       "name": "get_non_terminals",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 35,
+      "line": 41,
       "kind": "function",
-      "docstring": "Returns the set of non-terminal symbols."
+      "docstring": "Returns the set of all non-terminal symbols."
     },
     {
       "_type": "tag",
       "name": "get_terminals",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 45,
+      "line": 53,
       "kind": "function",
-      "docstring": "Returns the set of terminal symbols."
+      "docstring": "Returns the set of all terminal symbols."
     },
     {
       "_type": "tag",
       "name": "__str__",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 55,
+      "line": 63,
       "kind": "function",
       "docstring": null
     },
