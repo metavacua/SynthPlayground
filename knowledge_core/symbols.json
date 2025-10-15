@@ -1553,7 +1553,7 @@
       "name": "install_dependencies",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 39,
+      "line": 43,
       "kind": "function",
       "docstring": "Checks for required packages from requirements.txt and installs them if missing."
     },
@@ -1562,16 +1562,25 @@
       "name": "load_schema",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 111,
+      "line": 115,
       "kind": "function",
       "docstring": "Loads the protocol JSON schema."
+    },
+    {
+      "_type": "tag",
+      "name": "sanitize_markdown",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 128,
+      "kind": "function",
+      "docstring": "Sanitizes markdown content to remove potentially malicious instructions.\nThis function removes script tags and other potentially malicious HTML/JS."
     },
     {
       "_type": "tag",
       "name": "compile_protocols",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 124,
+      "line": 142,
       "kind": "function",
       "docstring": "Reads all .protocol.json and corresponding .protocol.md files from the\nsource directory, validates them, and compiles them into a target markdown file.\nOptionally, it can also generate a machine-readable knowledge graph."
     },
@@ -1580,9 +1589,27 @@
       "name": "main_cli",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 274,
+      "line": 294,
       "kind": "function",
       "docstring": "Main function to run the compiler from the command line."
+    },
+    {
+      "_type": "tag",
+      "name": "ProtocolChangeHandler",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 352,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "on_any_event",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 353,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",

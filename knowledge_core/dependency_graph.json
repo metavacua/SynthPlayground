@@ -94,6 +94,11 @@
       "id": "pypdf",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "watchdog",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
@@ -176,6 +181,10 @@
     {
       "source": "tooling",
       "target": "requests"
+    },
+    {
+      "source": "tooling",
+      "target": "watchdog"
     }
   ]
 }
