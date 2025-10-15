@@ -1,9 +1,12 @@
-let result = agent.call_tool("hdl_prover", "A, A -> B |- B");
+// integration_demo.aura
 
-if result {
-    print("Sequent is provable!");
-} else {
-    print("Sequent is not provable.");
-}
+// 1. Create a simple proof in Intuitionistic Logic (LJ)
+// We create an axiom proof of 'A'
+let axiom_proof = agent.call_tool("lj.axiom", "A");
 
-agent.call_tool("message_user", "Integration demo complete!");
+// 2. Translate the proof from LJ to Classical Logic (LK)
+// This will now return a JSON object representing the proof
+let translated_proof_json = agent.call_tool("diagram.translate", axiom_proof, "LJ", "LK");
+
+// 3. Print the translated proof JSON
+print(translated_proof_json);

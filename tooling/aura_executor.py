@@ -70,23 +70,65 @@ def main():
         with open(args.filepath, 'r') as f:
             script_content = f.read()
     except FileNotFoundError:
-        print(f"Error: File not found at {args.filepath}", file=sys.stderr)
-        sys.exit(1)
+        print(f"Error: File not found at {args.filepath}")
+        return
 
-    # Directly replace the function in the interpreter's BUILTINS object.
-    # This is the most reliable way to ensure the correct function is called.
-    interpreter.BUILTINS["agent"].call_tool.fn = dynamic_agent_call_tool
+    print(f"Executing Aura script: {args.filepath}")
+    l = lexer.Lexer(source_code)
+    p = parser.Parser(l)
+    program = p.parse_program()
 
-    lexer = Lexer(script_content)
-    parser = Parser(lexer)
-    program = parser.parse_program()
+    if p.errors:
+        for error in p.errors:
+            print(f"Parser error: {error}")
+        return
 
-    if parser.errors:
-        for error in parser.errors:
-            print(f"Parser Error: {error}", file=sys.stderr)
-        sys.exit(1)
+    # --- Tooling and Execution Environment ---
+    from aura_lang import interpreter
+    from tooling import hdl_prover # Import the tool we want to expose
+    from logic_system.src import diagram, lj, formulas, proof
 
-    # Create a global environment for the script
+    # --- Tooling and Execution Environment ---
+
+    def dynamic_agent_call_tool(tool_name, *args):
+        """
+        Dynamically calls an agent tool and wraps the result in an Aura object.
+        """
+        print(f"[Aura Executor]: Received call for tool '{tool_name}' with args {args}")
+        try:
+            # For simplicity, we'll use a hardcoded map.
+            # A real implementation would use a more dynamic discovery mechanism.
+            if tool_name == "hdl_prover.prove_sequent":
+                result = hdl_prover.prove_sequent(args[0])
+                return interpreter.Object(result)
+            elif tool_name == "environmental_probe.probe_network":
+                from tooling import environmental_probe
+                result = environmental_probe.probe_network()
+                return interpreter.Object(result)
+            elif tool_name == "diagram.translate":
+                # Expects: proof_obj, start_logic_str, end_logic_str
+                proof_obj, start_logic_str, end_logic_str = args
+
+                # Convert string representations of logics to Enum members
+                start_logic = diagram.Logic[start_logic_str]
+                end_logic = diagram.Logic[end_logic_str]
+
+                d = diagram.Diagram()
+                translated_proof = d.translate(proof_obj, start_logic, end_logic)
+                return interpreter.Object(translated_proof.to_dict())
+            elif tool_name == "lj.axiom":
+                prop_name = args[0]
+                prop = formulas.Prop(prop_name)
+                axiom_proof = lj.axiom(prop)
+                return interpreter.Object(axiom_proof)
+            else:
+                print(f"Error: Tool '{tool_name}' not found.")
+                return interpreter.Object(None)
+        except Exception as e:
+            print(f"Error executing tool '{tool_name}': {e}")
+            return interpreter.Object(None)
+
+    # --- Execute the Program ---
     env = interpreter.Environment()
 
     # Execute the script
