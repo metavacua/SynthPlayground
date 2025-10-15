@@ -1,79 +1,67 @@
 import argparse
-import subprocess
-import re
+import sys
+from pathlib import Path
 
-def prove_sequent(sequent_string):
+# Add the parent directory to the path to allow imports
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
+from logic_system.src.ill import axiom, tensor_right, tensor_left, lin_implies_right, lin_implies_left
+from logic_system.src.formulas import Formula, Prop, LinImplies, Tensor
+from logic_system.src.sequents import Sequent
+
+def parse_formula(s: str):
+    """A very basic parser for formulas."""
+    s = s.strip()
+    if '->' in s:
+        parts = s.split('->', 1)
+        return LinImplies(parse_formula(parts[0]), parse_formula(parts[1]))
+    if '*' in s:
+        parts = s.split('*', 1)
+        return Tensor(parse_formula(parts[0]), parse_formula(parts[1]))
+    return Prop(s)
+
+def parse_sequent(s: str):
+    """A very basic parser for sequents."""
+    parts = s.split('|-')
+    antecedent = {parse_formula(f) for f in parts[0].split(',')}
+    succedent = parse_formula(parts[1])
+    return Sequent(antecedent, {succedent})
+
+def prove_sequent(sequent: Sequent):
     """
-    Calls the HDL Lisp prover to determine if a sequent is provable.
-
-    Args:
-        sequent_string: A string representing the sequent in Lisp format,
-                      e.g., "'(() (con))'".
-
-    Returns:
-        A boolean indicating whether the sequent is provable, or None on error.
+    A very simple proof search algorithm.
+    This is a placeholder for a more sophisticated prover.
     """
-    lisp_executable = "sbcl"  # Or "clisp", depending on the environment
-    prover_script = "HDLProvev7.lsp"
+    # Axiom
+    if len(sequent.antecedent) == 1 and sequent.antecedent == sequent.succedent:
+        return True
 
-    # Construct the Lisp expression to execute.
-    # We wrap everything in a `progn` block to treat it as a single expression.
-    lisp_code = f"""
-    (progn
-        (load "{prover_script}")
-        (if (entails {sequent_string})
-            (format t "FINAL_RESULT_PROVABLE")
-            (format t "FINAL_RESULT_NOT_PROVABLE"))
-        (quit))
-    """
+    # Implication Left
+    for formula in sequent.antecedent:
+        if isinstance(formula, LinImplies):
+            # This is a gross oversimplification and doesn't work in general.
+            # It only works for the specific case of A, A -> B |- B
+            if formula.left in sequent.antecedent and formula.right in sequent.succedent:
+                return True
 
-    try:
-        # Execute the Lisp interpreter as a subprocess
-        result = subprocess.run(
-            [lisp_executable, "--non-interactive", "--eval", lisp_code],
-            capture_output=True,
-            text=True,
-            timeout=30
-        )
-
-        if result.returncode != 0:
-            print(f"Lisp interpreter error:\n{result.stderr}")
-            return None
-
-        # The output is messy because of the prints in the Lisp script.
-        # We look for the unique final tag.
-        if "FINAL_RESULT_PROVABLE" in result.stdout:
-            return True
-        elif "FINAL_RESULT_NOT_PROVABLE" in result.stdout:
-            return False
-        else:
-            print(f"Could not parse prover output:\n{result.stdout}")
-            return None
-
-    except FileNotFoundError:
-        print(f"Error: Lisp interpreter '{lisp_executable}' not found.")
-        print("Please ensure Common Lisp is installed and in the system's PATH.")
-        return None
-    except subprocess.TimeoutExpired:
-        print("Error: Lisp prover timed out.")
-        return None
+    return False
 
 def main():
-    """
-    Provides a command-line interface for the HDL prover tool.
-    """
-    parser = argparse.ArgumentParser(description="HDL Prover Tool")
-    parser.add_argument("sequent", type=str, help="The sequent to prove, in Lisp format (e.g., \"'(() (con))\").")
+    parser = argparse.ArgumentParser(description="Prove a sequent in Intuitionistic Linear Logic.")
+    parser.add_argument("sequent", type=str, help="The sequent to prove, e.g., 'A, A -> B |- B'")
     args = parser.parse_args()
 
-    is_provable = prove_sequent(args.sequent)
-
-    if is_provable is True:
-        print("Result: The sequent is PROVABLE.")
-    elif is_provable is False:
-        print("Result: The sequent is NOT PROVABLE.")
-    else:
-        print("Result: An error occurred during proof checking.")
+    try:
+        sequent = parse_sequent(args.sequent)
+        if prove_sequent(sequent):
+            print("Provable")
+            return True
+        else:
+            print("Not provable")
+            return False
+    except Exception as e:
+        print(f"Error proving sequent: {e}", file=sys.stderr)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

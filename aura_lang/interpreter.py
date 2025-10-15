@@ -33,16 +33,23 @@ class Environment:
 
 # --- Agent Tooling Bridge ---
 
-def agent_call_tool(tool_name, **kwargs):
+# --- Agent Tooling Bridge ---
+
+def _placeholder_agent_call_tool(tool_name, *args):
     """
     Placeholder for calling the agent's real tools.
     This will be replaced by a real implementation provided by the executor.
     """
-    print(f"[Aura Interpreter]: Tool call to '{tool_name}' with args {kwargs} is not yet implemented.")
+    print(f"[Aura Interpreter]: Tool call to '{tool_name}' with args {args} is not yet implemented.")
     if tool_name == "hdl_prover.prove_sequent":
         # Return a mock value for now
         return True
     return None
+
+# This can be overwritten by the executor.
+# By default, it's a placeholder. The aura_executor.py script
+# will replace this with a real implementation.
+agent_call_tool = _placeholder_agent_call_tool
 
 # --- Interpreter ---
 
@@ -153,7 +160,13 @@ def apply_function(fn, args):
     elif isinstance(fn, Builtin):
         unwrapped_args = [a.value for a in args]
         # The built-in function is now expected to return an Object
-        return fn.fn(*unwrapped_args)
+        # The first argument to the tool is the tool name, so we pass that separately.
+        tool_name = unwrapped_args[0]
+        tool_args = unwrapped_args[1:]
+        result = fn.fn(tool_name, *tool_args)
+        if isinstance(result, bool):
+            return Object(result)
+        return result
 
 class Agent(Object):
     def __init__(self):
