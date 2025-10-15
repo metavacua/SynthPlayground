@@ -111,11 +111,7 @@ def main():
         new_content = original_content.replace(args.old_name, args.new_name)
 
         diff_content = f"""\
-<<<<<<< SEARCH
 {original_content}
-=======
-{new_content}
->>>>>>> REPLACE
 """
         plan_content += f"""\
 replace_with_git_merge_diff

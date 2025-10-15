@@ -171,6 +171,10 @@
       "target": "pypdf"
     },
     {
+      "source": "root-python-project",
+      "target": "watchdog"
+    },
+    {
       "source": "tooling",
       "target": "jsonschema"
     },

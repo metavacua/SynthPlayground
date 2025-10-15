@@ -53,7 +53,10 @@ def execute_build(target_name, config):
 
     target_config = config["targets"][target_name]
     compiler_path = os.path.join(ROOT_DIR, target_config["compiler"])
-    output_path = os.path.join(ROOT_DIR, target_config["output"])
+
+    output_path = None
+    if "output" in target_config:
+        output_path = os.path.join(ROOT_DIR, target_config["output"])
 
     command = ["python3", compiler_path]
 
@@ -64,11 +67,17 @@ def execute_build(target_name, config):
     elif target_name == "readme":
         # The readme generator takes a single source file.
         source_file = os.path.join(ROOT_DIR, target_config["sources"][0])
-        command.extend(["--source-file", source_file, "--output-file", output_path])
-    else:
+        command.extend(["--source-file", source_file])
+        if output_path:
+            command.extend(["--output-file", output_path])
+    elif "sources" in target_config:
         # Most compilers take a source directory.
         source_dir = os.path.join(ROOT_DIR, target_config["sources"][0])
-        command.extend(["--source-dir", source_dir, "--output-file", output_path])
+        command.extend(["--source-dir", source_dir])
+        if output_path:
+            command.extend(["--output-file", output_path])
+
+
 
     # Add any additional command-line options
     if "options" in target_config:
