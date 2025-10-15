@@ -1073,6 +1073,24 @@
     },
     {
       "_type": "tag",
+      "name": "run_command",
+      "path": "./tooling/pre_submit_check.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Runs a command and exits if it fails."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/pre_submit_check.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function",
+      "docstring": "Main function to run pre-submission checks."
+    },
+    {
+      "_type": "tag",
       "name": "find_protocol_dirs",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
