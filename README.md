@@ -14,6 +14,9 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
 - **`agent-shell-001`**: A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.
 - **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
+- **`aura-execution-001`**: A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.
+- **`doc-audit-001`**: A protocol to ensure the completeness of system documentation.
+- **`hdl-proving-001`**: A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.
 - **`agent-interaction-001`**: A protocol governing the agent's core interaction and planning tools.
 - **`plan-registry-audit-001`**: A protocol for using the plan registry auditor tool to ensure the integrity of the plan registry.
 - **`refactor-001`**: A protocol for using the refactoring tool.
@@ -28,6 +31,10 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`tooling/agent_shell.py`**:
 
   > The new, interactive, API-driven entry point for the agent.\n  > \n  > This script replaces the old file-based signaling system with a direct,\n  > programmatic interface to the MasterControlGraph FSM. It is responsible for:\n  > 1.  Initializing the agent's state and a centralized logger.\n  > 2.  Instantiating and running the MasterControlGraph.\n  > 3.  Driving the FSM by calling its methods and passing data and the logger.\n  > 4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans\n  >     and respond to requests for action.
+
+- **`tooling/aura_executor.py`**:
+
+  > This script serves as the command-line executor for `.aura` files.\n  > \n  > It bridges the gap between the high-level Aura scripting language and the\n  > agent's underlying Python-based toolset. The executor is responsible for:\n  > 1.  Parsing the `.aura` source code using the lexer and parser from the\n  >     `aura_lang` package.\n  > 2.  Setting up an execution environment for the interpreter.\n  > 3.  Injecting a "tool-calling" capability into the Aura environment, which\n  >     allows Aura scripts to dynamically invoke registered Python tools\n  >     (e.g., `hdl_prover`, `environmental_probe`).\n  > 4.  Executing the parsed program and printing the final result.\n  > \n  > This makes it a key component for enabling more expressive and complex\n  > automation scripts for the agent.
 
 - **`tooling/background_researcher.py`**:
 
@@ -53,6 +60,10 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
   > Scans the repository for dependency files and generates a unified dependency graph.\n  > \n  > This script is a crucial component of the agent's environmental awareness,\n  > providing a clear map of the software supply chain. It recursively searches the\n  > entire repository for common dependency management files, specifically:\n  > - `package.json` (for JavaScript/Node.js projects)\n  > - `requirements.txt` (for Python projects)\n  > \n  > It parses these files to identify two key types of relationships:\n  > 1.  **Internal Dependencies:** Links between different projects within this repository.\n  > 2.  **External Dependencies:** Links to third-party libraries and packages.\n  > \n  > The final output is a JSON file, `knowledge_core/dependency_graph.json`, which\n  > represents these relationships as a graph structure with nodes (projects and\n  > dependencies) and edges (the dependency links). This artifact is a primary\n  > input for the agent's orientation and planning phases, allowing it to reason\n  > about the potential impact of its changes.
 
+- **`tooling/doc_auditor.py`**:
+
+  > This script provides a tool for auditing the completeness of the system documentation.\n  > \n  > It scans the generated `SYSTEM_DOCUMENTATION.md` file and searches for a specific\n  > pattern: a module header followed immediately by the text "_No module-level\n  > docstring found._". This pattern indicates that the `doc_generator.py` script\n  > was unable to find a docstring for that particular Python module.\n  > \n  > The auditor then prints a list of all such files, providing a clear and\n  > actionable report of which modules require documentation. This is a key tool for\n  > maintaining code health and ensuring that the agent's knowledge base is complete.
+
 - **`tooling/doc_generator.py`**:
 
   > Generates detailed system documentation from Python source files.\n  > \n  > This script scans specified directories for Python files, parses their\n  > Abstract Syntax Trees (ASTs), and extracts documentation for the module,\n  > classes, and functions. The output is a structured Markdown file.\n  > \n  > This is a key component of the project's self-documentation capabilities,\n  > powering the `SYSTEM_DOCUMENTATION.md` artifact in the `knowledge_core`.\n  > \n  > The script is configured via top-level constants:\n  > - `SCAN_DIRECTORIES`: A list of directories to search for .py files.\n  > - `OUTPUT_FILE`: The path where the final Markdown file will be written.\n  > - `DOC_TITLE`: The main title for the generated documentation file.\n  > \n  > It uses Python's `ast` module to reliably parse source files without\n  > importing them, which avoids issues with dependencies or script side-effects.
@@ -67,11 +78,15 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/fdc_cli.py`**:
 
-  > _No docstring found._
+  > This script provides a command-line interface (CLI) for managing the Finite\n  > Development Cycle (FDC).\n  > \n  > The FDC is a structured workflow for agent-driven software development. This CLI\n  > is the primary human interface for interacting with that cycle, providing\n  > commands to:\n  > - **start:** Initiates a new development task, triggering the "Advanced\n  >   Orientation and Research Protocol" (AORP) to ensure the agent is fully\n  >   contextualized.\n  > - **close:** Formally concludes a task, creating a post-mortem template for\n  >   analysis and lesson-learning.\n  > - **validate:** Checks a given plan file for both syntactic and semantic\n  >   correctness against the FDC's governing Finite State Machine (FSM). This\n  >   ensures that a plan is executable and will not violate protocol.\n  > - **analyze:** Examines a plan to determine its computational complexity (e.g.,\n  >   Constant, Polynomial, Exponential) and its modality (Read-Only vs.\n  >   Read-Write), providing insight into the plan's potential impact.
 
 - **`tooling/generate_docs.py`**:
 
   > This script generates comprehensive Markdown documentation for the agent's\n  > architecture, including the FSM, the agent shell, and the master control script.
+
+- **`tooling/hdl_prover.py`**:
+
+  > _No docstring found._
 
 - **`tooling/hierarchical_compiler.py`**:
 

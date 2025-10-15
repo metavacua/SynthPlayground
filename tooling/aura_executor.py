@@ -1,23 +1,74 @@
+"""
+This script serves as the command-line executor for `.aura` files.
+
+It bridges the gap between the high-level Aura scripting language and the
+agent's underlying Python-based toolset. The executor is responsible for:
+1.  Parsing the `.aura` source code using the lexer and parser from the
+    `aura_lang` package.
+2.  Setting up an execution environment for the interpreter.
+3.  Injecting a "tool-calling" capability into the Aura environment, which
+    allows Aura scripts to dynamically invoke registered Python tools
+    (e.g., `hdl_prover`, `environmental_probe`).
+4.  Executing the parsed program and printing the final result.
+
+This makes it a key component for enabling more expressive and complex
+automation scripts for the agent.
+"""
 import argparse
 import sys
-import os
+from pathlib import Path
 
-# Add the project root to the Python path to allow imports from aura_lang
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# Add the parent directory to the path to allow imports from aura_lang
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from aura_lang import lexer, parser
+import importlib
+
+from aura_lang.lexer import Lexer
+from aura_lang.parser import Parser
+import aura_lang.interpreter as interpreter
+
+def dynamic_agent_call_tool(tool_name, *args):
+    """
+    Dynamically imports and calls a tool from the 'tooling' directory.
+    Tool name should be the module name, without .py.
+    """
+    try:
+        # Sanitize the tool_name to prevent directory traversal
+        if '..' in tool_name or '/' in tool_name or '.py' in tool_name:
+            raise ValueError("Invalid tool name. Should be module name without path or extension.")
+
+        module_name = f"tooling.{tool_name}"
+        func_name = "main"
+        tool_module = importlib.import_module(module_name)
+        tool_func = getattr(tool_module, func_name)
+
+        original_argv = sys.argv
+        sys.argv = [f"tooling/{tool_name}.py"] + list(args)
+
+        print(f"[Aura Executor]: Calling tool '{tool_name}' with args {args}...")
+        result = tool_func()
+
+        sys.argv = original_argv
+        return result
+    except (ModuleNotFoundError, AttributeError) as e:
+        print(f"Error calling tool '{tool_name}': {e}", file=sys.stderr)
+        return None
+    except Exception as e:
+        print(f"An unexpected error occurred when calling tool '{tool_name}': {e}", file=sys.stderr)
+        return None
+
 
 def main():
     """
-    Parses and executes an Aura script.
+    Main entry point for the Aura script executor.
     """
-    arg_parser = argparse.ArgumentParser(description="Aura Executor")
-    arg_parser.add_argument("filepath", type=str, help="Path to the .aura file to execute.")
-    args = arg_parser.parse_args()
+    parser = argparse.ArgumentParser(description="Execute an Aura script.")
+    parser.add_argument("filepath", type=str, help="The path to the .aura script file.")
+    args = parser.parse_args()
 
     try:
-        with open(args.filepath, "r") as f:
-            source_code = f.read()
+        with open(args.filepath, 'r') as f:
+            script_content = f.read()
     except FileNotFoundError:
         print(f"Error: File not found at {args.filepath}")
         return
@@ -79,18 +130,9 @@ def main():
 
     # --- Execute the Program ---
     env = interpreter.Environment()
-    # Manually load built-ins into the environment for now.
-    for key, value in interpreter.BUILTINS.items():
-        env.set(key, value)
 
-    # Inject the real tool-calling function into the interpreter's context
-    # by replacing the placeholder on the agent object.
-    agent_obj = env.get("agent")
-    agent_obj.call_tool = interpreter.Builtin(dynamic_agent_call_tool)
-
-    print("Starting execution...")
-    result = interpreter.evaluate(program, env)
-    print(f"Execution finished. Final result: {result}")
+    # Execute the script
+    interpreter.evaluate(program, env)
 
 if __name__ == "__main__":
     main()

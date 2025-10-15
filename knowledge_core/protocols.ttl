@@ -146,9 +146,21 @@
     proto:hasRule <file:///app/protocols/shell-is-primary-entry-point> ;
     schema:description "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks." .
 
+<file:///app/protocols/aura-execution-001> proto:associatedTool <file:///app/protocols/tooling/aura_executor.py> ;
+    proto:hasRule <file:///app/protocols/execute-aura-script> ;
+    schema:description "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent." .
+
 <file:///app/protocols/dependency-management-001> proto:associatedTool <file:///app/protocols/run_in_bash_session> ;
     proto:hasRule <file:///app/protocols/dependency-install-on-start> ;
     schema:description "A protocol for ensuring a reliable execution environment through formal dependency management." .
+
+<file:///app/protocols/doc-audit-001> proto:associatedTool <file:///app/protocols/tooling/doc_auditor.py> ;
+    proto:hasRule <file:///app/protocols/audit-for-missing-docstrings> ;
+    schema:description "A protocol to ensure the completeness of system documentation." .
+
+<file:///app/protocols/hdl-proving-001> proto:associatedTool <file:///app/protocols/tooling/hdl_prover.py> ;
+    proto:hasRule <file:///app/protocols/prove-sequent> ;
+    schema:description "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs." .
 
 <file:///app/protocols/plan-registry-audit-001> proto:associatedTool <file:///app/protocols/tooling/plan_registry_auditor.py> ;
     proto:hasRule <file:///app/protocols/audit-for-dead-links> ;
@@ -328,6 +340,9 @@
 <file:///app/protocols/audit-for-dead-links> proto:enforcement "The tool is used by invoking it from the command line. It can be run manually for diagnostics or integrated into automated health checks." ;
     schema:description "The `plan_registry_auditor.py` tool should be used to scan the `knowledge_core/plan_registry.json` file for entries that point to non-existent plan files. This helps maintain the health of the hierarchical planning system." .
 
+<file:///app/protocols/audit-for-missing-docstrings> proto:enforcement "This check should be performed by running `make audit-docs`. This can be done periodically or as part of a pre-commit workflow." ;
+    schema:description "A check for missing module-level docstrings must be performed to ensure documentation completeness. All modules should have comprehensive documentation to aid agents and human users." .
+
 <file:///app/protocols/bootstrap-load-agents-md> proto:enforcement "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase." ;
     schema:description "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins." .
 
@@ -337,6 +352,9 @@
 <file:///app/protocols/dependency-install-on-start> proto:enforcement "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions." ;
     schema:description "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed." .
 
+<file:///app/protocols/execute-aura-script> proto:enforcement "The tool is used by invoking it from the command line with the path to the Aura script as an argument." ;
+    schema:description "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter." .
+
 <file:///app/protocols/formal-proposal-required> proto:enforcement "The initial plan for any speculative task must include a step to generate and save a proposal artifact." ;
     schema:description "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan." .
 
@@ -345,6 +363,9 @@
 
 <file:///app/protocols/planning-tool-access> proto:enforcement "The agent's core logic should be designed to use this tool for all planning activities." ;
     schema:description "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution." .
+
+<file:///app/protocols/prove-sequent> proto:enforcement "The tool is used by invoking it from the command line with the sequent to be proved as an argument." ;
+    schema:description "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover." .
 
 <file:///app/protocols/refactor-rename-symbol> proto:enforcement "The tool is used by invoking it from the command line with the appropriate arguments. The agent should use this tool when a refactoring task is requested." ;
     schema:description "The `refactor.py` tool can be used to rename a symbol and all of its references." .
