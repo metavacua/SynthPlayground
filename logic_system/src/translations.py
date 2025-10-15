@@ -66,13 +66,13 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
         right_premise = lj_to_ill_proof(premises[1])
         formula = conclusion.succedent_formula
         formula_star = translate_formula_lj_to_ill(formula)
-        return ill.with_right(left_premise, right_premise, formula_star)
+        return ill.with_right(left_premise, right_premise)
 
     elif rule_name == "∧-L":
         premise = lj_to_ill_proof(premises[0])
         formula = And(premises[0].conclusion.antecedent.elements()[0], premises[0].conclusion.antecedent.elements()[1])
         formula_star = translate_formula_lj_to_ill(formula)
-        return ill.with_left(premise, formula_star, formula_star.left)
+        return ill.with_left_1(premise, formula_star)
 
     elif rule_name == "∨-R":
         premise = lj_to_ill_proof(premises[0])
@@ -98,19 +98,18 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
         return ill.of_course_right(proof)
 
     elif rule_name == "→-L":
-        left_premise = lj_to_ill_proof(premises[0]) # !Γ* ⊢ A*
-        right_premise = lj_to_ill_proof(premises[1]) # !B*, !Δ* ⊢ C*
+        left_premise = lj_to_ill_proof(premises[0])
+        right_premise = lj_to_ill_proof(premises[1])
 
-        implication = conclusion.antecedent.elements()[0]
+        implication = [f for f in conclusion.antecedent if isinstance(f, Implies)][0]
         implication_star = translate_formula_lj_to_ill(implication)
 
         goal_succedent = right_premise.conclusion.succedent_formula
-        goal_antecedent = left_premise.conclusion.antecedent + right_premise.conclusion.antecedent - Counter([OfCourse(implication.right)]) + Counter([implication_star])
+        goal_antecedent = left_premise.conclusion.antecedent + (right_premise.conclusion.antecedent - Counter([translate_formula_lj_to_ill(implication.right)])) + Counter([implication_star])
         goal = ill.ILLSequent(goal_antecedent, goal_succedent)
 
         # Use the synthesizer to find the proof
         return ill_synthesizer.synthesize(goal)
-
 
     elif rule_name == "¬-L":
         premise = lj_to_ill_proof(premises[0])
