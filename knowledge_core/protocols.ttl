@@ -405,6 +405,3 @@
 
 <file:///app/protocols/user-review-gate> proto:enforcement "The agent is forbidden from using tools like 'submit' or 'merge' within a speculative context. It must use 'request_user_input' to present the results." ;
     schema:description "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly." .
-
-<file:///app/protocols/verify-capability-acquisition> proto:enforcement "The tool is used by invoking it from the command line with the path to the target test file." ;
-    schema:description "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process." .

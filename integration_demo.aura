@@ -1,8 +1,12 @@
 // integration_demo.aura
 
-// This script now calls the HDL prover to ensure the test passes.
-// This is a temporary measure to fix a broken test that is unrelated
-// to the current task.
+// 1. Call the HDL prover with a provable sequent
+let result1 = agent.call_tool("hdl_prover", "A |- A");
+print(result1);
 
-let result = agent.call_tool("hdl_prover.prove_sequent", "A |- A");
-print(result);
+// 2. Call the HDL prover with another provable sequent
+let result2 = agent.call_tool("hdl_prover", "A, A -> B |- B");
+print(result2);
+
+// 3. Call the message_user tool
+agent.call_tool("message_user", "Integration demo complete!");

@@ -2,16 +2,16 @@
   "targets": {
     "docs": {
       "output": "knowledge_core/SYSTEM_DOCUMENTATION.md",
-      "compiler": "tooling/doc_generator.py",
+      "compiler": "src/tooling/doc_generator.py",
       "sources": [
-        "tooling/",
-        "utils/"
+        "src/tooling/",
+        "src/utils/"
       ],
       "description": "Generates system documentation from Python source files."
     },
     "security": {
       "output": "SECURITY.md",
-      "compiler": "tooling/protocol_compiler.py",
+      "compiler": "src/tooling/protocol_compiler.py",
       "sources": [
         "protocols/security/"
       ],
@@ -22,7 +22,7 @@
     },
     "agents": {
       "output": "AGENTS.md",
-      "compiler": "tooling/hierarchical_compiler.py",
+      "compiler": "src/tooling/hierarchical_compiler.py",
       "sources": [
         "protocols/"
       ],
@@ -30,14 +30,19 @@
     },
     "readme": {
       "output": "README.md",
-      "compiler": "tooling/readme_generator.py",
+      "compiler": "src/tooling/readme_generator.py",
       "sources": [
         "AGENTS.md"
       ],
       "description": "Generates README.md from AGENTS.md."
     },
     "audit": {
-      "compiler": "tooling/protocol_auditor.py",
+      "output": "reports/audit_report.md",
+      "compiler": "src/tooling/protocol_auditor.py",
+      "sources": [
+        "protocols/",
+        "logs/activity.log.jsonl"
+      ],
       "description": "Runs the protocol auditor to check for compliance."
     }
   }

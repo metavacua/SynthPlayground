@@ -6,7 +6,7 @@
 # ==============================================================================
 # Variables
 # ==============================================================================
-BUILDER_SCRIPT = tooling/builder.py
+BUILDER_SCRIPT = src/tooling/builder.py
 
 # ==============================================================================
 # Default Target
@@ -53,15 +53,15 @@ install:
 
 format:
 	@echo "--> Formatting Python code with black..."
-	@black .
+	@black src/ tests/
 
 lint:
 	@echo "--> Linting Python code with flake8..."
-	@flake8 .
+	@flake8 src/ tests/
 
 test:
 	@echo "--> Running all unit tests..."
-	@python3 -m unittest discover -v .
+	@python3 -m unittest discover -s tests/ -v
 
 # ==============================================================================
 # Auditing
@@ -72,7 +72,7 @@ audit:
 
 audit-docs:
 	@echo "--> Auditing documentation for completeness..."
-	@python3 tooling/doc_auditor.py
+	@python3 src/tooling/doc_auditor.py
 
 # ==============================================================================
 # Cleanup
