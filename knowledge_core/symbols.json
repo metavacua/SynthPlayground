@@ -2261,6 +2261,15 @@
     },
     {
       "_type": "tag",
+      "name": "dynamic_agent_call_tool",
+      "path": "./tooling/aura_executor.py",
+      "language": "Python",
+      "line": 93,
+      "kind": "function",
+      "docstring": "Dynamically calls an agent tool and wraps the result in an Aura object."
+    },
+    {
+      "_type": "tag",
       "name": "TestMasterControlRedesigned",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
@@ -3323,6 +3332,15 @@
     },
     {
       "_type": "tag",
+      "name": "to_dict",
+      "path": "./logic_system/src/proof.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": "Serializes the proof tree to a dictionary."
+    },
+    {
+      "_type": "tag",
       "name": "Logic",
       "path": "./logic_system/src/diagram.py",
       "language": "Python",
@@ -3425,7 +3443,7 @@
       "name": "Object",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 6,
+      "line": 7,
       "kind": "class",
       "docstring": null
     },
@@ -3434,7 +3452,7 @@
       "name": "Integer",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 12,
+      "line": 13,
       "kind": "class",
       "docstring": null
     },
@@ -3443,7 +3461,7 @@
       "name": "String",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 13,
+      "line": 14,
       "kind": "class",
       "docstring": null
     },
@@ -3452,7 +3470,7 @@
       "name": "ReturnValue",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 14,
+      "line": 15,
       "kind": "class",
       "docstring": null
     },
@@ -3461,7 +3479,7 @@
       "name": "Function",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 16,
+      "line": 17,
       "kind": "class",
       "docstring": null
     },
@@ -3470,7 +3488,7 @@
       "name": "Builtin",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 20,
+      "line": 21,
       "kind": "class",
       "docstring": null
     },
@@ -3479,7 +3497,7 @@
       "name": "Environment",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 24,
+      "line": 25,
       "kind": "class",
       "docstring": null
     },
@@ -3488,7 +3506,7 @@
       "name": "_placeholder_agent_call_tool",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 38,
+      "line": 39,
       "kind": "function",
       "docstring": "Placeholder for calling the agent's real tools.\nThis will be replaced by a real implementation provided by the executor."
     },
@@ -3497,7 +3515,7 @@
       "name": "evaluate",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 56,
+      "line": 57,
       "kind": "function",
       "docstring": null
     },
@@ -3506,7 +3524,7 @@
       "name": "eval_program",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 90,
+      "line": 91,
       "kind": "function",
       "docstring": null
     },
@@ -3515,7 +3533,7 @@
       "name": "eval_block_statement",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 96,
+      "line": 97,
       "kind": "function",
       "docstring": null
     },
@@ -3524,7 +3542,7 @@
       "name": "eval_if_statement",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 102,
+      "line": 103,
       "kind": "function",
       "docstring": null
     },
@@ -3533,7 +3551,7 @@
       "name": "eval_for_statement",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 123,
+      "line": 124,
       "kind": "function",
       "docstring": null
     },
@@ -3542,7 +3560,7 @@
       "name": "eval_print_statement",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 130,
+      "line": 131,
       "kind": "function",
       "docstring": null
     },
@@ -3551,7 +3569,7 @@
       "name": "eval_infix_expression",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 139,
+      "line": 146,
       "kind": "function",
       "docstring": null
     },
@@ -3560,7 +3578,7 @@
       "name": "eval_identifier",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 149,
+      "line": 156,
       "kind": "function",
       "docstring": null
     },
@@ -3569,7 +3587,7 @@
       "name": "eval_expressions",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 152,
+      "line": 159,
       "kind": "function",
       "docstring": null
     },
@@ -3578,7 +3596,7 @@
       "name": "apply_function",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 154,
+      "line": 161,
       "kind": "function",
       "docstring": null
     },
@@ -3587,7 +3605,7 @@
       "name": "Agent",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 171,
+      "line": 178,
       "kind": "class",
       "docstring": null
     },
@@ -3596,7 +3614,7 @@
       "name": "__init__",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 7,
+      "line": 8,
       "kind": "function",
       "docstring": null
     },
@@ -3605,7 +3623,7 @@
       "name": "__repr__",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 9,
+      "line": 10,
       "kind": "function",
       "docstring": null
     },
@@ -3614,7 +3632,7 @@
       "name": "__init__",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 17,
+      "line": 18,
       "kind": "function",
       "docstring": null
     },
@@ -3623,7 +3641,7 @@
       "name": "__init__",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 21,
+      "line": 22,
       "kind": "function",
       "docstring": null
     },
@@ -3632,7 +3650,7 @@
       "name": "__init__",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 25,
+      "line": 26,
       "kind": "function",
       "docstring": null
     },
@@ -3641,7 +3659,7 @@
       "name": "get",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 27,
+      "line": 28,
       "kind": "function",
       "docstring": null
     },
@@ -3650,7 +3668,7 @@
       "name": "set",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 30,
+      "line": 31,
       "kind": "function",
       "docstring": null
     },
@@ -3659,7 +3677,7 @@
       "name": "__init__",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 172,
+      "line": 179,
       "kind": "function",
       "docstring": null
     },
