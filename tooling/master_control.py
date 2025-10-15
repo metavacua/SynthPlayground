@@ -191,6 +191,12 @@ class MasterControlGraph:
         }
 
         commands = parse_plan(plan_content)
+
+        # Enforce the 'reset-all-prohibition-001' protocol
+        for command in commands:
+            if command.tool_name == "reset_all":
+                return False, "CRITICAL: Use of the forbidden tool `reset_all` was detected in the plan."
+
         current_state = "PLANNING" # Validation always starts from the PLANNING state
 
         for command in commands:

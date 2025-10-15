@@ -1,3 +1,26 @@
+"""
+A documentation generator that creates a module's README.md file.
+
+This script is a key component of the "documentation as code" pipeline. It
+automates the creation of a `README.md` file by dynamically combining content
+from both machine-readable protocols and Python source code docstrings.
+
+The generation process is as follows:
+1.  **Parse `AGENTS.md`:** It reads the module's `AGENTS.md` file and extracts
+    the `protocol_id` and `description` from every JSON protocol block to create
+    a summary of the module's core protocols.
+2.  **Parse Source Code:** It scans the module's `tooling/` subdirectory for all
+    Python (`.py`) files. For each file, it parses the Abstract Syntax Tree (AST)
+    to extract the module-level docstring.
+3.  **Inject into Template:** It takes the generated protocol summaries and the
+    extracted docstrings and injects them into a static Markdown template.
+4.  **Write `README.md`:** The final, combined content is written to the
+    `README.md` file in the same directory.
+
+This ensures that the high-level `README.md` documentation always stays
+synchronized with the ground-truth definitions in the `AGENTS.md` protocols and
+the inline documentation within the tools themselves.
+"""
 import ast
 import os
 import re

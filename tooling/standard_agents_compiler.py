@@ -1,14 +1,27 @@
+"""
+A compiler that generates a simplified, standard-compliant `AGENTS.md` file.
+
+This script acts as an "adapter" to make the repository more accessible to
+third-party AI agents that expect a conventional set of instructions. While the
+repository's primary `AGENTS.md` is a complex, hierarchical, and
+machine-readable artifact for its own specialized agent, the `AGENTS.standard.md`
+file produced by this script offers a simple, human-readable summary of the
+most common development commands.
+
+The script works by:
+1.  **Parsing the Makefile:** It dynamically parses the project's `Makefile`,
+    which is the single source of truth for high-level commands. It specifically
+    extracts the exact commands for common targets like `install`, `test`,
+    `lint`, and `format`. This ensures the generated instructions are never
+    stale.
+2.  **Injecting into a Template:** It injects these extracted commands into a
+    pre-defined, user-friendly Markdown template.
+3.  **Generating the Artifact:** The final output is written to
+    `AGENTS.standard.md`, providing a simple, stable, and conventional entry
+    point for external tools, effectively bridging the gap between the complex
+    internal protocol system and the broader agent ecosystem.
+"""
 import os
-
-"""
-Generates a simplified, standard-compliant AGENTS.md file for external tools.
-
-This script parses the project's Makefile to extract key commands (install, test,
-lint, format) and injects them into a human-readable Markdown template. The
-output, AGENTS.standard.md, is designed to provide a quick, conventional entry
-point for third-party AI agents, bridging the gap between our complex internal
-protocol system and the broader ecosystem's expectations.
-"""
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))

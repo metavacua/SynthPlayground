@@ -144,14 +144,27 @@ def eval_print_statement(node, env):
         print(value_to_print)
 
 def eval_infix_expression(op, left, right):
-    if isinstance(left, Integer) and isinstance(right, Integer):
-        l, r = left.value, right.value
+    """Handles infix operations like +, -, ==, etc."""
+    if not hasattr(left, 'value') or not hasattr(right, 'value'):
+        return Object(False) # Cannot compare objects without a .value
+
+    l, r = left.value, right.value
+
+    # Generic equality checks
+    if op == '==':
+        return Object(l == r)
+    if op == '!=':
+        return Object(l != r)
+
+    # Type-specific operations
+    if isinstance(l, int) and isinstance(r, int):
         if op == '+': return Integer(l + r)
         if op == '-': return Integer(l - r)
         if op == '*': return Integer(l * r)
         if op == '/': return Integer(l // r)
-        if op == '!=': return Object(l != r)
-        if op == '==': return Object(l == r)
+        return Object(False) # Unsupported operator for integers
+
+    return Object(False) # Unsupported operator for the given types
 
 def eval_identifier(node, env):
     return env.get(node.value) or BUILTINS.get(node.value)
@@ -165,15 +178,8 @@ def apply_function(fn, args):
         evaluated = evaluate(fn.body, extended_env)
         return evaluated.value if isinstance(evaluated, ReturnValue) else evaluated
     elif isinstance(fn, Builtin):
-        unwrapped_args = [a.value for a in args]
-        # The built-in function is now expected to return an Object
-        # The first argument to the tool is the tool name, so we pass that separately.
-        tool_name = unwrapped_args[0]
-        tool_args = unwrapped_args[1:]
-        result = fn.fn(tool_name, *tool_args)
-        if isinstance(result, bool):
-            return Object(result)
-        return result
+        # The arguments are already Aura Objects, so we can pass them directly.
+        return fn.fn(*args)
 
 class Agent(Object):
     def __init__(self):

@@ -1,3 +1,22 @@
+"""
+Performs static analysis on a Python file to map its contextual role.
+
+This script acts as a code intelligence tool. Given a Python file, it performs
+a static analysis to understand its connections to the rest of the codebase.
+It generates a detailed JSON report that includes:
+
+1.  **Defined Symbols:** All functions and classes defined within the target file,
+    along with their line numbers.
+2.  **Imported Symbols:** All modules and symbols that the target file imports
+    from other modules.
+3.  **Cross-Repository References:** For each function and class defined in the
+    target file, it finds all other Python files in the repository that
+    reference that symbol.
+
+The resulting report provides a comprehensive "contextual awareness map" for a
+single file, showing what it provides to the system and what it consumes from
+it. This is invaluable for understanding the impact of potential changes.
+"""
 import argparse
 import ast
 import json
