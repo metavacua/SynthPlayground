@@ -1892,28 +1892,19 @@
     },
     {
       "_type": "tag",
-      "name": "find_package_json_files",
+      "name": "find_dependency_files",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
       "line": 29,
       "kind": "function",
-      "docstring": "Finds all package.json files in the repository, excluding node_modules."
-    },
-    {
-      "_type": "tag",
-      "name": "find_requirements_txt_files",
-      "path": "./tooling/dependency_graph_generator.py",
-      "language": "Python",
-      "line": 35,
-      "kind": "function",
-      "docstring": "Finds all requirements.txt files in the repository."
+      "docstring": "Finds all package.json and requirements.txt files, excluding node_modules."
     },
     {
       "_type": "tag",
       "name": "parse_package_json",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 43,
+      "line": 49,
       "kind": "function",
       "docstring": "Parses a single package.json file to extract its name and dependencies."
     },
@@ -1922,7 +1913,7 @@
       "name": "parse_requirements_txt",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 66,
+      "line": 72,
       "kind": "function",
       "docstring": "Parses a requirements.txt file to extract its dependencies."
     },
@@ -1931,7 +1922,7 @@
       "name": "generate_dependency_graph",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 104,
+      "line": 110,
       "kind": "function",
       "docstring": "Generates a dependency graph for all supported dependency files found."
     },
@@ -1940,7 +1931,7 @@
       "name": "main",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 156,
+      "line": 167,
       "kind": "function",
       "docstring": "Main function to generate and save the dependency graph."
     },
@@ -2381,7 +2372,7 @@
       "name": "TestDependencyGraphGenerator",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 29,
+      "line": 28,
       "kind": "class",
       "docstring": null
     },
@@ -2390,7 +2381,7 @@
       "name": "setUp",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 31,
+      "line": 30,
       "kind": "function",
       "docstring": "Set up a temporary directory structure for testing."
     },
@@ -2399,7 +2390,7 @@
       "name": "tearDown",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 64,
+      "line": 63,
       "kind": "function",
       "docstring": "Clean up the temporary directory."
     },
@@ -2408,7 +2399,7 @@
       "name": "test_find_files",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 69,
+      "line": 68,
       "kind": "function",
       "docstring": "Test finding both package.json and requirements.txt files."
     },
@@ -2417,7 +2408,7 @@
       "name": "test_parse_package_json",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 79,
+      "line": 77,
       "kind": "function",
       "docstring": "Test parsing a single package.json file."
     },
@@ -2426,7 +2417,7 @@
       "name": "test_parse_requirements_txt",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 88,
+      "line": 86,
       "kind": "function",
       "docstring": "Test parsing a single requirements.txt file."
     },
@@ -2435,7 +2426,7 @@
       "name": "test_generate_dependency_graph",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 102,
+      "line": 100,
       "kind": "function",
       "docstring": "Test the full graph generation logic with mixed project types."
     },
