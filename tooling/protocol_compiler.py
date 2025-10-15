@@ -157,12 +157,14 @@ def compile_protocols(
         return
 
     # --- File Discovery ---
-    # Discover all relevant files and sort them to ensure deterministic output.
-    # The sort order is: autodoc placeholders, then all markdown, then all json.
-    # This ensures descriptions and summaries appear before the JSON blocks.
-    autodoc_placeholders = sorted(glob.glob(os.path.join(source_dir, "*.autodoc.md")))
-    all_md_files = sorted(glob.glob(os.path.join(source_dir, "*.protocol.md")))
-    all_json_files = sorted(glob.glob(os.path.join(source_dir, "*.protocol.json")))
+    from tooling.filesystem_lister import list_all_files_and_dirs
+    # --- File Discovery ---
+    # Use the authoritative lister and then filter by extension.
+    all_files = list_all_files_and_dirs(root_dir=source_dir, use_gitignore=True)
+
+    autodoc_placeholders = sorted([os.path.join(source_dir, f) for f in all_files if f.endswith(".autodoc.md")])
+    all_md_files = sorted([os.path.join(source_dir, f) for f in all_files if f.endswith(".protocol.md")])
+    all_json_files = sorted([os.path.join(source_dir, f) for f in all_files if f.endswith(".protocol.json")])
 
     if not all_md_files and not all_json_files and not autodoc_placeholders:
         print(f"Warning: No protocol or documentation files found in {source_dir}.")

@@ -145,7 +145,7 @@ class TestMasterControlRedesigned(unittest.TestCase):
             "google_search": MagicMock(),
             "view_text_website": MagicMock(),
         }
-        trigger = self.graph.do_orientation(self.agent_state, self.mock_logger)
+        trigger = self.graph.do_orientation(self.agent_state, self.mock_logger, tools)
         # In the new system, do_orientation directly returns the next state, not a trigger.
         self.assertEqual(trigger, self.graph.get_trigger("ORIENTING", "PLANNING"))
         self.mock_logger.log.assert_called()

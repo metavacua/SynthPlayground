@@ -21,7 +21,14 @@ from tooling.master_control import MasterControlGraph
 from tooling.state import AgentState
 from tooling.filesystem_lister import list_all_files_and_dirs
 from utils.logger import Logger
-from __main__ import read_file, google_search, view_text_website
+try:
+    from __main__ import read_file, google_search, view_text_website
+except ImportError:
+    # Provide mock objects for testing environments
+    print("Could not import from __main__, using mock objects.")
+    read_file = lambda x: ""
+    google_search = lambda x: ""
+    view_text_website = lambda x: ""
 
 
 def find_fsm_transition(fsm, source_state, trigger):
