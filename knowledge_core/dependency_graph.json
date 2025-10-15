@@ -2,7 +2,12 @@
   "nodes": [
     {
       "id": "root-python-project",
-      "path": "./requirements.txt",
+      "path": "././requirements.txt",
+      "type": "python-project"
+    },
+    {
+      "id": "tooling",
+      "path": "././tooling/requirements.txt",
       "type": "python-project"
     },
     {
@@ -178,10 +183,6 @@
     },
     {
       "source": "root-python-project",
-      "target": "requests"
-    },
-    {
-      "source": "root-python-project",
       "target": "pypdf"
     },
     {
@@ -199,6 +200,30 @@
     {
       "source": "root-python-project",
       "target": "flake8"
+    },
+    {
+      "source": "tooling",
+      "target": "jsonschema"
+    },
+    {
+      "source": "tooling",
+      "target": "rdflib"
+    },
+    {
+      "source": "tooling",
+      "target": "watchdog"
+    },
+    {
+      "source": "tooling",
+      "target": "markdown"
+    },
+    {
+      "source": "tooling",
+      "target": "pypdf"
+    },
+    {
+      "source": "tooling",
+      "target": "requests"
     }
   ]
 }
