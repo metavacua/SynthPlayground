@@ -1,3 +1,14 @@
+"""
+This script provides a dedicated function for logging a specific, critical failure event.
+
+Its purpose is to create a standardized log entry when a "catastrophic failure"
+occurs, specifically the unauthorized use of the `reset_all` tool. This allows
+the agent's monitoring and post-mortem systems to reliably track and identify
+this particular high-severity error.
+
+The script uses the centralized `Logger` utility to ensure the log entry
+conforms to the project's structured logging schema.
+"""
 import sys
 import os
 

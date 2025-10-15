@@ -17,7 +17,7 @@
 
 ### `/app/tooling/__init__.py`
 
-_No module-level docstring found._
+This package contains various tools for the agent's operation.
 
 ### `/app/tooling/agent_shell.py`
 
@@ -50,6 +50,19 @@ programmatic interface to the MasterControlGraph FSM. It is responsible for:
   > The main loop that drives the agent's lifecycle via the FSM.
 
 
+### `/app/tooling/aura_executor.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Parses and executes an Aura script.
+
+
 ### `/app/tooling/background_researcher.py`
 
 This script performs a simulated research task in the background.
@@ -67,7 +80,18 @@ to a temporary file that the main agent can poll.
 
 ### `/app/tooling/builder.py`
 
-_No module-level docstring found._
+This script provides a unified, configuration-driven build system for the project.
+
+It reads a central `build_config.json` file to determine which compilers or
+generators to run for different build targets (like 'docs', 'agents', etc.).
+This allows for a flexible and easily extensible build process without modifying
+the build script itself. New targets can be added simply by updating the JSON
+configuration.
+
+The script supports building individual targets, listing all available targets,
+and building all targets in a predefined, logical order. It captures and
+displays the output of each build step, providing clear success or failure
+reporting.
 
 
 **Public Functions:**
@@ -90,7 +114,17 @@ _No module-level docstring found._
 
 ### `/app/tooling/code_health_analyzer.py`
 
-_No module-level docstring found._
+This script provides tools for analyzing and maintaining the health of the codebase.
+
+Currently, its primary function is to act as a "dead link checker" for the
+agent's Plan Registry (`knowledge_core/plan_registry.json`). The Plan Registry
+maps logical plan names to file paths. This script verifies that every file
+path in the registry points to an existing file.
+
+If it discovers any "dead links" (entries pointing to non-existent files),
+it can generate a corrective plan. This plan, when executed by the agent,
+will programmatically remove the invalid entries from the registry, ensuring
+the agent's plan library remains consistent and reliable.
 
 
 **Public Functions:**
@@ -156,7 +190,21 @@ without altering the core orchestration process.
 
 ### `/app/tooling/context_awareness_scanner.py`
 
-_No module-level docstring found._
+This script provides tools for understanding the context of a specific code file.
+
+It is designed to answer questions like:
+- What functions and classes are defined in this file?
+- What other modules or symbols does this file import?
+- Where else in the codebase are the symbols from this file being used?
+
+By parsing a Python file's Abstract Syntax Tree (AST), it can extract defined
+symbols (functions and classes) and imported symbols. It can also perform a
+repository-wide search to find references to the symbols defined in the target
+file.
+
+The output is a JSON report containing all this information, which gives the
+agent a comprehensive "contextual awareness" of a single file, aiding in tasks
+like refactoring, dependency analysis, and impact assessment.
 
 
 **Public Functions:**
@@ -232,6 +280,30 @@ about the potential impact of its changes.
 - #### `def parse_requirements_txt(requirements_path, root_dir)`
 
   > Parses a requirements.txt file to extract its dependencies.
+
+
+### `/app/tooling/doc_auditor.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def audit_documentation(filepath)`
+
+  > Scans the system documentation file for modules missing docstrings.
+  >
+  > Args:
+  >     filepath: The path to the SYSTEM_DOCUMENTATION.md file.
+  >
+  > Returns:
+  >     A list of file paths for modules that are missing docstrings.
+
+
+- #### `def main()`
+
+  > Command-line interface for the documentation auditor.
 
 
 ### `/app/tooling/doc_generator.py`
@@ -339,7 +411,18 @@ importing them, which avoids issues with dependencies or script side-effects.
 
 ### `/app/tooling/document_scanner.py`
 
-_No module-level docstring found._
+This script provides a utility for extracting text content from various document types.
+
+It is designed to scan a directory tree and identify files with common document
+extensions like `.pdf`, `.md`, and `.txt`. For each file found, it uses the
+appropriate method to read its content:
+- For PDFs, it uses the `pypdf` library to extract text from each page.
+- For Markdown and plain text files, it reads the raw text content.
+
+The script returns a dictionary where the keys are the file paths of the
+scanned documents and the values are their extracted text content. This tool is
+a key part of the agent's initial orientation, allowing it to gather context
+from human-readable documentation within the repository.
 
 
 **Public Functions:**
@@ -395,6 +478,35 @@ that might impact its ability to complete a task.
   > Tests network connectivity and measures latency to a reliable external endpoint.
 
 
+### `/app/tooling/fdc_cli.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def analyze_plan(plan_filepath)`
+
+  > Analyzes a plan file to determine its complexity class and modality.
+
+
+- #### `def close_task(task_id)`
+
+  > Automates the closing of a Finite Development Cycle.
+
+
+- #### `def main()`
+
+
+- #### `def start_task(task_id)`
+
+  > Initiates the AORP cascade for a new task.
+
+
+- #### `def validate_plan(plan_filepath)`
+
+
 ### `/app/tooling/generate_docs.py`
 
 This script generates comprehensive Markdown documentation for the agent's
@@ -419,9 +531,52 @@ architecture, including the FSM, the agent shell, and the master control script.
   > Extracts details about the master control script's state handlers.
 
 
-### `/app/tooling/hierarchical_compiler.py`
+### `/app/tooling/hdl_prover.py`
 
 _No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Provides a command-line interface for the HDL prover tool.
+
+
+- #### `def prove_sequent(sequent_string)`
+
+  > Calls the HDL Lisp prover to determine if a sequent is provable.
+  >
+  > Args:
+  >     sequent_string: A string representing the sequent in Lisp format,
+  >                   e.g., "'(() (con))'".
+  >
+  > Returns:
+  >     A boolean indicating whether the sequent is provable, or None on error.
+
+
+### `/app/tooling/hierarchical_compiler.py`
+
+This script orchestrates a hierarchical build process for the agent's protocols.
+
+It enables a modular, "microkernel"-style architecture where different sub-modules
+of the agent can define their own protocols independently. The script discovers
+all `protocols` directories across the repository and builds them in a specific
+order, from the most deeply nested to the top-level.
+
+Key features:
+- **Hierarchical Discovery:** Finds all `protocols` directories.
+- **Bottom-Up Compilation:** Compiles child modules first, then "injects" their
+  compiled `AGENTS.md` content as a summary into their parent's `AGENTS.md`.
+  This creates a single, comprehensive `AGENTS.md` at the root that includes
+  the protocols from all sub-modules.
+- **Artifact Generation:** For each module, it runs the `protocol_compiler.py`
+  to create `AGENTS.md` and the `readme_generator.py` to create `README.md`.
+- **Centralized Knowledge Graph:** After processing all modules, it performs a
+  final pass to discover all `.protocol.json` files and compiles them into a
+  single, unified RDF knowledge graph (`protocols.ttl`), providing a complete,
+  queryable view of the agent's entire protocol system.
 
 
 **Public Functions:**
@@ -560,7 +715,15 @@ enriched knowledge graph.
 
 ### `/app/tooling/log_failure.py`
 
-_No module-level docstring found._
+This script provides a dedicated function for logging a specific, critical failure event.
+
+Its purpose is to create a standardized log entry when a "catastrophic failure"
+occurs, specifically the unauthorized use of the `reset_all` tool. This allows
+the agent's monitoring and post-mortem systems to reliably track and identify
+this particular high-severity error.
+
+The script uses the centralized `Logger` utility to ensure the log entry
+conforms to the project's structured logging schema.
 
 
 **Public Functions:**
@@ -789,7 +952,17 @@ allowing for robust and readable plan files.
 
 ### `/app/tooling/plan_registry_auditor.py`
 
-_No module-level docstring found._
+This script provides a command-line tool to audit the agent's Plan Registry.
+
+The Plan Registry (`knowledge_core/plan_registry.json`) is a critical file that
+maps human-readable, logical plan names to the file paths of the actual plan
+scripts. This allows the agent to call plans by name (e.g., `call_plan "deep-research"`)
+without hardcoding file paths.
+
+This auditor ensures the integrity of the registry by checking that every file
+path listed in it actually exists. It identifies and reports any "dead links"
+where a plan name points to a non-existent file, helping to maintain the
+reliability of the agent's hierarchical planning system.
 
 
 **Public Functions:**
@@ -972,7 +1145,20 @@ directory, performing targeted updates based on command-line arguments.
 
 ### `/app/tooling/readme_generator.py`
 
-_No module-level docstring found._
+This script automatically generates a `README.md` file for a specific module.
+
+It acts as a documentation aggregator, pulling information from two primary sources:
+1.  **`AGENTS.md`:** It parses the JSON protocol blocks within a module's
+    `AGENTS.md` file to create a human-readable summary of the core protocols
+    governing that module.
+2.  **Python Source Files:** It scans the `tooling/` subdirectory within the
+    module for any Python scripts and extracts their module-level docstrings
+    to document the key software components.
+
+The script combines this extracted information with a static template to produce
+a well-structured `README.md` file. This ensures that the documentation for each
+module stays synchronized with its actual protocols and implementation, adhering
+to the principle of "documentation as code."
 
 
 **Public Functions:**
@@ -1001,7 +1187,25 @@ _No module-level docstring found._
 
 ### `/app/tooling/refactor.py`
 
-_No module-level docstring found._
+This script provides a simple, automated refactoring tool for renaming symbols.
+
+It is designed to be used from the command line to rename a Python function or
+class and all of its references throughout the repository.
+
+The process is as follows:
+1.  **Find Definition:** It first locates the definition of the target symbol
+    (the "old name") in the specified file.
+2.  **Find References:** It then searches the entire repository for any files
+    that mention the old name.
+3.  **Generate Plan:** For each file where the name is found, it generates a
+    `replace_with_git_merge_diff` command. This command encapsulates the change
+    from the old content to the new content (with the name replaced).
+4.  **Output Plan File:** It writes all these commands into a single, temporary
+    plan file.
+
+The path to this generated plan file is printed to standard output. The agent's
+master controller can then be instructed to execute this plan, applying the
+refactoring changes in a controlled and verifiable way.
 
 
 **Public Functions:**
@@ -1220,7 +1424,20 @@ rate tracking or tool usage anti-patterns) to be added as the system evolves.
 
 ### `/app/tooling/standard_agents_compiler.py`
 
-_No module-level docstring found._
+This script generates a simplified, standard-compliant `AGENTS.md` file.
+
+While the project's primary `AGENTS.md` is generated by a complex, hierarchical
+system, many external AI agents and tools expect a simpler, more conventional
+format. This script bridges that gap.
+
+It parses the project's `Makefile` to extract the essential commands for common
+tasks like installing dependencies, running tests, linting, and formatting code.
+It then injects these discovered commands into a human-readable Markdown
+template.
+
+The output, `AGENTS.standard.md`, provides a straightforward, predictable
+entry point for third-party agents, improving interoperability with the broader
+AI development ecosystem.
 
 
 **Public Functions:**
@@ -1436,6 +1653,244 @@ This ensures that any modification to the fundamental way protocols are defined 
 
 ---
 
+# --- Child Module: `compliance` ---
+
+# Protocol: AGENTS.md Non-Compliance
+
+This protocol defines what constitutes non-compliance with the established `AGENTS.md` protocols and outlines the expected corrective actions. Adherence to these meta-rules is critical for ensuring predictable, verifiable, and robust agent behavior.
+
+## Rule `non-compliance-definition`: Definition of Non-Compliance
+
+Non-compliance is the act of violating the explicit rules, conventions, or procedures documented in the `AGENTS.md` file and its source protocols within the `protocols/` directory. The `AGENTS.md` file serves as the agent's primary operational mandate, and any deviation from it is considered a fault condition.
+
+## Rule `non-compliance-direct-editing`: Prohibition of Direct Artifact Editing
+
+**Violation:** Directly editing any file that is a documented build artifact.
+- **Primary Example:** Modifying `AGENTS.md` or `README.md` directly is a severe violation. These files are generated from source protocols and documentation.
+- **Corrective Action:** The agent must revert any direct edits to build artifacts. Changes must be made to the source files (e.g., in `protocols/` or tool docstrings), and the appropriate build command (e.g., `make AGENTS.md`, `make docs`) must be executed.
+
+## Rule `non-compliance-test-procedure`: Adherence to Testing Protocols
+
+**Violation:** Failing to execute the testing procedures as defined in `AGENTS.md` before submitting changes. This includes not running the full test suite or ignoring failing tests.
+- **Corrective Action:** The agent must halt its execution plan and run the required tests. If tests fail, the agent must enter a debugging loop to resolve the failures before proceeding.
+
+## Rule `non-compliance-architectural-deviation`: Adherence to Architectural and Convention Guidelines
+
+**Violation:** Introducing changes that contradict the architectural patterns, coding conventions, or file structures laid out in `AGENTS.md`.
+- **Example:** Placing a new backend component in the `frontend/` directory when the architecture explicitly forbids it.
+- **Corrective Action:** The agent must identify the deviation, revert the incorrect changes, and re-implement them in accordance with the documented standards.
+
+## Rule `non-compliance-self-awareness-failure`: Failure to Maintain Protocol Awareness
+
+**Violation:** Operating with an outdated understanding of the protocols by failing to re-compile `AGENTS.md` when necessary, as defined in the `meta-protocol`.
+- **Corrective Action:** If the agent detects that its actions are out of sync with repository standards, it should trigger the `make AGENTS.md` command to refresh its internal state and re-evaluate its plan.
+
+## Consequence of Non-Compliance
+
+Upon detecting any form of non-compliance, the agent is required to:
+1.  **Halt:** Immediately stop the current execution path to prevent further deviation.
+2.  **Report:** Log the specific violation that was detected.
+3.  **Correct:** Initiate the defined corrective action for the specific violation. If a corrective action is not explicitly defined, the agent should revert the violating changes and re-plan its approach.
+
+---
+
+# Protocol: Pre-Commit Verification
+
+This protocol establishes the mandatory sequence of verification steps that must be performed before any code is submitted. Its purpose is to ensure that all changes meet a baseline level of quality, correctness, and review, preventing regressions and maintaining repository health.
+
+## Rule: Mandatory Pre-Commit Checks
+
+Before finalizing and submitting any work, the agent **must** execute the `pre_commit_instructions` tool. This tool acts as a procedural gateway, providing the specific, up-to-date checklist of actions required for validation. This typically includes:
+
+1.  **Running all automated tests** to verify correctness.
+2.  **Requesting a formal code review** to get critical feedback.
+3.  **Recording key learnings** to contribute to the agent's long-term memory.
+
+Adherence to this protocol is not optional. It is a fundamental step in the development lifecycle that safeguards the integrity of the codebase.
+
+
+---
+
+# Protocol: `reset_all` Prohibition
+
+**ID:** `reset-all-prohibition-001`
+
+## 1. Description
+
+This protocol establishes a strict and unconditional prohibition on the use of the `reset_all` tool. This tool is considered a legacy, high-risk command that is no longer permitted in any workflow.
+
+## 2. Rationale
+
+The `reset_all` tool has been the cause of multiple catastrophic failures, leading to the complete loss of work and the inability to complete tasks. Its behavior is too destructive and unpredictable for a production environment. More granular and safer tools are available for workspace management. This protocol serves as a hard-coded safeguard to prevent any future use of this tool.
+
+## 3. Rules
+
+### Rule `no-reset-all`
+
+-   **Description:** The `reset_all` tool is strictly forbidden under all circumstances.
+-   **Enforcement:** The `master_control.py` orchestrator will programmatically block any attempt to call `reset_all` and will immediately terminate the task with a critical error. This is not a rule for the agent to interpret, but a hard-coded system constraint.
+
+---
+
+
+---
+
+# --- Child Module: `core` ---
+
+# Protocol: The Context-Free Development Cycle (CFDC)
+
+This protocol marks a significant evolution from the Finite Development Cycle (FDC), introducing a hierarchical planning model that enables far greater complexity and modularity while preserving the system's core guarantee of decidability.
+
+## From FSM to Pushdown Automaton
+
+The FDC was based on a Finite State Machine (FSM), which provided a strict, linear sequence of operations. While robust, this model was fundamentally limited: it could not handle nested tasks or sub-routines, forcing all plans to be monolithic.
+
+The CFDC upgrades our execution model to a **Pushdown Automaton**. This is achieved by introducing a **plan execution stack**, which allows the system to call other plans as sub-routines. This enables a powerful new paradigm: **Context-Free Development Cycles**.
+
+## The `call_plan` Directive
+
+The core of the CFDC is the new `call_plan` directive. This allows one plan to execute another, effectively creating a parent-child relationship between them.
+
+- **Usage:** `call_plan <path_to_sub_plan.txt>`
+- **Function:** When the execution engine encounters this directive, it:
+    1.  Pushes the current plan's state (e.g., the current step number) onto the execution stack.
+    2.  Begins executing the sub-plan specified in the path.
+    3.  Once the sub-plan completes, it pops the parent plan's state from the stack and resumes its execution from where it left off.
+
+## Ensuring Decidability: The Recursion Depth Limit
+
+A system with unbounded recursion is not guaranteed to terminate. To prevent this, the CFDC introduces a non-negotiable, system-wide limit on the depth of the plan execution stack.
+
+**Rule `max-recursion-depth`**: The execution engine MUST enforce a maximum recursion depth, defined by a `MAX_RECURSION_DEPTH` constant. If a `call_plan` directive would cause the stack depth to exceed this limit, the entire process MUST terminate with an error. This hard limit ensures that even with recursive or deeply nested plans, the system remains a **decidable**, non-Turing-complete process that is guaranteed to halt.
+
+---
+
+# Protocol: The Plan Registry
+
+This protocol introduces a Plan Registry to create a more robust, modular, and discoverable system for hierarchical plans. It decouples the act of calling a plan from its physical file path, allowing plans to be referenced by a logical name.
+
+## The Problem with Path-Based Calls
+
+The initial implementation of the Context-Free Development Cycle (CFDC) relied on direct file paths (e.g., `call_plan path/to/plan.txt`). This is brittle:
+- If a registered plan is moved or renamed, all plans that call it will break.
+- It is difficult for an agent to discover and reuse existing, validated plans.
+
+## The Solution: A Central Registry
+
+The Plan Registry solves this by creating a single source of truth that maps logical, human-readable plan names to their corresponding file paths.
+
+- **Location:** `knowledge_core/plan_registry.json`
+- **Format:** A simple JSON object of key-value pairs:
+  ```json
+  {
+    "logical-name-1": "path/to/plan_1.txt",
+    "run-all-tests": "plans/common/run_tests.txt"
+  }
+  ```
+
+## Updated `call_plan` Logic
+
+The `call_plan` directive is now significantly more powerful. When executing `call_plan <argument>`, the system will follow a **registry-first** approach:
+
+1.  **Registry Lookup:** The system will first treat `<argument>` as a logical name and look it up in `knowledge_core/plan_registry.json`.
+2.  **Path Fallback:** If the name is not found in the registry, the system will fall back to treating `<argument>` as a direct file path. This ensures full backward compatibility with existing plans.
+
+## Management
+
+A new tool, `tooling/plan_manager.py`, will be introduced to manage the registry with simple commands like `register`, `deregister`, and `list`, making it easy to maintain the library of reusable plans.
+
+---
+
+# Protocol: The Closed-Loop Self-Correction Cycle
+
+This protocol describes the automated workflow that enables the agent to programmatically improve its own governing protocols based on new knowledge. It transforms the ad-hoc, manual process of learning into a reliable, machine-driven feedback loop.
+
+## The Problem: The Open Loop
+
+Previously, "lessons learned" were compiled into a simple markdown file, `knowledge_core/lessons_learned.md`. While this captured knowledge, it was a dead end. There was no automated process to translate these text-based insights into actual changes to the protocol source files. This required manual intervention, creating a significant bottleneck and a high risk of protocols becoming stale.
+
+## The Solution: A Protocol-Driven Self-Correction (PDSC) Workflow
+
+The PDSC workflow closes the feedback loop by introducing a set of new tools and structured data formats that allow the agent to enact its own improvements.
+
+**1. Structured, Actionable Lessons (`knowledge_core/lessons.jsonl`):**
+- Post-mortem analysis now generates lessons as structured JSON objects, not free-form text.
+- Each lesson includes a machine-readable `action` field, which contains a specific, executable command.
+
+**2. The Protocol Updater (`tooling/protocol_updater.py`):**
+- A new, dedicated tool for programmatically modifying the protocol source files (`*.protocol.json`).
+- It accepts commands like `add-tool`, allowing for precise, automated changes to protocol definitions.
+
+**3. The Orchestrator (`tooling/self_correction_orchestrator.py`):**
+- This script is the engine of the cycle. It reads `lessons.jsonl`, identifies pending lessons, and uses the `protocol_updater.py` to execute the defined actions.
+- After applying a lesson, it updates the lesson's status, creating a clear audit trail.
+- It finishes by running `make AGENTS.md` to ensure the changes are compiled into the live protocol.
+
+This new, automated cycle—**Analyze -> Structure Lesson -> Execute Correction -> Re-compile Protocol**—is a fundamental step towards autonomous self-improvement.
+
+---
+
+# Protocol: Deep Research Cycle
+
+This protocol defines a standardized, multi-step plan for conducting in-depth research on a complex topic. It is designed to be a reusable, callable plan that ensures a systematic and thorough investigation.
+
+The cycle consists of five main phases:
+1.  **Review Scanned Documents:** The agent first reviews the content of documents found in the repository during the initial scan. This provides immediate, project-specific context.
+2.  **Initial Scoping & Keyword Generation:** Based on the initial topic and the information from scanned documents, the agent generates a set of search keywords.
+3.  **Broad Information Gathering:** The agent uses the keywords to perform broad web searches and collect a list of relevant URLs.
+4.  **Targeted Information Extraction:** The agent visits the most promising URLs to extract detailed information.
+5.  **Synthesis & Summary:** The agent synthesizes the gathered information into a coherent summary, which is saved to a research report file.
+
+This structured approach ensures that research is not ad-hoc but is instead a repeatable and verifiable process.
+
+---
+
+# Protocol: The Formal Research Cycle (L4)
+
+This protocol establishes the L4 Deep Research Cycle, a specialized, self-contained Finite Development Cycle (FDC) designed for comprehensive knowledge acquisition. It elevates research from a simple tool-based action to a formal, verifiable process.
+
+## The Problem: Ad-Hoc Research
+
+Previously, research was an unstructured activity. The agent could use tools like `google_search` or `read_file`, but there was no formal process for planning, executing, and synthesizing complex research tasks. This made it difficult to tackle "unknown unknowns" in a reliable and auditable way.
+
+## The Solution: A Dedicated Research FDC
+
+The L4 Research Cycle solves this by introducing a new, specialized Finite State Machine (FSM) tailored specifically for research. When the main orchestrator (`master_control.py`) determines that a task requires deep knowledge, it initiates this cycle.
+
+### Key Features:
+
+1.  **Specialized FSM (`tooling/research_fsm.json`):** Unlike the generic development FSM, the research FSM has states that reflect a true research workflow: `GATHERING`, `SYNTHESIZING`, and `REPORTING`. This provides a more accurate model for the task.
+2.  **Executable Plans:** The `tooling/research_planner.py` is upgraded to generate formal, executable plans that are validated against the new research FSM. These are no longer just templates but are verifiable artifacts that guide the agent through the research process.
+3.  **Formal Invocation:** The L4 cycle is a first-class citizen in the agent's architecture. The main orchestrator can formally invoke it, execute the research plan, and then integrate the resulting knowledge back into its main task.
+
+This new protocol provides a robust, reliable, and formally verifiable mechanism for the agent to explore complex topics, making it significantly more autonomous and capable.
+
+---
+
+
+---
+
+# --- Child Module: `critic` ---
+
+# Protocol: Critic `reset_all` Prohibition
+
+This protocol establishes a critical safeguard to protect the integrity of the development workflow.
+
+## Rule: `critic-no-reset`
+
+The agent assigned the role of 'Code Review Critic' is explicitly and strictly forbidden from using the `reset_all` tool.
+
+**Rationale:** The `reset_all` tool is a destructive action that reverts all changes in the workspace. Its use by a review agent could lead to the accidental deletion of work-in-progress, creating a significant disruption. This protocol ensures that the critic's function is limited to analysis and feedback, preventing it from taking destructive actions.
+
+This prohibition is non-negotiable and must be adhered to by any agent assuming the 'Code Review Critic' role.
+
+**Enforcement Mechanism:** The Code Review Critic is not implemented in this repository. Its behavior is governed by the compiled `AGENTS.md` file, which is consumed by an external orchestration system. The inclusion of this protocol in `AGENTS.md` constitutes the complete implementation of this safeguard from the perspective of this codebase.
+
+---
+
+
+---
+
 # Protocol: Code Refactoring
 
 This protocol defines the use of the `refactor.py` tool, which provides a simple way to perform automated refactoring of Python code.
@@ -1564,6 +2019,26 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
   ],
   "associated_tools": [
     "tooling/aura_executor.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "doc-audit-001",
+  "description": "A protocol to ensure the completeness of system documentation.",
+  "rules": [
+    {
+      "rule_id": "audit-for-missing-docstrings",
+      "description": "A check for missing module-level docstrings must be performed to ensure documentation completeness. All modules should have comprehensive documentation to aid agents and human users.",
+      "enforcement": "This check should be performed by running `make audit-docs`. This can be done periodically or as part of a pre-commit workflow."
+    }
+  ],
+  "associated_tools": [
+    "tooling/doc_auditor.py"
   ]
 }
 ```

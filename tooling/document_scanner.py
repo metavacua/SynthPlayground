@@ -1,3 +1,17 @@
+"""
+This script provides a utility for extracting text content from various document types.
+
+It is designed to scan a directory tree and identify files with common document
+extensions like `.pdf`, `.md`, and `.txt`. For each file found, it uses the
+appropriate method to read its content:
+- For PDFs, it uses the `pypdf` library to extract text from each page.
+- For Markdown and plain text files, it reads the raw text content.
+
+The script returns a dictionary where the keys are the file paths of the
+scanned documents and the values are their extracted text content. This tool is
+a key part of the agent's initial orientation, allowing it to gather context
+from human-readable documentation within the repository.
+"""
 import os
 import pypdf
 from pypdf import PdfReader
