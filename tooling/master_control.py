@@ -535,7 +535,6 @@ class MasterControlGraph:
                 "POST_MORTEM",
                 {"path": final_path, "content": report_content},
                 "SUCCESS",
-                context=_get_log_context(agent_state),
             )
 
             # 4. Append lessons to knowledge_core/lessons.jsonl

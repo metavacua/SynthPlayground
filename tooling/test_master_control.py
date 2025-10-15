@@ -108,6 +108,8 @@ class TestMasterControlRedesigned(unittest.TestCase):
             f.write(" ")
         with open("tooling/self_correction_orchestrator.py", "w") as f:
             f.write(" ")
+        with open("postmortems/structured_postmortem.md", "w") as f:
+            f.write("# Post-Mortem Report for Task: test-redesigned-workflow\n\n## Agent Analysis\n\nThe task was completed successfully.\n")
 
         self.fsm_path = "tooling/fsm.json"
         self.task_id = "test-redesigned-workflow"

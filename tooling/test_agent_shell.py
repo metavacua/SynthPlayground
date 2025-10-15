@@ -10,7 +10,7 @@ mock_main_imports = {
 }
 
 with patch.dict('sys.modules', {'__main__': MagicMock(**mock_main_imports)}):
-    from tooling.agent_shell import main
+    from tooling.agent_shell import main, run_agent_loop
 
 class TestAgentShell(unittest.TestCase):
 

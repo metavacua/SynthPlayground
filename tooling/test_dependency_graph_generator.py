@@ -69,10 +69,10 @@ class TestDependencyGraphGenerator(unittest.TestCase):
         """Test finding both package.json and requirements.txt files."""
         js_files, py_files = find_dependency_files(self.test_dir)
         self.assertEqual(len(js_files), 1)
-        self.assertIn(self.pkg_json_path, js_files)
+        self.assertIn(os.path.abspath(self.pkg_json_path), js_files)
         self.assertEqual(len(py_files), 2)
-        self.assertIn(self.req_txt_path, py_files)
-        self.assertIn(self.root_req_txt_path, py_files)
+        self.assertIn(os.path.abspath(self.req_txt_path), py_files)
+        self.assertIn(os.path.abspath(self.root_req_txt_path), py_files)
 
     def test_parse_package_json(self):
         """Test parsing a single package.json file."""

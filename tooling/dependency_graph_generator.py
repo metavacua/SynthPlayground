@@ -23,23 +23,15 @@ import json
 import glob
 import re
 
+from utils.filesystem import find_files
+
 # --- Finder Functions ---
 
 
 def find_dependency_files(root_dir):
     """Finds all package.json and requirements.txt files, excluding node_modules."""
-    package_json_files = []
-    requirements_txt_files = []
-    for root, dirs, files in os.walk(root_dir):
-        # Exclude node_modules directories from the search
-        if "node_modules" in dirs:
-            dirs.remove("node_modules")
-
-        for file in files:
-            if file == "package.json":
-                package_json_files.append(os.path.join(root, file))
-            elif file == "requirements.txt":
-                requirements_txt_files.append(os.path.join(root, file))
+    package_json_files = find_files(root_dir, extensions=["package.json"], ignore_dirs=["node_modules"])
+    requirements_txt_files = find_files(root_dir, extensions=["requirements.txt"], ignore_dirs=["node_modules"])
     return package_json_files, requirements_txt_files
 
 
