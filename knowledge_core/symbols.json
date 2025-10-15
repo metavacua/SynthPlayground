@@ -362,6 +362,15 @@
     },
     {
       "_type": "tag",
+      "name": "main",
+      "path": "./tooling/capability_verifier.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "A tool to verify that the agent can monotonically improve its capabilities.\n\nThis tool works by:\n1. Running a target test file that is known to fail, confirming the agent lacks a capability.\n2. Invoking the agent's self-correction mechanism to learn the new capability.\n3. Running the target test again to confirm it now passes.\n4. Running the full test suite to ensure no existing capabilities were lost."
+    },
+    {
+      "_type": "tag",
       "name": "load_local_graph",
       "path": "./tooling/knowledge_integrator.py",
       "language": "Python",
@@ -3440,6 +3449,15 @@
     },
     {
       "_type": "tag",
+      "name": "fibonacci",
+      "path": "./self_improvement_project/main.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": "Calculates the nth Fibonacci number."
+    },
+    {
+      "_type": "tag",
       "name": "TestFizzBuzz",
       "path": "./self_improvement_project/test_main.py",
       "language": "Python",
@@ -3480,6 +3498,15 @@
       "path": "./self_improvement_project/test_main.py",
       "language": "Python",
       "line": 18,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_fibonacci",
+      "path": "./self_improvement_project/test_main.py",
+      "language": "Python",
+      "line": 23,
       "kind": "function",
       "docstring": null
     },
