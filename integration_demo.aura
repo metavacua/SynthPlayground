@@ -1,37 +1,12 @@
-// Integration Demo Script
+// integration_demo.aura
 
-print("--- Starting Full Integration Demo ---");
+// 1. Create a simple proof in Intuitionistic Logic (LJ)
+// We create an axiom proof of 'A'
+let axiom_proof = agent.call_tool("lj.axiom", "A");
 
-// 1. Call a standard agent tool to check network status.
-print("Step 1: Probing network connectivity...");
-let network_latency = agent.call_tool("environmental_probe.probe_network");
+// 2. Translate the proof from LJ to Classical Logic (LK)
+// This will now return a JSON object representing the proof
+let translated_proof_json = agent.call_tool("diagram.translate", axiom_proof, "LJ", "LK");
 
-if network_latency {
-    print("Network is UP. Latency (ms):");
-    print(network_latency);
-
-    // 2. Use the result to construct a logical statement.
-    // If the network is up, we can consider 'connectivity' to be a provable axiom.
-    // In our logic system, this is represented by the sequent '(() (connectivity))'
-    print("Step 2: Constructing logical sequent for 'connectivity'...");
-    let sequent_to_prove = "'(() (connectivity))";
-
-    // 3. Call the HDL prover to reason about the statement.
-    // We expect this to fail, as 'connectivity' is not a known axiom in HDL.
-    print("Step 3: Attempting to prove the sequent...");
-    let is_provable = agent.call_tool("hdl_prover.prove_sequent", sequent_to_prove);
-
-    print("Is the sequent provable?");
-    print(is_provable);
-
-    if is_provable {
-        print("Demo Result: Unexpectedly provable! This indicates an issue with the logic engine's axioms.");
-    } else {
-        print("Demo Result: Correctly determined that the arbitrary sequent is not provable.");
-    }
-
-} else {
-    print("Network is DOWN. Skipping logical proof.");
-}
-
-print("--- Integration Demo Complete ---");
+// 3. Print the translated proof JSON
+print(translated_proof_json);

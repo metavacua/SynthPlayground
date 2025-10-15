@@ -35,6 +35,9 @@ def main():
     # --- Tooling and Execution Environment ---
     from aura_lang import interpreter
     from tooling import hdl_prover # Import the tool we want to expose
+    from logic_system.src import diagram, lj, formulas, proof
+
+    # --- Tooling and Execution Environment ---
 
     def dynamic_agent_call_tool(tool_name, *args):
         """
@@ -45,13 +48,28 @@ def main():
             # For simplicity, we'll use a hardcoded map.
             # A real implementation would use a more dynamic discovery mechanism.
             if tool_name == "hdl_prover.prove_sequent":
-                # The arguments from Aura arrive as a tuple.
                 result = hdl_prover.prove_sequent(args[0])
-                return interpreter.Object(result) # Wrap the raw boolean in an Object
+                return interpreter.Object(result)
             elif tool_name == "environmental_probe.probe_network":
                 from tooling import environmental_probe
                 result = environmental_probe.probe_network()
                 return interpreter.Object(result)
+            elif tool_name == "diagram.translate":
+                # Expects: proof_obj, start_logic_str, end_logic_str
+                proof_obj, start_logic_str, end_logic_str = args
+
+                # Convert string representations of logics to Enum members
+                start_logic = diagram.Logic[start_logic_str]
+                end_logic = diagram.Logic[end_logic_str]
+
+                d = diagram.Diagram()
+                translated_proof = d.translate(proof_obj, start_logic, end_logic)
+                return interpreter.Object(translated_proof.to_dict())
+            elif tool_name == "lj.axiom":
+                prop_name = args[0]
+                prop = formulas.Prop(prop_name)
+                axiom_proof = lj.axiom(prop)
+                return interpreter.Object(axiom_proof)
             else:
                 print(f"Error: Tool '{tool_name}' not found.")
                 return interpreter.Object(None)

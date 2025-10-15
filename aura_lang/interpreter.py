@@ -1,5 +1,6 @@
 from aura_lang import ast
 import re
+import json
 
 # --- Object System ---
 
@@ -121,13 +122,19 @@ def eval_for_statement(node, env):
         evaluate(node.body, loop_env)
 
 def eval_print_statement(node, env):
-    # Simplified version without f-string interpolation.
     evaluated_obj = evaluate(node.value, env)
+    value_to_print = None
+
     if hasattr(evaluated_obj, 'value'):
-        print(evaluated_obj.value)
+        value_to_print = evaluated_obj.value
     else:
-        # This handles cases where a raw value might be returned
-        print(evaluated_obj)
+        # This handles cases where a raw value might be returned (e.g. from 'in' operator)
+        value_to_print = evaluated_obj
+
+    if isinstance(value_to_print, dict):
+        print(json.dumps(value_to_print, indent=2))
+    else:
+        print(value_to_print)
 
 def eval_infix_expression(op, left, right):
     if isinstance(left, Integer) and isinstance(right, Integer):

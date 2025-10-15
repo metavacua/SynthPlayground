@@ -20,3 +20,11 @@ class ProofTree:
         for premise in self.premises:
             s += premise.__repr__(level + 1)
         return s
+
+    def to_dict(self):
+        """Serializes the proof tree to a dictionary."""
+        return {
+            "conclusion": str(self.conclusion),
+            "rule": self.rule.name,
+            "premises": [premise.to_dict() for premise in self.premises]
+        }
