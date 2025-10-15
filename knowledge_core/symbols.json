@@ -218,6 +218,186 @@
     },
     {
       "_type": "tag",
+      "name": "recognize_right_linear",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "reverse_grammar",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "print_path",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "EarleyItem",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "recognize_earley",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 54,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "get_parse_count",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 90,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "count_parses",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 95,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 106,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_search",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 42,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 47,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__hash__",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 49,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 51,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Grammar",
+      "path": "./language_theory/toolchain/grammar.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "class",
+      "docstring": "A class to represent a formal grammar. It parses a grammar file\nand provides helpers for analyzing its properties."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./language_theory/toolchain/grammar.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_parse_file",
+      "path": "./language_theory/toolchain/grammar.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function",
+      "docstring": "Parses the grammar file provided at initialization."
+    },
+    {
+      "_type": "tag",
+      "name": "get_non_terminals",
+      "path": "./language_theory/toolchain/grammar.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": "Returns the set of non-terminal symbols."
+    },
+    {
+      "_type": "tag",
+      "name": "get_terminals",
+      "path": "./language_theory/toolchain/grammar.py",
+      "language": "Python",
+      "line": 45,
+      "kind": "function",
+      "docstring": "Returns the set of terminal symbols."
+    },
+    {
+      "_type": "tag",
+      "name": "__str__",
+      "path": "./language_theory/toolchain/grammar.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./language_theory/toolchain/quantify.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "Main function to run the grammar quantifier.\nThis tool computes and reports various metrics for a given grammar."
+    },
+    {
+      "_type": "tag",
       "name": "TestNewSelfImprovementCLI",
       "path": "./tooling/test_new_self_improvement_cli.py",
       "language": "Python",
