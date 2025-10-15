@@ -4,13 +4,13 @@
   "rules": [
     {
       "rule_id": "toolchain-audit-on-schema-change",
-      "description": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.",
+      "description": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `compiler_v2.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.",
       "enforcement": "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files."
     }
   ],
   "associated_tools": [
     "tooling/protocol_auditor.py",
     "tooling/protocol_compiler.py",
-    "tooling/hierarchical_compiler.py"
+    "tooling/compiler_v2.py"
   ]
 }

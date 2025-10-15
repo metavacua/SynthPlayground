@@ -75,7 +75,7 @@ A significant process gap was identified where a major architectural change to t
 
 This protocol closes that gap by introducing a new rule that explicitly links changes in the protocol system's architecture to a mandatory review of the toolchain.
 
-**Rule `toolchain-audit-on-schema-change`**: If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory **must** be performed as a subsequent step.
+**Rule `toolchain-audit-on-schema-change`**: If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `compiler_v2.py`), a formal audit of the entire `tooling/` directory **must** be performed as a subsequent step.
 
 This ensures that any modification to the fundamental way protocols are defined or processed is immediately followed by a conscious verification that all dependent tools are still functioning correctly and are aware of the new structure. This transforms the previously manual and error-prone discovery process into a formal, required step of the development lifecycle.
 
@@ -196,14 +196,14 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
   "rules": [
     {
       "rule_id": "toolchain-audit-on-schema-change",
-      "description": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.",
+      "description": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `compiler_v2.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.",
       "enforcement": "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files."
     }
   ],
   "associated_tools": [
     "tooling/protocol_auditor.py",
     "tooling/protocol_compiler.py",
-    "tooling/hierarchical_compiler.py"
+    "tooling/compiler_v2.py"
   ]
 }
 ```
@@ -575,21 +575,6 @@ This new, automated cycle—**Analyze -> Structure Lesson -> Execute Correction 
 
 ---
 
-# Protocol: Deep Research Cycle
-
-This protocol defines a standardized, multi-step plan for conducting in-depth research on a complex topic. It is designed to be a reusable, callable plan that ensures a systematic and thorough investigation.
-
-The cycle consists of five main phases:
-1.  **Review Scanned Documents:** The agent first reviews the content of documents found in the repository during the initial scan. This provides immediate, project-specific context.
-2.  **Initial Scoping & Keyword Generation:** Based on the initial topic and the information from scanned documents, the agent generates a set of search keywords.
-3.  **Broad Information Gathering:** The agent uses the keywords to perform broad web searches and collect a list of relevant URLs.
-4.  **Targeted Information Extraction:** The agent visits the most promising URLs to extract detailed information.
-5.  **Synthesis & Summary:** The agent synthesizes the gathered information into a coherent summary, which is saved to a research report file.
-
-This structured approach ensures that research is not ad-hoc but is instead a repeatable and verifiable process.
-
----
-
 # Protocol: The Formal Research Cycle (L4)
 
 This protocol establishes the L4 Deep Research Cycle, a specialized, self-contained Finite Development Cycle (FDC) designed for comprehensive knowledge acquisition. It elevates research from a simple tool-based action to a formal, verifiable process.
@@ -608,7 +593,18 @@ The L4 Research Cycle solves this by introducing a new, specialized Finite State
 2.  **Executable Plans:** The `tooling/research_planner.py` is upgraded to generate formal, executable plans that are validated against the new research FSM. These are no longer just templates but are verifiable artifacts that guide the agent through the research process.
 3.  **Formal Invocation:** The L4 cycle is a first-class citizen in the agent's architecture. The main orchestrator can formally invoke it, execute the research plan, and then integrate the resulting knowledge back into its main task.
 
-This new protocol provides a robust, reliable, and formally verifiable mechanism for the agent to explore complex topics, making it significantly more autonomous and capable.
+This new protocol provides a robust, reliable, and formally verifiable mechanism for the agent to explore complex topics, making it significantly more autonomous and capable.# Protocol: Deep Research Cycle
+
+This protocol defines a standardized, multi-step plan for conducting in-depth research on a complex topic. It is designed to be a reusable, callable plan that ensures a systematic and thorough investigation.
+
+The cycle consists of five main phases:
+1.  **Review Scanned Documents:** The agent first reviews the content of documents found in the repository during the initial scan. This provides immediate, project-specific context.
+2.  **Initial Scoping & Keyword Generation:** Based on the initial topic and the information from scanned documents, the agent generates a set of search keywords.
+3.  **Broad Information Gathering:** The agent uses the keywords to perform broad web searches and collect a list of relevant URLs.
+4.  **Targeted Information Extraction:** The agent visits the most promising URLs to extract detailed information.
+5.  **Synthesis & Summary:** The agent synthesizes the gathered information into a coherent summary, which is saved to a research report file.
+
+This structured approach ensures that research is not ad-hoc but is instead a repeatable and verifiable process.
 
 ---
 
@@ -924,61 +920,6 @@ This new protocol provides a robust, reliable, and formally verifiable mechanism
   "associated_tools": [
     "tooling.research_planner.plan_deep_research",
     "tooling.research.execute_research_protocol"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "deep-research-cycle-001",
-  "description": "A standardized, callable plan for conducting in-depth research on a complex topic.",
-  "rules": [
-    {
-      "rule_id": "structured-research-phases",
-      "description": "The deep research plan MUST follow a structured four-phase process: Scoping, Broad Gathering, Targeted Extraction, and Synthesis.",
-      "enforcement": "The plan's structure itself enforces this rule. The `lint` command can be extended to validate the structure of registered research plans."
-    }
-  ],
-  "associated_tools": [
-    "google_search",
-    "view_text_website",
-    "create_file_with_block"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "research-fdc-001",
-  "description": "Defines the formal Finite Development Cycle (FDC) for conducting deep research.",
-  "rules": [
-    {
-      "rule_id": "specialized-fsm",
-      "description": "The Research FDC must be governed by its own dedicated Finite State Machine, defined in `tooling/research_fsm.json`. This FSM is tailored for a research workflow, with states for gathering, synthesis, and reporting.",
-      "enforcement": "The `master_control.py` orchestrator must load and execute plans against this specific FSM when initiating an L4 Deep Research Cycle."
-    },
-    {
-      "rule_id": "executable-plans",
-      "description": "Research plans must be generated by `tooling/research_planner.py` as valid, executable plans that conform to the `research_fsm.json` definition. They are not just templates but formal, verifiable artifacts.",
-      "enforcement": "The output of the research planner must be linted and validated by the `fdc_cli.py` tool using the `research_fsm.json`."
-    },
-    {
-      "rule_id": "l4-invocation",
-      "description": "The L4 Deep Research Cycle is the designated mechanism for resolving complex 'unknown unknowns'. It is invoked by the main orchestrator when a task requires knowledge that cannot be obtained through simple L1-L3 orientation probes.",
-      "enforcement": "The `master_control.py` orchestrator is responsible for triggering the L4 cycle."
-    }
-  ],
-  "associated_tools": [
-    "tooling/master_control.py",
-    "tooling/research_planner.py",
-    "tooling/research.py",
-    "tooling/fdc_cli.py"
   ]
 }
 ```
