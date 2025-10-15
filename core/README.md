@@ -2,13 +2,9 @@
 
 ## Overview
 
-This document provides a human-readable summary of the protocols and key
-components defined within this module. It is automatically generated from the
-corresponding `AGENTS.md` file and the source code docstrings.
+This document provides a human-readable summary of the protocols and key components defined within this module. It is automatically generated.
 
 ## Core Protocols
-
-This module is governed by a series of machine-readable protocols defined in `AGENTS.md`. These protocols are the source of truth for the agent's behavior within this scope. The key protocols are:
 
 - **`core-directive-001`**: The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC).
 - **`decidability-constraints-001`**: Ensures all development processes are formally decidable and computationally tractable.
@@ -24,4 +20,4 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 ## Key Components
 
-_No `tooling/` directory found in this module._
+_This module does not contain a `tooling/` directory._

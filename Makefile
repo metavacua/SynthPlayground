@@ -1,85 +1,76 @@
-# Makefile for project standards and validation
-# Refactored to use the unified builder.py script
-
-.PHONY: all install format lint test build clean docs security agents readme
-
 # ==============================================================================
-# Variables
+# Makefile for Project Standards and Validation
+#
+# This Makefile has been refactored to be a simple, clean interface to the
+# unified `builder.py` script. All build logic, commands, and configurations
+# are defined in `build_config.json` and executed by the builder.
+#
+# This approach provides a single source of truth for the build system while
+# retaining the convenience of traditional `make` commands.
 # ==============================================================================
-BUILDER_SCRIPT = tooling/builder.py
 
-# ==============================================================================
-# Default Target
-# ==============================================================================
-all: build
+.PHONY: all install format lint test build clean docs security agents readme audit audit-docs quality
 
-# ==============================================================================
-# High-Level Build Targets
-# ==============================================================================
-# These targets delegate all logic to the centralized builder script.
-# The builder script reads its configuration from build_config.json.
+# --- Variables ---
+BUILDER = python3 tooling/builder.py
 
-# Build all primary artifacts
-build:
-	@echo "--> Running unified build for all targets..."
-	@python3 $(BUILDER_SCRIPT) --target all
+# --- High-Level Targets ---
 
-# Generate system documentation
-docs:
-	@echo "--> Building target: docs"
-	@python3 $(BUILDER_SCRIPT) --target docs
+# Default target: build all primary artifacts.
+all:
+	@$(BUILDER) --target all
 
-# Compile security protocols
-security:
-	@echo "--> Building target: security"
-	@python3 $(BUILDER_SCRIPT) --target security
+# Run all code quality checks in sequence.
+quality:
+	@$(BUILDER) --target quality
 
-# Compile hierarchical agent protocols
-agents:
-	@echo "--> Building target: agents"
-	@python3 $(BUILDER_SCRIPT) --target agents
+# Build all primary project artifacts.
+build: all
 
-# Generate the root README.md
-readme:
-	@echo "--> Building target: readme"
-	@python3 $(BUILDER_SCRIPT) --target readme
+# --- Individual Commands (Delegated to Builder) ---
 
-# ==============================================================================
-# Code Quality & Testing
-# ==============================================================================
 install:
-	@echo "--> Installing dependencies from requirements.txt..."
-	@pip install -r requirements.txt
+	@$(BUILDER) --target install
 
 format:
-	@echo "--> Formatting Python code with black..."
-	@black .
+	@$(BUILDER) --target format
 
 lint:
-	@echo "--> Linting Python code with flake8..."
-	@flake8 .
+	@$(BUILDER) --target lint
 
 test:
-	@echo "--> Running all unit tests..."
-	@python3 -m unittest discover -v .
+	@$(BUILDER) --target test
 
-# ==============================================================================
-# Auditing
-# ==============================================================================
+docs:
+	@$(BUILDER) --target docs
+
+security:
+	@$(BUILDER) --target security
+
+agents:
+	@$(BUILDER) --target agents
+
+readme:
+	@$(BUILDER) --target readme
+
 audit:
-	@echo "--> Building target: audit"
-	@python3 $(BUILDER_SCRIPT) --target audit
+	@$(BUILDER) --target audit
 
 audit-docs:
-	@echo "--> Auditing documentation for completeness..."
-	@python3 tooling/doc_auditor.py
+	@$(BUILDER) --target audit-docs
 
-# ==============================================================================
-# Cleanup
-# ==============================================================================
 clean:
-	@echo "--> Removing compiled protocol and documentation artifacts..."
-	@rm -f AGENTS.md
-	@rm -f README.md
-	@rm -f SECURITY.md
-	@rm -f knowledge_core/SYSTEM_DOCUMENTATION.md
+	@$(BUILDER) --target clean
+
+# --- Help/Discovery ---
+
+list:
+	@$(BUILDER) --list
+
+help:
+	@echo "Makefile for project standards and validation."
+	@echo "This Makefile is a wrapper around the unified builder.py script."
+	@echo "All build logic is defined in build_config.json."
+	@echo ""
+	@echo "Available targets:"
+	@$(BUILDER) --list

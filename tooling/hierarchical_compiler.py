@@ -45,7 +45,8 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if ROOT_DIR not in sys.path:
     sys.path.append(ROOT_DIR)
 
-from tooling import protocol_compiler, readme_generator
+import subprocess
+from tooling import protocol_compiler
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -99,18 +100,28 @@ def run_compiler(source_dir):
 
 
 def run_readme_generator(source_agents_md):
-    """Invokes the readme_generator.py script as a library."""
+    """Invokes the doc_builder.py script to generate a README."""
     parent_dir = os.path.dirname(source_agents_md)
     target_readme = os.path.join(parent_dir, README_FILENAME)
+    doc_builder_script = os.path.join(ROOT_DIR, "tooling", "doc_builder.py")
 
-    print(f"Running README.md generator for: {source_agents_md}")
+    command = [
+        "python3",
+        doc_builder_script,
+        "--format", "readme",
+        "--source-file", source_agents_md,
+        "--output-file", target_readme
+    ]
+
+    print(f"Running README generator for: {source_agents_md}")
+    print(f"Command: {' '.join(command)}")
     try:
-        readme_generator.main(source_agents_md, target_readme)
+        subprocess.run(command, check=True, capture_output=True, text=True, cwd=ROOT_DIR)
         print(f"Successfully generated {target_readme}")
         return target_readme
-    except Exception as e:
+    except subprocess.CalledProcessError as e:
         print(f"Error generating README.md for {source_agents_md}:")
-        print(e)
+        print(e.stderr)
         return None
 
 
