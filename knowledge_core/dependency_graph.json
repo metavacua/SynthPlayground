@@ -2,7 +2,7 @@
   "nodes": [
     {
       "id": "root-python-project",
-      "path": "./requirements.txt",
+      "path": "/app/requirements.txt",
       "type": "python-project"
     },
     {
@@ -109,6 +109,11 @@
       "id": "flake8",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "pathspec",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
@@ -199,6 +204,10 @@
     {
       "source": "root-python-project",
       "target": "flake8"
+    },
+    {
+      "source": "root-python-project",
+      "target": "pathspec"
     }
   ]
 }
