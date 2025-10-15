@@ -11,6 +11,19 @@ https://www.isa-afp.org/entries/ILL.html
 The use of this work is subject to the terms of the BSD license, a copy of
 which is included in this project as ISABELLE_LICENSE.
 """
+"""
+Implementation of Intuitionistic Linear Logic (ILL).
+
+The logic and rule formulations in this module are heavily based on the
+formalization found in the "Deep Embedding of Intuitionistic Linear Logic"
+entry in the Archive of Formal Proofs by Filip Smola and Jacques D. Fleuriot.
+
+The original work can be found at:
+https://www.isa-afp.org/entries/ILL.html
+
+The use of this work is subject to the terms of the BSD license, a copy of
+which is included in this project as ISABELLE_LICENSE.
+"""
 from typing import Iterable, Optional
 from collections import Counter
 from .formulas import Formula, Tensor, LinImplies, OfCourse, With, Plus
