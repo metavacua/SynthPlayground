@@ -35,6 +35,10 @@ import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
+# Add the root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.file_system_utils import find_files
+
 # --- Dependency Management ---
 # This section makes the script self-contained by automatically installing
 # its own dependencies. This is a best practice for development tools that
@@ -157,14 +161,12 @@ def compile_protocols(
         return
 
     # --- File Discovery ---
-    from tooling.filesystem_lister import list_all_files_and_dirs
-    # --- File Discovery ---
-    # Use the authoritative lister and then filter by extension.
-    all_files = list_all_files_and_dirs(root_dir=source_dir, use_gitignore=True)
-
-    autodoc_placeholders = sorted([os.path.join(source_dir, f) for f in all_files if f.endswith(".autodoc.md")])
-    all_md_files = sorted([os.path.join(source_dir, f) for f in all_files if f.endswith(".protocol.md")])
-    all_json_files = sorted([os.path.join(source_dir, f) for f in all_files if f.endswith(".protocol.json")])
+    # Discover all relevant files and sort them to ensure deterministic output.
+    # The sort order is: autodoc placeholders, then all markdown, then all json.
+    # This ensures descriptions and summaries appear before the JSON blocks.
+    autodoc_placeholders = sorted([os.path.join(source_dir, f) for f in find_files("*.autodoc.md", base_dir=source_dir)])
+    all_md_files = sorted([os.path.join(source_dir, f) for f in find_files("*.protocol.md", base_dir=source_dir)])
+    all_json_files = sorted([os.path.join(source_dir, f) for f in find_files("*.protocol.json", base_dir=source_dir)])
 
     if not all_md_files and not all_json_files and not autodoc_placeholders:
         print(f"Warning: No protocol or documentation files found in {source_dir}.")

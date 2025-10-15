@@ -8,7 +8,12 @@ import re
 import json
 import argparse
 import markdown
+import sys
 from typing import List, Dict, Optional
+
+# Add the root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.file_system_utils import find_files
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -166,11 +171,9 @@ def generate_documentation_for_module(mod_doc: ModuleDoc) -> List[str]:
 def find_python_files(directories: List[str]) -> List[str]:
     py_files = []
     for directory in directories:
-        for root, _, files in os.walk(directory):
-            for file in files:
-                if file.endswith(".py") and not file.startswith("test_"):
-                    py_files.append(os.path.join(root, file))
-    return sorted(py_files)
+        files = [os.path.join(directory, f) for f in find_files("*.py", base_dir=directory)]
+        py_files.extend(files)
+    return sorted([f for f in py_files if not os.path.basename(f).startswith("test_")])
 
 def generate_system_docs(source_dirs: List[str], output_file: str):
     """Generates the detailed SYSTEM_DOCUMENTATION.md."""
@@ -205,13 +208,14 @@ def generate_readme(agents_md_path: str, output_file: str):
 
     tooling_dir = os.path.join(os.path.dirname(output_file), "tooling")
     if os.path.isdir(tooling_dir):
-        key_files = [f for f in os.listdir(tooling_dir) if f.endswith(".py") and not f.startswith("test_")]
+        key_files = find_files("*.py", base_dir=tooling_dir)
+        key_files = [f for f in key_files if not os.path.basename(f).startswith("test_")]
         if key_files:
             components_parts = []
             for filename in sorted(key_files):
                 filepath = os.path.join(tooling_dir, filename)
                 docstring = get_module_docstring(filepath)
-                components_parts.append(f"- **`tooling/{filename}`**:\n\n  > {docstring.replace(os.linesep, f'{os.linesep}  > ')}")
+                components_parts.append(f"- **`tooling/{os.path.basename(filename)}`**:\n\n  > {docstring.replace(os.linesep, f'{os.linesep}  > ')}")
             components_md = "\n\n".join(components_parts)
         else:
             components_md = "_No key component scripts found in the `tooling/` directory._"

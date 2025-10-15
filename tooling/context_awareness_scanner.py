@@ -27,6 +27,10 @@ import json
 import os
 import sys
 
+# Add the root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.file_system_utils import find_files
+
 
 def get_defined_symbols(filepath):
     """Parses a Python file to find all defined functions and classes."""
@@ -74,18 +78,15 @@ def get_imported_symbols(filepath):
 def find_references(symbol_name, search_path):
     """Finds all files in a directory that reference a given symbol."""
     references = []
-    for root, _, files in os.walk(search_path):
-        if ".git" in root:
-            continue
-        for file in files:
-            if file.endswith(".py"):
-                filepath = os.path.join(root, file)
-                try:
-                    with open(filepath, "r", errors="ignore") as f:
-                        if symbol_name in f.read():
-                            references.append(filepath)
-                except Exception:
-                    pass  # Ignore files that can't be read
+    python_files = find_files("*.py", base_dir=search_path)
+    for file in python_files:
+        filepath = os.path.join(search_path, file)
+        try:
+            with open(filepath, "r", errors="ignore") as f:
+                if symbol_name in f.read():
+                    references.append(filepath)
+        except Exception:
+            pass  # Ignore files that can't be read
     return references
 
 

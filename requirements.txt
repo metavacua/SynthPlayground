@@ -14,9 +14,8 @@ requests==2.32.5
 rpds-py==0.27.1
 typing_extensions==4.14.1
 urllib3==2.5.0
-requests==2.32.5
-pypdf==6.1.1
-watchdog==6.0.0
-markdown==3.9
+pypdf==6.0.0
+watchdog==4.0.1
+markdown
 black
 flake8
