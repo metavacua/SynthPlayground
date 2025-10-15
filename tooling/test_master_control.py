@@ -120,6 +120,9 @@ class TestMasterControlRedesigned(unittest.TestCase):
         with open("tooling/self_correction_orchestrator.py", "w") as f:
             f.write(" ")
 
+        with open("postmortems/structured_postmortem.md", "w") as f:
+            f.write("Test postmortem")
+
         self.fsm_path = "tooling/fsm.json"
         self.task_id = "test-redesigned-workflow"
         self.agent_state = AgentState(task=self.task_id)
@@ -145,7 +148,7 @@ class TestMasterControlRedesigned(unittest.TestCase):
             "google_search": MagicMock(),
             "view_text_website": MagicMock(),
         }
-        trigger = self.graph.do_orientation(self.agent_state, self.mock_logger)
+        trigger = self.graph.do_orientation(self.agent_state, self.mock_logger, tools)
         # In the new system, do_orientation directly returns the next state, not a trigger.
         self.assertEqual(trigger, self.graph.get_trigger("ORIENTING", "PLANNING"))
         self.mock_logger.log.assert_called()
@@ -197,15 +200,21 @@ class TestMasterControlRedesigned(unittest.TestCase):
     def test_do_finalizing(self, mock_datetime):
         mock_datetime.date.today.return_value = datetime.date(2025, 10, 13)
         analysis_content = "The task was completed successfully."
-        trigger = self.graph.do_finalizing(
-            self.agent_state, analysis_content, self.mock_logger
-        )
+
+        with patch('builtins.open', unittest.mock.mock_open(read_data="[TASK_ID]")) as mock_file:
+            trigger = self.graph.do_finalizing(
+                self.agent_state, analysis_content, self.mock_logger
+            )
+
         self.assertEqual(
             trigger, self.graph.get_trigger("FINALIZING", "AWAITING_SUBMISSION")
         )
         expected_path = f"postmortems/2025-10-13-{self.task_id}.md"
-        self.assertTrue(os.path.exists(expected_path))
-        self.mock_logger.log.assert_any_call(
+        # The mock_open doesn't create a real file, so we can't check for its existence.
+        # Instead, we check that open was called with the correct path.
+        mock_file.assert_any_call(expected_path, "w")
+
+        self.mock_logger.log.assert_called_with(
             "Phase 5",
             self.task_id,
             -1,

@@ -31,6 +31,8 @@ from utils.file_system_utils import find_files
 # --- Finder Functions ---
 
 
+from tooling.filesystem_lister import list_all_files_and_dirs
+
 def find_dependency_files(root_dir):
     """Finds all package.json and requirements.txt files, excluding node_modules."""
     package_json_files = [os.path.join(root_dir, f) for f in find_files("package.json", root_dir)]
@@ -110,13 +112,15 @@ def generate_dependency_graph(root_dir="."):
     # Consolidate all discovered projects
     package_json_files, requirements_txt_files = find_dependency_files(root_dir)
 
-    for pf in package_json_files:
-        info = parse_package_json(pf)
+    for pf_rel in package_json_files:
+        pf_abs = os.path.join(root_dir, pf_rel)
+        info = parse_package_json(pf_abs)
         if info:
             all_projects.append(info)
 
-    for rf in requirements_txt_files:
-        info = parse_requirements_txt(rf, root_dir)
+    for rf_rel in requirements_txt_files:
+        rf_abs = os.path.join(root_dir, rf_rel)
+        info = parse_requirements_txt(rf_abs, root_dir)
         if info:
             all_projects.append(info)
 

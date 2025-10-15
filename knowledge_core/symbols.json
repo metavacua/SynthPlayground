@@ -1415,6 +1415,15 @@
     },
     {
       "_type": "tag",
+      "name": "list_all_files_and_dirs",
+      "path": "./tooling/filesystem_lister.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "function",
+      "docstring": "Walks through a directory and its subdirectories and returns a sorted list of all\nfiles and directories, including empty directories."
+    },
+    {
+      "_type": "tag",
       "name": "_load_plan_registry",
       "path": "./tooling/master_control.py",
       "language": "Python",
@@ -1465,14 +1474,14 @@
       "language": "Python",
       "line": 104,
       "kind": "function",
-      "docstring": "Executes orientation, including analyzing the last post-mortem."
+      "docstring": "Executes orientation, including analyzing the last post-mortem and scanning the filesystem."
     },
     {
       "_type": "tag",
       "name": "do_planning",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 151,
+      "line": 162,
       "kind": "function",
       "docstring": "Validates a given plan, parses it, and initializes the plan stack."
     },
@@ -1481,7 +1490,7 @@
       "name": "_validate_plan_with_cli",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 196,
+      "line": 207,
       "kind": "function",
       "docstring": "Validates a plan by writing it to a temporary file and using the fdc_cli.py script."
     },
@@ -1490,7 +1499,7 @@
       "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 248,
+      "line": 233,
       "kind": "function",
       "docstring": "Validates a plan against a specific model's FSM."
     },
@@ -1499,7 +1508,7 @@
       "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 302,
+      "line": 287,
       "kind": "function",
       "docstring": "Validates a plan against a specific model's FSM."
     },
@@ -1508,7 +1517,7 @@
       "name": "do_researching",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 356,
+      "line": 341,
       "kind": "function",
       "docstring": "Launches the background research process."
     },
@@ -1517,7 +1526,7 @@
       "name": "do_awaiting_result",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 379,
+      "line": 364,
       "kind": "function",
       "docstring": "Checks for the result of the background research process."
     },
@@ -1526,7 +1535,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 413,
+      "line": 398,
       "kind": "function",
       "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
     },
@@ -1535,7 +1544,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 424,
+      "line": 409,
       "kind": "function",
       "docstring": "Processes the result of a step and advances the execution state."
     },
@@ -1544,7 +1553,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 468,
+      "line": 453,
       "kind": "function",
       "docstring": "Handles the code generation state."
     },
@@ -1553,7 +1562,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 477,
+      "line": 462,
       "kind": "function",
       "docstring": "Handles the test execution state."
     },
@@ -1562,7 +1571,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 487,
+      "line": 472,
       "kind": "function",
       "docstring": "Handles the debugging state."
     },
@@ -1571,7 +1580,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 496,
+      "line": 481,
       "kind": "function",
       "docstring": "Handles the finalization of the task, guiding the agent through\nthe structured post-mortem process."
     },
@@ -2306,19 +2315,28 @@
     },
     {
       "_type": "tag",
-      "name": "validate_plan",
+      "name": "_load_file_index",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
       "line": 238,
       "kind": "function",
-      "docstring": null
+      "docstring": "Loads the file index from the .file_index.json file."
+    },
+    {
+      "_type": "tag",
+      "name": "validate_plan",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 260,
+      "kind": "function",
+      "docstring": "Validates a plan file against the FDC FSM using a pre-built file index."
     },
     {
       "_type": "tag",
       "name": "analyze_plan",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 272,
+      "line": 291,
       "kind": "function",
       "docstring": "Analyzes a plan file to determine its complexity class and modality."
     },
@@ -2327,7 +2345,7 @@
       "name": "start_task",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 319,
+      "line": 338,
       "kind": "function",
       "docstring": "Initiates the AORP cascade for a new task."
     },
@@ -2336,16 +2354,43 @@
       "name": "main",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 375,
+      "line": 394,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "get_all_files",
+      "path": "./tooling/file_indexer.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "function",
+      "docstring": "Walks the directory tree and returns a sorted list of all file paths.\n\nArgs:\n    root_dir (str): The root directory to start the walk from.\n    excludes (set): A set of directory and file names to exclude.\n    exclude_patterns (set): A set of file name patterns to exclude.\n\nReturns:\n    list: A sorted list of relative file paths."
+    },
+    {
+      "_type": "tag",
+      "name": "build_index",
+      "path": "./tooling/file_indexer.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function",
+      "docstring": "Scans the repository and builds the file index."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/file_indexer.py",
+      "language": "Python",
+      "line": 63,
+      "kind": "function",
+      "docstring": "Main entry point for the file indexer CLI."
     },
     {
       "_type": "tag",
       "name": "find_fsm_transition",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 26,
+      "line": 27,
       "kind": "function",
       "docstring": "Finds the destination state for a given source and trigger."
     },
@@ -2354,7 +2399,7 @@
       "name": "run_agent_loop",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 36,
+      "line": 37,
       "kind": "function",
       "docstring": "The main loop that drives the agent's lifecycle via the FSM."
     },
@@ -2363,7 +2408,7 @@
       "name": "main",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 164,
+      "line": 165,
       "kind": "function",
       "docstring": "Main entry point for the agent shell."
     },
@@ -2570,7 +2615,7 @@
       "name": "tearDown",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 118,
+      "line": 129,
       "kind": "function",
       "docstring": null
     },
@@ -2579,7 +2624,7 @@
       "name": "test_do_orientation",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 127,
+      "line": 138,
       "kind": "function",
       "docstring": null
     },
@@ -2588,7 +2633,7 @@
       "name": "test_do_planning",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 146,
+      "line": 157,
       "kind": "function",
       "docstring": null
     },
@@ -2597,7 +2642,7 @@
       "name": "test_do_execution",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 158,
+      "line": 169,
       "kind": "function",
       "docstring": null
     },
@@ -2606,7 +2651,7 @@
       "name": "test_do_execution_to_generate_code",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 173,
+      "line": 184,
       "kind": "function",
       "docstring": null
     },
@@ -2615,7 +2660,7 @@
       "name": "test_do_finalizing",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 186,
+      "line": 197,
       "kind": "function",
       "docstring": null
     },
