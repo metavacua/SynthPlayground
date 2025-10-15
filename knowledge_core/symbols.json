@@ -407,6 +407,51 @@
     },
     {
       "_type": "tag",
+      "name": "ComplexityTracer",
+      "path": "./language_theory/toolchain/complexity.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": "A tracer to count Python instructions executed."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./language_theory/toolchain/complexity.py",
+      "language": "Python",
+      "line": 38,
+      "kind": "function",
+      "docstring": "Main function for the complexity analyzer.\nThis script takes another Python script and its arguments as input,\nruns it, and reports the number of instructions executed."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./language_theory/toolchain/complexity.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "trace_dispatch",
+      "path": "./language_theory/toolchain/complexity.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "run_and_trace",
+      "path": "./language_theory/toolchain/complexity.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": "Runs a target module with tracing enabled using runpy."
+    },
+    {
+      "_type": "tag",
       "name": "TestNewSelfImprovementCLI",
       "path": "./tooling/test_new_self_improvement_cli.py",
       "language": "Python",
