@@ -1,3 +1,16 @@
+"""
+Implementation of Intuitionistic Linear Logic (ILL).
+
+The logic and rule formulations in this module are heavily based on the
+formalization found in the "Deep Embedding of Intuitionistic Linear Logic"
+entry in the Archive of Formal Proofs by Filip Smola and Jacques D. Fleuriot.
+
+The original work can be found at:
+https://www.isa-afp.org/entries/ILL.html
+
+The use of this work is subject to the terms of the BSD license, a copy of
+which is included in this project as ISABELLE_LICENSE.
+"""
 from typing import Iterable, Optional
 from collections import Counter
 from .formulas import Formula, Tensor, LinImplies, OfCourse, With, Plus
@@ -16,7 +29,7 @@ class ILLSequent(Sequent):
 
     def __repr__(self):
         # Overriding for custom representation
-        ant_str = ", ".join(map(str, self.antecedent.elements()))
+        ant_str = ", ".join(map(str, sorted(list(self.antecedent.elements()), key=str)))
         suc_str = str(self.succedent_formula)
         return f"{ant_str} ⊢ {suc_str}"
 
@@ -42,13 +55,12 @@ def cut(left_proof: ProofTree, right_proof: ProofTree) -> ProofTree:
     return ProofTree(conclusion, Rule("Cut"), [left_proof, right_proof])
 
 # Multiplicative Rules
-def tensor_right(left_proof: ProofTree, right_proof: ProofTree, formula: Tensor) -> ProofTree:
+def tensor_right(left_proof: ProofTree, right_proof: ProofTree) -> ProofTree:
     """Γ ⊢ A   and   Δ ⊢ B
     -----------------------
          Γ, Δ ⊢ A ⊗ B
     """
-    if left_proof.conclusion.succedent_formula != formula.left or right_proof.conclusion.succedent_formula != formula.right:
-        raise ValueError("Premises do not support the conclusion for ⊗-R")
+    formula = Tensor(left_proof.conclusion.succedent_formula, right_proof.conclusion.succedent_formula)
     antecedent = left_proof.conclusion.antecedent + right_proof.conclusion.antecedent
     conclusion = ILLSequent(antecedent, formula)
     return ProofTree(conclusion, Rule("⊗-R"), [left_proof, right_proof])
@@ -88,37 +100,40 @@ def lin_implies_left(left_proof: ProofTree, right_proof: ProofTree, formula: Lin
     return ProofTree(conclusion, Rule("⊸-L"), [left_proof, right_proof])
 
 # Additive Rules
-def with_right(left_proof: ProofTree, right_proof: ProofTree, formula: With) -> ProofTree:
+def with_right(left_proof: ProofTree, right_proof: ProofTree) -> ProofTree:
     """Γ ⊢ A   and   Γ ⊢ B
     -----------------------
           Γ ⊢ A & B
     """
     if left_proof.conclusion.antecedent != right_proof.conclusion.antecedent:
         raise ValueError("Antecedents must be the same for &-R.")
-    if left_proof.conclusion.succedent_formula != formula.left or right_proof.conclusion.succedent_formula != formula.right:
-        raise ValueError("Premises do not support the conclusion for &-R")
-
+    formula = With(left_proof.conclusion.succedent_formula, right_proof.conclusion.succedent_formula)
     conclusion = ILLSequent(left_proof.conclusion.antecedent, formula)
     return ProofTree(conclusion, Rule("&-R"), [left_proof, right_proof])
 
-def with_left(proof: ProofTree, formula: With, chosen_formula: Formula) -> ProofTree:
+def with_left_1(proof: ProofTree, formula: With) -> ProofTree:
     """Γ, A ⊢ C
     ------------
     Γ, A & B ⊢ C
-    or
-    Γ, B ⊢ C
+    """
+    if formula.left not in proof.conclusion.antecedent:
+        raise ValueError("Premise does not contain the chosen subformula.")
+
+    new_antecedent = (proof.conclusion.antecedent - Counter([formula.left])) + Counter([formula])
+    conclusion = ILLSequent(new_antecedent, proof.conclusion.succedent_formula)
+    return ProofTree(conclusion, Rule("&-L1"), [proof])
+
+def with_left_2(proof: ProofTree, formula: With) -> ProofTree:
+    """Γ, B ⊢ C
     ------------
     Γ, A & B ⊢ C
     """
-    if chosen_formula not in [formula.left, formula.right]:
-        raise ValueError("Chosen formula must be a subformula of the With formula.")
-    if chosen_formula not in proof.conclusion.antecedent:
+    if formula.right not in proof.conclusion.antecedent:
         raise ValueError("Premise does not contain the chosen subformula.")
 
-    new_antecedent = (proof.conclusion.antecedent - Counter([chosen_formula])) + Counter([formula])
+    new_antecedent = (proof.conclusion.antecedent - Counter([formula.right])) + Counter([formula])
     conclusion = ILLSequent(new_antecedent, proof.conclusion.succedent_formula)
-    return ProofTree(conclusion, Rule("&-L"), [proof])
-
+    return ProofTree(conclusion, Rule("&-L2"), [proof])
 
 def plus_right_1(proof: ProofTree, formula: Plus) -> ProofTree:
     """Γ ⊢ A
@@ -165,7 +180,6 @@ def of_course_right(proof: ProofTree) -> ProofTree:
     ----------
     !Γ ⊢ !A
     """
-    # This rule requires a context with only "of course" formulas.
     for f in proof.conclusion.antecedent:
         if not isinstance(f, OfCourse):
             raise ValueError("Antecedent for !-R must only contain '!' formulas.")
@@ -192,7 +206,6 @@ def contraction(proof: ProofTree, formula: OfCourse) -> ProofTree:
     if proof.conclusion.antecedent[formula] < 2:
          raise ValueError("Premise does not contain two instances of the contracted formula.")
 
-    # Remove one instance of the !A formula
     new_antecedent = proof.conclusion.antecedent - Counter([formula])
     conclusion = ILLSequent(new_antecedent, proof.conclusion.succedent_formula)
     return ProofTree(conclusion, Rule("Contraction"), [proof])
@@ -202,11 +215,6 @@ def weakening(proof: ProofTree, formula: OfCourse) -> ProofTree:
     ------------
     Γ, !A ⊢ B
     """
-    # This rule in ILL is for weakening a !-formula from the antecedent.
-    # The premise should not contain the formula that is being weakened in.
-    # The correct rule is Γ, !A ⊢ B / Γ ⊢ B, which is "forgetting".
-    # The rule Γ ⊢ B / Γ, !A ⊢ B is also a form of weakening.
-    # We will implement the latter.
     new_antecedent = proof.conclusion.antecedent + Counter([formula])
     conclusion = ILLSequent(new_antecedent, proof.conclusion.succedent_formula)
     return ProofTree(conclusion, Rule("Weakening"), [proof])

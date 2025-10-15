@@ -3,7 +3,7 @@ from collections import Counter
 from logic_system.src.formulas import Prop, Implies, And, Or, Not, OfCourse, LinImplies, With, Plus
 from logic_system.src.sequents import Sequent
 from logic_system.src.ill import contraction as ill_contraction, ILLSequent, axiom as ill_axiom
-from logic_system.src.lj import axiom as lj_axiom, implies_right as lj_implies_right
+from logic_system.src import lj
 from logic_system.src.translations import lj_to_lk, translate_formula_lj_to_ill, lj_to_ill_proof
 from logic_system.src.proof import ProofTree, Rule
 
@@ -15,8 +15,8 @@ class TestTranslations(unittest.TestCase):
         """
         # 1. Construct a simple LJ proof for ⊢ A → A
         A = Prop("A")
-        axiom_proof = lj_axiom(A) # A ⊢ A
-        lj_proof = lj_implies_right(axiom_proof, Implies(A, A)) # ⊢ A → A
+        axiom_proof = lj.axiom(A) # A ⊢ A
+        lj_proof = lj.implies_right(axiom_proof, Implies(A, A)) # ⊢ A → A
 
         # 2. Translate the LJ proof to LK
         lk_proof = lj_to_lk(lj_proof)
@@ -90,7 +90,7 @@ class TestTranslations(unittest.TestCase):
         """
         # 1. Construct LJ proof for A ⊢ A
         A = Prop("A")
-        lj_proof = lj_axiom(A)
+        lj_proof = lj.axiom(A)
 
         # 2. Translate to ILL
         ill_proof = lj_to_ill_proof(lj_proof)
@@ -105,6 +105,22 @@ class TestTranslations(unittest.TestCase):
         self.assertEqual(ill_proof.rule.name, "Dereliction")
         self.assertEqual(len(ill_proof.premises), 1)
         self.assertEqual(ill_proof.premises[0].rule.name, "Axiom")
+
+    def test_lj_implies_left_to_ill(self):
+        """Tests the translation of an LJ proof with →-L."""
+        A = Prop("A")
+        B = Prop("B")
+
+        # Construct LJ proof for A, A → B ⊢ B
+        p1 = lj.axiom(A) # A ⊢ A
+        p2 = lj.axiom(B) # B ⊢ B
+        p3 = lj.implies_left(p1, p2, Implies(A, B)) # A, A → B ⊢ B
+
+        # Translate to ILL
+        ill_proof = lj_to_ill_proof(p3)
+
+        # We expect a valid proof, even if it's complex
+        self.assertIsInstance(ill_proof, ProofTree)
 
 
 if __name__ == '__main__':
