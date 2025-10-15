@@ -31,21 +31,18 @@ class Environment:
         self.store[name] = val
         return val
 
-# --- Mocked "Standard Library" ---
+# --- Agent Tooling Bridge ---
 
-class MockHttpResponse:
-    def __init__(self, status_code, body):
-        self.status_code, self.body = status_code, body
-
-class MockUser:
-    def __init__(self, id, name, email):
-        self.id, self.name, self.email = id, name, email
-
-def mock_http_get(url):
-    return MockHttpResponse(200, '{"id": 1, "name": "Jules", "email": "jules@example.com"}') if "users/1" in url else MockHttpResponse(404, "Not Found")
-
-def mock_json_decode(json_string):
-    return MockUser(1, "Jules", "jules@example.com") if 'Jules' in json_string else None
+def agent_call_tool(tool_name, **kwargs):
+    """
+    Placeholder for calling the agent's real tools.
+    This will be replaced by a real implementation provided by the executor.
+    """
+    print(f"[Aura Interpreter]: Tool call to '{tool_name}' with args {kwargs} is not yet implemented.")
+    if tool_name == "hdl_prover.prove_sequent":
+        # Return a mock value for now
+        return True
+    return None
 
 # --- Interpreter ---
 
@@ -96,10 +93,25 @@ def eval_block_statement(block, env):
     return result
 
 def eval_if_statement(node, env):
-    condition = evaluate(node.condition, env)
-    # The condition is a raw boolean from the 'in' operator
-    if condition: return evaluate(node.consequence, env)
-    elif node.alternative: return evaluate(node.alternative, env)
+    condition_obj = evaluate(node.condition, env)
+
+    # Use Python-like truthiness to evaluate the condition
+    is_truthy = False
+    if hasattr(condition_obj, 'value'):
+        val = condition_obj.value
+        if val is not None and val is not False:
+            # Check for empty collections or zero values
+            if isinstance(val, (int, float)) and val == 0:
+                is_truthy = False
+            elif isinstance(val, (str, list, tuple, dict)) and not val:
+                is_truthy = False
+            else:
+                is_truthy = True
+
+    if is_truthy:
+        return evaluate(node.consequence, env)
+    elif node.alternative:
+        return evaluate(node.alternative, env)
 
 def eval_for_statement(node, env):
     iterable_obj = evaluate(node.iterable, env)
@@ -110,8 +122,12 @@ def eval_for_statement(node, env):
 
 def eval_print_statement(node, env):
     # Simplified version without f-string interpolation.
-    str_obj = evaluate(node.value, env)
-    print(str_obj.value)
+    evaluated_obj = evaluate(node.value, env)
+    if hasattr(evaluated_obj, 'value'):
+        print(evaluated_obj.value)
+    else:
+        # This handles cases where a raw value might be returned
+        print(evaluated_obj)
 
 def eval_infix_expression(op, left, right):
     if isinstance(left, Integer) and isinstance(right, Integer):
@@ -136,6 +152,12 @@ def apply_function(fn, args):
         return evaluated.value if isinstance(evaluated, ReturnValue) else evaluated
     elif isinstance(fn, Builtin):
         unwrapped_args = [a.value for a in args]
+        # The built-in function is now expected to return an Object
         return fn.fn(*unwrapped_args)
 
-BUILTINS = {"http.get": Builtin(mock_http_get), "json.decode": Builtin(mock_json_decode)}
+class Agent(Object):
+    def __init__(self):
+        self.value = self
+        self.call_tool = Builtin(agent_call_tool)
+
+BUILTINS = {"agent": Agent()}
