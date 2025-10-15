@@ -169,7 +169,7 @@
       "language": "Python",
       "line": 83,
       "kind": "function",
-      "docstring": "Constructs, validates, and writes a log entry.\n\nArgs:\n    phase (str): The current protocol phase (e.g., \"Phase 7\").\n    task_id (str): The ID of the current task.\n    plan_step (int): The current plan step number.\n    action_type (str): The type of action (e.g., \"TOOL_EXEC\").\n    action_details (dict): Details specific to the action.\n    outcome_status (str): The outcome of the action (\"SUCCESS\", \"FAILURE\").\n    outcome_message (str, optional): A message describing the outcome. Defaults to \"\".\n    error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.\n    evidence (str, optional): Citation for the action. Defaults to \"\".\n\nRaises:\n    ValidationError: If the generated log entry does not conform to the schema."
+      "docstring": "Constructs, validates, and writes a log entry.\n\nArgs:\n    phase (str): The current protocol phase (e.g., \"Phase 7\").\n    task_id (str): The ID of the current task.\n    plan_step (int): The current plan step number.\n    action_type (str): The type of action (e.g., \"TOOL_EXEC\").\n    action_details (dict): Details specific to the action.\n    outcome_status (str): The outcome of the action (\"SUCCESS\", \"FAILURE\").\n    outcome_message (str, optional): A message describing the outcome. Defaults to \"\".\n    error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.\n    evidence (str, optional): Citation for the action. Defaults to \"\".\n    context (dict, optional): The agent's internal context. Defaults to None.\n\nRaises:\n    ValidationError: If the generated log entry does not conform to the schema."
     },
     {
       "_type": "tag",
@@ -347,18 +347,36 @@
       "name": "TestNewResearchPlanner",
       "path": "./tooling/test_research_planner.py",
       "language": "Python",
-      "line": 5,
+      "line": 6,
       "kind": "class",
-      "docstring": "Tests for the refactored, FSM-compliant research planner."
+      "docstring": "Tests for the refactored, FSM-compliant research planner that uses templates."
     },
     {
       "_type": "tag",
-      "name": "test_plan_deep_research_generates_executable_plan",
+      "name": "setUp",
       "path": "./tooling/test_research_planner.py",
       "language": "Python",
-      "line": 10,
+      "line": 11,
       "kind": "function",
-      "docstring": "Verify that the new plan_deep_research generates a valid, executable\nFSM-compliant plan."
+      "docstring": "Create dummy template files for testing."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_research_planner.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": "Remove dummy template files."
+    },
+    {
+      "_type": "tag",
+      "name": "test_plan_deep_research_uses_templates_correctly",
+      "path": "./tooling/test_research_planner.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": "Verify that plan_deep_research generates a plan that correctly\npopulates and creates files from the templates."
     },
     {
       "_type": "tag",
@@ -839,10 +857,19 @@
     },
     {
       "_type": "tag",
-      "name": "MasterControlGraph",
+      "name": "_get_log_context",
       "path": "./tooling/master_control.py",
       "language": "Python",
       "line": 62,
+      "kind": "function",
+      "docstring": "Creates a context dictionary for logging from the agent's state."
+    },
+    {
+      "_type": "tag",
+      "name": "MasterControlGraph",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 76,
       "kind": "class",
       "docstring": "A Finite State Machine (FSM) that enforces the agent's protocol.\nThis graph reads a state definition and orchestrates the agent's workflow,\nensuring that all protocol steps are followed in the correct order."
     },
@@ -851,7 +878,7 @@
       "name": "__init__",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 69,
+      "line": 83,
       "kind": "function",
       "docstring": null
     },
@@ -860,7 +887,7 @@
       "name": "get_trigger",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 74,
+      "line": 88,
       "kind": "function",
       "docstring": "Finds a trigger in the FSM definition for a transition from a source\nto a destination state. This is a helper to avoid hardcoding trigger\nstrings in the state handlers."
     },
@@ -869,7 +896,7 @@
       "name": "do_orientation",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 90,
+      "line": 104,
       "kind": "function",
       "docstring": "Executes orientation, including analyzing the last post-mortem."
     },
@@ -878,7 +905,7 @@
       "name": "do_planning",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 131,
+      "line": 151,
       "kind": "function",
       "docstring": "Validates a given plan, parses it, and initializes the plan stack."
     },
@@ -887,7 +914,7 @@
       "name": "_validate_plan_with_cli",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 171,
+      "line": 196,
       "kind": "function",
       "docstring": "Validates a plan by writing it to a temporary file and using the fdc_cli.py script."
     },
@@ -896,7 +923,7 @@
       "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 223,
+      "line": 248,
       "kind": "function",
       "docstring": "Validates a plan against a specific model's FSM."
     },
@@ -905,7 +932,7 @@
       "name": "do_researching",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 277,
+      "line": 302,
       "kind": "function",
       "docstring": "Launches the background research process."
     },
@@ -914,7 +941,7 @@
       "name": "do_awaiting_result",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 297,
+      "line": 325,
       "kind": "function",
       "docstring": "Checks for the result of the background research process."
     },
@@ -923,7 +950,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 328,
+      "line": 359,
       "kind": "function",
       "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
     },
@@ -932,7 +959,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 339,
+      "line": 370,
       "kind": "function",
       "docstring": "Processes the result of a step and advances the execution state."
     },
@@ -941,7 +968,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 377,
+      "line": 414,
       "kind": "function",
       "docstring": "Handles the code generation state."
     },
@@ -950,7 +977,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 385,
+      "line": 423,
       "kind": "function",
       "docstring": "Handles the test execution state."
     },
@@ -959,7 +986,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 394,
+      "line": 433,
       "kind": "function",
       "docstring": "Handles the debugging state."
     },
@@ -968,9 +995,9 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 402,
+      "line": 442,
       "kind": "function",
-      "docstring": "Handles the finalization of the task with agent-provided analysis."
+      "docstring": "Handles the finalization of the task, guiding the agent through\nthe structured post-mortem process."
     },
     {
       "_type": "tag",
@@ -1112,7 +1139,7 @@
       "name": "to_json",
       "path": "./tooling/state.py",
       "language": "Python",
-      "line": 92,
+      "line": 93,
       "kind": "function",
       "docstring": null
     },
@@ -2581,7 +2608,7 @@
       "language": "Python",
       "line": 8,
       "kind": "function",
-      "docstring": "Generates a multi-step, FSM-compliant plan for conducting deep research.\n\nArgs:\n    topic (str): The research topic.\n\nReturns:\n    str: A string containing the executable plan."
+      "docstring": "Generates a multi-step, FSM-compliant plan for conducting deep research\nusing the official project templates.\n\nArgs:\n    topic (str): The research topic.\n    research_id (str): A unique ID for this research task.\n\nReturns:\n    str: A string containing the executable plan."
     },
     {
       "_type": "tag",
