@@ -1,0 +1,9 @@
+# A Context-Free Grammar for the (Untyped) Lambda Calculus
+#
+# This grammar generates syntactically well-formed lambda calculus terms.
+# It serves as a witness for a language that is itself a universal
+# model of computation, corresponding to a non-classical logic.
+#
+# We use 'L' to represent the lambda (λ) symbol.
+
+T -> id | L id . T | ( T T )

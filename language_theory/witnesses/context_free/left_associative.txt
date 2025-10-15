@@ -1,0 +1,5 @@
+# Unambiguous, Left-Associative Context-Free Grammar.
+# Symbols are separated by spaces.
+E -> E + T | T
+T -> T * F | F
+F -> i

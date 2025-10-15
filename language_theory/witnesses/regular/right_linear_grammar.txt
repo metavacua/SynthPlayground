@@ -1,0 +1,5 @@
+# Corrected Right-Linear Grammar for the language a^n b^m where n, m > 0
+# Symbols are separated by spaces.
+S -> a A
+A -> a A | b B
+B -> b B | b

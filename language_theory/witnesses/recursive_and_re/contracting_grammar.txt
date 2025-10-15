@@ -1,0 +1,10 @@
+# A Simple Grammar with a Contracting Rule
+#
+# This grammar generates the simple regular language L = {a+}.
+# However, it does so using a contracting (Type-0) rule (C -> ).
+# This demonstrates a grammar that is structurally unrestricted, even though
+# the language it generates is simple and decidable.
+
+S -> S B | C
+B C -> a C
+C ->

@@ -1,0 +1,8 @@
+# Context-Sensitive Grammar for the language L = {a^n b^n c^n | n >= 1}
+# Symbols on both sides of a rule are separated by spaces for robust parsing.
+S -> a S B C | a B C
+C B -> B C
+a B -> a b
+b B -> b b
+b C -> b c
+c C -> c c
