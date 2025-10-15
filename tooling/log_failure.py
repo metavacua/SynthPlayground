@@ -1,12 +1,3 @@
-"""
-A script to log a catastrophic failure event.
-
-This tool is designed to be called in the event of a critical, unrecoverable
-error, specifically the unauthorized use of the `reset_all` tool. It uses the
-standard `Logger` class to record a `SYSTEM_FAILURE` event in the main activity
-log, ensuring that such a severe event is formally documented for post-mortem
-analysis.
-"""
 import sys
 import os
 
