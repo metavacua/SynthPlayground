@@ -1,0 +1,27 @@
+# This file provides a declarative, centralized definition of the protocol
+# module hierarchy. The `compiler_v2.py` script uses this manifest to
+# understand the parent-child relationships between different protocol sets,
+# replacing the old system's fragile method of inferring the structure from
+# the file system.
+
+# The root module, which implicitly contains all other top-level modules.
+root:
+  # The path to the root module's protocol sources.
+  path: .
+  # A list of child modules that are logically contained within the root.
+  children:
+    - core
+    - compliance
+    - critic
+
+# Definition for the 'core' module.
+core:
+  path: ./core
+
+# Definition for the 'compliance' module.
+compliance:
+  path: ./compliance
+
+# Definition for the 'critic' module.
+critic:
+  path: ./critic

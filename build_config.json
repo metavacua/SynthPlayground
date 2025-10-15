@@ -50,11 +50,11 @@
     "agents": {
       "type": "compiler",
       "output": "AGENTS.md",
-      "compiler": "tooling/hierarchical_compiler.py",
+      "compiler": "tooling/compiler_v2.py",
       "sources": [
         "protocols/"
       ],
-      "description": "Recursively compiles all AGENTS.md files."
+      "description": "Recursively compiles all AGENTS.md files using the manifest-driven V2 compiler."
     },
     "audit": {
       "type": "command",

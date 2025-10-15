@@ -291,6 +291,44 @@ def compile_protocols(
     print(f"\n--- Compilation finished for {os.path.basename(target_file)} ---")
 
 
+def compile_protocols_to_string(source_dir, schema_file):
+    """
+    Compiles all protocols from a source directory into a single string.
+    This is a library-friendly version of compile_protocols that returns the
+    compiled content as a string instead of writing it to a file.
+    """
+    schema = load_schema(schema_file)
+    if not schema:
+        raise ValueError(f"Could not load schema from {schema_file}")
+
+    all_md_files = sorted(glob.glob(os.path.join(source_dir, "*.protocol.md")))
+    all_json_files = sorted(glob.glob(os.path.join(source_dir, "*.protocol.json")))
+
+    if not all_md_files and not all_json_files:
+        return "" # Return empty string if no protocol files are found
+
+    content_parts = []
+    # Process Markdown files
+    for file_path in all_md_files:
+        with open(file_path, "r") as f:
+            content = f.read()
+            sanitized_content = sanitize_markdown(content)
+            content_parts.append(sanitized_content)
+        content_parts.append("\n---\n")
+
+    # Process JSON files
+    for file_path in all_json_files:
+        with open(file_path, "r") as f:
+            protocol_data = json.load(f)
+        jsonschema.validate(instance=protocol_data, schema=schema)
+        json_string = json.dumps(protocol_data, indent=2)
+        md_json_block = f"```json\n{json_string}\n```\n"
+        content_parts.append(md_json_block)
+        content_parts.append("\n---\n")
+
+    return "\n".join(content_parts)
+
+
 def main_cli():
     """Main function to run the compiler from the command line."""
     parser = argparse.ArgumentParser(

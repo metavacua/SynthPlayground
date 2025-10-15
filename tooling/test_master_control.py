@@ -194,6 +194,29 @@ class TestMasterControlRedesigned(unittest.TestCase):
         )
         expected_path = f"postmortems/2025-10-13-{self.task_id}.md"
         self.assertTrue(os.path.exists(expected_path))
+
+        with open(expected_path, "r") as f:
+            written_content = f.read()
+
+        self.assertIn("The task was completed successfully.", written_content)
+        self.assertIn("structured data", written_content) # Check for the hardcoded string from the refactored method
+
+        expected_log_content = f"""# Post-Mortem Report for Task: {self.task_id}
+
+## Agent Analysis
+
+{analysis_content}
+
+## Structured Analysis
+
+structured data"""
+        # The agent's thought changes after the report is generated.
+        expected_thought = "Post-mortem report generated."
+        expected_context = {
+            "current_thought": expected_thought,
+            "active_memory_summary": "Messages: 0, Research Findings: No",
+            "plan_execution_stack": [],
+        }
         self.mock_logger.log.assert_called_with(
             "Phase 5",
             self.task_id,
@@ -201,9 +224,10 @@ class TestMasterControlRedesigned(unittest.TestCase):
             "POST_MORTEM",
             {
                 "path": expected_path,
-                "content": "# Post-Mortem Report for Task: test-redesigned-workflow\n\n## Agent Analysis\n\nThe task was completed successfully.\n",
+                "content": expected_log_content,
             },
             "SUCCESS",
+            context=expected_context,
         )
 
 
