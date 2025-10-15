@@ -248,6 +248,10 @@ def main():
         current_module_path = os.path.dirname(proto_dir)
         print(f"\n--- Processing Module: {current_module_path} ---")
 
+        # Always start with a clean slate by removing old summary files.
+        # This prevents stale data from being included if a previous run failed.
+        cleanup_summaries(proto_dir)
+
         # Inject summaries from children that have already been compiled
         for child_module_path, artifacts in compiled_artifacts.items():
             parent_module = get_parent_module(child_module_path, module_paths)
@@ -272,9 +276,6 @@ def main():
                 "agents_md": target_agents_md,
                 "readme": target_readme,
             }
-
-        # Clean up the temporary summary files
-        cleanup_summaries(proto_dir)
 
     print("\n--- Hierarchical Build Summary ---")
     for module, artifacts in sorted(compiled_artifacts.items()):
