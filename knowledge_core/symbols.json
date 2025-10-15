@@ -248,7 +248,7 @@
       "name": "audit_plan_registry",
       "path": "./tooling/plan_registry_auditor.py",
       "language": "Python",
-      "line": 16,
+      "line": 8,
       "kind": "function",
       "docstring": "Audits the plan registry to find registered plans that point to\nnon-existent files.\n\nArgs:\n    registry_path (str): The path to the plan registry JSON file.\n\nReturns:\n    list: A list of tuples, where each tuple contains the name and\n          path of a dead link."
     },
@@ -680,7 +680,7 @@
       "name": "find_protocol_dirs",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 44,
+      "line": 24,
       "kind": "function",
       "docstring": "Finds all directories named 'protocols' within the root directory,\nignoring any special-cased directories."
     },
@@ -689,7 +689,7 @@
       "name": "run_compiler",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 64,
+      "line": 44,
       "kind": "function",
       "docstring": "Invokes the protocol_compiler.py script as a library."
     },
@@ -698,7 +698,7 @@
       "name": "run_readme_generator",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 84,
+      "line": 64,
       "kind": "function",
       "docstring": "Invokes the readme_generator.py script as a library."
     },
@@ -707,7 +707,7 @@
       "name": "generate_summary",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 100,
+      "line": 80,
       "kind": "function",
       "docstring": "Extracts the full, rendered protocol blocks from a child AGENTS.md file.\nThis function finds all protocol definitions (human-readable markdown and\nthe associated machine-readable JSON block) and concatenates them into a\nsingle string to be injected into the parent AGENTS.md."
     },
@@ -716,7 +716,7 @@
       "name": "cleanup_summaries",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 131,
+      "line": 111,
       "kind": "function",
       "docstring": "Removes temporary summary files from a protocols directory."
     },
@@ -725,7 +725,7 @@
       "name": "get_parent_module",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 141,
+      "line": 121,
       "kind": "function",
       "docstring": "Finds the direct parent module of a given module."
     },
@@ -734,7 +734,7 @@
       "name": "compile_centralized_knowledge_graph",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 151,
+      "line": 131,
       "kind": "function",
       "docstring": "Finds all protocol.json files in the entire repository, loads them, and\ncompiles them into a single, unified knowledge graph."
     },
@@ -743,7 +743,7 @@
       "name": "main",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
-      "line": 208,
+      "line": 188,
       "kind": "function",
       "docstring": "Main function to orchestrate the hierarchical compilation."
     },
@@ -1130,7 +1130,7 @@
       "name": "TestPlanningEfficiencyAnalysis",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 14,
+      "line": 15,
       "kind": "class",
       "docstring": "Tests for the analyze_planning_efficiency function."
     },
@@ -1139,16 +1139,25 @@
       "name": "TestProtocolViolationAnalysis",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 65,
+      "line": 66,
       "kind": "class",
       "docstring": "Tests for the analyze_protocol_violations function."
+    },
+    {
+      "_type": "tag",
+      "name": "TestErrorRateAnalysis",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 125,
+      "kind": "class",
+      "docstring": "Tests for the analyze_error_rates function."
     },
     {
       "_type": "tag",
       "name": "setUp",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 17,
+      "line": 18,
       "kind": "function",
       "docstring": "Set up a temporary log file for testing planning efficiency."
     },
@@ -1157,7 +1166,7 @@
       "name": "tearDown",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 52,
+      "line": 53,
       "kind": "function",
       "docstring": "Clean up the temporary log file."
     },
@@ -1166,7 +1175,7 @@
       "name": "test_analyze_planning_efficiency",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 57,
+      "line": 58,
       "kind": "function",
       "docstring": "Test that the analysis correctly identifies tasks with multiple plan updates."
     },
@@ -1175,7 +1184,7 @@
       "name": "setUp",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 68,
+      "line": 69,
       "kind": "function",
       "docstring": "Set up a temporary log file for testing protocol violations."
     },
@@ -1184,7 +1193,7 @@
       "name": "tearDown",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 111,
+      "line": 112,
       "kind": "function",
       "docstring": "Clean up the temporary log file."
     },
@@ -1193,16 +1202,43 @@
       "name": "test_analyze_protocol_violations",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
-      "line": 116,
+      "line": 117,
       "kind": "function",
       "docstring": "Test that `reset_all` is detected in both SYSTEM_FAILURE and TOOL_EXEC logs."
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 128,
+      "kind": "function",
+      "docstring": "Set up a temporary log file for testing error rate analysis."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 158,
+      "kind": "function",
+      "docstring": "Clean up the temporary log file."
+    },
+    {
+      "_type": "tag",
+      "name": "test_analyze_error_rates",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 163,
+      "kind": "function",
+      "docstring": "Test that error rates and failure types are calculated correctly."
     },
     {
       "_type": "tag",
       "name": "load_config",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 20,
+      "line": 12,
       "kind": "function",
       "docstring": "Loads the build configuration file."
     },
@@ -1211,7 +1247,7 @@
       "name": "execute_build",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 28,
+      "line": 20,
       "kind": "function",
       "docstring": "Executes the build process for a specific target defined in the config."
     },
@@ -1220,7 +1256,7 @@
       "name": "main",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 93,
+      "line": 85,
       "kind": "function",
       "docstring": "Main function to parse arguments and drive the build process."
     },
@@ -1229,7 +1265,7 @@
       "name": "log_catastrophic_failure",
       "path": "./tooling/log_failure.py",
       "language": "Python",
-      "line": 19,
+      "line": 10,
       "kind": "function",
       "docstring": "Logs the catastrophic failure event."
     },
@@ -1355,7 +1391,7 @@
       "name": "get_defined_symbols",
       "path": "./tooling/context_awareness_scanner.py",
       "language": "Python",
-      "line": 20,
+      "line": 8,
       "kind": "function",
       "docstring": "Parses a Python file to find all defined functions and classes."
     },
@@ -1364,7 +1400,7 @@
       "name": "get_imported_symbols",
       "path": "./tooling/context_awareness_scanner.py",
       "language": "Python",
-      "line": 37,
+      "line": 25,
       "kind": "function",
       "docstring": "Parses a Python file to find all imported modules and symbols."
     },
@@ -1373,7 +1409,7 @@
       "name": "find_references",
       "path": "./tooling/context_awareness_scanner.py",
       "language": "Python",
-      "line": 63,
+      "line": 51,
       "kind": "function",
       "docstring": "Finds all files in a directory that reference a given symbol."
     },
@@ -1382,7 +1418,7 @@
       "name": "main",
       "path": "./tooling/context_awareness_scanner.py",
       "language": "Python",
-      "line": 81,
+      "line": 69,
       "kind": "function",
       "docstring": null
     },
@@ -1796,7 +1832,7 @@
       "name": "scan_documents",
       "path": "./tooling/document_scanner.py",
       "language": "Python",
-      "line": 13,
+      "line": 5,
       "kind": "function",
       "docstring": "Scans a directory for PDF, Markdown, and text files and extracts their content."
     },
@@ -1805,7 +1841,7 @@
       "name": "find_symbol_definition",
       "path": "./tooling/refactor.py",
       "language": "Python",
-      "line": 24,
+      "line": 8,
       "kind": "function",
       "docstring": "Finds the definition of a symbol in a Python file."
     },
@@ -1814,7 +1850,7 @@
       "name": "find_references",
       "path": "./tooling/refactor.py",
       "language": "Python",
-      "line": 38,
+      "line": 22,
       "kind": "function",
       "docstring": "Finds all files in a directory that reference a given symbol."
     },
@@ -1823,7 +1859,7 @@
       "name": "main",
       "path": "./tooling/refactor.py",
       "language": "Python",
-      "line": 56,
+      "line": 40,
       "kind": "function",
       "docstring": null
     },
@@ -1847,10 +1883,19 @@
     },
     {
       "_type": "tag",
-      "name": "main",
+      "name": "analyze_error_rates",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
       "line": 124,
+      "kind": "function",
+      "docstring": "Analyzes the log file to calculate action success/failure rates.\n\nArgs:\n    log_file (str): Path to the activity log file.\n\nReturns:\n    dict: A dictionary containing total counts, success/failure counts,\n          and a breakdown of failures by action type."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/self_improvement_cli.py",
+      "language": "Python",
+      "line": 175,
       "kind": "function",
       "docstring": "Main function to run the self-improvement analysis CLI."
     },
@@ -1967,7 +2012,7 @@
       "name": "get_module_docstring",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 51,
+      "line": 34,
       "kind": "function",
       "docstring": "Parses a Python file and extracts the module-level docstring."
     },
@@ -1976,7 +2021,7 @@
       "name": "generate_core_protocols_section",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 66,
+      "line": 49,
       "kind": "function",
       "docstring": "Parses a given AGENTS.md file to extract protocol definitions and generate a Markdown summary."
     },
@@ -1985,7 +2030,7 @@
       "name": "generate_key_components_section",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 107,
+      "line": 90,
       "kind": "function",
       "docstring": "Generates the Markdown for the \"Key Components\" section by documenting\nany `.py` files found in a `tooling/` subdirectory of the module."
     },
@@ -1994,7 +2039,7 @@
       "name": "main",
       "path": "./tooling/readme_generator.py",
       "language": "Python",
-      "line": 139,
+      "line": 122,
       "kind": "function",
       "docstring": "Main function to generate the README.md content and write it to a file."
     },
@@ -2012,7 +2057,7 @@
       "name": "get_dead_links_and_content",
       "path": "./tooling/code_health_analyzer.py",
       "language": "Python",
-      "line": 15,
+      "line": 8,
       "kind": "function",
       "docstring": "Audits the plan registry, returns a list of dead links and the original content."
     },
@@ -2021,7 +2066,7 @@
       "name": "generate_plan_to_fix_dead_links",
       "path": "./tooling/code_health_analyzer.py",
       "language": "Python",
-      "line": 42,
+      "line": 35,
       "kind": "function",
       "docstring": "Generates a plan using `overwrite_file_with_block` to fix dead links."
     },
@@ -2030,7 +2075,7 @@
       "name": "main",
       "path": "./tooling/code_health_analyzer.py",
       "language": "Python",
-      "line": 64,
+      "line": 57,
       "kind": "function",
       "docstring": "Main entry point for the code health analyzer.\nIdentifies dead links and prints a plan to fix them."
     },
