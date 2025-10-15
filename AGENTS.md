@@ -1553,17 +1553,37 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ```json
 {
-  "protocol_id": "doc-audit-001",
-  "description": "A protocol to ensure the completeness of system documentation.",
+  "protocol_id": "aura-execution-001",
+  "description": "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.",
   "rules": [
     {
-      "rule_id": "audit-for-missing-docstrings",
-      "description": "A check for missing module-level docstrings must be performed to ensure documentation completeness. All modules should have comprehensive documentation to aid agents and human users.",
-      "enforcement": "This check should be performed by running `make audit-docs`. This can be done periodically or as part of a pre-commit workflow."
+      "rule_id": "execute-aura-script",
+      "description": "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter.",
+      "enforcement": "The tool is used by invoking it from the command line with the path to the Aura script as an argument."
     }
   ],
   "associated_tools": [
-    "tooling/doc_auditor.py"
+    "tooling/aura_executor.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "hdl-proving-001",
+  "description": "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.",
+  "rules": [
+    {
+      "rule_id": "prove-sequent",
+      "description": "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover.",
+      "enforcement": "The tool is used by invoking it from the command line with the sequent to be proved as an argument."
+    }
+  ],
+  "associated_tools": [
+    "tooling/hdl_prover.py"
   ]
 }
 ```

@@ -1,0 +1,3 @@
+// Test script for the Aura executor
+let result = agent.call_tool("hdl_prover.prove_sequent", "'(() con)");
+print(result);

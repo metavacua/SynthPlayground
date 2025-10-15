@@ -1,0 +1,14 @@
+{
+  "protocol_id": "aura-execution-001",
+  "description": "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.",
+  "rules": [
+    {
+      "rule_id": "execute-aura-script",
+      "description": "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter.",
+      "enforcement": "The tool is used by invoking it from the command line with the path to the Aura script as an argument."
+    }
+  ],
+  "associated_tools": [
+    "tooling/aura_executor.py"
+  ]
+}
