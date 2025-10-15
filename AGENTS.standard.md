@@ -14,14 +14,14 @@ Here are the essential commands for working with this repository.
 
 To install all required Python packages, run:
 ```bash
-pip install -r requirements.txt
+$(BUILDER) --target install
 ```
 
 ### Running Tests
 
 To run the full suite of unit tests, use the following command:
 ```bash
-python3 -m unittest discover -v .
+$(BUILDER) --target test
 ```
 
 ## Code Style
@@ -32,14 +32,14 @@ This project uses standard Python code quality tools.
 
 To check the code for style issues, run the linter:
 ```bash
-flake8 .
+$(BUILDER) --target lint
 ```
 
 ### Formatting
 
 To automatically format the code, run:
 ```bash
-black .
+$(BUILDER) --target format
 ```
 
 ## Project Structure

@@ -1,155 +1,151 @@
-"""
-Unit tests for the self_correction_orchestrator.py script.
-
-This test suite verifies the end-to-end functionality of the automated
-self-correction workflow. It ensures that the orchestrator can correctly
-read structured lessons, invoke the protocol_updater.py script as a
-subprocess with the correct arguments, and update the lesson status file
-to reflect the outcome.
-"""
-
 import unittest
 import os
 import json
-import tempfile
 import shutil
-from tooling.self_correction_orchestrator import (
-    process_lessons,
-    load_lessons,
-    save_lessons,
-)
-
+from unittest.mock import patch, MagicMock, call
+from tooling.self_correction_orchestrator import load_lessons, save_lessons, process_lessons, main
 
 class TestSelfCorrectionOrchestrator(unittest.TestCase):
 
     def setUp(self):
-        """Set up a temporary directory with mock files."""
-        self.test_dir = tempfile.mkdtemp()
+        self.test_dir = "test_self_correction_dir"
+        os.makedirs(self.test_dir, exist_ok=True)
+        self.lessons_file = os.path.join(self.test_dir, "lessons.jsonl")
 
-        # Mock the lessons file
-        self.lessons_file_path = os.path.join(self.test_dir, "lessons.jsonl")
-        self.initial_lessons = [
-            {
-                "lesson_id": "l1",
-                "insight": "Tool 'new_tool' should be in protocol 'p1'.",
-                "action": {
-                    "type": "UPDATE_PROTOCOL",
-                    "command": "add-tool",
-                    "parameters": {"protocol_id": "p1", "tool_name": "new_tool"},
-                },
-                "status": "pending",
-            },
-            {
-                "lesson_id": "l2",
-                "insight": "This one is already done.",
-                "action": {},
-                "status": "applied",
-            },
-        ]
-        with open(self.lessons_file_path, "w") as f:
-            for lesson in self.initial_lessons:
-                f.write(json.dumps(lesson) + "\n")
+        # Mocking the external scripts and file paths
+        patcher_run = patch('tooling.self_correction_orchestrator.run_command', return_value=True)
+        self.mock_run_command = patcher_run.start()
+        self.addCleanup(patcher_run.stop)
 
-        # Mock the protocols directory and a protocol file
-        self.protocols_dir_path = os.path.join(self.test_dir, "protocols")
-        os.makedirs(self.protocols_dir_path)
-        self.protocol_file_path = os.path.join(
-            self.protocols_dir_path, "p1.protocol.json"
-        )
-        self.initial_protocol_data = {
-            "protocol_id": "p1",
-            "associated_tools": ["existing_tool"],
-        }
-        with open(self.protocol_file_path, "w") as f:
-            json.dump(self.initial_protocol_data, f, indent=2)
-
-        # --- Monkey-patch the constants in the orchestrator to use our temp files ---
-        import tooling.self_correction_orchestrator as orchestrator
-
-        self.orchestrator_orig_lessons = orchestrator.LESSONS_FILE
-        orchestrator.LESSONS_FILE = self.lessons_file_path
+        patcher_lessons_file = patch('tooling.self_correction_orchestrator.LESSONS_FILE', self.lessons_file)
+        patcher_lessons_file.start()
+        self.addCleanup(patcher_lessons_file.stop)
 
     def tearDown(self):
-        """Clean up and restore original constants."""
         shutil.rmtree(self.test_dir)
-        import tooling.self_correction_orchestrator as orchestrator
 
-        orchestrator.LESSONS_FILE = self.orchestrator_orig_lessons
+    def test_load_and_save_lessons(self):
+        """Tests that lessons can be loaded from and saved to the JSONL file."""
+        lessons_data = [
+            {"lesson_id": "L001", "status": "pending"},
+            {"lesson_id": "L002", "status": "applied"}
+        ]
+        with open(self.lessons_file, "w") as f:
+            for lesson in lessons_data:
+                f.write(json.dumps(lesson) + "\n")
 
-    def test_process_lessons_end_to_end(self):
-        """
-        Verify the entire workflow: loading, processing, saving,
-        and checking the side-effects (protocol file updated).
-        """
-        # Load initial lessons
-        lessons = load_lessons()
-        self.assertEqual(len(lessons), 2)
+        loaded = load_lessons()
+        self.assertEqual(len(loaded), 2)
+        self.assertEqual(loaded[0]['lesson_id'], 'L001')
 
-        # Run the processing, passing the mock protocols directory
-        changes_made = process_lessons(lessons, self.protocols_dir_path)
-        self.assertTrue(changes_made)
+        loaded[0]['status'] = 'failed'
+        save_lessons(loaded)
 
-        # Save the updated lessons
-        save_lessons(lessons)
+        reloaded = load_lessons()
+        self.assertEqual(reloaded[0]['status'], 'failed')
 
-        # --- Verification ---
-        # 1. Verify the protocol file was updated
-        with open(self.protocol_file_path, "r") as f:
-            updated_protocol = json.load(f)
-        self.assertIn("new_tool", updated_protocol["associated_tools"])
-        self.assertEqual(len(updated_protocol["associated_tools"]), 2)
-
-        # 2. Verify the lessons file was updated
-        updated_lessons = load_lessons()
-        self.assertEqual(updated_lessons[0]["status"], "applied")
-        self.assertEqual(updated_lessons[1]["status"], "applied")  # Stays the same
-
-    def test_process_lessons_handles_malformed_lesson_gracefully(self):
-        """
-        Verify that the orchestrator can skip a malformed lesson without crashing.
-        A malformed lesson, in this context, is one that is pending but is
-        missing the required 'command' key in its action payload.
-        """
-        # --- Setup: Add a malformed lesson to the existing ones ---
-        malformed_lesson = {
-            "lesson_id": "l3-malformed",
-            "insight": "This lesson is broken.",
+    @patch('tooling.self_correction_orchestrator.UPDATER_SCRIPT', 'mock_updater.py')
+    def test_process_update_protocol_lesson(self):
+        """Tests processing a lesson that updates a protocol."""
+        lessons = [{
+            "lesson_id": "L001",
+            "status": "pending",
             "action": {
                 "type": "UPDATE_PROTOCOL",
-                # "command" key is intentionally missing
-                "parameters": {"protocol_id": "p-broken", "tool_name": "t-broken"},
-            },
+                "command": "add-tool",
+                "parameters": {"protocol_id": "p-123", "tool_name": "new-tool"}
+            }
+        }]
+
+        changes_made = process_lessons(lessons, "protocols_dir")
+        self.assertTrue(changes_made)
+        self.assertEqual(lessons[0]['status'], 'applied')
+        self.mock_run_command.assert_called_once_with([
+            "python3", "mock_updater.py",
+            "--protocols-dir", "protocols_dir",
+            "add-tool",
+            "--protocol-id", "p-123",
+            "--tool-name", "new-tool"
+        ])
+
+    @patch('tooling.self_correction_orchestrator.CODE_SUGGESTER_SCRIPT', 'mock_suggester.py')
+    def test_process_code_change_lesson(self):
+        """Tests processing a lesson that proposes a code change."""
+        lessons = [{
+            "lesson_id": "L002",
             "status": "pending",
-        }
-        # The valid lesson from the initial setup
-        valid_lesson = self.initial_lessons[0]
+            "action": {
+                "type": "PROPOSE_CODE_CHANGE",
+                "parameters": {"filepath": "src/main.py", "diff": "@@ -1,1 +1,1 @@\n-old\n+new"}
+            }
+        }]
 
-        # Overwrite the lessons file with a new list
-        lessons_with_malformed = [valid_lesson, malformed_lesson]
-        save_lessons(lessons_with_malformed)
+        changes_made = process_lessons(lessons, ".")
+        self.assertTrue(changes_made)
+        self.assertEqual(lessons[0]['status'], 'applied')
+        self.mock_run_command.assert_called_once_with([
+            "python3", "mock_suggester.py",
+            "--filepath", "src/main.py",
+            "--diff", "@@ -1,1 +1,1 @@\n-old\n+new"
+        ])
 
-        # --- Execution ---
-        # Run the processing. This should not raise an exception.
-        changes_made = process_lessons(lessons_with_malformed, self.protocols_dir_path)
-        self.assertTrue(
-            changes_made, "Should report changes since the valid lesson was processed."
-        )
+    def test_failed_command(self):
+        """Tests that lesson status is set to 'failed' when a command fails."""
+        self.mock_run_command.return_value = False
+        lessons = [{
+            "lesson_id": "L003",
+            "status": "pending",
+            "action": {"type": "UPDATE_PROTOCOL", "command": "add-tool", "parameters": {"protocol_id": "p-456", "tool_name": "another-tool"}}
+        }]
 
-        # Save the results back to the file before verifying
-        save_lessons(lessons_with_malformed)
+        changes_made = process_lessons(lessons, ".")
+        self.assertTrue(changes_made)
+        self.assertEqual(lessons[0]['status'], 'failed')
 
-        # --- Verification ---
-        # 1. Verify the protocol file for the *valid* lesson was updated
-        with open(self.protocol_file_path, "r") as f:
-            updated_protocol = json.load(f)
-        self.assertIn("new_tool", updated_protocol["associated_tools"])
+    @patch('tooling.self_correction_orchestrator.process_lessons', return_value=True)
+    def test_main_flow_rebuilds_agents_md(self, mock_process):
+        """Tests that the main function calls to rebuild AGENTS.md after changes."""
+        with open(self.lessons_file, "w") as f:
+            f.write(json.dumps({"lesson_id": "L001", "status": "pending"}) + "\n")
 
-        # 2. Verify the statuses of the lessons
-        final_lessons = load_lessons()
-        # The valid lesson should be 'applied'
-        self.assertEqual(final_lessons[0]["status"], "applied")
-        # The malformed lesson should still be 'pending' as it was skipped
-        self.assertEqual(final_lessons[1]["status"], "pending")
+        main()
+
+        # Check that process_lessons was called
+        mock_process.assert_called()
+
+        # Check that 'make AGENTS.md' was called
+        self.mock_run_command.assert_called_with(["make", "AGENTS.md"])
+
+    def test_no_pending_lessons(self):
+        """Tests that the orchestrator does nothing if there are no pending lessons."""
+        lessons = [{"lesson_id": "L001", "status": "applied"}]
+        with open(self.lessons_file, "w") as f:
+            for lesson in lessons:
+                f.write(json.dumps(lesson) + "\n")
+
+        main()
+
+        # process_lessons should not be called if there are no pending lessons.
+        # Note: This tests the main() function's initial check.
+        self.mock_run_command.assert_not_called()
+
+    def test_malformed_lesson(self):
+        """Tests that malformed lessons are skipped and status is not changed."""
+        lessons = [{"lesson_id": "L001", "status": "pending"}] # Missing "action"
+        changes_made = process_lessons(lessons, ".")
+        self.assertFalse(changes_made)
+        self.assertEqual(lessons[0]['status'], 'pending') # Status should remain pending
+
+    def test_unknown_action_type(self):
+        """Tests that lessons with unknown action types are skipped."""
+        lessons = [{
+            "lesson_id": "L001",
+            "status": "pending",
+            "action": {"type": "UNKNOWN_ACTION"}
+        }]
+        changes_made = process_lessons(lessons, ".")
+        self.assertFalse(changes_made)
+        self.assertEqual(lessons[0]['status'], 'pending')
 
 
 if __name__ == "__main__":

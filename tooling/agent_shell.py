@@ -20,9 +20,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from tooling.master_control import MasterControlGraph
 from tooling.state import AgentState
 from utils.logger import Logger
-from __main__ import read_file, list_files, google_search, view_text_website
-
-
 def find_fsm_transition(fsm, source_state, trigger):
     """Finds the destination state for a given source and trigger."""
     for transition in fsm["transitions"]:
@@ -33,7 +30,7 @@ def find_fsm_transition(fsm, source_state, trigger):
 
 import argparse
 
-def run_agent_loop(task_description: str, model: str = None):
+def run_agent_loop(task_description: str, tools: dict, model: str = None):
     """
     The main loop that drives the agent's lifecycle via the FSM.
     """
@@ -60,12 +57,6 @@ def run_agent_loop(task_description: str, model: str = None):
             continue
 
         if current_state == "ORIENTING":
-            tools = {
-                "read_file": read_file,
-                "list_files": list_files,
-                "google_search": google_search,
-                "view_text_website": view_text_website,
-            }
             trigger = mcg.do_orientation(agent_state, logger, tools)
 
         elif current_state == "PLANNING":
@@ -176,7 +167,7 @@ def main():
     if args.model:
         task_description = f"Execute a self-improvement task under CSDC Model {args.model}."
 
-    run_agent_loop(task_description, model=args.model)
+    run_agent_loop(task_description, None, model=args.model)
 
 
 if __name__ == "__main__":
