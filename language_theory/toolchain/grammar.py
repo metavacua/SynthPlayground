@@ -7,8 +7,8 @@ class Grammar:
     """
     def __init__(self, filepath):
         self.filepath = filepath
-        self.productions = defaultdict(list)
-        self.start_symbol = "S" # Default, can be changed.
+        self.productions = [] # Store rules as (LHS_tuple, RHS_tuple)
+        self.start_symbol = None
         self._parse_file()
 
     def _parse_file(self):
@@ -16,40 +16,48 @@ class Grammar:
         with open(self.filepath, 'r') as f:
             for line in f:
                 line = line.split('#', 1)[0].strip()
-                if not line:
+                if not line or '->' not in line:
                     continue
 
-                if '->' not in line:
-                    continue # Or raise error
+                lhs_str, rhs_str = line.split('->', 1)
+                lhs = tuple(lhs_str.strip().split())
 
-                lhs, rhs_str = line.split('->', 1)
-                lhs = lhs.strip()
+                if self.start_symbol is None:
+                    self.start_symbol = lhs[0]
 
-                # The first rule's LHS is often the start symbol.
-                if not self.productions:
-                    self.start_symbol = lhs.split()[0]
+                # Handle multiple RHS productions separated by |
+                for rhs_part in rhs_str.split('|'):
+                    rhs = tuple(rhs_part.strip().split())
+                    self.productions.append((lhs, rhs))
 
-                rhs_productions = [tuple(r.strip().split()) for r in rhs_str.split('|')]
-                self.productions[lhs].extend(rhs_productions)
+    def get_productions_dict(self):
+        """Returns productions grouped by LHS, for parser use."""
+        prod_dict = defaultdict(list)
+        for lhs, rhs in self.productions:
+            # Parsers often expect the LHS to be a single symbol string
+            prod_dict[" ".join(lhs)].append(rhs)
+        return prod_dict
 
     def get_non_terminals(self):
-        """Returns the set of non-terminal symbols."""
-        non_terminals = set(self.productions.keys())
-        for rules in self.productions.values():
-            for rule in rules:
-                for symbol in rule:
-                    if symbol.isupper():
-                        non_terminals.add(symbol)
+        """Returns the set of all non-terminal symbols."""
+        non_terminals = set()
+        for lhs, rhs in self.productions:
+            for symbol in lhs:
+                if symbol.isupper():
+                    non_terminals.add(symbol)
+            for symbol in rhs:
+                if symbol.isupper():
+                    non_terminals.add(symbol)
         return non_terminals
 
     def get_terminals(self):
-        """Returns the set of terminal symbols."""
+        """Returns the set of all terminal symbols."""
         terminals = set()
-        for rules in self.productions.values():
-            for rule in rules:
-                for symbol in rule:
-                    if not symbol.isupper() and symbol:
-                        terminals.add(symbol)
+        for _, rhs in self.productions:
+            for symbol in rhs:
+                # Any symbol that isn't uppercase is a terminal
+                if not symbol.isupper() and symbol:
+                    terminals.add(symbol)
         return terminals
 
     def __str__(self):

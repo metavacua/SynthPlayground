@@ -1,7 +1,7 @@
 import argparse
 import sys
 from collections import defaultdict
-from grammar import Grammar
+from .grammar import Grammar
 
 def recognize_right_linear(grammar_productions, start_symbol, input_string):
     memo = {}
@@ -113,20 +113,26 @@ def main():
         grammar = Grammar(args.grammar_file)
         start_symbol = args.start_symbol if args.start_symbol else grammar.start_symbol
         print(f"Grammar loaded from {args.grammar_file}. Start symbol: {start_symbol}")
-        is_csg = any(' ' in k for k in grammar.productions.keys())
-        is_right_reg = all(len(r) <= 2 and (len(r) < 2 or r[1].isupper()) for v in grammar.productions.values() for r in v) and not is_csg
-        is_left_reg = all(len(r) <= 2 and (len(r) < 2 or r[0].isupper()) for v in grammar.productions.values() for r in v) and not is_csg
-        if is_csg:
+        productions_dict = grammar.get_productions_dict()
+        is_contracting = any(len(lhs) > len(rhs) for lhs, rhs in grammar.productions)
+        is_csg = any(len(lhs) > 1 for lhs, _ in grammar.productions) and not is_contracting
+        is_right_reg = all(len(rhs) <= 2 and (len(rhs) < 2 or rhs[1].isupper()) for _, rhs in grammar.productions) and not is_csg and not is_contracting
+        is_left_reg = all(len(rhs) <= 2 and (len(rhs) < 2 or rhs[0].isupper()) for _, rhs in grammar.productions) and not is_csg and not is_contracting
+
+        if is_contracting:
+            print("Heuristic: UNRESTRICTED (TYPE-0).")
+            print("\nWARNING: This grammar contains contracting rules, membership is undecidable.")
+        elif is_csg:
             print("Heuristic: CONTEXT-SENSITIVE. Recognition not implemented.")
         elif is_right_reg and not is_left_reg:
             print("Heuristic: RIGHT-LINEAR REGULAR.")
-            if recognize_right_linear(grammar.productions, start_symbol, args.input_string):
+            if recognize_right_linear(productions_dict, start_symbol, args.input_string):
                 print(f"\nSUCCESS: String '{args.input_string}' is recognized.")
             else:
                 print(f"\nFAILURE: String '{args.input_string}' is not recognized.")
         elif is_left_reg and not is_right_reg:
             print("Heuristic: LEFT-LINEAR REGULAR.")
-            reversed_grammar = reverse_grammar(grammar.productions)
+            reversed_grammar = reverse_grammar(productions_dict)
             if recognize_right_linear(reversed_grammar, start_symbol, args.input_string[::-1]):
                 print(f"\nSUCCESS: String '{args.input_string}' is recognized.")
             else:
@@ -134,7 +140,7 @@ def main():
         else:
             print("Heuristic: CONTEXT-FREE. Using Earley parser.")
             input_tokens = list(args.input_string) if ' ' not in args.input_string else args.input_string.split()
-            chart = recognize_earley(grammar.productions, start_symbol, input_tokens)
+            chart = recognize_earley(productions_dict, start_symbol, input_tokens)
             parse_count = get_parse_count(chart, start_symbol)
             if parse_count > 0:
                  print(f"\nSUCCESS: String '{args.input_string}' is recognized.")
