@@ -1,3 +1,15 @@
+"""
+This script provides a tool for auditing the completeness of the system documentation.
+
+It scans the generated `SYSTEM_DOCUMENTATION.md` file and searches for a specific
+pattern: a module header followed immediately by the text "_No module-level
+docstring found._". This pattern indicates that the `doc_generator.py` script
+was unable to find a docstring for that particular Python module.
+
+The auditor then prints a list of all such files, providing a clear and
+actionable report of which modules require documentation. This is a key tool for
+maintaining code health and ensuring that the agent's knowledge base is complete.
+"""
 import re
 import argparse
 

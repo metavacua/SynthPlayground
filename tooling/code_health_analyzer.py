@@ -1,16 +1,3 @@
-"""
-This script provides tools for analyzing and maintaining the health of the codebase.
-
-Currently, its primary function is to act as a "dead link checker" for the
-agent's Plan Registry (`knowledge_core/plan_registry.json`). The Plan Registry
-maps logical plan names to file paths. This script verifies that every file
-path in the registry points to an existing file.
-
-If it discovers any "dead links" (entries pointing to non-existent files),
-it can generate a corrective plan. This plan, when executed by the agent,
-will programmatically remove the invalid entries from the registry, ensuring
-the agent's plan library remains consistent and reliable.
-"""
 import json
 import os
 

@@ -1,17 +1,3 @@
-"""
-This script provides a unified, configuration-driven build system for the project.
-
-It reads a central `build_config.json` file to determine which compilers or
-generators to run for different build targets (like 'docs', 'agents', etc.).
-This allows for a flexible and easily extensible build process without modifying
-the build script itself. New targets can be added simply by updating the JSON
-configuration.
-
-The script supports building individual targets, listing all available targets,
-and building all targets in a predefined, logical order. It captures and
-displays the output of each build step, providing clear success or failure
-reporting.
-"""
 import os
 import json
 import argparse

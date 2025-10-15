@@ -1,20 +1,3 @@
-"""
-This script provides tools for understanding the context of a specific code file.
-
-It is designed to answer questions like:
-- What functions and classes are defined in this file?
-- What other modules or symbols does this file import?
-- Where else in the codebase are the symbols from this file being used?
-
-By parsing a Python file's Abstract Syntax Tree (AST), it can extract defined
-symbols (functions and classes) and imported symbols. It can also perform a
-repository-wide search to find references to the symbols defined in the target
-file.
-
-The output is a JSON report containing all this information, which gives the
-agent a comprehensive "contextual awareness" of a single file, aiding in tasks
-like refactoring, dependency analysis, and impact assessment.
-"""
 import argparse
 import ast
 import json

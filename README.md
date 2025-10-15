@@ -26,7 +26,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/__init__.py`**:
 
-  > This package contains various tools for the agent's operation.
+  > _No docstring found._
 
 - **`tooling/agent_shell.py`**:
 
@@ -34,7 +34,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/aura_executor.py`**:
 
-  > _No docstring found._
+  > This script serves as the command-line executor for `.aura` files.\n  > \n  > It bridges the gap between the high-level Aura scripting language and the\n  > agent's underlying Python-based toolset. The executor is responsible for:\n  > 1.  Parsing the `.aura` source code using the lexer and parser from the\n  >     `aura_lang` package.\n  > 2.  Setting up an execution environment for the interpreter.\n  > 3.  Injecting a "tool-calling" capability into the Aura environment, which\n  >     allows Aura scripts to dynamically invoke registered Python tools\n  >     (e.g., `hdl_prover`, `environmental_probe`).\n  > 4.  Executing the parsed program and printing the final result.\n  > \n  > This makes it a key component for enabling more expressive and complex\n  > automation scripts for the agent.
 
 - **`tooling/background_researcher.py`**:
 
@@ -42,11 +42,11 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/builder.py`**:
 
-  > This script provides a unified, configuration-driven build system for the project.\n  > \n  > It reads a central `build_config.json` file to determine which compilers or\n  > generators to run for different build targets (like 'docs', 'agents', etc.).\n  > This allows for a flexible and easily extensible build process without modifying\n  > the build script itself. New targets can be added simply by updating the JSON\n  > configuration.\n  > \n  > The script supports building individual targets, listing all available targets,\n  > and building all targets in a predefined, logical order. It captures and\n  > displays the output of each build step, providing clear success or failure\n  > reporting.
+  > _No docstring found._
 
 - **`tooling/code_health_analyzer.py`**:
 
-  > This script provides tools for analyzing and maintaining the health of the codebase.\n  > \n  > Currently, its primary function is to act as a "dead link checker" for the\n  > agent's Plan Registry (`knowledge_core/plan_registry.json`). The Plan Registry\n  > maps logical plan names to file paths. This script verifies that every file\n  > path in the registry points to an existing file.\n  > \n  > If it discovers any "dead links" (entries pointing to non-existent files),\n  > it can generate a corrective plan. This plan, when executed by the agent,\n  > will programmatically remove the invalid entries from the registry, ensuring\n  > the agent's plan library remains consistent and reliable.
+  > _No docstring found._
 
 - **`tooling/code_suggester.py`**:
 
@@ -54,7 +54,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/context_awareness_scanner.py`**:
 
-  > This script provides tools for understanding the context of a specific code file.\n  > \n  > It is designed to answer questions like:\n  > - What functions and classes are defined in this file?\n  > - What other modules or symbols does this file import?\n  > - Where else in the codebase are the symbols from this file being used?\n  > \n  > By parsing a Python file's Abstract Syntax Tree (AST), it can extract defined\n  > symbols (functions and classes) and imported symbols. It can also perform a\n  > repository-wide search to find references to the symbols defined in the target\n  > file.\n  > \n  > The output is a JSON report containing all this information, which gives the\n  > agent a comprehensive "contextual awareness" of a single file, aiding in tasks\n  > like refactoring, dependency analysis, and impact assessment.
+  > _No docstring found._
 
 - **`tooling/dependency_graph_generator.py`**:
 
@@ -62,7 +62,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/doc_auditor.py`**:
 
-  > _No docstring found._
+  > This script provides a tool for auditing the completeness of the system documentation.\n  > \n  > It scans the generated `SYSTEM_DOCUMENTATION.md` file and searches for a specific\n  > pattern: a module header followed immediately by the text "_No module-level\n  > docstring found._". This pattern indicates that the `doc_generator.py` script\n  > was unable to find a docstring for that particular Python module.\n  > \n  > The auditor then prints a list of all such files, providing a clear and\n  > actionable report of which modules require documentation. This is a key tool for\n  > maintaining code health and ensuring that the agent's knowledge base is complete.
 
 - **`tooling/doc_generator.py`**:
 
@@ -70,7 +70,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/document_scanner.py`**:
 
-  > This script provides a utility for extracting text content from various document types.\n  > \n  > It is designed to scan a directory tree and identify files with common document\n  > extensions like `.pdf`, `.md`, and `.txt`. For each file found, it uses the\n  > appropriate method to read its content:\n  > - For PDFs, it uses the `pypdf` library to extract text from each page.\n  > - For Markdown and plain text files, it reads the raw text content.\n  > \n  > The script returns a dictionary where the keys are the file paths of the\n  > scanned documents and the values are their extracted text content. This tool is\n  > a key part of the agent's initial orientation, allowing it to gather context\n  > from human-readable documentation within the repository.
+  > _No docstring found._
 
 - **`tooling/environmental_probe.py`**:
 
@@ -78,7 +78,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/fdc_cli.py`**:
 
-  > _No docstring found._
+  > This script provides a command-line interface (CLI) for managing the Finite\n  > Development Cycle (FDC).\n  > \n  > The FDC is a structured workflow for agent-driven software development. This CLI\n  > is the primary human interface for interacting with that cycle, providing\n  > commands to:\n  > - **start:** Initiates a new development task, triggering the "Advanced\n  >   Orientation and Research Protocol" (AORP) to ensure the agent is fully\n  >   contextualized.\n  > - **close:** Formally concludes a task, creating a post-mortem template for\n  >   analysis and lesson-learning.\n  > - **validate:** Checks a given plan file for both syntactic and semantic\n  >   correctness against the FDC's governing Finite State Machine (FSM). This\n  >   ensures that a plan is executable and will not violate protocol.\n  > - **analyze:** Examines a plan to determine its computational complexity (e.g.,\n  >   Constant, Polynomial, Exponential) and its modality (Read-Only vs.\n  >   Read-Write), providing insight into the plan's potential impact.
 
 - **`tooling/generate_docs.py`**:
 
@@ -90,7 +90,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/hierarchical_compiler.py`**:
 
-  > This script orchestrates a hierarchical build process for the agent's protocols.\n  > \n  > It enables a modular, "microkernel"-style architecture where different sub-modules\n  > of the agent can define their own protocols independently. The script discovers\n  > all `protocols` directories across the repository and builds them in a specific\n  > order, from the most deeply nested to the top-level.\n  > \n  > Key features:\n  > - **Hierarchical Discovery:** Finds all `protocols` directories.\n  > - **Bottom-Up Compilation:** Compiles child modules first, then "injects" their\n  >   compiled `AGENTS.md` content as a summary into their parent's `AGENTS.md`.\n  >   This creates a single, comprehensive `AGENTS.md` at the root that includes\n  >   the protocols from all sub-modules.\n  > - **Artifact Generation:** For each module, it runs the `protocol_compiler.py`\n  >   to create `AGENTS.md` and the `readme_generator.py` to create `README.md`.\n  > - **Centralized Knowledge Graph:** After processing all modules, it performs a\n  >   final pass to discover all `.protocol.json` files and compiles them into a\n  >   single, unified RDF knowledge graph (`protocols.ttl`), providing a complete,\n  >   queryable view of the agent's entire protocol system.
+  > _No docstring found._
 
 - **`tooling/knowledge_compiler.py`**:
 
@@ -102,7 +102,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/log_failure.py`**:
 
-  > This script provides a dedicated function for logging a specific, critical failure event.\n  > \n  > Its purpose is to create a standardized log entry when a "catastrophic failure"\n  > occurs, specifically the unauthorized use of the `reset_all` tool. This allows\n  > the agent's monitoring and post-mortem systems to reliably track and identify\n  > this particular high-severity error.\n  > \n  > The script uses the centralized `Logger` utility to ensure the log entry\n  > conforms to the project's structured logging schema.
+  > _No docstring found._
 
 - **`tooling/master_control.py`**:
 
@@ -126,7 +126,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/plan_registry_auditor.py`**:
 
-  > This script provides a command-line tool to audit the agent's Plan Registry.\n  > \n  > The Plan Registry (`knowledge_core/plan_registry.json`) is a critical file that\n  > maps human-readable, logical plan names to the file paths of the actual plan\n  > scripts. This allows the agent to call plans by name (e.g., `call_plan "deep-research"`)\n  > without hardcoding file paths.\n  > \n  > This auditor ensures the integrity of the registry by checking that every file\n  > path listed in it actually exists. It identifies and reports any "dead links"\n  > where a plan name points to a non-existent file, helping to maintain the\n  > reliability of the agent's hierarchical planning system.
+  > _No docstring found._
 
 - **`tooling/protocol_auditor.py`**:
 
@@ -142,11 +142,11 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/readme_generator.py`**:
 
-  > This script automatically generates a `README.md` file for a specific module.\n  > \n  > It acts as a documentation aggregator, pulling information from two primary sources:\n  > 1.  **`AGENTS.md`:** It parses the JSON protocol blocks within a module's\n  >     `AGENTS.md` file to create a human-readable summary of the core protocols\n  >     governing that module.\n  > 2.  **Python Source Files:** It scans the `tooling/` subdirectory within the\n  >     module for any Python scripts and extracts their module-level docstrings\n  >     to document the key software components.\n  > \n  > The script combines this extracted information with a static template to produce\n  > a well-structured `README.md` file. This ensures that the documentation for each\n  > module stays synchronized with its actual protocols and implementation, adhering\n  > to the principle of "documentation as code."
+  > _No docstring found._
 
 - **`tooling/refactor.py`**:
 
-  > This script provides a simple, automated refactoring tool for renaming symbols.\n  > \n  > It is designed to be used from the command line to rename a Python function or\n  > class and all of its references throughout the repository.\n  > \n  > The process is as follows:\n  > 1.  **Find Definition:** It first locates the definition of the target symbol\n  >     (the "old name") in the specified file.\n  > 2.  **Find References:** It then searches the entire repository for any files\n  >     that mention the old name.\n  > 3.  **Generate Plan:** For each file where the name is found, it generates a\n  >     `replace_with_git_merge_diff` command. This command encapsulates the change\n  >     from the old content to the new content (with the name replaced).\n  > 4.  **Output Plan File:** It writes all these commands into a single, temporary\n  >     plan file.\n  > \n  > The path to this generated plan file is printed to standard output. The agent's\n  > master controller can then be instructed to execute this plan, applying the\n  > refactoring changes in a controlled and verifiable way.
+  > _No docstring found._
 
 - **`tooling/reorientation_manager.py`**:
 
@@ -170,7 +170,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
 - **`tooling/standard_agents_compiler.py`**:
 
-  > This script generates a simplified, standard-compliant `AGENTS.md` file.\n  > \n  > While the project's primary `AGENTS.md` is generated by a complex, hierarchical\n  > system, many external AI agents and tools expect a simpler, more conventional\n  > format. This script bridges that gap.\n  > \n  > It parses the project's `Makefile` to extract the essential commands for common\n  > tasks like installing dependencies, running tests, linting, and formatting code.\n  > It then injects these discovered commands into a human-readable Markdown\n  > template.\n  > \n  > The output, `AGENTS.standard.md`, provides a straightforward, predictable\n  > entry point for third-party agents, improving interoperability with the broader\n  > AI development ecosystem.
+  > _No docstring found._
 
 - **`tooling/state.py`**:
 

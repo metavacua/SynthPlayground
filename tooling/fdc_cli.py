@@ -1,3 +1,22 @@
+"""
+This script provides a command-line interface (CLI) for managing the Finite
+Development Cycle (FDC).
+
+The FDC is a structured workflow for agent-driven software development. This CLI
+is the primary human interface for interacting with that cycle, providing
+commands to:
+- **start:** Initiates a new development task, triggering the "Advanced
+  Orientation and Research Protocol" (AORP) to ensure the agent is fully
+  contextualized.
+- **close:** Formally concludes a task, creating a post-mortem template for
+  analysis and lesson-learning.
+- **validate:** Checks a given plan file for both syntactic and semantic
+  correctness against the FDC's governing Finite State Machine (FSM). This
+  ensures that a plan is executable and will not violate protocol.
+- **analyze:** Examines a plan to determine its computational complexity (e.g.,
+  Constant, Polynomial, Exponential) and its modality (Read-Only vs.
+  Read-Write), providing insight into the plan's potential impact.
+"""
 import argparse
 import datetime
 import json
