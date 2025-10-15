@@ -1,3 +1,23 @@
+"""
+A hierarchical build system for compiling nested protocol modules.
+
+This script orchestrates the compilation of `AGENTS.md` and `README.md` files
+across a nested directory structure. It introduces the concept of "child modules"
+and ensures that they are built before their parents.
+
+The core logic is as follows:
+1.  **Discovery:** Find all `protocols` directories in the repository.
+2.  **Bottom-Up Compilation:** Process these directories from the deepest level upwards.
+3.  **Child Summaries:** For each compiled child module, generate a summary of its
+    protocols.
+4.  **Injection:** Inject these summaries into the parent's `protocols` directory
+    before the parent is compiled. This allows the parent's `AGENTS.md` to
+    include the protocols of its children, creating a single, unified document
+    at each level of the hierarchy.
+5.  **Knowledge Graph:** After all documentation is built, it scans for all
+    `*.protocol.json` files to compile a single, centralized RDF knowledge graph,
+    providing a unified, machine-readable view of all defined protocols.
+"""
 import os
 import sys
 import json

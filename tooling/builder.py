@@ -1,3 +1,11 @@
+"""
+A unified build script for the project.
+
+This script reads a `build_config.json` file and executes different
+build targets based on the provided command-line arguments. It's designed
+to be the single entry point for compiling various project artifacts, such as
+documentation, protocol files, and security reports.
+"""
 import os
 import json
 import argparse
