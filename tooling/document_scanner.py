@@ -1,19 +1,21 @@
 """
-Recursively scans a directory to find and extract text from documents.
+A tool for scanning the repository for human-readable documents and extracting their text content.
 
-This script provides a crucial capability for the agent's orientation phase.
-It walks through a given directory structure and identifies files with common
-document extensions: `.pdf`, `.md`, and `.txt`.
+This script is a crucial component of the agent's initial information-gathering
+and orientation phase. It allows the agent to ingest knowledge from unstructured
+or semi-structured documents that are not part of the formal codebase, but which
+may contain critical context, requirements, or specifications.
 
-For each file found, it attempts to extract the full text content:
-- For `.pdf` files, it uses the `pypdf` library to parse the document and
-  extract text from each page.
-- For `.md` and `.txt` files, it reads the raw text content.
+The scanner searches a given directory for files with common document extensions:
+- `.pdf`: Uses the `pypdf` library to extract text from PDF files.
+- `.md`: Reads Markdown files.
+- `.txt`: Reads plain text files.
 
-The script returns a dictionary where the keys are the file paths of the
-scanned documents and the values are their extracted text content. This allows
-the agent to gather a broad base of knowledge from the human-readable
-documentation available in a repository.
+The output is a dictionary where the keys are the file paths of the discovered
+documents and the values are their extracted text content. This data can then
+be used by the agent to inform its planning and execution process. This tool
+is essential for bridging the gap between human-written documentation and the
+agent's operational awareness.
 """
 import os
 import pypdf

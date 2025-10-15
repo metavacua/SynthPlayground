@@ -1,18 +1,23 @@
 """
-A command-line tool to audit the Plan Registry for broken links.
+A tool for auditing the agent's Plan Registry to ensure its integrity.
 
-This script is the reference implementation for the `plan-registry-audit-001`
-protocol. Its purpose is to ensure the integrity of the hierarchical planning
-system by verifying the `knowledge_core/plan_registry.json` file.
+This script is a diagnostic and maintenance tool designed to validate the
+`knowledge_core/plan_registry.json` file. The Plan Registry is a critical
+component of the hierarchical planning system (CFDC), as it maps logical plan
+names to their physical file paths. If this registry contains "dead links"
+(i.e., entries that point to files that have been moved, renamed, or deleted),
+the agent's ability to execute complex, multi-stage plans will be compromised.
 
-The Plan Registry maps logical, human-readable names to the file paths of
-reusable plans. This auditor reads the registry and checks every entry to
-confirm that the specified file path points to an actual, existing file.
+This auditor performs one key function:
+- **Dead Link Detection:** It reads every entry in the plan registry and verifies
+  that the file path associated with each logical name actually exists in the
+  filesystem.
 
-It prints a report to the console, listing all valid entries and flagging any
-"dead links" where the target file is missing. This allows for quick diagnosis
-and correction of the plan library, preventing runtime errors when the agent
-tries to execute a plan that no longer exists.
+The script provides a clear, human-readable report of which registry entries are
+valid and which are invalid. This allows for quick identification and correction
+of issues, helping to maintain the health and reliability of the agent's core
+planning capabilities. It can be run manually for diagnostics or integrated into
+automated health checks.
 """
 import json
 import os

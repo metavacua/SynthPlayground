@@ -1,17 +1,18 @@
 """
-A command-line interface for a simple Hypersequent-calculus-based logic prover.
+A command-line tool for proving sequents in Intuitionistic Linear Logic.
 
-This script provides a tool for checking the provability of a logical sequent
-formatted for a subset of Intuitionistic Linear Logic. It is governed by the
-`hdl-proving-001` protocol.
+This script provides a basic interface to a simple logic prover. It takes a
+sequent as a command-line argument, parses it into a logical structure, and
+then attempts to prove it using a rudimentary proof search algorithm.
 
-The script takes a sequent as a command-line argument (e.g., "A, A -> B |- B"),
-parses it into a formal data structure, and then uses a simple proof search
-algorithm to determine if the sequent is provable.
+The primary purpose of this tool is to allow the agent to perform formal
+reasoning and verification tasks by checking the validity of logical entailments.
+For example, it can be used to verify that a certain conclusion follows from a
+set of premises according to the rules of linear logic.
 
-NOTE: The current proof search implementation is a basic placeholder and is not
-a complete or sound prover. It is intended as a scaffold for a more
-sophisticated logic engine.
+The current implementation uses a very basic parser and proof algorithm,
+serving as a placeholder and demonstration for a more sophisticated, underlying
+logic engine.
 """
 import argparse
 import sys

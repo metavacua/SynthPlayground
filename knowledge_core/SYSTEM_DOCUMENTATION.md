@@ -6,8 +6,17 @@
 
 ### `/app/tooling/__init__.py`
 
-This directory contains the core tooling for the agent's development,
-build, and self-analysis capabilities.
+This module contains the various tools and utilities that support the agent's
+development, testing, and operational workflows.
+
+The tools in this package are the building blocks of the agent's capabilities,
+ranging from code analysis and refactoring to protocol compilation and
+self-correction. Each script is designed to be a self-contained unit of
+functionality that can be invoked either from the command line or programmatically
+by the agent's master control system.
+
+This __init__.py file marks the 'tooling' directory as a Python package,
+allowing for the organized import of its various modules.
 
 ### `/app/tooling/agent_shell.py`
 
@@ -89,20 +98,31 @@ to a temporary file that the main agent can poll.
 
 ### `/app/tooling/builder.py`
 
-The unified build script for this repository.
+A unified, configuration-driven build script for the project.
 
-This script replaces a complex Makefile with a single, data-driven entry point
-for all build-related tasks. It reads its configuration from `build_config.json`,
-which defines a series of build "targets."
+This script serves as the central entry point for all build-related tasks, such
+as generating documentation, compiling protocols, and creating other project
+artifacts. It replaces a traditional Makefile's direct command execution with a
+more structured, maintainable, and introspectable approach.
 
-Each target specifies a "compiler" (a Python script in the `tooling/` directory),
-input sources, and an output artifact. This script is responsible for
-orchestrating the execution of these compilers in the correct order to generate
-all necessary project artifacts, such as `AGENTS.md`, `README.md`, and
-`SYSTEM_DOCUMENTATION.md`.
+The core logic is driven by a `build_config.json` file, which defines a series
+of "targets." Each target specifies:
+- The `compiler` script to execute (e.g., `doc_generator.py`).
+- The `output` file to generate.
+- The `source` directories or files.
+- Any additional command-line `options`.
 
-This centralized approach makes the build process more transparent, maintainable,
-and easier to extend.
+This centralized builder provides several advantages:
+- **Single Source of Truth:** The `build_config.json` file is the definitive
+  source for all build logic, making the process easy to understand and modify.
+- **Consistency:** Ensures all build tasks are executed in a uniform way.
+- **Extensibility:** New build targets can be added by simply updating the
+  configuration file, without changing the script itself.
+- **Discoverability:** The script can list all available targets, making the
+  build system self-documenting.
+
+It is intended to be the primary interface for both human developers (via `make`
+targets that call this script) and automated systems.
 
 
 **Public Functions:**
@@ -123,25 +143,66 @@ and easier to extend.
   > Main function to parse arguments and drive the build process.
 
 
+### `/app/tooling/capability_verifier.py`
+
+A tool to verify that the agent can monotonically improve its capabilities.
+
+This script is designed to provide a formal, automated test for the agent's
+self-correction and learning mechanisms. It ensures that when the agent learns
+a new capability, it does so without losing (regressing) any of its existing
+capabilities. This is a critical safeguard for ensuring robust and reliable
+agent evolution.
+
+The tool works by orchestrating a four-step process:
+1.  **Confirm Initial Failure:** It runs a specific test file that is known to
+    fail, verifying that the agent currently lacks the target capability.
+2.  **Invoke Self-Correction:** It simulates the discovery of a new "lesson" and
+    triggers the `self_correction_orchestrator.py` script, which is responsible
+    for integrating new knowledge and skills.
+3.  **Confirm Final Success:** It runs the same test file again, confirming that
+    the agent has successfully learned the new capability and the test now passes.
+4.  **Check for Regressions:** It runs the full, existing test suite to ensure
+    that the process of learning the new skill has not inadvertently broken any
+    previously functional capabilities.
+
+This provides a closed-loop verification of monotonic improvement, which is a
+cornerstone of the agent's design philosophy.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > A tool to verify that the agent can monotonically improve its capabilities.
+  >
+  > This tool works by:
+  > 1. Running a target test file that is known to fail, confirming the agent lacks a capability.
+  > 2. Invoking the agent's self-correction mechanism to learn the new capability.
+  > 3. Running the target test again to confirm it now passes.
+  > 4. Running the full test suite to ensure no existing capabilities were lost.
+
+
 ### `/app/tooling/code_health_analyzer.py`
 
-Audits the Plan Registry for dead links and generates a corrective plan.
+A tool for analyzing and reporting on the overall health of the codebase.
 
-This script scans the `knowledge_core/plan_registry.json` file, which maps
-logical plan names to their file paths. It checks if each file path in the
-registry points to an existing file.
+This module provides functionality to perform various checks on the repository's
+artifacts to ensure their integrity and consistency. The primary focus of this
+tool is to identify and, where possible, generate plans to fix common issues
+that can arise from automated or manual changes.
 
-If any "dead links" (entries pointing to non-existent files) are found,
-this script will:
-1.  Identify the invalid entries.
-2.  Generate a new, corrected version of the plan registry with the dead links
-    removed.
-3.  Print a complete, executable plan to the console. This plan uses the
-    `overwrite_file_with_block` command to replace the old registry with the
-    new, corrected version.
+Currently, this analyzer focuses on the health of the Plan Registry:
+- **Dead Link Detection:** It scans the `knowledge_core/plan_registry.json` file
+  to find any registered plan names that point to file paths that no longer
+  exist in the filesystem. These "dead links" can break the hierarchical
+  planning system.
 
-This provides a semi-automated way to maintain the integrity of the Plan
-Registry, a key component of the hierarchical planning system.
+When dead links are found, the tool can generate a corrective plan. This plan
+consists of a `overwrite_file_with_block` command that will replace the
+contents of the plan registry with a new version that has the invalid entries
+removed. This automated detection and remediation capability is a key part of
+maintaining the long-term health and reliability of the agent's knowledge base.
 
 
 **Public Functions:**
@@ -207,23 +268,27 @@ without altering the core orchestration process.
 
 ### `/app/tooling/context_awareness_scanner.py`
 
-Performs static analysis on a Python file to map its contextual role.
+A tool for performing static analysis on a Python file to understand its context.
 
-This script acts as a code intelligence tool. Given a Python file, it performs
-a static analysis to understand its connections to the rest of the codebase.
-It generates a detailed JSON report that includes:
+This script provides a "contextual awareness" scan of a specified Python file
+to help an agent (or a human) understand its role, dependencies, and connections
+within a larger codebase. This is crucial for planning complex changes or
+refactoring efforts, as it provides a snapshot of the potential impact of
+modifying a file.
 
-1.  **Defined Symbols:** All functions and classes defined within the target file,
-    along with their line numbers.
-2.  **Imported Symbols:** All modules and symbols that the target file imports
-    from other modules.
-3.  **Cross-Repository References:** For each function and class defined in the
-    target file, it finds all other Python files in the repository that
-    reference that symbol.
+The scanner performs three main functions:
+1.  **Symbol Definition Analysis:** It uses Python's Abstract Syntax Tree (AST)
+    module to parse the target file and identify all the functions and classes
+    that are defined within it.
+2.  **Import Analysis:** It also uses the AST to find all modules and symbols
+    that the target file imports, revealing its dependencies on other parts of
+    the codebase or external libraries.
+3.  **Reference Finding:** It performs a repository-wide search to find all other
+    files that reference the symbols defined in the target file. This helps to
+    understand how the file is used by the rest of the system.
 
-The resulting report provides a comprehensive "contextual awareness map" for a
-single file, showing what it provides to the system and what it consumes from
-it. This is invaluable for understanding the impact of potential changes.
+The final output is a detailed JSON report containing all of this information,
+which can be used as a foundational artifact for automated planning or human review.
 
 
 **Public Functions:**
@@ -242,6 +307,33 @@ it. This is invaluable for understanding the impact of potential changes.
 - #### `def get_imported_symbols(filepath)`
 
   > Parses a Python file to find all imported modules and symbols.
+
+
+- #### `def main()`
+
+
+### `/app/tooling/csdc_cli.py`
+
+A command-line tool for managing the Context-Sensitive Development Cycle (CSDC).
+
+This script provides an interface to validate a development plan against a specific
+CSDC model (A or B) and a given complexity class (P or EXP). It ensures that a
+plan adheres to the strict logical and computational constraints defined by the
+CSDC protocol before it is executed.
+
+The tool performs two main checks:
+1.  **Complexity Analysis:** It analyzes the plan to determine its computational
+    complexity and verifies that it matches the expected complexity class.
+2.  **Model Validation:** It validates the plan's commands against the rules of
+    the specified CSDC model, ensuring that it does not violate any of the
+    model's constraints (e.g., forbidding certain functions).
+
+This serves as a critical gateway for ensuring that all development work within
+the CSDC framework is sound, predictable, and compliant with the governing
+meta-mathematical principles.
+
+
+**Public Functions:**
 
 
 - #### `def main()`
@@ -439,21 +531,23 @@ importing them, which avoids issues with dependencies or script side-effects.
 
 ### `/app/tooling/document_scanner.py`
 
-Recursively scans a directory to find and extract text from documents.
+A tool for scanning the repository for human-readable documents and extracting their text content.
 
-This script provides a crucial capability for the agent's orientation phase.
-It walks through a given directory structure and identifies files with common
-document extensions: `.pdf`, `.md`, and `.txt`.
+This script is a crucial component of the agent's initial information-gathering
+and orientation phase. It allows the agent to ingest knowledge from unstructured
+or semi-structured documents that are not part of the formal codebase, but which
+may contain critical context, requirements, or specifications.
 
-For each file found, it attempts to extract the full text content:
-- For `.pdf` files, it uses the `pypdf` library to parse the document and
-  extract text from each page.
-- For `.md` and `.txt` files, it reads the raw text content.
+The scanner searches a given directory for files with common document extensions:
+- `.pdf`: Uses the `pypdf` library to extract text from PDF files.
+- `.md`: Reads Markdown files.
+- `.txt`: Reads plain text files.
 
-The script returns a dictionary where the keys are the file paths of the
-scanned documents and the values are their extracted text content. This allows
-the agent to gather a broad base of knowledge from the human-readable
-documentation available in a repository.
+The output is a dictionary where the keys are the file paths of the discovered
+documents and the values are their extracted text content. This data can then
+be used by the agent to inform its planning and execution process. This tool
+is essential for bridging the gap between human-written documentation and the
+agent's operational awareness.
 
 
 **Public Functions:**
@@ -580,19 +674,20 @@ architecture, including the FSM, the agent shell, and the master control script.
 
 ### `/app/tooling/hdl_prover.py`
 
-A command-line interface for a simple Hypersequent-calculus-based logic prover.
+A command-line tool for proving sequents in Intuitionistic Linear Logic.
 
-This script provides a tool for checking the provability of a logical sequent
-formatted for a subset of Intuitionistic Linear Logic. It is governed by the
-`hdl-proving-001` protocol.
+This script provides a basic interface to a simple logic prover. It takes a
+sequent as a command-line argument, parses it into a logical structure, and
+then attempts to prove it using a rudimentary proof search algorithm.
 
-The script takes a sequent as a command-line argument (e.g., "A, A -> B |- B"),
-parses it into a formal data structure, and then uses a simple proof search
-algorithm to determine if the sequent is provable.
+The primary purpose of this tool is to allow the agent to perform formal
+reasoning and verification tasks by checking the validity of logical entailments.
+For example, it can be used to verify that a certain conclusion follows from a
+set of premises according to the rules of linear logic.
 
-NOTE: The current proof search implementation is a basic placeholder and is not
-a complete or sound prover. It is intended as a scaffold for a more
-sophisticated logic engine.
+The current implementation uses a very basic parser and proof algorithm,
+serving as a placeholder and demonstration for a more sophisticated, underlying
+logic engine.
 
 
 **Public Functions:**
@@ -619,39 +714,41 @@ sophisticated logic engine.
 
 ### `/app/tooling/hierarchical_compiler.py`
 
-A two-pass compiler for building hierarchical agent protocol documentation.
+A hierarchical build system for compiling nested protocol modules.
 
-This script is the master engine for the "protocol as code" architecture. It
-orchestrates the compilation of `AGENTS.md` and `README.md` files across a
-nested directory structure and generates a unified, repository-wide knowledge
-graph of all defined protocols.
+This script orchestrates the compilation of `AGENTS.md` and `README.md` files
+across a repository with a nested or hierarchical module structure. It is a key
+component of the system's ability to manage complexity by allowing protocols to
+be defined in a modular, distributed way while still being presented as a unified,
+coherent whole at each level of the hierarchy.
 
-The process works in two main passes:
+The compiler operates in two main passes:
 
-**Pass 1: Hierarchical Documentation Build**
-1.  **Discovery:** It recursively finds all directories named `protocols`,
-    starting from the most deeply nested ones and working its way up to the root.
-2.  **Child-First Compilation:** For each `protocols` directory, it invokes the
-    `protocol_compiler.py` and `readme_generator.py` scripts to build the
-    `AGENTS.md` and `README.md` for that specific module.
-3.  **Summary Injection:** After a child module is built, the script extracts the
-    full, rendered text of its protocols from its `AGENTS.md`. It then injects
-    this text into a temporary file within the parent's `protocols` directory.
-4.  **Parent Compilation:** The parent module is then compiled. Its `AGENTS.md`
-    now seamlessly includes the complete, unabridged protocols of all its
-    children, creating a single, comprehensive `AGENTS.md` at each level of the
-    hierarchy.
+**Pass 1: Documentation Compilation (Bottom-Up)**
+1.  **Discovery:** It finds all `protocols` directories in the repository, which
+    signify the root of a documentation module.
+2.  **Bottom-Up Traversal:** It processes these directories from the most deeply
+    nested ones upwards. This ensures that child modules are always built before
+    their parents.
+3.  **Child Summary Injection:** For each compiled child module, it generates a
+    summary of its protocols and injects this summary into the parent's
+    `protocols` directory as a temporary file.
+4.  **Parent Compilation:** When the parent module is compiled, the standard
+    `protocol_compiler.py` automatically includes the injected child summaries,
+    creating a single `AGENTS.md` file that contains both the parent's native
+    protocols and the full protocols of all its direct children.
+5.  **README Generation:** After each `AGENTS.md` is compiled, the corresponding
+    `README.md` is generated.
 
 **Pass 2: Centralized Knowledge Graph Compilation**
-1.  **Discovery:** The script finds every `*.protocol.json` file in the entire
-    repository.
-2.  **Validation & Aggregation:** It validates each file against the master
-    `protocol.schema.json`.
-3.  **RDF Generation:** It uses `rdflib` to parse all validated JSON-LD protocol
-    definitions into a single RDF graph.
-4.  **Serialization:** The final, unified graph is serialized to
-    `knowledge_core/protocols.ttl`, creating a machine-queryable single source
-    of truth for all agent protocols in the repository.
+1.  After all documentation is built, it performs a full repository scan to find
+    every `*.protocol.json` file.
+2.  It parses all of these files and compiles them into a single, centralized
+    RDF knowledge graph (`protocols.ttl`). This provides a unified,
+    machine-readable view of every protocol defined anywhere in the system.
+
+This hierarchical approach allows for both localized, context-specific protocol
+definitions and a holistic, system-wide understanding of the agent's governing rules.
 
 
 **Public Functions:**
@@ -790,22 +887,22 @@ enriched knowledge graph.
 
 ### `/app/tooling/log_failure.py`
 
-A special-purpose script to log a pre-defined catastrophic failure event.
+A dedicated script to log a catastrophic failure event to the main activity log.
 
-This is not a general-purpose tool. Its sole function is to create a very
-specific log entry in `logs/activity.log.jsonl` that represents a
-catastrophic, unrecoverable system failure.
+This tool is designed to be invoked in the rare case of a severe, unrecoverable
+error that violates a core protocol. Its primary purpose is to ensure that such
+a critical event is formally and structurally documented in the standard agent
+activity log (`logs/activity.log.jsonl`), even if the main agent loop has
+crashed or been terminated.
 
-The logged event is hard-coded to represent a critical protocol violation: the
-unauthorized use of the `reset_all` tool, which is documented as a cause of
-past workflow collapses.
+The script is pre-configured to log a `SYSTEM_FAILURE` event, specifically
+attributing it to the "Unauthorized use of the `reset_all` tool." This creates a
+permanent, machine-readable record of the failure, which is essential for
+post-mortem analysis, debugging, and the development of future safeguards.
 
-This script is likely used for:
-1.  Testing the logging and auditing systems' ability to handle critical failure
-    events.
-2.  Seeding the log with a known failure event for post-mortem analysis drills.
-3.  Providing a programmatic way to signal a system-wide halt in a controlled
-    manner during simulations.
+By using the standard `Logger` class, it ensures that the failure log entry
+conforms to the established `LOGGING_SCHEMA.md`, making it processable by
+auditing and analysis tools.
 
 
 **Public Functions:**
@@ -883,7 +980,7 @@ This module is designed as a library to be controlled by an external shell
 
     > Executes orientation, including analyzing the last post-mortem.
 
-  - ##### `def do_planning(self, agent_state, plan_content, logger, model='A')`
+  - ##### `def do_planning(self, agent_state, plan_content, logger)`
 
     > Validates a given plan, parses it, and initializes the plan stack.
 
@@ -904,6 +1001,10 @@ This module is designed as a library to be controlled by an external shell
     > Finds a trigger in the FSM definition for a transition from a source
     > to a destination state. This is a helper to avoid hardcoding trigger
     > strings in the state handlers.
+
+  - ##### `def validate_plan_for_model(self, plan_content, model)`
+
+    > Validates a plan against a specific model's FSM.
 
 
 ### `/app/tooling/master_control_cli.py`
@@ -927,23 +1028,24 @@ decoupling the entry point from the FSM implementation.
 
 ### `/app/tooling/message_user.py`
 
-A simple, local simulation of the `message_user` tool.
+A dummy tool that prints its arguments to simulate the message_user tool.
 
-In a real agent execution environment, the `message_user` tool would be a
-special function provided by the environment to communicate with the end-user.
-This script provides a lightweight, standalone equivalent for local testing
-and development.
+This script is a simple command-line utility that takes a string as an
+argument and prints it to standard output, prefixed with "[Message User]:".
+Its purpose is to serve as a stand-in or mock for the actual `message_user`
+tool in testing environments where the full agent framework is not required.
 
-Its sole purpose is to take a string as a command-line argument and print it
-to standard output, prefixed with "[Message User]:". This allows developers to
-test plans and scripts that involve user communication without needing the full
-agent framework.
+This allows for the testing of scripts or workflows that call the
+`message_user` tool without needing to invoke the entire agent messaging
+subsystem.
 
 
 **Public Functions:**
 
 
 - #### `def main()`
+
+  > Prints the first command-line argument to simulate a user message.
 
 
 ### `/app/tooling/pages_generator.py`
@@ -1055,20 +1157,25 @@ allowing for robust and readable plan files.
 
 ### `/app/tooling/plan_registry_auditor.py`
 
-A command-line tool to audit the Plan Registry for broken links.
+A tool for auditing the agent's Plan Registry to ensure its integrity.
 
-This script is the reference implementation for the `plan-registry-audit-001`
-protocol. Its purpose is to ensure the integrity of the hierarchical planning
-system by verifying the `knowledge_core/plan_registry.json` file.
+This script is a diagnostic and maintenance tool designed to validate the
+`knowledge_core/plan_registry.json` file. The Plan Registry is a critical
+component of the hierarchical planning system (CFDC), as it maps logical plan
+names to their physical file paths. If this registry contains "dead links"
+(i.e., entries that point to files that have been moved, renamed, or deleted),
+the agent's ability to execute complex, multi-stage plans will be compromised.
 
-The Plan Registry maps logical, human-readable names to the file paths of
-reusable plans. This auditor reads the registry and checks every entry to
-confirm that the specified file path points to an actual, existing file.
+This auditor performs one key function:
+- **Dead Link Detection:** It reads every entry in the plan registry and verifies
+  that the file path associated with each logical name actually exists in the
+  filesystem.
 
-It prints a report to the console, listing all valid entries and flagging any
-"dead links" where the target file is missing. This allows for quick diagnosis
-and correction of the plan library, preventing runtime errors when the agent
-tries to execute a plan that no longer exists.
+The script provides a clear, human-readable report of which registry entries are
+valid and which are invalid. This allows for quick identification and correction
+of issues, helping to maintain the health and reliability of the agent's core
+planning capabilities. It can be run manually for diagnostics or integrated into
+automated health checks.
 
 
 **Public Functions:**
@@ -1257,27 +1364,31 @@ directory, performing targeted updates based on command-line arguments.
 
 ### `/app/tooling/readme_generator.py`
 
-A documentation generator that creates a module's README.md file.
+A tool for automatically generating a `README.md` file for a given module.
 
-This script is a key component of the "documentation as code" pipeline. It
-automates the creation of a `README.md` file by dynamically combining content
-from both machine-readable protocols and Python source code docstrings.
+This script creates a structured and human-readable `README.md` file by
+combining static templates with dynamically generated content extracted from the
+module's own source files. It is a key part of the project's "self-documenting"
+philosophy, ensuring that the high-level documentation stays synchronized with
+the source of truth (the code and protocols).
 
-The generation process is as follows:
-1.  **Parse `AGENTS.md`:** It reads the module's `AGENTS.md` file and extracts
-    the `protocol_id` and `description` from every JSON protocol block to create
-    a summary of the module's core protocols.
-2.  **Parse Source Code:** It scans the module's `tooling/` subdirectory for all
-    Python (`.py`) files. For each file, it parses the Abstract Syntax Tree (AST)
-    to extract the module-level docstring.
-3.  **Inject into Template:** It takes the generated protocol summaries and the
-    extracted docstrings and injects them into a static Markdown template.
-4.  **Write `README.md`:** The final, combined content is written to the
-    `README.md` file in the same directory.
+The generator performs two main dynamic functions:
 
-This ensures that the high-level `README.md` documentation always stays
-synchronized with the ground-truth definitions in the `AGENTS.md` protocols and
-the inline documentation within the tools themselves.
+1.  **Protocol Summary Generation:** It parses the module's `AGENTS.md` file to
+    find all defined protocol blocks (both those native to the module and those
+    imported from child modules). It then formats this information into a clear,
+    list-based summary that provides a high-level overview of the module's
+    governing rules.
+
+2.  **Key Component Documentation:** It scans the module's `tooling/` subdirectory
+    (if it exists) and finds all Python scripts within it. For each script, it
+    parses the source code to extract the module-level docstring. This provides
+    a concise summary of the key tools and components that make up the module's
+    functionality.
+
+The final output is a consistent, auto-updating README that serves as the primary
+entry point for any human or agent seeking to understand the purpose, rules, and
+capabilities of the module.
 
 
 **Public Functions:**
@@ -1306,30 +1417,29 @@ the inline documentation within the tools themselves.
 
 ### `/app/tooling/refactor.py`
 
-A command-line tool for automated, plan-based code refactoring.
+A tool for performing automated symbol renaming in Python code.
 
-This script provides a safe and repeatable way to perform common refactoring
-tasks, such as renaming a symbol, across the entire codebase. It is the
-reference implementation for the `refactor-001` protocol.
+This script provides a command-line interface to find a specific symbol
+(a function or a class) in a given Python file and rename it, along with all of
+its textual references throughout the entire repository. This provides a safe
+and automated way to perform a common refactoring task, reducing the risk of
+manual errors.
 
-The tool operates by generating a detailed, executable plan file that the
-agent's master controller can then execute. This decouples the analysis of the
-refactoring from its execution.
+The tool operates in three main stages:
+1.  **Definition Finding:** It uses Python's Abstract Syntax Tree (AST) module
+    to parse the source file and precisely locate the definition of the target
+    symbol. This ensures that the tool is targeting the correct code construct.
+2.  **Reference Finding:** It performs a text-based search across the specified
+    search path (defaulting to the entire repository) to find all files that
+    mention the symbol's old name.
+3.  **Plan Generation:** Instead of modifying files directly, it generates a
+    refactoring "plan." This plan is a sequence of `replace_with_git_merge_diff`
+    commands, one for each file that needs to be changed. The path to this
+    generated plan file is printed to standard output.
 
-Workflow for renaming a symbol:
-1.  **AST-based Definition Finding:** It first parses the source file using
-    Python's Abstract Syntax Tree (AST) to reliably locate the precise
-    definition of the target function or class. This avoids the ambiguity of
-    simple text searches.
-2.  **Reference Searching:** It then searches the entire repository to find all
-    files that contain the old symbol name, creating a list of potential
-    references.
-3.  **Plan Generation:** For each file that contains the old name, it generates a
-    `replace_with_git_merge_diff` command. This command is a highly-specific
-    search-and-replace that will substitute the old name for the new one.
-4.  **Plan Output:** All generated commands are written to a single `.plan.txt`
-    file. The script outputs the path to this file, which can then be passed to
-    the agent's execution engine.
+This plan-based approach allows the agent's master controller to execute the
+refactoring in a controlled, verifiable, and atomic way, consistent with its
+standard operational procedures.
 
 
 **Public Functions:**
@@ -1560,27 +1670,13 @@ rate tracking or tool usage anti-patterns) to be added as the system evolves.
 
 ### `/app/tooling/standard_agents_compiler.py`
 
-A compiler that generates a simplified, standard-compliant `AGENTS.md` file.
+Generates a simplified, standard-compliant AGENTS.md file for external tools.
 
-This script acts as an "adapter" to make the repository more accessible to
-third-party AI agents that expect a conventional set of instructions. While the
-repository's primary `AGENTS.md` is a complex, hierarchical, and
-machine-readable artifact for its own specialized agent, the `AGENTS.standard.md`
-file produced by this script offers a simple, human-readable summary of the
-most common development commands.
-
-The script works by:
-1.  **Parsing the Makefile:** It dynamically parses the project's `Makefile`,
-    which is the single source of truth for high-level commands. It specifically
-    extracts the exact commands for common targets like `install`, `test`,
-    `lint`, and `format`. This ensures the generated instructions are never
-    stale.
-2.  **Injecting into a Template:** It injects these extracted commands into a
-    pre-defined, user-friendly Markdown template.
-3.  **Generating the Artifact:** The final output is written to
-    `AGENTS.standard.md`, providing a simple, stable, and conventional entry
-    point for external tools, effectively bridging the gap between the complex
-    internal protocol system and the broader agent ecosystem.
+This script parses the project's Makefile to extract key commands (install, test,
+lint, format) and injects them into a human-readable Markdown template. The
+output, AGENTS.standard.md, is designed to provide a quick, conventional entry
+point for third-party AI agents, bridging the gap between our complex internal
+protocol system and the broader ecosystem's expectations.
 
 
 **Public Functions:**

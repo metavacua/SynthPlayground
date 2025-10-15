@@ -1,3 +1,27 @@
+"""
+A tool to verify that the agent can monotonically improve its capabilities.
+
+This script is designed to provide a formal, automated test for the agent's
+self-correction and learning mechanisms. It ensures that when the agent learns
+a new capability, it does so without losing (regressing) any of its existing
+capabilities. This is a critical safeguard for ensuring robust and reliable
+agent evolution.
+
+The tool works by orchestrating a four-step process:
+1.  **Confirm Initial Failure:** It runs a specific test file that is known to
+    fail, verifying that the agent currently lacks the target capability.
+2.  **Invoke Self-Correction:** It simulates the discovery of a new "lesson" and
+    triggers the `self_correction_orchestrator.py` script, which is responsible
+    for integrating new knowledge and skills.
+3.  **Confirm Final Success:** It runs the same test file again, confirming that
+    the agent has successfully learned the new capability and the test now passes.
+4.  **Check for Regressions:** It runs the full, existing test suite to ensure
+    that the process of learning the new skill has not inadvertently broken any
+    previously functional capabilities.
+
+This provides a closed-loop verification of monotonic improvement, which is a
+cornerstone of the agent's design philosophy.
+"""
 import argparse
 import subprocess
 import sys

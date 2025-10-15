@@ -1,20 +1,20 @@
 """
-A special-purpose script to log a pre-defined catastrophic failure event.
+A dedicated script to log a catastrophic failure event to the main activity log.
 
-This is not a general-purpose tool. Its sole function is to create a very
-specific log entry in `logs/activity.log.jsonl` that represents a
-catastrophic, unrecoverable system failure.
+This tool is designed to be invoked in the rare case of a severe, unrecoverable
+error that violates a core protocol. Its primary purpose is to ensure that such
+a critical event is formally and structurally documented in the standard agent
+activity log (`logs/activity.log.jsonl`), even if the main agent loop has
+crashed or been terminated.
 
-The logged event is hard-coded to represent a critical protocol violation: the
-unauthorized use of the `reset_all` tool, which is documented as a cause of
-past workflow collapses.
+The script is pre-configured to log a `SYSTEM_FAILURE` event, specifically
+attributing it to the "Unauthorized use of the `reset_all` tool." This creates a
+permanent, machine-readable record of the failure, which is essential for
+post-mortem analysis, debugging, and the development of future safeguards.
 
-This script is likely used for:
-1.  Testing the logging and auditing systems' ability to handle critical failure
-    events.
-2.  Seeding the log with a known failure event for post-mortem analysis drills.
-3.  Providing a programmatic way to signal a system-wide halt in a controlled
-    manner during simulations.
+By using the standard `Logger` class, it ensures that the failure log entry
+conforms to the established `LOGGING_SCHEMA.md`, making it processable by
+auditing and analysis tools.
 """
 import sys
 import os

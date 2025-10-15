@@ -1,37 +1,39 @@
 """
-A two-pass compiler for building hierarchical agent protocol documentation.
+A hierarchical build system for compiling nested protocol modules.
 
-This script is the master engine for the "protocol as code" architecture. It
-orchestrates the compilation of `AGENTS.md` and `README.md` files across a
-nested directory structure and generates a unified, repository-wide knowledge
-graph of all defined protocols.
+This script orchestrates the compilation of `AGENTS.md` and `README.md` files
+across a repository with a nested or hierarchical module structure. It is a key
+component of the system's ability to manage complexity by allowing protocols to
+be defined in a modular, distributed way while still being presented as a unified,
+coherent whole at each level of the hierarchy.
 
-The process works in two main passes:
+The compiler operates in two main passes:
 
-**Pass 1: Hierarchical Documentation Build**
-1.  **Discovery:** It recursively finds all directories named `protocols`,
-    starting from the most deeply nested ones and working its way up to the root.
-2.  **Child-First Compilation:** For each `protocols` directory, it invokes the
-    `protocol_compiler.py` and `readme_generator.py` scripts to build the
-    `AGENTS.md` and `README.md` for that specific module.
-3.  **Summary Injection:** After a child module is built, the script extracts the
-    full, rendered text of its protocols from its `AGENTS.md`. It then injects
-    this text into a temporary file within the parent's `protocols` directory.
-4.  **Parent Compilation:** The parent module is then compiled. Its `AGENTS.md`
-    now seamlessly includes the complete, unabridged protocols of all its
-    children, creating a single, comprehensive `AGENTS.md` at each level of the
-    hierarchy.
+**Pass 1: Documentation Compilation (Bottom-Up)**
+1.  **Discovery:** It finds all `protocols` directories in the repository, which
+    signify the root of a documentation module.
+2.  **Bottom-Up Traversal:** It processes these directories from the most deeply
+    nested ones upwards. This ensures that child modules are always built before
+    their parents.
+3.  **Child Summary Injection:** For each compiled child module, it generates a
+    summary of its protocols and injects this summary into the parent's
+    `protocols` directory as a temporary file.
+4.  **Parent Compilation:** When the parent module is compiled, the standard
+    `protocol_compiler.py` automatically includes the injected child summaries,
+    creating a single `AGENTS.md` file that contains both the parent's native
+    protocols and the full protocols of all its direct children.
+5.  **README Generation:** After each `AGENTS.md` is compiled, the corresponding
+    `README.md` is generated.
 
 **Pass 2: Centralized Knowledge Graph Compilation**
-1.  **Discovery:** The script finds every `*.protocol.json` file in the entire
-    repository.
-2.  **Validation & Aggregation:** It validates each file against the master
-    `protocol.schema.json`.
-3.  **RDF Generation:** It uses `rdflib` to parse all validated JSON-LD protocol
-    definitions into a single RDF graph.
-4.  **Serialization:** The final, unified graph is serialized to
-    `knowledge_core/protocols.ttl`, creating a machine-queryable single source
-    of truth for all agent protocols in the repository.
+1.  After all documentation is built, it performs a full repository scan to find
+    every `*.protocol.json` file.
+2.  It parses all of these files and compiles them into a single, centralized
+    RDF knowledge graph (`protocols.ttl`). This provides a unified,
+    machine-readable view of every protocol defined anywhere in the system.
+
+This hierarchical approach allows for both localized, context-specific protocol
+definitions and a holistic, system-wide understanding of the agent's governing rules.
 """
 import os
 import sys

@@ -1,25 +1,29 @@
 """
-A documentation generator that creates a module's README.md file.
+A tool for automatically generating a `README.md` file for a given module.
 
-This script is a key component of the "documentation as code" pipeline. It
-automates the creation of a `README.md` file by dynamically combining content
-from both machine-readable protocols and Python source code docstrings.
+This script creates a structured and human-readable `README.md` file by
+combining static templates with dynamically generated content extracted from the
+module's own source files. It is a key part of the project's "self-documenting"
+philosophy, ensuring that the high-level documentation stays synchronized with
+the source of truth (the code and protocols).
 
-The generation process is as follows:
-1.  **Parse `AGENTS.md`:** It reads the module's `AGENTS.md` file and extracts
-    the `protocol_id` and `description` from every JSON protocol block to create
-    a summary of the module's core protocols.
-2.  **Parse Source Code:** It scans the module's `tooling/` subdirectory for all
-    Python (`.py`) files. For each file, it parses the Abstract Syntax Tree (AST)
-    to extract the module-level docstring.
-3.  **Inject into Template:** It takes the generated protocol summaries and the
-    extracted docstrings and injects them into a static Markdown template.
-4.  **Write `README.md`:** The final, combined content is written to the
-    `README.md` file in the same directory.
+The generator performs two main dynamic functions:
 
-This ensures that the high-level `README.md` documentation always stays
-synchronized with the ground-truth definitions in the `AGENTS.md` protocols and
-the inline documentation within the tools themselves.
+1.  **Protocol Summary Generation:** It parses the module's `AGENTS.md` file to
+    find all defined protocol blocks (both those native to the module and those
+    imported from child modules). It then formats this information into a clear,
+    list-based summary that provides a high-level overview of the module's
+    governing rules.
+
+2.  **Key Component Documentation:** It scans the module's `tooling/` subdirectory
+    (if it exists) and finds all Python scripts within it. For each script, it
+    parses the source code to extract the module-level docstring. This provides
+    a concise summary of the key tools and components that make up the module's
+    functionality.
+
+The final output is a consistent, auto-updating README that serves as the primary
+entry point for any human or agent seeking to understand the purpose, rules, and
+capabilities of the module.
 """
 import ast
 import os

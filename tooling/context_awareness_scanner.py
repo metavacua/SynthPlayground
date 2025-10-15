@@ -1,21 +1,25 @@
 """
-Performs static analysis on a Python file to map its contextual role.
+A tool for performing static analysis on a Python file to understand its context.
 
-This script acts as a code intelligence tool. Given a Python file, it performs
-a static analysis to understand its connections to the rest of the codebase.
-It generates a detailed JSON report that includes:
+This script provides a "contextual awareness" scan of a specified Python file
+to help an agent (or a human) understand its role, dependencies, and connections
+within a larger codebase. This is crucial for planning complex changes or
+refactoring efforts, as it provides a snapshot of the potential impact of
+modifying a file.
 
-1.  **Defined Symbols:** All functions and classes defined within the target file,
-    along with their line numbers.
-2.  **Imported Symbols:** All modules and symbols that the target file imports
-    from other modules.
-3.  **Cross-Repository References:** For each function and class defined in the
-    target file, it finds all other Python files in the repository that
-    reference that symbol.
+The scanner performs three main functions:
+1.  **Symbol Definition Analysis:** It uses Python's Abstract Syntax Tree (AST)
+    module to parse the target file and identify all the functions and classes
+    that are defined within it.
+2.  **Import Analysis:** It also uses the AST to find all modules and symbols
+    that the target file imports, revealing its dependencies on other parts of
+    the codebase or external libraries.
+3.  **Reference Finding:** It performs a repository-wide search to find all other
+    files that reference the symbols defined in the target file. This helps to
+    understand how the file is used by the rest of the system.
 
-The resulting report provides a comprehensive "contextual awareness map" for a
-single file, showing what it provides to the system and what it consumes from
-it. This is invaluable for understanding the impact of potential changes.
+The final output is a detailed JSON report containing all of this information,
+which can be used as a foundational artifact for automated planning or human review.
 """
 import argparse
 import ast

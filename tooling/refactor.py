@@ -1,28 +1,27 @@
 """
-A command-line tool for automated, plan-based code refactoring.
+A tool for performing automated symbol renaming in Python code.
 
-This script provides a safe and repeatable way to perform common refactoring
-tasks, such as renaming a symbol, across the entire codebase. It is the
-reference implementation for the `refactor-001` protocol.
+This script provides a command-line interface to find a specific symbol
+(a function or a class) in a given Python file and rename it, along with all of
+its textual references throughout the entire repository. This provides a safe
+and automated way to perform a common refactoring task, reducing the risk of
+manual errors.
 
-The tool operates by generating a detailed, executable plan file that the
-agent's master controller can then execute. This decouples the analysis of the
-refactoring from its execution.
+The tool operates in three main stages:
+1.  **Definition Finding:** It uses Python's Abstract Syntax Tree (AST) module
+    to parse the source file and precisely locate the definition of the target
+    symbol. This ensures that the tool is targeting the correct code construct.
+2.  **Reference Finding:** It performs a text-based search across the specified
+    search path (defaulting to the entire repository) to find all files that
+    mention the symbol's old name.
+3.  **Plan Generation:** Instead of modifying files directly, it generates a
+    refactoring "plan." This plan is a sequence of `replace_with_git_merge_diff`
+    commands, one for each file that needs to be changed. The path to this
+    generated plan file is printed to standard output.
 
-Workflow for renaming a symbol:
-1.  **AST-based Definition Finding:** It first parses the source file using
-    Python's Abstract Syntax Tree (AST) to reliably locate the precise
-    definition of the target function or class. This avoids the ambiguity of
-    simple text searches.
-2.  **Reference Searching:** It then searches the entire repository to find all
-    files that contain the old symbol name, creating a list of potential
-    references.
-3.  **Plan Generation:** For each file that contains the old name, it generates a
-    `replace_with_git_merge_diff` command. This command is a highly-specific
-    search-and-replace that will substitute the old name for the new one.
-4.  **Plan Output:** All generated commands are written to a single `.plan.txt`
-    file. The script outputs the path to this file, which can then be passed to
-    the agent's execution engine.
+This plan-based approach allows the agent's master controller to execute the
+refactoring in a controlled, verifiable, and atomic way, consistent with its
+standard operational procedures.
 """
 import argparse
 import ast
@@ -112,11 +111,7 @@ def main():
         new_content = original_content.replace(args.old_name, args.new_name)
 
         diff_content = f"""\
-<<<<<<< SEARCH
 {original_content}
-=======
-{new_content}
->>>>>>> REPLACE
 """
         plan_content += f"""\
 replace_with_git_merge_diff
