@@ -46,6 +46,8 @@ ACTION_TYPE_MAP = {
     "rename_file": "move_op",
     "run_in_bash_session": "tool_exec",
     "for_each_file": "loop_op",
+    "define_set_of_names": "define_names_op",
+    "define_diagonalization_function": "define_diag_op",
 }
 
 # --- CLI Subcommands & Helpers ---
@@ -267,7 +269,7 @@ def validate_plan(plan_filepath):
         sys.exit(1)
 
 
-def analyze_plan(plan_filepath):
+def analyze_plan(plan_filepath, return_results=False):
     """Analyzes a plan file to determine its complexity class and modality."""
     try:
         with open(plan_filepath, "r") as f:
@@ -285,11 +287,14 @@ def analyze_plan(plan_filepath):
             loop_indents.append(indent)
 
     if not loop_indents:
-        complexity = "Constant (O(1))"
+        complexity_class = "P"
+        complexity_string = "Constant (O(1))"
     elif max(loop_indents) > min(loop_indents):
-        complexity = "Exponential (EXPTIME-Class)"
+        complexity_class = "EXP"
+        complexity_string = "Exponential (EXPTIME-Class)"
     else:
-        complexity = "Polynomial (P-Class)"
+        complexity_class = "P"
+        complexity_string = "Polynomial (P-Class)"
 
     # --- Modality Analysis ---
     has_write_op = False
@@ -303,8 +308,11 @@ def analyze_plan(plan_filepath):
 
     modality = "Construction (Read-Write)" if has_write_op else "Analysis (Read-Only)"
 
+    if return_results:
+        return {"complexity_class": complexity_class, "modality": modality}
+
     print("Plan Analysis Results:")
-    print(f"  - Complexity: {complexity}")
+    print(f"  - Complexity: {complexity_string}")
     print(f"  - Modality:   {modality}")
 
 

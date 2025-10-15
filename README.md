@@ -15,7 +15,7 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`agent-shell-001`**: A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.
 - **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
 - **`aura-execution-001`**: A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.
-- **`capability-verification-001`**: A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.
+- **`csdc-001`**: A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.
 - **`doc-audit-001`**: A protocol to ensure the completeness of system documentation.
 - **`hdl-proving-001`**: A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.
 - **`agent-interaction-001`**: A protocol governing the agent's core interaction and planning tools.
@@ -60,6 +60,10 @@ This module is governed by a series of machine-readable protocols defined in `AG
 - **`tooling/context_awareness_scanner.py`**:
 
   > A tool for scanning a Python file to understand its context within a repository.\n  > \n  > This script performs static analysis on a given file to:\n  > 1.  Identify all functions and classes defined within it.\n  > 2.  Identify all modules and symbols it imports.\n  > 3.  Search the repository for references to the symbols defined in the file.\n  > \n  > The output is a JSON report that provides a snapshot of the file's role and\n  > dependencies, which is useful for understanding its impact and for planning\n  > refactoring efforts.
+
+- **`tooling/csdc_cli.py`**:
+
+  > _No docstring found._
 
 - **`tooling/dependency_graph_generator.py`**:
 

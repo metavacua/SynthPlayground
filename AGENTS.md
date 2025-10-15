@@ -333,6 +333,38 @@ This prohibition is non-negotiable and must be adhered to by any agent assuming 
 
 ---
 
+# Protocol: The Context-Sensitive Development Cycle (CSDC)
+
+This protocol introduces a new form of development cycle that is sensitive to the logical context in which it operates. It moves beyond the purely structural validation of the FDC and CFDC to incorporate constraints based on fundamental principles of logic and computability.
+
+The CSDC is founded on the idea of exploring the trade-offs between expressive power and the risk of self-referential paradoxes. It achieves this by defining two mutually exclusive development models.
+
+## Model A: The Introspective Model
+
+- **Permits:** `define_set_of_names`
+- **Forbids:** `define_diagonalization_function`
+
+This model allows the system to have a complete map of its own language, enabling powerful introspection and metaprogramming. However, it explicitly forbids the diagonalization function, a common source of paradoxes in self-referential systems. This can be seen as a Gödel-like approach.
+
+## Model B: The Self-Referential Model
+
+- **Permits:** `define_diagonalization_function`
+- **Forbids:** `define_set_of_names`
+
+This model allows the system to define and use the diagonalization function, enabling direct self-reference. However, it prevents the system from having a complete name-map of its own expressions, which is another way to avoid paradox (related to Tarski's undefinability theorem).
+
+## Complexity Classes
+
+Both models can be further constrained by computational complexity:
+- **Polynomial (P):** For plans that are considered computationally tractable.
+- **Exponential (EXP):** For plans that may require significantly more resources, allowing for more complex but potentially less efficient solutions.
+
+## The `csdc_cli.py` Tool
+
+The CSDC is enforced by the `tooling/csdc_cli.py` tool. This tool validates a plan against a specified model and complexity class, ensuring that all constraints are met before execution.
+
+---
+
 # Protocol: Code Refactoring
 
 This protocol defines the use of the `refactor.py` tool, which provides a simple way to perform automated refactoring of Python code.
@@ -470,17 +502,27 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ```json
 {
-  "protocol_id": "capability-verification-001",
-  "description": "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.",
+  "protocol_id": "csdc-001",
+  "description": "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.",
   "rules": [
     {
-      "rule_id": "verify-capability-acquisition",
-      "description": "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process.",
-      "enforcement": "The tool is used by invoking it from the command line with the path to the target test file."
+      "rule_id": "use-csdc-cli",
+      "description": "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP).",
+      "enforcement": "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments."
+    },
+    {
+      "rule_id": "model-a-constraints",
+      "description": "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`.",
+      "enforcement": "Enforced by the `fsm_model_a.json` FSM used by the `csdc_cli.py` tool."
+    },
+    {
+      "rule_id": "model-b-constraints",
+      "description": "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`.",
+      "enforcement": "Enforced by the `fsm_model_b.json` FSM used by the `csdc_cli.py` tool."
     }
   ],
   "associated_tools": [
-    "tooling/capability_verifier.py"
+    "tooling/csdc_cli.py"
   ]
 }
 ```
