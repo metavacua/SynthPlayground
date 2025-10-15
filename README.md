@@ -14,6 +14,7 @@ This document provides a human-readable summary of the protocols and key compone
 - **`capability-verification-001`**: A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.
 - **`csdc-001`**: A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.
 - **`unified-doc-builder-001`**: A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth.
+- **`file-indexing-001`**: A protocol for maintaining an up-to-date file index to accelerate tool performance.
 - **`hdl-proving-001`**: A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.
 - **`agent-interaction-001`**: A protocol governing the agent's core interaction and planning tools.
 - **`speculative-execution-001`**: A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.
@@ -295,6 +296,10 @@ This document provides a human-readable summary of the protocols and key compone
   >   Constant, Polynomial, Exponential) and its modality (Read-Only vs.
   >   Read-Write), providing insight into the plan's potential impact.
 
+- **`tooling/file_indexer.py`**:
+
+  > _No module-level docstring found._
+
 - **`tooling/hdl_prover.py`**:
 
   > A command-line tool for proving sequents in Intuitionistic Linear Logic.
@@ -476,6 +481,10 @@ This document provides a human-readable summary of the protocols and key compone
   > which are central to the agent's ability to understand and execute plans.
   > The parser correctly handles multi-line arguments and ignores comments,
   > allowing for robust and readable plan files.
+
+- **`tooling/pre_submit_check.py`**:
+
+  > _No module-level docstring found._
 
 - **`tooling/protocol_compiler.py`**:
 

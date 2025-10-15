@@ -183,6 +183,10 @@
     },
     {
       "source": "root-python-project",
+      "target": "requests"
+    },
+    {
+      "source": "root-python-project",
       "target": "pypdf"
     },
     {
