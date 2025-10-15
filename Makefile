@@ -70,6 +70,10 @@ audit:
 	@echo "--> Building target: audit"
 	@python3 $(BUILDER_SCRIPT) --target audit
 
+audit-docs:
+	@echo "--> Auditing documentation for completeness..."
+	@python3 tooling/doc_auditor.py
+
 # ==============================================================================
 # Cleanup
 # ==============================================================================
