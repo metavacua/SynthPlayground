@@ -1784,6 +1784,87 @@
     },
     {
       "_type": "tag",
+      "name": "_log_event",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": "Appends a new log entry to the activity log, ensuring it's on a new line."
+    },
+    {
+      "_type": "tag",
+      "name": "_create_log_entry",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 49,
+      "kind": "function",
+      "docstring": "Creates a structured log entry dictionary."
+    },
+    {
+      "_type": "tag",
+      "name": "close_task",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function",
+      "docstring": "Automates the closing of a Finite Development Cycle."
+    },
+    {
+      "_type": "tag",
+      "name": "_validate_action",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 99,
+      "kind": "function",
+      "docstring": "Validates a single, non-loop action."
+    },
+    {
+      "_type": "tag",
+      "name": "_validate_plan_recursive",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 156,
+      "kind": "function",
+      "docstring": "Recursively validates a block of a plan."
+    },
+    {
+      "_type": "tag",
+      "name": "validate_plan",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 217,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_plan",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 251,
+      "kind": "function",
+      "docstring": "Analyzes a plan file to determine its complexity class and modality."
+    },
+    {
+      "_type": "tag",
+      "name": "start_task",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 292,
+      "kind": "function",
+      "docstring": "Initiates the AORP cascade for a new task."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/fdc_cli.py",
+      "language": "Python",
+      "line": 348,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "find_fsm_transition",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
