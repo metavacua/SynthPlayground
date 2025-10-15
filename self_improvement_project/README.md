@@ -1,26 +1,26 @@
-# Self Improvement Project: FizzBuzz
+# Self Improvement Project: A Goal-Oriented System
 
-This project is a small demonstration of core software engineering skills. It was created in response to the general directive to "Self improve."
+This project demonstrates a foundational concept of self-improvement within a closed computational system. It features two competing processes, an "Innovator" and a "Stabilizer," that work together to evolve the system's state toward a specific, measurable goal.
 
 ## Purpose
 
-The goal of this project is to showcase the ability to:
+The goal of this project is to serve as a minimal example of a goal-oriented, self-improving system. The system's "improvement" is defined by its ability to find a state whose hash representation has a maximal number of leading zeros. This turns the abstract idea of "improvement" into a concrete problem, similar to a proof-of-work system.
 
-*   Create a new, self-contained project.
-*   Implement a well-known algorithm (FizzBuzz).
-*   Write unit tests to verify the correctness of the implementation.
-*   Follow a structured development process.
+This project showcases the ability to:
 
-This project is not intended to be integrated into a larger application but rather to serve as a standalone example of a complete, tested feature.
+*   Create a self-contained, abstract computational system.
+*   Implement a non-arbitrary, goal-oriented feedback loop.
+*   Write unit tests to verify the system's logic using mocking.
+*   Maintain coherent documentation (`README.md`, `architecture.md`).
 
 ## How to run
 
-To run the main program:
+To run the main program and observe the self-improvement loop:
 ```bash
-python main.py
+python self_improvement_project/main.py
 ```
 
 To run the tests:
 ```bash
-python test_main.py
+python self_improvement_project/test_main.py
 ```
