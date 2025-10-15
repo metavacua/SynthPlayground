@@ -2,13 +2,13 @@
 
 ---
 
-## `tooling/` Directory
+## `/app/tooling/` Directory
 
-### `tooling/__init__.py`
+### `/app/tooling/__init__.py`
 
 _No module-level docstring found._
 
-### `tooling/agent_shell.py`
+### `/app/tooling/agent_shell.py`
 
 The new, interactive, API-driven entry point for the agent.
 
@@ -39,7 +39,69 @@ programmatic interface to the MasterControlGraph FSM. It is responsible for:
   > The main loop that drives the agent's lifecycle via the FSM.
 
 
-### `tooling/code_suggester.py`
+### `/app/tooling/background_researcher.py`
+
+This script performs a simulated research task in the background.
+It takes a task ID as a command-line argument and writes its findings
+to a temporary file that the main agent can poll.
+
+
+**Public Functions:**
+
+
+- #### `def perform_research(task_id)`
+
+  > Simulates a research task and writes the result to a file.
+
+
+### `/app/tooling/builder.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def execute_build(target_name, config)`
+
+  > Executes the build process for a specific target defined in the config.
+
+
+- #### `def load_config()`
+
+  > Loads the build configuration file.
+
+
+- #### `def main()`
+
+  > Main function to parse arguments and drive the build process.
+
+
+### `/app/tooling/code_health_analyzer.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def generate_plan_to_fix_dead_links(dead_links, current_registry)`
+
+  > Generates a plan using `overwrite_file_with_block` to fix dead links.
+
+
+- #### `def get_dead_links_and_content()`
+
+  > Audits the plan registry, returns a list of dead links and the original content.
+
+
+- #### `def main()`
+
+  > Main entry point for the code health analyzer.
+  > Identifies dead links and prints a plan to fix them.
+
+
+### `/app/tooling/code_suggester.py`
 
 Handles the generation and application of autonomous code change suggestions.
 
@@ -81,7 +143,7 @@ without altering the core orchestration process.
   > Parses arguments, generates a plan, and prints the plan's path to stdout.
 
 
-### `tooling/context_awareness_scanner.py`
+### `/app/tooling/context_awareness_scanner.py`
 
 _No module-level docstring found._
 
@@ -107,7 +169,7 @@ _No module-level docstring found._
 - #### `def main()`
 
 
-### `tooling/dependency_graph_generator.py`
+### `/app/tooling/dependency_graph_generator.py`
 
 Scans the repository for dependency files and generates a unified dependency graph.
 
@@ -161,7 +223,7 @@ about the potential impact of its changes.
   > Parses a requirements.txt file to extract its dependencies.
 
 
-### `tooling/doc_generator.py`
+### `/app/tooling/doc_generator.py`
 
 Generates detailed system documentation from Python source files.
 
@@ -204,7 +266,7 @@ importing them, which avoids issues with dependencies or script side-effects.
   > Generates Markdown content for a single module.
 
 
-- #### `def main()`
+- #### `def main(source_dirs, output_file)`
 
   > Main function to find files, parse them, and write documentation.
 
@@ -264,7 +326,20 @@ importing them, which avoids issues with dependencies or script side-effects.
   - ##### `def __init__(self, name, docstring, classes, functions)`
 
 
-### `tooling/environmental_probe.py`
+### `/app/tooling/document_scanner.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def scan_documents(directory='.')`
+
+  > Scans a directory for PDF, Markdown, and text files and extracts their content.
+
+
+### `/app/tooling/environmental_probe.py`
 
 Performs a series of checks to assess the capabilities of the execution environment.
 
@@ -309,7 +384,31 @@ that might impact its ability to complete a task.
   > Tests network connectivity and measures latency to a reliable external endpoint.
 
 
-### `tooling/hierarchical_compiler.py`
+### `/app/tooling/generate_docs.py`
+
+This script generates comprehensive Markdown documentation for the agent's
+architecture, including the FSM, the agent shell, and the master control script.
+
+
+**Public Functions:**
+
+
+- #### `def generate_documentation()`
+
+  > Generates the final Markdown documentation.
+
+
+- #### `def get_fsm_details()`
+
+  > Extracts FSM states and transitions from fsm.json.
+
+
+- #### `def get_master_control_details()`
+
+  > Extracts details about the master control script's state handlers.
+
+
+### `/app/tooling/hierarchical_compiler.py`
 
 _No module-level docstring found._
 
@@ -354,15 +453,15 @@ _No module-level docstring found._
 
 - #### `def run_compiler(source_dir)`
 
-  > Invokes the protocol_compiler.py script as a subprocess.
+  > Invokes the protocol_compiler.py script as a library.
 
 
 - #### `def run_readme_generator(source_agents_md)`
 
-  > Invokes the readme_generator.py script as a subprocess.
+  > Invokes the readme_generator.py script as a library.
 
 
-### `tooling/knowledge_compiler.py`
+### `/app/tooling/knowledge_compiler.py`
 
 Extracts structured lessons from post-mortem reports and compiles them into a
 centralized, long-term knowledge base.
@@ -412,7 +511,7 @@ post-mortem file as its primary argument.
   > pattern matching to identify specific, supported commands.
 
 
-### `tooling/knowledge_integrator.py`
+### `/app/tooling/knowledge_integrator.py`
 
 Enriches the local knowledge graph with data from external sources like DBPedia.
 
@@ -448,7 +547,7 @@ enriched knowledge graph.
   > enriched graph.
 
 
-### `tooling/log_failure.py`
+### `/app/tooling/log_failure.py`
 
 _No module-level docstring found._
 
@@ -461,19 +560,33 @@ _No module-level docstring found._
   > Logs the catastrophic failure event.
 
 
-### `tooling/master_control.py`
+### `/app/tooling/master_control.py`
 
-The master orchestrator for the agent's lifecycle, governed by a Finite State Machine.
+The master orchestrator for the agent's lifecycle, implementing the Context-Free Development Cycle (CFDC).
 
 This script, master_control.py, is the heart of the agent's operational loop.
-It implements a strict, protocol-driven workflow defined in a JSON file
-(typically `tooling/fsm.json`). The MasterControlGraph class reads this FSM
-definition and steps through the prescribed states, ensuring that the agent
-cannot deviate from the established protocol.
+It implements the CFDC, a hierarchical planning and execution model based on a
+Pushdown Automaton. This allows the agent to execute complex tasks by calling
+plans as sub-routines.
 
-This version has been refactored to be a library controlled by an external
-shell (e.g., `agent_shell.py`), eliminating all file-based polling and making
-the interaction purely programmatic and fully logged.
+Core Responsibilities:
+- **Hierarchical Plan Execution:** Manages a plan execution stack to enable
+  plans to call other plans via the `call_plan` directive. This allows for
+  modular, reusable, and complex task decomposition. A maximum recursion depth
+  is enforced to guarantee decidability.
+- **Plan Validation:** Contains the in-memory plan validator. Before execution,
+  it parses a plan and simulates its execution against a Finite State Machine
+  (FSM) to ensure it complies with the agent's operational protocols.
+- **"Registry-First" Plan Resolution:** When resolving a `call_plan` directive,
+  it first attempts to look up the plan by its logical name in the
+  `knowledge_core/plan_registry.json`. If not found, it falls back to treating
+  the argument as a direct file path.
+- **FSM-Governed Lifecycle:** The entire workflow, from orientation to
+  finalization, is governed by a strict FSM definition (e.g., `tooling/fsm.json`)
+  to ensure predictable and auditable behavior.
+
+This module is designed as a library to be controlled by an external shell
+(e.g., `agent_shell.py`), making its interaction purely programmatic.
 
 
 **Public Classes:**
@@ -490,6 +603,14 @@ the interaction purely programmatic and fully logged.
 
   - ##### `def __init__(self, fsm_path='tooling/fsm.json')`
 
+  - ##### `def do_awaiting_result(self, agent_state, logger)`
+
+    > Checks for the result of the background research process.
+
+  - ##### `def do_debugging(self, agent_state, logger)`
+
+    > Handles the debugging state.
+
   - ##### `def do_execution(self, agent_state, step_result, logger)`
 
     > Processes the result of a step and advances the execution state.
@@ -498,9 +619,13 @@ the interaction purely programmatic and fully logged.
 
     > Handles the finalization of the task with agent-provided analysis.
 
+  - ##### `def do_generating_code(self, agent_state, logger)`
+
+    > Handles the code generation state.
+
   - ##### `def do_orientation(self, agent_state, logger)`
 
-    > Executes the L1, L2, and L3 orientation steps.
+    > Executes orientation, including analyzing the last post-mortem.
 
   - ##### `def do_planning(self, agent_state, plan_content, logger)`
 
@@ -508,7 +633,11 @@ the interaction purely programmatic and fully logged.
 
   - ##### `def do_researching(self, agent_state, logger)`
 
-    > Generates, validates, and initiates a formal Deep Research FDC.
+    > Launches the background research process.
+
+  - ##### `def do_running_tests(self, agent_state, logger)`
+
+    > Handles the test execution state.
 
   - ##### `def get_current_step(self, agent_state)`
 
@@ -521,7 +650,7 @@ the interaction purely programmatic and fully logged.
     > strings in the state handlers.
 
 
-### `tooling/master_control_cli.py`
+### `/app/tooling/master_control_cli.py`
 
 The official command-line interface for the agent's master control loop.
 
@@ -540,7 +669,7 @@ decoupling the entry point from the FSM implementation.
   > This script parses the task description and invokes the agent shell.
 
 
-### `tooling/pages_generator.py`
+### `/app/tooling/pages_generator.py`
 
 Generates a single HTML file for GitHub Pages from the repository's metalanguage.
 
@@ -562,7 +691,7 @@ the main page for the project's GitHub Pages site.
   > final index.html page.
 
 
-### `tooling/plan_manager.py`
+### `/app/tooling/plan_manager.py`
 
 Provides a command-line interface for managing the agent's Plan Registry.
 
@@ -618,7 +747,7 @@ workflows from smaller, validated sub-plans.
   > Saves the given data to the plan registry JSON file.
 
 
-### `tooling/plan_parser.py`
+### `/app/tooling/plan_parser.py`
 
 Parses a plan file into a structured list of commands.
 
@@ -647,7 +776,28 @@ allowing for robust and readable plan files.
   > This structure correctly handles multi-line arguments for tools.
 
 
-### `tooling/protocol_auditor.py`
+### `/app/tooling/plan_registry_auditor.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def audit_plan_registry(registry_path=DEFAULT_PLAN_REGISTRY_PATH)`
+
+  > Audits the plan registry to find registered plans that point to
+  > non-existent files.
+  >
+  > Args:
+  >     registry_path (str): The path to the plan registry JSON file.
+  >
+  > Returns:
+  >     list: A list of tuples, where each tuple contains the name and
+  >           path of a dead link.
+
+
+### `/app/tooling/protocol_auditor.py`
 
 Audits the agent's behavior against its governing protocols and generates a report.
 
@@ -721,7 +871,7 @@ accurate audit.
   > Returns a list of warning/error dictionaries.
 
 
-### `tooling/protocol_compiler.py`
+### `/app/tooling/protocol_compiler.py`
 
 Compiles source protocol files into unified, human-readable and machine-readable artifacts.
 
@@ -758,17 +908,22 @@ making the agent's protocols robust, verifiable, and maintainable.
   > Optionally, it can also generate a machine-readable knowledge graph.
 
 
+- #### `def install_dependencies()`
+
+  > Checks for required packages from requirements.txt and installs them if missing.
+
+
 - #### `def load_schema(schema_file)`
 
   > Loads the protocol JSON schema.
 
 
-- #### `def main()`
+- #### `def main_cli()`
 
-  > Main function to run the compiler.
+  > Main function to run the compiler from the command line.
 
 
-### `tooling/protocol_updater.py`
+### `/app/tooling/protocol_updater.py`
 
 A command-line tool for programmatically updating protocol source files.
 
@@ -804,7 +959,7 @@ directory, performing targeted updates based on command-line arguments.
   > Updates the description of a specific rule within a protocol.
 
 
-### `tooling/readme_generator.py`
+### `/app/tooling/readme_generator.py`
 
 _No module-level docstring found._
 
@@ -828,12 +983,33 @@ _No module-level docstring found._
   > Parses a Python file and extracts the module-level docstring.
 
 
-- #### `def main()`
+- #### `def main(source_file, output_file)`
 
   > Main function to generate the README.md content and write it to a file.
 
 
-### `tooling/reorientation_manager.py`
+### `/app/tooling/refactor.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def find_references(symbol_name, search_path)`
+
+  > Finds all files in a directory that reference a given symbol.
+
+
+- #### `def find_symbol_definition(filepath, symbol_name)`
+
+  > Finds the definition of a symbol in a Python file.
+
+
+- #### `def main()`
+
+
+### `/app/tooling/reorientation_manager.py`
 
 Re-orientation Manager
 
@@ -890,27 +1066,11 @@ adaptive, and reliable.
   > Updates the temporal orientations knowledge base.
 
 
-### `tooling/research.py`
+### `/app/tooling/research.py`
 
-A unified, constraint-based interface for all research and data-gathering operations.
-
-This script abstracts the various methods an agent might use to gather information
-(reading local files, accessing the web, querying a database) into a single,
-standardized function: `execute_research_protocol`. It is a core component of
-the Advanced Orientation and Research Protocol (AORP), providing the mechanism
-by which the agent fulfills the requirements of each orientation level (L1-L4).
-
-The function operates on a `constraints` dictionary, which specifies the target,
-scope, and other parameters of the research task. This design allows the calling
-orchestrator (e.g., `master_control.py`) to request information without needing
-to know the underlying implementation details of how that information is fetched.
-
-This script is designed to be executed by a system that has pre-loaded the
-following native tools into the execution environment:
-- `read_file(filepath: str) -> str`
-- `list_files(path: str = ".") -> list[str]`
-- `google_search(query: str) -> str`
-- `view_text_website(url: str) -> str`
+This module contains the logic for executing research tasks based on a set of
+constraints. It acts as a dispatcher, calling the appropriate tool (e.g.,
+read_file, google_search) based on the specified target and scope.
 
 
 **Public Functions:**
@@ -918,36 +1078,21 @@ following native tools into the execution environment:
 
 - #### `def execute_research_protocol(constraints)`
 
-  > Executes a research task based on a dictionary of constraints.
-  >
-  > This function delegates to native, pre-loaded tools based on the specified
-  > target and scope.
+  > Executes a research task based on a provided constraints dictionary.
   >
   > Args:
-  >     constraints: A dictionary specifying the operational parameters.
-  >         - target: 'local_filesystem', 'external_web', 'external_repository', or 'knowledge_graph'.
-  >         - scope: 'file', 'directory', 'narrow', 'broad', or 'enrich'.
-  >         - path: The file or directory path for local filesystem operations.
-  >         - query: The search term for web research.
-  >         - url: The specific URL for direct web access.
-  >         - input_graph_path: Path to the source knowledge graph.
-  >         - output_graph_path: Path to save the enriched knowledge graph.
+  >     constraints (dict): A dictionary specifying the research target,
+  >                         scope, and other parameters.
   >
   > Returns:
-  >     A string containing the result of the research operation.
+  >     str: The result of the research action, or an error message.
 
 
-### `tooling/research_planner.py`
+### `/app/tooling/research_planner.py`
 
-Generates a structured, executable plan for conducting deep research tasks.
-
-This script provides a standardized, FSM-compliant workflow for the agent when
-it needs to perform in-depth research on a complex topic. The `plan_deep_research`
-function creates a plan file that is not just a template, but a formal,
-verifiable artifact that can be executed by the `master_control.py` orchestrator.
-
-The generated plan adheres to the state transitions defined in `research_fsm.json`,
-guiding the agent through the phases of GATHERING, SYNTHESIZING, and REPORTING.
+This module is responsible for generating a formal, FSM-compliant research plan
+for a given topic. The output is a string that can be executed by the agent's
+master controller.
 
 
 **Public Functions:**
@@ -955,20 +1100,16 @@ guiding the agent through the phases of GATHERING, SYNTHESIZING, and REPORTING.
 
 - #### `def plan_deep_research(topic)`
 
-  > Generates a structured, FSM-compliant executable plan for deep research.
-  >
-  > This function creates a plan that guides an agent through a research
-  > workflow. The plan is designed to be validated by `fdc_cli.py` against
-  > the `tooling/research_fsm.json` definition.
+  > Generates a multi-step, FSM-compliant plan for conducting deep research.
   >
   > Args:
-  >     topic: The research topic to be investigated.
+  >     topic (str): The research topic.
   >
   > Returns:
-  >     A string containing the executable research plan.
+  >     str: A string containing the executable plan.
 
 
-### `tooling/self_correction_orchestrator.py`
+### `/app/tooling/self_correction_orchestrator.py`
 
 Orchestrates the Protocol-Driven Self-Correction (PDSC) workflow.
 
@@ -1006,7 +1147,7 @@ actionable lessons from `knowledge_core/lessons.jsonl` and uses the
   > Saves a list of lessons back to the JSONL file, overwriting it.
 
 
-### `tooling/self_improvement_cli.py`
+### `/app/tooling/self_improvement_cli.py`
 
 Analyzes agent activity logs to identify opportunities for self-improvement.
 
@@ -1066,7 +1207,7 @@ rate tracking or tool usage anti-patterns) to be added as the system evolves.
   > Main function to run the self-improvement analysis CLI.
 
 
-### `tooling/standard_agents_compiler.py`
+### `/app/tooling/standard_agents_compiler.py`
 
 _No module-level docstring found._
 
@@ -1086,7 +1227,7 @@ _No module-level docstring found._
   > skipping any 'echo' lines. This version iterates through lines for robustness.
 
 
-### `tooling/state.py`
+### `/app/tooling/state.py`
 
 Defines the core data structures for managing the agent's state.
 
@@ -1151,7 +1292,7 @@ execution that is the hallmark of the CFDC.
   > to the current step being executed.
 
 
-### `tooling/symbol_map_generator.py`
+### `/app/tooling/symbol_map_generator.py`
 
 Generates a code symbol map for the repository to aid in contextual understanding.
 
@@ -1197,77 +1338,3 @@ and understand the structure of the repository without having to read every file
 - #### `def main()`
 
   > Main function to generate and save the symbol map.
-
-
----
-
-## `utils/` Directory
-
-### `utils/__init__.py`
-
-_No module-level docstring found._
-
-### `utils/logger.py`
-
-Provides a standardized, schema-validated logger for producing structured JSONL logs.
-
-This module contains the `Logger` class, which is responsible for creating all
-entries in the `logs/activity.log.jsonl` file. This is a critical component for
-maintaining an auditable, machine-readable record of the agent's actions.
-
-The logger enforces a strict structure on all log entries by validating them
-against a formal JSON schema, which is extracted from the `LOGGING_SCHEMA.md`
-document. This ensures that every log entry, regardless of its source, is
-consistent and contains the required fields.
-
-Key features of the `Logger` class:
-- **Schema Validation:** Each log entry is validated against the official
-  project schema before being written to disk, preventing data corruption.
-- **Structured Data:** Logs are written in JSONL format, where each line is a
-  valid JSON object, making them easy to parse and query.
-- **Session Management:** It automatically assigns a unique `session_id` to
-  all logs generated during its lifecycle, allowing actions to be traced back
-  to a specific run.
-- **Automatic Timestamps:** It injects a UTC timestamp into every log entry,
-  providing a precise timeline of events.
-
-This centralized logger is the sole mechanism by which the agent should record
-its activities, ensuring a single source of truth for all post-mortem analysis
-and self-improvement activities.
-
-
-**Public Classes:**
-
-
-- #### `class Logger`
-
-  > A class to handle structured logging to a JSONL file, validated against a schema.
-
-
-  **Methods:**
-
-  - ##### `def __init__(self, schema_path='LOGGING_SCHEMA.md', log_path='logs/activity.log.jsonl')`
-
-    > Initializes the Logger, loading the schema and setting up the session.
-    >
-    > Args:
-    >     schema_path (str): The path to the Markdown file containing the logging schema.
-    >     log_path (str): The path to the log file to be written.
-
-  - ##### `def log(self, phase, task_id, plan_step, action_type, action_details, outcome_status, outcome_message='', error_details=None, evidence='')`
-
-    > Constructs, validates, and writes a log entry.
-    >
-    > Args:
-    >     phase (str): The current protocol phase (e.g., "Phase 7").
-    >     task_id (str): The ID of the current task.
-    >     plan_step (int): The current plan step number.
-    >     action_type (str): The type of action (e.g., "TOOL_EXEC").
-    >     action_details (dict): Details specific to the action.
-    >     outcome_status (str): The outcome of the action ("SUCCESS", "FAILURE").
-    >     outcome_message (str, optional): A message describing the outcome. Defaults to "".
-    >     error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.
-    >     evidence (str, optional): Citation for the action. Defaults to "".
-    >
-    > Raises:
-    >     ValidationError: If the generated log entry does not conform to the schema.

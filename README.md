@@ -37,6 +37,10 @@ This module is governed by a series of machine-readable protocols defined in `AG
 
   > _No docstring found._
 
+- **`tooling/code_health_analyzer.py`**:
+
+  > _No docstring found._
+
 - **`tooling/code_suggester.py`**:
 
   > Handles the generation and application of autonomous code change suggestions.\n  > \n  > This tool is a key component of the advanced self-correction loop. It is\n  > designed to be invoked by the self-correction orchestrator when a lesson\n  > contains a 'propose-code-change' action.\n  > \n  > For its initial implementation, this tool acts as a structured executor. It\n  > takes a lesson where the 'details' field contains a fully-formed git-style\n  > merge diff and applies it to the target file. It does this by generating a\n  > temporary, single-step plan file and signaling its location for the master\n  > controller to execute.\n  > \n  > This establishes the fundamental workflow for autonomous code modification,\n  > decoupling the suggestion logic from the execution logic. Future iterations\n  > can enhance this tool with more sophisticated code generation capabilities\n  > (e.g., using an LLM to generate the diff from a natural language description)\n  > without altering the core orchestration process.
