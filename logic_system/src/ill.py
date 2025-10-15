@@ -26,6 +26,21 @@ def axiom(A: Formula) -> ProofTree:
     conclusion = ILLSequent([A], A)
     return ProofTree(conclusion, Rule("Axiom"))
 
+# Structural Rule
+def cut(left_proof: ProofTree, right_proof: ProofTree) -> ProofTree:
+    """Γ ⊢ A   and   Δ, A ⊢ C
+    --------------------------
+         Γ, Δ ⊢ C
+    """
+    cut_formula = left_proof.conclusion.succedent_formula
+    if cut_formula not in right_proof.conclusion.antecedent:
+        raise ValueError("Cut formula not found in the antecedent of the right premise.")
+
+    antecedent = left_proof.conclusion.antecedent + (right_proof.conclusion.antecedent - Counter([cut_formula]))
+    succedent = right_proof.conclusion.succedent_formula
+    conclusion = ILLSequent(antecedent, succedent)
+    return ProofTree(conclusion, Rule("Cut"), [left_proof, right_proof])
+
 # Multiplicative Rules
 def tensor_right(left_proof: ProofTree, right_proof: ProofTree, formula: Tensor) -> ProofTree:
     """Γ ⊢ A   and   Δ ⊢ B

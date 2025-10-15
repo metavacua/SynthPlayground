@@ -4,6 +4,7 @@ from . import ill
 from .proof import ProofTree, Rule
 from .formulas import Formula, Prop, And, Or, Implies, Not, Tensor, Par, LinImplies, OfCourse, With, Plus
 from .sequents import Sequent
+from .synthesizer import Synthesizer
 from collections import Counter
 
 def lj_to_lk(lj_proof: ProofTree) -> ProofTree:
@@ -52,6 +53,7 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
     rule_name = lj_proof.rule.name
     conclusion = lj_proof.conclusion
     premises = lj_proof.premises
+    ill_synthesizer = Synthesizer(ill)
 
     if rule_name == "Axiom":
         formula = list(conclusion.antecedent.elements())[0]
@@ -96,14 +98,19 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
         return ill.of_course_right(proof)
 
     elif rule_name == "→-L":
-        left_premise = lj_to_ill_proof(premises[0])
-        right_premise = lj_to_ill_proof(premises[1])
+        left_premise = lj_to_ill_proof(premises[0]) # !Γ* ⊢ A*
+        right_premise = lj_to_ill_proof(premises[1]) # !B*, !Δ* ⊢ C*
 
-        # This is a complex translation that requires cut, which is not implemented.
-        # For now, we will return a placeholder proof tree.
-        succedent_star = translate_formula_lj_to_ill(conclusion.succedent_formula)
-        antecedent_star = bang_context(Counter({translate_formula_lj_to_ill(f): c for f, c in conclusion.antecedent.items()}))
-        return ProofTree(conclusion=ill.ILLSequent(antecedent_star, succedent_star), rule=Rule("→-L (Translated)"), premises=[left_premise, right_premise])
+        implication = conclusion.antecedent.elements()[0]
+        implication_star = translate_formula_lj_to_ill(implication)
+
+        goal_succedent = right_premise.conclusion.succedent_formula
+        goal_antecedent = left_premise.conclusion.antecedent + right_premise.conclusion.antecedent - Counter([OfCourse(implication.right)]) + Counter([implication_star])
+        goal = ill.ILLSequent(goal_antecedent, goal_succedent)
+
+        # Use the synthesizer to find the proof
+        return ill_synthesizer.synthesize(goal)
+
 
     elif rule_name == "¬-L":
         premise = lj_to_ill_proof(premises[0])
