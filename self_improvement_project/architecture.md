@@ -19,10 +19,13 @@ These two processes are **mutually exclusive** in their operation. At any given 
 
 ## The Self-Improvement Loop
 
-1.  **Innovation Phase (Process A is active):** Process A takes the current state of the system (including the code of both processes) as input. It then applies a diagonalization function to generate a new piece of code or a new strategy that is not currently part of the system.
-2.  **Integration Phase (Process B is active):** Process B takes the output of Process A. It runs a series of tests and simulations to evaluate the new element.
-    *   If the new element is deemed beneficial (e.g., it improves performance, adds a new feature, or fixes a bug), Process B integrates it into the system. This might involve modifying its own code or the code of Process A.
-    *   If the new element is deemed harmful or useless, it is discarded.
-3.  **Cycle Repeats:** The system then returns to the Innovation Phase, but now with a modified state. This creates a continuous loop of innovation and integration, leading to self-improvement.
+The system operates in a continuous loop, performing a primitive version of problem-solving. It attempts to "improve" its state by searching for a state whose hash representation has a desirable property.
 
-This document will be expanded with more details on the diagonalization function, the context-sensitive switching mechanism, and the representation of expressions.
+1.  **Innovation Phase (Process A is active):** Process A takes the current system state (a set of strings) and generates a new candidate element by hashing the entire set. This new element represents the "DNA" of the current state.
+2.  **Integration Phase (Process B is active):** Process B evaluates this new element. Its goal is to drive the system toward a state whose hash has a maximal number of leading zeros. This serves as a concrete, measurable, and non-arbitrary goal, similar to a simple proof-of-work system.
+    *   An element is deemed **beneficial** if adding it to the system results in a new state whose hash has more leading zeros than the hash of any previously known state.
+    *   If the element is beneficial, it is integrated into the system state, and the bar for "best quality" is raised.
+    *   If the element is not beneficial, it is discarded.
+3.  **Cycle Repeats:** The system then returns to the Innovation Phase, using its new, larger state to generate the next candidate element. This creates a continuous loop where the system perpetually searches for "better" states, as defined by the leading-zero metric.
+
+This simple feedback loop transforms the system from one that changes randomly to one that is goal-oriented, demonstrating a foundational principle of directed self-improvement.

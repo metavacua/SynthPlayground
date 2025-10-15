@@ -15,18 +15,45 @@ class ProcessB:
     """The Stabilizer"""
     def __init__(self, system_state):
         self.system_state = system_state
+        # Initialize with the quality of the initial state.
+        self.current_best_quality = self._count_leading_zeros(diagonalization(system_state))
 
     def run(self, new_element):
         """Analyzes and integrates the new element."""
         if self.is_beneficial(new_element):
             self.system_state.add(new_element)
+            # Update the best quality score.
+            self.current_best_quality = self._count_leading_zeros(diagonalization(self.system_state))
             return True
         return False
 
+    def _count_leading_zeros(self, hex_string):
+        """Counts the number of leading '0' characters in a hex string."""
+        count = 0
+        for char in hex_string:
+            if char == '0':
+                count += 1
+            else:
+                break
+        return count
+
     def is_beneficial(self, new_element):
-        """Determines if the new element is beneficial."""
-        # For now, a simple heuristic: the new element is beneficial if its hash is even.
-        return int(hashlib.sha256(new_element.encode()).hexdigest(), 16) % 2 == 0
+        """
+        Determines if the new element is beneficial.
+        A new element is beneficial if adding it to the system state
+        results in a new state whose hash has more leading zeros than the current best.
+        """
+        # We create a potential next state by adding the new element.
+        potential_next_state = self.system_state.union({new_element})
+
+        # We calculate the hash of this potential next state.
+        next_state_hash = diagonalization(potential_next_state)
+
+        # We get the quality of the potential next state.
+        next_quality = self._count_leading_zeros(next_state_hash)
+
+        # The new element is beneficial if it leads to a state with a better hash.
+        return next_quality > self.current_best_quality
 
 def diagonalization(input_set):
     """
