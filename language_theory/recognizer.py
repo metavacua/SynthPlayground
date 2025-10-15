@@ -161,11 +161,18 @@ def main():
         print(f"Grammar loaded successfully from {args.grammar_file}")
 
         # Heuristics to determine grammar type
-        is_csg = any(len(non_terminal) > 1 for non_terminal in grammar.keys())
+        raw_grammar_text = open(args.grammar_file).read()
+        is_indexed = '[' in raw_grammar_text and ']' in raw_grammar_text
+        # A LHS with a space indicates multiple symbols, a key feature of CSGs.
+        is_csg = any(' ' in non_terminal for non_terminal in grammar.keys())
         is_right_reg = all(len(r) <= 2 and (len(r) < 2 or r[1].isupper()) for rules in grammar.values() for r in rules) and not is_csg
         is_left_reg = all(len(r) <= 2 and (len(r) < 2 or r[0].isupper()) for rules in grammar.values() for r in rules) and not is_csg
 
-        if is_csg:
+        if is_indexed:
+            print("Heuristic determined grammar to be an INTERMEDIATE grammar (e.g., Indexed Grammar).")
+            print("Recognition of intermediate grammars is not implemented.")
+
+        elif is_csg:
             print("Heuristic determined grammar to be CONTEXT-SENSITIVE.")
             print("Recognition of context-sensitive languages is not implemented.")
             print("This is a PSPACE-complete problem and requires a different parsing approach (e.g., a Linear Bounded Automaton).")
