@@ -1415,6 +1415,15 @@
     },
     {
       "_type": "tag",
+      "name": "list_all_files_and_dirs",
+      "path": "./tooling/filesystem_lister.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "function",
+      "docstring": "Walks through a directory and its subdirectories and returns a sorted list of all\nfiles and directories, including empty directories."
+    },
+    {
+      "_type": "tag",
       "name": "_load_plan_registry",
       "path": "./tooling/master_control.py",
       "language": "Python",
@@ -1465,14 +1474,14 @@
       "language": "Python",
       "line": 104,
       "kind": "function",
-      "docstring": "Executes orientation, including analyzing the last post-mortem."
+      "docstring": "Executes orientation, including analyzing the last post-mortem and scanning the filesystem."
     },
     {
       "_type": "tag",
       "name": "do_planning",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 151,
+      "line": 162,
       "kind": "function",
       "docstring": "Validates a given plan, parses it, and initializes the plan stack."
     },
@@ -1481,7 +1490,7 @@
       "name": "_validate_plan_with_cli",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 196,
+      "line": 207,
       "kind": "function",
       "docstring": "Validates a plan by writing it to a temporary file and using the fdc_cli.py script."
     },
@@ -1490,7 +1499,7 @@
       "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 248,
+      "line": 259,
       "kind": "function",
       "docstring": "Validates a plan against a specific model's FSM."
     },
@@ -1499,7 +1508,7 @@
       "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 302,
+      "line": 313,
       "kind": "function",
       "docstring": "Validates a plan against a specific model's FSM."
     },
@@ -1508,7 +1517,7 @@
       "name": "do_researching",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 356,
+      "line": 367,
       "kind": "function",
       "docstring": "Launches the background research process."
     },
@@ -1517,7 +1526,7 @@
       "name": "do_awaiting_result",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 379,
+      "line": 390,
       "kind": "function",
       "docstring": "Checks for the result of the background research process."
     },
@@ -1526,7 +1535,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 413,
+      "line": 424,
       "kind": "function",
       "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
     },
@@ -1535,7 +1544,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 424,
+      "line": 435,
       "kind": "function",
       "docstring": "Processes the result of a step and advances the execution state."
     },
@@ -1544,7 +1553,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 468,
+      "line": 479,
       "kind": "function",
       "docstring": "Handles the code generation state."
     },
@@ -1553,7 +1562,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 477,
+      "line": 488,
       "kind": "function",
       "docstring": "Handles the test execution state."
     },
@@ -1562,7 +1571,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 487,
+      "line": 498,
       "kind": "function",
       "docstring": "Handles the debugging state."
     },
@@ -1571,7 +1580,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 496,
+      "line": 507,
       "kind": "function",
       "docstring": "Handles the finalization of the task, guiding the agent through\nthe structured post-mortem process."
     },
@@ -2345,7 +2354,7 @@
       "name": "find_fsm_transition",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 26,
+      "line": 27,
       "kind": "function",
       "docstring": "Finds the destination state for a given source and trigger."
     },
@@ -2354,7 +2363,7 @@
       "name": "run_agent_loop",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 36,
+      "line": 37,
       "kind": "function",
       "docstring": "The main loop that drives the agent's lifecycle via the FSM."
     },
@@ -2363,7 +2372,7 @@
       "name": "main",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 164,
+      "line": 165,
       "kind": "function",
       "docstring": "Main entry point for the agent shell."
     },
