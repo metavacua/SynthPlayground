@@ -1,6 +1,6 @@
 import argparse
 import sys
-from grammar import Grammar
+from .grammar import Grammar
 
 def main():
     """
@@ -23,13 +23,13 @@ def main():
         print(f"   - Terminals ({len(terminals)}): {sorted(list(terminals))}")
 
         # Get rule counts
-        total_rules = sum(len(rules) for rules in grammar.productions.values())
+        total_rules = len(grammar.productions)
         print(f"\n2. Rule Metrics:")
         print(f"   - Total Production Rules: {total_rules}")
 
         # Calculate average rule length (RHS)
         if total_rules > 0:
-            total_rhs_length = sum(len(rule) for rules in grammar.productions.values() for rule in rules)
+            total_rhs_length = sum(len(rhs) for _, rhs in grammar.productions)
             avg_rhs_length = total_rhs_length / total_rules
             print(f"   - Average RHS Length: {avg_rhs_length:.2f}")
 
