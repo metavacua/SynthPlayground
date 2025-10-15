@@ -1,14 +1,10 @@
 # Unambiguous, Right-Associative Context-Free Grammar.
-# This grammar enforces standard operator precedence (* over +)
-# but right-associativity for both operators.
+# Symbols are separated by spaces.
 #
-# A string like i+i*i can only be parsed as i+(i*i).
-# A string like i+i+i can only be parsed as i+(i+i).
-#
-# E -> T+E | T   (Expression is a sum of terms, associating to the right)
-# T -> F*T | F   (Term is a product of factors, associating to the right)
-# F -> i          (Factor is an identifier)
+# E -> T + E | T
+# T -> F * T | F
+# F -> i
 
-E -> T+E | T
-T -> F*T | F
+E -> T + E | T
+T -> F * T | F
 F -> i
