@@ -371,6 +371,15 @@
     },
     {
       "_type": "tag",
+      "name": "main",
+      "path": "./tooling/csdc_cli.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "load_local_graph",
       "path": "./tooling/knowledge_integrator.py",
       "language": "Python",
@@ -884,10 +893,19 @@
     },
     {
       "_type": "tag",
-      "name": "do_researching",
+      "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
       "line": 217,
+      "kind": "function",
+      "docstring": "Validates a plan against a specific model's FSM."
+    },
+    {
+      "_type": "tag",
+      "name": "do_researching",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 271,
       "kind": "function",
       "docstring": "Launches the background research process."
     },
@@ -896,7 +914,7 @@
       "name": "do_awaiting_result",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 237,
+      "line": 291,
       "kind": "function",
       "docstring": "Checks for the result of the background research process."
     },
@@ -905,7 +923,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 268,
+      "line": 322,
       "kind": "function",
       "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
     },
@@ -914,7 +932,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 279,
+      "line": 333,
       "kind": "function",
       "docstring": "Processes the result of a step and advances the execution state."
     },
@@ -923,7 +941,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 317,
+      "line": 371,
       "kind": "function",
       "docstring": "Handles the code generation state."
     },
@@ -932,7 +950,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 325,
+      "line": 379,
       "kind": "function",
       "docstring": "Handles the test execution state."
     },
@@ -941,7 +959,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 334,
+      "line": 388,
       "kind": "function",
       "docstring": "Handles the debugging state."
     },
@@ -950,7 +968,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 342,
+      "line": 396,
       "kind": "function",
       "docstring": "Handles the finalization of the task with agent-provided analysis."
     },
@@ -1913,7 +1931,7 @@
       "name": "_log_event",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 54,
+      "line": 56,
       "kind": "function",
       "docstring": "Appends a new log entry to the activity log, ensuring it's on a new line."
     },
@@ -1922,7 +1940,7 @@
       "name": "_create_log_entry",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 68,
+      "line": 70,
       "kind": "function",
       "docstring": "Creates a structured log entry dictionary."
     },
@@ -1931,7 +1949,7 @@
       "name": "close_task",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 84,
+      "line": 86,
       "kind": "function",
       "docstring": "Automates the closing of a Finite Development Cycle."
     },
@@ -1940,7 +1958,7 @@
       "name": "_validate_action",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 118,
+      "line": 120,
       "kind": "function",
       "docstring": "Validates a single, non-loop action."
     },
@@ -1949,7 +1967,7 @@
       "name": "_validate_plan_recursive",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 175,
+      "line": 177,
       "kind": "function",
       "docstring": "Recursively validates a block of a plan."
     },
@@ -1958,7 +1976,7 @@
       "name": "validate_plan",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 236,
+      "line": 238,
       "kind": "function",
       "docstring": null
     },
@@ -1967,7 +1985,7 @@
       "name": "analyze_plan",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 270,
+      "line": 272,
       "kind": "function",
       "docstring": "Analyzes a plan file to determine its complexity class and modality."
     },
@@ -1976,7 +1994,7 @@
       "name": "start_task",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 311,
+      "line": 319,
       "kind": "function",
       "docstring": "Initiates the AORP cascade for a new task."
     },
@@ -1985,7 +2003,7 @@
       "name": "main",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 367,
+      "line": 375,
       "kind": "function",
       "docstring": null
     },
