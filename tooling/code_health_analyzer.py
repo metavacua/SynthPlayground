@@ -1,23 +1,3 @@
-"""
-A tool for analyzing and reporting on the overall health of the codebase.
-
-This module provides functionality to perform various checks on the repository's
-artifacts to ensure their integrity and consistency. The primary focus of this
-tool is to identify and, where possible, generate plans to fix common issues
-that can arise from automated or manual changes.
-
-Currently, this analyzer focuses on the health of the Plan Registry:
-- **Dead Link Detection:** It scans the `knowledge_core/plan_registry.json` file
-  to find any registered plan names that point to file paths that no longer
-  exist in the filesystem. These "dead links" can break the hierarchical
-  planning system.
-
-When dead links are found, the tool can generate a corrective plan. This plan
-consists of a `overwrite_file_with_block` command that will replace the
-contents of the plan registry with a new version that has the invalid entries
-removed. This automated detection and remediation capability is a key part of
-maintaining the long-term health and reliability of the agent's knowledge base.
-"""
 import json
 import os
 

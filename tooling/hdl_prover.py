@@ -1,19 +1,3 @@
-"""
-A command-line tool for proving sequents in Intuitionistic Linear Logic.
-
-This script provides a basic interface to a simple logic prover. It takes a
-sequent as a command-line argument, parses it into a logical structure, and
-then attempts to prove it using a rudimentary proof search algorithm.
-
-The primary purpose of this tool is to allow the agent to perform formal
-reasoning and verification tasks by checking the validity of logical entailments.
-For example, it can be used to verify that a certain conclusion follows from a
-set of premises according to the rules of linear logic.
-
-The current implementation uses a very basic parser and proof algorithm,
-serving as a placeholder and demonstration for a more sophisticated, underlying
-logic engine.
-"""
 import argparse
 import sys
 from pathlib import Path

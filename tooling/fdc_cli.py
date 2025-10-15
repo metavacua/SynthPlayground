@@ -24,6 +24,7 @@ import os
 import shutil
 import sys
 import uuid
+import subprocess
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -317,59 +318,44 @@ def analyze_plan(plan_filepath, return_results=False):
 
 
 def start_task(task_id):
-    """Initiates the AORP cascade for a new task."""
+    """
+    Delegates task execution to the primary agent shell entry point.
+    This function acts as a compatibility layer, ensuring that calls to the
+    legacy `fdc_cli.py start` command are forwarded to the correct, modern
+    `agent_shell.py` main loop. This enforces the architectural protocol that
+    the agent shell is the sole entry point for all tasks.
+    """
     if not task_id:
         print("Error: --task-id is required.", file=sys.stderr)
         sys.exit(1)
 
-    print("--- FDC: Initiating Advanced Orientation and Research Protocol (AORP) ---")
-    print(f"--- Task ID: {task_id} ---")
-
-    # --- L1: Self-Awareness & Identity Verification ---
-    print("\n--- L1: Self-Awareness & Identity Verification ---")
-    try:
-        with open(os.path.join(ROOT_DIR, "knowledge_core", "agent_meta.json"), "r") as f:
-            agent_meta = json.load(f)
-            print("Successfully loaded knowledge_core/agent_meta.json:")
-            print(json.dumps(agent_meta, indent=2))
-    except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error during L1: Could not read or parse agent_meta.json. {e}", file=sys.stderr)
+    agent_shell_path = os.path.join(ROOT_DIR, "tooling", "agent_shell.py")
+    if not os.path.exists(agent_shell_path):
+        print(f"Error: Agent shell not found at {agent_shell_path}", file=sys.stderr)
         sys.exit(1)
 
-    # --- L2: Repository State Synchronization ---
-    print("\n--- L2: Repository State Synchronization ---")
-    try:
-        kc_path = os.path.join(ROOT_DIR, "knowledge_core")
-        artifacts = [f for f in os.listdir(kc_path) if os.path.isfile(os.path.join(kc_path, f)) and f != 'agent_meta.json']
-        print("Found knowledge_core artifacts:")
-        for artifact in artifacts:
-            print(f"- {artifact}")
-    except FileNotFoundError as e:
-        print(f"Error during L2: Could not list knowledge_core directory. {e}", file=sys.stderr)
-        sys.exit(1)
+    print(f"--- FDC CLI: Delegating control to Agent Shell for task: {task_id} ---")
 
-    # --- L3: Environmental Probing ---
-    print("\n--- L3: Environmental Probing ---")
-    probe_script_path = os.path.join(ROOT_DIR, "tooling", "environmental_probe.py")
-    if not os.path.exists(probe_script_path):
-        print(f"Error during L3: Probe script not found at {probe_script_path}", file=sys.stderr)
-        sys.exit(1)
-
-    print(f"Executing: python3 {probe_script_path}")
-    # We are already running in a bash session, so we can just run the script
-    # and it will inherit the environment.
-    os.system(f"python3 {probe_script_path}")
-
-
-    # --- Logging ---
-    _log_event(
-        _create_log_entry(
-            task_id,
-            "TASK_START",
-            {"summary": f"AORP cascade completed for FDC task '{task_id}'."},
-        )
+    # We use subprocess.run to execute the agent shell and wait for it to complete.
+    # The task_id is passed as the task description.
+    result = subprocess.run(
+        [sys.executable, agent_shell_path, task_id],
+        capture_output=True,
+        text=True,
+        check=False  # We check the returncode manually
     )
-    print(f"\n--- AORP Complete. Logged TASK_START event for task: {task_id} ---")
+
+    print("--- Agent Shell Process Output ---")
+    print(result.stdout)
+    if result.stderr:
+        print("--- Agent Shell Process Errors ---")
+        print(result.stderr)
+
+    if result.returncode != 0:
+        print(f"\n--- FDC CLI: Agent Shell process failed with exit code {result.returncode} ---", file=sys.stderr)
+        sys.exit(result.returncode)
+    else:
+        print(f"\n--- FDC CLI: Agent Shell process completed successfully for task: {task_id} ---")
 
 
 def main():

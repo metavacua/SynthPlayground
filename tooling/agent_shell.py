@@ -20,9 +20,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from tooling.master_control import MasterControlGraph
 from tooling.state import AgentState
 from utils.logger import Logger
-from __main__ import read_file, list_files, google_search, view_text_website
-
-
 def find_fsm_transition(fsm, source_state, trigger):
     """Finds the destination state for a given source and trigger."""
     for transition in fsm["transitions"]:
@@ -31,7 +28,7 @@ def find_fsm_transition(fsm, source_state, trigger):
     return None
 
 
-def run_agent_loop(task_description: str):
+def run_agent_loop(task_description: str, tools: dict = None):
     """
     The main loop that drives the agent's lifecycle via the FSM.
     """
@@ -56,12 +53,6 @@ def run_agent_loop(task_description: str):
             continue
 
         if current_state == "ORIENTING":
-            tools = {
-                "read_file": read_file,
-                "list_files": list_files,
-                "google_search": google_search,
-                "view_text_website": view_text_website,
-            }
             trigger = mcg.do_orientation(agent_state, logger, tools)
 
         elif current_state == "PLANNING":
@@ -137,8 +128,25 @@ The research findings have been integrated.
 
 def main():
     """Main entry point for the agent shell."""
-    task_description = "Perform a basic self-check and greet the user."
-    run_agent_loop(task_description)
+    # When run directly, create dummy tool functions for testing.
+    def dummy_tool(name):
+        def func(*args, **kwargs):
+            print(f"[Dummy Tool] Called {name} with args: {args}, kwargs: {kwargs}")
+            return f"Dummy result for {name}"
+        return func
+
+    tools = {
+        "read_file": dummy_tool("read_file"),
+        "list_files": dummy_tool("list_files"),
+        "google_search": dummy_tool("google_search"),
+        "view_text_website": dummy_tool("view_text_website"),
+    }
+
+    if len(sys.argv) > 1:
+        task_description = " ".join(sys.argv[1:])
+    else:
+        task_description = "Perform a basic self-check and greet the user."
+    run_agent_loop(task_description, tools=tools)
 
 
 if __name__ == "__main__":

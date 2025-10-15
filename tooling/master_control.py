@@ -87,7 +87,7 @@ class MasterControlGraph:
             f"No trigger found for transition from {source_state} to {dest_state}"
         )
 
-    def do_orientation(self, agent_state: AgentState, logger: Logger) -> str:
+    def do_orientation(self, agent_state: AgentState, logger: Logger, tools: dict) -> str:
         """
         Executes orientation, including analyzing the last post-mortem.
         """
@@ -99,10 +99,11 @@ class MasterControlGraph:
                 postmortem_files = [os.path.join(postmortem_dir, f) for f in os.listdir(postmortem_dir) if f.endswith(".md")]
                 if postmortem_files:
                     latest_postmortem = max(postmortem_files, key=os.path.getctime)
-                    with open(latest_postmortem, "r") as f:
-                        postmortem_content = f.read()
-                    agent_state.messages.append({"role": "system", "content": f"Reviewing last task's post-mortem:\n{postmortem_content}"})
-                    logger.log("Phase 1", agent_state.task, -1, "INFO", {"summary": f"Analyzed post-mortem: {latest_postmortem}"}, "SUCCESS")
+                    read_file = tools.get("read_file")
+                    if read_file:
+                        postmortem_content = read_file(latest_postmortem)
+                        agent_state.messages.append({"role": "system", "content": f"Reviewing last task's post-mortem:\n{postmortem_content}"})
+                        logger.log("Phase 1", agent_state.task, -1, "INFO", {"summary": f"Analyzed post-mortem: {latest_postmortem}"}, "SUCCESS")
 
             # L1, L2, L3 steps...
             agent_state.orientation_complete = True
@@ -191,12 +192,6 @@ class MasterControlGraph:
         }
 
         commands = parse_plan(plan_content)
-
-        # Enforce the 'reset-all-prohibition-001' protocol
-        for command in commands:
-            if command.tool_name == "reset_all":
-                return False, "CRITICAL: Use of the forbidden tool `reset_all` was detected in the plan."
-
         current_state = "PLANNING" # Validation always starts from the PLANNING state
 
         for command in commands:

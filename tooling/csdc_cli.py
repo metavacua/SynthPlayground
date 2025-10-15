@@ -1,22 +1,3 @@
-"""
-A command-line tool for managing the Context-Sensitive Development Cycle (CSDC).
-
-This script provides an interface to validate a development plan against a specific
-CSDC model (A or B) and a given complexity class (P or EXP). It ensures that a
-plan adheres to the strict logical and computational constraints defined by the
-CSDC protocol before it is executed.
-
-The tool performs two main checks:
-1.  **Complexity Analysis:** It analyzes the plan to determine its computational
-    complexity and verifies that it matches the expected complexity class.
-2.  **Model Validation:** It validates the plan's commands against the rules of
-    the specified CSDC model, ensuring that it does not violate any of the
-    model's constraints (e.g., forbidding certain functions).
-
-This serves as a critical gateway for ensuring that all development work within
-the CSDC framework is sound, predictable, and compliant with the governing
-meta-mathematical principles.
-"""
 import argparse
 import sys
 import os
