@@ -1,24 +1,3 @@
-"""
-This script orchestrates a hierarchical build process for the agent's protocols.
-
-It enables a modular, "microkernel"-style architecture where different sub-modules
-of the agent can define their own protocols independently. The script discovers
-all `protocols` directories across the repository and builds them in a specific
-order, from the most deeply nested to the top-level.
-
-Key features:
-- **Hierarchical Discovery:** Finds all `protocols` directories.
-- **Bottom-Up Compilation:** Compiles child modules first, then "injects" their
-  compiled `AGENTS.md` content as a summary into their parent's `AGENTS.md`.
-  This creates a single, comprehensive `AGENTS.md` at the root that includes
-  the protocols from all sub-modules.
-- **Artifact Generation:** For each module, it runs the `protocol_compiler.py`
-  to create `AGENTS.md` and the `readme_generator.py` to create `README.md`.
-- **Centralized Knowledge Graph:** After processing all modules, it performs a
-  final pass to discover all `.protocol.json` files and compiles them into a
-  single, unified RDF knowledge graph (`protocols.ttl`), providing a complete,
-  queryable view of the agent's entire protocol system.
-"""
 import os
 import sys
 import json
@@ -67,16 +46,13 @@ def run_compiler(source_dir):
     parent_dir = os.path.dirname(source_dir)
     target_agents_md = os.path.join(parent_dir, AGENTS_MD_FILENAME)
     schema_file = os.path.join(source_dir, "protocol.schema.json")
-    autodoc_file = os.path.join(ROOT_DIR, "knowledge_core", "SYSTEM_DOCUMENTATION.md")
     if not os.path.exists(schema_file):
         # Fallback to the root schema if not found in the current protocol dir
         schema_file = os.path.join(ROOT_DIR, "protocols", "protocol.schema.json")
 
     print(f"Running AGENTS.md compiler for: {source_dir}")
     try:
-        protocol_compiler.compile_protocols(
-            source_dir, target_agents_md, schema_file, autodoc_file=autodoc_file
-        )
+        protocol_compiler.compile_protocols(source_dir, target_agents_md, schema_file)
         print(f"Successfully compiled {target_agents_md}")
         return target_agents_md
     except Exception as e:

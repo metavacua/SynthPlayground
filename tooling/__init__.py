@@ -1,3 +1,1 @@
-"""
-This package contains various tools for the agent's operation.
-"""
+# This file marks the 'tooling' directory as a Python package.

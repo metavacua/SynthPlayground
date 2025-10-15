@@ -1,3 +1,19 @@
+"""
+This script serves as the command-line executor for `.aura` files.
+
+It bridges the gap between the high-level Aura scripting language and the
+agent's underlying Python-based toolset. The executor is responsible for:
+1.  Parsing the `.aura` source code using the lexer and parser from the
+    `aura_lang` package.
+2.  Setting up an execution environment for the interpreter.
+3.  Injecting a "tool-calling" capability into the Aura environment, which
+    allows Aura scripts to dynamically invoke registered Python tools
+    (e.g., `hdl_prover`, `environmental_probe`).
+4.  Executing the parsed program and printing the final result.
+
+This makes it a key component for enabling more expressive and complex
+automation scripts for the agent.
+"""
 import argparse
 import sys
 from pathlib import Path

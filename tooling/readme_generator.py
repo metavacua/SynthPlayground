@@ -1,19 +1,3 @@
-"""
-This script automatically generates a `README.md` file for a specific module.
-
-It acts as a documentation aggregator, pulling information from two primary sources:
-1.  **`AGENTS.md`:** It parses the JSON protocol blocks within a module's
-    `AGENTS.md` file to create a human-readable summary of the core protocols
-    governing that module.
-2.  **Python Source Files:** It scans the `tooling/` subdirectory within the
-    module for any Python scripts and extracts their module-level docstrings
-    to document the key software components.
-
-The script combines this extracted information with a static template to produce
-a well-structured `README.md` file. This ensures that the documentation for each
-module stays synchronized with its actual protocols and implementation, adhering
-to the principle of "documentation as code."
-"""
 import ast
 import os
 import re
