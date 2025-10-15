@@ -155,6 +155,10 @@
     proto:hasRule <file:///app/protocols/verify-capability-acquisition> ;
     schema:description "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement." .
 
+<file:///app/protocols/complexity-analysis-001> proto:associatedTool <file:///app/protocols/tooling/complexity_analyzer.py> ;
+    proto:hasRule <file:///app/protocols/use-complexity-analyzer> ;
+    schema:description "A protocol for analyzing the computational complexity of formal language recognition, based on Blum's axioms." .
+
 <file:///app/protocols/csdc-001> proto:associatedTool <file:///app/protocols/tooling/csdc_cli.py> ;
     proto:hasRule <file:///app/protocols/model-a-constraints>,
         <file:///app/protocols/model-b-constraints>,
@@ -394,6 +398,9 @@
 
 <file:///app/protocols/toolchain-audit-on-schema-change> proto:enforcement "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files." ;
     schema:description "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure." .
+
+<file:///app/protocols/use-complexity-analyzer> proto:enforcement "The tool is invoked from the command line with a grammar file and an input string. It determines the grammar type, runs the appropriate recognition algorithm, and outputs a report of the complexity metrics." ;
+    schema:description "The `complexity_analyzer.py` tool must be used to measure the time and space complexity of recognizing a string against a given grammar. The tool provides concrete metrics (operation counts, memory units) that serve as a practical implementation of a Blum-axiomatic complexity measure." .
 
 <file:///app/protocols/use-csdc-cli> proto:enforcement "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments." ;
     schema:description "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP)." .

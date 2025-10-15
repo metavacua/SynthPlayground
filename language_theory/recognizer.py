@@ -2,21 +2,27 @@ import argparse
 import sys
 from collections import defaultdict
 
-def recognize_right_linear(grammar, start_symbol, input_string):
+def recognize_right_linear(grammar, start_symbol, input_string, verbose=False):
     """
     Attempts to recognize a string using a right-linear grammar with tracing.
-    Returns True if the string is recognized, False otherwise.
+    Returns a tuple: (recognized: bool, metrics: dict).
     """
     memo = {}
+    metrics = {
+        "time_complexity": 0, # Number of recursive calls
+        "space_complexity": 0 # Max size of the memoization table
+    }
 
     def _search(symbol, text, path):
         """Inner recursive search function with memoization."""
+        metrics["time_complexity"] += 1
         state = (symbol, tuple(text))
         if state in memo:
             return memo[state]
 
-        indent = "  " * len(path)
-        print(f"{indent}Attempting to match '{symbol}' with input '{"".join(text)}'")
+        if verbose:
+            indent = "  " * len(path)
+            print(f"{indent}Attempting to match '{symbol}' with input '{"".join(text)}'")
 
         if symbol not in grammar:
             return False
@@ -28,8 +34,9 @@ def recognize_right_linear(grammar, start_symbol, input_string):
             if len(rule) == 1 and rule[0].islower():
                 terminal = rule[0]
                 if text and text[0] == terminal and len(text) == 1:
-                    print(f"{indent}  Matched terminal rule. End of string.")
-                    print_path(current_path)
+                    if verbose:
+                        print(f"{indent}  Matched terminal rule. End of string.")
+                        print_path(current_path)
                     return True
                 continue # Rule doesn't match or there's leftover input
 
@@ -37,15 +44,19 @@ def recognize_right_linear(grammar, start_symbol, input_string):
             if len(rule) == 2 and rule[0].islower() and rule[1].isupper():
                 terminal, non_terminal = rule
                 if text and text[0] == terminal:
-                    print(f"{indent}  Matched terminal '{terminal}', recursing on '{non_terminal}'")
+                    if verbose:
+                        print(f"{indent}  Matched terminal '{terminal}', recursing on '{non_terminal}'")
                     if _search(non_terminal, text[1:], current_path):
                         memo[state] = True
+                        metrics["space_complexity"] = max(metrics["space_complexity"], len(memo))
                         return True
 
         memo[state] = False
+        metrics["space_complexity"] = max(metrics["space_complexity"], len(memo))
         return False
 
-    return _search(start_symbol, list(input_string), [])
+    recognized = _search(start_symbol, list(input_string), [])
+    return recognized, metrics
 
 def reverse_grammar(grammar):
     """Reverses a left-linear grammar into a right-linear one."""
@@ -94,10 +105,15 @@ def parse_grammar(filepath):
 
     return grammar
 
-def recognize_earley(grammar, start_symbol, input_string):
+def recognize_earley(grammar, start_symbol, input_string, verbose=False):
     """
     Recognizes a string using the Earley parsing algorithm for any CFG.
+    Returns a tuple: (recognized: bool, metrics: dict).
     """
+    metrics = {
+        "time_complexity": 0, # Number of items processed from the queue
+        "space_complexity": 0 # Total number of items stored in the chart
+    }
     # An Earley item is a tuple: (rule, dot_position, start_chart_index)
     # The chart is a list of sets of Earley items.
     chart = [set() for _ in range(len(input_string) + 1)]
@@ -112,6 +128,7 @@ def recognize_earley(grammar, start_symbol, input_string):
         while item_idx < len(queue):
             item = queue[item_idx]
             item_idx += 1
+            metrics["time_complexity"] += 1
 
             rule, dot_pos, start_idx = item
 
@@ -139,14 +156,16 @@ def recognize_earley(grammar, start_symbol, input_string):
                     if new_item not in chart[i + 1]:
                         chart[i + 1].add(new_item)
 
+    # Calculate final space complexity
+    metrics["space_complexity"] = sum(len(s) for s in chart)
 
     # Check for successful parse
     for item in chart[len(input_string)]:
         rule, dot_pos, start_idx = item
         if rule[0] == start_symbol and dot_pos == len(rule[1]) and start_idx == 0:
-            return True
+            return True, metrics
 
-    return False
+    return False, metrics
 
 def main():
     """Main function to run the recognizer."""
@@ -179,27 +198,33 @@ def main():
 
         elif is_right_reg and not is_left_reg:
             print("Heuristic determined grammar to be RIGHT-LINEAR.")
-            if recognize_right_linear(grammar, args.start_symbol, args.input_string):
+            recognized, metrics = recognize_right_linear(grammar, args.start_symbol, args.input_string, verbose=True)
+            if recognized:
                 print(f"\nSUCCESS: The string '{args.input_string}' can be generated by the grammar.")
             else:
                 print(f"\nFAILURE: The string '{args.input_string}' cannot be generated by the grammar.")
+            print(f"Complexity Metrics: {metrics}")
 
         elif is_left_reg and not is_right_reg:
             print("Heuristic determined grammar to be LEFT-LINEAR.")
             print("Reversing grammar and input string for right-linear recognizer.")
             reversed_grammar = reverse_grammar(grammar)
             reversed_string = args.input_string[::-1]
-            if recognize_right_linear(reversed_grammar, args.start_symbol, reversed_string):
+            recognized, metrics = recognize_right_linear(reversed_grammar, args.start_symbol, reversed_string, verbose=True)
+            if recognized:
                 print(f"\nSUCCESS: The string '{args.input_string}' can be generated by the grammar.")
             else:
                 print(f"\nFAILURE: The string '{args.input_string}' cannot be generated by the grammar.")
+            print(f"Complexity Metrics: {metrics}")
 
         else:
             print("Heuristic determined grammar to be CONTEXT-FREE. Using Earley parser.")
-            if recognize_earley(grammar, args.start_symbol, args.input_string):
+            recognized, metrics = recognize_earley(grammar, args.start_symbol, args.input_string, verbose=True)
+            if recognized:
                  print(f"\nSUCCESS: The string '{args.input_string}' is recognized by the CFG.")
             else:
                  print(f"\nFAILURE: The string '{args.input_string}' is not recognized by the CFG.")
+            print(f"Complexity Metrics: {metrics}")
 
     except FileNotFoundError:
         print(f"Error: Grammar file not found at {args.grammar_file}", file=sys.stderr)

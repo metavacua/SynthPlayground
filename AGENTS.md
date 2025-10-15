@@ -525,6 +525,26 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ```json
 {
+  "protocol_id": "complexity-analysis-001",
+  "description": "A protocol for analyzing the computational complexity of formal language recognition, based on Blum's axioms.",
+  "rules": [
+    {
+      "rule_id": "use-complexity-analyzer",
+      "description": "The `complexity_analyzer.py` tool must be used to measure the time and space complexity of recognizing a string against a given grammar. The tool provides concrete metrics (operation counts, memory units) that serve as a practical implementation of a Blum-axiomatic complexity measure.",
+      "enforcement": "The tool is invoked from the command line with a grammar file and an input string. It determines the grammar type, runs the appropriate recognition algorithm, and outputs a report of the complexity metrics."
+    }
+  ],
+  "associated_tools": [
+    "tooling/complexity_analyzer.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
   "protocol_id": "csdc-001",
   "description": "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.",
   "rules": [

@@ -12,6 +12,7 @@ This document provides a human-readable summary of the protocols and key compone
 - **`unified-auditor-001`**: A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.
 - **`aura-execution-001`**: A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.
 - **`capability-verification-001`**: A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.
+- **`complexity-analysis-001`**: A protocol for analyzing the computational complexity of formal language recognition, based on Blum's axioms.
 - **`csdc-001`**: A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.
 - **`unified-doc-builder-001`**: A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth.
 - **`hdl-proving-001`**: A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.
@@ -164,6 +165,10 @@ This document provides a human-readable summary of the protocols and key compone
   > can enhance this tool with more sophisticated code generation capabilities
   > (e.g., using an LLM to generate the diff from a natural language description)
   > without altering the core orchestration process.
+
+- **`tooling/complexity_analyzer.py`**:
+
+  > _No module-level docstring found._
 
 - **`tooling/context_awareness_scanner.py`**:
 
