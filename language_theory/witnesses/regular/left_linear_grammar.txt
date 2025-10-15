@@ -1,0 +1,12 @@
+# Corrected Left-Linear Grammar for the language a^n b^m where n, m > 0
+# e.g., ab, aab, abbb
+# This grammar is systematically derived from the right-linear grammar for the reversed language.
+# Productions are of the form A -> Bt or A -> t.
+
+# S: Start symbol
+# B: Builds the b's from right-to-left
+# A: Builds the a's from right-to-left
+
+S -> Bb
+B -> Bb | Aa
+A -> Aa | a

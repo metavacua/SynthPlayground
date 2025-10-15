@@ -1,0 +1,13 @@
+# Context-Sensitive Grammar for the language L = {a^n b^n c^n | n >= 1}
+# This is a classic example of a language that is context-sensitive but not context-free.
+#
+# The key rule is `CB -> BC`, which allows the Bs and Cs to be sorted.
+# This rule is context-sensitive because the replacement of C depends on its right-context (B)
+# and the replacement of B depends on its left-context (C).
+
+S -> aSBC | aBC
+CB -> BC
+aB -> ab
+bB -> bb
+bC -> bc
+cC -> cc

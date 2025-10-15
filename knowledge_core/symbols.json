@@ -169,7 +169,7 @@
       "language": "Python",
       "line": 83,
       "kind": "function",
-      "docstring": "Constructs, validates, and writes a log entry.\n\nArgs:\n    phase (str): The current protocol phase (e.g., \"Phase 7\").\n    task_id (str): The ID of the current task.\n    plan_step (int): The current plan step number.\n    action_type (str): The type of action (e.g., \"TOOL_EXEC\").\n    action_details (dict): Details specific to the action.\n    outcome_status (str): The outcome of the action (\"SUCCESS\", \"FAILURE\").\n    outcome_message (str, optional): A message describing the outcome. Defaults to \"\".\n    error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.\n    evidence (str, optional): Citation for the action. Defaults to \"\".\n\nRaises:\n    ValidationError: If the generated log entry does not conform to the schema."
+      "docstring": "Constructs, validates, and writes a log entry.\n\nArgs:\n    phase (str): The current protocol phase (e.g., \"Phase 7\").\n    task_id (str): The ID of the current task.\n    plan_step (int): The current plan step number.\n    action_type (str): The type of action (e.g., \"TOOL_EXEC\").\n    action_details (dict): Details specific to the action.\n    outcome_status (str): The outcome of the action (\"SUCCESS\", \"FAILURE\").\n    outcome_message (str, optional): A message describing the outcome. Defaults to \"\".\n    error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.\n    evidence (str, optional): Citation for the action. Defaults to \"\".\n    context (dict, optional): The agent's internal context. Defaults to None.\n\nRaises:\n    ValidationError: If the generated log entry does not conform to the schema."
     },
     {
       "_type": "tag",
@@ -347,18 +347,36 @@
       "name": "TestNewResearchPlanner",
       "path": "./tooling/test_research_planner.py",
       "language": "Python",
-      "line": 5,
+      "line": 6,
       "kind": "class",
-      "docstring": "Tests for the refactored, FSM-compliant research planner."
+      "docstring": "Tests for the refactored, FSM-compliant research planner that uses templates."
     },
     {
       "_type": "tag",
-      "name": "test_plan_deep_research_generates_executable_plan",
+      "name": "setUp",
       "path": "./tooling/test_research_planner.py",
       "language": "Python",
-      "line": 10,
+      "line": 11,
       "kind": "function",
-      "docstring": "Verify that the new plan_deep_research generates a valid, executable\nFSM-compliant plan."
+      "docstring": "Create dummy template files for testing."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_research_planner.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": "Remove dummy template files."
+    },
+    {
+      "_type": "tag",
+      "name": "test_plan_deep_research_uses_templates_correctly",
+      "path": "./tooling/test_research_planner.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": "Verify that plan_deep_research generates a plan that correctly\npopulates and creates files from the templates."
     },
     {
       "_type": "tag",
@@ -839,10 +857,19 @@
     },
     {
       "_type": "tag",
-      "name": "MasterControlGraph",
+      "name": "_get_log_context",
       "path": "./tooling/master_control.py",
       "language": "Python",
       "line": 62,
+      "kind": "function",
+      "docstring": "Creates a context dictionary for logging from the agent's state."
+    },
+    {
+      "_type": "tag",
+      "name": "MasterControlGraph",
+      "path": "./tooling/master_control.py",
+      "language": "Python",
+      "line": 76,
       "kind": "class",
       "docstring": "A Finite State Machine (FSM) that enforces the agent's protocol.\nThis graph reads a state definition and orchestrates the agent's workflow,\nensuring that all protocol steps are followed in the correct order."
     },
@@ -851,7 +878,7 @@
       "name": "__init__",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 69,
+      "line": 83,
       "kind": "function",
       "docstring": null
     },
@@ -860,7 +887,7 @@
       "name": "get_trigger",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 74,
+      "line": 88,
       "kind": "function",
       "docstring": "Finds a trigger in the FSM definition for a transition from a source\nto a destination state. This is a helper to avoid hardcoding trigger\nstrings in the state handlers."
     },
@@ -869,7 +896,7 @@
       "name": "do_orientation",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 90,
+      "line": 104,
       "kind": "function",
       "docstring": "Executes orientation, including analyzing the last post-mortem."
     },
@@ -878,7 +905,7 @@
       "name": "do_planning",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 131,
+      "line": 151,
       "kind": "function",
       "docstring": "Validates a given plan, parses it, and initializes the plan stack."
     },
@@ -887,7 +914,7 @@
       "name": "_validate_plan_with_cli",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 171,
+      "line": 196,
       "kind": "function",
       "docstring": "Validates a plan by writing it to a temporary file and using the fdc_cli.py script."
     },
@@ -896,7 +923,7 @@
       "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 223,
+      "line": 248,
       "kind": "function",
       "docstring": "Validates a plan against a specific model's FSM."
     },
@@ -905,7 +932,7 @@
       "name": "do_researching",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 277,
+      "line": 302,
       "kind": "function",
       "docstring": "Launches the background research process."
     },
@@ -914,7 +941,7 @@
       "name": "do_awaiting_result",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 297,
+      "line": 325,
       "kind": "function",
       "docstring": "Checks for the result of the background research process."
     },
@@ -923,7 +950,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 328,
+      "line": 359,
       "kind": "function",
       "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
     },
@@ -932,7 +959,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 339,
+      "line": 370,
       "kind": "function",
       "docstring": "Processes the result of a step and advances the execution state."
     },
@@ -941,7 +968,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 377,
+      "line": 414,
       "kind": "function",
       "docstring": "Handles the code generation state."
     },
@@ -950,7 +977,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 385,
+      "line": 423,
       "kind": "function",
       "docstring": "Handles the test execution state."
     },
@@ -959,7 +986,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 394,
+      "line": 433,
       "kind": "function",
       "docstring": "Handles the debugging state."
     },
@@ -968,9 +995,9 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 402,
+      "line": 442,
       "kind": "function",
-      "docstring": "Handles the finalization of the task with agent-provided analysis."
+      "docstring": "Handles the finalization of the task, guiding the agent through\nthe structured post-mortem process."
     },
     {
       "_type": "tag",
@@ -1112,7 +1139,7 @@
       "name": "to_json",
       "path": "./tooling/state.py",
       "language": "Python",
-      "line": 92,
+      "line": 93,
       "kind": "function",
       "docstring": null
     },
@@ -2581,14 +2608,14 @@
       "language": "Python",
       "line": 8,
       "kind": "function",
-      "docstring": "Generates a multi-step, FSM-compliant plan for conducting deep research.\n\nArgs:\n    topic (str): The research topic.\n\nReturns:\n    str: A string containing the executable plan."
+      "docstring": "Generates a multi-step, FSM-compliant plan for conducting deep research\nusing the official project templates.\n\nArgs:\n    topic (str): The research topic.\n    research_id (str): A unique ID for this research task.\n\nReturns:\n    str: A string containing the executable plan."
     },
     {
       "_type": "tag",
       "name": "lj_to_lk",
       "path": "./logic_system/src/translations.py",
       "language": "Python",
-      "line": 5,
+      "line": 10,
       "kind": "function",
       "docstring": "Translates a proof from the LJ calculus to the LK calculus.\nThis is a direct embedding, as any valid LJ proof is also a valid LK proof."
     },
@@ -2597,25 +2624,34 @@
       "name": "translate_formula_lj_to_ill",
       "path": "./logic_system/src/translations.py",
       "language": "Python",
-      "line": 20,
+      "line": 23,
       "kind": "function",
       "docstring": "Translates a formula from Intuitionistic Logic (LJ) to Intuitionistic Linear Logic (ILL)\nusing a standard Girard-style translation."
+    },
+    {
+      "_type": "tag",
+      "name": "bang_context",
+      "path": "./logic_system/src/translations.py",
+      "language": "Python",
+      "line": 44,
+      "kind": "function",
+      "docstring": "Applies ! to every formula in a context."
     },
     {
       "_type": "tag",
       "name": "lj_to_ill_proof",
       "path": "./logic_system/src/translations.py",
       "language": "Python",
-      "line": 43,
+      "line": 48,
       "kind": "function",
-      "docstring": "Translates a full proof from LJ to ILL.\nA proof of \u0393 \u22a2 A in LJ becomes a proof of !\u0393* \u22a2 A* in ILL.\n\nNOTE: This is a placeholder implementation for the proof-of-concept.\nA full, correct implementation of this translation is highly non-trivial\nand would require a dedicated theorem prover or proof synthesizer for\nIntuitionistic Linear Logic. This function demonstrates the principle for\na few key rules but is not guaranteed to be correct or complete."
+      "docstring": "Translates a full proof from LJ to ILL.\nA proof of \u0393 \u22a2 A in LJ becomes a proof of !\u0393* \u22a2 A* in ILL."
     },
     {
       "_type": "tag",
       "name": "ill_to_ll",
       "path": "./logic_system/src/translations.py",
       "language": "Python",
-      "line": 111,
+      "line": 129,
       "kind": "function",
       "docstring": "Translates a proof from the ILL calculus to the LL calculus.\nThis is a direct embedding, as any valid ILL proof is also a valid LL proof."
     },
@@ -2624,7 +2660,7 @@
       "name": "Sequent",
       "path": "./logic_system/src/sequents.py",
       "language": "Python",
-      "line": 4,
+      "line": 5,
       "kind": "class",
       "docstring": null
     },
@@ -2633,7 +2669,7 @@
       "name": "__init__",
       "path": "./logic_system/src/sequents.py",
       "language": "Python",
-      "line": 5,
+      "line": 6,
       "kind": "function",
       "docstring": null
     },
@@ -2642,7 +2678,7 @@
       "name": "__repr__",
       "path": "./logic_system/src/sequents.py",
       "language": "Python",
-      "line": 9,
+      "line": 10,
       "kind": "function",
       "docstring": null
     },
@@ -2651,7 +2687,7 @@
       "name": "__eq__",
       "path": "./logic_system/src/sequents.py",
       "language": "Python",
-      "line": 14,
+      "line": 24,
       "kind": "function",
       "docstring": null
     },
@@ -2660,7 +2696,16 @@
       "name": "__hash__",
       "path": "./logic_system/src/sequents.py",
       "language": "Python",
-      "line": 17,
+      "line": 27,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "format_multiset",
+      "path": "./logic_system/src/sequents.py",
+      "language": "Python",
+      "line": 11,
       "kind": "function",
       "docstring": null
     },
@@ -2669,7 +2714,7 @@
       "name": "axiom",
       "path": "./logic_system/src/ll.py",
       "language": "Python",
-      "line": 6,
+      "line": 7,
       "kind": "function",
       "docstring": "A \u22a2 A"
     },
@@ -2678,7 +2723,7 @@
       "name": "tensor_right",
       "path": "./logic_system/src/ll.py",
       "language": "Python",
-      "line": 13,
+      "line": 14,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394, A   and   \u0393' \u22a2 \u0394', B\n--------------------------------\n      \u0393, \u0393' \u22a2 \u0394, \u0394', A \u2297 B"
     },
@@ -2687,7 +2732,7 @@
       "name": "tensor_left",
       "path": "./logic_system/src/ll.py",
       "language": "Python",
-      "line": 28,
+      "line": 29,
       "kind": "function",
       "docstring": "\u0393, A, B \u22a2 \u0394\n---------------\n \u0393, A \u2297 B \u22a2 \u0394"
     },
@@ -2696,7 +2741,7 @@
       "name": "par_right",
       "path": "./logic_system/src/ll.py",
       "language": "Python",
-      "line": 39,
+      "line": 40,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394, A, B\n---------------\n \u0393 \u22a2 \u0394, A \u214b B"
     },
@@ -2705,7 +2750,7 @@
       "name": "par_left",
       "path": "./logic_system/src/ll.py",
       "language": "Python",
-      "line": 50,
+      "line": 51,
       "kind": "function",
       "docstring": "\u0393, A \u22a2 \u0394   and   \u0393', B \u22a2 \u0394'\n--------------------------------\n      \u0393, \u0393', A \u214b B \u22a2 \u0394, \u0394'"
     },
@@ -2714,7 +2759,7 @@
       "name": "cut",
       "path": "./logic_system/src/ll.py",
       "language": "Python",
-      "line": 65,
+      "line": 66,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394, A   and   A, \u0393' \u22a2 \u0394'\n--------------------------------\n         \u0393, \u0393' \u22a2 \u0394, \u0394'"
     },
@@ -2723,7 +2768,7 @@
       "name": "LJSequent",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 6,
+      "line": 7,
       "kind": "class",
       "docstring": null
     },
@@ -2732,7 +2777,7 @@
       "name": "axiom",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 25,
+      "line": 26,
       "kind": "function",
       "docstring": "A \u22a2 A"
     },
@@ -2741,7 +2786,7 @@
       "name": "weak_left",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 31,
+      "line": 32,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394  /  \u0393, A \u22a2 \u0394"
     },
@@ -2750,7 +2795,7 @@
       "name": "cut",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 36,
+      "line": 37,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A   and   A, \u0393' \u22a2 B / \u0393, \u0393' \u22a2 B"
     },
@@ -2759,7 +2804,7 @@
       "name": "and_left",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 45,
+      "line": 46,
       "kind": "function",
       "docstring": "\u0393, A, B \u22a2 \u0394 / \u0393, A \u2227 B \u22a2 \u0394"
     },
@@ -2768,7 +2813,7 @@
       "name": "and_right",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 51,
+      "line": 52,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A   and   \u0393 \u22a2 B / \u0393 \u22a2 A \u2227 B"
     },
@@ -2777,7 +2822,7 @@
       "name": "or_left",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 58,
+      "line": 59,
       "kind": "function",
       "docstring": "\u0393, A \u22a2 \u0394   and   \u0393, B \u22a2 \u0394 / \u0393, A \u2228 B \u22a2 \u0394"
     },
@@ -2786,7 +2831,7 @@
       "name": "or_right",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 65,
+      "line": 66,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A / \u0393 \u22a2 A \u2228 B  or  \u0393 \u22a2 B / \u0393 \u22a2 A \u2228 B"
     },
@@ -2795,7 +2840,7 @@
       "name": "implies_left",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 71,
+      "line": 72,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A   and   B, \u0393' \u22a2 C / A \u2192 B, \u0393, \u0393' \u22a2 C"
     },
@@ -2804,7 +2849,7 @@
       "name": "implies_right",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 78,
+      "line": 79,
       "kind": "function",
       "docstring": "A, \u0393 \u22a2 B / \u0393 \u22a2 A \u2192 B"
     },
@@ -2813,7 +2858,7 @@
       "name": "not_left",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 84,
+      "line": 85,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A / \u00acA, \u0393 \u22a2"
     },
@@ -2822,7 +2867,7 @@
       "name": "not_right",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 90,
+      "line": 91,
       "kind": "function",
       "docstring": "A, \u0393 \u22a2 / \u0393 \u22a2 \u00acA"
     },
@@ -2831,7 +2876,7 @@
       "name": "__init__",
       "path": "./logic_system/src/lj.py",
       "language": "Python",
-      "line": 7,
+      "line": 8,
       "kind": "function",
       "docstring": null
     },
@@ -2903,7 +2948,7 @@
       "name": "or_left",
       "path": "./logic_system/src/lk.py",
       "language": "Python",
-      "line": 38,
+      "line": 42,
       "kind": "function",
       "docstring": "\u0393, A \u22a2 \u0394   and   \u0393, B \u22a2 \u0394 / \u0393, A \u2228 B \u22a2 \u0394"
     },
@@ -2912,7 +2957,7 @@
       "name": "or_right",
       "path": "./logic_system/src/lk.py",
       "language": "Python",
-      "line": 46,
+      "line": 52,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394, A, B / \u0393 \u22a2 \u0394, A \u2228 B"
     },
@@ -2921,7 +2966,7 @@
       "name": "implies_left",
       "path": "./logic_system/src/lk.py",
       "language": "Python",
-      "line": 52,
+      "line": 58,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394, A   and   B, \u0393 \u22a2 \u0394 / A \u2192 B, \u0393 \u22a2 \u0394"
     },
@@ -2930,7 +2975,7 @@
       "name": "implies_right",
       "path": "./logic_system/src/lk.py",
       "language": "Python",
-      "line": 59,
+      "line": 65,
       "kind": "function",
       "docstring": "A, \u0393 \u22a2 \u0394, B / \u0393 \u22a2 \u0394, A \u2192 B"
     },
@@ -2939,7 +2984,7 @@
       "name": "not_left",
       "path": "./logic_system/src/lk.py",
       "language": "Python",
-      "line": 66,
+      "line": 72,
       "kind": "function",
       "docstring": "\u0393 \u22a2 \u0394, A / \u00acA, \u0393 \u22a2 \u0394"
     },
@@ -2948,9 +2993,45 @@
       "name": "not_right",
       "path": "./logic_system/src/lk.py",
       "language": "Python",
-      "line": 73,
+      "line": 79,
       "kind": "function",
       "docstring": "A, \u0393 \u22a2 \u0394 / \u0393 \u22a2 \u0394, \u00acA"
+    },
+    {
+      "_type": "tag",
+      "name": "Synthesizer",
+      "path": "./logic_system/src/synthesizer.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./logic_system/src/synthesizer.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_get_partitions",
+      "path": "./logic_system/src/synthesizer.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": "Generator for all 2-partitions of a multiset."
+    },
+    {
+      "_type": "tag",
+      "name": "synthesize",
+      "path": "./logic_system/src/synthesizer.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -3236,7 +3317,7 @@
       "name": "ILLSequent",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 6,
+      "line": 20,
       "kind": "class",
       "docstring": null
     },
@@ -3245,16 +3326,25 @@
       "name": "axiom",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 21,
+      "line": 37,
       "kind": "function",
       "docstring": "A \u22a2 A"
+    },
+    {
+      "_type": "tag",
+      "name": "cut",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 A   and   \u0394, A \u22a2 C\n--------------------------\n     \u0393, \u0394 \u22a2 C"
     },
     {
       "_type": "tag",
       "name": "tensor_right",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 27,
+      "line": 58,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A   and   \u0394 \u22a2 B\n-----------------------\n     \u0393, \u0394 \u22a2 A \u2297 B"
     },
@@ -3263,7 +3353,7 @@
       "name": "tensor_left",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 38,
+      "line": 68,
       "kind": "function",
       "docstring": "\u0393, A, B \u22a2 C\n---------------\n \u0393, A \u2297 B \u22a2 C"
     },
@@ -3272,7 +3362,7 @@
       "name": "lin_implies_right",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 49,
+      "line": 79,
       "kind": "function",
       "docstring": "\u0393, A \u22a2 B\n------------\n\u0393 \u22a2 A \u22b8 B"
     },
@@ -3281,16 +3371,70 @@
       "name": "lin_implies_left",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 60,
+      "line": 90,
       "kind": "function",
       "docstring": "\u0393 \u22a2 A   and   \u0394, B \u22a2 C\n--------------------------\n   \u0393, \u0394, A \u22b8 B \u22a2 C"
+    },
+    {
+      "_type": "tag",
+      "name": "with_right",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 103,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 A   and   \u0393 \u22a2 B\n-----------------------\n      \u0393 \u22a2 A & B"
+    },
+    {
+      "_type": "tag",
+      "name": "with_left_1",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 114,
+      "kind": "function",
+      "docstring": "\u0393, A \u22a2 C\n------------\n\u0393, A & B \u22a2 C"
+    },
+    {
+      "_type": "tag",
+      "name": "with_left_2",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 126,
+      "kind": "function",
+      "docstring": "\u0393, B \u22a2 C\n------------\n\u0393, A & B \u22a2 C"
+    },
+    {
+      "_type": "tag",
+      "name": "plus_right_1",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 138,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 A\n------------\n\u0393 \u22a2 A \u2295 B"
+    },
+    {
+      "_type": "tag",
+      "name": "plus_right_2",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 148,
+      "kind": "function",
+      "docstring": "\u0393 \u22a2 B\n------------\n\u0393 \u22a2 A \u2295 B"
+    },
+    {
+      "_type": "tag",
+      "name": "plus_left",
+      "path": "./logic_system/src/ill.py",
+      "language": "Python",
+      "line": 158,
+      "kind": "function",
+      "docstring": "\u0393, A \u22a2 C   and   \u0393, B \u22a2 C\n--------------------------\n     \u0393, A \u2295 B \u22a2 C"
     },
     {
       "_type": "tag",
       "name": "of_course_right",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 73,
+      "line": 178,
       "kind": "function",
       "docstring": "!\u0393 \u22a2 A\n----------\n!\u0393 \u22a2 !A"
     },
@@ -3299,7 +3443,7 @@
       "name": "dereliction",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 86,
+      "line": 190,
       "kind": "function",
       "docstring": "\u0393, A \u22a2 B\n------------\n\u0393, !A \u22a2 B"
     },
@@ -3308,7 +3452,7 @@
       "name": "contraction",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 97,
+      "line": 201,
       "kind": "function",
       "docstring": "\u0393, !A, !A \u22a2 B\n----------------\n   \u0393, !A \u22a2 B"
     },
@@ -3317,7 +3461,7 @@
       "name": "weakening",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 117,
+      "line": 213,
       "kind": "function",
       "docstring": "\u0393 \u22a2 B\n------------\n\u0393, !A \u22a2 B"
     },
@@ -3326,7 +3470,7 @@
       "name": "__init__",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 7,
+      "line": 21,
       "kind": "function",
       "docstring": null
     },
@@ -3335,7 +3479,7 @@
       "name": "succedent_formula",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 11,
+      "line": 27,
       "kind": "function",
       "docstring": null
     },
@@ -3344,7 +3488,7 @@
       "name": "__repr__",
       "path": "./logic_system/src/ill.py",
       "language": "Python",
-      "line": 15,
+      "line": 30,
       "kind": "function",
       "docstring": null
     },
@@ -3458,73 +3602,118 @@
     },
     {
       "_type": "tag",
-      "name": "fizzbuzz",
+      "name": "ProcessA",
       "path": "./self_improvement_project/main.py",
       "language": "Python",
-      "line": 1,
-      "kind": "function",
-      "docstring": "This function implements the FizzBuzz logic.\nFor multiples of 3, it returns \"Fizz\".\nFor multiples of 5, it returns \"Buzz\".\nFor multiples of both 3 and 5, it returns \"FizzBuzz\".\nOtherwise, it returns the number."
+      "line": 5,
+      "kind": "class",
+      "docstring": "The Innovator"
     },
     {
       "_type": "tag",
-      "name": "fibonacci",
+      "name": "ProcessB",
       "path": "./self_improvement_project/main.py",
       "language": "Python",
-      "line": 11,
-      "kind": "function",
-      "docstring": "Calculates the nth Fibonacci number."
+      "line": 14,
+      "kind": "class",
+      "docstring": "The Stabilizer"
     },
     {
       "_type": "tag",
-      "name": "TestFizzBuzz",
+      "name": "diagonalization",
+      "path": "./self_improvement_project/main.py",
+      "language": "Python",
+      "line": 31,
+      "kind": "function",
+      "docstring": "A simple diagonalization function.\nIt creates a new element by hashing the concatenation of all elements in the set."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./self_improvement_project/main.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": "The main loop for the self-improvement process."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./self_improvement_project/main.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "run",
+      "path": "./self_improvement_project/main.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": "Generates a new element using diagonalization."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./self_improvement_project/main.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "run",
+      "path": "./self_improvement_project/main.py",
+      "language": "Python",
+      "line": 19,
+      "kind": "function",
+      "docstring": "Analyzes and integrates the new element."
+    },
+    {
+      "_type": "tag",
+      "name": "is_beneficial",
+      "path": "./self_improvement_project/main.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": "Determines if the new element is beneficial."
+    },
+    {
+      "_type": "tag",
+      "name": "TestSelfImprovement",
       "path": "./self_improvement_project/test_main.py",
       "language": "Python",
-      "line": 4,
+      "line": 5,
       "kind": "class",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_fizz",
+      "name": "test_diagonalization",
       "path": "./self_improvement_project/test_main.py",
       "language": "Python",
-      "line": 6,
+      "line": 7,
       "kind": "function",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_buzz",
+      "name": "test_process_a",
       "path": "./self_improvement_project/test_main.py",
       "language": "Python",
-      "line": 10,
+      "line": 25,
       "kind": "function",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_fizzbuzz",
+      "name": "test_process_b",
       "path": "./self_improvement_project/test_main.py",
       "language": "Python",
-      "line": 14,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_number",
-      "path": "./self_improvement_project/test_main.py",
-      "language": "Python",
-      "line": 18,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_fibonacci",
-      "path": "./self_improvement_project/test_main.py",
-      "language": "Python",
-      "line": 23,
+      "line": 34,
       "kind": "function",
       "docstring": null
     },

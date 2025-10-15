@@ -1,0 +1,14 @@
+# Unambiguous, Left-Associative Context-Free Grammar.
+# This grammar enforces standard operator precedence (* over +)
+# and left-associativity for both operators.
+#
+# A string like i+i*i can only be parsed as i+(i*i).
+# A string like i+i+i can only be parsed as (i+i)+i.
+#
+# E -> E+T | T   (Expression is a sum of terms)
+# T -> T*F | F   (Term is a product of factors)
+# F -> i          (Factor is an identifier)
+
+E -> E+T | T
+T -> T*F | F
+F -> i

@@ -1,0 +1,9 @@
+# Ambiguous Context-Free Grammar for simple arithmetic expressions.
+# This grammar allows a string like i+i*i to have two different parse trees,
+# one for (i+i)*i and one for i+(i*i).
+#
+# E -> E+E
+# E -> E*E
+# E -> i
+
+E -> E+E | E*E | i

@@ -91,6 +91,7 @@ class Logger:
         outcome_message="",
         error_details=None,
         evidence="",
+        context=None,
     ):
         """
         Constructs, validates, and writes a log entry.
@@ -105,6 +106,7 @@ class Logger:
             outcome_message (str, optional): A message describing the outcome. Defaults to "".
             error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.
             evidence (str, optional): Citation for the action. Defaults to "".
+            context (dict, optional): The agent's internal context. Defaults to None.
 
         Raises:
             ValidationError: If the generated log entry does not conform to the schema.
@@ -118,6 +120,7 @@ class Logger:
             "action": {"type": action_type, "details": action_details},
             "outcome": {"status": outcome_status, "message": outcome_message},
             "evidence_citation": evidence,
+            "context": context if context else {},
         }
 
         if error_details and outcome_status == "FAILURE":

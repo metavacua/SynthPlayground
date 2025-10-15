@@ -1,33 +1,54 @@
-# Deep Research Plan
+# Research Plan: [Topic]
 
-## 1. Research Context
-- **Topic:** Agentic coding assistants
-- **Repository Context:** external
-- **Governing Protocol:** `src/open_deep_research/deep_researcher.py`
+**Research ID:** `[RESEARCH_ID]`
+**Date:** `[YYYY-MM-DD]`
+**Objective:** *A clear, one-sentence statement of what this research aims to achieve.*
 
-## 2. Research Phases
+---
 
-### Phase A: Initial Planning & Question Formulation
-*   **Action:** Analyze the topic to break it down into fundamental questions.
-*   **Output:** A list of 3-5 core research questions.
-    -   *Question 1:*
-    -   *Question 2:*
-    -   *Question 3:*
+## 1. Research Questions
 
-### Phase B: Parallel Research Execution
-*   **Action:** For each core question, execute a targeted research query using the `execute_research_protocol` tool.
-*   **Example Action for Question 1:** `execute_research_protocol(constraints={"target": "external_web", "scope": "narrow", "query": "..."})`
-*   **Output:** A collection of raw findings for each question.
+*List the specific, answerable questions that will guide this research. These should directly map to the "Research Question" section of the final report.*
 
-### Phase C: Synthesis and Refinement
-*   **Action:** Review the collected findings to identify key insights, connections, and contradictions.
-*   **Output:** A synthesized summary of the findings. Determine if any gaps exist that require follow-up research.
+1.  *Primary Question:*
+2.  *Secondary Question 1:*
+3.  *Secondary Question 2:*
 
-### Phase D: Final Report Generation
-*   **Action:** Structure the synthesized findings into a comprehensive and well-organized report.
-*   **Output:** The final research report, ready for review.
+---
 
-## 3. Protocol Reference Snippet
-```json
-Error: 'url' not specified for external repository research....
-```
+## 2. Information Gathering Strategy (Phase 1)
+
+### 2.1. Initial Keywords and Search Terms
+-
+-
+-
+
+### 2.2. Target Sources
+*Identify the primary sources to be investigated.*
+- **[ ] Internal Repository:**
+  - `[path/to/relevant/directory_or_file]`
+- **[ ] External Web Search:**
+  - `[Primary search engine or academic database]`
+- **[ ] Specific Websites/Documentation:**
+  - `[URL to a known resource]`
+
+### 2.3. Scope and Limitations
+*Define the boundaries of the research. What is out of scope?*
+
+---
+
+## 3. Synthesis and Reporting Plan (Phase 2 & 3)
+
+### 3.1. Synthesis Approach
+*Briefly describe the plan for synthesizing the gathered information. (e.g., "Key findings will be extracted into a bulleted list, then grouped by theme to identify patterns.")*
+
+### 3.2. Final Report Structure
+*Confirm that the final output will be a completed `research/research_report_template.md`.*
+
+---
+
+## 4. Estimated Timeline
+- **Phase 1 (Gathering):** `[e.g., 2 hours]`
+- **Phase 2 (Synthesizing):** `[e.g., 1.5 hours]`
+- **Phase 3 (Reporting):** `[e.g., 1 hour]`
+- **Total Estimated Time:** `[e.g., 4.5 hours]`
