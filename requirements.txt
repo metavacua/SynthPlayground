@@ -19,3 +19,4 @@ watchdog==4.0.1
 markdown
 black
 flake8
+pathspec

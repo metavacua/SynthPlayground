@@ -19,28 +19,14 @@ about the potential impact of its changes.
 """
 
 import os
+import sys
 import json
-import glob
 import re
 
-# --- Finder Functions ---
+# Add the root directory to the path to allow for absolute imports
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-
-def find_dependency_files(root_dir):
-    """Finds all package.json and requirements.txt files, excluding node_modules."""
-    package_json_files = []
-    requirements_txt_files = []
-    for root, dirs, files in os.walk(root_dir):
-        # Exclude node_modules directories from the search
-        if "node_modules" in dirs:
-            dirs.remove("node_modules")
-
-        for file in files:
-            if file == "package.json":
-                package_json_files.append(os.path.join(root, file))
-            elif file == "requirements.txt":
-                requirements_txt_files.append(os.path.join(root, file))
-    return package_json_files, requirements_txt_files
+from tooling.filesystem_utils import find_files
 
 
 # --- Parser Functions ---
@@ -112,8 +98,13 @@ def generate_dependency_graph(root_dir="."):
     graph = {"nodes": [], "edges": []}
     all_projects = []
 
-    # Consolidate all discovered projects
-    package_json_files, requirements_txt_files = find_dependency_files(root_dir)
+    # Use the new centralized utility to find dependency files
+    package_json_files = find_files(
+        start_dir=root_dir, search_patterns=["package.json"], ignore_patterns=["node_modules/"]
+    )
+    requirements_txt_files = find_files(
+        start_dir=root_dir, search_patterns=["requirements.txt"], ignore_patterns=["node_modules/"]
+    )
 
     for pf in package_json_files:
         info = parse_package_json(pf)
