@@ -11,12 +11,1866 @@
     },
     {
       "_type": "tag",
-      "name": "main",
-      "path": "./run.py",
+      "name": "InterpError",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Closure",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_appl_to_python",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_appl_list_to_python_list",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Primitive",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 31,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Interpreter",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_unparse",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 132,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "interpret",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 136,
+      "kind": "function",
+      "docstring": "Interprets the given term in the provided environment."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 32,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "apply",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 37,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 44,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "interpret",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 47,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TInt",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TString",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TBool",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TState",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TAction",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TGoal",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TUnit",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TList",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 45,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TTerm",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 53,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TProd",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 59,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TSum",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 68,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TFun",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 77,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TExponential",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 86,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Var",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 96,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Int",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 104,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "String",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 112,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Bool",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 120,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "App",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 128,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Fun",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 137,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Pair",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 147,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Let",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 156,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "LetPair",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 166,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Inl",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 177,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Inr",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 186,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Case",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 195,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Promote",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 207,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "LetBang",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 215,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Unit",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 225,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Nil",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 231,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Cons",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 239,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "AST",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 248,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 40,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 42,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 46,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 48,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 50,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 54,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 56,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 60,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 63,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 69,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 72,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 74,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 78,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 81,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 83,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 87,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 89,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 91,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 97,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 99,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 101,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 105,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 107,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 109,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 113,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 115,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 117,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 121,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 123,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 125,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 129,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 132,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 134,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 138,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 142,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 144,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 148,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 151,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 153,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 157,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 161,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 163,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 167,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 172,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 174,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 178,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 181,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 183,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 187,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 190,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 192,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 196,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 202,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 204,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 208,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 210,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 212,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 216,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 220,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 222,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 226,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 228,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 232,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 234,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 236,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 240,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 243,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 245,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 249,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 251,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./appl_ast.py",
+      "language": "Python",
+      "line": 253,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestParser",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_literals",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_var",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_fun",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_app",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_pair",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 23,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_let_pair",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_inl_inr",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_case",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_promote",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_let_bang",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_complex_expression",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 42,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_parse_error",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 62,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_unit",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 66,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_nil",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 69,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_cons",
+      "path": "./test_parser.py",
+      "language": "Python",
+      "line": 72,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Action",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 1,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Goal",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "State",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "create_action",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "create_goal",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "create_state",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 31,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "apply_action",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "is_goal",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 47,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 2,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./planning.py",
       "language": "Python",
       "line": 11,
       "kind": "function",
-      "docstring": "The main entry point for the agent.\n\nThis script initializes the agent's state, runs the master control graph\nto enforce the protocol, and prints the final result."
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 19,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "Parser",
+      "path": "./parser.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse",
+      "path": "./parser.py",
+      "language": "Python",
+      "line": 223,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./parser.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "peek",
+      "path": "./parser.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "consume",
+      "path": "./parser.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_atom",
+      "path": "./parser.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_app",
+      "path": "./parser.py",
+      "language": "Python",
+      "line": 73,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_expr",
+      "path": "./parser.py",
+      "language": "Python",
+      "line": 84,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_cons",
+      "path": "./parser.py",
+      "language": "Python",
+      "line": 172,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_type",
+      "path": "./parser.py",
+      "language": "Python",
+      "line": 180,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestTypeChecker",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_literals",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_var_unrestricted",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_var_linear",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_var_not_found",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_fun",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_fun_unrestricted",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_app",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_app_type_mismatch",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 40,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_pair",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 47,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_let_pair",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 51,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_inl_inr",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 56,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_case",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 60,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_case_type_mismatch",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_promote",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 69,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_promote_linear_error",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 72,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_let_bang",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 76,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_unused_linear_variable",
+      "path": "./test_type_checker.py",
+      "language": "Python",
+      "line": 80,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestInterpreter",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_literals",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_var",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_var_not_found",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_fun",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_app",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_app_non_function",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 32,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_pair",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 38,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_let_pair",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 42,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_inl_inr",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 46,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_case",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 50,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_promote",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 54,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_let_bang",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 57,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_list",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 61,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_planning_primitive",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_homoiconicity",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 81,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TypeCheckError",
+      "path": "./type_checker.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TypeChecker",
+      "path": "./type_checker.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "type_check",
+      "path": "./type_checker.py",
+      "language": "Python",
+      "line": 124,
+      "kind": "function",
+      "docstring": "Type-checks the given term in the provided contexts."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./type_checker.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "type_check",
+      "path": "./type_checker.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
