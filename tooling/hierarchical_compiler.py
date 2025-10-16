@@ -1,3 +1,40 @@
+"""
+A hierarchical build system for compiling nested protocol modules.
+
+This script orchestrates the compilation of `AGENTS.md` and `README.md` files
+across a repository with a nested or hierarchical module structure. It is a key
+component of the system's ability to manage complexity by allowing protocols to
+be defined in a modular, distributed way while still being presented as a unified,
+coherent whole at each level of the hierarchy.
+
+The compiler operates in two main passes:
+
+**Pass 1: Documentation Compilation (Bottom-Up)**
+1.  **Discovery:** It finds all `protocols` directories in the repository, which
+    signify the root of a documentation module.
+2.  **Bottom-Up Traversal:** It processes these directories from the most deeply
+    nested ones upwards. This ensures that child modules are always built before
+    their parents.
+3.  **Child Summary Injection:** For each compiled child module, it generates a
+    summary of its protocols and injects this summary into the parent's
+    `protocols` directory as a temporary file.
+4.  **Parent Compilation:** When the parent module is compiled, the standard
+    `protocol_compiler.py` automatically includes the injected child summaries,
+    creating a single `AGENTS.md` file that contains both the parent's native
+    protocols and the full protocols of all its direct children.
+5.  **README Generation:** After each `AGENTS.md` is compiled, the corresponding
+    `README.md` is generated.
+
+**Pass 2: Centralized Knowledge Graph Compilation**
+1.  After all documentation is built, it performs a full repository scan to find
+    every `*.protocol.json` file.
+2.  It parses all of these files and compiles them into a single, centralized
+    RDF knowledge graph (`protocols.ttl`). This provides a unified,
+    machine-readable view of every protocol defined anywhere in the system.
+
+This hierarchical approach allows for both localized, context-specific protocol
+definitions and a holistic, system-wide understanding of the agent's governing rules.
+"""
 import os
 import sys
 import json
@@ -8,7 +45,10 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if ROOT_DIR not in sys.path:
     sys.path.append(ROOT_DIR)
 
-from tooling import protocol_compiler, readme_generator
+import subprocess
+from tooling import protocol_compiler
+from utils.file_system_utils import find_files, get_ignore_patterns
+import fnmatch
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -27,9 +67,12 @@ def find_protocol_dirs(root_dir):
     ignoring any special-cased directories.
     """
     protocol_dirs = []
+    dir_patterns, _ = get_ignore_patterns(root_dir)
     special_paths = {os.path.join(root_dir, d) for d in SPECIAL_DIRS}
 
     for dirpath, dirnames, _ in os.walk(root_dir):
+        # Exclude ignored directories from traversal
+        dirnames[:] = [d for d in dirnames if not any(fnmatch.fnmatch(d, p) for p in dir_patterns)]
         if PROTOCOLS_DIR_NAME in dirnames:
             proto_dir_path = os.path.join(dirpath, PROTOCOLS_DIR_NAME)
             if proto_dir_path in special_paths:
@@ -62,18 +105,28 @@ def run_compiler(source_dir):
 
 
 def run_readme_generator(source_agents_md):
-    """Invokes the readme_generator.py script as a library."""
+    """Invokes the doc_builder.py script to generate a README."""
     parent_dir = os.path.dirname(source_agents_md)
     target_readme = os.path.join(parent_dir, README_FILENAME)
+    doc_builder_script = os.path.join(ROOT_DIR, "tooling", "doc_builder.py")
 
-    print(f"Running README.md generator for: {source_agents_md}")
+    command = [
+        "python3",
+        doc_builder_script,
+        "--format", "readme",
+        "--source-file", source_agents_md,
+        "--output-file", target_readme
+    ]
+
+    print(f"Running README generator for: {source_agents_md}")
+    print(f"Command: {' '.join(command)}")
     try:
-        readme_generator.main(source_agents_md, target_readme)
+        subprocess.run(command, check=True, capture_output=True, text=True, cwd=ROOT_DIR)
         print(f"Successfully generated {target_readme}")
         return target_readme
-    except Exception as e:
+    except subprocess.CalledProcessError as e:
         print(f"Error generating README.md for {source_agents_md}:")
-        print(e)
+        print(e.stderr)
         return None
 
 
@@ -140,11 +193,7 @@ def compile_centralized_knowledge_graph():
     schema_file = os.path.join(ROOT_DIR, "protocols", "protocol.schema.json")
     schema = json.load(open(schema_file))
 
-    all_json_files = []
-    for root, _, files in os.walk(ROOT_DIR):
-        for file in files:
-            if file.endswith(".protocol.json"):
-                all_json_files.append(os.path.join(root, file))
+    all_json_files = [os.path.join(ROOT_DIR, f) for f in find_files("*.protocol.json")]
 
     print(f"Found {len(all_json_files)} protocol.json files for KG compilation.")
 
@@ -200,6 +249,10 @@ def main():
         current_module_path = os.path.dirname(proto_dir)
         print(f"\n--- Processing Module: {current_module_path} ---")
 
+        # Always start with a clean slate by removing old summary files.
+        # This prevents stale data from being included if a previous run failed.
+        cleanup_summaries(proto_dir)
+
         # Inject summaries from children that have already been compiled
         for child_module_path, artifacts in compiled_artifacts.items():
             parent_module = get_parent_module(child_module_path, module_paths)
@@ -224,9 +277,6 @@ def main():
                 "agents_md": target_agents_md,
                 "readme": target_readme,
             }
-
-        # Clean up the temporary summary files
-        cleanup_summaries(proto_dir)
 
     print("\n--- Hierarchical Build Summary ---")
     for module, artifacts in sorted(compiled_artifacts.items()):

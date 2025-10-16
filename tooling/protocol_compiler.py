@@ -30,6 +30,14 @@ import json
 import argparse
 import subprocess
 import sys
+import re
+import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+
+# Add the root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.file_system_utils import find_files
 
 # --- Dependency Management ---
 # This section makes the script self-contained by automatically installing
@@ -121,6 +129,20 @@ def load_schema(schema_file):
         return None
 
 
+def sanitize_markdown(content):
+    """
+    Sanitizes markdown content to remove potentially malicious instructions.
+    This function removes script tags and other potentially malicious HTML/JS.
+    """
+    # Remove script tags
+    content = re.sub(r"<script.*?>.*?</script>", "", content, flags=re.IGNORECASE | re.DOTALL)
+    # Remove on* attributes
+    content = re.sub(r" on\w+=\".*?\"", "", content, flags=re.IGNORECASE)
+    # Remove <<<SENSITIVE_INSTRUCTIONS>>> tags
+    content = re.sub(r"<<<SENSITIVE_INSTRUCTIONS>>>.*<<<SENSITIVE_INSTRUCTIONS>>>", "", content, flags=re.DOTALL)
+    return content
+
+
 def compile_protocols(
     source_dir, target_file, schema_file, knowledge_graph_file=None, autodoc_file=None
 ):
@@ -142,9 +164,9 @@ def compile_protocols(
     # Discover all relevant files and sort them to ensure deterministic output.
     # The sort order is: autodoc placeholders, then all markdown, then all json.
     # This ensures descriptions and summaries appear before the JSON blocks.
-    autodoc_placeholders = sorted(glob.glob(os.path.join(source_dir, "*.autodoc.md")))
-    all_md_files = sorted(glob.glob(os.path.join(source_dir, "*.protocol.md")))
-    all_json_files = sorted(glob.glob(os.path.join(source_dir, "*.protocol.json")))
+    autodoc_placeholders = sorted([os.path.join(source_dir, f) for f in find_files("*.autodoc.md", base_dir=source_dir)])
+    all_md_files = sorted([os.path.join(source_dir, f) for f in find_files("*.protocol.md", base_dir=source_dir)])
+    all_json_files = sorted([os.path.join(source_dir, f) for f in find_files("*.protocol.json", base_dir=source_dir)])
 
     if not all_md_files and not all_json_files and not autodoc_placeholders:
         print(f"Warning: No protocol or documentation files found in {source_dir}.")
@@ -185,7 +207,9 @@ def compile_protocols(
     for file_path in all_md_files:
         print(f"  - Processing: {os.path.basename(file_path)}")
         with open(file_path, "r") as f:
-            final_content.append(f.read())
+            content = f.read()
+            sanitized_content = sanitize_markdown(content)
+            final_content.append(sanitized_content)
         final_content.append("\n---\n")
 
     # 3. Process all JSON protocol files
@@ -303,6 +327,11 @@ def main_cli():
         default=DEFAULT_AUTODOC_FILE,
         help=f"Path to the system documentation file to be injected. Defaults to {DEFAULT_AUTODOC_FILE}",
     )
+    parser.add_argument(
+        "--watch",
+        action="store_true",
+        help="Enable watch mode to automatically recompile on file changes.",
+    )
 
     args = parser.parse_args()
 
@@ -319,6 +348,39 @@ def main_cli():
         knowledge_graph_file=args.knowledge_graph_file,
         autodoc_file=args.autodoc_file,
     )
+
+    if args.watch:
+        print(f"\n--- Entering Watch Mode ---")
+        print(f"Monitoring {args.source_dir} for changes...")
+
+        class ProtocolChangeHandler(FileSystemEventHandler):
+            def on_any_event(self, event):
+                # This event handler will trigger on any file change.
+                # We can add more specific logic here if needed (e.g., for specific file types).
+                print(f"\nDetected change in {event.src_path}. Recompiling...")
+                try:
+                    compile_protocols(
+                        source_dir=args.source_dir,
+                        target_file=args.output_file,
+                        schema_file=schema_file,
+                        knowledge_graph_file=args.knowledge_graph_file,
+                        autodoc_file=args.autodoc_file,
+                    )
+                except Exception as e:
+                    # Catch exceptions during recompilation to prevent the watcher from crashing.
+                    print(f"Error during recompilation: {e}")
+
+
+        event_handler = ProtocolChangeHandler()
+        observer = Observer()
+        observer.schedule(event_handler, args.source_dir, recursive=True)
+        observer.start()
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            observer.stop()
+        observer.join()
 
 
 if __name__ == "__main__":

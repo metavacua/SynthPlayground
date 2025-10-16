@@ -24,6 +24,15 @@
 3.  The plan for the user's request must be formulated *after* and *in accordance with* the protocols loaded from `AGENTS.md`.
 4.  If `AGENTS.md` is not found, the agent should notify the user of a critical configuration error.
 
+**Rule `bootstrap-scan-for-documents`**: After processing `AGENTS.md`, the agent should perform a scan of the repository for document files that could contain relevant information.
+
+**Rationale**: Important project documentation, specifications, or other relevant information may be contained in various document formats. Proactively scanning for and processing these documents will provide the agent with a more complete context for the task at hand.
+
+**Procedure**:
+1.  The agent will perform a file listing to identify potential documents of interest (e.g., `.pdf`, `.md`, `.txt`).
+2.  For each identified document, the agent will use the appropriate tool to read and summarize its contents. For PDF files, this will involve using a PDF reading library.
+3.  The agent will incorporate the summarized information into its understanding of the project and use it to inform the planning process.
+
 ---
 
 # Protocol: Dependency Management
@@ -267,11 +276,12 @@ This new, automated cycle—**Analyze -> Structure Lesson -> Execute Correction 
 
 This protocol defines a standardized, multi-step plan for conducting in-depth research on a complex topic. It is designed to be a reusable, callable plan that ensures a systematic and thorough investigation.
 
-The cycle consists of four main phases:
-1.  **Initial Scoping & Keyword Generation:** The agent uses its initial understanding of the topic to generate a set of search keywords.
-2.  **Broad Information Gathering:** The agent uses the keywords to perform broad web searches and collect a list of relevant URLs.
-3.  **Targeted Information Extraction:** The agent visits the most promising URLs to extract detailed information.
-4.  **Synthesis & Summary:** The agent synthesizes the gathered information into a coherent summary, which is saved to a research report file.
+The cycle consists of five main phases:
+1.  **Review Scanned Documents:** The agent first reviews the content of documents found in the repository during the initial scan. This provides immediate, project-specific context.
+2.  **Initial Scoping & Keyword Generation:** Based on the initial topic and the information from scanned documents, the agent generates a set of search keywords.
+3.  **Broad Information Gathering:** The agent uses the keywords to perform broad web searches and collect a list of relevant URLs.
+4.  **Targeted Information Extraction:** The agent visits the most promising URLs to extract detailed information.
+5.  **Synthesis & Summary:** The agent synthesizes the gathered information into a coherent summary, which is saved to a research report file.
 
 This structured approach ensures that research is not ad-hoc but is instead a repeatable and verifiable process.
 
@@ -323,20 +333,51 @@ This prohibition is non-negotiable and must be adhered to by any agent assuming 
 
 ---
 
-# Protocol: Code Refactoring
+# Protocol: The Context-Sensitive Development Cycle (CSDC)
 
-This protocol defines the use of the `refactor.py` tool, which provides a simple way to perform automated refactoring of Python code.
+This protocol introduces a new form of development cycle that is sensitive to the logical context in which it operates. It moves beyond the purely structural validation of the FDC and CFDC to incorporate constraints based on fundamental principles of logic and computability.
 
-## Rule: `refactor-rename-symbol`
+The CSDC is founded on the idea of exploring the trade-offs between expressive power and the risk of self-referential paradoxes. It achieves this by defining two mutually exclusive development models.
 
-The `refactor.py` tool can be used to rename a symbol (a function or class) and all of its references within a given search path.
+## Model A: The Introspective Model
 
-**Usage:**
-```
-python tooling/refactor.py --filepath <path_to_file> --old-name <old_symbol_name> --new-name <new_symbol_name> [--search-path <path>]
-```
+- **Permits:** `define_set_of_names`
+- **Forbids:** `define_diagonalization_function`
 
-The tool will generate a plan file containing a series of `replace_with_git_merge_diff` commands to perform the renaming. This plan can then be executed by the agent's master controller.
+This model allows the system to have a complete map of its own language, enabling powerful introspection and metaprogramming. However, it explicitly forbids the diagonalization function, a common source of paradoxes in self-referential systems. This can be seen as a Gödel-like approach.
+
+## Model B: The Self-Referential Model
+
+- **Permits:** `define_diagonalization_function`
+- **Forbids:** `define_set_of_names`
+
+This model allows the system to define and use the diagonalization function, enabling direct self-reference. However, it prevents the system from having a complete name-map of its own expressions, which is another way to avoid paradox (related to Tarski's undefinability theorem).
+
+## Complexity Classes
+
+Both models can be further constrained by computational complexity:
+- **Polynomial (P):** For plans that are considered computationally tractable.
+- **Exponential (EXP):** For plans that may require significantly more resources, allowing for more complex but potentially less efficient solutions.
+
+## The `csdc_cli.py` Tool
+
+The CSDC is enforced by the `tooling/csdc_cli.py` tool. This tool validates a plan against a specified model and complexity class, ensuring that all constraints are met before execution.
+
+---
+
+# Protocol: Speculative Execution
+
+This protocol empowers the agent to engage in creative and exploratory tasks when it is otherwise idle. It provides a formal framework for the agent to generate novel ideas, plans, or artifacts that are not direct responses to a user request, but are instead products of its own "imagination" and analysis of the repository.
+
+The goal is to enable proactive, creative problem-solving and self-improvement, allowing the agent to "dream" productively within safe and well-defined boundaries.
+
+## Rules
+
+- **`idle-state-trigger`**: The Speculative Execution Protocol can only be invoked when the agent has no active, user-assigned task. This ensures that speculative work never interferes with primary duties.
+- **`formal-proposal-required`**: The first action in any speculative task must be the creation of a formal proposal document. This document must outline the objective, rationale, and a detailed plan for the task.
+- **`resource-constraints`**: All speculative tasks must operate under predefined resource constraints (e.g., time limits, computational resources) to prevent runaway processes.
+- **`user-review-gate`**: The final output or artifact of a speculative task cannot be integrated or submitted directly. It must be presented to the user for formal review and approval.
+- **`speculative-logging`**: All logs, artifacts, and actions generated during a speculative task must be clearly tagged with a `speculative` flag to distinguish them from standard, user-directed work.
 
 ---
 
@@ -424,6 +465,156 @@ The tool will generate a plan file containing a series of `replace_with_git_merg
 
 ```json
 {
+  "protocol_id": "unified-auditor-001",
+  "description": "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.",
+  "rules": [
+    {
+      "rule_id": "run-all-audits",
+      "description": "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness.",
+      "enforcement": "The tool is invoked via the command line, typically through the `make audit` target."
+    }
+  ],
+  "associated_tools": [
+    "tooling/auditor.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "aura-execution-001",
+  "description": "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.",
+  "rules": [
+    {
+      "rule_id": "execute-aura-script",
+      "description": "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter.",
+      "enforcement": "The tool is used by invoking it from the command line with the path to the Aura script as an argument."
+    }
+  ],
+  "associated_tools": [
+    "tooling/aura_executor.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "capability-verification-001",
+  "description": "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.",
+  "rules": [
+    {
+      "rule_id": "verify-capability-acquisition",
+      "description": "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process.",
+      "enforcement": "The tool is used by invoking it from the command line with the path to the target test file."
+    }
+  ],
+  "associated_tools": [
+    "tooling/capability_verifier.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "csdc-001",
+  "description": "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.",
+  "rules": [
+    {
+      "rule_id": "use-csdc-cli",
+      "description": "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP).",
+      "enforcement": "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments."
+    },
+    {
+      "rule_id": "model-a-constraints",
+      "description": "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`.",
+      "enforcement": "Enforced by the `fsm_model_a.json` FSM used by the `csdc_cli.py` tool."
+    },
+    {
+      "rule_id": "model-b-constraints",
+      "description": "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`.",
+      "enforcement": "Enforced by the `fsm_model_b.json` FSM used by the `csdc_cli.py` tool."
+    }
+  ],
+  "associated_tools": [
+    "tooling/csdc_cli.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "unified-doc-builder-001",
+  "description": "A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth.",
+  "rules": [
+    {
+      "rule_id": "use-doc-builder-for-all-docs",
+      "description": "The `doc_builder.py` script is the single entry point for generating all user-facing documentation, including system-level docs, README files, and GitHub Pages. It should be called with the appropriate '--format' argument.",
+      "enforcement": "The tool is invoked via the command line, typically through the `make docs`, `make readme`, or `make pages` targets."
+    }
+  ],
+  "associated_tools": [
+    "tooling/doc_builder.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "file-indexing-001",
+  "description": "A protocol for maintaining an up-to-date file index to accelerate tool performance.",
+  "rules": [
+    {
+      "rule_id": "update-index-before-submit",
+      "description": "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem.",
+      "enforcement": "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/file_indexer.py build'."
+    }
+  ],
+  "associated_tools": [
+    "tooling/file_indexer.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "hdl-proving-001",
+  "description": "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.",
+  "rules": [
+    {
+      "rule_id": "prove-sequent",
+      "description": "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover.",
+      "enforcement": "The tool is used by invoking it from the command line with the sequent to be proved as an argument."
+    }
+  ],
+  "associated_tools": [
+    "tooling/hdl_prover.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
   "protocol_id": "agent-interaction-001",
   "description": "A protocol governing the agent's core interaction and planning tools.",
   "rules": [
@@ -450,17 +641,39 @@ The tool will generate a plan file containing a series of `replace_with_git_merg
 
 ```json
 {
-  "protocol_id": "refactor-001",
-  "description": "A protocol for using the refactoring tool.",
+  "protocol_id": "speculative-execution-001",
+  "description": "A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.",
   "rules": [
     {
-      "rule_id": "refactor-rename-symbol",
-      "description": "The `refactor.py` tool can be used to rename a symbol and all of its references.",
-      "enforcement": "The tool is used by invoking it from the command line with the appropriate arguments. The agent should use this tool when a refactoring task is requested."
+      "rule_id": "idle-state-trigger",
+      "description": "The agent may only initiate a speculative task when it has no active, user-assigned tasks.",
+      "enforcement": "The agent's main control loop must verify an idle state before allowing the invocation of a speculative plan."
+    },
+    {
+      "rule_id": "formal-proposal-required",
+      "description": "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan.",
+      "enforcement": "The initial plan for any speculative task must include a step to generate and save a proposal artifact."
+    },
+    {
+      "rule_id": "resource-constraints",
+      "description": "Speculative tasks must operate under defined resource limits.",
+      "enforcement": "This is a system-level constraint that the agent orchestrator must enforce."
+    },
+    {
+      "rule_id": "user-review-gate",
+      "description": "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly.",
+      "enforcement": "The agent is forbidden from using tools like 'submit' or 'merge' within a speculative context. It must use 'request_user_input' to present the results."
+    },
+    {
+      "rule_id": "speculative-logging",
+      "description": "All logs and artifacts generated during a speculative task must be tagged as 'speculative'.",
+      "enforcement": "The agent's logging and file-creation tools should be context-aware and apply this tag when in a speculative mode."
     }
   ],
   "associated_tools": [
-    "tooling/refactor.py"
+    "set_plan",
+    "create_file_with_block",
+    "request_user_input"
   ]
 }
 ```

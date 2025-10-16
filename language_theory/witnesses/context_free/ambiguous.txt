@@ -1,0 +1,8 @@
+# Ambiguous Context-Free Grammar for simple arithmetic expressions.
+# Symbols are separated by spaces.
+#
+# E -> E + E
+# E -> E * E
+# E -> i
+
+E -> E + E | E * E | i

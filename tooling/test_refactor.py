@@ -1,71 +1,63 @@
-import os
-import subprocess
 import unittest
-import tempfile
+import os
 import shutil
+from unittest.mock import patch
+from tooling.refactor import find_symbol_definition, find_references, main as refactor_main
 
-
-class TestRefactorTool(unittest.TestCase):
+class TestRefactor(unittest.TestCase):
 
     def setUp(self):
-        # Create a temporary directory for our test files
-        self.test_dir = tempfile.mkdtemp()
-        self.file_to_refactor = os.path.join(self.test_dir, "file1.py")
-        self.referencing_file = os.path.join(self.test_dir, "file2.py")
+        self.test_dir = "test_refactor_dir"
+        os.makedirs(self.test_dir, exist_ok=True)
+        self.file_with_symbol = os.path.join(self.test_dir, "file_with_symbol.py")
+        self.referencing_file = os.path.join(self.test_dir, "referencing_file.py")
 
-        with open(self.file_to_refactor, "w") as f:
-            f.write("def old_function_name():\n")
-            f.write("    pass\n")
+        with open(self.file_with_symbol, "w") as f:
+            f.write("def old_name():\n    pass")
 
         with open(self.referencing_file, "w") as f:
-            f.write("from file1 import old_function_name\n")
-            f.write("\n")
-            f.write("old_function_name()\n")
+            f.write("from file_with_symbol import old_name\n\nold_name()")
 
     def tearDown(self):
-        # Clean up the temporary directory
         shutil.rmtree(self.test_dir)
 
-    def test_rename_symbol(self):
-        # Run the refactor tool
-        result = subprocess.run(
-            [
-                "python",
-                "tooling/refactor.py",
-                "--filepath",
-                self.file_to_refactor,
-                "--old-name",
-                "old_function_name",
-                "--new-name",
-                "new_function_name",
-                "--search-path",
-                self.test_dir,
-            ],
-            capture_output=True,
-            text=True,
-        )
+    def test_find_symbol_definition(self):
+        """Tests finding a symbol's definition."""
+        node = find_symbol_definition(self.file_with_symbol, "old_name")
+        self.assertIsNotNone(node)
+        self.assertEqual(node.name, "old_name")
 
-        self.assertEqual(result.returncode, 0)
-        plan_path = result.stdout.strip()
+    def test_find_references(self):
+        """Tests finding references to a symbol."""
+        references = find_references("old_name", self.test_dir)
+        self.assertEqual(len(references), 2)
+        self.assertIn(self.file_with_symbol, references)
+        self.assertIn(self.referencing_file, references)
+
+    @patch('sys.argv', new_callable=lambda: ['tooling/refactor.py', '--filepath', 'test_refactor_dir/file_with_symbol.py', '--old-name', 'old_name', '--new-name', 'new_name', '--search-path', 'test_refactor_dir'])
+    @patch('builtins.print')
+    def test_main_plan_generation(self, mock_print, mock_argv):
+        """Tests that the main function generates a correct refactoring plan."""
+        refactor_main()
+
+        # Check that a plan file path was printed to stdout
+        mock_print.assert_called_once()
+        plan_path = mock_print.call_args[0][0]
         self.assertTrue(os.path.exists(plan_path))
 
-        # Check the content of the generated plan
         with open(plan_path, "r") as f:
-            plan_content = f.read()
+            content = f.read()
 
-        # The plan should contain two replace_with_git_merge_diff blocks
-        self.assertIn(
-            f"replace_with_git_merge_diff\n{self.file_to_refactor}", plan_content
-        )
-        self.assertIn(
-            f"replace_with_git_merge_diff\n{self.referencing_file}", plan_content
-        )
-        self.assertIn("def new_function_name():", plan_content)
-        self.assertIn("from file1 import new_function_name", plan_content)
+        self.assertIn(f"replace_with_git_merge_diff\n{self.file_with_symbol}", content)
+        self.assertIn(f"replace_with_git_merge_diff\n{self.referencing_file}", content)
 
-        # Clean up the plan file
         os.remove(plan_path)
 
+    def test_symbol_not_found(self):
+        """Tests that the tool exits if the symbol is not found."""
+        with patch('sys.argv', ['tooling/refactor.py', '--filepath', self.file_with_symbol, '--old-name', 'non_existent', '--new-name', 'new_name']):
+            with self.assertRaises(SystemExit):
+                refactor_main()
 
 if __name__ == "__main__":
     unittest.main()

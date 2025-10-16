@@ -1,3 +1,6 @@
 jsonschema
 rdflib
+watchdog
+markdown
+pypdf
 requests

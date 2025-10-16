@@ -1,4 +1,5 @@
 {
-  "create-hello-file": "sub_plan.txt",
-  "deep-research": "plans/deep_research.txt"
+  "deep-research": "plans/deep_research.txt",
+  "code-health-supervisor": "plans/code_health_supervisor.txt",
+  "full-system-audit": "plans/full_system_audit.txt"
 }

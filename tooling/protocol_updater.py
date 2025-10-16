@@ -14,19 +14,24 @@ import argparse
 import json
 import os
 import glob
+import sys
 
 DEFAULT_PROTOCOLS_DIR = "protocols/"
 
 
 def find_protocol_file(protocol_id: str, protocols_dir: str) -> str | None:
-    """Finds the protocol file path corresponding to a given protocol_id."""
-    for filepath in glob.glob(os.path.join(protocols_dir, "*.protocol.json")):
+    """
+    Recursively finds the protocol file path corresponding to a given protocol_id.
+    """
+    search_pattern = os.path.join(protocols_dir, "**", "*.protocol.json")
+    for filepath in glob.glob(search_pattern, recursive=True):
         try:
             with open(filepath, "r") as f:
                 data = json.load(f)
                 if data.get("protocol_id") == protocol_id:
                     return filepath
-        except (json.JSONDecodeError, IOError):
+        except (json.JSONDecodeError, IOError) as e:
+            print(f"Warning: Could not read or parse {filepath}: {e}", file=sys.stderr)
             continue
     return None
 
@@ -38,9 +43,9 @@ def add_tool_to_protocol(protocol_id: str, tool_name: str, protocols_dir: str):
     protocol_file = find_protocol_file(protocol_id, protocols_dir)
     if not protocol_file:
         print(
-            f"Error: Protocol with ID '{protocol_id}' not found in '{protocols_dir}'."
+            f"Error: Protocol with ID '{protocol_id}' not found in '{protocols_dir}'.",
+            file=sys.stderr
         )
-        # Exit with a non-zero status code to indicate failure to the calling process.
         exit(1)
 
     try:

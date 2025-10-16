@@ -164,68 +164,72 @@
     (if bindings
         (progn
           (format t "  Matched rule: hypersequent_independence_r_indepR with bindings: ~S~%" bindings)
-          (let ((premise-condition-met
-                 (eval (substitute-bindings (rule-premise-condition hypersequent_independence_r_indepR-rule) bindings))))
-            (format t "  Premise condition for indep_r_indepR: ~S, Condition Value: ~S~%"
-                    (rule-premise-condition hypersequent_independence_r_indepR-rule) premise-condition-met)
+          (let* ((condition-template (rule-premise-condition hypersequent_independence_r_indepR-rule))
+                 (sequent-template1 (second (second condition-template)))
+                 (sequent-template2 (second (third condition-template)))
+                 (sequent1 (substitute-bindings sequent-template1 bindings))
+                 (sequent2 (substitute-bindings sequent-template2 bindings))
+                 (premise-condition-met (or (entails sequent1) (entails sequent2))))
+            (format t "  Premise condition for indep_r_indepR: (OR (ENTAILS ~S) (ENTAILS ~S)), Condition Value: ~S~%"
+                    sequent1 sequent2 premise-condition-met)
             (if premise-condition-met
                 (progn
-                  (format t "  Premise condition met for indep_r_indepR~%")
-                  (let ((output-sequent (substitute-bindings (rule-output-sequent hypersequent_independence_r_indepR-rule) bindings)))
-                    (format t "  Applying rule, new sequent: ~S~%" output-sequent)
-                    (if (entails output-sequent)      ; Recursive call for indep_r_indepR
-                        (return-from entails t)))))))))
+                  (format t "  Premise condition met for indep_r_indepR. Proof is complete.~%")
+                  (return-from entails t)))))))
 
   ;; 4. Try Independence Left Rule (indep_l_indepL)
   (let ((bindings (pattern-match (rule-input-sequent hypersequent_independence_l_indepL-rule) sequent nil)))
     (if bindings
         (progn
           (format t "  Matched rule: hypersequent_independence_l_indepL with bindings: ~S~%" bindings)
-          (let ((premise-condition-met
-                 (eval (substitute-bindings (rule-premise-condition hypersequent_independence_l_indepL-rule) bindings))))
-            (format t "  Premise condition for indep_l_indepL: ~S, Condition Value: ~S~%"
-                    (rule-premise-condition hypersequent_independence_l_indepL-rule) premise-condition-met)
+          (let* ((condition-template (rule-premise-condition hypersequent_independence_l_indepL-rule))
+                 (sequent-template1 (second (second condition-template)))
+                 (sequent-template2 (second (third condition-template)))
+                 (sequent1 (substitute-bindings sequent-template1 bindings))
+                 (sequent2 (substitute-bindings sequent-template2 bindings))
+                 (premise-condition-met (or (entails sequent1) (entails sequent2))))
+            (format t "  Premise condition for indep_l_indepL: (OR (ENTAILS ~S) (ENTAILS ~S)), Condition Value: ~S~%"
+                    sequent1 sequent2 premise-condition-met)
             (if premise-condition-met
                 (progn
-                  (format t "  Premise condition met for indep_l_indepL~%")
-                  (let ((output-sequent (substitute-bindings (rule-output-sequent hypersequent_independence_l_indepL-rule) bindings)))
-                    (format t "  Applying rule, new sequent: ~S~%" output-sequent)
-                    (if (entails output-sequent)      ; Recursive call for indep_l_indepL
-                        (return-from entails t)))))))))
+                  (format t "  Premise condition met for indep_l_indepL. Proof is complete.~%")
+                  (return-from entails t)))))))
 
   ;; 5. Try Dependence Right Rule (dep_r_depR)
   (let ((bindings (pattern-match (rule-input-sequent dependence_r_depR-rule) sequent nil)))
     (if bindings
         (progn
           (format t "  Matched rule: dependence_r_depR with bindings: ~S~%" bindings)
-          (let ((premise-condition-met
-                 (eval (substitute-bindings (rule-premise-condition dependence_r_depR-rule) bindings))))
-            (format t "  Premise condition for dep_r_depR: ~S, Condition Value: ~S~%"
-                    (rule-premise-condition dependence_r_depR-rule) premise-condition-met)
+          (let* ((condition-template (rule-premise-condition dependence_r_depR-rule))
+                 (sequent-template1 (second (second condition-template)))
+                 (sequent-template2 (second (third condition-template)))
+                 (sequent1 (substitute-bindings sequent-template1 bindings))
+                 (sequent2 (substitute-bindings sequent-template2 bindings))
+                 (premise-condition-met (and (entails sequent1) (entails sequent2))))
+            (format t "  Premise condition for dep_r_depR: (AND (ENTAILS ~S) (ENTAILS ~S)), Condition Value: ~S~%"
+                    sequent1 sequent2 premise-condition-met)
             (if premise-condition-met
                 (progn
-                  (format t "  Premise condition met for dep_r_depR~%")
-                  (let ((output-sequent (substitute-bindings (rule-output-sequent dependence_r_depR-rule) bindings)))
-                    (format t "  Applying rule, new sequent: ~S~%" output-sequent)
-                    (if (entails output-sequent)      ; Recursive call for dep_r_depR
-                        (return-from entails t)))))))))
+                  (format t "  Premise condition met for dep_r_depR. Proof is complete.~%")
+                  (return-from entails t)))))))
 
   ;; 6. Try Dependence Left Rule (dep_l_depL)
   (let ((bindings (pattern-match (rule-input-sequent dependence_l_depL-rule) sequent nil)))
     (if bindings
         (progn
           (format t "  Matched rule: dependence_l_depL with bindings: ~S~%" bindings)
-          (let ((premise-condition-met
-                 (eval (substitute-bindings (rule-premise-condition dependence_l_depL-rule) bindings))))
-            (format t "  Premise condition for dep_l_depL: ~S, Condition Value: ~S~%"
-                    (rule-premise-condition dependence_l_depL-rule) premise-condition-met)
+          (let* ((condition-template (rule-premise-condition dependence_l_depL-rule))
+                 (sequent-template1 (second (second condition-template)))
+                 (sequent-template2 (second (third condition-template)))
+                 (sequent1 (substitute-bindings sequent-template1 bindings))
+                 (sequent2 (substitute-bindings sequent-template2 bindings))
+                 (premise-condition-met (and (entails sequent1) (entails sequent2))))
+            (format t "  Premise condition for dep_l_depL: (AND (ENTAILS ~S) (ENTAILS ~S)), Condition Value: ~S~%"
+                    sequent1 sequent2 premise-condition-met)
             (if premise-condition-met
                 (progn
-                  (format t "  Premise condition met for dep_l_depL~%")
-                  (let ((output-sequent (substitute-bindings (rule-output-sequent dependence_l_depL-rule) bindings)))
-                    (format t "  Applying rule, new sequent: ~S~%" output-sequent)
-                    (if (entails output-sequent)      ; Recursive call for dep_l_depL
-                        (return-from entails t)))))))))
+                  (format t "  Premise condition met for dep_l_depL. Proof is complete.~%")
+                  (return-from entails t)))))))
 
 
   ;; 7. No rule applied or proof not found
@@ -395,40 +399,34 @@
 
 (defun test-entails-independence-r-premise-true-a ()
   (let ((sequent '(() (indep con baz))))  ; 'con' is provable
-     (assert-entails-equal (entails sequent) nil "Entails Independence Right Rule (indepR) Test (Premise A - Start) - Should be nil before rule application")
      (assert-entails-equal (entails '(() con)) t "Premise (entails con) should be true")
-     (assert-entails-equal (entails '(() (indep con baz))) t "Entails Independence Right Rule (indepR) Test (Premise A - End)"))) ; Should now pass as indepR checks premise
+     (assert-entails-equal (entails sequent) t "Entails Independence Right Rule (indepR) Test (Premise A)")))
 
 (defun test-entails-independence-r-premise-true-b ()
   (let ((sequent '(() (indep baz con))))  ; 'con' is provable, order swapped
-     (assert-entails-equal (entails sequent) nil "Entails Independence Right Rule (indepR) Test (Premise B - Start) - Should be nil before rule application")
      (assert-entails-equal (entails '(() con)) t "Premise (entails con) should be true")
-     (assert-entails-equal (entails '(() (indep baz con))) t "Entails Independence Right Rule (indepR) Test (Premise B - End)"))) ; Should now pass
+     (assert-entails-equal (entails sequent) t "Entails Independence Right Rule (indepR) Test (Premise B)")))
 
 (defun test-entails-independence-l-premise-true-a ()
   (let ((sequent '(((indep incon baz) ()))))  ; 'incon' is refutable
-     (assert-entails-equal (entails sequent) nil "Entails Independence Left Rule (indepL) Test (Premise A - Start) - Should be nil before rule application")
      (assert-entails-equal (entails '((incon) ())) t "Premise (incon entails) should be true")
-     (assert-entails-equal (entails '(((indep incon baz) ()))) t "Entails Independence Left Rule (indepL) Test (Premise A - End)"))) ; Should now pass
+     (assert-entails-equal (entails sequent) t "Entails Independence Left Rule (indepL) Test (Premise A)")))
 
 (defun test-entails-independence-l-premise-true-b ()
   (let ((sequent '(((indep baz incon) ()))))  ; 'incon' is refutable, order swapped
-     (assert-entails-equal (entails sequent) nil "Entails Independence Left Rule (indepL) Test (Premise B - Start) - Should be nil before rule application")
      (assert-entails-equal (entails '((incon) ())) t "Premise (incon entails) should be true")
-     (assert-entails-equal (entails '(((indep baz incon) ()))) t "Entails Independence Left Rule (indepL) Test (Premise B - End)"))) ; Should now pass
+     (assert-entails-equal (entails sequent) t "Entails Independence Left Rule (indepL) Test (Premise B)")))
 
 
 (defun test-entails-dependence-r-premise-true ()
   (let ((sequent '(() (dep con con)))) ; Both premises are 'con', which is provable
-     (assert-entails-equal (entails sequent) nil "Entails Dependence Right Rule (depR) Test (Start) - Should be nil before rule application")
      (assert-entails-equal (entails '(() con)) t "Premise (entails con) should be true")
-     (assert-entails-equal (entails '(() (dep con con))) t "Entails Dependence Right Rule (depR) Test (End)"))) ; Should now pass
+     (assert-entails-equal (entails sequent) t "Entails Dependence Right Rule (depR) Test")))
 
 (defun test-entails-dependence-l-premise-true ()
   (let ((sequent '(((dep incon incon) ())))) ; Both premises are 'incon', which is refutable
-     (assert-entails-equal (entails sequent) nil "Entails Dependence Left Rule (depL) Test (Start) - Should be nil before rule application")
      (assert-entails-equal (entails '((incon) ())) t "Premise (incon entails) should be true")
-     (assert-entails-equal (entails '(((dep incon incon) ()))) t "Entails Dependence Left Rule (depL) Test (End)"))) ; Should now pass
+     (assert-entails-equal (entails sequent) t "Entails Dependence Left Rule (depL) Test")))
 
 
 (defun test-entails-non-entailment ()

@@ -9,6 +9,7 @@
     }
   ],
   "associated_tools": [
-    "pre_commit_instructions"
+    "pre_commit_instructions",
+    "code_linter"
   ]
 }

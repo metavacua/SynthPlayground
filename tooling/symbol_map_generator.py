@@ -27,6 +27,11 @@ import json
 import glob
 import subprocess
 import ast
+import sys
+
+# Add the root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.file_system_utils import find_files
 
 
 def has_ctags():
@@ -85,15 +90,8 @@ def generate_symbols_with_ast(root_dir="."):
     print("Falling back to AST-based symbol generation for Python files...")
     symbols = []
 
-    for filepath in glob.glob(os.path.join(root_dir, "**", "*.py"), recursive=True):
-        path_components = filepath.split(os.sep)
-        if (
-            "node_modules" in path_components
-            or "test" in path_components
-            or "tests" in path_components
-        ):
-            continue
-
+    for rel_filepath in find_files("*.py", base_dir=root_dir):
+        filepath = os.path.join(root_dir, rel_filepath)
         try:
             with open(filepath, "r") as f:
                 content = f.read()
@@ -102,6 +100,7 @@ def generate_symbols_with_ast(root_dir="."):
 
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef) or isinstance(node, ast.ClassDef):
+                    docstring = ast.get_docstring(node)
                     symbol_entry = {
                         "_type": "tag",
                         "name": node.name,
@@ -111,6 +110,7 @@ def generate_symbols_with_ast(root_dir="."):
                         "kind": (
                             "function" if isinstance(node, ast.FunctionDef) else "class"
                         ),
+                        "docstring": docstring,
                     }
                     symbols.append(symbol_entry)
         except Exception as e:

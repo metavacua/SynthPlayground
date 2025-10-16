@@ -4,6 +4,7 @@
     "ORIENTING",
     "PLANNING",
     "RESEARCHING",
+    "AWAITING_RESULT",
     "EXECUTING",
     "GENERATING_CODE",
     "RUNNING_TESTS",
@@ -47,13 +48,28 @@
     },
     {
       "source": "RESEARCHING",
-      "dest": "EXECUTING",
-      "trigger": "research_plan_validated"
+      "dest": "AWAITING_RESULT",
+      "trigger": "research_started"
     },
     {
       "source": "RESEARCHING",
       "dest": "ERROR",
       "trigger": "research_failed"
+    },
+    {
+      "source": "AWAITING_RESULT",
+      "dest": "AWAITING_RESULT",
+      "trigger": "wait"
+    },
+    {
+      "source": "AWAITING_RESULT",
+      "dest": "PLANNING",
+      "trigger": "result_ready"
+    },
+    {
+        "source": "AWAITING_RESULT",
+        "dest": "ERROR",
+        "trigger": "result_failed"
     },
     {
       "source": "EXECUTING",
@@ -104,6 +120,11 @@
       "source": "FINALIZING",
       "dest": "ERROR",
       "trigger": "finalization_failed"
+    },
+    {
+      "source": "ERROR",
+      "dest": "ORIENTING",
+      "trigger": "reorient"
     }
   ]
 }

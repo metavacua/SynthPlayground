@@ -1,3 +1,22 @@
+"""
+This script provides a command-line interface (CLI) for managing the Finite
+Development Cycle (FDC).
+
+The FDC is a structured workflow for agent-driven software development. This CLI
+is the primary human interface for interacting with that cycle, providing
+commands to:
+- **start:** Initiates a new development task, triggering the "Advanced
+  Orientation and Research Protocol" (AORP) to ensure the agent is fully
+  contextualized.
+- **close:** Formally concludes a task, creating a post-mortem template for
+  analysis and lesson-learning.
+- **validate:** Checks a given plan file for both syntactic and semantic
+  correctness against the FDC's governing Finite State Machine (FSM). This
+  ensures that a plan is executable and will not violate protocol.
+- **analyze:** Examines a plan to determine its computational complexity (e.g.,
+  Constant, Polynomial, Exponential) and its modality (Read-Only vs.
+  Read-Write), providing insight into the plan's potential impact.
+"""
 import argparse
 import datetime
 import json
@@ -5,6 +24,10 @@ import os
 import shutil
 import sys
 import uuid
+
+# Add the root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.file_system_utils import find_files
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -27,6 +50,8 @@ ACTION_TYPE_MAP = {
     "rename_file": "move_op",
     "run_in_bash_session": "tool_exec",
     "for_each_file": "loop_op",
+    "define_set_of_names": "define_names_op",
+    "define_diagonalization_function": "define_diag_op",
 }
 
 # --- CLI Subcommands & Helpers ---
@@ -225,13 +250,7 @@ def validate_plan(plan_filepath):
         sys.exit(1)
 
     # Initialize the simulated file system with the actual state of the repository
-    simulated_fs = set()
-    for root, dirs, files in os.walk("."):
-        # Exclude .git directory from the walk
-        if ".git" in dirs:
-            dirs.remove(".git")
-        for name in files:
-            simulated_fs.add(os.path.join(root, name).replace("./", ""))
+    simulated_fs = set(find_files("*"))
 
     print(f"Starting validation with {len(simulated_fs)} files pre-loaded...")
     final_state, _, _ = _validate_plan_recursive(
@@ -248,7 +267,7 @@ def validate_plan(plan_filepath):
         sys.exit(1)
 
 
-def analyze_plan(plan_filepath):
+def analyze_plan(plan_filepath, return_results=False):
     """Analyzes a plan file to determine its complexity class and modality."""
     try:
         with open(plan_filepath, "r") as f:
@@ -266,11 +285,14 @@ def analyze_plan(plan_filepath):
             loop_indents.append(indent)
 
     if not loop_indents:
-        complexity = "Constant (O(1))"
+        complexity_class = "P"
+        complexity_string = "Constant (O(1))"
     elif max(loop_indents) > min(loop_indents):
-        complexity = "Exponential (EXPTIME-Class)"
+        complexity_class = "EXP"
+        complexity_string = "Exponential (EXPTIME-Class)"
     else:
-        complexity = "Polynomial (P-Class)"
+        complexity_class = "P"
+        complexity_string = "Polynomial (P-Class)"
 
     # --- Modality Analysis ---
     has_write_op = False
@@ -284,8 +306,11 @@ def analyze_plan(plan_filepath):
 
     modality = "Construction (Read-Write)" if has_write_op else "Analysis (Read-Only)"
 
+    if return_results:
+        return {"complexity_class": complexity_class, "modality": modality}
+
     print("Plan Analysis Results:")
-    print(f"  - Complexity: {complexity}")
+    print(f"  - Complexity: {complexity_string}")
     print(f"  - Modality:   {modality}")
 
 
@@ -313,10 +338,11 @@ def start_task(task_id):
     print("\n--- L2: Repository State Synchronization ---")
     try:
         kc_path = os.path.join(ROOT_DIR, "knowledge_core")
-        artifacts = [f for f in os.listdir(kc_path) if os.path.isfile(os.path.join(kc_path, f)) and f != 'agent_meta.json']
+        artifacts = find_files("*", base_dir=kc_path)
+        artifacts = [f for f in artifacts if os.path.basename(f) != 'agent_meta.json']
         print("Found knowledge_core artifacts:")
         for artifact in artifacts:
-            print(f"- {artifact}")
+            print(f"- {os.path.basename(artifact)}")
     except FileNotFoundError as e:
         print(f"Error during L2: Could not list knowledge_core directory. {e}", file=sys.stderr)
         sys.exit(1)

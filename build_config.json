@@ -1,15 +1,42 @@
 {
   "targets": {
+    "install": {
+      "type": "command",
+      "command": "pip install -r requirements.txt",
+      "description": "Installs Python dependencies from requirements.txt."
+    },
+    "format": {
+      "type": "command",
+      "command": "black .",
+      "description": "Formats all Python code using the Black code formatter."
+    },
+    "lint": {
+      "type": "command",
+      "command": "flake8 .",
+      "description": "Lints all Python code using flake8."
+    },
+    "test": {
+      "type": "command",
+      "command": "python3 -m unittest discover -v .",
+      "description": "Runs all unit tests in the repository."
+    },
     "docs": {
-      "output": "knowledge_core/SYSTEM_DOCUMENTATION.md",
-      "compiler": "tooling/doc_generator.py",
-      "sources": [
-        "tooling/",
-        "utils/"
-      ],
-      "description": "Generates system documentation from Python source files."
+      "type": "command",
+      "command": "python3 tooling/doc_builder.py --format system",
+      "description": "Generates detailed system documentation."
+    },
+    "readme": {
+      "type": "command",
+      "command": "python3 tooling/doc_builder.py --format readme",
+      "description": "Generates the root README.md file."
+    },
+    "pages": {
+      "type": "command",
+      "command": "python3 tooling/doc_builder.py --format pages",
+      "description": "Generates index.html for GitHub Pages."
     },
     "security": {
+      "type": "compiler",
       "output": "SECURITY.md",
       "compiler": "tooling/protocol_compiler.py",
       "sources": [
@@ -21,26 +48,27 @@
       "description": "Compiles security protocols into SECURITY.md."
     },
     "agents": {
+      "type": "compiler",
       "output": "AGENTS.md",
       "compiler": "tooling/hierarchical_compiler.py",
       "sources": [
-        "protocols/",
-        "core/protocols/",
-        "compliance/protocols/"
+        "protocols/"
       ],
       "description": "Recursively compiles all AGENTS.md files."
     },
-    "readme": {
-      "output": "README.md",
-      "compiler": "tooling/readme_generator.py",
-      "sources": [
-        "AGENTS.md"
-      ],
-      "description": "Generates README.md from AGENTS.md."
-    },
     "audit": {
-      "compiler": "tooling/protocol_auditor.py",
-      "description": "Runs the protocol auditor to check for compliance."
+      "type": "command",
+      "command": "python3 tooling/auditor.py all",
+      "description": "Runs all unified audits (protocols, plans, docs)."
+    },
+    "clean": {
+        "type": "command",
+        "command": "rm -f AGENTS.md README.md SECURITY.md knowledge_core/SYSTEM_DOCUMENTATION.md index.html",
+        "description": "Removes all compiled protocol and documentation artifacts."
     }
+  },
+  "build_groups": {
+    "all": ["docs", "security", "agents", "readme", "pages"],
+    "quality": ["format", "lint", "test"]
   }
 }

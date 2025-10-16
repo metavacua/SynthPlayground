@@ -203,7 +203,8 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
     }
   ],
   "associated_tools": [
-    "pre_commit_instructions"
+    "pre_commit_instructions",
+    "code_linter"
   ]
 }
 ```

@@ -1,95 +1,60 @@
 """
-A unified, constraint-based interface for all research and data-gathering operations.
-
-This script abstracts the various methods an agent might use to gather information
-(reading local files, accessing the web, querying a database) into a single,
-standardized function: `execute_research_protocol`. It is a core component of
-the Advanced Orientation and Research Protocol (AORP), providing the mechanism
-by which the agent fulfills the requirements of each orientation level (L1-L4).
-
-The function operates on a `constraints` dictionary, which specifies the target,
-scope, and other parameters of the research task. This design allows the calling
-orchestrator (e.g., `master_control.py`) to request information without needing
-to know the underlying implementation details of how that information is fetched.
-
-This script is designed to be executed by a system that has pre-loaded the
-following native tools into the execution environment:
-- `read_file(filepath: str) -> str`
-- `list_files(path: str = ".") -> list[str]`
-- `google_search(query: str) -> str`
-- `view_text_website(url: str) -> str`
+This module contains the logic for executing research tasks based on a set of
+constraints. It acts as a dispatcher, calling the appropriate tool (e.g.,
+read_file, google_search) based on the specified target and scope.
 """
+import time
 
-from typing import Dict, Any
-from tooling.knowledge_integrator import run_knowledge_integration
+# These tools are expected to be available in the global scope where this
+# module is executed, injected by the agent's runtime environment.
+# We define them here as placeholders to avoid linting errors.
+read_file = lambda filepath: None
+list_files = lambda path: None
+google_search = lambda query: None
+view_text_website = lambda url: None
 
 
-def execute_research_protocol(constraints: Dict[str, Any], tools: Dict[str, Any]) -> str:
+def execute_research_protocol(constraints: dict) -> str:
     """
-    Executes a research task based on a dictionary of constraints.
-
-    This function delegates to native, pre-loaded tools based on the specified
-    target and scope.
+    Executes a research task based on a provided constraints dictionary.
 
     Args:
-        constraints: A dictionary specifying the operational parameters.
-            - target: 'local_filesystem', 'external_web', 'external_repository', or 'knowledge_graph'.
-            - scope: 'file', 'directory', 'narrow', 'broad', or 'enrich'.
-            - path: The file or directory path for local filesystem operations.
-            - query: The search term for web research.
-            - url: The specific URL for direct web access.
-            - input_graph_path: Path to the source knowledge graph.
-            - output_graph_path: Path to save the enriched knowledge graph.
+        constraints (dict): A dictionary specifying the research target,
+                            scope, and other parameters.
 
     Returns:
-        A string containing the result of the research operation.
+        str: The result of the research action, or an error message.
     """
     target = constraints.get("target")
-    scope = constraints.get("scope")
-    path = constraints.get("path")
-    query = constraints.get("query")
-    url = constraints.get("url")
 
-    # Level 1: Read a local file
-    if target == "local_filesystem" and scope == "file":
+    if target == "local_filesystem":
+        scope = constraints.get("scope")
+        path = constraints.get("path")
         if not path:
             return "Error: 'path' not specified for local file research."
-        # Assumes `read_file` is available in the execution environment
-        return tools["read_file"](filepath=path)
+        if scope == "file":
+            return read_file(filepath=path)
+        elif scope == "directory":
+            files = list_files(path=path)
+            return "\n".join(files)
 
-    # Level 2: List a local directory
-    elif target == "local_filesystem" and scope == "directory":
-        # Assumes `list_files` is available in the execution environment
-        return "\n".join(tools["list_files"](path=path or "."))
+    elif target == "external_web":
+        scope = constraints.get("scope")
+        if scope == "narrow":
+            query = constraints.get("query")
+            if not query:
+                return "Error: 'query' not specified for narrow web search."
+            return google_search(query=query)
+        elif scope == "broad":
+            url = constraints.get("url")
+            if not url:
+                return "Error: 'url' not specified for broad web research."
+            return view_text_website(url=url)
 
-    # Level 3: Targeted web search
-    elif target == "external_web" and scope == "narrow":
-        if not query:
-            return "Error: 'query' not specified for narrow web research."
-        # Assumes `google_search` is available in the execution environment
-        return tools["google_search"](query=query)
-
-    # Level 4: Broad web research (fetch content from a specific URL)
-    elif target == "external_web" and scope == "broad":
-        if not url:
-            return "Error: 'url' not specified for broad web research."
-        # Assumes `view_text_website` is available in the execution environment
-        return tools["view_text_website"](url=url)
-
-    # Level 5: Fetch a file from a specific URL (e.g., from a Git repo)
     elif target == "external_repository":
+        url = constraints.get("url")
         if not url:
             return "Error: 'url' not specified for external repository research."
-        # Assumes `view_text_website` is available in the execution environment
-        return tools["view_text_website"](url=url)
+        return view_text_website(url=url)
 
-    # New Target: Knowledge Graph Enrichment
-    elif target == "knowledge_graph" and scope == "enrich":
-        input_path = constraints.get("input_graph_path", "knowledge_core/protocols.ttl")
-        output_path = constraints.get(
-            "output_graph_path", "knowledge_core/enriched_protocols.ttl"
-        )
-        return run_knowledge_integration(input_path, output_path)
-
-    else:
-        return "Error: The provided constraints do not map to a recognized research protocol."
+    return "Error: The provided constraints do not map to a recognized research protocol."

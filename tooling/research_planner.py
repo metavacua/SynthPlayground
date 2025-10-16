@@ -1,66 +1,74 @@
 """
-Generates a structured, executable plan for conducting deep research tasks.
-
-This script provides a standardized, FSM-compliant workflow for the agent when
-it needs to perform in-depth research on a complex topic. The `plan_deep_research`
-function creates a plan file that is not just a template, but a formal,
-verifiable artifact that can be executed by the `master_control.py` orchestrator.
-
-The generated plan adheres to the state transitions defined in `research_fsm.json`,
-guiding the agent through the phases of GATHERING, SYNTHESIZING, and REPORTING.
+This module is responsible for generating a formal, FSM-compliant research plan
+for a given topic. The output is a string that can be executed by the agent's
+master controller.
 """
+import re
 
-import sys
-
-
-def plan_deep_research(topic: str) -> str:
+def plan_deep_research(topic: str, research_id: str) -> str:
     """
-    Generates a structured, FSM-compliant executable plan for deep research.
-
-    This function creates a plan that guides an agent through a research
-    workflow. The plan is designed to be validated by `fdc_cli.py` against
-    the `tooling/research_fsm.json` definition.
+    Generates a multi-step, FSM-compliant plan for conducting deep research
+    using the official project templates.
 
     Args:
-        topic: The research topic to be investigated.
+        topic (str): The research topic.
+        research_id (str): A unique ID for this research task.
 
     Returns:
-        A string containing the executable research plan.
+        str: A string containing the executable plan.
     """
-    # Sanitize the topic to create safe filenames and task IDs
-    safe_topic = "".join(
-        c for c in topic.replace(" ", "_") if c.isalnum() or c in ("-", "_")
-    ).lower()
-    report_filename = f"research_report_{safe_topic}.md"
-    task_id = f"research-{safe_topic}"
+    plan_file = f"research/research_plan_{research_id}.md"
+    report_file = f"research/research_report_{research_id}.md"
 
-    # This template creates a clean, 4-step plan that the current executor can parse.
-    plan_template = f"""\
-# Auto-Generated Deep Research Plan
+    # 1. Load the plan template
+    with open("research/research_plan.md", "r") as f:
+        plan_template = f.read()
+
+    # 2. Populate the plan template
+    plan_content = plan_template.replace("[Topic]", topic)
+    plan_content = plan_content.replace("[RESEARCH_ID]", research_id)
+    plan_content = plan_content.replace(
+        "A clear, one-sentence statement of what this research aims to achieve.",
+        f"To produce a comprehensive research report on the topic of '{topic}'."
+    )
+
+    # 3. Load the report template
+    with open("research/research_report_template.md", "r") as f:
+        report_template = f.read()
+
+    # 4. Populate the report template
+    report_content = report_template.replace("[Topic]", topic)
+    report_content = report_content.replace("[RESEARCH_ID]", research_id)
+
+
+    plan = f"""
 # FSM: tooling/research_fsm.json
+# ---
+# This plan outlines the process for conducting deep research on the topic:
+# '{topic}' using Research ID: {research_id}
+# ---
 
-# 1. Set the plan, moving from IDLE to GATHERING
-set_plan This is the research plan for the topic: '{topic}'.
+# Step 1: Set the overall plan for the user.
+set_plan This is the research plan for '{topic}'. I will first create the formal plan and report documents, then proceed with the research.
 
-# 2. Complete the interactive GATHERING phase, moving to SYNTHESIZING
+# Step 2: Create the formal research plan document.
+create_file_with_block {plan_file}
+{plan_content}
+
+# Step 3: Create the placeholder research report document.
+create_file_with_block {report_file}
+{report_content}
+
+# Step 4: Inform the user that the setup is complete and research is starting.
+message_user The research plan and report structure for '{topic}' have been created. I am now proceeding with the information gathering phase.
+
+# Step 5: Mark the planning step as complete.
 plan_step_complete
 
-# 3. Create the report file, moving from SYNTHESIZING to REPORTING
-create_file_with_block {report_filename}
+# Step 6: (This is where the agent would begin executing the actual research steps,
+# like using google_search, reading files, etc. This plan only covers the setup.)
 
-# 4. Close the task, moving from REPORTING to DONE
-run_in_bash_session python3 tooling/fdc_cli.py close --task-id "{task_id}"
+# Step 7: Submit the generated research documents.
+submit
 """
-    return plan_template.strip()
-
-
-if __name__ == "__main__":
-    # Example usage for testing
-    if len(sys.argv) > 1:
-        topic_arg = sys.argv[1]
-    else:
-        topic_arg = "The role of Pushdown Automata in ensuring decidability"
-
-    print(f"--- Generating Research Plan for: '{topic_arg}' ---")
-    plan = plan_deep_research(topic=topic_arg)
-    print(plan)
+    return plan.strip()
