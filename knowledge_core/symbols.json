@@ -3704,7 +3704,7 @@
       "name": "_load_plan_registry",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 51,
+      "line": 52,
       "kind": "function",
       "docstring": "Loads the plan registry, returning an empty dict if it doesn't exist or is invalid."
     },
@@ -3713,7 +3713,7 @@
       "name": "_get_log_context",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 62,
+      "line": 63,
       "kind": "function",
       "docstring": "Creates a context dictionary for logging from the agent's state."
     },
@@ -3722,7 +3722,7 @@
       "name": "MasterControlGraph",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 76,
+      "line": 77,
       "kind": "class",
       "docstring": "A Finite State Machine (FSM) that enforces the agent's protocol.\nThis graph reads a state definition and orchestrates the agent's workflow,\nensuring that all protocol steps are followed in the correct order."
     },
@@ -3731,7 +3731,7 @@
       "name": "__init__",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 83,
+      "line": 84,
       "kind": "function",
       "docstring": null
     },
@@ -3740,7 +3740,7 @@
       "name": "get_trigger",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 88,
+      "line": 89,
       "kind": "function",
       "docstring": "Finds a trigger in the FSM definition for a transition from a source\nto a destination state. This is a helper to avoid hardcoding trigger\nstrings in the state handlers."
     },
@@ -3749,7 +3749,7 @@
       "name": "do_orientation",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 104,
+      "line": 105,
       "kind": "function",
       "docstring": "Executes orientation, including analyzing the last post-mortem and scanning the filesystem."
     },
@@ -3758,7 +3758,7 @@
       "name": "do_planning",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 162,
+      "line": 163,
       "kind": "function",
       "docstring": "Validates a given plan, parses it, and initializes the plan stack."
     },
@@ -3767,7 +3767,7 @@
       "name": "_validate_plan_with_cli",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 207,
+      "line": 208,
       "kind": "function",
       "docstring": "Validates a plan by writing it to a temporary file and using the fdc_cli.py script."
     },
@@ -3776,25 +3776,16 @@
       "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 259,
+      "line": 264,
       "kind": "function",
-      "docstring": "Validates a plan against a specific model's FSM."
-    },
-    {
-      "_type": "tag",
-      "name": "validate_plan_for_model",
-      "path": "./tooling/master_control.py",
-      "language": "Python",
-      "line": 313,
-      "kind": "function",
-      "docstring": "Validates a plan against a specific model's FSM."
+      "docstring": "Validates a plan against a specific CSDC model using the LBAValidator."
     },
     {
       "_type": "tag",
       "name": "do_researching",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 367,
+      "line": 281,
       "kind": "function",
       "docstring": "Launches the background research process."
     },
@@ -3803,7 +3794,7 @@
       "name": "do_awaiting_result",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 390,
+      "line": 304,
       "kind": "function",
       "docstring": "Checks for the result of the background research process."
     },
@@ -3812,7 +3803,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 424,
+      "line": 338,
       "kind": "function",
       "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
     },
@@ -3821,7 +3812,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 435,
+      "line": 349,
       "kind": "function",
       "docstring": "Processes the result of a step and advances the execution state."
     },
@@ -3830,7 +3821,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 479,
+      "line": 393,
       "kind": "function",
       "docstring": "Handles the code generation state."
     },
@@ -3839,7 +3830,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 488,
+      "line": 402,
       "kind": "function",
       "docstring": "Handles the test execution state."
     },
@@ -3848,7 +3839,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 498,
+      "line": 412,
       "kind": "function",
       "docstring": "Handles the debugging state."
     },
@@ -3857,7 +3848,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 507,
+      "line": 421,
       "kind": "function",
       "docstring": "Handles the finalization of the task, guiding the agent through\nthe structured post-mortem process."
     },
@@ -4094,6 +4085,24 @@
       "line": 111,
       "kind": "function",
       "docstring": "Runs all environmental probes and prints a summary report."
+    },
+    {
+      "_type": "tag",
+      "name": "LBAValidator",
+      "path": "./tooling/lba_validator.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "class",
+      "docstring": "A validator that uses LBA principles to enforce CSDC rules."
+    },
+    {
+      "_type": "tag",
+      "name": "validate",
+      "path": "./tooling/lba_validator.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function",
+      "docstring": "Validates a plan against a given CSDC model.\n\nArgs:\n    plan_content: The string content of the plan.\n    model: The CSDC model to validate against ('A' or 'B').\n\nReturns:\n    A tuple containing a boolean indicating validity and a string with an error message."
     },
     {
       "_type": "tag",
