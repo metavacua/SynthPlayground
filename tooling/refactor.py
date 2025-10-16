@@ -109,8 +109,6 @@ def main():
         if args.old_name not in original_content:
             continue
 
-        new_content = original_content.replace(args.old_name, args.new_name)
-
         diff_content = f"""\
 {original_content}
 """

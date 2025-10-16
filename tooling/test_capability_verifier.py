@@ -1,7 +1,7 @@
 import unittest
 import os
 import shutil
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch, MagicMock
 from tooling.capability_verifier import main as capability_verifier_main
 
 

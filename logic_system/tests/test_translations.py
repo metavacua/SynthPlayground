@@ -15,7 +15,6 @@ from logic_system.src.sequents import Sequent
 from logic_system.src.ill import (
     contraction as ill_contraction,
     ILLSequent,
-    axiom as ill_axiom,
 )
 from logic_system.src import lj
 from logic_system.src.translations import (

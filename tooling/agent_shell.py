@@ -19,7 +19,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from tooling.master_control import MasterControlGraph
 from tooling.state import AgentState
-from tooling.filesystem_lister import list_all_files_and_dirs
 from utils.logger import Logger
 
 
@@ -45,7 +44,6 @@ def run_agent_loop(task_description: str, tools: dict, model: str = None):
     schema_path = os.path.join(os.path.dirname(__file__), "..", "LOGGING_SCHEMA.md")
     logger = Logger(schema_path=schema_path)
     mcg = MasterControlGraph()
-    planning_attempts = 0
 
     print(f"--- Starting Agent Task: {task_description} ({task_id}) ---")
     if model:

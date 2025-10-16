@@ -52,7 +52,7 @@ class TestSelfImprovement(unittest.TestCase):
         with patch(
             "main.diagonalization",
             side_effect=[initial_state_hash, next_state_hash, next_state_hash],
-        ) as mock_diag:
+        ):
             process_b = ProcessB(system_state)
 
             # The initial quality should be 1.
@@ -80,7 +80,7 @@ class TestSelfImprovement(unittest.TestCase):
 
         with patch(
             "main.diagonalization", side_effect=[initial_state_hash, next_state_hash]
-        ) as mock_diag:
+        ):
             process_b = ProcessB(system_state)
 
             # Initial quality should be 2.

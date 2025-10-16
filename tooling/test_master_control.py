@@ -136,11 +136,7 @@ class TestMasterControlRedesigned(unittest.TestCase):
         shutil.rmtree(self.test_dir)
 
     @patch("tooling.master_control.subprocess.run")
-    @patch(
-        "tooling.master_control.execute_research_protocol",
-        return_value="Mocked Research Data",
-    )
-    def test_do_orientation(self, mock_research, mock_subprocess):
+    def test_do_orientation(self, mock_subprocess):
         mock_subprocess.return_value = subprocess.CompletedProcess(
             args=[], returncode=0, stdout="mocked output", stderr=""
         )

@@ -1,8 +1,7 @@
 import unittest
 import os
 import shutil
-import json
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch, call
 from tooling.hierarchical_compiler import (
     find_protocol_dirs,
     generate_summary,

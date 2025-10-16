@@ -1,6 +1,5 @@
-from . import lj
-from . import lk
 from . import ill
+from . import lk
 from .proof import ProofTree, Rule
 from .formulas import (
     Formula,
@@ -9,14 +8,11 @@ from .formulas import (
     Or,
     Implies,
     Not,
-    Tensor,
-    Par,
     LinImplies,
     OfCourse,
     With,
     Plus,
 )
-from .sequents import Sequent
 from .synthesizer import Synthesizer
 from collections import Counter
 

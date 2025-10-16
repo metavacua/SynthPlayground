@@ -1,9 +1,7 @@
 import unittest
-from collections import Counter
 from logic_system.src.formulas import Prop, LinImplies, OfCourse, Tensor
-from logic_system.src.ill import ILLSequent, axiom
+from logic_system.src.ill import ILLSequent
 from logic_system.src.synthesizer import Synthesizer
-from logic_system.src.proof import ProofTree
 
 
 class TestSynthesis(unittest.TestCase):

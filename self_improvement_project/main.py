@@ -86,9 +86,9 @@ def main():
         print(f"  Process A generated: {new_element[:10]}...")
 
         if process_b.run(new_element):
-            print(f"  Process B integrated the new element.")
+            print("  Process B integrated the new element.")
         else:
-            print(f"  Process B rejected the new element.")
+            print("  Process B rejected the new element.")
         print(f"  System state after B: {system_state}")
         print("-" * 20)
 

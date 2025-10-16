@@ -2,7 +2,7 @@
 This script serves as the command-line executor for `.aura` files.
 
 It bridges the gap between the high-level Aura scripting language and the
-agent's underlying Python-based toolset. The executor is responsible for:
+agent's underlying Python-based toolset. It is responsible for:
 1.  Parsing the `.aura` source code using the lexer and parser from the
     `aura_lang` package.
 2.  Setting up an execution environment for the interpreter.
@@ -19,7 +19,6 @@ import argparse
 import sys
 from pathlib import Path
 import subprocess
-import importlib
 
 # Add the parent directory to the path to allow imports from aura_lang
 sys.path.append(str(Path(__file__).resolve().parent.parent))
@@ -103,8 +102,8 @@ def main():
         sys.exit(1)
 
     print(f"Executing Aura script: {args.filepath}")
-    l = Lexer(source_code)
-    p = Parser(l)
+    lexer = Lexer(source_code)
+    p = Parser(lexer)
     program = p.parse_program()
 
     if p.errors:

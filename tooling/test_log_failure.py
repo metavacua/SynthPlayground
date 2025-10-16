@@ -1,8 +1,7 @@
 import unittest
 import os
-import json
 import shutil
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from tooling.log_failure import log_catastrophic_failure
 
 

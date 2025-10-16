@@ -1,8 +1,5 @@
-from aura_lang.lexer import Lexer, Token
 from aura_lang.ast import (
     Program,
-    Statement,
-    Expression,
     LetStatement,
     ReturnStatement,
     ExpressionStatement,
@@ -17,7 +14,6 @@ from aura_lang.ast import (
     ForStatement,
     ListLiteral,
     MemberAccess,
-    UseStatement,
     PrintStatement,
 )
 

@@ -21,7 +21,7 @@ def main():
         # Get alphabet sizes
         non_terminals = grammar.get_non_terminals()
         terminals = grammar.get_terminals()
-        print(f"\n1. Alphabet Sizes:")
+        print("\n1. Alphabet Sizes:")
         print(
             f"   - Non-Terminals ({len(non_terminals)}): {sorted(list(non_terminals))}"
         )
@@ -29,7 +29,7 @@ def main():
 
         # Get rule counts
         total_rules = len(grammar.productions)
-        print(f"\n2. Rule Metrics:")
+        print("\n2. Rule Metrics:")
         print(f"   - Total Production Rules: {total_rules}")
 
         # Calculate average rule length (RHS)

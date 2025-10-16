@@ -1,7 +1,7 @@
 import unittest
 import os
 import shutil
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch, MagicMock
 from tooling.aura_executor import main as aura_main
 
 

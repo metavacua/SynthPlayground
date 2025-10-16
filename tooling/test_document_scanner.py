@@ -3,7 +3,6 @@ import os
 import shutil
 from unittest.mock import patch, MagicMock
 from tooling.document_scanner import scan_documents
-import pypdf
 
 
 class TestDocumentScanner(unittest.TestCase):

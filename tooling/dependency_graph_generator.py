@@ -20,7 +20,6 @@ about the potential impact of its changes.
 
 import os
 import json
-import glob
 import re
 import sys
 
@@ -29,9 +28,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from utils.file_system_utils import find_files
 
 # --- Finder Functions ---
-
-
-from tooling.filesystem_lister import list_all_files_and_dirs
 
 
 def find_dependency_files(root_dir):

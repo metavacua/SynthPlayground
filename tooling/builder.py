@@ -134,9 +134,14 @@ def execute_build(target_name, config):
     except subprocess.CalledProcessError as e:
         print("  - Status:   FAILURE")
         print(f"  - Error:    Build failed with exit code {e.returncode}.")
-        print("  - STDERR:")
-        for line in e.stderr.strip().split("\n"):
-            print(f"    {line}")
+        if e.stdout:
+            print("  - STDOUT:")
+            for line in e.stdout.strip().split("\n"):
+                print(f"    {line}")
+        if e.stderr:
+            print("  - STDERR:")
+            for line in e.stderr.strip().split("\n"):
+                print(f"    {line}")
         raise
 
 

@@ -1,7 +1,6 @@
 import unittest
 import os
 import shutil
-import json
 from tooling.doc_builder import generate_system_docs, generate_readme, generate_pages
 
 

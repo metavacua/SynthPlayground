@@ -2,7 +2,7 @@ import unittest
 import os
 import json
 import shutil
-from tooling.protocol_compiler import compile_protocols, load_schema
+from tooling.protocol_compiler import compile_protocols
 import jsonschema
 
 

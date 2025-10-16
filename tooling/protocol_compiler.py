@@ -25,7 +25,6 @@ making the agent's protocols robust, verifiable, and maintainable.
 """
 
 import os
-import glob
 import json
 import argparse
 import subprocess
@@ -328,7 +327,7 @@ def compile_protocols(
             print("\n--- Knowledge Graph Compilation Failed ---")
             print(f"Error serializing RDF graph: {e}")
 
-    print(f"\n--- Compilation finished for {os.path.basename(target_file)} ---")
+    print(f"--- Compilation finished for {os.path.basename(target_file)} ---")
 
 
 def main_cli():
@@ -386,7 +385,7 @@ def main_cli():
     )
 
     if args.watch:
-        print(f"\n--- Entering Watch Mode ---")
+        print("\n--- Entering Watch Mode ---")
         print(f"Monitoring {args.source_dir} for changes...")
 
         class ProtocolChangeHandler(FileSystemEventHandler):

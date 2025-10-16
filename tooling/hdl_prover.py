@@ -22,14 +22,7 @@ from pathlib import Path
 # Add the parent directory to the path to allow imports
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from logic_system.src.ill import (
-    axiom,
-    tensor_right,
-    tensor_left,
-    lin_implies_right,
-    lin_implies_left,
-)
-from logic_system.src.formulas import Formula, Prop, LinImplies, Tensor
+from logic_system.src.formulas import Prop, LinImplies, Tensor
 from logic_system.src.sequents import Sequent
 
 

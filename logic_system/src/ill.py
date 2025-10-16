@@ -12,7 +12,7 @@ The use of this work is subject to the terms of the BSD license, a copy of
 which is included in this project as ISABELLE_LICENSE.
 """
 
-from typing import Iterable, Optional
+from typing import Iterable
 from collections import Counter
 from .formulas import Formula, Tensor, LinImplies, OfCourse, With, Plus
 from .sequents import Sequent
