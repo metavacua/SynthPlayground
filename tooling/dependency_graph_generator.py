@@ -35,8 +35,9 @@ from tooling.filesystem_lister import list_all_files_and_dirs
 
 def find_dependency_files(root_dir):
     """Finds all package.json and requirements.txt files, excluding node_modules."""
-    package_json_files = [os.path.join(root_dir, f) for f in find_files("package.json", root_dir)]
-    requirements_txt_files = [os.path.join(root_dir, f) for f in find_files("requirements.txt", root_dir)]
+    # find_files already returns paths relative to root_dir, so no join is needed.
+    package_json_files = find_files("package.json", root_dir)
+    requirements_txt_files = find_files("requirements.txt", root_dir)
     return package_json_files, requirements_txt_files
 
 
