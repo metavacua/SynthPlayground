@@ -175,7 +175,7 @@ def _validate_plan_recursive(
 
         if command == "for_each_file":
             loop_depth = len(placeholders) + 1
-            placeholder_key = f"{file{loop_depth}}"
+            placeholder_key = f"{{file{loop_depth}}}"
             dummy_file = f"dummy_file_for_loop_{loop_depth}"
 
             # Find loop body

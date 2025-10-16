@@ -1,0 +1,3 @@
+# This plan executes a constant-time APPL workload.
+run_in_bash_session
+python tooling/appl_runner.py tests/appl/complexity/constant.appl

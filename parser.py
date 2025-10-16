@@ -221,6 +221,8 @@ class Parser:
             raise ValueError(f"Unknown type: {token}")
 
 def parse(s: str) -> Term:
+    # Remove single-line comments
+    s = re.sub(r'//.*', '', s)
     s = s.strip()
     tokens = re.findall(r'::|:|\(|\)|,|=>|->|=|\*|\+|!|\||\b(?:let|in|case|of|inl|inr|fn|unit|Int|String|Bool|State|Action|Goal|Unit|List|Cons|Nil)\b|\w+|"[^"]*"', s)
     tokens = [t for t in tokens if t]
