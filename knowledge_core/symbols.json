@@ -4016,6 +4016,24 @@
     },
     {
       "_type": "tag",
+      "name": "run_appl_file",
+      "path": "./tooling/appl_runner.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Executes an APPL file using the run.py interpreter.\n\nArgs:\n    filepath: The path to the .appl file to execute.\n\nReturns:\n    The output from the APPL interpreter."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/appl_runner.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": "Main function to run the APPL runner from the command line."
+    },
+    {
+      "_type": "tag",
       "name": "PlanContext",
       "path": "./tooling/state.py",
       "language": "Python",
@@ -4970,6 +4988,24 @@
     },
     {
       "_type": "tag",
+      "name": "execute_plan",
+      "path": "./tooling/plan_executor.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "Executes a plan file, simulating the agent's execution loop.\n\nArgs:\n    filepath: The path to the plan file."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/plan_executor.py",
+      "language": "Python",
+      "line": 50,
+      "kind": "function",
+      "docstring": "Main function to run the plan executor from the command line."
+    },
+    {
+      "_type": "tag",
       "name": "find_symbol_definition",
       "path": "./tooling/refactor.py",
       "language": "Python",
@@ -5849,6 +5885,24 @@
       "line": 74,
       "kind": "function",
       "docstring": "Tests that the builder exits on an invalid target name."
+    },
+    {
+      "_type": "tag",
+      "name": "reliable_ls",
+      "path": "./tooling/reliable_ls.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Recursively lists all directories and files under the start_path.\n\nArgs:\n    start_path: The directory to start the traversal from."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/reliable_ls.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": "Main function to run the reliable_ls tool from the command line."
     },
     {
       "_type": "tag",
