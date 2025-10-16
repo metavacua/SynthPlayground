@@ -21,6 +21,8 @@ from tooling.master_control import MasterControlGraph
 from tooling.state import AgentState
 from tooling.filesystem_lister import list_all_files_and_dirs
 from utils.logger import Logger
+from tooling.udc_orchestrator import UDCOrchestrator
+
 def find_fsm_transition(fsm, source_state, trigger):
     """Finds the destination state for a given source and trigger."""
     for transition in fsm["transitions"]:
@@ -162,8 +164,26 @@ def main():
         default=None,
         help="The CSDC model to run the agent under (A or B).",
     )
+    parser.add_argument(
+        "--udc-plan",
+        type=str,
+        default=None,
+        help="Run the UDC orchestrator with the specified plan file.",
+    )
     args = parser.parse_args()
 
+    # If a UDC plan is specified, run the UDC orchestrator directly.
+    if args.udc_plan:
+        print(f"--- Running in UDC Mode with plan: {args.udc_plan} ---")
+        if not os.path.exists(args.udc_plan):
+            print(f"Error: UDC plan file not found at '{args.udc_plan}'")
+            sys.exit(1)
+
+        orchestrator = UDCOrchestrator(plan_path=args.udc_plan)
+        orchestrator.run()
+        return
+
+    # Otherwise, proceed with the normal agent loop.
     task_description = "Perform a basic self-check and greet the user."
     if args.model:
         task_description = f"Execute a self-improvement task under CSDC Model {args.model}."
