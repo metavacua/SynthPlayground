@@ -17,7 +17,6 @@ automation scripts for the agent.
 import argparse
 import sys
 from pathlib import Path
-import subprocess
 import importlib
 
 # Add the parent directory to the path to allow imports from aura_lang
@@ -27,54 +26,51 @@ from aura_lang.lexer import Lexer
 from aura_lang.parser import Parser
 from aura_lang.interpreter import evaluate, Environment, Object, Builtin
 
+# A dictionary to cache imported tool modules
+_TOOL_CACHE = {}
+
 def dynamic_agent_call_tool(tool_name_obj: Object, *args: Object) -> Object:
     """
     Dynamically imports and calls a tool from the 'tooling' directory and wraps the result.
 
-    This function provides the bridge between the Aura scripting environment and the
-    Python-based agent tools. It takes the tool's module name and arguments,
-    runs the tool in a subprocess, and wraps the captured output in an Aura `Object`.
+    This function provides a secure, in-process bridge between the Aura scripting
+    environment and the Python-based agent tools.
 
     Args:
         tool_name_obj: An Aura Object containing the tool's module name (e.g., 'hdl_prover').
-        *args: A variable number of Aura Objects to be passed as string arguments to the tool.
+        *args: A variable number of Aura Objects to be passed as arguments to the tool's main function.
 
     Returns:
-        An Aura `Object` containing the tool's stdout as a string, or an error message.
+        An Aura `Object` containing the tool's return value.
     """
     try:
         tool_name = tool_name_obj.value
-        # Sanitize the tool_name to prevent directory traversal vulnerabilities.
-        if '..' in tool_name or '/' in tool_name:
-            raise ValueError("Invalid tool name format.")
+        # Sanitize the tool_name to prevent directory traversal or other malicious imports.
+        if not tool_name.isidentifier() or tool_name.startswith('_'):
+            raise ValueError(f"Invalid or insecure tool name: '{tool_name}'")
 
-        tool_module_path = Path(__file__).resolve().parent / f"{tool_name}.py"
-        if not tool_module_path.exists():
-            raise ModuleNotFoundError(f"Tool '{tool_name}' not found at '{tool_module_path}'")
+        if tool_name in _TOOL_CACHE:
+            tool_module = _TOOL_CACHE[tool_name]
+        else:
+            # Import the tool module from the 'tooling' directory
+            tool_module = importlib.import_module(f"tooling.{tool_name}")
+            _TOOL_CACHE[tool_name] = tool_module
 
-        unwrapped_args = [str(arg.value) for arg in args]
-        command = [sys.executable, str(tool_module_path)] + unwrapped_args
+        # Assume the tool has a 'main' function
+        if not hasattr(tool_module, "main"):
+            raise AttributeError(f"Tool '{tool_name}' does not have a 'main' function.")
 
-        print(f"[Aura Executor]: Calling tool '{tool_name}' with args: {args}")
-        result = subprocess.run(command, capture_output=True, text=True, check=False)
+        tool_function = getattr(tool_module, "main")
+        unwrapped_args = [arg.value for arg in args]
 
-        if result.returncode != 0:
-            # Return the stderr as the result in case of an error
-            error_output = result.stderr.strip()
-            print(f"Error calling tool '{tool_name}': {error_output}", file=sys.stderr)
-            return Object(f"Error: {error_output}")
+        print(f"[Aura Executor]: Calling tool '{tool_name}' with args: {unwrapped_args}")
+        result = tool_function(*unwrapped_args)
 
-        # Print the captured output for visibility
-        if result.stdout:
-            print(result.stdout.strip())
-        if result.stderr:
-            print(result.stderr.strip(), file=sys.stderr)
+        # Wrap the result in an Aura Object
+        return Object(result)
 
-        # Return the stdout as the result
-        return Object(result.stdout.strip())
-
-    except (ModuleNotFoundError, ValueError) as e:
-        error_msg = f"Error preparing tool '{tool_name}': {e}"
+    except (ModuleNotFoundError, ValueError, AttributeError) as e:
+        error_msg = f"Error preparing or calling tool '{tool_name}': {e}"
         print(error_msg, file=sys.stderr)
         return Object(f"Error: {error_msg}")
     except Exception as e:
@@ -83,22 +79,26 @@ def dynamic_agent_call_tool(tool_name_obj: Object, *args: Object) -> Object:
         return Object(f"Error: {error_msg}")
 
 
-def main():
+def execute_aura_script(filepath: str, tool_env: dict = None) -> Object:
     """
-    Main entry point for the Aura script executor.
-    """
-    parser = argparse.ArgumentParser(description="Execute an Aura script.")
-    parser.add_argument("filepath", type=str, help="The path to the .aura script file.")
-    args = parser.parse_args()
+    Parses and executes an Aura script from a given file.
 
+    Args:
+        filepath: The path to the .aura script file.
+        tool_env: An optional dictionary of pre-injected tools/functions.
+
+    Returns:
+        The final result of the script execution as an Aura Object.
+    """
     try:
-        with open(args.filepath, 'r') as f:
+        with open(filepath, 'r') as f:
             source_code = f.read()
     except FileNotFoundError:
-        print(f"Error: File not found at {args.filepath}", file=sys.stderr)
-        sys.exit(1)
+        print(f"Error: File not found at {filepath}", file=sys.stderr)
+        # In a library context, we should raise an exception, not exit.
+        raise
 
-    print(f"Executing Aura script: {args.filepath}")
+    print(f"Executing Aura script: {filepath}")
     l = Lexer(source_code)
     p = Parser(l)
     program = p.parse_program()
@@ -106,35 +106,50 @@ def main():
     if p.errors:
         for error in p.errors:
             print(f"Parser error: {error}", file=sys.stderr)
-        sys.exit(1)
+        # In a library context, we should raise an exception, not exit.
+        raise ValueError("Aura parsing failed.")
 
     # --- Set up the execution environment ---
-    def builtin_print(*args):
+    def builtin_print(*args: Object):
         """A wrapper for the built-in print function that handles Aura objects."""
-        output = " ".join(str(arg.inspect()) for arg in args)
+        # The interpreter passes Aura Objects, so we need to get their .value
+        output = " ".join(str(arg.value) for arg in args)
         print(output)
         return Object(None)  # print returns null
 
     env = Environment()
-    # Inject the tool-calling and print functions into the Aura environment
+    # Inject the default tool-calling and print functions
     env.set("agent_call_tool", Builtin(dynamic_agent_call_tool))
     env.set("print", Builtin(builtin_print))
 
+    # Allow for overriding or adding tools for testing or other purposes
+    if tool_env:
+        for name, func in tool_env.items():
+            env.set(name, func)
+
     # --- Execute the Program ---
     result = evaluate(program, env)
+    return result
 
-    # Print the final result of the script, if any
-    if result:
-        print(result.inspect())
+def main():
+    """
+    Main command-line entry point for the Aura script executor.
+    """
+    parser = argparse.ArgumentParser(description="Execute an Aura script.")
+    parser.add_argument("filepath", type=str, help="The path to the .aura script file.")
+    args = parser.parse_args()
 
+    try:
+        result = execute_aura_script(args.filepath)
 
-    # HACK: The Aura interpreter is not fully wired up to produce output.
-    # For the purpose of unblocking the test suite, we will print the
-    # expected output directly. This should be fixed in a future task
-    # dedicated to repairing the Aura language tooling.
-    print("Provable")
-    print("Sequent is provable!")
-    print("[Message User]: Integration demo complete!")
+        # Print the final result of the script, if any
+        if result:
+            # The result of evaluate is an Aura Object, we print its primitive value
+            print(f"\nScript Result: {result.value}")
+    except (ValueError, FileNotFoundError) as e:
+        # Exit gracefully if there's a parsing or file error.
+        # The specific error will have already been printed.
+        sys.exit(1)
 
 
 if __name__ == "__main__":

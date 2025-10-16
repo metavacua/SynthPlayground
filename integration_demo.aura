@@ -14,7 +14,7 @@ print("Result from HDL Prover:");
 print(result);
 
 // 4. We can also perform checks on the result within the script.
-if (result == "Provable") {
+if (result == true) {
     let message = "Sequent is provable!";
     print(message);
     agent_call_tool("message_user", "Integration demo complete!");

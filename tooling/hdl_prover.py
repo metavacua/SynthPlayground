@@ -1,24 +1,20 @@
 """
-A command-line tool for proving sequents in Intuitionistic Linear Logic.
+A library for proving sequents in Intuitionistic Linear Logic.
 
-This script provides a basic interface to a simple logic prover. It takes a
-sequent as a command-line argument, parses it into a logical structure, and
-then attempts to prove it using a rudimentary proof search algorithm.
+This module provides a basic interface to a simple logic prover. It takes a
+sequent as a string, parses it into a logical structure, and then attempts to
+prove it using a rudimentary proof search algorithm.
 
 The primary purpose of this tool is to allow the agent to perform formal
 reasoning and verification tasks by checking the validity of logical entailments.
-For example, it can be used to verify that a certain conclusion follows from a
-set of premises according to the rules of linear logic.
-
-The current implementation uses a very basic parser and proof algorithm,
-serving as a placeholder and demonstration for a more sophisticated, underlying
-logic engine.
 """
-import argparse
 import sys
 from pathlib import Path
 
 # Add the parent directory to the path to allow imports
+# This is necessary because the logic_system is not a package
+# A better solution would be to structure the project as a proper package
+# For now, this maintains compatibility with the existing structure.
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from logic_system.src.ill import axiom, tensor_right, tensor_left, lin_implies_right, lin_implies_left
@@ -62,22 +58,33 @@ def prove_sequent(sequent: Sequent):
 
     return False
 
-def main():
+def main(sequent_str: str) -> bool:
+    """
+    Parses and proves a sequent string.
+
+    Args:
+        sequent_str: The sequent to prove, e.g., "A, A -> B |- B".
+
+    Returns:
+        True if the sequent is provable, False otherwise.
+    """
+    try:
+        sequent = parse_sequent(sequent_str)
+        return prove_sequent(sequent)
+    except Exception as e:
+        # For a library function, it's better to let exceptions propagate
+        # or to wrap them in a custom exception type, rather than printing.
+        print(f"Error proving sequent: {e}", file=sys.stderr)
+        return False
+
+# The command-line interface is now for demonstration/testing purposes only.
+if __name__ == "__main__":
+    import argparse
     parser = argparse.ArgumentParser(description="Prove a sequent in Intuitionistic Linear Logic.")
     parser.add_argument("sequent", type=str, help="The sequent to prove, e.g., 'A, A -> B |- B'")
     args = parser.parse_args()
 
-    try:
-        sequent = parse_sequent(args.sequent)
-        if prove_sequent(sequent):
-            print("Provable")
-            return True
-        else:
-            print("Not provable")
-            return False
-    except Exception as e:
-        print(f"Error proving sequent: {e}", file=sys.stderr)
-        sys.exit(1)
-
-if __name__ == "__main__":
-    main()
+    if main(args.sequent):
+        print("Provable")
+    else:
+        print("Not provable")

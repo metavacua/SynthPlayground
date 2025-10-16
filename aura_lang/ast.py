@@ -68,6 +68,10 @@ class IntegerLiteral(Expression):
     def __init__(self, value):
         self.value = value
 
+class BooleanLiteral(Expression):
+    def __init__(self, value):
+        self.value = value
+
 class StringLiteral(Expression):
     def __init__(self, value):
         self.value = value
