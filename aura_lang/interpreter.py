@@ -12,6 +12,7 @@ class Object:
 
 class Integer(Object): pass
 class String(Object): pass
+class Boolean(Object): pass
 class ReturnValue(Object): pass
 
 class Function(Object):
@@ -69,6 +70,7 @@ def evaluate(node, env):
     elif node_type == ast.PrintStatement: return eval_print_statement(node, env)
     elif node_type == ast.IntegerLiteral: return Integer(node.value)
     elif node_type == ast.StringLiteral: return String(node.value)
+    elif node_type == ast.BooleanLiteral: return Boolean(node.value)
     elif node_type == ast.Identifier: return eval_identifier(node, env)
     elif node_type == ast.ListLiteral: return Object(eval_expressions(node.elements, env))
     elif node_type == ast.InfixExpression:
@@ -89,9 +91,15 @@ def evaluate(node, env):
     return None
 
 def eval_program(program, env):
+    result = None  # Initialize result
     for statement in program.statements:
         result = evaluate(statement, env)
-        if isinstance(result, ReturnValue): return result.value
+        if isinstance(result, ReturnValue):
+            return result.value
+    # If the script ends without an expression (e.g. only let statements),
+    # result can be None. We should return a proper Aura Object for consistency.
+    if result is None:
+        return Object(None)
     return result
 
 def eval_block_statement(block, env):
@@ -100,26 +108,41 @@ def eval_block_statement(block, env):
         if isinstance(result, ReturnValue): return result
     return result
 
+def _is_truthy(obj) -> bool:
+    """
+    Determines the truthiness of an Aura object, handling raw Python types as well.
+    - None and False are falsy.
+    - Aura Booleans are evaluated by their value.
+    - Numbers are falsy if 0.
+    - Strings and lists are falsy if empty.
+    - All other objects are truthy.
+    """
+    if obj is None:
+        return False
+    if isinstance(obj, bool): # Handle raw bools that might slip through
+        return obj
+
+    val = obj.value
+    if isinstance(val, bool):
+        return val
+    if val is None:
+        return False
+    if isinstance(val, (int, float)):
+        return val != 0
+    if isinstance(val, (str, list, dict)):
+        return len(val) > 0
+    return True # All other object values are considered truthy
+
 def eval_if_statement(node, env):
     condition_obj = evaluate(node.condition, env)
 
-    # Use Python-like truthiness to evaluate the condition
-    is_truthy = False
-    if hasattr(condition_obj, 'value'):
-        val = condition_obj.value
-        if val is not None and val is not False:
-            # Check for empty collections or zero values
-            if isinstance(val, (int, float)) and val == 0:
-                is_truthy = False
-            elif isinstance(val, (str, list, tuple, dict)) and not val:
-                is_truthy = False
-            else:
-                is_truthy = True
-
-    if is_truthy:
+    if _is_truthy(condition_obj):
         return evaluate(node.consequence, env)
     elif node.alternative:
         return evaluate(node.alternative, env)
+    else:
+        # If there's no 'else' block, an 'if' statement evaluates to null.
+        return Object(None)
 
 def eval_for_statement(node, env):
     iterable_obj = evaluate(node.iterable, env)
@@ -145,26 +168,33 @@ def eval_print_statement(node, env):
 
 def eval_infix_expression(op, left, right):
     """Handles infix operations like +, -, ==, etc."""
-    if not hasattr(left, 'value') or not hasattr(right, 'value'):
-        return Object(False) # Cannot compare objects without a .value
+    # Ensure both left and right are Aura objects and have a .value attribute
+    if not isinstance(left, Object) or not isinstance(right, Object):
+         # This case should ideally not be hit if the parser is correct
+        return Boolean(False)
 
-    l, r = left.value, right.value
+    l_val = left.value
+    r_val = right.value
 
-    # Generic equality checks
+    # Generic equality checks should be handled first and for all types.
     if op == '==':
-        return Object(l == r)
+        return Boolean(l_val == r_val)
     if op == '!=':
-        return Object(l != r)
+        return Boolean(l_val != r_val)
 
-    # Type-specific operations
-    if isinstance(l, int) and isinstance(r, int):
-        if op == '+': return Integer(l + r)
-        if op == '-': return Integer(l - r)
-        if op == '*': return Integer(l * r)
-        if op == '/': return Integer(l // r)
-        return Object(False) # Unsupported operator for integers
+    # Type-specific operations.
+    # Using `type()` is important here to avoid `isinstance(True, int)` being true.
+    if type(l_val) is int and type(r_val) is int:
+        if op == '+': return Integer(l_val + r_val)
+        if op == '-': return Integer(l_val - r_val)
+        if op == '*': return Integer(l_val * r_val)
+        if op == '/': return Integer(l_val // r_val)
+        # Any other operator is invalid for two integers.
+        return Object(None)
 
-    return Object(False) # Unsupported operator for the given types
+    # Add other type-specific operations here in the future (e.g., string concat).
+
+    return Object(None)  # Unsupported operator for the given types
 
 def eval_identifier(node, env):
     return env.get(node.value) or BUILTINS.get(node.value)

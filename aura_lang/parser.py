@@ -2,9 +2,9 @@ from aura_lang.lexer import Lexer, Token
 from aura_lang.ast import (
     Program, Statement, Expression, LetStatement, ReturnStatement,
     ExpressionStatement, Identifier, IntegerLiteral, StringLiteral,
-    InfixExpression, CallExpression, FunctionDefinition, BlockStatement,
-    IfStatement, ForStatement, ListLiteral, MemberAccess, UseStatement,
-    PrintStatement
+    BooleanLiteral, InfixExpression, CallExpression, FunctionDefinition,
+    BlockStatement, IfStatement, ForStatement, ListLiteral, MemberAccess,
+    UseStatement, PrintStatement
 )
 
 # Operator precedence levels
@@ -33,8 +33,12 @@ class Parser:
         self.next_token()
 
         self.prefix_parse_fns = {
-            'ID': self.parse_identifier, 'INTEGER': self.parse_integer_literal,
-            'STRING': self.parse_string_literal, 'LPAREN': self.parse_grouped_expression,
+            'ID': self.parse_identifier,
+            'INTEGER': self.parse_integer_literal,
+            'STRING': self.parse_string_literal,
+            'TRUE': self.parse_boolean,
+            'FALSE': self.parse_boolean,
+            'LPAREN': self.parse_grouped_expression,
             'LBRACKET': self.parse_list_literal,
         }
         self.infix_parse_fns = {
@@ -107,6 +111,7 @@ class Parser:
     def parse_identifier(self): return Identifier(value=self.current_token.value)
     def parse_integer_literal(self): return IntegerLiteral(value=int(self.current_token.value))
     def parse_string_literal(self): return StringLiteral(value=self.current_token.value)
+    def parse_boolean(self): return BooleanLiteral(value=self.current_token.type == 'TRUE')
 
     def parse_grouped_expression(self):
         self.next_token()
