@@ -22,6 +22,9 @@ def list_all_files_and_dirs(root_dir=".", use_gitignore=True):
     item_list = []
     gitignore_patterns = _get_gitignore_patterns(os.path.join(root_dir, ".gitignore")) if use_gitignore else []
 
+    # Always add the root directory representation.
+    item_list.append('./')
+
     for root, dirs, files in os.walk(root_dir, topdown=True):
         # Filter directories in-place to prevent os.walk from traversing them
         if use_gitignore:
@@ -29,28 +32,24 @@ def list_all_files_and_dirs(root_dir=".", use_gitignore=True):
             dirs[:] = []
             for d in original_dirs:
                 dir_path = os.path.join(root, d)
-                rel_dir_path = os.path.relpath(dir_path, root_dir) + "/"
+                rel_dir_path = os.path.normpath(os.path.relpath(dir_path, root_dir)) + "/"
                 if not any(fnmatch.fnmatch(rel_dir_path, p) for p in gitignore_patterns):
                     dirs.append(d)
 
         # Add directories to the list
         for d in dirs:
             dir_path = os.path.join(root, d)
-            item_list.append(os.path.relpath(dir_path, root_dir) + "/")
+            item_list.append(os.path.normpath(os.path.relpath(dir_path, root_dir)) + "/")
 
         # Add files to the list
         for f in files:
             file_path = os.path.join(root, f)
-            rel_file_path = os.path.relpath(file_path, root_dir)
+            rel_file_path = os.path.normpath(os.path.relpath(file_path, root_dir))
             if use_gitignore:
                 if not any(fnmatch.fnmatch(rel_file_path, p) for p in gitignore_patterns):
                     item_list.append(rel_file_path)
             else:
                 item_list.append(rel_file_path)
 
-    # Add the root directory itself if it's not ignored
-    if root_dir == ".":
-        if not use_gitignore or not any(fnmatch.fnmatch("./", p) for p in gitignore_patterns):
-             item_list.append("./")
-
+    # Use a set to remove potential duplicates and then sort for consistent output.
     return sorted(list(set(item_list)))
