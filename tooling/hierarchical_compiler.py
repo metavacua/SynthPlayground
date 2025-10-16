@@ -35,6 +35,7 @@ The compiler operates in two main passes:
 This hierarchical approach allows for both localized, context-specific protocol
 definitions and a holistic, system-wide understanding of the agent's governing rules.
 """
+
 import os
 import sys
 import json
@@ -72,7 +73,9 @@ def find_protocol_dirs(root_dir):
 
     for dirpath, dirnames, _ in os.walk(root_dir):
         # Exclude ignored directories from traversal
-        dirnames[:] = [d for d in dirnames if not any(fnmatch.fnmatch(d, p) for p in dir_patterns)]
+        dirnames[:] = [
+            d for d in dirnames if not any(fnmatch.fnmatch(d, p) for p in dir_patterns)
+        ]
         if PROTOCOLS_DIR_NAME in dirnames:
             proto_dir_path = os.path.join(dirpath, PROTOCOLS_DIR_NAME)
             if proto_dir_path in special_paths:
@@ -113,15 +116,20 @@ def run_readme_generator(source_agents_md):
     command = [
         "python3",
         doc_builder_script,
-        "--format", "readme",
-        "--source-file", source_agents_md,
-        "--output-file", target_readme
+        "--format",
+        "readme",
+        "--source-file",
+        source_agents_md,
+        "--output-file",
+        target_readme,
     ]
 
     print(f"Running README generator for: {source_agents_md}")
     print(f"Command: {' '.join(command)}")
     try:
-        subprocess.run(command, check=True, capture_output=True, text=True, cwd=ROOT_DIR)
+        subprocess.run(
+            command, check=True, capture_output=True, text=True, cwd=ROOT_DIR
+        )
         print(f"Successfully generated {target_readme}")
         return target_readme
     except subprocess.CalledProcessError as e:

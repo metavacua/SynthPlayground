@@ -23,6 +23,7 @@ This centralized builder provides several advantages:
   configuration file.
 - **Discoverability:** The script can list all available targets and groups.
 """
+
 import os
 import json
 import argparse
@@ -100,9 +101,11 @@ def execute_build(target_name, config):
         command, command_str = execute_compiler_target(target_name, target_config)
     elif target_type == "command":
         command, command_str = execute_command_target(target_name, target_config)
-        shell = True # Shell commands run with shell=True
+        shell = True  # Shell commands run with shell=True
     else:
-        raise ValueError(f"Unknown target type '{target_type}' for target '{target_name}'")
+        raise ValueError(
+            f"Unknown target type '{target_type}' for target '{target_name}'"
+        )
 
     print(f"  - Command:  {command_str}")
 

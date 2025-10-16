@@ -2,10 +2,24 @@ from . import lj
 from . import lk
 from . import ill
 from .proof import ProofTree, Rule
-from .formulas import Formula, Prop, And, Or, Implies, Not, Tensor, Par, LinImplies, OfCourse, With, Plus
+from .formulas import (
+    Formula,
+    Prop,
+    And,
+    Or,
+    Implies,
+    Not,
+    Tensor,
+    Par,
+    LinImplies,
+    OfCourse,
+    With,
+    Plus,
+)
 from .sequents import Sequent
 from .synthesizer import Synthesizer
 from collections import Counter
+
 
 def lj_to_lk(lj_proof: ProofTree) -> ProofTree:
     """
@@ -15,10 +29,13 @@ def lj_to_lk(lj_proof: ProofTree) -> ProofTree:
     translated_premises = [lj_to_lk(p) for p in lj_proof.premises]
 
     return ProofTree(
-        conclusion=lk.Sequent(lj_proof.conclusion.antecedent, lj_proof.conclusion.succedent),
+        conclusion=lk.Sequent(
+            lj_proof.conclusion.antecedent, lj_proof.conclusion.succedent
+        ),
         rule=lj_proof.rule,
-        premises=translated_premises
+        premises=translated_premises,
     )
+
 
 def translate_formula_lj_to_ill(formula: Formula) -> Formula:
     """
@@ -26,24 +43,41 @@ def translate_formula_lj_to_ill(formula: Formula) -> Formula:
     using a standard Girard-style translation.
     """
     if isinstance(formula, Prop):
-        return formula # Atoms are translated to themselves
+        return formula  # Atoms are translated to themselves
     elif isinstance(formula, And):
-        return With(translate_formula_lj_to_ill(formula.left), translate_formula_lj_to_ill(formula.right))
+        return With(
+            translate_formula_lj_to_ill(formula.left),
+            translate_formula_lj_to_ill(formula.right),
+        )
     elif isinstance(formula, Or):
-        return Plus(OfCourse(translate_formula_lj_to_ill(formula.left)), OfCourse(translate_formula_lj_to_ill(formula.right)))
+        return Plus(
+            OfCourse(translate_formula_lj_to_ill(formula.left)),
+            OfCourse(translate_formula_lj_to_ill(formula.right)),
+        )
     elif isinstance(formula, Implies):
         # A -> B becomes !(A* -o B*)
-        return OfCourse(LinImplies(OfCourse(translate_formula_lj_to_ill(formula.left)), OfCourse(translate_formula_lj_to_ill(formula.right))))
+        return OfCourse(
+            LinImplies(
+                OfCourse(translate_formula_lj_to_ill(formula.left)),
+                OfCourse(translate_formula_lj_to_ill(formula.right)),
+            )
+        )
     elif isinstance(formula, Not):
         # Not A is A -> bottom, so !(A* -o bottom)
         bottom = Prop("⊥")
-        return OfCourse(LinImplies(OfCourse(translate_formula_lj_to_ill(formula.operand)), OfCourse(bottom)))
+        return OfCourse(
+            LinImplies(
+                OfCourse(translate_formula_lj_to_ill(formula.operand)), OfCourse(bottom)
+            )
+        )
     else:
         raise TypeError(f"Unknown formula type for translation: {type(formula)}")
+
 
 def bang_context(context: Counter) -> Counter:
     """Applies ! to every formula in a context."""
     return Counter({OfCourse(f): c for f, c in context.items()})
+
 
 def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
     """
@@ -70,7 +104,10 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
 
     elif rule_name == "∧-L":
         premise = lj_to_ill_proof(premises[0])
-        formula = And(premises[0].conclusion.antecedent.elements()[0], premises[0].conclusion.antecedent.elements()[1])
+        formula = And(
+            premises[0].conclusion.antecedent.elements()[0],
+            premises[0].conclusion.antecedent.elements()[1],
+        )
         formula_star = translate_formula_lj_to_ill(formula)
         return ill.with_left_1(premise, formula_star)
 
@@ -78,7 +115,9 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
         premise = lj_to_ill_proof(premises[0])
         formula = conclusion.succedent_formula
         formula_star = translate_formula_lj_to_ill(formula)
-        if formula_star.left == translate_formula_lj_to_ill(premises[0].conclusion.succedent_formula):
+        if formula_star.left == translate_formula_lj_to_ill(
+            premises[0].conclusion.succedent_formula
+        ):
             return ill.plus_right_1(premise, formula_star)
         else:
             return ill.plus_right_2(premise, formula_star)
@@ -86,7 +125,10 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
     elif rule_name == "∨-L":
         left_premise = lj_to_ill_proof(premises[0])
         right_premise = lj_to_ill_proof(premises[1])
-        formula = Or(premises[0].conclusion.antecedent.elements()[1], premises[1].conclusion.antecedent.elements()[1])
+        formula = Or(
+            premises[0].conclusion.antecedent.elements()[1],
+            premises[1].conclusion.antecedent.elements()[1],
+        )
         formula_star = translate_formula_lj_to_ill(formula)
         return ill.plus_left(left_premise, right_premise, formula_star)
 
@@ -105,7 +147,14 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
         implication_star = translate_formula_lj_to_ill(implication)
 
         goal_succedent = right_premise.conclusion.succedent_formula
-        goal_antecedent = left_premise.conclusion.antecedent + (right_premise.conclusion.antecedent - Counter([translate_formula_lj_to_ill(implication.right)])) + Counter([implication_star])
+        goal_antecedent = (
+            left_premise.conclusion.antecedent
+            + (
+                right_premise.conclusion.antecedent
+                - Counter([translate_formula_lj_to_ill(implication.right)])
+            )
+            + Counter([implication_star])
+        )
         goal = ill.ILLSequent(goal_antecedent, goal_succedent)
 
         # Use the synthesizer to find the proof
@@ -113,7 +162,13 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
 
     elif rule_name == "¬-L":
         premise = lj_to_ill_proof(premises[0])
-        return ProofTree(conclusion=ill.ILLSequent(premise.conclusion.antecedent, OfCourse(Prop("⊥"))), rule=Rule("¬-L (Translated)"), premises=[premise])
+        return ProofTree(
+            conclusion=ill.ILLSequent(
+                premise.conclusion.antecedent, OfCourse(Prop("⊥"))
+            ),
+            rule=Rule("¬-L (Translated)"),
+            premises=[premise],
+        )
 
     elif rule_name == "¬-R":
         premise = lj_to_ill_proof(premises[0])
@@ -123,7 +178,9 @@ def lj_to_ill_proof(lj_proof: ProofTree) -> ProofTree:
         return ill.of_course_right(proof)
 
     else:
-        raise NotImplementedError(f"Translation for rule '{rule_name}' is not yet implemented.")
+        raise NotImplementedError(
+            f"Translation for rule '{rule_name}' is not yet implemented."
+        )
 
 
 def ill_to_ll(ill_proof: ProofTree) -> ProofTree:
@@ -134,7 +191,9 @@ def ill_to_ll(ill_proof: ProofTree) -> ProofTree:
     translated_premises = [ill_to_ll(p) for p in ill_proof.premises]
 
     return ProofTree(
-        conclusion=lk.Sequent(ill_proof.conclusion.antecedent, ill_proof.conclusion.succedent),
+        conclusion=lk.Sequent(
+            ill_proof.conclusion.antecedent, ill_proof.conclusion.succedent
+        ),
         rule=ill_proof.rule,
-        premises=translated_premises
+        premises=translated_premises,
     )

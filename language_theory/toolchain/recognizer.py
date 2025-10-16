@@ -3,12 +3,16 @@ import sys
 from collections import defaultdict
 from .grammar import Grammar
 
+
 def recognize_right_linear(grammar_productions, start_symbol, input_string):
     memo = {}
+
     def _search(symbol, text, path):
         state = (symbol, tuple(text))
-        if state in memo: return memo[state]
-        if symbol not in grammar_productions: return False
+        if state in memo:
+            return memo[state]
+        if symbol not in grammar_productions:
+            return False
         for rule in grammar_productions[symbol]:
             current_path = path + [f"{symbol} -> {' '.join(rule)}"]
             if len(rule) == 1 and rule[0].islower():
@@ -22,7 +26,9 @@ def recognize_right_linear(grammar_productions, start_symbol, input_string):
                         return True
         memo[state] = False
         return False
+
     return _search(start_symbol, list(input_string), [])
+
 
 def reverse_grammar(grammar_productions):
     reversed_g = defaultdict(list)
@@ -32,11 +38,13 @@ def reverse_grammar(grammar_productions):
             reversed_g[non_terminal].append(tuple(reversed_rule))
     return reversed_g
 
+
 def print_path(path):
     print("\n--- Successful Derivation Path ---")
     for step in path:
         print(step)
     print("---------------------------------")
+
 
 class EarleyItem:
     def __init__(self, rule, dot_pos, start_idx):
@@ -44,12 +52,20 @@ class EarleyItem:
         self.dot_pos = dot_pos
         self.start_idx = start_idx
         self.back_pointers = []
+
     def __eq__(self, other):
-        return (self.rule, self.dot_pos, self.start_idx) == (other.rule, other.dot_pos, other.start_idx)
+        return (self.rule, self.dot_pos, self.start_idx) == (
+            other.rule,
+            other.dot_pos,
+            other.start_idx,
+        )
+
     def __hash__(self):
         return hash((self.rule, self.dot_pos, self.start_idx))
+
     def __repr__(self):
         return f"({self.rule[0]} -> {' '.join(self.rule[1][:self.dot_pos])}.{' '.join(self.rule[1][self.dot_pos:])}, {self.start_idx})"
+
 
 def recognize_earley(grammar_productions, start_symbol, input_tokens):
     chart = [[] for _ in range(len(input_tokens) + 1)]
@@ -71,11 +87,16 @@ def recognize_earley(grammar_productions, start_symbol, input_tokens):
                 elif i < len(input_tokens) and next_symbol == input_tokens[i]:
                     new_item = EarleyItem(item.rule, item.dot_pos + 1, item.start_idx)
                     new_item.back_pointers.append(input_tokens[i])
-                    chart[i+1].append(new_item)
+                    chart[i + 1].append(new_item)
             else:
                 for prev_item in chart[item.start_idx]:
-                    if prev_item.dot_pos < len(prev_item.rule[1]) and prev_item.rule[1][prev_item.dot_pos] == item.rule[0]:
-                        new_item = EarleyItem(prev_item.rule, prev_item.dot_pos + 1, prev_item.start_idx)
+                    if (
+                        prev_item.dot_pos < len(prev_item.rule[1])
+                        and prev_item.rule[1][prev_item.dot_pos] == item.rule[0]
+                    ):
+                        new_item = EarleyItem(
+                            prev_item.rule, prev_item.dot_pos + 1, prev_item.start_idx
+                        )
                         found = False
                         for existing_item in chart[i]:
                             if existing_item == new_item:
@@ -87,15 +108,27 @@ def recognize_earley(grammar_productions, start_symbol, input_tokens):
                             chart[i].append(new_item)
     return chart
 
+
 def get_parse_count(chart, start_symbol):
-    final_items = [item for item in chart[-1] if item.rule[0] == start_symbol and item.dot_pos == len(item.rule[1]) and item.start_idx == 0]
-    if not final_items: return 0
+    final_items = [
+        item
+        for item in chart[-1]
+        if item.rule[0] == start_symbol
+        and item.dot_pos == len(item.rule[1])
+        and item.start_idx == 0
+    ]
+    if not final_items:
+        return 0
     return sum(count_parses(item) for item in final_items)
 
+
 def count_parses(item):
-    if not item.back_pointers: return 1 # Predicted states
-    if isinstance(item.back_pointers[0], str): return 1 # Scanned terminal
-    if hasattr(item, 'parse_count'): return item.parse_count
+    if not item.back_pointers:
+        return 1  # Predicted states
+    if isinstance(item.back_pointers[0], str):
+        return 1  # Scanned terminal
+    if hasattr(item, "parse_count"):
+        return item.parse_count
     count = 0
     for bp_set in item.back_pointers:
         item1, item2 = bp_set
@@ -103,11 +136,16 @@ def count_parses(item):
     item.parse_count = count
     return count
 
+
 def main():
-    parser = argparse.ArgumentParser(description="A grammar recognizer for various formal language classes.")
+    parser = argparse.ArgumentParser(
+        description="A grammar recognizer for various formal language classes."
+    )
     parser.add_argument("grammar_file", help="Path to the grammar file.")
     parser.add_argument("input_string", help="The string to recognize.")
-    parser.add_argument("--start-symbol", help="Override the default start symbol of the grammar.")
+    parser.add_argument(
+        "--start-symbol", help="Override the default start symbol of the grammar."
+    )
     args = parser.parse_args()
     try:
         grammar = Grammar(args.grammar_file)
@@ -115,46 +153,75 @@ def main():
         print(f"Grammar loaded from {args.grammar_file}. Start symbol: {start_symbol}")
         productions_dict = grammar.get_productions_dict()
         is_contracting = any(len(lhs) > len(rhs) for lhs, rhs in grammar.productions)
-        is_csg = any(len(lhs) > 1 for lhs, _ in grammar.productions) and not is_contracting
-        is_right_reg = all(len(rhs) <= 2 and (len(rhs) < 2 or rhs[1].isupper()) for _, rhs in grammar.productions) and not is_csg and not is_contracting
-        is_left_reg = all(len(rhs) <= 2 and (len(rhs) < 2 or rhs[0].isupper()) for _, rhs in grammar.productions) and not is_csg and not is_contracting
+        is_csg = (
+            any(len(lhs) > 1 for lhs, _ in grammar.productions) and not is_contracting
+        )
+        is_right_reg = (
+            all(
+                len(rhs) <= 2 and (len(rhs) < 2 or rhs[1].isupper())
+                for _, rhs in grammar.productions
+            )
+            and not is_csg
+            and not is_contracting
+        )
+        is_left_reg = (
+            all(
+                len(rhs) <= 2 and (len(rhs) < 2 or rhs[0].isupper())
+                for _, rhs in grammar.productions
+            )
+            and not is_csg
+            and not is_contracting
+        )
 
         if is_contracting:
             print("Heuristic: UNRESTRICTED (TYPE-0).")
-            print("\nWARNING: This grammar contains contracting rules, membership is undecidable.")
+            print(
+                "\nWARNING: This grammar contains contracting rules, membership is undecidable."
+            )
         elif is_csg:
             print("Heuristic: CONTEXT-SENSITIVE. Recognition not implemented.")
         elif is_right_reg and not is_left_reg:
             print("Heuristic: RIGHT-LINEAR REGULAR.")
-            if recognize_right_linear(productions_dict, start_symbol, args.input_string):
+            if recognize_right_linear(
+                productions_dict, start_symbol, args.input_string
+            ):
                 print(f"\nSUCCESS: String '{args.input_string}' is recognized.")
             else:
                 print(f"\nFAILURE: String '{args.input_string}' is not recognized.")
         elif is_left_reg and not is_right_reg:
             print("Heuristic: LEFT-LINEAR REGULAR.")
             reversed_grammar = reverse_grammar(productions_dict)
-            if recognize_right_linear(reversed_grammar, start_symbol, args.input_string[::-1]):
+            if recognize_right_linear(
+                reversed_grammar, start_symbol, args.input_string[::-1]
+            ):
                 print(f"\nSUCCESS: String '{args.input_string}' is recognized.")
             else:
                 print(f"\nFAILURE: String '{args.input_string}' is not recognized.")
         else:
             print("Heuristic: CONTEXT-FREE. Using Earley parser.")
-            input_tokens = list(args.input_string) if ' ' not in args.input_string else args.input_string.split()
+            input_tokens = (
+                list(args.input_string)
+                if " " not in args.input_string
+                else args.input_string.split()
+            )
             chart = recognize_earley(productions_dict, start_symbol, input_tokens)
             parse_count = get_parse_count(chart, start_symbol)
             if parse_count > 0:
-                 print(f"\nSUCCESS: String '{args.input_string}' is recognized.")
-                 print(f"Found {parse_count} valid parse(s).")
-                 if parse_count > 1: print("Grammar is AMBIGUOUS for this input.")
-                 else: print("Grammar is UNAMBIGUOUS for this input.")
+                print(f"\nSUCCESS: String '{args.input_string}' is recognized.")
+                print(f"Found {parse_count} valid parse(s).")
+                if parse_count > 1:
+                    print("Grammar is AMBIGUOUS for this input.")
+                else:
+                    print("Grammar is UNAMBIGUOUS for this input.")
             else:
-                 print(f"\nFAILURE: String '{args.input_string}' is not recognized.")
+                print(f"\nFAILURE: String '{args.input_string}' is not recognized.")
     except FileNotFoundError:
         print(f"Error: Grammar file not found at {args.grammar_file}", file=sys.stderr)
         sys.exit(1)
     except Exception as e:
         print(f"An error occurred: {e}", file=sys.stderr)
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

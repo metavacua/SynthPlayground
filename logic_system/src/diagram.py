@@ -3,11 +3,13 @@ from collections import deque
 from .proof import ProofTree
 from . import translations
 
+
 class Logic(Enum):
     LJ = "Intuitionistic Logic"
     LK = "Classical Logic"
     ILL = "Intuitionistic Linear Logic"
     LL = "Classical Linear Logic"
+
 
 class Diagram:
     def __init__(self):
@@ -36,7 +38,9 @@ class Diagram:
         while queue:
             current_logic, path = queue.popleft()
 
-            for neighbor, translation_func in self._graph.get(current_logic, {}).items():
+            for neighbor, translation_func in self._graph.get(
+                current_logic, {}
+            ).items():
                 if neighbor == end:
                     return path + [translation_func]
 
@@ -44,13 +48,15 @@ class Diagram:
                     visited.add(neighbor)
                     queue.append((neighbor, path + [translation_func]))
 
-        return None # No path found
+        return None  # No path found
 
     def translate(self, proof: ProofTree, start: Logic, end: Logic) -> ProofTree:
         """Translates a proof from a starting logic to an ending logic."""
         path = self.find_path(start, end)
         if path is None:
-            raise ValueError(f"No translation path found from {start.name} to {end.name}")
+            raise ValueError(
+                f"No translation path found from {start.name} to {end.name}"
+            )
 
         translated_proof = proof
         for translation_func in path:
@@ -58,8 +64,9 @@ class Diagram:
 
         return translated_proof
 
+
 # Example usage:
-if __name__ == '__main__':
+if __name__ == "__main__":
     from .formulas import Prop, Implies
     from . import lj
 

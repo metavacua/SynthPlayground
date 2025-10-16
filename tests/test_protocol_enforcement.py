@@ -11,6 +11,7 @@ from tooling.master_control import MasterControlGraph
 from tooling.state import AgentState
 from utils.logger import Logger
 
+
 class TestProtocolEnforcement(unittest.TestCase):
     """
     Tests the enforcement of critical, system-wide protocols.
@@ -43,7 +44,11 @@ class TestProtocolEnforcement(unittest.TestCase):
         # We expect the plan to be rejected and the FSM to transition to the ERROR state.
         expected_trigger = self.mcg.get_trigger("PLANNING", "ERROR")
         self.assertEqual(trigger, expected_trigger)
-        self.assertIn("CRITICAL: Use of the forbidden tool `reset_all` was detected in the plan.", self.agent_state.error)
+        self.assertIn(
+            "CRITICAL: Use of the forbidden tool `reset_all` was detected in the plan.",
+            self.agent_state.error,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

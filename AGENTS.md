@@ -365,6 +365,12 @@ The CSDC is enforced by the `tooling/csdc_cli.py` tool. This tool validates a pl
 
 ---
 
+# Security Protocol
+
+This document outlines the security policies and procedures for this project. It includes guidelines for handling sensitive data, reporting vulnerabilities, and maintaining a secure development environment. All contributors are expected to adhere to these protocols to ensure the integrity and safety of the project.
+
+---
+
 # Protocol: Speculative Execution
 
 This protocol empowers the agent to engage in creative and exploratory tasks when it is otherwise idle. It provides a formal framework for the agent to generate novel ideas, plans, or artifacts that are not direct responses to a user request, but are instead products of its own "imagination" and analysis of the repository.
@@ -575,26 +581,6 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ```json
 {
-  "protocol_id": "file-indexing-001",
-  "description": "A protocol for maintaining an up-to-date file index to accelerate tool performance.",
-  "rules": [
-    {
-      "rule_id": "update-index-before-submit",
-      "description": "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem.",
-      "enforcement": "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/file_indexer.py build'."
-    }
-  ],
-  "associated_tools": [
-    "tooling/file_indexer.py"
-  ]
-}
-```
-
-
----
-
-```json
-{
   "protocol_id": "hdl-proving-001",
   "description": "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.",
   "rules": [
@@ -632,6 +618,39 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
   "associated_tools": [
     "set_plan",
     "message_user"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "security-header",
+  "description": "Defines the identity and purpose of the Security Protocol document.",
+  "rules": []
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "security-vuln-reporting-001",
+  "description": "Defines the official policy and procedure for reporting security vulnerabilities.",
+  "rules": [
+    {
+      "rule_id": "vuln-reporting-channel",
+      "description": "All suspected security vulnerabilities MUST be reported privately to the designated security contact.",
+      "enforcement": "This is a procedural rule. The designated contact is specified in the project's main SECURITY.md file."
+    },
+    {
+      "rule_id": "no-public-disclosure",
+      "description": "Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed.",
+      "enforcement": "Violation of this rule may result in being banned from the project community."
+    }
   ]
 }
 ```

@@ -5,6 +5,7 @@ import shutil
 from tooling.protocol_compiler import compile_protocols, load_schema
 import jsonschema
 
+
 class TestProtocolCompiler(unittest.TestCase):
 
     def setUp(self):
@@ -20,15 +21,21 @@ class TestProtocolCompiler(unittest.TestCase):
         # Create a simple schema
         self.schema_path = os.path.join(self.source_dir, "protocol.schema.json")
         with open(self.schema_path, "w") as f:
-            json.dump({
-                "type": "object",
-                "properties": {
-                    "protocol_id": {"type": "string"},
-                    "description": {"type": "string"},
-                    "associated_tools": {"type": "array", "items": {"type": "string"}}
+            json.dump(
+                {
+                    "type": "object",
+                    "properties": {
+                        "protocol_id": {"type": "string"},
+                        "description": {"type": "string"},
+                        "associated_tools": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                        },
+                    },
+                    "required": ["protocol_id", "description"],
                 },
-                "required": ["protocol_id", "description"]
-            }, f)
+                f,
+            )
 
     def tearDown(self):
         shutil.rmtree(self.test_dir)
@@ -37,17 +44,28 @@ class TestProtocolCompiler(unittest.TestCase):
         """Tests that valid protocols are compiled correctly."""
         # Create valid protocol files
         with open(os.path.join(self.source_dir, "p1.protocol.json"), "w") as f:
-            json.dump({"protocol_id": "TEST-001", "description": "First test protocol.", "associated_tools": ["tool_a"]}, f)
+            json.dump(
+                {
+                    "protocol_id": "TEST-001",
+                    "description": "First test protocol.",
+                    "associated_tools": ["tool_a"],
+                },
+                f,
+            )
         with open(os.path.join(self.source_dir, "p1.protocol.md"), "w") as f:
             f.write("# Protocol 1\nThis is the first protocol.")
         with open(os.path.join(self.source_dir, "p2.protocol.json"), "w") as f:
-            json.dump({"protocol_id": "TEST-002", "description": "Second test protocol."}, f)
+            json.dump(
+                {"protocol_id": "TEST-002", "description": "Second test protocol."}, f
+            )
 
         # Create autodoc files
         autodoc_path = os.path.join(self.autodoc_dir, "SYSTEM_DOCUMENTATION.md")
         with open(autodoc_path, "w") as f:
             f.write("# System Documentation\nThis is the system documentation.")
-        with open(os.path.join(self.source_dir, "autodoc_placeholder.autodoc.md"), "w") as f:
+        with open(
+            os.path.join(self.source_dir, "autodoc_placeholder.autodoc.md"), "w"
+        ) as f:
             f.write("<!-- AUTODOC PLACEHOLDER -->")
 
         target_file = os.path.join(self.output_dir, "AGENTS.md")
@@ -55,7 +73,7 @@ class TestProtocolCompiler(unittest.TestCase):
             source_dir=self.source_dir,
             target_file=target_file,
             schema_file=self.schema_path,
-            autodoc_file=autodoc_path
+            autodoc_file=autodoc_path,
         )
 
         self.assertTrue(os.path.exists(target_file))
@@ -77,40 +95,45 @@ class TestProtocolCompiler(unittest.TestCase):
         """Tests that the compiler raises a validation error for invalid JSON."""
         # Create an invalid protocol file
         with open(os.path.join(self.source_dir, "invalid.protocol.json"), "w") as f:
-            json.dump({"protocol_id": "INVALID-001"}, f) # Missing 'description'
+            json.dump({"protocol_id": "INVALID-001"}, f)  # Missing 'description'
 
         target_file = os.path.join(self.output_dir, "AGENTS.md")
         with self.assertRaises(jsonschema.ValidationError):
             compile_protocols(
                 source_dir=self.source_dir,
                 target_file=target_file,
-                schema_file=self.schema_path
+                schema_file=self.schema_path,
             )
 
     def test_knowledge_graph_generation(self):
         """Tests that the knowledge graph is generated when requested."""
         # Create valid protocol files
         with open(os.path.join(self.source_dir, "p1.protocol.json"), "w") as f:
-            json.dump({"protocol_id": "TEST-001", "description": "First test protocol.", "associated_tools": ["tool_a"]}, f)
+            json.dump(
+                {
+                    "protocol_id": "TEST-001",
+                    "description": "First test protocol.",
+                    "associated_tools": ["tool_a"],
+                },
+                f,
+            )
         with open(os.path.join(self.source_dir, "p2.protocol.json"), "w") as f:
-            json.dump({"protocol_id": "TEST-002", "description": "Second test protocol."}, f)
+            json.dump(
+                {"protocol_id": "TEST-002", "description": "Second test protocol."}, f
+            )
 
         target_file = os.path.join(self.output_dir, "AGENTS.md")
         kg_file = os.path.join(self.output_dir, "protocols.ttl")
 
         # Create a context file needed for RDF generation
         with open(os.path.join(self.source_dir, "protocol.context.jsonld"), "w") as f:
-            json.dump({
-                "@context": {
-                    "protocol_id": "http://schema.org/identifier"
-                }
-            }, f)
+            json.dump({"@context": {"protocol_id": "http://schema.org/identifier"}}, f)
 
         compile_protocols(
             source_dir=self.source_dir,
             target_file=target_file,
             schema_file=self.schema_path,
-            knowledge_graph_file=kg_file
+            knowledge_graph_file=kg_file,
         )
 
         self.assertTrue(os.path.exists(kg_file))
@@ -133,7 +156,7 @@ class TestProtocolCompiler(unittest.TestCase):
         compile_protocols(
             source_dir=empty_source_dir,
             target_file=target_file,
-            schema_file=os.path.join(empty_source_dir, "protocol.schema.json")
+            schema_file=os.path.join(empty_source_dir, "protocol.schema.json"),
         )
         # The compiler should not create a file if there are no protocols.
         self.assertFalse(os.path.exists(target_file))
@@ -141,14 +164,16 @@ class TestProtocolCompiler(unittest.TestCase):
     def test_malformed_json(self):
         """Tests that the compiler raises an error for malformed JSON."""
         with open(os.path.join(self.source_dir, "malformed.protocol.json"), "w") as f:
-            f.write("{'invalid_json': True,}") # Malformed JSON with trailing comma and single quotes
+            f.write(
+                "{'invalid_json': True,}"
+            )  # Malformed JSON with trailing comma and single quotes
 
         target_file = os.path.join(self.output_dir, "AGENTS.md")
         with self.assertRaises(json.JSONDecodeError):
             compile_protocols(
                 source_dir=self.source_dir,
                 target_file=target_file,
-                schema_file=self.schema_path
+                schema_file=self.schema_path,
             )
 
     def test_missing_schema(self):
@@ -160,7 +185,7 @@ class TestProtocolCompiler(unittest.TestCase):
         compile_protocols(
             source_dir=self.source_dir,
             target_file=target_file,
-            schema_file="non_existent_schema.json"
+            schema_file="non_existent_schema.json",
         )
         self.assertFalse(os.path.exists(target_file))
 

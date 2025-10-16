@@ -65,9 +65,7 @@ class TestResearchExecutor(unittest.TestCase):
             "url": "http://example.com/file.py",
         }
         result = execute_research_protocol(constraints)
-        mock_view_text_website.assert_called_once_with(
-            url="http://example.com/file.py"
-        )
+        mock_view_text_website.assert_called_once_with(url="http://example.com/file.py")
         self.assertEqual(result, "repo file content")
 
     def test_invalid_target(self):

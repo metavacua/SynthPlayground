@@ -14,9 +14,10 @@ This document provides a human-readable summary of the protocols and key compone
 - **`capability-verification-001`**: A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.
 - **`csdc-001`**: A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.
 - **`unified-doc-builder-001`**: A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth.
-- **`file-indexing-001`**: A protocol for maintaining an up-to-date file index to accelerate tool performance.
 - **`hdl-proving-001`**: A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.
 - **`agent-interaction-001`**: A protocol governing the agent's core interaction and planning tools.
+- **`security-header`**: Defines the identity and purpose of the Security Protocol document.
+- **`security-vuln-reporting-001`**: Defines the official policy and procedure for reporting security vulnerabilities.
 - **`speculative-execution-001`**: A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.
 
 ## Key Components
@@ -88,12 +89,6 @@ This document provides a human-readable summary of the protocols and key compone
   >
   > This makes it a key component for enabling more expressive and complex
   > automation scripts for the agent.
-
-- **`tooling/background_researcher.py`**:
-
-  > This script performs a simulated research task in the background.
-  > It takes a task ID as a command-line argument and writes its findings
-  > to a temporary file that the main agent can poll.
 
 - **`tooling/builder.py`**:
 
@@ -190,26 +185,6 @@ This document provides a human-readable summary of the protocols and key compone
   > The final output is a detailed JSON report containing all of this information,
   > which can be used as a foundational artifact for automated planning or human review.
 
-- **`tooling/csdc_cli.py`**:
-
-  > A command-line tool for managing the Context-Sensitive Development Cycle (CSDC).
-  >
-  > This script provides an interface to validate a development plan against a specific
-  > CSDC model (A or B) and a given complexity class (P or EXP). It ensures that a
-  > plan adheres to the strict logical and computational constraints defined by the
-  > CSDC protocol before it is executed.
-  >
-  > The tool performs two main checks:
-  > 1.  **Complexity Analysis:** It analyzes the plan to determine its computational
-  >     complexity and verifies that it matches the expected complexity class.
-  > 2.  **Model Validation:** It validates the plan's commands against the rules of
-  >     the specified CSDC model, ensuring that it does not violate any of the
-  >     model's constraints (e.g., forbidding certain functions).
-  >
-  > This serves as a critical gateway for ensuring that all development work within
-  > the CSDC framework is sound, predictable, and compliant with the governing
-  > meta-mathematical principles.
-
 - **`tooling/dependency_graph_generator.py`**:
 
   > Scans the repository for dependency files and generates a unified dependency graph.
@@ -276,27 +251,7 @@ This document provides a human-readable summary of the protocols and key compone
   > probes, allowing the agent to quickly identify any environmental constraints
   > that might impact its ability to complete a task.
 
-- **`tooling/fdc_cli.py`**:
-
-  > This script provides a command-line interface (CLI) for managing the Finite
-  > Development Cycle (FDC).
-  >
-  > The FDC is a structured workflow for agent-driven software development. This CLI
-  > is the primary human interface for interacting with that cycle, providing
-  > commands to:
-  > - **start:** Initiates a new development task, triggering the "Advanced
-  >   Orientation and Research Protocol" (AORP) to ensure the agent is fully
-  >   contextualized.
-  > - **close:** Formally concludes a task, creating a post-mortem template for
-  >   analysis and lesson-learning.
-  > - **validate:** Checks a given plan file for both syntactic and semantic
-  >   correctness against the FDC's governing Finite State Machine (FSM). This
-  >   ensures that a plan is executable and will not violate protocol.
-  > - **analyze:** Examines a plan to determine its computational complexity (e.g.,
-  >   Constant, Polynomial, Exponential) and its modality (Read-Only vs.
-  >   Read-Write), providing insight into the plan's potential impact.
-
-- **`tooling/file_indexer.py`**:
+- **`tooling/filesystem_lister.py`**:
 
   > _No module-level docstring found._
 
@@ -430,27 +385,6 @@ This document provides a human-readable summary of the protocols and key compone
   > This module is designed as a library to be controlled by an external shell
   > (e.g., `agent_shell.py`), making its interaction purely programmatic.
 
-- **`tooling/master_control_cli.py`**:
-
-  > The official command-line interface for the agent's master control loop.
-  >
-  > This script is now a lightweight wrapper that passes control to the new,
-  > API-driven `agent_shell.py`. It preserves the command-line interface while
-  > decoupling the entry point from the FSM implementation.
-
-- **`tooling/message_user.py`**:
-
-  > A dummy tool that prints its arguments to simulate the message_user tool.
-  >
-  > This script is a simple command-line utility that takes a string as an
-  > argument and prints it to standard output, prefixed with "[Message User]:".
-  > Its purpose is to serve as a stand-in or mock for the actual `message_user`
-  > tool in testing environments where the full agent framework is not required.
-  >
-  > This allows for the testing of scripts or workflows that call the
-  > `message_user` tool without needing to invoke the entire agent messaging
-  > subsystem.
-
 - **`tooling/plan_manager.py`**:
 
   > Provides a command-line interface for managing the agent's Plan Registry.
@@ -481,10 +415,6 @@ This document provides a human-readable summary of the protocols and key compone
   > which are central to the agent's ability to understand and execute plans.
   > The parser correctly handles multi-line arguments and ignores comments,
   > allowing for robust and readable plan files.
-
-- **`tooling/pre_submit_check.py`**:
-
-  > _No module-level docstring found._
 
 - **`tooling/protocol_compiler.py`**:
 
@@ -622,30 +552,6 @@ This document provides a human-readable summary of the protocols and key compone
   >
   > The tool is designed to be extensible, with future analyses (such as error
   > rate tracking or tool usage anti-patterns) to be added as the system evolves.
-
-- **`tooling/standard_agents_compiler.py`**:
-
-  > A compiler that generates a simplified, standard-compliant `AGENTS.md` file.
-  >
-  > This script acts as an "adapter" to make the repository more accessible to
-  > third-party AI agents that expect a conventional set of instructions. While the
-  > repository's primary `AGENTS.md` is a complex, hierarchical, and
-  > machine-readable artifact for its own specialized agent, the `AGENTS.standard.md`
-  > file produced by this script offers a simple, human-readable summary of the
-  > most common development commands.
-  >
-  > The script works by:
-  > 1.  **Parsing the Makefile:** It dynamically parses the project's `Makefile`,
-  >     which is the single source of truth for high-level commands. It specifically
-  >     extracts the exact commands for common targets like `install`, `test`,
-  >     `lint`, and `format`. This ensures the generated instructions are never
-  >     stale.
-  > 2.  **Injecting into a Template:** It injects these extracted commands into a
-  >     pre-defined, user-friendly Markdown template.
-  > 3.  **Generating the Artifact:** The final output is written to
-  >     `AGENTS.standard.md`, providing a simple, stable, and conventional entry
-  >     point for external tools, effectively bridging the gap between the complex
-  >     internal protocol system and the broader agent ecosystem.
 
 - **`tooling/state.py`**:
 

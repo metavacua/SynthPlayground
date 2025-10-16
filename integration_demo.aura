@@ -17,5 +17,4 @@ print(result);
 if (result == "Provable") {
     let message = "Sequent is provable!";
     print(message);
-    agent_call_tool("message_user", "Integration demo complete!");
 }

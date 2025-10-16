@@ -2,6 +2,7 @@ from collections import Counter
 from typing import Iterable
 from .formulas import Formula
 
+
 class Sequent:
     def __init__(self, antecedent: Iterable[Formula], succedent: Iterable[Formula]):
         self.antecedent = Counter(antecedent)

@@ -103,14 +103,16 @@ class TestMasterControlRedesigned(unittest.TestCase):
 
         # Create a dummy structured post-mortem file
         with open("postmortems/structured_postmortem.md", "w") as f:
-            f.write("""\
+            f.write(
+                """\
 # Structured Post-Mortem
 - Task ID: [TASK_ID]
 - Completion Date: [COMPLETION_DATE]
 - Outcome: [SUCCESS | FAILURE]
 - Objective: *A concise, one-sentence summary of the original goal.*
 ## 4. General Reflections
-""")
+"""
+            )
 
         # Create dummy dependencies that are called by the master_control
         with open("tooling/environmental_probe.py", "w") as f:
@@ -194,14 +196,18 @@ class TestMasterControlRedesigned(unittest.TestCase):
         trigger = self.graph.do_execution(
             self.agent_state, "code_generation_requested", self.mock_logger
         )
-        self.assertEqual(trigger, self.graph.get_trigger("EXECUTING", "GENERATING_CODE"))
+        self.assertEqual(
+            trigger, self.graph.get_trigger("EXECUTING", "GENERATING_CODE")
+        )
 
     @patch("tooling.master_control.datetime")
     def test_do_finalizing(self, mock_datetime):
         mock_datetime.date.today.return_value = datetime.date(2025, 10, 13)
         analysis_content = "The task was completed successfully."
 
-        with patch('builtins.open', unittest.mock.mock_open(read_data="[TASK_ID]")) as mock_file:
+        with patch(
+            "builtins.open", unittest.mock.mock_open(read_data="[TASK_ID]")
+        ) as mock_file:
             trigger = self.graph.do_finalizing(
                 self.agent_state, analysis_content, self.mock_logger
             )

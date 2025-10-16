@@ -5,6 +5,7 @@ from logic_system.src.ill import ILLSequent, axiom
 from logic_system.src.synthesizer import Synthesizer
 from logic_system.src.proof import ProofTree
 
+
 class TestSynthesis(unittest.TestCase):
 
     def setUp(self):
@@ -28,7 +29,6 @@ class TestSynthesis(unittest.TestCase):
         proof = self.synthesizer.synthesize(goal)
         self.assertEqual(proof.conclusion, goal)
 
-
     def test_dereliction_synthesis(self):
         """Tests synthesis of a proof involving dereliction."""
         A = Prop("A")
@@ -48,5 +48,5 @@ class TestSynthesis(unittest.TestCase):
         self.assertEqual(proof.premises[1].conclusion, ILLSequent([B], B))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

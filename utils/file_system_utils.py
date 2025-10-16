@@ -40,8 +40,8 @@ def get_ignore_patterns(base_dir):
                 line = line.strip()
                 if not line or line.startswith("#"):
                     continue
-                if line.endswith('/'):
-                    dir_patterns.add(line.rstrip('/'))
+                if line.endswith("/"):
+                    dir_patterns.add(line.rstrip("/"))
                 else:
                     file_patterns.add(line)
     except (IOError, OSError) as e:
@@ -58,7 +58,11 @@ def find_files(pattern, base_dir=ROOT_DIR):
     try:
         for root, dirnames, filenames in os.walk(base_dir, topdown=True):
             # Exclude ignored directories from traversal
-            dirnames[:] = [d for d in dirnames if not any(fnmatch.fnmatch(d, p) for p in dir_patterns)]
+            dirnames[:] = [
+                d
+                for d in dirnames
+                if not any(fnmatch.fnmatch(d, p) for p in dir_patterns)
+            ]
 
             for filename in filenames:
                 if any(fnmatch.fnmatch(filename, p) for p in file_patterns):

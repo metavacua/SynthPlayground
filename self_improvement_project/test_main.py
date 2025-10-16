@@ -3,6 +3,7 @@ import hashlib
 from unittest.mock import patch
 from main import ProcessA, ProcessB, diagonalization
 
+
 class TestSelfImprovement(unittest.TestCase):
 
     def test_diagonalization(self):
@@ -48,7 +49,10 @@ class TestSelfImprovement(unittest.TestCase):
         # 1. Inside ProcessB.__init__ for the initial quality.
         # 2. Inside ProcessB.is_beneficial for the next state quality.
         # 3. Inside ProcessB.run to update the best quality.
-        with patch('main.diagonalization', side_effect=[initial_state_hash, next_state_hash, next_state_hash]) as mock_diag:
+        with patch(
+            "main.diagonalization",
+            side_effect=[initial_state_hash, next_state_hash, next_state_hash],
+        ) as mock_diag:
             process_b = ProcessB(system_state)
 
             # The initial quality should be 1.
@@ -63,7 +67,6 @@ class TestSelfImprovement(unittest.TestCase):
             # The new best quality should be 2.
             self.assertEqual(process_b.current_best_quality, 2)
 
-
     def test_process_b_non_beneficial_rejection(self):
         # Test that ProcessB correctly rejects a non-beneficial element.
         system_state = {"initial"}
@@ -75,7 +78,9 @@ class TestSelfImprovement(unittest.TestCase):
 
         new_element = initial_state_hash
 
-        with patch('main.diagonalization', side_effect=[initial_state_hash, next_state_hash]) as mock_diag:
+        with patch(
+            "main.diagonalization", side_effect=[initial_state_hash, next_state_hash]
+        ) as mock_diag:
             process_b = ProcessB(system_state)
 
             # Initial quality should be 2.
@@ -91,5 +96,5 @@ class TestSelfImprovement(unittest.TestCase):
             self.assertEqual(process_b.current_best_quality, 2)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -22,9 +22,11 @@ The tool works by orchestrating a four-step process:
 This provides a closed-loop verification of monotonic improvement, which is a
 cornerstone of the agent's design philosophy.
 """
+
 import argparse
 import subprocess
 import sys
+
 
 def main():
     """
@@ -36,11 +38,13 @@ def main():
     3. Running the target test again to confirm it now passes.
     4. Running the full test suite to ensure no existing capabilities were lost.
     """
-    parser = argparse.ArgumentParser(description="Verify monotonic capability improvement.")
+    parser = argparse.ArgumentParser(
+        description="Verify monotonic capability improvement."
+    )
     parser.add_argument(
         "--test-file",
         required=True,
-        help="The path to the test file that defines the new capability."
+        help="The path to the test file that defines the new capability.",
     )
     args = parser.parse_args()
 
@@ -48,9 +52,13 @@ def main():
 
     # Step 1: Confirm the initial test fails
     print("\n--- Step 1: Confirming initial failure ---")
-    initial_result = subprocess.run([sys.executable, args.test_file], capture_output=True, text=True)
+    initial_result = subprocess.run(
+        [sys.executable, args.test_file], capture_output=True, text=True
+    )
     if initial_result.returncode == 0:
-        print("Error: Test file passed unexpectedly. The agent may already possess this capability.")
+        print(
+            "Error: Test file passed unexpectedly. The agent may already possess this capability."
+        )
         print(initial_result.stdout)
         sys.exit(1)
     else:
@@ -63,23 +71,25 @@ def main():
         "status": "pending",
         "failure": {
             "test_file": args.test_file,
-            "error_message": initial_result.stderr
+            "error_message": initial_result.stderr,
         },
         "action": {
             "type": "PROPOSE_CODE_CHANGE",
             "parameters": {
                 "filepath": "self_improvement_project/main.py",
-                "diff": "No-op for this test, as the fix is already applied."
-            }
-        }
+                "diff": "No-op for this test, as the fix is already applied.",
+            },
+        },
     }
     import json
+
     with open("knowledge_core/lessons.jsonl", "w") as f:
         f.write(json.dumps(lesson_content) + "\n")
 
     orchestrator_result = subprocess.run(
         [sys.executable, "tooling/self_correction_orchestrator.py"],
-        capture_output=True, text=True
+        capture_output=True,
+        text=True,
     )
     if orchestrator_result.returncode != 0:
         print("Error: Self-correction orchestrator failed.")
@@ -91,7 +101,9 @@ def main():
 
     # Step 3: Confirm the test now passes
     print("\n--- Step 3: Confirming test now passes ---")
-    final_result = subprocess.run([sys.executable, args.test_file], capture_output=True, text=True)
+    final_result = subprocess.run(
+        [sys.executable, args.test_file], capture_output=True, text=True
+    )
     if final_result.returncode != 0:
         print("Error: Test file still fails after self-correction.")
         print(final_result.stderr)
@@ -104,7 +116,11 @@ def main():
     print("\n--- Step 4: Checking for regressions ---")
     # I need to find the full test suite. I'll assume for now it's in a `tests/` directory.
     # This is a placeholder and may need to be adjusted.
-    regression_result = subprocess.run([sys.executable, "-m", "unittest", "discover", "tests/"], capture_output=True, text=True)
+    regression_result = subprocess.run(
+        [sys.executable, "-m", "unittest", "discover", "tests/"],
+        capture_output=True,
+        text=True,
+    )
     if regression_result.returncode != 0:
         print("Error: Regressions detected. The agent has lost a capability.")
         print(regression_result.stderr)

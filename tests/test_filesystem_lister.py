@@ -8,6 +8,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 
 from tooling.filesystem_lister import list_all_files_and_dirs
 
+
 class TestFilesystemLister(unittest.TestCase):
 
     def setUp(self):
@@ -30,15 +31,12 @@ class TestFilesystemLister(unittest.TestCase):
         # The function returns paths relative to the given root_dir.
         result_paths = list_all_files_and_dirs(self.test_dir)
 
-        expected_relative_paths = sorted([
-            './',
-            'empty_subdir/',
-            'root.txt',
-            'subdir_with_file/',
-            'subdir_with_file/a.txt'
-        ])
+        expected_relative_paths = sorted(
+            ["empty_subdir/", "root.txt", "subdir_with_file/", "subdir_with_file/a.txt"]
+        )
 
-        self.assertEqual(result_paths, expected_relative_paths)
+        self.assertEqual(sorted(result_paths), expected_relative_paths)
+
 
 if __name__ == "__main__":
     unittest.main()

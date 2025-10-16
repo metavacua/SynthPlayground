@@ -174,6 +174,7 @@ def analyze_error_rates(log_file):
 
 import subprocess
 
+
 def run_self_improvement_task(model: str):
     """
     Invokes the agent_shell.py to run a self-improvement task for a specific model.
@@ -194,6 +195,7 @@ def run_self_improvement_task(model: str):
         print(f"  - Return Code: {e.returncode}")
         print(f"  - STDOUT: {e.stdout}")
         print(f"  - STDERR: {e.stderr}")
+
 
 def main():
     """
@@ -249,9 +251,9 @@ def main():
     else:
         print(f"  - Overall Success Rate: {error_stats['success_rate']:.2f}%")
         print(f"  - Overall Failure Rate: {error_stats['failure_rate']:.2f}%")
-        if error_stats['failures_by_type']:
+        if error_stats["failures_by_type"]:
             print("  - Failures by Action Type:")
-            for action_type, count in sorted(error_stats['failures_by_type'].items()):
+            for action_type, count in sorted(error_stats["failures_by_type"].items()):
                 print(f"    - {action_type}: {count} failure(s)")
 
     print("\n--- Analysis Complete ---")

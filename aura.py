@@ -1,8 +1,14 @@
 import sys
 from aura_lang.lexer import Lexer
 from aura_lang.parser import Parser
-from aura_lang.interpreter import evaluate, Environment, BUILTINS, Function as AuraFunction
+from aura_lang.interpreter import (
+    evaluate,
+    Environment,
+    BUILTINS,
+    Function as AuraFunction,
+)
 from aura_lang import ast
+
 
 def main():
     if len(sys.argv) < 2:
@@ -12,7 +18,7 @@ def main():
     filepath = sys.argv[1]
 
     try:
-        with open(filepath, 'r') as f:
+        with open(filepath, "r") as f:
             source_code = f.read()
     except FileNotFoundError:
         print(f"Error: File not found at '{filepath}'")

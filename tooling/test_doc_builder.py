@@ -4,6 +4,7 @@ import shutil
 import json
 from tooling.doc_builder import generate_system_docs, generate_readme, generate_pages
 
+
 class TestDocBuilder(unittest.TestCase):
 
     def setUp(self):
@@ -15,18 +16,21 @@ class TestDocBuilder(unittest.TestCase):
         # Create a sample Python file for system doc generation
         self.py_file_path = os.path.join(self.test_dir, "tooling", "sample_tool.py")
         with open(self.py_file_path, "w") as f:
-            f.write('"""This is a sample tool."""\n\ndef sample_function():\n    """This is a sample function."""\n    pass')
+            f.write(
+                '"""This is a sample tool."""\n\ndef sample_function():\n    """This is a sample function."""\n    pass'
+            )
 
         # Create a sample AGENTS.md for README generation
         self.agents_md_path = os.path.join(self.test_dir, "AGENTS.md")
         with open(self.agents_md_path, "w") as f:
-            f.write('```json\n{"protocol_id": "DOC-001", "description": "A test protocol."}\n```')
+            f.write(
+                '```json\n{"protocol_id": "DOC-001", "description": "A test protocol."}\n```'
+            )
 
         # Create a dummy README.md for pages generation
         self.readme_path = os.path.join(self.test_dir, "README.md")
         with open(self.readme_path, "w") as f:
             f.write("# Test README")
-
 
     def tearDown(self):
         shutil.rmtree(self.test_dir)
@@ -34,7 +38,10 @@ class TestDocBuilder(unittest.TestCase):
     def test_generate_system_docs(self):
         """Tests the generation of system documentation from Python files."""
         output_file = os.path.join(self.test_dir, "SYSTEM.md")
-        generate_system_docs(source_dirs=[os.path.join(self.test_dir, "tooling")], output_file=output_file)
+        generate_system_docs(
+            source_dirs=[os.path.join(self.test_dir, "tooling")],
+            output_file=output_file,
+        )
 
         self.assertTrue(os.path.exists(output_file))
         with open(output_file, "r") as f:
@@ -64,7 +71,11 @@ class TestDocBuilder(unittest.TestCase):
     def test_generate_pages(self):
         """Tests the generation of a GitHub Pages index.html file."""
         output_file = os.path.join(self.test_dir, "index.html")
-        generate_pages(readme_path=self.readme_path, agents_md_path=self.agents_md_path, output_file=output_file)
+        generate_pages(
+            readme_path=self.readme_path,
+            agents_md_path=self.agents_md_path,
+            output_file=output_file,
+        )
 
         self.assertTrue(os.path.exists(output_file))
         with open(output_file, "r") as f:
@@ -79,7 +90,9 @@ class TestDocBuilder(unittest.TestCase):
     def test_generate_readme_missing_agents_md(self):
         """Tests that README generation handles a missing AGENTS.md file."""
         output_file = os.path.join(self.test_dir, "README_NO_AGENTS.md")
-        generate_readme(agents_md_path="non_existent_agents.md", output_file=output_file)
+        generate_readme(
+            agents_md_path="non_existent_agents.md", output_file=output_file
+        )
 
         self.assertTrue(os.path.exists(output_file))
         with open(output_file, "r") as f:
@@ -95,7 +108,10 @@ class TestDocBuilder(unittest.TestCase):
             f.write("def my_func():\n    pass")
 
         output_file = os.path.join(self.test_dir, "SYSTEM_NO_DOC.md")
-        generate_system_docs(source_dirs=[os.path.join(self.test_dir, "tooling")], output_file=output_file)
+        generate_system_docs(
+            source_dirs=[os.path.join(self.test_dir, "tooling")],
+            output_file=output_file,
+        )
 
         self.assertTrue(os.path.exists(output_file))
         with open(output_file, "r") as f:

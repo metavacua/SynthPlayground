@@ -101,35 +101,84 @@ class MasterControlGraph:
             f"No trigger found for transition from {source_state} to {dest_state}"
         )
 
-    def do_orientation(self, agent_state: AgentState, logger: Logger, tools: dict) -> str:
+    def do_orientation(
+        self, agent_state: AgentState, logger: Logger, tools: dict
+    ) -> str:
         """
         Executes orientation, including analyzing the last post-mortem and scanning the filesystem.
         """
         agent_state.current_thought = "Starting orientation. Will review previous task outcomes and scan filesystem."
-        logger.log("Phase 1", agent_state.task, -1, "INFO", {"state": "ORIENTING"}, "SUCCESS", context=_get_log_context(agent_state))
+        logger.log(
+            "Phase 1",
+            agent_state.task,
+            -1,
+            "INFO",
+            {"state": "ORIENTING"},
+            "SUCCESS",
+            context=_get_log_context(agent_state),
+        )
         try:
             # Use the provided list_files tool to scan the directory
             list_files = tools.get("list_files")
             if list_files:
                 file_list = list_files()
                 # Ensure the file_list is serializable for the message
-                agent_state.messages.append({"role": "system", "content": f"Initial file listing:\n{str(file_list)}"})
+                agent_state.messages.append(
+                    {
+                        "role": "system",
+                        "content": f"Initial file listing:\n{str(file_list)}",
+                    }
+                )
                 agent_state.current_thought = "Initial file scan complete."
-                logger.log("Phase 1", agent_state.task, -1, "INFO", {"summary": "Performed initial file scan."}, "SUCCESS", context=_get_log_context(agent_state))
+                logger.log(
+                    "Phase 1",
+                    agent_state.task,
+                    -1,
+                    "INFO",
+                    {"summary": "Performed initial file scan."},
+                    "SUCCESS",
+                    context=_get_log_context(agent_state),
+                )
             else:
-                logger.log("Phase 1", agent_state.task, -1, "WARNING", {"summary": "`list_files` tool not provided to orientation."}, "SUCCESS")
+                logger.log(
+                    "Phase 1",
+                    agent_state.task,
+                    -1,
+                    "WARNING",
+                    {"summary": "`list_files` tool not provided to orientation."},
+                    "SUCCESS",
+                )
 
             # Analyze the most recent post-mortem report
             postmortem_dir = "postmortems/"
             if os.path.exists(postmortem_dir):
-                postmortem_files = [os.path.join(postmortem_dir, f) for f in os.listdir(postmortem_dir) if f.endswith(".md")]
+                postmortem_files = [
+                    os.path.join(postmortem_dir, f)
+                    for f in os.listdir(postmortem_dir)
+                    if f.endswith(".md")
+                ]
                 if postmortem_files:
                     latest_postmortem = max(postmortem_files, key=os.path.getctime)
                     with open(latest_postmortem, "r") as f:
                         postmortem_content = f.read()
-                    agent_state.messages.append({"role": "system", "content": f"Reviewing last task's post-mortem:\n{postmortem_content}"})
-                    agent_state.current_thought = f"Analyzed post-mortem: {os.path.basename(latest_postmortem)}."
-                    logger.log("Phase 1", agent_state.task, -1, "INFO", {"summary": f"Analyzed post-mortem: {latest_postmortem}"}, "SUCCESS", context=_get_log_context(agent_state))
+                    agent_state.messages.append(
+                        {
+                            "role": "system",
+                            "content": f"Reviewing last task's post-mortem:\n{postmortem_content}",
+                        }
+                    )
+                    agent_state.current_thought = (
+                        f"Analyzed post-mortem: {os.path.basename(latest_postmortem)}."
+                    )
+                    logger.log(
+                        "Phase 1",
+                        agent_state.task,
+                        -1,
+                        "INFO",
+                        {"summary": f"Analyzed post-mortem: {latest_postmortem}"},
+                        "SUCCESS",
+                        context=_get_log_context(agent_state),
+                    )
 
             # L1, L2, L3 steps...
             agent_state.orientation_complete = True
@@ -167,7 +216,13 @@ class MasterControlGraph:
         """
         agent_state.current_thought = "Received new plan. Validating against FSM."
         logger.log(
-            "Phase 2", agent_state.task, 0, "INFO", {"state": "PLANNING"}, "SUCCESS", context=_get_log_context(agent_state)
+            "Phase 2",
+            agent_state.task,
+            0,
+            "INFO",
+            {"state": "PLANNING"},
+            "SUCCESS",
+            context=_get_log_context(agent_state),
         )
 
         is_valid, error_message = self._validate_plan_with_cli(plan_content)
@@ -231,9 +286,12 @@ class MasterControlGraph:
         # Enforce the 'reset-all-prohibition-001' protocol
         for command in commands:
             if command.tool_name == "reset_all":
-                return False, "CRITICAL: Use of the forbidden tool `reset_all` was detected in the plan."
+                return (
+                    False,
+                    "CRITICAL: Use of the forbidden tool `reset_all` was detected in the plan.",
+                )
 
-        current_state = "PLANNING" # Validation always starts from the PLANNING state
+        current_state = "PLANNING"  # Validation always starts from the PLANNING state
 
         for command in commands:
             action_type = ACTION_TYPE_MAP.get(command.tool_name)
@@ -242,17 +300,29 @@ class MasterControlGraph:
 
             next_state = None
             for transition in self.fsm["transitions"]:
-                if transition["source"] == current_state and transition["trigger"] == action_type:
+                if (
+                    transition["source"] == current_state
+                    and transition["trigger"] == action_type
+                ):
                     next_state = transition["dest"]
                     break
 
             if not next_state:
-                return False, f"Invalid FSM transition. Cannot perform action '{action_type}' (from tool '{command.tool_name}') from state '{current_state}'."
+                return (
+                    False,
+                    f"Invalid FSM transition. Cannot perform action '{action_type}' (from tool '{command.tool_name}') from state '{current_state}'.",
+                )
 
             current_state = next_state
 
-        if current_state not in self.fsm["final_states"] and current_state != "EXECUTING":
-             return False, f"Plan does not end in a valid state. Final state: '{current_state}'"
+        if (
+            current_state not in self.fsm["final_states"]
+            and current_state != "EXECUTING"
+        ):
+            return (
+                False,
+                f"Plan does not end in a valid state. Final state: '{current_state}'",
+            )
 
         return True, ""
 
@@ -287,7 +357,7 @@ class MasterControlGraph:
         }
 
         commands = parse_plan(plan_content)
-        current_state = "PLANNING" # Validation always starts from the PLANNING state
+        current_state = "PLANNING"  # Validation always starts from the PLANNING state
 
         for command in commands:
             action_type = ACTION_TYPE_MAP.get(command.tool_name)
@@ -296,17 +366,26 @@ class MasterControlGraph:
 
             next_state = None
             for transition in fsm["transitions"]:
-                if transition["source"] == current_state and transition["trigger"] == action_type:
+                if (
+                    transition["source"] == current_state
+                    and transition["trigger"] == action_type
+                ):
                     next_state = transition["dest"]
                     break
 
             if not next_state:
-                return False, f"Invalid FSM transition for model '{model}'. Cannot perform action '{action_type}' (from tool '{command.tool_name}') from state '{current_state}'."
+                return (
+                    False,
+                    f"Invalid FSM transition for model '{model}'. Cannot perform action '{action_type}' (from tool '{command.tool_name}') from state '{current_state}'.",
+                )
 
             current_state = next_state
 
         if current_state not in fsm["final_states"] and current_state != "EXECUTING":
-             return False, f"Plan does not end in a valid state for model '{model}'. Final state: '{current_state}'"
+            return (
+                False,
+                f"Plan does not end in a valid state for model '{model}'. Final state: '{current_state}'",
+            )
 
         return True, ""
 
@@ -341,7 +420,7 @@ class MasterControlGraph:
         }
 
         commands = parse_plan(plan_content)
-        current_state = "PLANNING" # Validation always starts from the PLANNING state
+        current_state = "PLANNING"  # Validation always starts from the PLANNING state
 
         for command in commands:
             action_type = ACTION_TYPE_MAP.get(command.tool_name)
@@ -350,17 +429,26 @@ class MasterControlGraph:
 
             next_state = None
             for transition in fsm["transitions"]:
-                if transition["source"] == current_state and transition["trigger"] == action_type:
+                if (
+                    transition["source"] == current_state
+                    and transition["trigger"] == action_type
+                ):
                     next_state = transition["dest"]
                     break
 
             if not next_state:
-                return False, f"Invalid FSM transition for model '{model}'. Cannot perform action '{action_type}' (from tool '{command.tool_name}') from state '{current_state}'."
+                return (
+                    False,
+                    f"Invalid FSM transition for model '{model}'. Cannot perform action '{action_type}' (from tool '{command.tool_name}') from state '{current_state}'.",
+                )
 
             current_state = next_state
 
         if current_state not in fsm["final_states"] and current_state != "EXECUTING":
-             return False, f"Plan does not end in a valid state for model '{model}'. Final state: '{current_state}'"
+            return (
+                False,
+                f"Plan does not end in a valid state for model '{model}'. Final state: '{current_state}'",
+            )
 
         return True, ""
 
@@ -368,8 +456,18 @@ class MasterControlGraph:
         """
         Launches the background research process.
         """
-        agent_state.current_thought = "Plan requires research. Launching background researcher."
-        logger.log("Phase 3", agent_state.task, -1, "INFO", {"state": "RESEARCHING"}, "SUCCESS", context=_get_log_context(agent_state))
+        agent_state.current_thought = (
+            "Plan requires research. Launching background researcher."
+        )
+        logger.log(
+            "Phase 3",
+            agent_state.task,
+            -1,
+            "INFO",
+            {"state": "RESEARCHING"},
+            "SUCCESS",
+            context=_get_log_context(agent_state),
+        )
         try:
             task_id = agent_state.task
             process = subprocess.Popen(
@@ -378,13 +476,34 @@ class MasterControlGraph:
                 stderr=subprocess.PIPE,
             )
             agent_state.background_processes["research"] = process
-            agent_state.current_thought = f"Background research process started (PID: {process.pid})."
-            logger.log("Phase 3", task_id, -1, "INFO", {"summary": f"Started background research (PID: {process.pid})"}, "SUCCESS", context=_get_log_context(agent_state))
+            agent_state.current_thought = (
+                f"Background research process started (PID: {process.pid})."
+            )
+            logger.log(
+                "Phase 3",
+                task_id,
+                -1,
+                "INFO",
+                {"summary": f"Started background research (PID: {process.pid})"},
+                "SUCCESS",
+                context=_get_log_context(agent_state),
+            )
             return self.get_trigger("RESEARCHING", "AWAITING_RESULT")
         except Exception as e:
             agent_state.error = f"Failed to start research process: {e}"
-            agent_state.current_thought = f"CRITICAL ERROR launching research process: {e}"
-            logger.log("Phase 3", agent_state.task, -1, "SYSTEM_FAILURE", {"state": "ERROR"}, "FAILURE", str(e), context=_get_log_context(agent_state))
+            agent_state.current_thought = (
+                f"CRITICAL ERROR launching research process: {e}"
+            )
+            logger.log(
+                "Phase 3",
+                agent_state.task,
+                -1,
+                "SYSTEM_FAILURE",
+                {"state": "ERROR"},
+                "FAILURE",
+                str(e),
+                context=_get_log_context(agent_state),
+            )
             return self.get_trigger("RESEARCHING", "ERROR")
 
     def do_awaiting_result(self, agent_state: AgentState, logger: Logger) -> str:
@@ -396,29 +515,62 @@ class MasterControlGraph:
         if os.path.exists(result_path):
             with open(result_path, "r") as f:
                 result = f.read()
-            os.remove(result_path) # Clean up the result file
+            os.remove(result_path)  # Clean up the result file
             # Store and log the research findings
             agent_state.research_findings["report"] = result
             report_path = f"reports/{task_id}-research.md"
             os.makedirs(os.path.dirname(report_path), exist_ok=True)
             with open(report_path, "w") as f:
                 f.write(f"# Research Report for Task: {task_id}\n\n{result}")
-            agent_state.current_thought = "Research complete. Integrating findings and returning to planning."
-            logger.log("Phase 3", task_id, -1, "RESEARCH_REPORT", {"path": report_path}, "SUCCESS", context=_get_log_context(agent_state))
+            agent_state.current_thought = (
+                "Research complete. Integrating findings and returning to planning."
+            )
+            logger.log(
+                "Phase 3",
+                task_id,
+                -1,
+                "RESEARCH_REPORT",
+                {"path": report_path},
+                "SUCCESS",
+                context=_get_log_context(agent_state),
+            )
             return self.get_trigger("AWAITING_RESULT", "PLANNING")
         else:
             # Check if the process is still running
             process = agent_state.background_processes.get("research")
-            if process and process.poll() is not None: # Process has terminated
+            if process and process.poll() is not None:  # Process has terminated
                 stdout, stderr = process.communicate()
                 agent_state.error = f"Research process failed with code {process.returncode}.\nStderr: {stderr.decode()}"
-                agent_state.current_thought = f"CRITICAL ERROR: Research process failed unexpectedly."
-                logger.log("Phase 3", task_id, -1, "SYSTEM_FAILURE", {"state": "ERROR"}, "FAILURE", agent_state.error, context=_get_log_context(agent_state))
-                return self.get_trigger("AWAITING_RESULT", "ERROR") # Should be a transition from AWAITING_RESULT to ERROR
+                agent_state.current_thought = (
+                    f"CRITICAL ERROR: Research process failed unexpectedly."
+                )
+                logger.log(
+                    "Phase 3",
+                    task_id,
+                    -1,
+                    "SYSTEM_FAILURE",
+                    {"state": "ERROR"},
+                    "FAILURE",
+                    agent_state.error,
+                    context=_get_log_context(agent_state),
+                )
+                return self.get_trigger(
+                    "AWAITING_RESULT", "ERROR"
+                )  # Should be a transition from AWAITING_RESULT to ERROR
 
-            agent_state.current_thought = "Awaiting result from background research process."
-            logger.log("Phase 3", task_id, -1, "INFO", {"summary": "Waiting for research result..."}, "SUCCESS", context=_get_log_context(agent_state))
-            time.sleep(1) # Wait before checking again
+            agent_state.current_thought = (
+                "Awaiting result from background research process."
+            )
+            logger.log(
+                "Phase 3",
+                task_id,
+                -1,
+                "INFO",
+                {"summary": "Waiting for research result..."},
+                "SUCCESS",
+                context=_get_log_context(agent_state),
+            )
+            time.sleep(1)  # Wait before checking again
             return self.get_trigger("AWAITING_RESULT", "AWAITING_RESULT")
 
     def get_current_step(self, agent_state: AgentState) -> Command | None:
@@ -440,14 +592,22 @@ class MasterControlGraph:
         """
         agent_state.current_thought = "Continuing plan execution."
         logger.log(
-            "Phase 4", agent_state.task, -1, "INFO", {"state": "EXECUTING"}, "SUCCESS", context=_get_log_context(agent_state)
+            "Phase 4",
+            agent_state.task,
+            -1,
+            "INFO",
+            {"state": "EXECUTING"},
+            "SUCCESS",
+            context=_get_log_context(agent_state),
         )
 
         if step_result == "code_generation_requested":
             return self.get_trigger("EXECUTING", "GENERATING_CODE")
 
         if not agent_state.plan_stack:
-            agent_state.current_thought = "Plan execution stack is empty. Finalizing task."
+            agent_state.current_thought = (
+                "Plan execution stack is empty. Finalizing task."
+            )
             return self.get_trigger("EXECUTING", "FINALIZING")
 
         current_context = agent_state.plan_stack[-1]
@@ -457,7 +617,9 @@ class MasterControlGraph:
                 agent_state.current_thought = "Completed final plan. Finalizing task."
                 return self.get_trigger("EXECUTING", "FINALIZING")
             else:
-                agent_state.current_thought = "Sub-plan complete. Popping stack and resuming parent plan."
+                agent_state.current_thought = (
+                    "Sub-plan complete. Popping stack and resuming parent plan."
+                )
                 return self.get_trigger("EXECUTING", "EXECUTING")
 
         command_obj = current_context.commands[current_context.current_step]
@@ -480,7 +642,13 @@ class MasterControlGraph:
         """Handles the code generation state."""
         agent_state.current_thought = "Entering code generation phase."
         logger.log(
-            "Phase 4.1", agent_state.task, -1, "INFO", {"state": "GENERATING_CODE"}, "SUCCESS", context=_get_log_context(agent_state)
+            "Phase 4.1",
+            agent_state.task,
+            -1,
+            "INFO",
+            {"state": "GENERATING_CODE"},
+            "SUCCESS",
+            context=_get_log_context(agent_state),
         )
         # In a real implementation, this would involve calling a code generation tool
         return self.get_trigger("GENERATING_CODE", "RUNNING_TESTS")
@@ -489,7 +657,13 @@ class MasterControlGraph:
         """Handles the test execution state."""
         agent_state.current_thought = "Entering test execution phase."
         logger.log(
-            "Phase 4.2", agent_state.task, -1, "INFO", {"state": "RUNNING_TESTS"}, "SUCCESS", context=_get_log_context(agent_state)
+            "Phase 4.2",
+            agent_state.task,
+            -1,
+            "INFO",
+            {"state": "RUNNING_TESTS"},
+            "SUCCESS",
+            context=_get_log_context(agent_state),
         )
         # In a real implementation, this would involve running tests and checking the results
         # For now, we'll just simulate the tests passing.
@@ -499,7 +673,13 @@ class MasterControlGraph:
         """Handles the debugging state."""
         agent_state.current_thought = "Entering debugging phase."
         logger.log(
-            "Phase 4.3", agent_state.task, -1, "INFO", {"state": "DEBUGGING"}, "SUCCESS", context=_get_log_context(agent_state)
+            "Phase 4.3",
+            agent_state.task,
+            -1,
+            "INFO",
+            {"state": "DEBUGGING"},
+            "SUCCESS",
+            context=_get_log_context(agent_state),
         )
         # In a real implementation, this would involve running debugging tools
         return self.get_trigger("DEBUGGING", "EXECUTING")
@@ -511,9 +691,17 @@ class MasterControlGraph:
         Handles the finalization of the task, guiding the agent through
         the structured post-mortem process.
         """
-        agent_state.current_thought = "Task complete. Generating structured post-mortem."
+        agent_state.current_thought = (
+            "Task complete. Generating structured post-mortem."
+        )
         logger.log(
-            "Phase 5", agent_state.task, -1, "INFO", {"state": "FINALIZING"}, "SUCCESS", context=_get_log_context(agent_state)
+            "Phase 5",
+            agent_state.task,
+            -1,
+            "INFO",
+            {"state": "FINALIZING"},
+            "SUCCESS",
+            context=_get_log_context(agent_state),
         )
         try:
             task_id = agent_state.task
@@ -525,12 +713,21 @@ class MasterControlGraph:
             # In a real scenario, the agent would analyze its logs to fill this out.
             # Here, we'll just populate it with placeholder data.
             report_content = template.replace("[TASK_ID]", task_id)
-            report_content = report_content.replace("[COMPLETION_DATE]", str(datetime.date.today()))
-            report_content = report_content.replace("[SUCCESS | FAILURE]", "SUCCESS") # Assume success for now
-            report_content = report_content.replace("*A concise, one-sentence summary of the original goal.*", agent_state.task)
+            report_content = report_content.replace(
+                "[COMPLETION_DATE]", str(datetime.date.today())
+            )
+            report_content = report_content.replace(
+                "[SUCCESS | FAILURE]", "SUCCESS"
+            )  # Assume success for now
+            report_content = report_content.replace(
+                "*A concise, one-sentence summary of the original goal.*",
+                agent_state.task,
+            )
             # This is where the agent would provide its analysis_content
-            report_content = report_content.replace("## 4. General Reflections", f"## 4. General Reflections\n\n{analysis_content}\n")
-
+            report_content = report_content.replace(
+                "## 4. General Reflections",
+                f"## 4. General Reflections\n\n{analysis_content}\n",
+            )
 
             final_path = f"postmortems/{datetime.date.today()}-{task_id}.md"
             os.makedirs(os.path.dirname(final_path), exist_ok=True)
@@ -555,13 +752,17 @@ class MasterControlGraph:
             if "lesson:" in analysis_content.lower():
                 try:
                     # Extract the JSON part of the lesson from the analysis
-                    lesson_json_str = analysis_content.split("```json")[1].split("```")[0]
+                    lesson_json_str = analysis_content.split("```json")[1].split("```")[
+                        0
+                    ]
                     lesson_data = json.loads(lesson_json_str)
 
                     with open("knowledge_core/lessons.jsonl", "a") as f:
                         f.write(json.dumps(lesson_data) + "\n")
 
-                    agent_state.current_thought += " Appended new lesson to knowledge core."
+                    agent_state.current_thought += (
+                        " Appended new lesson to knowledge core."
+                    )
                     logger.log(
                         "Phase 5",
                         task_id,
@@ -582,7 +783,6 @@ class MasterControlGraph:
                         "FAILURE",
                         context=_get_log_context(agent_state),
                     )
-
 
             return self.get_trigger("FINALIZING", "AWAITING_SUBMISSION")
         except Exception as e:

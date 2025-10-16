@@ -1,6 +1,7 @@
 import unittest
 from tooling.plan_parser import parse_plan, Command
 
+
 class TestPlanParser(unittest.TestCase):
 
     def test_parse_single_command(self):
@@ -45,6 +46,7 @@ The real message
         self.assertEqual(len(commands), 2)
         self.assertEqual(commands[0], Command("set_plan", "The real plan"))
         self.assertEqual(commands[1], Command("message_user", "The real message"))
+
 
 if __name__ == "__main__":
     unittest.main()

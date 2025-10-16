@@ -17,14 +17,16 @@ be used by the agent to inform its planning and execution process. This tool
 is essential for bridging the gap between human-written documentation and the
 agent's operational awareness.
 """
+
 import os
 import pypdf
 from pypdf import PdfReader
 import sys
 
 # Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.file_system_utils import find_files
+
 
 def scan_documents(directory="."):
     """

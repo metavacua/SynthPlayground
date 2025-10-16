@@ -5,6 +5,7 @@ from .formulas import Formula, LinImplies, OfCourse, With, Plus, Tensor
 from collections import Counter
 from itertools import combinations
 
+
 class Synthesizer:
     def __init__(self, logic_module=ill):
         self.logic = logic_module
@@ -42,7 +43,9 @@ class Synthesizer:
 
         if isinstance(succedent_formula, LinImplies):
             formula = succedent_formula
-            new_goal = self.logic.ILLSequent(goal.antecedent + Counter([formula.left]), formula.right)
+            new_goal = self.logic.ILLSequent(
+                goal.antecedent + Counter([formula.left]), formula.right
+            )
             try:
                 premise_proof = self.synthesize(new_goal, max_depth - 1, visited)
                 return self.logic.lin_implies_right(premise_proof, formula)
@@ -75,7 +78,9 @@ class Synthesizer:
         for ant_formula in list(goal.antecedent.elements()):
             if isinstance(ant_formula, OfCourse):
                 # Dereliction
-                new_antecedent = (goal.antecedent - Counter([ant_formula])) + Counter([ant_formula.operand])
+                new_antecedent = (goal.antecedent - Counter([ant_formula])) + Counter(
+                    [ant_formula.operand]
+                )
                 new_goal = self.logic.ILLSequent(new_antecedent, succedent_formula)
                 try:
                     premise_proof = self.synthesize(new_goal, max_depth - 1, visited)
@@ -101,14 +106,15 @@ class Synthesizer:
                 except (ValueError, RecursionError):
                     pass
 
-
             if isinstance(ant_formula, LinImplies):
                 formula = ant_formula
                 remaining_antecedent = goal.antecedent - Counter([formula])
                 for part1, part2 in self._get_partitions(remaining_antecedent):
                     try:
                         goal1 = self.logic.ILLSequent(part1, formula.left)
-                        goal2 = self.logic.ILLSequent(part2 + Counter([formula.right]), succedent_formula)
+                        goal2 = self.logic.ILLSequent(
+                            part2 + Counter([formula.right]), succedent_formula
+                        )
                         premise1 = self.synthesize(goal1, max_depth - 1, visited)
                         premise2 = self.synthesize(goal2, max_depth - 1, visited)
                         return self.logic.lin_implies_left(premise1, premise2, formula)

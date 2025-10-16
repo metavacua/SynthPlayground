@@ -67,13 +67,20 @@ class TestDependencyGraphGenerator(unittest.TestCase):
 
     def test_find_files(self):
         """Test finding both package.json and requirements.txt files."""
-        js_files, py_files = find_dependency_files(self.test_dir)
-        self.assertEqual(len(js_files), 1)
-        # The new lister returns relative paths, so we check for the relative path
-        self.assertIn(os.path.relpath(self.pkg_json_path, self.test_dir), js_files)
-        self.assertEqual(len(py_files), 2)
-        self.assertIn(os.path.relpath(self.req_txt_path, self.test_dir), py_files)
-        self.assertIn(os.path.relpath(self.root_req_txt_path, self.test_dir), py_files)
+        abs_test_dir = os.path.abspath(self.test_dir)
+        js_files, py_files = find_dependency_files(abs_test_dir)
+
+        # find_files returns paths relative to the search directory
+        expected_js = [os.path.relpath(self.pkg_json_path, abs_test_dir)]
+        expected_py = sorted(
+            [
+                os.path.relpath(self.req_txt_path, abs_test_dir),
+                os.path.relpath(self.root_req_txt_path, abs_test_dir),
+            ]
+        )
+
+        self.assertEqual(sorted(js_files), sorted(expected_js))
+        self.assertEqual(sorted(py_files), sorted(expected_py))
 
     def test_parse_package_json(self):
         """Test parsing a single package.json file."""
@@ -100,7 +107,8 @@ class TestDependencyGraphGenerator(unittest.TestCase):
 
     def test_generate_dependency_graph(self):
         """Test the full graph generation logic with mixed project types."""
-        graph = generate_dependency_graph(self.test_dir)
+        abs_test_dir = os.path.abspath(self.test_dir)
+        graph = generate_dependency_graph(abs_test_dir)
 
         nodes = graph["nodes"]
         edges = graph["edges"]
@@ -111,11 +119,11 @@ class TestDependencyGraphGenerator(unittest.TestCase):
         expected_nodes = {
             "js-app",
             "py_app",
-            "root-python-project",  # projects
-            "react",  # js external
+            "root-python-project",
+            "react",
             "flask",
             "requests",
-            "jsonschema",  # python external
+            "jsonschema",
         }
         self.assertEqual(node_ids, expected_nodes)
 

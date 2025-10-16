@@ -2,12 +2,15 @@ import argparse
 import sys
 from .grammar import Grammar
 
+
 def main():
     """
     Main function to run the grammar quantifier.
     This tool computes and reports various metrics for a given grammar.
     """
-    parser = argparse.ArgumentParser(description="A tool to quantify properties of a formal grammar.")
+    parser = argparse.ArgumentParser(
+        description="A tool to quantify properties of a formal grammar."
+    )
     parser.add_argument("grammar_file", help="Path to the grammar file.")
     args = parser.parse_args()
 
@@ -19,7 +22,9 @@ def main():
         non_terminals = grammar.get_non_terminals()
         terminals = grammar.get_terminals()
         print(f"\n1. Alphabet Sizes:")
-        print(f"   - Non-Terminals ({len(non_terminals)}): {sorted(list(non_terminals))}")
+        print(
+            f"   - Non-Terminals ({len(non_terminals)}): {sorted(list(non_terminals))}"
+        )
         print(f"   - Terminals ({len(terminals)}): {sorted(list(terminals))}")
 
         # Get rule counts
@@ -41,6 +46,7 @@ def main():
     except Exception as e:
         print(f"An error occurred: {e}", file=sys.stderr)
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

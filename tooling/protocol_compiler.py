@@ -36,13 +36,14 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 # Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.file_system_utils import find_files
 
 # --- Dependency Management ---
 # This section makes the script self-contained by automatically installing
 # its own dependencies. This is a best practice for development tools that
 # need to run in various environments without manual setup.
+
 
 def install_dependencies():
     """
@@ -53,7 +54,9 @@ def install_dependencies():
     requirements_path = os.path.join(script_dir, "requirements.txt")
 
     if not os.path.exists(requirements_path):
-        print(f"Warning: requirements.txt not found at {requirements_path}. Skipping dependency check.")
+        print(
+            f"Warning: requirements.txt not found at {requirements_path}. Skipping dependency check."
+        )
         return
 
     try:
@@ -64,23 +67,34 @@ def install_dependencies():
         freeze = None
 
     if freeze:
-        installed_packages = [line.split('==')[0] for line in freeze.freeze()]
+        installed_packages = [line.split("==")[0] for line in freeze.freeze()]
     else:
         # Fallback to slower subprocess call if internal API is not available
-        req = subprocess.run([sys.executable, '-m', 'pip', 'freeze'], capture_output=True, text=True)
-        installed_packages = [line.split('==')[0] for line in req.stdout.split('\n')]
+        req = subprocess.run(
+            [sys.executable, "-m", "pip", "freeze"], capture_output=True, text=True
+        )
+        installed_packages = [line.split("==")[0] for line in req.stdout.split("\n")]
 
-    with open(requirements_path, 'r') as f:
-        required_packages = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+    with open(requirements_path, "r") as f:
+        required_packages = [
+            line.strip() for line in f if line.strip() and not line.startswith("#")
+        ]
 
-    missing_packages = [pkg for pkg in required_packages if pkg.lower() not in [p.lower() for p in installed_packages]]
+    missing_packages = [
+        pkg
+        for pkg in required_packages
+        if pkg.lower() not in [p.lower() for p in installed_packages]
+    ]
 
     if missing_packages:
         print(f"Installing missing dependencies: {', '.join(missing_packages)}")
         # Use sys.executable to ensure we install to the correct Python environment
-        subprocess.check_call([sys.executable, "-m", "pip", "install", *missing_packages])
+        subprocess.check_call(
+            [sys.executable, "-m", "pip", "install", *missing_packages]
+        )
     else:
         print("All dependencies are satisfied.")
+
 
 # --- Auto-install dependencies before importing them ---
 install_dependencies()
@@ -135,11 +149,18 @@ def sanitize_markdown(content):
     This function removes script tags and other potentially malicious HTML/JS.
     """
     # Remove script tags
-    content = re.sub(r"<script.*?>.*?</script>", "", content, flags=re.IGNORECASE | re.DOTALL)
+    content = re.sub(
+        r"<script.*?>.*?</script>", "", content, flags=re.IGNORECASE | re.DOTALL
+    )
     # Remove on* attributes
     content = re.sub(r" on\w+=\".*?\"", "", content, flags=re.IGNORECASE)
     # Remove <<<SENSITIVE_INSTRUCTIONS>>> tags
-    content = re.sub(r"<<<SENSITIVE_INSTRUCTIONS>>>.*<<<SENSITIVE_INSTRUCTIONS>>>", "", content, flags=re.DOTALL)
+    content = re.sub(
+        r"<<<SENSITIVE_INSTRUCTIONS>>>.*<<<SENSITIVE_INSTRUCTIONS>>>",
+        "",
+        content,
+        flags=re.DOTALL,
+    )
     return content
 
 
@@ -164,9 +185,24 @@ def compile_protocols(
     # Discover all relevant files and sort them to ensure deterministic output.
     # The sort order is: autodoc placeholders, then all markdown, then all json.
     # This ensures descriptions and summaries appear before the JSON blocks.
-    autodoc_placeholders = sorted([os.path.join(source_dir, f) for f in find_files("*.autodoc.md", base_dir=source_dir)])
-    all_md_files = sorted([os.path.join(source_dir, f) for f in find_files("*.protocol.md", base_dir=source_dir)])
-    all_json_files = sorted([os.path.join(source_dir, f) for f in find_files("*.protocol.json", base_dir=source_dir)])
+    autodoc_placeholders = sorted(
+        [
+            os.path.join(source_dir, f)
+            for f in find_files("*.autodoc.md", base_dir=source_dir)
+        ]
+    )
+    all_md_files = sorted(
+        [
+            os.path.join(source_dir, f)
+            for f in find_files("*.protocol.md", base_dir=source_dir)
+        ]
+    )
+    all_json_files = sorted(
+        [
+            os.path.join(source_dir, f)
+            for f in find_files("*.protocol.json", base_dir=source_dir)
+        ]
+    )
 
     if not all_md_files and not all_json_files and not autodoc_placeholders:
         print(f"Warning: No protocol or documentation files found in {source_dir}.")
@@ -369,7 +405,6 @@ def main_cli():
                 except Exception as e:
                     # Catch exceptions during recompilation to prevent the watcher from crashing.
                     print(f"Error during recompilation: {e}")
-
 
         event_handler = ProtocolChangeHandler()
         observer = Observer()

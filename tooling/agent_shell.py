@@ -21,6 +21,8 @@ from tooling.master_control import MasterControlGraph
 from tooling.state import AgentState
 from tooling.filesystem_lister import list_all_files_and_dirs
 from utils.logger import Logger
+
+
 def find_fsm_transition(fsm, source_state, trigger):
     """Finds the destination state for a given source and trigger."""
     for transition in fsm["transitions"]:
@@ -30,6 +32,7 @@ def find_fsm_transition(fsm, source_state, trigger):
 
 
 import argparse
+
 
 def run_agent_loop(task_description: str, tools: dict, model: str = None):
     """
@@ -70,9 +73,13 @@ def run_agent_loop(task_description: str, tools: dict, model: str = None):
                         plan_content = f.read()
 
                     # Validate the plan against the specified model
-                    is_valid, error_message = mcg.validate_plan_for_model(plan_content, model)
+                    is_valid, error_message = mcg.validate_plan_for_model(
+                        plan_content, model
+                    )
                     if not is_valid:
-                        agent_state.error = f"Plan validation failed for model {model}: {error_message}"
+                        agent_state.error = (
+                            f"Plan validation failed for model {model}: {error_message}"
+                        )
                         mcg.current_state = "ERROR"
                         continue
 
@@ -132,7 +139,6 @@ The research findings have been integrated.
             )
             mcg.current_state = "ERROR"
 
-
         # Transition the FSM to the next state
         next_state = find_fsm_transition(mcg.fsm, current_state, trigger)
         if next_state:
@@ -166,7 +172,9 @@ def main():
 
     task_description = "Perform a basic self-check and greet the user."
     if args.model:
-        task_description = f"Execute a self-improvement task under CSDC Model {args.model}."
+        task_description = (
+            f"Execute a self-improvement task under CSDC Model {args.model}."
+        )
 
     run_agent_loop(task_description, None, model=args.model)
 
