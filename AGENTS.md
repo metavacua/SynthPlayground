@@ -9,6 +9,9 @@
 # ---
 
 
+
+---
+
 # Protocol: Agent Bootstrap
 
 **Rule `bootstrap-load-agents-md`**: Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the `AGENTS.md` file in the repository root.
@@ -362,30 +365,6 @@ The CSDC is enforced by the `tooling/csdc_cli.py` tool. This tool validates a pl
 
 ---
 
-# Protocol: pLLLU Execution
-
-This protocol establishes the `plllu_runner.py` script as the official entry point for executing pLLLU (`.plllu`) files.
-
-## The Problem: Lack of a Standard Runner
-
-The pLLLU language provides a powerful way to define complex logic, but without a standardized execution tool, there is no reliable way to integrate these files into the agent's workflow.
-
-## The Solution: A Dedicated Runner
-
-This protocol mandates the use of `tooling/plllu_runner.py` for all pLLLU file executions.
-
-**Rule `plllu-runner-is-entry-point`**: All pLLLU files must be executed through the `plllu_runner.py` script.
-
-This ensures that every pLLLU file is executed in a controlled, programmatic environment.
-
----
-
-# Security Protocol
-
-This document outlines the security policies and procedures for this project. It includes guidelines for handling sensitive data, reporting vulnerabilities, and maintaining a secure development environment. All contributors are expected to adhere to these protocols to ensure the integrity and safety of the project.
-
----
-
 # Protocol: Speculative Execution
 
 This protocol empowers the agent to engage in creative and exploratory tasks when it is otherwise idle. It provides a formal framework for the agent to generate novel ideas, plans, or artifacts that are not direct responses to a user request, but are instead products of its own "imagination" and analysis of the repository.
@@ -653,59 +632,6 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
   "associated_tools": [
     "set_plan",
     "message_user"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "plllu-execution-001",
-  "description": "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent.",
-  "rules": [
-    {
-      "rule_id": "execute-plllu-script",
-      "description": "The `plllu_runner.py` tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter.",
-      "enforcement": "The tool is used by invoking it from the command line with the path to the pLLLU script as an argument."
-    }
-  ],
-  "associated_tools": [
-    "tooling/plllu_runner.py"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "security-header",
-  "description": "Defines the identity and purpose of the Security Protocol document.",
-  "rules": []
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "security-vuln-reporting-001",
-  "description": "Defines the official policy and procedure for reporting security vulnerabilities.",
-  "rules": [
-    {
-      "rule_id": "vuln-reporting-channel",
-      "description": "All suspected security vulnerabilities MUST be reported privately to the designated security contact.",
-      "enforcement": "This is a procedural rule. The designated contact is specified in the project's main SECURITY.md file."
-    },
-    {
-      "rule_id": "no-public-disclosure",
-      "description": "Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed.",
-      "enforcement": "Violation of this rule may result in being banned from the project community."
-    }
   ]
 }
 ```
