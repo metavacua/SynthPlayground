@@ -112,6 +112,3 @@ dmypy.json
 .pyre/
 
 # Generated Documentation
-# Reconciliation artifacts
-AGENTS.md.reconciled
-reconciliation_report.md

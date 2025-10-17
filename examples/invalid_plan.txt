@@ -1,3 +1,0 @@
-set_plan
-submit
-plan_step_complete

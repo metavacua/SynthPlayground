@@ -1,8 +1,0 @@
--- UDC Toolchain Example in pLLLU --
--- Models a complex toolchain with potential for non-termination and indeterminacy --
-
--- The theorem prover is a powerful but potentially non-terminating tool,
--- modeled as a reusable resource with '!'.
--- The static analysis tool is experimental, so we check its readiness
--- with the completeness operator '~'.
-(code_gen ⊗ (~static_analysis ⊗ static_analysis)) ⅋ (!theorem_prover)

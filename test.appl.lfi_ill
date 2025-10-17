@@ -1,1 +1,0 @@
-let !Var(x) = !Int(5) in (Var(x) * Var(x))

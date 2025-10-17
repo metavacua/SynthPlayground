@@ -1,6 +1,0 @@
--- FDC Toolchain Example in pLLLU --
--- Models a simple, linear tool execution --
-
--- A simple plan is a tensor product of the tools.
--- This enforces that each step is used exactly once and in order.
-lint ⊗ test ⊗ deploy

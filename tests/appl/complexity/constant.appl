@@ -1,6 +1,0 @@
-// Represents a constant-time workload.
-let s = create_state(Cons("p", Nil(String))) in
-let g = create_goal("q")(Cons("q", Nil(String))) in
-let a = create_action("q")(Cons("p", Nil(String)))(Cons("q", Nil(String))) in
-let s_new = apply_action(s)(a) in
-is_goal(s_new)(g)

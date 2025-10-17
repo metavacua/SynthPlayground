@@ -1,7 +1,0 @@
-// This test checks for semantic validation.
-let initial_state = create_state(Cons("at Z", Nil(String))) in
-let goal = create_goal("move")(Cons("at B", Nil(String))) in
-let move_action = create_action("move")(Cons("at A", Nil(String)))(Cons("at B", Nil(String))) in
-let new_state = apply_action(initial_state)(move_action) in
-let result = is_goal(new_state)(goal) in
-result

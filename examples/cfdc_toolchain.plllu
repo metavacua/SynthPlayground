@@ -1,6 +1,0 @@
--- CFDC Toolchain Example in pLLLU --
--- Models a toolchain with a choice and potential conflict --
-
--- The plan involves a choice between two formatters,
--- and we check the consistency of that choice after testing.
-(lint ⊗ (format_A ⊕ format_B)) ⊗ (test ⊗ ∘(format_A ⊕ format_B))
