@@ -1,0 +1,25 @@
+# This is a paradoxical UDC program for testing the LFI model.
+#
+# Logic: This program halts if and only if it doesn't halt.
+#
+# 1. We start with the assumption that the program is NOT halting.
+# 2. We compare a register to the 'HALTED' state.
+# 3. If the 'HALTED' state is true, we enter an infinite loop (we don't halt).
+# 4. If the 'HALTED' state is false, we halt.
+
+LABEL START
+    # The ParaconsistentHaltingDecider seeds the 'HALTED' state with FALSE.
+    # So, this CMP instruction is effectively "is the program not halting?"
+    CMP REG1 HALTED
+
+    # JE (Jump if Equal) to DONT_HALT if the 'HALTED' state is TRUE.
+    # In our LFI model, this means we jump if the state is TRUE or BOTH.
+    JE DONT_HALT
+
+    # If we don't jump, it's because the 'HALTED' state was FALSE.
+    # In that case, we execute the HALT instruction.
+    HALT
+
+LABEL DONT_HALT
+    # This is an infinite loop, representing the non-halting path.
+    JMP DONT_HALT
