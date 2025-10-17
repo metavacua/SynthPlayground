@@ -1,0 +1,11 @@
+-- FDC Toolchain Example in pLLLU --
+-- Models a simple, linear tool execution --
+
+-- Define the tools as atomic propositions
+let plan = "Run Linter" in
+let test = "Run Unit Tests" in
+let deploy = "Deploy to Staging" in
+
+-- A simple plan is a tensor product of the tools
+-- This enforces that each step is used exactly once and in order.
+plan ⊗ test ⊗ deploy

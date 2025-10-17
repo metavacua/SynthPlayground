@@ -49,8 +49,7 @@ def list_all_files_and_dirs(root_dir=".", use_gitignore=True):
                 item_list.append(rel_file_path)
 
     # Add the root directory itself if it's not ignored
-    if root_dir == ".":
-        if not use_gitignore or not any(fnmatch.fnmatch("./", p) for p in gitignore_patterns):
-             item_list.append("./")
+    if not use_gitignore or not any(fnmatch.fnmatch("./", p) for p in gitignore_patterns):
+         item_list.append(os.path.relpath(root_dir, root_dir) + "/")
 
     return sorted(list(set(item_list)))

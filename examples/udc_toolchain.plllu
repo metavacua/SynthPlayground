@@ -1,0 +1,30 @@
+-- UDC Toolchain Example in pLLLU --
+-- Models a complex toolchain with potential for non-termination and indeterminacy --
+
+-- Tools
+let code_gen = "Run Code Generator" in
+let static_analysis = "Run Static Analysis" in
+let theorem_prover = "Run Theorem Prover" in
+let human_review = "Request Human Review" in
+
+-- The theorem prover is a powerful but potentially non-terminating tool.
+-- We can use the 'of course' modality to indicate it can be used repeatedly.
+let repeatable_prover = !theorem_prover in
+
+-- Let's say the static analysis tool is experimental, and we're not sure
+-- if it's fully integrated into the system yet. We can use the completeness
+-- operator to model this.
+let check_analysis_tool = ~static_analysis in
+
+-- The plan:
+-- 1. Generate code.
+-- 2. Check if the analysis tool is available.
+-- 3. If it is, run it. If not, request human review.
+-- 4. Run the theorem prover as many times as needed.
+
+-- This can be modeled as a case-like structure using par and plus.
+-- (check_analysis_tool ⊗ static_analysis) ⊕ (~(check_analysis_tool) ⊗ human_review)
+-- This is a simplified representation. A full program would require functions.
+
+-- A more direct representation of the plan:
+code_gen ⊗ ( (check_analysis_tool ⊗ static_analysis) ⅋ repeatable_prover)

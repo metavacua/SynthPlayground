@@ -1,0 +1,74 @@
+# UDC Plan: Prime Number Generator
+#
+# This plan finds prime numbers via trial division and writes them to the tape.
+# It is designed to be a non-halting program, making it a perfect test case
+# for the UDC Orchestrator's safety limits (instruction count, time, memory).
+#
+# Register Allocation:
+# R0: N, the number currently being tested for primality.
+# R1: i, the current divisor being tested.
+# R2: temp, a temporary register for the modulo calculation.
+
+# --- Initialization ---
+# Start checking for primes from the number 3.
+MOV R0, 3
+WRITE 2 # Manually add the first prime, 2, to the tape at position 0.
+RIGHT   # Move tape head to position 1 for the next prime.
+
+# --- Main Loop: Test a new number N ---
+LABEL next_number_loop
+  # For each new N, start the trial divisor i back at 2.
+  MOV R1, 2
+
+# --- Inner Loop: Check N against divisor i ---
+LABEL divisor_check_loop
+  # If the divisor i has reached N, it means no smaller number divided N evenly.
+  # Therefore, N must be prime.
+  CMP R1, R0
+  JE prime_found
+
+  # --- Modulo Sub-Loop: Check if R0 is divisible by R1 ---
+  # Copy N into the temp register for the subtraction loop.
+  MOV R2, R0
+
+  LABEL modulo_loop
+    # Compare temp (R2) with the divisor (R1).
+    # If temp is smaller than the divisor, then N is not evenly divisible by i.
+    CMP R2, R1
+    JL not_divisible
+
+    # Subtract the divisor from temp.
+    SUB R2, R1
+
+    # Check if temp is now exactly 0. If so, N is divisible by i.
+    CMP R2, 0
+    JE composite_found
+
+    # If not divisible yet and temp is still large enough, continue subtracting.
+    JMP modulo_loop
+
+# --- Branches ---
+LABEL not_divisible
+  # N was not divisible by the current i. Increment i and try the next one.
+  INC R1
+  JMP divisor_check_loop
+
+LABEL prime_found
+  # N is prime. Write its value to the current tape position.
+  WRITE R0
+  # Move the tape head to the right for the next prime number.
+  RIGHT
+  # Continue to the next number.
+  JMP next_number
+
+LABEL composite_found
+  # N is not prime (it was divisible by i).
+  # Skip writing to the tape and just move on to the next number.
+  JMP next_number
+
+LABEL next_number
+  # Increment N to test the next integer.
+  INC R0
+  JMP next_number_loop
+
+# Note: There is no HALT instruction. This program is intended to run indefinitely.

@@ -25,6 +25,9 @@ rate tracking or tool usage anti-patterns) to be added as the system evolves.
 import argparse
 import json
 from collections import defaultdict
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 LOG_FILE_PATH = "logs/activity.log.jsonl"
 ACTION_TYPE_MAP = {"set_plan": "PLAN_UPDATE"}
