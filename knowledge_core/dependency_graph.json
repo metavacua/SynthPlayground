@@ -2,12 +2,12 @@
   "nodes": [
     {
       "id": "root-python-project",
-      "path": "././requirements.txt",
+      "path": "./requirements.txt",
       "type": "python-project"
     },
     {
       "id": "tooling",
-      "path": "././tooling/requirements.txt",
+      "path": "./tooling/requirements.txt",
       "type": "python-project"
     },
     {
@@ -106,6 +106,11 @@
       "type": "python-external"
     },
     {
+      "id": "ply",
+      "path": null,
+      "type": "python-external"
+    },
+    {
       "id": "black",
       "path": null,
       "type": "python-external"
@@ -192,6 +197,10 @@
     {
       "source": "root-python-project",
       "target": "markdown"
+    },
+    {
+      "source": "root-python-project",
+      "target": "ply"
     },
     {
       "source": "root-python-project",
