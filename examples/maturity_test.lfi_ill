@@ -1,0 +1,18 @@
+-- Test Paraconsistent Negation (¬)
+¬(True)   -- Expected: FALSE
+¬(False)  -- Expected: TRUE
+¬(Both)   -- Expected: BOTH
+¬(Neither) -- Expected: NEITHER
+
+-- Test Consistency Operator (∘)
+∘(True)   -- Expected: TRUE
+∘(False)  -- Expected: TRUE
+∘(Both)   -- Expected: FALSE
+∘(Neither) -- Expected: NEITHER
+
+-- Test Section Modality (§)
+§(True)   -- Expected: TRUE (and concrete value True)
+
+-- Test Nested Operations
+∘(¬(Both)) -- Expected: FALSE (¬(Both) is Both, and ∘(Both) is FALSE)
+¬(∘(Both)) -- Expected: TRUE (∘(Both) is False, and ¬(False) is TRUE)

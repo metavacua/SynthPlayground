@@ -50,6 +50,32 @@ class Interpreter:
     def visit_String(self, node):
         return ParaconsistentState(ParaconsistentTruth.TRUE, node.value)
 
+    def visit_Atom(self, node):
+        # The semantics of linear negation on atoms (e.g., p^⊥) is not fully
+        # specified in the research paper for an FDE-style evaluation.
+        # This implementation provides a basic interpretation.
+        if node.negated:
+            if node.name == "True":
+                return ParaconsistentState(ParaconsistentTruth.FALSE, False)
+            elif node.name == "False":
+                return ParaconsistentState(ParaconsistentTruth.TRUE, True)
+            # For negated Both/Neither or other atoms, the semantics are
+            # undefined. We'll treat them as NEITHER.
+            else:
+                return ParaconsistentState(ParaconsistentTruth.NEITHER, None)
+
+        if node.name == "True":
+            return ParaconsistentState(ParaconsistentTruth.TRUE, True)
+        elif node.name == "False":
+            return ParaconsistentState(ParaconsistentTruth.FALSE, False)
+        elif node.name == "Both":
+            return ParaconsistentState(ParaconsistentTruth.BOTH, None)
+        elif node.name == "Neither":
+            return ParaconsistentState(ParaconsistentTruth.NEITHER, None)
+
+        # Fallback for other atoms, treat as NEITHER
+        return ParaconsistentState(ParaconsistentTruth.NEITHER, node.name)
+
     def visit_Bool(self, node):
         if node.value == "Both":
             return ParaconsistentState(ParaconsistentTruth.BOTH)
@@ -89,6 +115,47 @@ class Interpreter:
             return self.visit(node.e2)
         else:
             return ParaconsistentState(ParaconsistentTruth.FALSE)
+
+    def visit_Section(self, node):
+        # Placeholder Implementation:
+        # The § modality from Light Linear Logic has complex semantics related
+        # to proof structure and complexity bounds, which are not captured in this
+        # simple FDE-style evaluator. For now, we treat it as an identity
+        # function to allow for syntactic compatibility with the formal grammar.
+        return ParaconsistentState(ParaconsistentTruth.TRUE, self.visit(node.formula))
+
+    def visit_Negation(self, node):
+        val = self.visit(node.formula)
+        negated_value = None
+        if val.value == ParaconsistentTruth.TRUE:
+            negated_value = ParaconsistentTruth.FALSE
+        elif val.value == ParaconsistentTruth.FALSE:
+            negated_value = ParaconsistentTruth.TRUE
+        else:
+            # BOTH and NEITHER remain unchanged under paraconsistent negation
+            negated_value = val.value
+
+        return ParaconsistentState(negated_value, val.concrete_value)
+
+    def visit_Consistency(self, node):
+        val = self.visit(node.formula)
+        consistency_value = None
+        concrete_result = None
+
+        if val.value == ParaconsistentTruth.TRUE or val.value == ParaconsistentTruth.FALSE:
+            # If the value is classically true or false, it's consistent.
+            consistency_value = ParaconsistentTruth.TRUE
+            concrete_result = True
+        elif val.value == ParaconsistentTruth.BOTH:
+            # If the value is BOTH, it's inconsistent.
+            consistency_value = ParaconsistentTruth.FALSE
+            concrete_result = False
+        else: # NEITHER
+            # If the value is NEITHER, its consistency is also NEITHER.
+            consistency_value = ParaconsistentTruth.NEITHER
+            concrete_result = None
+
+        return ParaconsistentState(consistency_value, concrete_result)
 
     def visit_WhyNot(self, node):
         return ParaconsistentState(ParaconsistentTruth.TRUE, self.visit(node.e))
