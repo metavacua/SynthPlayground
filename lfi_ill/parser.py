@@ -7,6 +7,7 @@ precedence = (
     ('left', 'TENSOR', 'PAR'),
     ('left', 'PLUS', 'WITH'),
     ('right', 'NEG', 'CIRC', 'COMP', 'OFC', 'WHYNOT', 'SEC'),
+    ('left', 'PERP'),
 )
 
 # --- Parsing Rules ---
@@ -19,9 +20,9 @@ def p_literal_atom(p):
     'literal : ID'
     p[0] = Atom(p[1])
 
-def p_literal_atom_neg(p):
-    'literal : ID BOT'
-    p[0] = Atom(p[1], negated=True)
+def p_formula_neg(p):
+    'formula : formula PERP'
+    p[0] = p[1].neg()
 
 def p_formula_binary_op(p):
     '''formula : formula TENSOR formula
@@ -59,7 +60,7 @@ def p_formula_unary_op(p):
 
 def p_formula_units(p):
     '''formula : ONE
-               | BOT
+               | PERP
                | ZERO
                | TOP'''
     if p[1] == '1':

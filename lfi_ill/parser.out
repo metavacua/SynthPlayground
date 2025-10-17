@@ -5,7 +5,7 @@ Grammar
 Rule 0     S' -> formula
 Rule 1     formula -> literal
 Rule 2     literal -> ID
-Rule 3     literal -> ID BOT
+Rule 3     formula -> formula PERP
 Rule 4     formula -> formula TENSOR formula
 Rule 5     formula -> formula PAR formula
 Rule 6     formula -> formula PLUS formula
@@ -17,22 +17,22 @@ Rule 11    formula -> OFC formula
 Rule 12    formula -> WHYNOT formula
 Rule 13    formula -> SEC formula
 Rule 14    formula -> ONE
-Rule 15    formula -> BOT
+Rule 15    formula -> PERP
 Rule 16    formula -> ZERO
 Rule 17    formula -> TOP
 Rule 18    formula -> LPAREN formula RPAREN
 
 Terminals, with rules where they appear
 
-BOT                  : 3 15
 CIRC                 : 9
 COMP                 : 10
-ID                   : 2 3
+ID                   : 2
 LPAREN               : 18
 NEG                  : 8
 OFC                  : 11
 ONE                  : 14
 PAR                  : 5
+PERP                 : 3 15
 PLUS                 : 6
 RPAREN               : 18
 SEC                  : 13
@@ -45,7 +45,7 @@ error                :
 
 Nonterminals, with rules where they appear
 
-formula              : 4 4 5 5 6 6 7 7 8 9 10 11 12 13 18 0
+formula              : 3 4 4 5 5 6 6 7 7 8 9 10 11 12 13 18 0
 literal              : 1
 
 Parsing method: LALR
@@ -54,6 +54,7 @@ state 0
 
     (0) S' -> . formula
     (1) formula -> . literal
+    (3) formula -> . formula PERP
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
@@ -65,21 +66,20 @@ state 0
     (12) formula -> . WHYNOT formula
     (13) formula -> . SEC formula
     (14) formula -> . ONE
-    (15) formula -> . BOT
+    (15) formula -> . PERP
     (16) formula -> . ZERO
     (17) formula -> . TOP
     (18) formula -> . LPAREN formula RPAREN
     (2) literal -> . ID
-    (3) literal -> . ID BOT
 
-    NEG             shift and go to state 3
-    CIRC            shift and go to state 4
-    COMP            shift and go to state 5
-    OFC             shift and go to state 6
-    WHYNOT          shift and go to state 7
-    SEC             shift and go to state 8
-    ONE             shift and go to state 9
-    BOT             shift and go to state 10
+    NEG             shift and go to state 4
+    CIRC            shift and go to state 5
+    COMP            shift and go to state 6
+    OFC             shift and go to state 7
+    WHYNOT          shift and go to state 8
+    SEC             shift and go to state 9
+    ONE             shift and go to state 10
+    PERP            shift and go to state 3
     ZERO            shift and go to state 11
     TOP             shift and go to state 12
     LPAREN          shift and go to state 13
@@ -91,21 +91,24 @@ state 0
 state 1
 
     (0) S' -> formula .
+    (3) formula -> formula . PERP
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
     (7) formula -> formula . WITH formula
 
-    TENSOR          shift and go to state 15
-    PAR             shift and go to state 16
-    PLUS            shift and go to state 17
-    WITH            shift and go to state 18
+    PERP            shift and go to state 15
+    TENSOR          shift and go to state 16
+    PAR             shift and go to state 17
+    PLUS            shift and go to state 18
+    WITH            shift and go to state 19
 
 
 state 2
 
     (1) formula -> literal .
 
+    PERP            reduce using rule 1 (formula -> literal .)
     TENSOR          reduce using rule 1 (formula -> literal .)
     PAR             reduce using rule 1 (formula -> literal .)
     PLUS            reduce using rule 1 (formula -> literal .)
@@ -116,46 +119,22 @@ state 2
 
 state 3
 
-    (8) formula -> NEG . formula
-    (1) formula -> . literal
-    (4) formula -> . formula TENSOR formula
-    (5) formula -> . formula PAR formula
-    (6) formula -> . formula PLUS formula
-    (7) formula -> . formula WITH formula
-    (8) formula -> . NEG formula
-    (9) formula -> . CIRC formula
-    (10) formula -> . COMP formula
-    (11) formula -> . OFC formula
-    (12) formula -> . WHYNOT formula
-    (13) formula -> . SEC formula
-    (14) formula -> . ONE
-    (15) formula -> . BOT
-    (16) formula -> . ZERO
-    (17) formula -> . TOP
-    (18) formula -> . LPAREN formula RPAREN
-    (2) literal -> . ID
-    (3) literal -> . ID BOT
+    (15) formula -> PERP .
 
-    NEG             shift and go to state 3
-    CIRC            shift and go to state 4
-    COMP            shift and go to state 5
-    OFC             shift and go to state 6
-    WHYNOT          shift and go to state 7
-    SEC             shift and go to state 8
-    ONE             shift and go to state 9
-    BOT             shift and go to state 10
-    ZERO            shift and go to state 11
-    TOP             shift and go to state 12
-    LPAREN          shift and go to state 13
-    ID              shift and go to state 14
+    PERP            reduce using rule 15 (formula -> PERP .)
+    TENSOR          reduce using rule 15 (formula -> PERP .)
+    PAR             reduce using rule 15 (formula -> PERP .)
+    PLUS            reduce using rule 15 (formula -> PERP .)
+    WITH            reduce using rule 15 (formula -> PERP .)
+    $end            reduce using rule 15 (formula -> PERP .)
+    RPAREN          reduce using rule 15 (formula -> PERP .)
 
-    formula                        shift and go to state 19
-    literal                        shift and go to state 2
 
 state 4
 
-    (9) formula -> CIRC . formula
+    (8) formula -> NEG . formula
     (1) formula -> . literal
+    (3) formula -> . formula PERP
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
@@ -167,21 +146,20 @@ state 4
     (12) formula -> . WHYNOT formula
     (13) formula -> . SEC formula
     (14) formula -> . ONE
-    (15) formula -> . BOT
+    (15) formula -> . PERP
     (16) formula -> . ZERO
     (17) formula -> . TOP
     (18) formula -> . LPAREN formula RPAREN
     (2) literal -> . ID
-    (3) literal -> . ID BOT
 
-    NEG             shift and go to state 3
-    CIRC            shift and go to state 4
-    COMP            shift and go to state 5
-    OFC             shift and go to state 6
-    WHYNOT          shift and go to state 7
-    SEC             shift and go to state 8
-    ONE             shift and go to state 9
-    BOT             shift and go to state 10
+    NEG             shift and go to state 4
+    CIRC            shift and go to state 5
+    COMP            shift and go to state 6
+    OFC             shift and go to state 7
+    WHYNOT          shift and go to state 8
+    SEC             shift and go to state 9
+    ONE             shift and go to state 10
+    PERP            shift and go to state 3
     ZERO            shift and go to state 11
     TOP             shift and go to state 12
     LPAREN          shift and go to state 13
@@ -192,8 +170,9 @@ state 4
 
 state 5
 
-    (10) formula -> COMP . formula
+    (9) formula -> CIRC . formula
     (1) formula -> . literal
+    (3) formula -> . formula PERP
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
@@ -205,21 +184,20 @@ state 5
     (12) formula -> . WHYNOT formula
     (13) formula -> . SEC formula
     (14) formula -> . ONE
-    (15) formula -> . BOT
+    (15) formula -> . PERP
     (16) formula -> . ZERO
     (17) formula -> . TOP
     (18) formula -> . LPAREN formula RPAREN
     (2) literal -> . ID
-    (3) literal -> . ID BOT
 
-    NEG             shift and go to state 3
-    CIRC            shift and go to state 4
-    COMP            shift and go to state 5
-    OFC             shift and go to state 6
-    WHYNOT          shift and go to state 7
-    SEC             shift and go to state 8
-    ONE             shift and go to state 9
-    BOT             shift and go to state 10
+    NEG             shift and go to state 4
+    CIRC            shift and go to state 5
+    COMP            shift and go to state 6
+    OFC             shift and go to state 7
+    WHYNOT          shift and go to state 8
+    SEC             shift and go to state 9
+    ONE             shift and go to state 10
+    PERP            shift and go to state 3
     ZERO            shift and go to state 11
     TOP             shift and go to state 12
     LPAREN          shift and go to state 13
@@ -230,8 +208,9 @@ state 5
 
 state 6
 
-    (11) formula -> OFC . formula
+    (10) formula -> COMP . formula
     (1) formula -> . literal
+    (3) formula -> . formula PERP
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
@@ -243,21 +222,20 @@ state 6
     (12) formula -> . WHYNOT formula
     (13) formula -> . SEC formula
     (14) formula -> . ONE
-    (15) formula -> . BOT
+    (15) formula -> . PERP
     (16) formula -> . ZERO
     (17) formula -> . TOP
     (18) formula -> . LPAREN formula RPAREN
     (2) literal -> . ID
-    (3) literal -> . ID BOT
 
-    NEG             shift and go to state 3
-    CIRC            shift and go to state 4
-    COMP            shift and go to state 5
-    OFC             shift and go to state 6
-    WHYNOT          shift and go to state 7
-    SEC             shift and go to state 8
-    ONE             shift and go to state 9
-    BOT             shift and go to state 10
+    NEG             shift and go to state 4
+    CIRC            shift and go to state 5
+    COMP            shift and go to state 6
+    OFC             shift and go to state 7
+    WHYNOT          shift and go to state 8
+    SEC             shift and go to state 9
+    ONE             shift and go to state 10
+    PERP            shift and go to state 3
     ZERO            shift and go to state 11
     TOP             shift and go to state 12
     LPAREN          shift and go to state 13
@@ -268,8 +246,9 @@ state 6
 
 state 7
 
-    (12) formula -> WHYNOT . formula
+    (11) formula -> OFC . formula
     (1) formula -> . literal
+    (3) formula -> . formula PERP
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
@@ -281,21 +260,20 @@ state 7
     (12) formula -> . WHYNOT formula
     (13) formula -> . SEC formula
     (14) formula -> . ONE
-    (15) formula -> . BOT
+    (15) formula -> . PERP
     (16) formula -> . ZERO
     (17) formula -> . TOP
     (18) formula -> . LPAREN formula RPAREN
     (2) literal -> . ID
-    (3) literal -> . ID BOT
 
-    NEG             shift and go to state 3
-    CIRC            shift and go to state 4
-    COMP            shift and go to state 5
-    OFC             shift and go to state 6
-    WHYNOT          shift and go to state 7
-    SEC             shift and go to state 8
-    ONE             shift and go to state 9
-    BOT             shift and go to state 10
+    NEG             shift and go to state 4
+    CIRC            shift and go to state 5
+    COMP            shift and go to state 6
+    OFC             shift and go to state 7
+    WHYNOT          shift and go to state 8
+    SEC             shift and go to state 9
+    ONE             shift and go to state 10
+    PERP            shift and go to state 3
     ZERO            shift and go to state 11
     TOP             shift and go to state 12
     LPAREN          shift and go to state 13
@@ -306,8 +284,9 @@ state 7
 
 state 8
 
-    (13) formula -> SEC . formula
+    (12) formula -> WHYNOT . formula
     (1) formula -> . literal
+    (3) formula -> . formula PERP
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
@@ -319,21 +298,20 @@ state 8
     (12) formula -> . WHYNOT formula
     (13) formula -> . SEC formula
     (14) formula -> . ONE
-    (15) formula -> . BOT
+    (15) formula -> . PERP
     (16) formula -> . ZERO
     (17) formula -> . TOP
     (18) formula -> . LPAREN formula RPAREN
     (2) literal -> . ID
-    (3) literal -> . ID BOT
 
-    NEG             shift and go to state 3
-    CIRC            shift and go to state 4
-    COMP            shift and go to state 5
-    OFC             shift and go to state 6
-    WHYNOT          shift and go to state 7
-    SEC             shift and go to state 8
-    ONE             shift and go to state 9
-    BOT             shift and go to state 10
+    NEG             shift and go to state 4
+    CIRC            shift and go to state 5
+    COMP            shift and go to state 6
+    OFC             shift and go to state 7
+    WHYNOT          shift and go to state 8
+    SEC             shift and go to state 9
+    ONE             shift and go to state 10
+    PERP            shift and go to state 3
     ZERO            shift and go to state 11
     TOP             shift and go to state 12
     LPAREN          shift and go to state 13
@@ -344,8 +322,47 @@ state 8
 
 state 9
 
+    (13) formula -> SEC . formula
+    (1) formula -> . literal
+    (3) formula -> . formula PERP
+    (4) formula -> . formula TENSOR formula
+    (5) formula -> . formula PAR formula
+    (6) formula -> . formula PLUS formula
+    (7) formula -> . formula WITH formula
+    (8) formula -> . NEG formula
+    (9) formula -> . CIRC formula
+    (10) formula -> . COMP formula
+    (11) formula -> . OFC formula
+    (12) formula -> . WHYNOT formula
+    (13) formula -> . SEC formula
+    (14) formula -> . ONE
+    (15) formula -> . PERP
+    (16) formula -> . ZERO
+    (17) formula -> . TOP
+    (18) formula -> . LPAREN formula RPAREN
+    (2) literal -> . ID
+
+    NEG             shift and go to state 4
+    CIRC            shift and go to state 5
+    COMP            shift and go to state 6
+    OFC             shift and go to state 7
+    WHYNOT          shift and go to state 8
+    SEC             shift and go to state 9
+    ONE             shift and go to state 10
+    PERP            shift and go to state 3
+    ZERO            shift and go to state 11
+    TOP             shift and go to state 12
+    LPAREN          shift and go to state 13
+    ID              shift and go to state 14
+
+    formula                        shift and go to state 25
+    literal                        shift and go to state 2
+
+state 10
+
     (14) formula -> ONE .
 
+    PERP            reduce using rule 14 (formula -> ONE .)
     TENSOR          reduce using rule 14 (formula -> ONE .)
     PAR             reduce using rule 14 (formula -> ONE .)
     PLUS            reduce using rule 14 (formula -> ONE .)
@@ -354,22 +371,11 @@ state 9
     RPAREN          reduce using rule 14 (formula -> ONE .)
 
 
-state 10
-
-    (15) formula -> BOT .
-
-    TENSOR          reduce using rule 15 (formula -> BOT .)
-    PAR             reduce using rule 15 (formula -> BOT .)
-    PLUS            reduce using rule 15 (formula -> BOT .)
-    WITH            reduce using rule 15 (formula -> BOT .)
-    $end            reduce using rule 15 (formula -> BOT .)
-    RPAREN          reduce using rule 15 (formula -> BOT .)
-
-
 state 11
 
     (16) formula -> ZERO .
 
+    PERP            reduce using rule 16 (formula -> ZERO .)
     TENSOR          reduce using rule 16 (formula -> ZERO .)
     PAR             reduce using rule 16 (formula -> ZERO .)
     PLUS            reduce using rule 16 (formula -> ZERO .)
@@ -382,6 +388,7 @@ state 12
 
     (17) formula -> TOP .
 
+    PERP            reduce using rule 17 (formula -> TOP .)
     TENSOR          reduce using rule 17 (formula -> TOP .)
     PAR             reduce using rule 17 (formula -> TOP .)
     PLUS            reduce using rule 17 (formula -> TOP .)
@@ -394,6 +401,7 @@ state 13
 
     (18) formula -> LPAREN . formula RPAREN
     (1) formula -> . literal
+    (3) formula -> . formula PERP
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
@@ -405,47 +413,59 @@ state 13
     (12) formula -> . WHYNOT formula
     (13) formula -> . SEC formula
     (14) formula -> . ONE
-    (15) formula -> . BOT
+    (15) formula -> . PERP
     (16) formula -> . ZERO
     (17) formula -> . TOP
     (18) formula -> . LPAREN formula RPAREN
     (2) literal -> . ID
-    (3) literal -> . ID BOT
 
-    NEG             shift and go to state 3
-    CIRC            shift and go to state 4
-    COMP            shift and go to state 5
-    OFC             shift and go to state 6
-    WHYNOT          shift and go to state 7
-    SEC             shift and go to state 8
-    ONE             shift and go to state 9
-    BOT             shift and go to state 10
+    NEG             shift and go to state 4
+    CIRC            shift and go to state 5
+    COMP            shift and go to state 6
+    OFC             shift and go to state 7
+    WHYNOT          shift and go to state 8
+    SEC             shift and go to state 9
+    ONE             shift and go to state 10
+    PERP            shift and go to state 3
     ZERO            shift and go to state 11
     TOP             shift and go to state 12
     LPAREN          shift and go to state 13
     ID              shift and go to state 14
 
-    formula                        shift and go to state 25
+    formula                        shift and go to state 26
     literal                        shift and go to state 2
 
 state 14
 
     (2) literal -> ID .
-    (3) literal -> ID . BOT
 
+    PERP            reduce using rule 2 (literal -> ID .)
     TENSOR          reduce using rule 2 (literal -> ID .)
     PAR             reduce using rule 2 (literal -> ID .)
     PLUS            reduce using rule 2 (literal -> ID .)
     WITH            reduce using rule 2 (literal -> ID .)
     $end            reduce using rule 2 (literal -> ID .)
     RPAREN          reduce using rule 2 (literal -> ID .)
-    BOT             shift and go to state 26
 
 
 state 15
 
+    (3) formula -> formula PERP .
+
+    PERP            reduce using rule 3 (formula -> formula PERP .)
+    TENSOR          reduce using rule 3 (formula -> formula PERP .)
+    PAR             reduce using rule 3 (formula -> formula PERP .)
+    PLUS            reduce using rule 3 (formula -> formula PERP .)
+    WITH            reduce using rule 3 (formula -> formula PERP .)
+    $end            reduce using rule 3 (formula -> formula PERP .)
+    RPAREN          reduce using rule 3 (formula -> formula PERP .)
+
+
+state 16
+
     (4) formula -> formula TENSOR . formula
     (1) formula -> . literal
+    (3) formula -> . formula PERP
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
@@ -457,21 +477,20 @@ state 15
     (12) formula -> . WHYNOT formula
     (13) formula -> . SEC formula
     (14) formula -> . ONE
-    (15) formula -> . BOT
+    (15) formula -> . PERP
     (16) formula -> . ZERO
     (17) formula -> . TOP
     (18) formula -> . LPAREN formula RPAREN
     (2) literal -> . ID
-    (3) literal -> . ID BOT
 
-    NEG             shift and go to state 3
-    CIRC            shift and go to state 4
-    COMP            shift and go to state 5
-    OFC             shift and go to state 6
-    WHYNOT          shift and go to state 7
-    SEC             shift and go to state 8
-    ONE             shift and go to state 9
-    BOT             shift and go to state 10
+    NEG             shift and go to state 4
+    CIRC            shift and go to state 5
+    COMP            shift and go to state 6
+    OFC             shift and go to state 7
+    WHYNOT          shift and go to state 8
+    SEC             shift and go to state 9
+    ONE             shift and go to state 10
+    PERP            shift and go to state 3
     ZERO            shift and go to state 11
     TOP             shift and go to state 12
     LPAREN          shift and go to state 13
@@ -480,10 +499,11 @@ state 15
     formula                        shift and go to state 27
     literal                        shift and go to state 2
 
-state 16
+state 17
 
     (5) formula -> formula PAR . formula
     (1) formula -> . literal
+    (3) formula -> . formula PERP
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
@@ -495,21 +515,20 @@ state 16
     (12) formula -> . WHYNOT formula
     (13) formula -> . SEC formula
     (14) formula -> . ONE
-    (15) formula -> . BOT
+    (15) formula -> . PERP
     (16) formula -> . ZERO
     (17) formula -> . TOP
     (18) formula -> . LPAREN formula RPAREN
     (2) literal -> . ID
-    (3) literal -> . ID BOT
 
-    NEG             shift and go to state 3
-    CIRC            shift and go to state 4
-    COMP            shift and go to state 5
-    OFC             shift and go to state 6
-    WHYNOT          shift and go to state 7
-    SEC             shift and go to state 8
-    ONE             shift and go to state 9
-    BOT             shift and go to state 10
+    NEG             shift and go to state 4
+    CIRC            shift and go to state 5
+    COMP            shift and go to state 6
+    OFC             shift and go to state 7
+    WHYNOT          shift and go to state 8
+    SEC             shift and go to state 9
+    ONE             shift and go to state 10
+    PERP            shift and go to state 3
     ZERO            shift and go to state 11
     TOP             shift and go to state 12
     LPAREN          shift and go to state 13
@@ -518,10 +537,11 @@ state 16
     formula                        shift and go to state 28
     literal                        shift and go to state 2
 
-state 17
+state 18
 
     (6) formula -> formula PLUS . formula
     (1) formula -> . literal
+    (3) formula -> . formula PERP
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
@@ -533,21 +553,20 @@ state 17
     (12) formula -> . WHYNOT formula
     (13) formula -> . SEC formula
     (14) formula -> . ONE
-    (15) formula -> . BOT
+    (15) formula -> . PERP
     (16) formula -> . ZERO
     (17) formula -> . TOP
     (18) formula -> . LPAREN formula RPAREN
     (2) literal -> . ID
-    (3) literal -> . ID BOT
 
-    NEG             shift and go to state 3
-    CIRC            shift and go to state 4
-    COMP            shift and go to state 5
-    OFC             shift and go to state 6
-    WHYNOT          shift and go to state 7
-    SEC             shift and go to state 8
-    ONE             shift and go to state 9
-    BOT             shift and go to state 10
+    NEG             shift and go to state 4
+    CIRC            shift and go to state 5
+    COMP            shift and go to state 6
+    OFC             shift and go to state 7
+    WHYNOT          shift and go to state 8
+    SEC             shift and go to state 9
+    ONE             shift and go to state 10
+    PERP            shift and go to state 3
     ZERO            shift and go to state 11
     TOP             shift and go to state 12
     LPAREN          shift and go to state 13
@@ -556,10 +575,11 @@ state 17
     formula                        shift and go to state 29
     literal                        shift and go to state 2
 
-state 18
+state 19
 
     (7) formula -> formula WITH . formula
     (1) formula -> . literal
+    (3) formula -> . formula PERP
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
@@ -571,21 +591,20 @@ state 18
     (12) formula -> . WHYNOT formula
     (13) formula -> . SEC formula
     (14) formula -> . ONE
-    (15) formula -> . BOT
+    (15) formula -> . PERP
     (16) formula -> . ZERO
     (17) formula -> . TOP
     (18) formula -> . LPAREN formula RPAREN
     (2) literal -> . ID
-    (3) literal -> . ID BOT
 
-    NEG             shift and go to state 3
-    CIRC            shift and go to state 4
-    COMP            shift and go to state 5
-    OFC             shift and go to state 6
-    WHYNOT          shift and go to state 7
-    SEC             shift and go to state 8
-    ONE             shift and go to state 9
-    BOT             shift and go to state 10
+    NEG             shift and go to state 4
+    CIRC            shift and go to state 5
+    COMP            shift and go to state 6
+    OFC             shift and go to state 7
+    WHYNOT          shift and go to state 8
+    SEC             shift and go to state 9
+    ONE             shift and go to state 10
+    PERP            shift and go to state 3
     ZERO            shift and go to state 11
     TOP             shift and go to state 12
     LPAREN          shift and go to state 13
@@ -594,9 +613,10 @@ state 18
     formula                        shift and go to state 30
     literal                        shift and go to state 2
 
-state 19
+state 20
 
     (8) formula -> NEG formula .
+    (3) formula -> formula . PERP
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
@@ -608,16 +628,19 @@ state 19
     WITH            reduce using rule 8 (formula -> NEG formula .)
     $end            reduce using rule 8 (formula -> NEG formula .)
     RPAREN          reduce using rule 8 (formula -> NEG formula .)
+    PERP            shift and go to state 15
 
-  ! TENSOR          [ shift and go to state 15 ]
-  ! PAR             [ shift and go to state 16 ]
-  ! PLUS            [ shift and go to state 17 ]
-  ! WITH            [ shift and go to state 18 ]
+  ! PERP            [ reduce using rule 8 (formula -> NEG formula .) ]
+  ! TENSOR          [ shift and go to state 16 ]
+  ! PAR             [ shift and go to state 17 ]
+  ! PLUS            [ shift and go to state 18 ]
+  ! WITH            [ shift and go to state 19 ]
 
 
-state 20
+state 21
 
     (9) formula -> CIRC formula .
+    (3) formula -> formula . PERP
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
@@ -629,16 +652,19 @@ state 20
     WITH            reduce using rule 9 (formula -> CIRC formula .)
     $end            reduce using rule 9 (formula -> CIRC formula .)
     RPAREN          reduce using rule 9 (formula -> CIRC formula .)
+    PERP            shift and go to state 15
 
-  ! TENSOR          [ shift and go to state 15 ]
-  ! PAR             [ shift and go to state 16 ]
-  ! PLUS            [ shift and go to state 17 ]
-  ! WITH            [ shift and go to state 18 ]
+  ! PERP            [ reduce using rule 9 (formula -> CIRC formula .) ]
+  ! TENSOR          [ shift and go to state 16 ]
+  ! PAR             [ shift and go to state 17 ]
+  ! PLUS            [ shift and go to state 18 ]
+  ! WITH            [ shift and go to state 19 ]
 
 
-state 21
+state 22
 
     (10) formula -> COMP formula .
+    (3) formula -> formula . PERP
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
@@ -650,16 +676,19 @@ state 21
     WITH            reduce using rule 10 (formula -> COMP formula .)
     $end            reduce using rule 10 (formula -> COMP formula .)
     RPAREN          reduce using rule 10 (formula -> COMP formula .)
+    PERP            shift and go to state 15
 
-  ! TENSOR          [ shift and go to state 15 ]
-  ! PAR             [ shift and go to state 16 ]
-  ! PLUS            [ shift and go to state 17 ]
-  ! WITH            [ shift and go to state 18 ]
+  ! PERP            [ reduce using rule 10 (formula -> COMP formula .) ]
+  ! TENSOR          [ shift and go to state 16 ]
+  ! PAR             [ shift and go to state 17 ]
+  ! PLUS            [ shift and go to state 18 ]
+  ! WITH            [ shift and go to state 19 ]
 
 
-state 22
+state 23
 
     (11) formula -> OFC formula .
+    (3) formula -> formula . PERP
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
@@ -671,16 +700,19 @@ state 22
     WITH            reduce using rule 11 (formula -> OFC formula .)
     $end            reduce using rule 11 (formula -> OFC formula .)
     RPAREN          reduce using rule 11 (formula -> OFC formula .)
+    PERP            shift and go to state 15
 
-  ! TENSOR          [ shift and go to state 15 ]
-  ! PAR             [ shift and go to state 16 ]
-  ! PLUS            [ shift and go to state 17 ]
-  ! WITH            [ shift and go to state 18 ]
+  ! PERP            [ reduce using rule 11 (formula -> OFC formula .) ]
+  ! TENSOR          [ shift and go to state 16 ]
+  ! PAR             [ shift and go to state 17 ]
+  ! PLUS            [ shift and go to state 18 ]
+  ! WITH            [ shift and go to state 19 ]
 
 
-state 23
+state 24
 
     (12) formula -> WHYNOT formula .
+    (3) formula -> formula . PERP
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
@@ -692,16 +724,19 @@ state 23
     WITH            reduce using rule 12 (formula -> WHYNOT formula .)
     $end            reduce using rule 12 (formula -> WHYNOT formula .)
     RPAREN          reduce using rule 12 (formula -> WHYNOT formula .)
+    PERP            shift and go to state 15
 
-  ! TENSOR          [ shift and go to state 15 ]
-  ! PAR             [ shift and go to state 16 ]
-  ! PLUS            [ shift and go to state 17 ]
-  ! WITH            [ shift and go to state 18 ]
+  ! PERP            [ reduce using rule 12 (formula -> WHYNOT formula .) ]
+  ! TENSOR          [ shift and go to state 16 ]
+  ! PAR             [ shift and go to state 17 ]
+  ! PLUS            [ shift and go to state 18 ]
+  ! WITH            [ shift and go to state 19 ]
 
 
-state 24
+state 25
 
     (13) formula -> SEC formula .
+    (3) formula -> formula . PERP
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
@@ -713,43 +748,36 @@ state 24
     WITH            reduce using rule 13 (formula -> SEC formula .)
     $end            reduce using rule 13 (formula -> SEC formula .)
     RPAREN          reduce using rule 13 (formula -> SEC formula .)
+    PERP            shift and go to state 15
 
-  ! TENSOR          [ shift and go to state 15 ]
-  ! PAR             [ shift and go to state 16 ]
-  ! PLUS            [ shift and go to state 17 ]
-  ! WITH            [ shift and go to state 18 ]
+  ! PERP            [ reduce using rule 13 (formula -> SEC formula .) ]
+  ! TENSOR          [ shift and go to state 16 ]
+  ! PAR             [ shift and go to state 17 ]
+  ! PLUS            [ shift and go to state 18 ]
+  ! WITH            [ shift and go to state 19 ]
 
 
-state 25
+state 26
 
     (18) formula -> LPAREN formula . RPAREN
+    (3) formula -> formula . PERP
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
     (7) formula -> formula . WITH formula
 
     RPAREN          shift and go to state 31
-    TENSOR          shift and go to state 15
-    PAR             shift and go to state 16
-    PLUS            shift and go to state 17
-    WITH            shift and go to state 18
-
-
-state 26
-
-    (3) literal -> ID BOT .
-
-    TENSOR          reduce using rule 3 (literal -> ID BOT .)
-    PAR             reduce using rule 3 (literal -> ID BOT .)
-    PLUS            reduce using rule 3 (literal -> ID BOT .)
-    WITH            reduce using rule 3 (literal -> ID BOT .)
-    $end            reduce using rule 3 (literal -> ID BOT .)
-    RPAREN          reduce using rule 3 (literal -> ID BOT .)
+    PERP            shift and go to state 15
+    TENSOR          shift and go to state 16
+    PAR             shift and go to state 17
+    PLUS            shift and go to state 18
+    WITH            shift and go to state 19
 
 
 state 27
 
     (4) formula -> formula TENSOR formula .
+    (3) formula -> formula . PERP
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
@@ -759,18 +787,21 @@ state 27
     PAR             reduce using rule 4 (formula -> formula TENSOR formula .)
     $end            reduce using rule 4 (formula -> formula TENSOR formula .)
     RPAREN          reduce using rule 4 (formula -> formula TENSOR formula .)
-    PLUS            shift and go to state 17
-    WITH            shift and go to state 18
+    PERP            shift and go to state 15
+    PLUS            shift and go to state 18
+    WITH            shift and go to state 19
 
+  ! PERP            [ reduce using rule 4 (formula -> formula TENSOR formula .) ]
   ! PLUS            [ reduce using rule 4 (formula -> formula TENSOR formula .) ]
   ! WITH            [ reduce using rule 4 (formula -> formula TENSOR formula .) ]
-  ! TENSOR          [ shift and go to state 15 ]
-  ! PAR             [ shift and go to state 16 ]
+  ! TENSOR          [ shift and go to state 16 ]
+  ! PAR             [ shift and go to state 17 ]
 
 
 state 28
 
     (5) formula -> formula PAR formula .
+    (3) formula -> formula . PERP
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
@@ -780,18 +811,21 @@ state 28
     PAR             reduce using rule 5 (formula -> formula PAR formula .)
     $end            reduce using rule 5 (formula -> formula PAR formula .)
     RPAREN          reduce using rule 5 (formula -> formula PAR formula .)
-    PLUS            shift and go to state 17
-    WITH            shift and go to state 18
+    PERP            shift and go to state 15
+    PLUS            shift and go to state 18
+    WITH            shift and go to state 19
 
+  ! PERP            [ reduce using rule 5 (formula -> formula PAR formula .) ]
   ! PLUS            [ reduce using rule 5 (formula -> formula PAR formula .) ]
   ! WITH            [ reduce using rule 5 (formula -> formula PAR formula .) ]
-  ! TENSOR          [ shift and go to state 15 ]
-  ! PAR             [ shift and go to state 16 ]
+  ! TENSOR          [ shift and go to state 16 ]
+  ! PAR             [ shift and go to state 17 ]
 
 
 state 29
 
     (6) formula -> formula PLUS formula .
+    (3) formula -> formula . PERP
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
@@ -803,16 +837,19 @@ state 29
     WITH            reduce using rule 6 (formula -> formula PLUS formula .)
     $end            reduce using rule 6 (formula -> formula PLUS formula .)
     RPAREN          reduce using rule 6 (formula -> formula PLUS formula .)
+    PERP            shift and go to state 15
 
-  ! TENSOR          [ shift and go to state 15 ]
-  ! PAR             [ shift and go to state 16 ]
-  ! PLUS            [ shift and go to state 17 ]
-  ! WITH            [ shift and go to state 18 ]
+  ! PERP            [ reduce using rule 6 (formula -> formula PLUS formula .) ]
+  ! TENSOR          [ shift and go to state 16 ]
+  ! PAR             [ shift and go to state 17 ]
+  ! PLUS            [ shift and go to state 18 ]
+  ! WITH            [ shift and go to state 19 ]
 
 
 state 30
 
     (7) formula -> formula WITH formula .
+    (3) formula -> formula . PERP
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
@@ -824,17 +861,20 @@ state 30
     WITH            reduce using rule 7 (formula -> formula WITH formula .)
     $end            reduce using rule 7 (formula -> formula WITH formula .)
     RPAREN          reduce using rule 7 (formula -> formula WITH formula .)
+    PERP            shift and go to state 15
 
-  ! TENSOR          [ shift and go to state 15 ]
-  ! PAR             [ shift and go to state 16 ]
-  ! PLUS            [ shift and go to state 17 ]
-  ! WITH            [ shift and go to state 18 ]
+  ! PERP            [ reduce using rule 7 (formula -> formula WITH formula .) ]
+  ! TENSOR          [ shift and go to state 16 ]
+  ! PAR             [ shift and go to state 17 ]
+  ! PLUS            [ shift and go to state 18 ]
+  ! WITH            [ shift and go to state 19 ]
 
 
 state 31
 
     (18) formula -> LPAREN formula RPAREN .
 
+    PERP            reduce using rule 18 (formula -> LPAREN formula RPAREN .)
     TENSOR          reduce using rule 18 (formula -> LPAREN formula RPAREN .)
     PAR             reduce using rule 18 (formula -> LPAREN formula RPAREN .)
     PLUS            reduce using rule 18 (formula -> LPAREN formula RPAREN .)

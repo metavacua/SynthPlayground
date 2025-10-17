@@ -13,7 +13,7 @@ tokens = (
     'CIRC',
     'COMP',
     'ONE',
-    'BOT',
+    'PERP',
     'ZERO',
     'TOP',
     'LPAREN',
@@ -32,7 +32,7 @@ t_NEG = r'¬'
 t_CIRC = r'∘'
 t_COMP = r'~'
 t_ONE = r'1'
-t_BOT = r'⊥'
+t_PERP = r'⊥'
 t_ZERO = r'0'
 t_TOP = r'⊤'
 t_LPAREN = r'\('
