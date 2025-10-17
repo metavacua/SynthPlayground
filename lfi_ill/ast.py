@@ -73,6 +73,18 @@ class Completeness(Formula):
     def __repr__(self):
         return f"Completeness({self.formula})"
 
+class CoNegation(Formula):
+    def __init__(self, formula):
+        self.formula = formula
+    def __repr__(self):
+        return f"CoNegation({self.formula})"
+
+class Undeterminedness(Formula):
+    def __init__(self, formula):
+        self.formula = formula
+    def __repr__(self):
+        return f"Undeterminedness({self.formula})"
+
 class One(Formula):
     def __repr__(self):
         return "One"

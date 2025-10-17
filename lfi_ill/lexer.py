@@ -12,6 +12,8 @@ tokens = (
     'NEG',
     'CIRC',
     'COMP',
+    'MINUS',
+    'STAR',
     'ONE',
     'BOT',
     'ZERO',
@@ -31,6 +33,8 @@ t_SEC = r'§'
 t_NEG = r'¬'
 t_CIRC = r'∘'
 t_COMP = r'~'
+t_MINUS = r'-'
+t_STAR = r'\*'
 t_ONE = r'1'
 t_BOT = r'⊥'
 t_ZERO = r'0'

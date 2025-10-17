@@ -118,6 +118,29 @@ class Interpreter:
         is_complete = val.value != ParaconsistentTruth.NEITHER
         return ParaconsistentState(ParaconsistentTruth.TRUE if is_complete else ParaconsistentTruth.FALSE)
 
+    def visit_CoNegation(self, node):
+        val = self.visit(node.formula)
+        # Swaps True and False in the truth value set, similar to Negation
+        new_value = {not v for v in val.value.value}
+
+        if new_value == {True, False}:
+            truth_value = ParaconsistentTruth.BOTH
+        elif new_value == {True}:
+            truth_value = ParaconsistentTruth.TRUE
+        elif new_value == {False}:
+            truth_value = ParaconsistentTruth.FALSE
+        else: # NEITHER
+            truth_value = ParaconsistentTruth.NEITHER
+
+        return ParaconsistentState(truth_value, val.concrete_value)
+
+    def visit_Undeterminedness(self, node):
+        val = self.visit(node.formula)
+        # A formula is undetermined if it is not BOTH (dual of consistency)
+        # This is equivalent to completeness in the FDE model.
+        is_undetermined = val.value != ParaconsistentTruth.BOTH
+        return ParaconsistentState(ParaconsistentTruth.TRUE if is_undetermined else ParaconsistentTruth.FALSE)
+
     def visit_WhyNot(self, node):
         return ParaconsistentState(ParaconsistentTruth.TRUE, self.visit(node.e))
 
