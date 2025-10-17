@@ -26,17 +26,13 @@ import sys
 
 # Add the root directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from utils.file_system_utils import find_files
-
-# --- Finder Functions ---
-
-
 from tooling.filesystem_lister import list_all_files_and_dirs
 
 def find_dependency_files(root_dir):
     """Finds all package.json and requirements.txt files, excluding node_modules."""
-    package_json_files = [os.path.join(root_dir, f) for f in find_files("package.json", root_dir)]
-    requirements_txt_files = [os.path.join(root_dir, f) for f in find_files("requirements.txt", root_dir)]
+    all_files = list_all_files_and_dirs(root_dir)
+    package_json_files = [f for f in all_files if f.endswith("package.json")]
+    requirements_txt_files = [f for f in all_files if f.endswith("requirements.txt")]
     return package_json_files, requirements_txt_files
 
 
