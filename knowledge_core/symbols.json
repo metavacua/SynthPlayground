@@ -1901,6 +1901,87 @@
     },
     {
       "_type": "tag",
+      "name": "TestAuraInterpreter",
+      "path": "./tests/test_aura_interpreter.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_eval",
+      "path": "./tests/test_aura_interpreter.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": "Helper function to parse and evaluate Aura code."
+    },
+    {
+      "_type": "tag",
+      "name": "test_integer_literals",
+      "path": "./tests/test_aura_interpreter.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_string_literals",
+      "path": "./tests/test_aura_interpreter.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_let_statements",
+      "path": "./tests/test_aura_interpreter.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_infix_expressions",
+      "path": "./tests/test_aura_interpreter.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_if_statements",
+      "path": "./tests/test_aura_interpreter.py",
+      "language": "Python",
+      "line": 45,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_function_definition_and_call",
+      "path": "./tests/test_aura_interpreter.py",
+      "language": "Python",
+      "line": 53,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_len_builtin",
+      "path": "./tests/test_aura_interpreter.py",
+      "language": "Python",
+      "line": 81,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TestProtocolEnforcement",
       "path": "./tests/test_protocol_enforcement.py",
       "language": "Python",
@@ -2447,6 +2528,87 @@
       "line": 35,
       "kind": "function",
       "docstring": "Verify that plan_deep_research generates a plan that correctly\npopulates and creates files from the templates."
+    },
+    {
+      "_type": "tag",
+      "name": "TestPlllUInterpreter",
+      "path": "./tooling/test_plllu_interpreter.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_plllu_interpreter.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_atom_consumption",
+      "path": "./tooling/test_plllu_interpreter.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_unary_operators",
+      "path": "./tooling/test_plllu_interpreter.py",
+      "language": "Python",
+      "line": 23,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_additive_conjunction_shared_resource",
+      "path": "./tooling/test_plllu_interpreter.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_additive_conjunction_different_resources",
+      "path": "./tooling/test_plllu_interpreter.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_paraconsistency_with_shared_resource",
+      "path": "./tooling/test_plllu_interpreter.py",
+      "language": "Python",
+      "line": 52,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_implication_precondition",
+      "path": "./tooling/test_plllu_interpreter.py",
+      "language": "Python",
+      "line": 61,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_modalities_are_transparent_and_linear",
+      "path": "./tooling/test_plllu_interpreter.py",
+      "language": "Python",
+      "line": 74,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -4691,6 +4853,114 @@
     },
     {
       "_type": "tag",
+      "name": "AtomNode",
+      "path": "./tooling/pda_parser.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "UnaryOpNode",
+      "path": "./tooling/pda_parser.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "BinaryOpNode",
+      "path": "./tooling/pda_parser.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "t_ATOM",
+      "path": "./tooling/pda_parser.py",
+      "language": "Python",
+      "line": 47,
+      "kind": "function",
+      "docstring": "[A-Z][A-Z0-9]*"
+    },
+    {
+      "_type": "tag",
+      "name": "t_newline",
+      "path": "./tooling/pda_parser.py",
+      "language": "Python",
+      "line": 54,
+      "kind": "function",
+      "docstring": "\\n+"
+    },
+    {
+      "_type": "tag",
+      "name": "t_error",
+      "path": "./tooling/pda_parser.py",
+      "language": "Python",
+      "line": 58,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "p_formula_binary",
+      "path": "./tooling/pda_parser.py",
+      "language": "Python",
+      "line": 75,
+      "kind": "function",
+      "docstring": "formula : formula IMPLIES formula\n        | formula WITH formula\n        | formula PLUS formula"
+    },
+    {
+      "_type": "tag",
+      "name": "p_formula_unary",
+      "path": "./tooling/pda_parser.py",
+      "language": "Python",
+      "line": 83,
+      "kind": "function",
+      "docstring": "formula : NOT formula\n        | BANG formula\n        | CONSISTENCY formula\n        | SECTION formula\n        | WHYNOT formula"
+    },
+    {
+      "_type": "tag",
+      "name": "p_formula_group",
+      "path": "./tooling/pda_parser.py",
+      "language": "Python",
+      "line": 93,
+      "kind": "function",
+      "docstring": "formula : LPAREN formula RPAREN"
+    },
+    {
+      "_type": "tag",
+      "name": "p_formula_atom",
+      "path": "./tooling/pda_parser.py",
+      "language": "Python",
+      "line": 99,
+      "kind": "function",
+      "docstring": "formula : ATOM"
+    },
+    {
+      "_type": "tag",
+      "name": "p_error",
+      "path": "./tooling/pda_parser.py",
+      "language": "Python",
+      "line": 105,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_formula",
+      "path": "./tooling/pda_parser.py",
+      "language": "Python",
+      "line": 114,
+      "kind": "function",
+      "docstring": "Parses a pLLLU formula string into an AST."
+    },
+    {
+      "_type": "tag",
       "name": "find_protocol_dirs",
       "path": "./tooling/hierarchical_compiler.py",
       "language": "Python",
@@ -5222,6 +5492,96 @@
     },
     {
       "_type": "tag",
+      "name": "LogicValue",
+      "path": "./tooling/plllu_interpreter.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "InterpretationError",
+      "path": "./tooling/plllu_interpreter.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "class",
+      "docstring": "Custom exception for errors during interpretation."
+    },
+    {
+      "_type": "tag",
+      "name": "FourValuedInterpreter",
+      "path": "./tooling/plllu_interpreter.py",
+      "language": "Python",
+      "line": 19,
+      "kind": "class",
+      "docstring": "Interprets a pLLLU AST using a four-valued logic and a resource-passing model."
+    },
+    {
+      "_type": "tag",
+      "name": "create_context_from_string",
+      "path": "./tooling/plllu_interpreter.py",
+      "language": "Python",
+      "line": 163,
+      "kind": "function",
+      "docstring": "Helper to create a context from a string like 'A:T, B:B'.\nThe interpreter now expects the context to be a dictionary mapping\nthe unique atom tuple (name, id) to its LogicValue."
+    },
+    {
+      "_type": "tag",
+      "name": "patch_atom_values",
+      "path": "./tooling/plllu_interpreter.py",
+      "language": "Python",
+      "line": 189,
+      "kind": "function",
+      "docstring": "Recursively patches the AST to replace atom names with (value, id) tuples.\nThis is a hack for testing, as the parser doesn't know about logic values."
+    },
+    {
+      "_type": "tag",
+      "name": "interpret",
+      "path": "./tooling/plllu_interpreter.py",
+      "language": "Python",
+      "line": 23,
+      "kind": "function",
+      "docstring": "Main entry point for interpreting an AST.\nThe initial context is a Counter of atoms available."
+    },
+    {
+      "_type": "tag",
+      "name": "_evaluate",
+      "path": "./tooling/plllu_interpreter.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "function",
+      "docstring": "Dispatcher that evaluates a node against a given context.\nReturns a tuple: (LogicValue, remaining_context_as_Counter)."
+    },
+    {
+      "_type": "tag",
+      "name": "_eval_atom",
+      "path": "./tooling/plllu_interpreter.py",
+      "language": "Python",
+      "line": 51,
+      "kind": "function",
+      "docstring": "Evaluates an atom by consuming it from the context."
+    },
+    {
+      "_type": "tag",
+      "name": "_eval_unary_op",
+      "path": "./tooling/plllu_interpreter.py",
+      "language": "Python",
+      "line": 68,
+      "kind": "function",
+      "docstring": "Evaluates a unary op by evaluating its child and transforming the value.\nThe context is passed through the operation."
+    },
+    {
+      "_type": "tag",
+      "name": "_eval_binary_op",
+      "path": "./tooling/plllu_interpreter.py",
+      "language": "Python",
+      "line": 106,
+      "kind": "function",
+      "docstring": "Evaluates a binary op. Additives use a shared context, multiplicatives split it."
+    },
+    {
+      "_type": "tag",
       "name": "TestRefactor",
       "path": "./tooling/test_refactor.py",
       "language": "Python",
@@ -5471,6 +5831,15 @@
       "line": 13,
       "kind": "function",
       "docstring": "Walks through a directory and its subdirectories and returns a sorted list of all\nfiles and directories.\n\nArgs:\n    root_dir (str): The root directory to start the walk from.\n    use_gitignore (bool): If True, respects the patterns in the .gitignore file."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/plllu_runner.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": "This tool provides a command-line interface for running .plllu files.\nIt integrates the pLLLU lexer, parser, and interpreter to execute\nthe logic defined in a given pLLLU source file."
     },
     {
       "_type": "tag",
@@ -6008,7 +6377,7 @@
       "name": "run_command",
       "path": "./tooling/pre_submit_check.py",
       "language": "Python",
-      "line": 4,
+      "line": 13,
       "kind": "function",
       "docstring": "Runs a command and exits if it fails."
     },
@@ -6017,7 +6386,7 @@
       "name": "main",
       "path": "./tooling/pre_submit_check.py",
       "language": "Python",
-      "line": 16,
+      "line": 26,
       "kind": "function",
       "docstring": "Main function to run pre-submission checks."
     },
@@ -6881,7 +7250,7 @@
       "name": "eval_identifier",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 169,
+      "line": 171,
       "kind": "function",
       "docstring": null
     },
@@ -6890,7 +7259,7 @@
       "name": "eval_expressions",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 172,
+      "line": 174,
       "kind": "function",
       "docstring": null
     },
@@ -6899,7 +7268,7 @@
       "name": "apply_function",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 174,
+      "line": 176,
       "kind": "function",
       "docstring": null
     },
@@ -6908,8 +7277,17 @@
       "name": "Agent",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 184,
+      "line": 186,
       "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "len_builtin",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 191,
+      "kind": "function",
       "docstring": null
     },
     {
@@ -6980,7 +7358,7 @@
       "name": "__init__",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 185,
+      "line": 187,
       "kind": "function",
       "docstring": null
     },
@@ -7594,14 +7972,14 @@
       "language": "Python",
       "line": 138,
       "kind": "function",
-      "docstring": null
+      "docstring": "Parses a list of identifiers for a function definition."
     },
     {
       "_type": "tag",
       "name": "parse_if_statement",
       "path": "./aura_lang/parser.py",
       "language": "Python",
-      "line": 155,
+      "line": 169,
       "kind": "function",
       "docstring": null
     },
@@ -7610,7 +7988,7 @@
       "name": "parse_for_statement",
       "path": "./aura_lang/parser.py",
       "language": "Python",
-      "line": 167,
+      "line": 181,
       "kind": "function",
       "docstring": null
     },
@@ -7619,7 +7997,7 @@
       "name": "parse_list_literal",
       "path": "./aura_lang/parser.py",
       "language": "Python",
-      "line": 177,
+      "line": 191,
       "kind": "function",
       "docstring": null
     },
@@ -7628,7 +8006,7 @@
       "name": "parse_call_expression",
       "path": "./aura_lang/parser.py",
       "language": "Python",
-      "line": 182,
+      "line": 196,
       "kind": "function",
       "docstring": null
     },
@@ -7637,7 +8015,7 @@
       "name": "parse_expression_list",
       "path": "./aura_lang/parser.py",
       "language": "Python",
-      "line": 187,
+      "line": 201,
       "kind": "function",
       "docstring": null
     },
@@ -7646,7 +8024,7 @@
       "name": "parse_infix_expression",
       "path": "./aura_lang/parser.py",
       "language": "Python",
-      "line": 198,
+      "line": 212,
       "kind": "function",
       "docstring": null
     },
@@ -7655,7 +8033,7 @@
       "name": "parse_member_access",
       "path": "./aura_lang/parser.py",
       "language": "Python",
-      "line": 205,
+      "line": 219,
       "kind": "function",
       "docstring": null
     },
@@ -7664,7 +8042,7 @@
       "name": "expect_peek",
       "path": "./aura_lang/parser.py",
       "language": "Python",
-      "line": 211,
+      "line": 225,
       "kind": "function",
       "docstring": null
     },
@@ -7673,7 +8051,7 @@
       "name": "peek_precedence",
       "path": "./aura_lang/parser.py",
       "language": "Python",
-      "line": 218,
+      "line": 232,
       "kind": "function",
       "docstring": null
     },
@@ -7682,7 +8060,7 @@
       "name": "current_precedence",
       "path": "./aura_lang/parser.py",
       "language": "Python",
-      "line": 219,
+      "line": 233,
       "kind": "function",
       "docstring": null
     },
