@@ -1,0 +1,44 @@
+# Formal Grammar of pLLL (BNF)
+
+# Literals
+<literal> ::= <atom> | <atom_neg>
+
+# Multiplicatives
+<multiplicative> ::= <tensor> | <par>
+<tensor> ::= <formula> "⊗" <formula>
+<par> ::= <formula> "⅋" <formula>
+<one> ::= "1"
+<bottom> ::= "⊥"
+
+# Additives
+<additive> ::= <plus> | <with>
+<plus> ::= <formula> "⊕" <formula>
+<with> ::= <formula> "&" <formula>
+<zero> ::= "0"
+<top> ::= "⊤"
+
+# Modalities
+<modality> ::= <of_course> | <why_not> | <section>
+<of_course> ::= "!" <formula>
+<why_not> ::= "?" <formula>
+<section> ::= "§" <formula>
+
+# Paraconsistent
+<paraconsistent> ::= <negation> | <consistency>
+<negation> ::= "¬" <formula>
+<consistency> ::= "∘" <formula>
+
+# Formula
+<formula> ::= <literal>
+            | <multiplicative>
+            | <additive>
+            | <modality>
+            | <paraconsistent>
+            | <one>
+            | <bottom>
+            | <zero>
+            | <top>
+
+# Atoms
+<atom> ::= "p" | "q" | "r" | ...
+<atom_neg> ::= <atom> "⊥"

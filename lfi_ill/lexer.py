@@ -1,51 +1,55 @@
-import re
-from lfi_ill.token import Token
+import ply.lex as lex
 
-class Lexer:
-    def __init__(self, text):
-        self.text = text
-        self.pos = 0
-        self.tokens = self.tokenize()
-        print("Tokens:", self.tokens)
+tokens = (
+    'ID',
+    'TENSOR',
+    'PAR',
+    'PLUS',
+    'WITH',
+    'OFC',
+    'WHYNOT',
+    'SEC',
+    'NEG',
+    'CIRC',
+    'ONE',
+    'BOT',
+    'ZERO',
+    'TOP',
+    'LPAREN',
+    'RPAREN',
+)
 
-    def tokenize(self):
-        token_specification = [
-            ('TInt', r'TInt'), ('TString', r'TString'), ('TBool', r'TBool'), ('TUnit', r'TUnit'),
-            ('TPar', r'TPar'),
-            ('LET', r'let'), ('INL', r'inl'), ('INR', r'inr'), ('IN', r'in'), ('FUN', r'fun'), ('CASE', r'case'), ('OF', r'of'),
-            ('FST', r'fst'), ('SND', r'snd'),
-            ('TRUE', r'True'), ('FALSE', r'False'), ('BOTH', r'Both'), ('NEITHER', r'Neither'),
-            ('ID', r'[a-zA-Z_][a-zA-Z0-9_]*'),
-            ('INTEGER', r'\d+'),
-            ('STRING', r'"[^"]*"'),
-            ('ARROW', r'->'), ('Lollipop', r'-o'),
-            ('TENSOR', r'\*'), ('PLUS', r'\+'), ('WITH', r'&'),
-            ('OFC', r'!'), ('WHYNOT', r'\?'),
-            ('LPAREN', r'\('), ('RPAREN', r'\)'),
-            ('LBRACE', r'{'), ('RBRACE', r'}'),
-            ('LBRACKET', r'<'), ('RBRACKET', r'>'),
-            ('COMMA', r','), ('COLON', r':'), ('ASSIGN', r'='),
-            ('PIPE', r'\|'),
-            ('COMMENT', r'#.*'),
-            ('NEWLINE', r'\n'),
-            ('SKIP', r'[ \t]+'),
-            ('MISMATCH', r'.'),
-        ]
-        tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
-        tokens = []
-        for mo in re.finditer(tok_regex, self.text):
-            kind = mo.lastgroup
-            value = mo.group()
-            if kind == 'NEWLINE' or kind == 'SKIP' or kind == 'COMMENT':
-                continue
-            if kind == 'MISMATCH':
-                raise RuntimeError(f'{value!r} unexpected')
-            tokens.append(Token(kind, value, mo.start()))
-        return tokens
+# Tokens
+t_TENSOR = r'⊗'
+t_PAR = r'⅋'
+t_PLUS = r'⊕'
+t_WITH = r'&'
+t_OFC = r'!'
+t_WHYNOT = r'\?'
+t_SEC = r'§'
+t_NEG = r'¬'
+t_CIRC = r'∘'
+t_ONE = r'1'
+t_BOT = r'⊥'
+t_ZERO = r'0'
+t_TOP = r'⊤'
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
 
-    def get_next_token(self):
-        if self.pos < len(self.tokens):
-            token = self.tokens[self.pos]
-            self.pos += 1
-            return token
-        return Token('EOF', '', self.pos)
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    return t
+
+# Ignored characters
+t_ignore = " \t"
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += t.value.count("\n")
+
+def t_error(t):
+    print("Illegal character '%s'" % t.value[0])
+    t.lexer.skip(1)
+
+# Build the lexer
+lexer = lex.lex()
