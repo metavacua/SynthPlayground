@@ -17,5 +17,6 @@ urllib3==2.5.0
 pypdf==6.0.0
 watchdog==4.0.1
 markdown
+ply
 black
 flake8
