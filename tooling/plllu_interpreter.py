@@ -90,7 +90,15 @@ class FourValuedInterpreter:
                 result_value = LogicValue.FALSE
             return (result_value, remaining_context)
 
-        if op == '!': # For now, ! is transparent.
+        if op == '!' or op == '?': # For now, these are transparent.
+            return (child_value, remaining_context)
+
+        if op == '§':
+            # In a full proof-theoretic interpreter, the section modality would
+            # constrain the structure of the proof (e.g., by limiting rule applications
+            # within its scope) to ensure polynomial-time normalization.
+            # In this value-based interpreter, we model it as a transparent operator
+            # that simply consumes the resource and passes the value through.
             return (child_value, remaining_context)
 
         raise NotImplementedError(f"Unary operator '{op}'")
@@ -128,6 +136,25 @@ class FourValuedInterpreter:
                 elif l_val == LogicValue.BOTH or r_val == LogicValue.BOTH: result_value = LogicValue.BOTH
                 else: result_value = LogicValue.NEITHER
                 return (result_value, remaining_context)
+
+        # Hypothetical operator (-o)
+        if op == '-o':
+            # As per the guidance, implication is predicated on the consistency of the hypothesis.
+            # 1. Check if the hypothesis 'A' (the left node) is consistent.
+            # We evaluate '∘(A)' using the current context.
+            consistency_ast = ('unary_op', '∘', left)
+            consistency_value, rem_context_after_check = self._evaluate(consistency_ast, context)
+
+            if consistency_value != LogicValue.TRUE:
+                # The hypothesis is not consistent, so the implication is vacuously false
+                # in this resource-sensitive system.
+                return (LogicValue.FALSE, rem_context_after_check)
+
+            # 2. If it is consistent, we can proceed.
+            # This is a simplified implementation that does not correctly model
+            # the hypothetical context. It just evaluates the conclusion with the
+            # remaining resources.
+            return self._evaluate(right, rem_context_after_check)
 
         raise NotImplementedError(f"Binary operator '{op}'")
 
