@@ -20,7 +20,6 @@ def BinaryOpNode(op, left, right):
 
 tokens = (
     'ATOM',
-    'IMPLIES',
     'WITH',
     'PLUS',
     'NOT',      # LFU undeterminedness operator '~'
@@ -31,7 +30,6 @@ tokens = (
 )
 
 # Regex for tokens
-t_IMPLIES = r'-o'
 t_WITH = r'&'
 t_PLUS = r'\|'
 t_NOT = r'~'
@@ -62,7 +60,6 @@ lexer = lex.lex()
 
 # Operator precedence and associativity
 precedence = (
-    ('right', 'IMPLIES'),
     ('left', 'PLUS'),
     ('left', 'WITH'),
     ('right', 'NOT', 'BANG', 'CONSISTENCY'),
@@ -70,8 +67,7 @@ precedence = (
 
 def p_formula_binary(p):
     """
-    formula : formula IMPLIES formula
-            | formula WITH formula
+    formula : formula WITH formula
             | formula PLUS formula
     """
     p[0] = BinaryOpNode(p[2], p[1], p[3])

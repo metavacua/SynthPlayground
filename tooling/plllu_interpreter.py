@@ -9,8 +9,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 class LogicValue(Enum):
     TRUE = 1
     FALSE = 0
-    BOTH = 2  # t and f
-    NEITHER = 3 # neither t nor f
+    BOTH = 2
+    NEITHER = 3
 
 class InterpretationError(Exception):
     """Custom exception for errors during interpretation."""
@@ -18,183 +18,169 @@ class InterpretationError(Exception):
 
 class FourValuedInterpreter:
     """
-    Interprets a pLLLU AST using a four-valued logic (TRUE, FALSE, BOTH, NEITHER).
-    It also enforces the linear consumption of resources from a given context.
+    Interprets a pLLLU AST using a four-valued logic and a resource-passing model.
     """
-    def __init__(self, context):
-        """
-        Initializes the interpreter with a context.
-        The context is a dictionary mapping atoms to their four-valued truth value.
-        e.g., {'A': LogicValue.TRUE, 'B': LogicValue.BOTH}
-        """
-        self.context = context
-        self.used_atoms = Counter()
-        self.max_usage = Counter({atom: 1 for atom in context})
-
-    def interpret(self, ast_node):
+    def interpret(self, ast_node, initial_context):
         """
         Main entry point for interpreting an AST.
-        Verifies resource consumption after evaluation.
+        The initial context is a Counter of atoms available.
         """
-        result = self._evaluate(ast_node)
+        final_value, remaining_context = self._evaluate(ast_node, initial_context)
 
-        if self.used_atoms != self.max_usage:
-            raise InterpretationError(
-                f"Linearity Error: Context resources do not match consumption. "
-                f"Required: {dict(self.max_usage)}, Consumed: {dict(self.used_atoms)}"
-            )
-        return result
+        # After evaluation, if any resources remain, it's a linearity error.
+        if remaining_context:
+            raise InterpretationError(f"Linearity Error: The following resources were not consumed: {list(remaining_context.elements())}")
 
-    def _evaluate(self, node):
-        """Dispatcher for AST node types."""
+        return final_value
+
+    def _evaluate(self, node, context):
+        """
+        Dispatcher that evaluates a node against a given context.
+        Returns a tuple: (LogicValue, remaining_context_as_Counter).
+        """
         node_type = node[0]
         if node_type == 'atom':
-            return self._eval_atom(node)
+            return self._eval_atom(node, context)
         elif node_type == 'unary_op':
-            return self._eval_unary_op(node)
+            return self._eval_unary_op(node, context)
         elif node_type == 'binary_op':
-            return self._eval_binary_op(node)
+            return self._eval_binary_op(node, context)
         else:
             raise NotImplementedError(f"Unknown node type: {node_type}")
 
-    def _eval_atom(self, node):
-        """Evaluates an atom by looking it up in the context."""
-        _, atom_name = node
-        if atom_name not in self.context:
-            raise InterpretationError(f"Atom '{atom_name}' not in context.")
+    def _eval_atom(self, node, context):
+        """
+        Evaluates an atom by consuming it from the context.
+        """
+        _, atom_details = node
+        atom_value, atom_key = atom_details # e.g. (LogicValue.TRUE, ('A', 1))
 
-        self.used_atoms[atom_name] += 1
-        if self.used_atoms[atom_name] > self.max_usage[atom_name]:
-            raise InterpretationError(f"Linearity Error: Atom '{atom_name}' consumed more than once.")
+        if context[atom_key] <= 0:
+            raise InterpretationError(f"Linearity Error: Atom '{atom_key[0]}' (id: {atom_key[1]}) requested but not available in context {list(context.elements())}.")
 
-        return self.context[atom_name]
+        new_context = context.copy()
+        new_context[atom_key] -= 1
+        if new_context[atom_key] == 0:
+            del new_context[atom_key]
 
-    def _eval_unary_op(self, node):
-        """Evaluates a unary operation."""
+        return (atom_value, new_context)
+
+    def _eval_unary_op(self, node, context):
+        """
+        Evaluates a unary op by evaluating its child and transforming the value.
+        The context is passed through the operation.
+        """
         _, op, child = node
-        val = self._evaluate(child)
 
+        # First, evaluate the child to consume its resources and get its value
+        child_value, remaining_context = self._evaluate(child, context)
+
+        # Now, transform the value based on the operator
         if op == '~': # Undeterminedness (LFU)
-            if val == LogicValue.TRUE: return LogicValue.FALSE
-            if val == LogicValue.FALSE: return LogicValue.TRUE
-            if val == LogicValue.BOTH: return LogicValue.BOTH
-            if val == LogicValue.NEITHER: return LogicValue.NEITHER
+            if child_value == LogicValue.TRUE: result_value = LogicValue.FALSE
+            elif child_value == LogicValue.FALSE: result_value = LogicValue.TRUE
+            elif child_value == LogicValue.BOTH: result_value = LogicValue.BOTH
+            else: result_value = LogicValue.NEITHER # NEITHER
+            return (result_value, remaining_context)
 
         if op == '∘': # Consistency (LFI)
-            if val == LogicValue.TRUE or val == LogicValue.FALSE:
-                return LogicValue.TRUE
+            if child_value == LogicValue.TRUE or child_value == LogicValue.FALSE:
+                result_value = LogicValue.TRUE
             else: # BOTH or NEITHER
-                return LogicValue.FALSE
+                result_value = LogicValue.FALSE
+            return (result_value, remaining_context)
 
-        if op == '!': # For now, ! is transparent. A real implementation would be more complex.
-            return val
+        if op == '!': # For now, ! is transparent.
+            return (child_value, remaining_context)
 
         raise NotImplementedError(f"Unary operator '{op}'")
 
-    def _eval_binary_op(self, node):
-        """Evaluates a binary operation using four-valued truth tables."""
+    def _eval_binary_op(self, node, context):
+        """
+        Evaluates a binary op. Additives use a shared context, multiplicatives split it.
+        """
         _, op, left, right = node
 
-        # Additive operators (&, |) duplicate the context for each branch.
+        # Additive operators (&, |)
         if op == '&' or op == '|':
-            initial_used_atoms = self.used_atoms.copy()
+            # Both branches are evaluated with the same context.
+            l_val, l_rem = self._evaluate(left, context)
+            r_val, r_rem = self._evaluate(right, context)
 
-            # Evaluate left branch, ensuring context is reset even if it fails
-            try:
-                l_val = self._evaluate(left)
-                left_used_atoms = self.used_atoms.copy()
-            finally:
-                self.used_atoms = initial_used_atoms
+            # Linearity check: Both branches must consume the exact same resources.
+            if l_rem != r_rem:
+                raise InterpretationError(f"Linearity Error for additive '{op}': branches consume different resources.")
 
-            # Evaluate right branch from the same initial state
-            r_val = self._evaluate(right)
-            right_used_atoms = self.used_atoms.copy()
+            remaining_context = l_rem # They are the same, so we can pick one.
 
-            # For additives, the resources consumed by both branches must be identical.
-            if left_used_atoms != right_used_atoms:
-                raise InterpretationError(
-                    f"Linearity Error for additive operator '{op}': branches consume different resources. "
-                    f"Left consumed: {dict(left_used_atoms - initial_used_atoms)}, "
-                    f"Right consumed: {dict(right_used_atoms - initial_used_atoms)}"
-                )
+            if op == '&':
+                if l_val == LogicValue.FALSE or r_val == LogicValue.FALSE: result_value = LogicValue.FALSE
+                elif l_val == LogicValue.TRUE: result_value = r_val
+                elif r_val == LogicValue.TRUE: result_value = l_val
+                elif l_val == LogicValue.NEITHER or r_val == LogicValue.NEITHER: result_value = LogicValue.NEITHER
+                else: result_value = LogicValue.BOTH
+                return (result_value, remaining_context)
 
-            # The final usage is the usage of one of the identical branches.
-            self.used_atoms = left_used_atoms
-
-            if op == '&': # Conjunction (meet)
-                if l_val == LogicValue.FALSE or r_val == LogicValue.FALSE: return LogicValue.FALSE
-                if l_val == LogicValue.TRUE: return r_val
-                if r_val == LogicValue.TRUE: return l_val
-                if l_val == LogicValue.NEITHER or r_val == LogicValue.NEITHER: return LogicValue.NEITHER
-                return LogicValue.BOTH
-
-            if op == '|': # Disjunction (join)
-                if l_val == LogicValue.TRUE or r_val == LogicValue.TRUE: return LogicValue.TRUE
-                if l_val == LogicValue.FALSE: return r_val
-                if r_val == LogicValue.FALSE: return l_val
-                if l_val == LogicValue.BOTH or r_val == LogicValue.BOTH: return LogicValue.BOTH
-                return LogicValue.NEITHER
-
-        if op == '-o': # Implication
-            # NOTE: This is a truth-functional simplification and is NOT a correct
-            # implementation of linear implication, which requires modifying the
-            # context for the sub-evaluation (i.e., Gamma, A |- B).
-            # This implementation incorrectly treats it as a multiplicative, consuming
-            # resources for both sub-formulas from the same context.
-            l_val = self._evaluate(left)
-            r_val = self._evaluate(right)
-
-            # Truth table for A -> B based on (~A | B)
-            neg_l_val = {
-                LogicValue.TRUE: LogicValue.FALSE,
-                LogicValue.FALSE: LogicValue.TRUE,
-                LogicValue.BOTH: LogicValue.BOTH,
-                LogicValue.NEITHER: LogicValue.NEITHER,
-            }[l_val]
-
-            if neg_l_val == LogicValue.TRUE or r_val == LogicValue.TRUE: return LogicValue.TRUE
-            if neg_l_val == LogicValue.FALSE: return r_val
-            if r_val == LogicValue.FALSE: return neg_l_val
-            if neg_l_val == LogicValue.BOTH or r_val == LogicValue.BOTH: return LogicValue.BOTH
-            return LogicValue.NEITHER
+            if op == '|':
+                if l_val == LogicValue.TRUE or r_val == LogicValue.TRUE: result_value = LogicValue.TRUE
+                elif l_val == LogicValue.FALSE: result_value = r_val
+                elif r_val == LogicValue.FALSE: result_value = l_val
+                elif l_val == LogicValue.BOTH or r_val == LogicValue.BOTH: result_value = LogicValue.BOTH
+                else: result_value = LogicValue.NEITHER
+                return (result_value, remaining_context)
 
         raise NotImplementedError(f"Binary operator '{op}'")
 
 
 # --- Self-test for demonstration ---
-if __name__ == '__main__':
-    from tooling.pda_parser import parse_formula
+def create_context_from_string(s):
+    """
+    Helper to create a context from a string like 'A:T, B:B'.
+    The interpreter now expects the context to be a dictionary mapping
+    the unique atom tuple (name, id) to its LogicValue.
+    """
+    context = {}
+    atom_counts = Counter()
+    if not s:
+        return context
 
-    print("--- Testing the pLLLU Four-Valued Interpreter ---")
+    parts = [part.strip() for part in s.split(',')]
+    for part in parts:
+        name, value_char = part.split(':')
+        atom_counts[name] += 1
 
-    test_cases = [
-        {"desc": "LFI: Consistency of TRUE is TRUE", "context": {'A': LogicValue.TRUE}, "formula": "∘A", "expected": LogicValue.TRUE},
-        {"desc": "LFI: Consistency of BOTH is FALSE", "context": {'A': LogicValue.BOTH}, "formula": "∘A", "expected": LogicValue.FALSE},
-        {"desc": "LFU: Undeterminedness of TRUE is FALSE", "context": {'A': LogicValue.TRUE}, "formula": "~A", "expected": LogicValue.FALSE},
-        {"desc": "LFU: Undeterminedness of BOTH is BOTH", "context": {'A': LogicValue.BOTH}, "formula": "~A", "expected": LogicValue.BOTH},
-        {"desc": "Linearity: Valid consumption", "context": {'A': LogicValue.TRUE, 'B': LogicValue.FALSE}, "formula": "A & B", "expected": LogicValue.FALSE},
-        {"desc": "Linearity: Fails on reuse", "context": {'A': LogicValue.TRUE}, "formula": "A & A", "should_fail": True},
-        {"desc": "Linearity: Fails on non-consumption", "context": {'A': LogicValue.TRUE, 'B': LogicValue.TRUE}, "formula": "A", "should_fail": True},
-    ]
+        value_map = {'T': LogicValue.TRUE, 'F': LogicValue.FALSE, 'B': LogicValue.BOTH, 'N': LogicValue.NEITHER}
+        logic_value = value_map[value_char]
 
-    for case in test_cases:
-        print(f"\n--- Running Test: {case['desc']} ---")
-        try:
-            ast = parse_formula(case['formula'])
-            interpreter = FourValuedInterpreter(case['context'])
-            result = interpreter.interpret(ast)
+        # The _evaluate function needs to know the value, so we pass it in the atom node
+        # The context just needs to know that the unique atom exists.
+        atom_tuple = (logic_value, atom_counts[name]) # e.g. (LogicValue.TRUE, 1)
+        context[(name, atom_counts[name])] = True
+    return Counter(context)
 
-            if case.get('should_fail'):
-                print(f"FAILURE: Should have failed but returned {result.name}")
-            elif result == case['expected']:
-                print(f"SUCCESS: Returned {result.name} as expected.")
-            else:
-                print(f"FAILURE: Expected {case['expected'].name} but got {result.name}")
 
-        except (InterpretationError, NotImplementedError) as e:
-            if case.get('should_fail'):
-                print(f"SUCCESS: Correctly failed with error: {e}")
-            else:
-                print(f"FAILURE: Should have passed but failed with error: {e}")
-        except Exception as e:
-            print(f"UNEXPECTED ERROR: {e}")
+def patch_atom_values(node, context_values):
+    """
+    Recursively patches the AST to replace atom names with (value, id) tuples.
+    This is a hack for testing, as the parser doesn't know about logic values.
+    """
+    node_type = node[0]
+    if node_type == 'atom':
+        atom_name = node[1]
+        # Find the first available atom of this name in the context
+        for (name, id), _ in context_values.items():
+            if name == atom_name:
+                # To prevent reuse in the patcher
+                del context_values[(name, id)]
+                # Get the logic value from the original atom tuple
+                logic_value = [k[0] for k in interpreter.pda_parser_context if k[1] == name and k[2] == id][0]
+                return ('atom', (logic_value, id))
+        raise ValueError(f"Atom {atom_name} not found in patch context")
+
+    elif node_type == 'unary_op':
+        op, child = node[1], node[2]
+        return (node_type, op, patch_atom_values(child, context_values))
+    elif node_type == 'binary_op':
+        op, left, right = node[1], node[2], node[3]
+        return (node_type, op, patch_atom_values(left, context_values), patch_atom_values(right, context_values))
+    return node

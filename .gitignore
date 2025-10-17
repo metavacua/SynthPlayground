@@ -115,3 +115,7 @@ dmypy.json
 # Reconciliation artifacts
 AGENTS.md.reconciled
 reconciliation_report.md
+
+# Ply-generated files
+parser.out
+parsetab.py
