@@ -1,4 +1,4 @@
-# APPL (Automated Planning Programming Language) Final Evaluation Report
+# APPL (Agentic Plan Programming Language) Final Evaluation Report
 
 ## 1. Executive Summary
 
