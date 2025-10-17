@@ -9,6 +9,6 @@
     }
   ],
   "associated_tools": [
-    "tooling/agent_shell.py"
+    "agent_core/execution/agent_shell.py"
   ]
 }

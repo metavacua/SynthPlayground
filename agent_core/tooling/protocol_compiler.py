@@ -35,9 +35,9 @@ import time
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-# Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from utils.file_system_utils import find_files
+# Add the project root to the Python path to allow absolute imports
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+from agent_core.utils.file_system_utils import find_files
 
 # --- Dependency Management ---
 # This section makes the script self-contained by automatically installing
@@ -91,7 +91,7 @@ from rdflib import Graph
 
 
 # --- Configuration ---
-ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 DEFAULT_PROTOCOLS_DIR = os.path.join(ROOT_DIR, "protocols")
 # The schema is now resolved relative to the source directory, not a global default.
 DEFAULT_SCHEMA_FILENAME = "protocol.schema.json"

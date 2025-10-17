@@ -20,7 +20,7 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
 
 # The Command dataclass is now defined in the central plan_parser module.
-from tooling.plan_parser import Command
+from .plan_parser import Command
 
 
 @dataclass

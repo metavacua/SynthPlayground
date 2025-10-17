@@ -30,8 +30,8 @@ import subprocess
 from datetime import datetime
 
 # --- Configuration ---
-ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-CONFIG_FILE = os.path.join(ROOT_DIR, "build_config.json")
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+CONFIG_FILE = os.path.join(ROOT_DIR, "agent_core/tooling/build_config.json")
 
 
 def load_config():

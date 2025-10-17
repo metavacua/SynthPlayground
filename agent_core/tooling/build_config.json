@@ -22,23 +22,18 @@
     },
     "docs": {
       "type": "command",
-      "command": "python3 tooling/doc_builder.py --format system",
+      "command": "python3 agent_core/tooling/doc_builder.py --format system",
       "description": "Generates detailed system documentation."
     },
     "readme": {
       "type": "command",
-      "command": "python3 tooling/doc_builder.py --format readme",
+      "command": "python3 agent_core/tooling/doc_builder.py --format readme",
       "description": "Generates the root README.md file."
-    },
-    "pages": {
-      "type": "command",
-      "command": "python3 tooling/doc_builder.py --format pages",
-      "description": "Generates index.html for GitHub Pages."
     },
     "security": {
       "type": "compiler",
       "output": "SECURITY.md",
-      "compiler": "tooling/protocol_compiler.py",
+      "compiler": "agent_core/tooling/protocol_compiler.py",
       "sources": [
         "protocols/security/"
       ],
@@ -50,15 +45,15 @@
     "agents": {
       "type": "compiler",
       "output": "AGENTS.md",
-      "compiler": "tooling/hierarchical_compiler.py",
+      "compiler": "agent_core/tooling/protocol_compiler.py",
       "sources": [
         "protocols/"
       ],
-      "description": "Recursively compiles all AGENTS.md files."
+      "description": "Compiles all AGENTS.md files."
     },
     "audit": {
       "type": "command",
-      "command": "python3 tooling/auditor.py all",
+      "command": "python3 agent_core/tooling/auditor.py all",
       "description": "Runs all unified audits (protocols, plans, docs)."
     },
     "clean": {
@@ -68,7 +63,7 @@
     }
   },
   "build_groups": {
-    "all": ["docs", "security", "agents", "readme", "pages"],
+    "all": ["docs", "security", "agents", "readme"],
     "quality": ["format", "lint", "test"]
   }
 }

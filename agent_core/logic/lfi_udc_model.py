@@ -1,6 +1,6 @@
 import enum
 import re
-from tooling.halting_heuristic_analyzer import Instruction as UDCInstruction
+from .halting_heuristic_analyzer import Instruction as UDCInstruction
 
 
 class ParaconsistentTruth(enum.Enum):

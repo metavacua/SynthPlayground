@@ -12,7 +12,7 @@ The CSDC defines two mutually exclusive models:
 
 This validator checks for these co-occurrence constraints.
 """
-from tooling.plan_parser import parse_plan, Command
+from .plan_parser import parse_plan, Command
 
 class LBAValidator:
     """

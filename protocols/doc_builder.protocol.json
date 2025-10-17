@@ -9,6 +9,6 @@
     }
   ],
   "associated_tools": [
-    "tooling/doc_builder.py"
+    "agent_core/tooling/doc_builder.py"
   ]
 }

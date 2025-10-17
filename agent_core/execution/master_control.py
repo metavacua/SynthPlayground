@@ -33,12 +33,12 @@ import subprocess
 import tempfile
 import time
 
-from tooling.state import AgentState, PlanContext
-from tooling.research import execute_research_protocol
-from tooling.plan_parser import parse_plan, Command
-from tooling.document_scanner import scan_documents
-from tooling.lba_validator import LBAValidator
-from utils.logger import Logger
+from .state import AgentState, PlanContext
+from .research import execute_research_protocol
+from .plan_parser import parse_plan, Command
+from .document_scanner import scan_documents
+from .lba_validator import LBAValidator
+from agent_core.utils.logger import Logger
 
 MAX_RECURSION_DEPTH = 10
 
@@ -81,7 +81,9 @@ class MasterControlGraph:
     ensuring that all protocol steps are followed in the correct order.
     """
 
-    def __init__(self, fsm_path: str = "tooling/fsm.json"):
+    def __init__(self, fsm_path: str = None):
+        if fsm_path is None:
+            fsm_path = os.path.join(os.path.dirname(__file__), "fsm.json")
         with open(fsm_path, "r") as f:
             self.fsm = json.load(f)
         self.current_state = self.fsm["initial_state"]

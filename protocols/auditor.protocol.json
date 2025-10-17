@@ -9,6 +9,6 @@
     }
   ],
   "associated_tools": [
-    "tooling/auditor.py"
+    "agent_core/tooling/auditor.py"
   ]
 }

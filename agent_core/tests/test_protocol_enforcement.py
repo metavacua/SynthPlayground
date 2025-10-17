@@ -3,13 +3,13 @@ import os
 import sys
 from unittest.mock import MagicMock
 
-# Add the root directory to the Python path
-ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-sys.path.append(ROOT_DIR)
+# Add the project root to the Python path
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+sys.path.insert(0, ROOT_DIR)
 
-from tooling.master_control import MasterControlGraph
-from tooling.state import AgentState
-from utils.logger import Logger
+from agent_core.execution.master_control import MasterControlGraph
+from agent_core.execution.state import AgentState
+from agent_core.utils.logger import Logger
 
 class TestProtocolEnforcement(unittest.TestCase):
     """
