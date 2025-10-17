@@ -2,12 +2,15 @@ import ply.yacc as yacc
 from lfi_ill.lexer import tokens
 from lfi_ill.ast import *
 
+# Operator Precedence
 precedence = (
-    ('right', 'UNARY'),
-    ('left', 'TENSOR', 'PAR', 'PLUS', 'WITH'),
+    ('left', 'TENSOR', 'PAR'),
+    ('left', 'PLUS', 'WITH'),
+    ('right', 'NEG', 'CIRC', 'COMP', 'OFC', 'WHYNOT', 'SEC'),
 )
 
-# Parsing rules
+# --- Parsing Rules ---
+
 def p_formula_literal(p):
     'formula : literal'
     p[0] = p[1]
@@ -20,43 +23,39 @@ def p_literal_atom_neg(p):
     'literal : ID BOT'
     p[0] = Atom(p[1], negated=True)
 
-def p_formula_multiplicative(p):
-    'formula : formula TENSOR formula'
-    p[0] = Tensor(p[1], p[3])
+def p_formula_binary_op(p):
+    '''formula : formula TENSOR formula
+               | formula PAR formula
+               | formula PLUS formula
+               | formula WITH formula'''
+    if p[2] == '⊗':
+        p[0] = Tensor(p[1], p[3])
+    elif p[2] == '⅋':
+        p[0] = Par(p[1], p[3])
+    elif p[2] == '⊕':
+        p[0] = Plus(p[1], p[3])
+    elif p[2] == '&':
+        p[0] = With(p[1], p[3])
 
-def p_formula_par(p):
-    'formula : formula PAR formula'
-    p[0] = Par(p[1], p[3])
-
-def p_formula_additive(p):
-    'formula : formula PLUS formula'
-    p[0] = Plus(p[1], p[3])
-
-def p_formula_with(p):
-    'formula : formula WITH formula'
-    p[0] = With(p[1], p[3])
-
-def p_formula_modalities(p):
-    '''formula : OFC formula %prec UNARY
-               | WHYNOT formula %prec UNARY
-               | SEC formula %prec UNARY'''
-    if p[1] == '!':
-        p[0] = OfCourse(p[2])
-    elif p[1] == '?':
-        p[0] = WhyNot(p[2])
-    elif p[1] == '§':
-        p[0] = Section(p[2])
-
-def p_formula_paraconsistent(p):
-    '''formula : NEG formula %prec UNARY
-               | CIRC formula %prec UNARY
-               | TILDE formula %prec UNARY'''
+def p_formula_unary_op(p):
+    '''formula : NEG formula
+               | CIRC formula
+               | COMP formula
+               | OFC formula
+               | WHYNOT formula
+               | SEC formula'''
     if p[1] == '¬':
         p[0] = Negation(p[2])
     elif p[1] == '∘':
         p[0] = Consistency(p[2])
     elif p[1] == '~':
-        p[0] = Paracomplete(p[2])
+        p[0] = Completeness(p[2])
+    elif p[1] == '!':
+        p[0] = OfCourse(p[2])
+    elif p[1] == '?':
+        p[0] = WhyNot(p[2])
+    elif p[1] == '§':
+        p[0] = Section(p[2])
 
 def p_formula_units(p):
     '''formula : ONE
@@ -77,7 +76,10 @@ def p_formula_group(p):
     p[0] = p[2]
 
 def p_error(p):
-    print("Syntax error in input!")
+    if p:
+        print(f"Syntax error at '{p.value}'")
+    else:
+        print("Syntax error at EOF")
 
 parser = yacc.yacc()
 

@@ -10,12 +10,12 @@ Rule 4     formula -> formula TENSOR formula
 Rule 5     formula -> formula PAR formula
 Rule 6     formula -> formula PLUS formula
 Rule 7     formula -> formula WITH formula
-Rule 8     formula -> OFC formula
-Rule 9     formula -> WHYNOT formula
-Rule 10    formula -> SEC formula
-Rule 11    formula -> NEG formula
-Rule 12    formula -> CIRC formula
-Rule 13    formula -> TILDE formula
+Rule 8     formula -> NEG formula
+Rule 9     formula -> CIRC formula
+Rule 10    formula -> COMP formula
+Rule 11    formula -> OFC formula
+Rule 12    formula -> WHYNOT formula
+Rule 13    formula -> SEC formula
 Rule 14    formula -> ONE
 Rule 15    formula -> BOT
 Rule 16    formula -> ZERO
@@ -25,20 +25,20 @@ Rule 18    formula -> LPAREN formula RPAREN
 Terminals, with rules where they appear
 
 BOT                  : 3 15
-CIRC                 : 12
+CIRC                 : 9
+COMP                 : 10
 ID                   : 2 3
 LPAREN               : 18
-NEG                  : 11
-OFC                  : 8
+NEG                  : 8
+OFC                  : 11
 ONE                  : 14
 PAR                  : 5
 PLUS                 : 6
 RPAREN               : 18
-SEC                  : 10
+SEC                  : 13
 TENSOR               : 4
-TILDE                : 13
 TOP                  : 17
-WHYNOT               : 9
+WHYNOT               : 12
 WITH                 : 7
 ZERO                 : 16
 error                :
@@ -58,12 +58,12 @@ state 0
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
     (7) formula -> . formula WITH formula
-    (8) formula -> . OFC formula
-    (9) formula -> . WHYNOT formula
-    (10) formula -> . SEC formula
-    (11) formula -> . NEG formula
-    (12) formula -> . CIRC formula
-    (13) formula -> . TILDE formula
+    (8) formula -> . NEG formula
+    (9) formula -> . CIRC formula
+    (10) formula -> . COMP formula
+    (11) formula -> . OFC formula
+    (12) formula -> . WHYNOT formula
+    (13) formula -> . SEC formula
     (14) formula -> . ONE
     (15) formula -> . BOT
     (16) formula -> . ZERO
@@ -72,12 +72,12 @@ state 0
     (2) literal -> . ID
     (3) literal -> . ID BOT
 
-    OFC             shift and go to state 3
-    WHYNOT          shift and go to state 4
-    SEC             shift and go to state 5
-    NEG             shift and go to state 6
-    CIRC            shift and go to state 7
-    TILDE           shift and go to state 8
+    NEG             shift and go to state 3
+    CIRC            shift and go to state 4
+    COMP            shift and go to state 5
+    OFC             shift and go to state 6
+    WHYNOT          shift and go to state 7
+    SEC             shift and go to state 8
     ONE             shift and go to state 9
     BOT             shift and go to state 10
     ZERO            shift and go to state 11
@@ -116,18 +116,18 @@ state 2
 
 state 3
 
-    (8) formula -> OFC . formula
+    (8) formula -> NEG . formula
     (1) formula -> . literal
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
     (7) formula -> . formula WITH formula
-    (8) formula -> . OFC formula
-    (9) formula -> . WHYNOT formula
-    (10) formula -> . SEC formula
-    (11) formula -> . NEG formula
-    (12) formula -> . CIRC formula
-    (13) formula -> . TILDE formula
+    (8) formula -> . NEG formula
+    (9) formula -> . CIRC formula
+    (10) formula -> . COMP formula
+    (11) formula -> . OFC formula
+    (12) formula -> . WHYNOT formula
+    (13) formula -> . SEC formula
     (14) formula -> . ONE
     (15) formula -> . BOT
     (16) formula -> . ZERO
@@ -136,12 +136,12 @@ state 3
     (2) literal -> . ID
     (3) literal -> . ID BOT
 
-    OFC             shift and go to state 3
-    WHYNOT          shift and go to state 4
-    SEC             shift and go to state 5
-    NEG             shift and go to state 6
-    CIRC            shift and go to state 7
-    TILDE           shift and go to state 8
+    NEG             shift and go to state 3
+    CIRC            shift and go to state 4
+    COMP            shift and go to state 5
+    OFC             shift and go to state 6
+    WHYNOT          shift and go to state 7
+    SEC             shift and go to state 8
     ONE             shift and go to state 9
     BOT             shift and go to state 10
     ZERO            shift and go to state 11
@@ -154,18 +154,18 @@ state 3
 
 state 4
 
-    (9) formula -> WHYNOT . formula
+    (9) formula -> CIRC . formula
     (1) formula -> . literal
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
     (7) formula -> . formula WITH formula
-    (8) formula -> . OFC formula
-    (9) formula -> . WHYNOT formula
-    (10) formula -> . SEC formula
-    (11) formula -> . NEG formula
-    (12) formula -> . CIRC formula
-    (13) formula -> . TILDE formula
+    (8) formula -> . NEG formula
+    (9) formula -> . CIRC formula
+    (10) formula -> . COMP formula
+    (11) formula -> . OFC formula
+    (12) formula -> . WHYNOT formula
+    (13) formula -> . SEC formula
     (14) formula -> . ONE
     (15) formula -> . BOT
     (16) formula -> . ZERO
@@ -174,12 +174,12 @@ state 4
     (2) literal -> . ID
     (3) literal -> . ID BOT
 
-    OFC             shift and go to state 3
-    WHYNOT          shift and go to state 4
-    SEC             shift and go to state 5
-    NEG             shift and go to state 6
-    CIRC            shift and go to state 7
-    TILDE           shift and go to state 8
+    NEG             shift and go to state 3
+    CIRC            shift and go to state 4
+    COMP            shift and go to state 5
+    OFC             shift and go to state 6
+    WHYNOT          shift and go to state 7
+    SEC             shift and go to state 8
     ONE             shift and go to state 9
     BOT             shift and go to state 10
     ZERO            shift and go to state 11
@@ -192,18 +192,18 @@ state 4
 
 state 5
 
-    (10) formula -> SEC . formula
+    (10) formula -> COMP . formula
     (1) formula -> . literal
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
     (7) formula -> . formula WITH formula
-    (8) formula -> . OFC formula
-    (9) formula -> . WHYNOT formula
-    (10) formula -> . SEC formula
-    (11) formula -> . NEG formula
-    (12) formula -> . CIRC formula
-    (13) formula -> . TILDE formula
+    (8) formula -> . NEG formula
+    (9) formula -> . CIRC formula
+    (10) formula -> . COMP formula
+    (11) formula -> . OFC formula
+    (12) formula -> . WHYNOT formula
+    (13) formula -> . SEC formula
     (14) formula -> . ONE
     (15) formula -> . BOT
     (16) formula -> . ZERO
@@ -212,12 +212,12 @@ state 5
     (2) literal -> . ID
     (3) literal -> . ID BOT
 
-    OFC             shift and go to state 3
-    WHYNOT          shift and go to state 4
-    SEC             shift and go to state 5
-    NEG             shift and go to state 6
-    CIRC            shift and go to state 7
-    TILDE           shift and go to state 8
+    NEG             shift and go to state 3
+    CIRC            shift and go to state 4
+    COMP            shift and go to state 5
+    OFC             shift and go to state 6
+    WHYNOT          shift and go to state 7
+    SEC             shift and go to state 8
     ONE             shift and go to state 9
     BOT             shift and go to state 10
     ZERO            shift and go to state 11
@@ -230,18 +230,18 @@ state 5
 
 state 6
 
-    (11) formula -> NEG . formula
+    (11) formula -> OFC . formula
     (1) formula -> . literal
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
     (7) formula -> . formula WITH formula
-    (8) formula -> . OFC formula
-    (9) formula -> . WHYNOT formula
-    (10) formula -> . SEC formula
-    (11) formula -> . NEG formula
-    (12) formula -> . CIRC formula
-    (13) formula -> . TILDE formula
+    (8) formula -> . NEG formula
+    (9) formula -> . CIRC formula
+    (10) formula -> . COMP formula
+    (11) formula -> . OFC formula
+    (12) formula -> . WHYNOT formula
+    (13) formula -> . SEC formula
     (14) formula -> . ONE
     (15) formula -> . BOT
     (16) formula -> . ZERO
@@ -250,12 +250,12 @@ state 6
     (2) literal -> . ID
     (3) literal -> . ID BOT
 
-    OFC             shift and go to state 3
-    WHYNOT          shift and go to state 4
-    SEC             shift and go to state 5
-    NEG             shift and go to state 6
-    CIRC            shift and go to state 7
-    TILDE           shift and go to state 8
+    NEG             shift and go to state 3
+    CIRC            shift and go to state 4
+    COMP            shift and go to state 5
+    OFC             shift and go to state 6
+    WHYNOT          shift and go to state 7
+    SEC             shift and go to state 8
     ONE             shift and go to state 9
     BOT             shift and go to state 10
     ZERO            shift and go to state 11
@@ -268,18 +268,18 @@ state 6
 
 state 7
 
-    (12) formula -> CIRC . formula
+    (12) formula -> WHYNOT . formula
     (1) formula -> . literal
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
     (7) formula -> . formula WITH formula
-    (8) formula -> . OFC formula
-    (9) formula -> . WHYNOT formula
-    (10) formula -> . SEC formula
-    (11) formula -> . NEG formula
-    (12) formula -> . CIRC formula
-    (13) formula -> . TILDE formula
+    (8) formula -> . NEG formula
+    (9) formula -> . CIRC formula
+    (10) formula -> . COMP formula
+    (11) formula -> . OFC formula
+    (12) formula -> . WHYNOT formula
+    (13) formula -> . SEC formula
     (14) formula -> . ONE
     (15) formula -> . BOT
     (16) formula -> . ZERO
@@ -288,12 +288,12 @@ state 7
     (2) literal -> . ID
     (3) literal -> . ID BOT
 
-    OFC             shift and go to state 3
-    WHYNOT          shift and go to state 4
-    SEC             shift and go to state 5
-    NEG             shift and go to state 6
-    CIRC            shift and go to state 7
-    TILDE           shift and go to state 8
+    NEG             shift and go to state 3
+    CIRC            shift and go to state 4
+    COMP            shift and go to state 5
+    OFC             shift and go to state 6
+    WHYNOT          shift and go to state 7
+    SEC             shift and go to state 8
     ONE             shift and go to state 9
     BOT             shift and go to state 10
     ZERO            shift and go to state 11
@@ -306,18 +306,18 @@ state 7
 
 state 8
 
-    (13) formula -> TILDE . formula
+    (13) formula -> SEC . formula
     (1) formula -> . literal
     (4) formula -> . formula TENSOR formula
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
     (7) formula -> . formula WITH formula
-    (8) formula -> . OFC formula
-    (9) formula -> . WHYNOT formula
-    (10) formula -> . SEC formula
-    (11) formula -> . NEG formula
-    (12) formula -> . CIRC formula
-    (13) formula -> . TILDE formula
+    (8) formula -> . NEG formula
+    (9) formula -> . CIRC formula
+    (10) formula -> . COMP formula
+    (11) formula -> . OFC formula
+    (12) formula -> . WHYNOT formula
+    (13) formula -> . SEC formula
     (14) formula -> . ONE
     (15) formula -> . BOT
     (16) formula -> . ZERO
@@ -326,12 +326,12 @@ state 8
     (2) literal -> . ID
     (3) literal -> . ID BOT
 
-    OFC             shift and go to state 3
-    WHYNOT          shift and go to state 4
-    SEC             shift and go to state 5
-    NEG             shift and go to state 6
-    CIRC            shift and go to state 7
-    TILDE           shift and go to state 8
+    NEG             shift and go to state 3
+    CIRC            shift and go to state 4
+    COMP            shift and go to state 5
+    OFC             shift and go to state 6
+    WHYNOT          shift and go to state 7
+    SEC             shift and go to state 8
     ONE             shift and go to state 9
     BOT             shift and go to state 10
     ZERO            shift and go to state 11
@@ -398,12 +398,12 @@ state 13
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
     (7) formula -> . formula WITH formula
-    (8) formula -> . OFC formula
-    (9) formula -> . WHYNOT formula
-    (10) formula -> . SEC formula
-    (11) formula -> . NEG formula
-    (12) formula -> . CIRC formula
-    (13) formula -> . TILDE formula
+    (8) formula -> . NEG formula
+    (9) formula -> . CIRC formula
+    (10) formula -> . COMP formula
+    (11) formula -> . OFC formula
+    (12) formula -> . WHYNOT formula
+    (13) formula -> . SEC formula
     (14) formula -> . ONE
     (15) formula -> . BOT
     (16) formula -> . ZERO
@@ -412,12 +412,12 @@ state 13
     (2) literal -> . ID
     (3) literal -> . ID BOT
 
-    OFC             shift and go to state 3
-    WHYNOT          shift and go to state 4
-    SEC             shift and go to state 5
-    NEG             shift and go to state 6
-    CIRC            shift and go to state 7
-    TILDE           shift and go to state 8
+    NEG             shift and go to state 3
+    CIRC            shift and go to state 4
+    COMP            shift and go to state 5
+    OFC             shift and go to state 6
+    WHYNOT          shift and go to state 7
+    SEC             shift and go to state 8
     ONE             shift and go to state 9
     BOT             shift and go to state 10
     ZERO            shift and go to state 11
@@ -450,12 +450,12 @@ state 15
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
     (7) formula -> . formula WITH formula
-    (8) formula -> . OFC formula
-    (9) formula -> . WHYNOT formula
-    (10) formula -> . SEC formula
-    (11) formula -> . NEG formula
-    (12) formula -> . CIRC formula
-    (13) formula -> . TILDE formula
+    (8) formula -> . NEG formula
+    (9) formula -> . CIRC formula
+    (10) formula -> . COMP formula
+    (11) formula -> . OFC formula
+    (12) formula -> . WHYNOT formula
+    (13) formula -> . SEC formula
     (14) formula -> . ONE
     (15) formula -> . BOT
     (16) formula -> . ZERO
@@ -464,12 +464,12 @@ state 15
     (2) literal -> . ID
     (3) literal -> . ID BOT
 
-    OFC             shift and go to state 3
-    WHYNOT          shift and go to state 4
-    SEC             shift and go to state 5
-    NEG             shift and go to state 6
-    CIRC            shift and go to state 7
-    TILDE           shift and go to state 8
+    NEG             shift and go to state 3
+    CIRC            shift and go to state 4
+    COMP            shift and go to state 5
+    OFC             shift and go to state 6
+    WHYNOT          shift and go to state 7
+    SEC             shift and go to state 8
     ONE             shift and go to state 9
     BOT             shift and go to state 10
     ZERO            shift and go to state 11
@@ -488,12 +488,12 @@ state 16
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
     (7) formula -> . formula WITH formula
-    (8) formula -> . OFC formula
-    (9) formula -> . WHYNOT formula
-    (10) formula -> . SEC formula
-    (11) formula -> . NEG formula
-    (12) formula -> . CIRC formula
-    (13) formula -> . TILDE formula
+    (8) formula -> . NEG formula
+    (9) formula -> . CIRC formula
+    (10) formula -> . COMP formula
+    (11) formula -> . OFC formula
+    (12) formula -> . WHYNOT formula
+    (13) formula -> . SEC formula
     (14) formula -> . ONE
     (15) formula -> . BOT
     (16) formula -> . ZERO
@@ -502,12 +502,12 @@ state 16
     (2) literal -> . ID
     (3) literal -> . ID BOT
 
-    OFC             shift and go to state 3
-    WHYNOT          shift and go to state 4
-    SEC             shift and go to state 5
-    NEG             shift and go to state 6
-    CIRC            shift and go to state 7
-    TILDE           shift and go to state 8
+    NEG             shift and go to state 3
+    CIRC            shift and go to state 4
+    COMP            shift and go to state 5
+    OFC             shift and go to state 6
+    WHYNOT          shift and go to state 7
+    SEC             shift and go to state 8
     ONE             shift and go to state 9
     BOT             shift and go to state 10
     ZERO            shift and go to state 11
@@ -526,12 +526,12 @@ state 17
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
     (7) formula -> . formula WITH formula
-    (8) formula -> . OFC formula
-    (9) formula -> . WHYNOT formula
-    (10) formula -> . SEC formula
-    (11) formula -> . NEG formula
-    (12) formula -> . CIRC formula
-    (13) formula -> . TILDE formula
+    (8) formula -> . NEG formula
+    (9) formula -> . CIRC formula
+    (10) formula -> . COMP formula
+    (11) formula -> . OFC formula
+    (12) formula -> . WHYNOT formula
+    (13) formula -> . SEC formula
     (14) formula -> . ONE
     (15) formula -> . BOT
     (16) formula -> . ZERO
@@ -540,12 +540,12 @@ state 17
     (2) literal -> . ID
     (3) literal -> . ID BOT
 
-    OFC             shift and go to state 3
-    WHYNOT          shift and go to state 4
-    SEC             shift and go to state 5
-    NEG             shift and go to state 6
-    CIRC            shift and go to state 7
-    TILDE           shift and go to state 8
+    NEG             shift and go to state 3
+    CIRC            shift and go to state 4
+    COMP            shift and go to state 5
+    OFC             shift and go to state 6
+    WHYNOT          shift and go to state 7
+    SEC             shift and go to state 8
     ONE             shift and go to state 9
     BOT             shift and go to state 10
     ZERO            shift and go to state 11
@@ -564,12 +564,12 @@ state 18
     (5) formula -> . formula PAR formula
     (6) formula -> . formula PLUS formula
     (7) formula -> . formula WITH formula
-    (8) formula -> . OFC formula
-    (9) formula -> . WHYNOT formula
-    (10) formula -> . SEC formula
-    (11) formula -> . NEG formula
-    (12) formula -> . CIRC formula
-    (13) formula -> . TILDE formula
+    (8) formula -> . NEG formula
+    (9) formula -> . CIRC formula
+    (10) formula -> . COMP formula
+    (11) formula -> . OFC formula
+    (12) formula -> . WHYNOT formula
+    (13) formula -> . SEC formula
     (14) formula -> . ONE
     (15) formula -> . BOT
     (16) formula -> . ZERO
@@ -578,12 +578,12 @@ state 18
     (2) literal -> . ID
     (3) literal -> . ID BOT
 
-    OFC             shift and go to state 3
-    WHYNOT          shift and go to state 4
-    SEC             shift and go to state 5
-    NEG             shift and go to state 6
-    CIRC            shift and go to state 7
-    TILDE           shift and go to state 8
+    NEG             shift and go to state 3
+    CIRC            shift and go to state 4
+    COMP            shift and go to state 5
+    OFC             shift and go to state 6
+    WHYNOT          shift and go to state 7
+    SEC             shift and go to state 8
     ONE             shift and go to state 9
     BOT             shift and go to state 10
     ZERO            shift and go to state 11
@@ -596,128 +596,128 @@ state 18
 
 state 19
 
-    (8) formula -> OFC formula .
+    (8) formula -> NEG formula .
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
     (7) formula -> formula . WITH formula
 
-    $end            reduce using rule 8 (formula -> OFC formula .)
-    RPAREN          reduce using rule 8 (formula -> OFC formula .)
-    TENSOR          shift and go to state 15
-    PAR             shift and go to state 16
-    PLUS            shift and go to state 17
-    WITH            shift and go to state 18
+    TENSOR          reduce using rule 8 (formula -> NEG formula .)
+    PAR             reduce using rule 8 (formula -> NEG formula .)
+    PLUS            reduce using rule 8 (formula -> NEG formula .)
+    WITH            reduce using rule 8 (formula -> NEG formula .)
+    $end            reduce using rule 8 (formula -> NEG formula .)
+    RPAREN          reduce using rule 8 (formula -> NEG formula .)
 
-  ! TENSOR          [ reduce using rule 8 (formula -> OFC formula .) ]
-  ! PAR             [ reduce using rule 8 (formula -> OFC formula .) ]
-  ! PLUS            [ reduce using rule 8 (formula -> OFC formula .) ]
-  ! WITH            [ reduce using rule 8 (formula -> OFC formula .) ]
+  ! TENSOR          [ shift and go to state 15 ]
+  ! PAR             [ shift and go to state 16 ]
+  ! PLUS            [ shift and go to state 17 ]
+  ! WITH            [ shift and go to state 18 ]
 
 
 state 20
 
-    (9) formula -> WHYNOT formula .
+    (9) formula -> CIRC formula .
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
     (7) formula -> formula . WITH formula
 
-    $end            reduce using rule 9 (formula -> WHYNOT formula .)
-    RPAREN          reduce using rule 9 (formula -> WHYNOT formula .)
-    TENSOR          shift and go to state 15
-    PAR             shift and go to state 16
-    PLUS            shift and go to state 17
-    WITH            shift and go to state 18
+    TENSOR          reduce using rule 9 (formula -> CIRC formula .)
+    PAR             reduce using rule 9 (formula -> CIRC formula .)
+    PLUS            reduce using rule 9 (formula -> CIRC formula .)
+    WITH            reduce using rule 9 (formula -> CIRC formula .)
+    $end            reduce using rule 9 (formula -> CIRC formula .)
+    RPAREN          reduce using rule 9 (formula -> CIRC formula .)
 
-  ! TENSOR          [ reduce using rule 9 (formula -> WHYNOT formula .) ]
-  ! PAR             [ reduce using rule 9 (formula -> WHYNOT formula .) ]
-  ! PLUS            [ reduce using rule 9 (formula -> WHYNOT formula .) ]
-  ! WITH            [ reduce using rule 9 (formula -> WHYNOT formula .) ]
+  ! TENSOR          [ shift and go to state 15 ]
+  ! PAR             [ shift and go to state 16 ]
+  ! PLUS            [ shift and go to state 17 ]
+  ! WITH            [ shift and go to state 18 ]
 
 
 state 21
 
-    (10) formula -> SEC formula .
+    (10) formula -> COMP formula .
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
     (7) formula -> formula . WITH formula
 
-    $end            reduce using rule 10 (formula -> SEC formula .)
-    RPAREN          reduce using rule 10 (formula -> SEC formula .)
-    TENSOR          shift and go to state 15
-    PAR             shift and go to state 16
-    PLUS            shift and go to state 17
-    WITH            shift and go to state 18
+    TENSOR          reduce using rule 10 (formula -> COMP formula .)
+    PAR             reduce using rule 10 (formula -> COMP formula .)
+    PLUS            reduce using rule 10 (formula -> COMP formula .)
+    WITH            reduce using rule 10 (formula -> COMP formula .)
+    $end            reduce using rule 10 (formula -> COMP formula .)
+    RPAREN          reduce using rule 10 (formula -> COMP formula .)
 
-  ! TENSOR          [ reduce using rule 10 (formula -> SEC formula .) ]
-  ! PAR             [ reduce using rule 10 (formula -> SEC formula .) ]
-  ! PLUS            [ reduce using rule 10 (formula -> SEC formula .) ]
-  ! WITH            [ reduce using rule 10 (formula -> SEC formula .) ]
+  ! TENSOR          [ shift and go to state 15 ]
+  ! PAR             [ shift and go to state 16 ]
+  ! PLUS            [ shift and go to state 17 ]
+  ! WITH            [ shift and go to state 18 ]
 
 
 state 22
 
-    (11) formula -> NEG formula .
+    (11) formula -> OFC formula .
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
     (7) formula -> formula . WITH formula
 
-    $end            reduce using rule 11 (formula -> NEG formula .)
-    RPAREN          reduce using rule 11 (formula -> NEG formula .)
-    TENSOR          shift and go to state 15
-    PAR             shift and go to state 16
-    PLUS            shift and go to state 17
-    WITH            shift and go to state 18
+    TENSOR          reduce using rule 11 (formula -> OFC formula .)
+    PAR             reduce using rule 11 (formula -> OFC formula .)
+    PLUS            reduce using rule 11 (formula -> OFC formula .)
+    WITH            reduce using rule 11 (formula -> OFC formula .)
+    $end            reduce using rule 11 (formula -> OFC formula .)
+    RPAREN          reduce using rule 11 (formula -> OFC formula .)
 
-  ! TENSOR          [ reduce using rule 11 (formula -> NEG formula .) ]
-  ! PAR             [ reduce using rule 11 (formula -> NEG formula .) ]
-  ! PLUS            [ reduce using rule 11 (formula -> NEG formula .) ]
-  ! WITH            [ reduce using rule 11 (formula -> NEG formula .) ]
+  ! TENSOR          [ shift and go to state 15 ]
+  ! PAR             [ shift and go to state 16 ]
+  ! PLUS            [ shift and go to state 17 ]
+  ! WITH            [ shift and go to state 18 ]
 
 
 state 23
 
-    (12) formula -> CIRC formula .
+    (12) formula -> WHYNOT formula .
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
     (7) formula -> formula . WITH formula
 
-    $end            reduce using rule 12 (formula -> CIRC formula .)
-    RPAREN          reduce using rule 12 (formula -> CIRC formula .)
-    TENSOR          shift and go to state 15
-    PAR             shift and go to state 16
-    PLUS            shift and go to state 17
-    WITH            shift and go to state 18
+    TENSOR          reduce using rule 12 (formula -> WHYNOT formula .)
+    PAR             reduce using rule 12 (formula -> WHYNOT formula .)
+    PLUS            reduce using rule 12 (formula -> WHYNOT formula .)
+    WITH            reduce using rule 12 (formula -> WHYNOT formula .)
+    $end            reduce using rule 12 (formula -> WHYNOT formula .)
+    RPAREN          reduce using rule 12 (formula -> WHYNOT formula .)
 
-  ! TENSOR          [ reduce using rule 12 (formula -> CIRC formula .) ]
-  ! PAR             [ reduce using rule 12 (formula -> CIRC formula .) ]
-  ! PLUS            [ reduce using rule 12 (formula -> CIRC formula .) ]
-  ! WITH            [ reduce using rule 12 (formula -> CIRC formula .) ]
+  ! TENSOR          [ shift and go to state 15 ]
+  ! PAR             [ shift and go to state 16 ]
+  ! PLUS            [ shift and go to state 17 ]
+  ! WITH            [ shift and go to state 18 ]
 
 
 state 24
 
-    (13) formula -> TILDE formula .
+    (13) formula -> SEC formula .
     (4) formula -> formula . TENSOR formula
     (5) formula -> formula . PAR formula
     (6) formula -> formula . PLUS formula
     (7) formula -> formula . WITH formula
 
-    $end            reduce using rule 13 (formula -> TILDE formula .)
-    RPAREN          reduce using rule 13 (formula -> TILDE formula .)
-    TENSOR          shift and go to state 15
-    PAR             shift and go to state 16
-    PLUS            shift and go to state 17
-    WITH            shift and go to state 18
+    TENSOR          reduce using rule 13 (formula -> SEC formula .)
+    PAR             reduce using rule 13 (formula -> SEC formula .)
+    PLUS            reduce using rule 13 (formula -> SEC formula .)
+    WITH            reduce using rule 13 (formula -> SEC formula .)
+    $end            reduce using rule 13 (formula -> SEC formula .)
+    RPAREN          reduce using rule 13 (formula -> SEC formula .)
 
-  ! TENSOR          [ reduce using rule 13 (formula -> TILDE formula .) ]
-  ! PAR             [ reduce using rule 13 (formula -> TILDE formula .) ]
-  ! PLUS            [ reduce using rule 13 (formula -> TILDE formula .) ]
-  ! WITH            [ reduce using rule 13 (formula -> TILDE formula .) ]
+  ! TENSOR          [ shift and go to state 15 ]
+  ! PAR             [ shift and go to state 16 ]
+  ! PLUS            [ shift and go to state 17 ]
+  ! WITH            [ shift and go to state 18 ]
 
 
 state 25
@@ -757,15 +757,15 @@ state 27
 
     TENSOR          reduce using rule 4 (formula -> formula TENSOR formula .)
     PAR             reduce using rule 4 (formula -> formula TENSOR formula .)
-    PLUS            reduce using rule 4 (formula -> formula TENSOR formula .)
-    WITH            reduce using rule 4 (formula -> formula TENSOR formula .)
     $end            reduce using rule 4 (formula -> formula TENSOR formula .)
     RPAREN          reduce using rule 4 (formula -> formula TENSOR formula .)
+    PLUS            shift and go to state 17
+    WITH            shift and go to state 18
 
+  ! PLUS            [ reduce using rule 4 (formula -> formula TENSOR formula .) ]
+  ! WITH            [ reduce using rule 4 (formula -> formula TENSOR formula .) ]
   ! TENSOR          [ shift and go to state 15 ]
   ! PAR             [ shift and go to state 16 ]
-  ! PLUS            [ shift and go to state 17 ]
-  ! WITH            [ shift and go to state 18 ]
 
 
 state 28
@@ -778,15 +778,15 @@ state 28
 
     TENSOR          reduce using rule 5 (formula -> formula PAR formula .)
     PAR             reduce using rule 5 (formula -> formula PAR formula .)
-    PLUS            reduce using rule 5 (formula -> formula PAR formula .)
-    WITH            reduce using rule 5 (formula -> formula PAR formula .)
     $end            reduce using rule 5 (formula -> formula PAR formula .)
     RPAREN          reduce using rule 5 (formula -> formula PAR formula .)
+    PLUS            shift and go to state 17
+    WITH            shift and go to state 18
 
+  ! PLUS            [ reduce using rule 5 (formula -> formula PAR formula .) ]
+  ! WITH            [ reduce using rule 5 (formula -> formula PAR formula .) ]
   ! TENSOR          [ shift and go to state 15 ]
   ! PAR             [ shift and go to state 16 ]
-  ! PLUS            [ shift and go to state 17 ]
-  ! WITH            [ shift and go to state 18 ]
 
 
 state 29
