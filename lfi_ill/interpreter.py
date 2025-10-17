@@ -90,6 +90,34 @@ class Interpreter:
         else:
             return ParaconsistentState(ParaconsistentTruth.FALSE)
 
+    def visit_Negation(self, node):
+        val = self.visit(node.formula)
+        # Swaps True and False in the truth value set
+        new_value = {not v for v in val.value.value}
+
+        if new_value == {True, False}:
+            truth_value = ParaconsistentTruth.BOTH
+        elif new_value == {True}:
+            truth_value = ParaconsistentTruth.TRUE
+        elif new_value == {False}:
+            truth_value = ParaconsistentTruth.FALSE
+        else: # NEITHER
+            truth_value = ParaconsistentTruth.NEITHER
+
+        return ParaconsistentState(truth_value, val.concrete_value)
+
+    def visit_Consistency(self, node):
+        val = self.visit(node.formula)
+        # A formula is consistent if it is not BOTH.
+        is_consistent = val.value != ParaconsistentTruth.BOTH
+        return ParaconsistentState(ParaconsistentTruth.TRUE if is_consistent else ParaconsistentTruth.FALSE)
+
+    def visit_Completeness(self, node):
+        val = self.visit(node.formula)
+        # A formula is complete (determined) if it is not NEITHER.
+        is_complete = val.value != ParaconsistentTruth.NEITHER
+        return ParaconsistentState(ParaconsistentTruth.TRUE if is_complete else ParaconsistentTruth.FALSE)
+
     def visit_WhyNot(self, node):
         return ParaconsistentState(ParaconsistentTruth.TRUE, self.visit(node.e))
 
@@ -125,7 +153,7 @@ class Interpreter:
         else:
             return ParaconsistentState(ParaconsistentTruth.FALSE)
 
-    def visit_Var(self, node):
+    def visit_Atom(self, node):
         if node.name in self.environment:
             return self.environment[node.name]
         else:

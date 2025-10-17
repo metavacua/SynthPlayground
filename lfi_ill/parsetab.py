@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'BOT CIRC ID LPAREN NEG OFC ONE PAR PLUS RPAREN SEC TENSOR TOP WHYNOT WITH ZEROformula : literalliteral : IDliteral : ID BOTformula : formula TENSOR formulaformula : formula PAR formulaformula : formula PLUS formulaformula : formula WITH formulaformula : OFC formula\n               | WHYNOT formula\n               | SEC formulaformula : NEG formula\n               | CIRC formulaformula : ONE\n               | BOT\n               | ZERO\n               | TOPformula : LPAREN formula RPAREN'
+_lr_signature = 'leftTENSORPARleftPLUSWITHrightNEGCIRCCOMPOFCWHYNOTSECBOT CIRC COMP ID LPAREN NEG OFC ONE PAR PLUS RPAREN SEC TENSOR TOP WHYNOT WITH ZEROformula : literalliteral : IDliteral : ID BOTformula : formula TENSOR formula\n               | formula PAR formula\n               | formula PLUS formula\n               | formula WITH formulaformula : NEG formula\n               | CIRC formula\n               | COMP formula\n               | OFC formula\n               | WHYNOT formula\n               | SEC formulaformula : ONE\n               | BOT\n               | ZERO\n               | TOPformula : LPAREN formula RPAREN'
 
-_lr_action_items = {'OFC':([0,3,4,5,6,7,12,14,15,16,17,],[3,3,3,3,3,3,3,3,3,3,3,]),'WHYNOT':([0,3,4,5,6,7,12,14,15,16,17,],[4,4,4,4,4,4,4,4,4,4,4,]),'SEC':([0,3,4,5,6,7,12,14,15,16,17,],[5,5,5,5,5,5,5,5,5,5,5,]),'NEG':([0,3,4,5,6,7,12,14,15,16,17,],[6,6,6,6,6,6,6,6,6,6,6,]),'CIRC':([0,3,4,5,6,7,12,14,15,16,17,],[7,7,7,7,7,7,7,7,7,7,7,]),'ONE':([0,3,4,5,6,7,12,14,15,16,17,],[8,8,8,8,8,8,8,8,8,8,8,]),'BOT':([0,3,4,5,6,7,12,13,14,15,16,17,],[9,9,9,9,9,9,9,24,9,9,9,9,]),'ZERO':([0,3,4,5,6,7,12,14,15,16,17,],[10,10,10,10,10,10,10,10,10,10,10,]),'TOP':([0,3,4,5,6,7,12,14,15,16,17,],[11,11,11,11,11,11,11,11,11,11,11,]),'LPAREN':([0,3,4,5,6,7,12,14,15,16,17,],[12,12,12,12,12,12,12,12,12,12,12,]),'ID':([0,3,4,5,6,7,12,14,15,16,17,],[13,13,13,13,13,13,13,13,13,13,13,]),'$end':([1,2,8,9,10,11,13,18,19,20,21,22,24,25,26,27,28,29,],[0,-1,-13,-14,-15,-16,-2,-8,-9,-10,-11,-12,-3,-4,-5,-6,-7,-17,]),'TENSOR':([1,2,8,9,10,11,13,18,19,20,21,22,23,24,25,26,27,28,29,],[14,-1,-13,-14,-15,-16,-2,14,14,14,14,14,14,-3,14,14,14,14,-17,]),'PAR':([1,2,8,9,10,11,13,18,19,20,21,22,23,24,25,26,27,28,29,],[15,-1,-13,-14,-15,-16,-2,15,15,15,15,15,15,-3,15,15,15,15,-17,]),'PLUS':([1,2,8,9,10,11,13,18,19,20,21,22,23,24,25,26,27,28,29,],[16,-1,-13,-14,-15,-16,-2,16,16,16,16,16,16,-3,16,16,16,16,-17,]),'WITH':([1,2,8,9,10,11,13,18,19,20,21,22,23,24,25,26,27,28,29,],[17,-1,-13,-14,-15,-16,-2,17,17,17,17,17,17,-3,17,17,17,17,-17,]),'RPAREN':([2,8,9,10,11,13,18,19,20,21,22,23,24,25,26,27,28,29,],[-1,-13,-14,-15,-16,-2,-8,-9,-10,-11,-12,29,-3,-4,-5,-6,-7,-17,]),}
+_lr_action_items = {'NEG':([0,3,4,5,6,7,8,13,15,16,17,18,],[3,3,3,3,3,3,3,3,3,3,3,3,]),'CIRC':([0,3,4,5,6,7,8,13,15,16,17,18,],[4,4,4,4,4,4,4,4,4,4,4,4,]),'COMP':([0,3,4,5,6,7,8,13,15,16,17,18,],[5,5,5,5,5,5,5,5,5,5,5,5,]),'OFC':([0,3,4,5,6,7,8,13,15,16,17,18,],[6,6,6,6,6,6,6,6,6,6,6,6,]),'WHYNOT':([0,3,4,5,6,7,8,13,15,16,17,18,],[7,7,7,7,7,7,7,7,7,7,7,7,]),'SEC':([0,3,4,5,6,7,8,13,15,16,17,18,],[8,8,8,8,8,8,8,8,8,8,8,8,]),'ONE':([0,3,4,5,6,7,8,13,15,16,17,18,],[9,9,9,9,9,9,9,9,9,9,9,9,]),'BOT':([0,3,4,5,6,7,8,13,14,15,16,17,18,],[10,10,10,10,10,10,10,10,26,10,10,10,10,]),'ZERO':([0,3,4,5,6,7,8,13,15,16,17,18,],[11,11,11,11,11,11,11,11,11,11,11,11,]),'TOP':([0,3,4,5,6,7,8,13,15,16,17,18,],[12,12,12,12,12,12,12,12,12,12,12,12,]),'LPAREN':([0,3,4,5,6,7,8,13,15,16,17,18,],[13,13,13,13,13,13,13,13,13,13,13,13,]),'ID':([0,3,4,5,6,7,8,13,15,16,17,18,],[14,14,14,14,14,14,14,14,14,14,14,14,]),'$end':([1,2,9,10,11,12,14,19,20,21,22,23,24,26,27,28,29,30,31,],[0,-1,-14,-15,-16,-17,-2,-8,-9,-10,-11,-12,-13,-3,-4,-5,-6,-7,-18,]),'TENSOR':([1,2,9,10,11,12,14,19,20,21,22,23,24,25,26,27,28,29,30,31,],[15,-1,-14,-15,-16,-17,-2,-8,-9,-10,-11,-12,-13,15,-3,-4,-5,-6,-7,-18,]),'PAR':([1,2,9,10,11,12,14,19,20,21,22,23,24,25,26,27,28,29,30,31,],[16,-1,-14,-15,-16,-17,-2,-8,-9,-10,-11,-12,-13,16,-3,-4,-5,-6,-7,-18,]),'PLUS':([1,2,9,10,11,12,14,19,20,21,22,23,24,25,26,27,28,29,30,31,],[17,-1,-14,-15,-16,-17,-2,-8,-9,-10,-11,-12,-13,17,-3,17,17,-6,-7,-18,]),'WITH':([1,2,9,10,11,12,14,19,20,21,22,23,24,25,26,27,28,29,30,31,],[18,-1,-14,-15,-16,-17,-2,-8,-9,-10,-11,-12,-13,18,-3,18,18,-6,-7,-18,]),'RPAREN':([2,9,10,11,12,14,19,20,21,22,23,24,25,26,27,28,29,30,31,],[-1,-14,-15,-16,-17,-2,-8,-9,-10,-11,-12,-13,31,-3,-4,-5,-6,-7,-18,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'formula':([0,3,4,5,6,7,12,14,15,16,17,],[1,18,19,20,21,22,23,25,26,27,28,]),'literal':([0,3,4,5,6,7,12,14,15,16,17,],[2,2,2,2,2,2,2,2,2,2,2,]),}
+_lr_goto_items = {'formula':([0,3,4,5,6,7,8,13,15,16,17,18,],[1,19,20,21,22,23,24,25,27,28,29,30,]),'literal':([0,3,4,5,6,7,8,13,15,16,17,18,],[2,2,2,2,2,2,2,2,2,2,2,2,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,21 +27,22 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> formula","S'",1,None,None,None),
-  ('formula -> literal','formula',1,'p_formula_literal','parser.py',7),
-  ('literal -> ID','literal',1,'p_literal_atom','parser.py',11),
-  ('literal -> ID BOT','literal',2,'p_literal_atom_neg','parser.py',15),
-  ('formula -> formula TENSOR formula','formula',3,'p_formula_multiplicative','parser.py',19),
-  ('formula -> formula PAR formula','formula',3,'p_formula_par','parser.py',23),
-  ('formula -> formula PLUS formula','formula',3,'p_formula_additive','parser.py',27),
-  ('formula -> formula WITH formula','formula',3,'p_formula_with','parser.py',31),
-  ('formula -> OFC formula','formula',2,'p_formula_modalities','parser.py',35),
-  ('formula -> WHYNOT formula','formula',2,'p_formula_modalities','parser.py',36),
-  ('formula -> SEC formula','formula',2,'p_formula_modalities','parser.py',37),
-  ('formula -> NEG formula','formula',2,'p_formula_paraconsistent','parser.py',46),
-  ('formula -> CIRC formula','formula',2,'p_formula_paraconsistent','parser.py',47),
-  ('formula -> ONE','formula',1,'p_formula_units','parser.py',54),
-  ('formula -> BOT','formula',1,'p_formula_units','parser.py',55),
-  ('formula -> ZERO','formula',1,'p_formula_units','parser.py',56),
-  ('formula -> TOP','formula',1,'p_formula_units','parser.py',57),
-  ('formula -> LPAREN formula RPAREN','formula',3,'p_formula_group','parser.py',68),
+  ('formula -> literal','formula',1,'p_formula_literal','parser.py',15),
+  ('literal -> ID','literal',1,'p_literal_atom','parser.py',19),
+  ('literal -> ID BOT','literal',2,'p_literal_atom_neg','parser.py',23),
+  ('formula -> formula TENSOR formula','formula',3,'p_formula_binary_op','parser.py',27),
+  ('formula -> formula PAR formula','formula',3,'p_formula_binary_op','parser.py',28),
+  ('formula -> formula PLUS formula','formula',3,'p_formula_binary_op','parser.py',29),
+  ('formula -> formula WITH formula','formula',3,'p_formula_binary_op','parser.py',30),
+  ('formula -> NEG formula','formula',2,'p_formula_unary_op','parser.py',41),
+  ('formula -> CIRC formula','formula',2,'p_formula_unary_op','parser.py',42),
+  ('formula -> COMP formula','formula',2,'p_formula_unary_op','parser.py',43),
+  ('formula -> OFC formula','formula',2,'p_formula_unary_op','parser.py',44),
+  ('formula -> WHYNOT formula','formula',2,'p_formula_unary_op','parser.py',45),
+  ('formula -> SEC formula','formula',2,'p_formula_unary_op','parser.py',46),
+  ('formula -> ONE','formula',1,'p_formula_units','parser.py',61),
+  ('formula -> BOT','formula',1,'p_formula_units','parser.py',62),
+  ('formula -> ZERO','formula',1,'p_formula_units','parser.py',63),
+  ('formula -> TOP','formula',1,'p_formula_units','parser.py',64),
+  ('formula -> LPAREN formula RPAREN','formula',3,'p_formula_group','parser.py',75),
 ]

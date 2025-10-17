@@ -11,6 +11,7 @@ tokens = (
     'SEC',
     'NEG',
     'CIRC',
+    'COMP',
     'ONE',
     'BOT',
     'ZERO',
@@ -29,6 +30,7 @@ t_WHYNOT = r'\?'
 t_SEC = r'§'
 t_NEG = r'¬'
 t_CIRC = r'∘'
+t_COMP = r'~'
 t_ONE = r'1'
 t_BOT = r'⊥'
 t_ZERO = r'0'

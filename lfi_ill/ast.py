@@ -67,6 +67,12 @@ class Consistency(Formula):
     def __repr__(self):
         return f"Consistency({self.formula})"
 
+class Completeness(Formula):
+    def __init__(self, formula):
+        self.formula = formula
+    def __repr__(self):
+        return f"Completeness({self.formula})"
+
 class One(Formula):
     def __repr__(self):
         return "One"
