@@ -124,33 +124,47 @@ class Parser:
         return block
 
     def parse_function_definition(self):
-        self.expect_peek('ID')
+        if not self.expect_peek('ID'):
+            return None
         name = Identifier(self.current_token.value)
-        self.expect_peek('LPAREN')
+        if not self.expect_peek('LPAREN'):
+            return None
         params = self.parse_function_parameters()
-        if self.peek_token.type == 'ARROW':
-            self.next_token()
-            self.next_token()
-        self.expect_peek('LBRACE')
+        if not self.expect_peek('LBRACE'):
+            return None
         body = self.parse_block_statement()
-        return FunctionDefinition(name=name, params=params, body=body)
+        return FunctionDefinition(name, params, body)
 
     def parse_function_parameters(self):
-        params = []
-        if self.peek_token.type == 'RPAREN':
-            self.next_token()
-            return params
-        self.next_token()
+        """Parses a list of identifiers for a function definition."""
+        identifiers = []
 
-        while True:
-            params.append(Identifier(self.current_token.value))
-            self.next_token()
-            if self.current_token.type == 'COLON':
-                self.next_token()
-                self.next_token()
-            if self.current_token.type == 'RPAREN': break
-            if not self.expect_peek('COMMA'): return None
-        return params
+        # Check for empty parameter list: fn()
+        if self.peek_token.type == 'RPAREN':
+            self.next_token()  # Consume the ')'
+            return identifiers
+
+        # Consume the first parameter
+        self.next_token()
+        if self.current_token.type != 'ID':
+            self.errors.append(f"Expected parameter name to be an identifier, got {self.current_token.type}")
+            return None # Error case
+        identifiers.append(Identifier(self.current_token.value))
+
+        # Consume subsequent parameters
+        while self.peek_token.type == 'COMMA':
+            self.next_token()  # Consume the ','
+            self.next_token()  # Consume the identifier
+            if self.current_token.type != 'ID':
+                self.errors.append(f"Expected parameter name to be an identifier, got {self.current_token.type}")
+                return None # Error case
+            identifiers.append(Identifier(self.current_token.value))
+
+        # Expect the closing parenthesis
+        if not self.expect_peek('RPAREN'):
+            return None  # expect_peek already logged the error
+
+        return identifiers
 
     def parse_if_statement(self):
         self.next_token()

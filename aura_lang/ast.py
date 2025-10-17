@@ -78,7 +78,7 @@ class ListLiteral(Expression):
 
 class CallExpression(Expression):
     def __init__(self, function, arguments):
-        self.function = function  # Identifier or FunctionLiteral
+        self.function = function  # Identifier
         self.arguments = arguments  # List of Expressions
 
 class InfixExpression(Expression):

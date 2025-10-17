@@ -162,9 +162,11 @@ def eval_infix_expression(op, left, right):
         if op == '-': return Integer(l - r)
         if op == '*': return Integer(l * r)
         if op == '/': return Integer(l // r)
-        return Object(False) # Unsupported operator for integers
+        if op == '<': return Object(l < r)
+        if op == '>': return Object(l > r)
+        return Object(False)
 
-    return Object(False) # Unsupported operator for the given types
+    return Object(False)
 
 def eval_identifier(node, env):
     return env.get(node.value) or BUILTINS.get(node.value)
@@ -186,4 +188,17 @@ class Agent(Object):
         self.value = self
         self.call_tool = Builtin(agent_call_tool)
 
-BUILTINS = {"agent": Agent()}
+def len_builtin(*args):
+    if len(args) != 1:
+        return None
+    arg = args[0]
+    if isinstance(arg, String):
+        return Integer(len(arg.value))
+    if isinstance(arg, Object) and isinstance(arg.value, list):
+        return Integer(len(arg.value))
+    return None
+
+BUILTINS = {
+    "agent": Agent(),
+    "len": Builtin(len_builtin),
+}
