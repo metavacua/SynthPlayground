@@ -18,6 +18,8 @@ This repository uses a hierarchical, decentralized protocol system. Each of the 
 - [Critic](protocols/critic/AGENTS.md)
 - [Experimental](protocols/experimental/AGENTS.md)
 - [Security](protocols/security/AGENTS.md)
+- [Self-improvement](protocols/self-improvement/AGENTS.md)
+- [Testing](protocols/testing/AGENTS.md)
 
 ## Root Protocols
 

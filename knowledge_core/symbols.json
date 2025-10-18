@@ -3632,7 +3632,7 @@
       "name": "install_dependencies",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 28,
+      "line": 29,
       "kind": "function",
       "docstring": null
     },
@@ -3641,7 +3641,7 @@
       "name": "load_schema",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 71,
+      "line": 72,
       "kind": "function",
       "docstring": null
     },
@@ -3650,7 +3650,7 @@
       "name": "sanitize_markdown",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 84,
+      "line": 85,
       "kind": "function",
       "docstring": null
     },
@@ -3659,7 +3659,7 @@
       "name": "extract_docstring",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 90,
+      "line": 91,
       "kind": "function",
       "docstring": "Extracts the module-level docstring from a Python file."
     },
@@ -3668,7 +3668,7 @@
       "name": "compile_single_module",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 103,
+      "line": 104,
       "kind": "function",
       "docstring": null
     },
@@ -3677,7 +3677,7 @@
       "name": "compile_module_wrapper",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 180,
+      "line": 176,
       "kind": "function",
       "docstring": null
     },
@@ -3686,7 +3686,7 @@
       "name": "generate_root_agents_md",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 195,
+      "line": 192,
       "kind": "function",
       "docstring": "Generates the root AGENTS.md file, linking to all successfully compiled child modules."
     },
@@ -3695,7 +3695,7 @@
       "name": "main_orchestrator",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 243,
+      "line": 240,
       "kind": "function",
       "docstring": "Main function to find and run all local build scripts in parallel."
     },
@@ -4856,7 +4856,7 @@
       "name": "find_fsm_transition",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 26,
+      "line": 27,
       "kind": "function",
       "docstring": "Finds the destination state for a given source and trigger."
     },
@@ -4865,7 +4865,7 @@
       "name": "run_agent_loop",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 36,
+      "line": 37,
       "kind": "function",
       "docstring": "The main loop that drives the agent's lifecycle via the FSM."
     },
@@ -4874,7 +4874,7 @@
       "name": "main",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 158,
+      "line": 169,
       "kind": "function",
       "docstring": "Main entry point for the agent shell."
     },
@@ -5963,7 +5963,7 @@
       "name": "main",
       "path": "./tooling/capability_verifier.py",
       "language": "Python",
-      "line": 29,
+      "line": 33,
       "kind": "function",
       "docstring": "A tool to verify that the agent can monotonically improve its capabilities.\n\nThis tool works by:\n1. Running a target test file that is known to fail, confirming the agent lacks a capability.\n2. Invoking the agent's self-correction mechanism to learn the new capability.\n3. Running the target test again to confirm it now passes.\n4. Running the full test suite to ensure no existing capabilities were lost."
     },
@@ -6089,7 +6089,7 @@
       "name": "load_lessons",
       "path": "./tooling/self_correction_orchestrator.py",
       "language": "Python",
-      "line": 18,
+      "line": 19,
       "kind": "function",
       "docstring": "Loads all lessons from the JSONL file."
     },
@@ -6098,7 +6098,7 @@
       "name": "save_lessons",
       "path": "./tooling/self_correction_orchestrator.py",
       "language": "Python",
-      "line": 27,
+      "line": 28,
       "kind": "function",
       "docstring": "Saves a list of lessons back to the JSONL file, overwriting it."
     },
@@ -6107,7 +6107,7 @@
       "name": "run_command",
       "path": "./tooling/self_correction_orchestrator.py",
       "language": "Python",
-      "line": 34,
+      "line": 35,
       "kind": "function",
       "docstring": "Runs a command and returns True on success, False on failure."
     },
@@ -6116,7 +6116,7 @@
       "name": "process_lessons",
       "path": "./tooling/self_correction_orchestrator.py",
       "language": "Python",
-      "line": 46,
+      "line": 47,
       "kind": "function",
       "docstring": "Processes all pending lessons, applies them, and updates their status.\nReturns True if any changes were made, False otherwise."
     },
@@ -6125,7 +6125,7 @@
       "name": "main",
       "path": "./tooling/self_correction_orchestrator.py",
       "language": "Python",
-      "line": 159,
+      "line": 160,
       "kind": "function",
       "docstring": "Main function to run the self-correction workflow."
     },
@@ -6458,7 +6458,7 @@
       "name": "test_main_flow_rebuilds_agents_md",
       "path": "./tooling/test_self_correction_orchestrator.py",
       "language": "Python",
-      "line": 106,
+      "line": 107,
       "kind": "function",
       "docstring": "Tests that the main function calls to rebuild AGENTS.md after changes."
     },
@@ -6467,7 +6467,7 @@
       "name": "test_no_pending_lessons",
       "path": "./tooling/test_self_correction_orchestrator.py",
       "language": "Python",
-      "line": 119,
+      "line": 122,
       "kind": "function",
       "docstring": "Tests that the orchestrator does nothing if there are no pending lessons."
     },
@@ -6476,7 +6476,7 @@
       "name": "test_malformed_lesson",
       "path": "./tooling/test_self_correction_orchestrator.py",
       "language": "Python",
-      "line": 132,
+      "line": 136,
       "kind": "function",
       "docstring": "Tests that malformed lessons are skipped and status is not changed."
     },
@@ -6485,7 +6485,7 @@
       "name": "test_unknown_action_type",
       "path": "./tooling/test_self_correction_orchestrator.py",
       "language": "Python",
-      "line": 139,
+      "line": 143,
       "kind": "function",
       "docstring": "Tests that lessons with unknown action types are skipped."
     },
