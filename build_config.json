@@ -65,11 +65,6 @@
         "type": "command",
         "command": "rm -f AGENTS.md README.md SECURITY.md knowledge_core/SYSTEM_DOCUMENTATION.md index.html",
         "description": "Removes all compiled protocol and documentation artifacts."
-    },
-    "run-experiment": {
-      "type": "command",
-      "command": "python3 tooling/experiment_runner.py",
-      "description": "Runs a standardized experiment in a specified directory."
     }
   },
   "build_groups": {

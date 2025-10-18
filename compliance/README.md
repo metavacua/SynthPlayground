@@ -10,7 +10,7 @@ This document provides a human-readable summary of the protocols and key compone
 - **`meta-protocol-001`**: A meta-protocol governing the agent's awareness and maintenance of its own core protocol files.
 - **`non-compliance-protocol-001`**: A protocol that defines non-compliance with AGENTS.md and specifies corrective actions.
 - **`pre-commit-protocol-001`**: Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission.
-- **`reset-all-prohibition-001`**: This protocol establishes a strict and unconditional prohibition on the use of the `reset_all` tool. This tool is considered a legacy, high-risk command that is no longer permitted in any workflow.
+- **`reset-all-prohibition-001`**: A high-priority protocol that unconditionally forbids the use of the `reset_all` tool.
 
 ## Key Components
 

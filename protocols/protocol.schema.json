@@ -28,23 +28,11 @@
             "type": "string"
           },
           "enforcement": {
-            "description": "A human-readable description of how the rule is enforced. This is optional if machine-enforceable fields are present.",
+            "description": "Describes how the rule is programmatically enforced.",
             "type": "string"
-          },
-          "effect": {
-            "description": "The machine-enforceable effect of the rule. 'deny' means the specified actions are forbidden.",
-            "type": "string",
-            "enum": ["deny"]
-          },
-          "tool_name": {
-            "description": "A list of tool names that this rule applies to for machine enforcement.",
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
           }
         },
-        "required": ["rule_id", "description"]
+        "required": ["rule_id", "description", "enforcement"]
       }
     },
     "associated_tools": {
