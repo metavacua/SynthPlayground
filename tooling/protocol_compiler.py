@@ -13,6 +13,7 @@ import sys
 import re
 import time
 import importlib.util
+import json
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -241,7 +242,6 @@ def main_orchestrator():
     Main function to find and run all local build scripts in parallel.
     """
     parser = argparse.ArgumentParser(description="Parallel Protocol Build Orchestrator")
-    # Retaining for potential future use, but not currently used by the orchestrator itself.
     parser.add_argument("--knowledge-graph-file", help="Path to output knowledge graph file (currently disabled in decentralized build).")
     args = parser.parse_args()
 
@@ -261,6 +261,9 @@ def main_orchestrator():
     if not all_protocol_dirs:
         print("No protocol directories found. Exiting.")
         return
+
+    successful_compilations = []
+    failed_compilations = []
 
     with ThreadPoolExecutor() as executor:
         future_to_dir = {executor.submit(compile_module_wrapper, dir_path): dir_path for dir_path in build_script_dirs}

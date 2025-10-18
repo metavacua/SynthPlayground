@@ -3632,7 +3632,7 @@
       "name": "install_dependencies",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 28,
+      "line": 29,
       "kind": "function",
       "docstring": null
     },
@@ -3641,7 +3641,7 @@
       "name": "load_schema",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 71,
+      "line": 72,
       "kind": "function",
       "docstring": null
     },
@@ -3650,7 +3650,7 @@
       "name": "sanitize_markdown",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 84,
+      "line": 85,
       "kind": "function",
       "docstring": null
     },
@@ -3659,7 +3659,7 @@
       "name": "extract_docstring",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 90,
+      "line": 91,
       "kind": "function",
       "docstring": "Extracts the module-level docstring from a Python file."
     },
@@ -3668,7 +3668,7 @@
       "name": "compile_single_module",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 103,
+      "line": 104,
       "kind": "function",
       "docstring": null
     },
@@ -3677,9 +3677,9 @@
       "name": "compile_module_wrapper",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 180,
+      "line": 176,
       "kind": "function",
-      "docstring": null
+      "docstring": "Wrapper to execute the local build script in a given protocol directory."
     },
     {
       "_type": "tag",
