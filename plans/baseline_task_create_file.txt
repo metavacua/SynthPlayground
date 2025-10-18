@@ -1,2 +1,0 @@
-1. Create a file named `output.txt` with the content "Hello, World!".
-2. End of plan.

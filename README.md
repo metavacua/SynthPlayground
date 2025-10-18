@@ -17,9 +17,6 @@ This document provides a human-readable summary of the protocols and key compone
 - **`file-indexing-001`**: A protocol for maintaining an up-to-date file index to accelerate tool performance.
 - **`hdl-proving-001`**: A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.
 - **`agent-interaction-001`**: A protocol governing the agent's core interaction and planning tools.
-- **`plllu-execution-001`**: A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent.
-- **`security-header`**: Defines the identity and purpose of the Security Protocol document.
-- **`security-vuln-reporting-001`**: Defines the official policy and procedure for reporting security vulnerabilities.
 - **`speculative-execution-001`**: A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.
 
 ## Key Components
@@ -49,21 +46,6 @@ This document provides a human-readable summary of the protocols and key compone
   > 3.  Driving the FSM by calling its methods and passing data and the logger.
   > 4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans
   >     and respond to requests for action.
-
-- **`tooling/appl_runner.py`**:
-
-  > A command-line tool for executing APPL files.
-  >
-  > This script provides a simple interface to run APPL files using the main
-  > `run.py` interpreter. It captures and prints the output of the execution,
-  > and provides detailed error reporting if the execution fails.
-
-- **`tooling/appl_to_lfi_ill.py`**:
-
-  > A compiler that translates APPL (a simple functional language) to LFI-ILL.
-  >
-  > This script takes a Python file containing an APPL AST, and compiles it into
-  > an LFI-ILL AST. The resulting AST is then written to a `.lfi_ill` file.
 
 - **`tooling/auditor.py`**:
 
@@ -106,13 +88,6 @@ This document provides a human-readable summary of the protocols and key compone
   >
   > This makes it a key component for enabling more expressive and complex
   > automation scripts for the agent.
-
-- **`tooling/aura_to_lfi_ill.py`**:
-
-  > A compiler that translates AURA code to LFI-ILL.
-  >
-  > This script takes an AURA file, parses it, and compiles it into an LFI-ILL
-  > AST. The resulting AST is then written to a `.lfi_ill` file.
 
 - **`tooling/background_researcher.py`**:
 
@@ -321,27 +296,9 @@ This document provides a human-readable summary of the protocols and key compone
   >   Constant, Polynomial, Exponential) and its modality (Read-Only vs.
   >   Read-Write), providing insight into the plan's potential impact.
 
-- **`tooling/filesystem_lister.py`**:
+- **`tooling/file_indexer.py`**:
 
-  > A tool for listing files and directories in a repository, with an option to respect .gitignore.
-
-- **`tooling/halting_heuristic_analyzer.py`**:
-
-  > A static analysis tool to estimate the termination risk of a UDC plan.
-  >
-  > This script reads a `.udc` plan file, parses its instructions, and uses a
-  > series of heuristics to identify potential infinite loops. It is not a
-  > formal decider (as the halting problem is undecidable), but rather a
-  > practical tool to flag common patterns that lead to non-termination.
-  >
-  > The analysis focuses on:
-  > 1.  Detecting backward jumps, which are the primary indicator of loops.
-  > 2.  Analyzing the exit conditions of these loops (e.g., `JE`, `JNE`).
-  > 3.  Checking if the registers involved in the exit conditions are modified
-  >     within the loop body in a way that is likely to lead to termination.
-  >
-  > The tool outputs a JSON report detailing the estimated risk level (LOW,
-  > MEDIUM, HIGH) and the specific loops that were identified.
+  > _No module-level docstring found._
 
 - **`tooling/hdl_prover.py`**:
 
@@ -426,51 +383,6 @@ This document provides a human-readable summary of the protocols and key compone
   > endpoint to find related information, and merges the external data into a new,
   > enriched knowledge graph.
 
-- **`tooling/lba_validator.py`**:
-
-  > A Linear Bounded Automaton (LBA) for validating Context-Sensitive Development Cycle (CSDC) plans.
-  >
-  > This module implements a validator that enforces the context-sensitive rules of the CSDC.
-  > Unlike a simple FSM, an LBA can inspect the entire input "tape" (the plan) to make
-  > validation decisions. This is necessary to enforce rules where the validity of one
-  > command depends on the presence or absence of another command elsewhere in the plan.
-  >
-  > The CSDC defines two mutually exclusive models:
-  > - Model A: Permits `define_set_of_names`, but forbids `define_diagonalization_function`.
-  > - Model B: Permits `define_diagonalization_function`, but forbids `define_set_of_names`.
-  >
-  > This validator checks for these co-occurrence constraints.
-
-- **`tooling/lfi_ill_halting_decider.py`**:
-
-  > A tool for analyzing the termination of LFI-ILL programs.
-  >
-  > This script takes an LFI-ILL file, interprets it in a paraconsistent logic
-  > environment, and reports on its halting status. It does this by setting up
-  > a paradoxical initial state and observing how the program resolves it.
-
-- **`tooling/lfi_udc_model.py`**:
-
-  > A paraconsistent execution model for UDC plans.
-  >
-  > This module provides the classes necessary to interpret a UDC (Un-decidable
-  > Computation) plan within a Logic of Formal Inconsistency (LFI). Instead of
-  > concrete values, the state of the machine (registers, tape, etc.) is modeled
-  > using paraconsistent truth values (TRUE, FALSE, BOTH, NEITHER).
-  >
-  > This allows the system to reason about paradoxical programs, such as a program
-  > that halts if and only if it does not halt. By executing the program under
-  > paraconsistent semantics, the model can arrive at a final state of `BOTH`,
-  > effectively demonstrating the paradoxical nature of the input without crashing.
-  >
-  > Key classes:
-  > - `ParaconsistentTruth`: An enum for the four truth values.
-  > - `ParaconsistentState`: A wrapper for a value that holds a paraconsistent truth.
-  > - `LFIInstruction`: A UDC instruction that operates on paraconsistent states.
-  > - `LFIExecutor`: A virtual machine that executes a UDC plan using LFI semantics.
-  > - `ParaconsistentHaltingDecider`: The main entry point that orchestrates the
-  >   analysis of a UDC plan.
-
 - **`tooling/log_failure.py`**:
 
   > A dedicated script to log a catastrophic failure event to the main activity log.
@@ -539,27 +451,6 @@ This document provides a human-readable summary of the protocols and key compone
   > `message_user` tool without needing to invoke the entire agent messaging
   > subsystem.
 
-- **`tooling/pda_parser.py`**:
-
-  > A parser for pLLLU (paraconsistent Linear Logic with Undeterminedness) formulas.
-  >
-  > This script uses the PLY (Python Lex-Yacc) library to define a lexer and a
-  > parser for a simple, string-based representation of pLLLU formulas. It can
-  > handle basic atomic formulas, unary operators (like negation and consistency),
-  > and binary operators (like implication and conjunction).
-  >
-  > The main function `parse_formula` takes a string and returns a simple AST
-  > (Abstract Syntax Tree) represented as nested tuples.
-
-- **`tooling/plan_executor.py`**:
-
-  > A simple plan executor for simulating agent behavior.
-  >
-  > This script reads a plan file, parses it, and executes the commands in a
-  > simplified, simulated environment. It supports a limited set of tools
-  > (`message_user` and `run_in_bash_session`) to provide a basic demonstration
-  > of how an agent would execute a plan.
-
 - **`tooling/plan_manager.py`**:
 
   > Provides a command-line interface for managing the agent's Plan Registry.
@@ -591,30 +482,6 @@ This document provides a human-readable summary of the protocols and key compone
   > The parser correctly handles multi-line arguments and ignores comments,
   > allowing for robust and readable plan files.
 
-- **`tooling/plllu_interpreter.py`**:
-
-  > A resource-sensitive, four-valued interpreter for pLLLU formulas.
-  >
-  > This script implements an interpreter for the pLLLU language. It operates on
-  > an AST generated by the `pda_parser.py` script. The interpreter is designed
-  > to be resource-sensitive, meaning that each atomic formula in the initial
-  > context must be consumed exactly once during the evaluation of the proof.
-  >
-  > The logic is four-valued, supporting TRUE, FALSE, BOTH, and NEITHER, allowing
-  > it to reason about paraconsistent and paracomplete states.
-  >
-  > The core of the interpreter is the `FourValuedInterpreter` class, which
-  > recursively walks the AST, consuming resources from a context (a Counter of
-  > available atoms) and returning the resulting logical value.
-
-- **`tooling/plllu_runner.py`**:
-
-  > A command-line runner for pLLLU files.
-  >
-  > This script provides an entry point for executing `.plllu` files. It
-  > integrates the pLLLU lexer, parser, and interpreter to execute the logic
-  > defined in a given pLLLU source file and print the result.
-
 - **`tooling/pre_submit_check.py`**:
 
   > _No module-level docstring found._
@@ -644,10 +511,6 @@ This document provides a human-readable summary of the protocols and key compone
   > This process ensures that `AGENTS.md` and other protocol documents are not edited
   > manually but are instead generated from a validated, single source of truth,
   > making the agent's protocols robust, verifiable, and maintainable.
-
-- **`tooling/protocol_mutator.py`**:
-
-  > _No module-level docstring found._
 
 - **`tooling/protocol_updater.py`**:
 
@@ -686,14 +549,6 @@ This document provides a human-readable summary of the protocols and key compone
   > This plan-based approach allows the agent's master controller to execute the
   > refactoring in a controlled, verifiable, and atomic way, consistent with its
   > standard operational procedures.
-
-- **`tooling/reliable_ls.py`**:
-
-  > A tool for reliably listing files and directories.
-  >
-  > This script provides a consistent, sorted, and recursive listing of files and
-  > directories, excluding the `.git` directory. It is intended to be a more
-  > reliable alternative to the standard `ls` command for agent use cases.
 
 - **`tooling/reorientation_manager.py`**:
 
@@ -833,16 +688,3 @@ This document provides a human-readable summary of the protocols and key compone
   > The resulting `symbols.json` artifact is a critical input for the agent's
   > orientation and planning phases, allowing it to quickly locate relevant code
   > and understand the structure of the repository without having to read every file.
-
-- **`tooling/udc_orchestrator.py`**:
-
-  > An orchestrator for executing Unrestricted Development Cycle (UDC) plans.
-  >
-  > This script provides a sandboxed environment for running UDC plans, which are
-  > low-level assembly-like programs that can perform Turing-complete computations.
-  > The orchestrator acts as a virtual machine with a tape-based memory model,
-  > registers, and a set of simple instructions.
-  >
-  > To prevent non-termination and other resource-exhaustion issues, the
-  > orchestrator imposes strict limits on the number of instructions executed,
-  > the amount of memory used, and the total wall-clock time.
