@@ -6,11 +6,11 @@ This document provides a human-readable summary of the protocols and key compone
 
 ## Core Protocols
 
-- **`agent-bootstrap-001`**: A foundational protocol that dictates the agent's initial actions upon starting any task.
 - **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
 - **`experimental-prologue-001`**: An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.
 - **`agent-shell-001`**: A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.
 - **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
+- **`unified-auditor-001`**: A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.
 - **`aura-execution-001`**: A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.
 - **`capability-verification-001`**: A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.
 - **`csdc-001`**: A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.
@@ -851,3 +851,25 @@ This document provides a human-readable summary of the protocols and key compone
   > To prevent non-termination and other resource-exhaustion issues, the
   > orchestrator imposes strict limits on the number of instructions executed,
   > the amount of memory used, and the total wall-clock time.
+
+## Experimental Framework
+
+The `experiments/` directory contains a framework for testing the agent's behavior in response to changes in its governing protocols (`AGENTS.md`). Each subdirectory within `experiments/` represents a self-contained experiment.
+
+### Running an Experiment
+
+To run an existing experiment (e.g., `scoped_protocol_override`):
+
+1.  **Review the Experiment:** Read the `README.md` inside the experiment's directory (e.g., `experiments/scoped_protocol_override/README.md`) to understand its hypothesis, procedure, and expected outcome.
+2.  **Perform the Baseline Run:** Follow the instructions in the experiment's `README.md` to establish the agent's baseline behavior. This usually involves performing a task in the root directory.
+3.  **Perform the Experimental Run:** Follow the instructions to run the agent against the mutated protocol. This typically involves:
+    a. Copying the `mutation.md` file to a new `AGENTS.md` file within the experiment's directory.
+    b. Instructing the agent to perform the task specified in `task.md`, targeting the experiment's directory.
+4.  **Compare the Results:** Observe the difference in the agent's behavior between the baseline and experimental runs to verify the hypothesis.
+
+### Creating a New Experiment
+
+1.  Create a new subdirectory in `experiments/`.
+2.  Add a `README.md` file explaining the new experiment's hypothesis and procedure.
+3.  Add a `mutation.md` file containing the altered `AGENTS.md` content.
+4.  Add a `task.md` file describing the task the agent should perform.

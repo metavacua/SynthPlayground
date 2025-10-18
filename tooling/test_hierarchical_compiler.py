@@ -61,13 +61,11 @@ This is the child's protocol.
         self.assertIn("# Protocol: Child Protocol", summary)
         self.assertIn("CHILD-001", summary)
 
-    @patch('tooling.hierarchical_compiler.run_system_doc_generator')
-    def test_main_orchestration(self, mock_run_system_doc_generator):
+    def test_main_orchestration(self):
         """Tests the main orchestration logic of the hierarchical compiler."""
-        # Define what the mocked helpers should return
+        # Define what the mocked compilers should return
         child_agents_path = os.path.join(self.test_dir, "child", "AGENTS.md")
         root_agents_path = os.path.join(self.test_dir, "AGENTS.md")
-        mock_run_system_doc_generator.return_value = "path/to/system_doc.md"
 
         # Simulate the compiler creating the AGENTS.md files
         self.mock_run_compiler.side_effect = [child_agents_path, root_agents_path]
@@ -78,21 +76,11 @@ This is the child's protocol.
 
         hierarchical_main()
 
-        # Check that the system doc generator was called
-        mock_run_system_doc_generator.assert_called_once()
-
-        # Check that the compiler was called with the correct doc_sources
+        # Check that the compilers were called in the correct order (child then root)
         calls = self.mock_run_compiler.call_args_list
         self.assertEqual(len(calls), 2)
-
-        # Check call for child protocol
-        self.assertEqual(calls[0][0][0], self.child_protocols)
-        self.assertIn("system", calls[0][0][1])
-        self.assertEqual(calls[0][0][1]["system"], "path/to/system_doc.md")
-
-        # Check call for root protocol
-        self.assertEqual(calls[1][0][0], self.root_protocols)
-        self.assertIn("readme", calls[1][0][1])
+        self.assertEqual(calls[0], call(self.child_protocols))
+        self.assertEqual(calls[1], call(self.root_protocols))
 
         # Check that README generation was called for each compiled AGENTS.md
         self.assertEqual(self.mock_run_readme.call_count, 2)

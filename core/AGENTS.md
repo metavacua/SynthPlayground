@@ -9,6 +9,207 @@
 # ---
 
 
+# Jules Agent Protocol: The Hierarchical Development Cycle
+
+**Version:** 4.0.0
+
+---
+
+---
+
+## 1. The Core Problem: Ensuring Formally Verifiable Execution
+
+To tackle complex tasks reliably, an agent's workflow must be formally structured and guaranteed to terminate—it must be **decidable**. This is achieved through a hierarchical system composed of a high-level **Orchestrator** that manages the agent's overall state and a low-level **FDC Toolchain** that governs the validity of the agent's plans. This structure prevents the system from entering paradoxical, non-terminating loops.
+
+---
+
+---
+
+## 2. The Solution: A Two-Layered FSM System
+
+---
+
+### Layer 1: The Orchestrator (`master_control.py` & `fsm.json`)
+
+The Orchestrator is the master Finite State Machine (FSM) that guides the agent through its entire lifecycle, from orientation to submission. It is not directly controlled by the agent's plan but rather directs the agent's state based on the successful completion of each phase.
+
+**Key States (defined in `tooling/fsm.json`):**
+*   `ORIENTING`: The initial state where the agent gathers context.
+*   `PLANNING`: The state where the Orchestrator waits for the agent to produce a `plan.txt`.
+*   `EXECUTING`: The state where the Orchestrator oversees the step-by-step execution of the validated plan.
+*   `POST_MORTEM`: The state for finalizing the task and recording learnings.
+*   `AWAITING_SUBMISSION`: The final state before the code is submitted.
+
+**The Orchestrator's Critical Role in Planning:**
+During the `PLANNING` state, the Orchestrator's most important job is to validate the agent-generated `plan.txt`. It does this by calling the FDC Toolchain's `lint` command. **A plan that fails this check will halt the entire process, preventing the agent from entering an invalid state.**
+
+---
+
+### Layer 2: The FDC Toolchain (`fdc_cli.py` & `fdc_fsm.json`)
+
+The FDC Toolchain is a set of utilities that the agent uses to structure its work and that the Orchestrator uses for validation. The toolchain is governed by its own FSM (`tooling/fdc_fsm.json`), which defines the legal sequence of commands *within a plan*.
+
+#### **FDC Commands for Agent Use:**
+
+**`start` - Task Initiation**
+*   **Usage:** The first command the agent MUST issue upon receiving a task.
+*   **Command:** `run_in_bash_session python3 tooling/fdc_cli.py start --task-id "your-task-id"`
+*   **Function:** Logs the `TASK_START` event, formally beginning the development cycle.
+
+**`lint` - Pre-Flight Plan Validation**
+*   **Usage:** A command the agent can use to self-correct its own plan before finalizing it. The Orchestrator will *always* run this command on `plan.txt` as a mandatory check.
+*   **Command:** `run_in_bash_session python3 tooling/fdc_cli.py lint <plan_file.txt>`
+*   **Function:** Performs a comprehensive check against the low-level FSM:
+    1.  **Closure Mandate:** Ensures the plan's final action is a call to the `close` command.
+    2.  **FSM Validation:** Validates the sequence of agent tools against `tooling/fdc_fsm.json`.
+    3.  **Semantic Validation:** Checks for errors like using a file before creating it.
+
+**`close` - Task Closure**
+*   **Usage:** The **last command** in any valid plan.
+*   **Command:** `run_in_bash_session python3 tooling/fdc_cli.py close --task-id "your-task-id"`
+*   **Function:** Logs `TASK_END`, generates a post-mortem template, and signals to the Orchestrator that plan execution is complete.
+---
+
+---
+
+### STANDING ORDERS
+
+1.  **Orchestrator is Sovereign:** The agent's lifecycle is governed by `master_control.py`. The agent's primary job is to provide a valid `plan.txt` when the Orchestrator enters the `PLANNING` state.
+2.  **Toolchain is Law:** All plans must be valid according to the `fdc_cli.py lint` command. A valid plan is one that passes the Closure Mandate and is a valid string in the language defined by `fdc_fsm.json`.
+3.  **Hierarchy is Structure:** The Orchestrator (`master_control.py`) validates the agent's plan using the FDC Toolchain (`fdc_cli.py`). This separation ensures a robust, verifiable, and decidable development process, preventing the system from executing paradoxical or non-terminating plans.
+
+---
+
+# Protocol: The Context-Free Development Cycle (CFDC)
+
+This protocol marks a significant evolution from the Finite Development Cycle (FDC), introducing a hierarchical planning model that enables far greater complexity and modularity while preserving the system's core guarantee of decidability.
+
+## From FSM to Pushdown Automaton
+
+The FDC was based on a Finite State Machine (FSM), which provided a strict, linear sequence of operations. While robust, this model was fundamentally limited: it could not handle nested tasks or sub-routines, forcing all plans to be monolithic.
+
+The CFDC upgrades our execution model to a **Pushdown Automaton**. This is achieved by introducing a **plan execution stack**, which allows the system to call other plans as sub-routines. This enables a powerful new paradigm: **Context-Free Development Cycles**.
+
+## The `call_plan` Directive
+
+The core of the CFDC is the new `call_plan` directive. This allows one plan to execute another, effectively creating a parent-child relationship between them.
+
+- **Usage:** `call_plan <path_to_sub_plan.txt>`
+- **Function:** When the execution engine encounters this directive, it:
+    1.  Pushes the current plan's state (e.g., the current step number) onto the execution stack.
+    2.  Begins executing the sub-plan specified in the path.
+    3.  Once the sub-plan completes, it pops the parent plan's state from the stack and resumes its execution from where it left off.
+
+## Ensuring Decidability: The Recursion Depth Limit
+
+A system with unbounded recursion is not guaranteed to terminate. To prevent this, the CFDC introduces a non-negotiable, system-wide limit on the depth of the plan execution stack.
+
+**Rule `max-recursion-depth`**: The execution engine MUST enforce a maximum recursion depth, defined by a `MAX_RECURSION_DEPTH` constant. If a `call_plan` directive would cause the stack depth to exceed this limit, the entire process MUST terminate with an error. This hard limit ensures that even with recursive or deeply nested plans, the system remains a **decidable**, non-Turing-complete process that is guaranteed to halt.
+
+---
+
+# Protocol: The Plan Registry
+
+This protocol introduces a Plan Registry to create a more robust, modular, and discoverable system for hierarchical plans. It decouples the act of calling a plan from its physical file path, allowing plans to be referenced by a logical name.
+
+## The Problem with Path-Based Calls
+
+The initial implementation of the Context-Free Development Cycle (CFDC) relied on direct file paths (e.g., `call_plan path/to/plan.txt`). This is brittle:
+- If a registered plan is moved or renamed, all plans that call it will break.
+- It is difficult for an agent to discover and reuse existing, validated plans.
+
+## The Solution: A Central Registry
+
+The Plan Registry solves this by creating a single source of truth that maps logical, human-readable plan names to their corresponding file paths.
+
+- **Location:** `knowledge_core/plan_registry.json`
+- **Format:** A simple JSON object of key-value pairs:
+  ```json
+  {
+    "logical-name-1": "path/to/plan_1.txt",
+    "run-all-tests": "plans/common/run_tests.txt"
+  }
+  ```
+
+## Updated `call_plan` Logic
+
+The `call_plan` directive is now significantly more powerful. When executing `call_plan <argument>`, the system will follow a **registry-first** approach:
+
+1.  **Registry Lookup:** The system will first treat `<argument>` as a logical name and look it up in `knowledge_core/plan_registry.json`.
+2.  **Path Fallback:** If the name is not found in the registry, the system will fall back to treating `<argument>` as a direct file path. This ensures full backward compatibility with existing plans.
+
+## Management
+
+A new tool, `tooling/plan_manager.py`, will be introduced to manage the registry with simple commands like `register`, `deregister`, and `list`, making it easy to maintain the library of reusable plans.
+
+---
+
+# Protocol: The Closed-Loop Self-Correction Cycle
+
+This protocol describes the automated workflow that enables the agent to programmatically improve its own governing protocols based on new knowledge. It transforms the ad-hoc, manual process of learning into a reliable, machine-driven feedback loop.
+
+## The Problem: The Open Loop
+
+Previously, "lessons learned" were compiled into a simple markdown file, `knowledge_core/lessons_learned.md`. While this captured knowledge, it was a dead end. There was no automated process to translate these text-based insights into actual changes to the protocol source files. This required manual intervention, creating a significant bottleneck and a high risk of protocols becoming stale.
+
+## The Solution: A Protocol-Driven Self-Correction (PDSC) Workflow
+
+The PDSC workflow closes the feedback loop by introducing a set of new tools and structured data formats that allow the agent to enact its own improvements.
+
+**1. Structured, Actionable Lessons (`knowledge_core/lessons.jsonl`):**
+- Post-mortem analysis now generates lessons as structured JSON objects, not free-form text.
+- Each lesson includes a machine-readable `action` field, which contains a specific, executable command.
+
+**2. The Protocol Updater (`tooling/protocol_updater.py`):**
+- A new, dedicated tool for programmatically modifying the protocol source files (`*.protocol.json`).
+- It accepts commands like `add-tool`, allowing for precise, automated changes to protocol definitions.
+
+**3. The Orchestrator (`tooling/self_correction_orchestrator.py`):**
+- This script is the engine of the cycle. It reads `lessons.jsonl`, identifies pending lessons, and uses the `protocol_updater.py` to execute the defined actions.
+- After applying a lesson, it updates the lesson's status, creating a clear audit trail.
+- It finishes by running `make AGENTS.md` to ensure the changes are compiled into the live protocol.
+
+This new, automated cycle—**Analyze -> Structure Lesson -> Execute Correction -> Re-compile Protocol**—is a fundamental step towards autonomous self-improvement.
+
+---
+
+# Protocol: Deep Research Cycle
+
+This protocol defines a standardized, multi-step plan for conducting in-depth research on a complex topic. It is designed to be a reusable, callable plan that ensures a systematic and thorough investigation.
+
+The cycle consists of five main phases:
+1.  **Review Scanned Documents:** The agent first reviews the content of documents found in the repository during the initial scan. This provides immediate, project-specific context.
+2.  **Initial Scoping & Keyword Generation:** Based on the initial topic and the information from scanned documents, the agent generates a set of search keywords.
+3.  **Broad Information Gathering:** The agent uses the keywords to perform broad web searches and collect a list of relevant URLs.
+4.  **Targeted Information Extraction:** The agent visits the most promising URLs to extract detailed information.
+5.  **Synthesis & Summary:** The agent synthesizes the gathered information into a coherent summary, which is saved to a research report file.
+
+This structured approach ensures that research is not ad-hoc but is instead a repeatable and verifiable process.
+
+---
+
+# Protocol: The Formal Research Cycle (L4)
+
+This protocol establishes the L4 Deep Research Cycle, a specialized, self-contained Finite Development Cycle (FDC) designed for comprehensive knowledge acquisition. It elevates research from a simple tool-based action to a formal, verifiable process.
+
+## The Problem: Ad-Hoc Research
+
+Previously, research was an unstructured activity. The agent could use tools like `google_search` or `read_file`, but there was no formal process for planning, executing, and synthesizing complex research tasks. This made it difficult to tackle "unknown unknowns" in a reliable and auditable way.
+
+## The Solution: A Dedicated Research FDC
+
+The L4 Research Cycle solves this by introducing a new, specialized Finite State Machine (FSM) tailored specifically for research. When the main orchestrator (`master_control.py`) determines that a task requires deep knowledge, it initiates this cycle.
+
+### Key Features:
+
+1.  **Specialized FSM (`tooling/research_fsm.json`):** Unlike the generic development FSM, the research FSM has states that reflect a true research workflow: `GATHERING`, `SYNTHESIZING`, and `REPORTING`. This provides a more accurate model for the task.
+2.  **Executable Plans:** The `tooling/research_planner.py` is upgraded to generate formal, executable plans that are validated against the new research FSM. These are no longer just templates but are verifiable artifacts that guide the agent through the research process.
+3.  **Formal Invocation:** The L4 cycle is a first-class citizen in the agent's architecture. The main orchestrator can formally invoke it, execute the research plan, and then integrate the resulting knowledge back into its main task.
+
+This new protocol provides a robust, reliable, and formally verifiable mechanism for the agent to explore complex topics, making it significantly more autonomous and capable.
+
+---
+
 ```json
 {
   "protocol_id": "aorp-header",
@@ -28,13 +229,6 @@
 }
 ```
 
----
-
-# Jules Agent Protocol: The Hierarchical Development Cycle
-
-**Version:** 4.0.0
-
----
 
 ---
 
@@ -55,13 +249,6 @@
 }
 ```
 
----
-
-## 1. The Core Problem: Ensuring Formally Verifiable Execution
-
-To tackle complex tasks reliably, an agent's workflow must be formally structured and guaranteed to terminate—it must be **decidable**. This is achieved through a hierarchical system composed of a high-level **Orchestrator** that manages the agent's overall state and a low-level **FDC Toolchain** that governs the validity of the agent's plans. This structure prevents the system from entering paradoxical, non-terminating loops.
-
----
 
 ---
 
@@ -93,25 +280,6 @@ To tackle complex tasks reliably, an agent's workflow must be formally structure
 }
 ```
 
----
-
-## 2. The Solution: A Two-Layered FSM System
-
----
-
-### Layer 1: The Orchestrator (`master_control.py` & `fsm.json`)
-
-The Orchestrator is the master Finite State Machine (FSM) that guides the agent through its entire lifecycle, from orientation to submission. It is not directly controlled by the agent's plan but rather directs the agent's state based on the successful completion of each phase.
-
-**Key States (defined in `tooling/fsm.json`):**
-*   `ORIENTING`: The initial state where the agent gathers context.
-*   `PLANNING`: The state where the Orchestrator waits for the agent to produce a `plan.txt`.
-*   `EXECUTING`: The state where the Orchestrator oversees the step-by-step execution of the validated plan.
-*   `POST_MORTEM`: The state for finalizing the task and recording learnings.
-*   `AWAITING_SUBMISSION`: The final state before the code is submitted.
-
-**The Orchestrator's Critical Role in Planning:**
-During the `PLANNING` state, the Orchestrator's most important job is to validate the agent-generated `plan.txt`. It does this by calling the FDC Toolchain's `lint` command. **A plan that fails this check will halt the entire process, preventing the agent from entering an invalid state.**
 
 ---
 
@@ -148,6 +316,7 @@ During the `PLANNING` state, the Orchestrator's most important job is to validat
   ]
 }
 ```
+
 
 ---
 
@@ -199,32 +368,6 @@ During the `PLANNING` state, the Orchestrator's most important job is to validat
 }
 ```
 
----
-
-### Layer 2: The FDC Toolchain (`fdc_cli.py` & `fdc_fsm.json`)
-
-The FDC Toolchain is a set of utilities that the agent uses to structure its work and that the Orchestrator uses for validation. The toolchain is governed by its own FSM (`tooling/fdc_fsm.json`), which defines the legal sequence of commands *within a plan*.
-
-#### **FDC Commands for Agent Use:**
-
-**`start` - Task Initiation**
-*   **Usage:** The first command the agent MUST issue upon receiving a task.
-*   **Command:** `run_in_bash_session python3 tooling/fdc_cli.py start --task-id "your-task-id"`
-*   **Function:** Logs the `TASK_START` event, formally beginning the development cycle.
-
-**`lint` - Pre-Flight Plan Validation**
-*   **Usage:** A command the agent can use to self-correct its own plan before finalizing it. The Orchestrator will *always* run this command on `plan.txt` as a mandatory check.
-*   **Command:** `run_in_bash_session python3 tooling/fdc_cli.py lint <plan_file.txt>`
-*   **Function:** Performs a comprehensive check against the low-level FSM:
-    1.  **Closure Mandate:** Ensures the plan's final action is a call to the `close` command.
-    2.  **FSM Validation:** Validates the sequence of agent tools against `tooling/fdc_fsm.json`.
-    3.  **Semantic Validation:** Checks for errors like using a file before creating it.
-
-**`close` - Task Closure**
-*   **Usage:** The **last command** in any valid plan.
-*   **Command:** `run_in_bash_session python3 tooling/fdc_cli.py close --task-id "your-task-id"`
-*   **Function:** Logs `TASK_END`, generates a post-mortem template, and signals to the Orchestrator that plan execution is complete.
----
 
 ---
 
@@ -257,13 +400,6 @@ The FDC Toolchain is a set of utilities that the agent uses to structure its wor
 }
 ```
 
----
-
-### STANDING ORDERS
-
-1.  **Orchestrator is Sovereign:** The agent's lifecycle is governed by `master_control.py`. The agent's primary job is to provide a valid `plan.txt` when the Orchestrator enters the `PLANNING` state.
-2.  **Toolchain is Law:** All plans must be valid according to the `fdc_cli.py lint` command. A valid plan is one that passes the Closure Mandate and is a valid string in the language defined by `fdc_fsm.json`.
-3.  **Hierarchy is Structure:** The Orchestrator (`master_control.py`) validates the agent's plan using the FDC Toolchain (`fdc_cli.py`). This separation ensures a robust, verifiable, and decidable development process, preventing the system from executing paradoxical or non-terminating plans.
 
 ---
 
@@ -290,33 +426,6 @@ The FDC Toolchain is a set of utilities that the agent uses to structure its wor
 }
 ```
 
----
-
-# Protocol: The Context-Free Development Cycle (CFDC)
-
-This protocol marks a significant evolution from the Finite Development Cycle (FDC), introducing a hierarchical planning model that enables far greater complexity and modularity while preserving the system's core guarantee of decidability.
-
-## From FSM to Pushdown Automaton
-
-The FDC was based on a Finite State Machine (FSM), which provided a strict, linear sequence of operations. While robust, this model was fundamentally limited: it could not handle nested tasks or sub-routines, forcing all plans to be monolithic.
-
-The CFDC upgrades our execution model to a **Pushdown Automaton**. This is achieved by introducing a **plan execution stack**, which allows the system to call other plans as sub-routines. This enables a powerful new paradigm: **Context-Free Development Cycles**.
-
-## The `call_plan` Directive
-
-The core of the CFDC is the new `call_plan` directive. This allows one plan to execute another, effectively creating a parent-child relationship between them.
-
-- **Usage:** `call_plan <path_to_sub_plan.txt>`
-- **Function:** When the execution engine encounters this directive, it:
-    1.  Pushes the current plan's state (e.g., the current step number) onto the execution stack.
-    2.  Begins executing the sub-plan specified in the path.
-    3.  Once the sub-plan completes, it pops the parent plan's state from the stack and resumes its execution from where it left off.
-
-## Ensuring Decidability: The Recursion Depth Limit
-
-A system with unbounded recursion is not guaranteed to terminate. To prevent this, the CFDC introduces a non-negotiable, system-wide limit on the depth of the plan execution stack.
-
-**Rule `max-recursion-depth`**: The execution engine MUST enforce a maximum recursion depth, defined by a `MAX_RECURSION_DEPTH` constant. If a `call_plan` directive would cause the stack depth to exceed this limit, the entire process MUST terminate with an error. This hard limit ensures that even with recursive or deeply nested plans, the system remains a **decidable**, non-Turing-complete process that is guaranteed to halt.
 
 ---
 
@@ -349,41 +458,6 @@ A system with unbounded recursion is not guaranteed to terminate. To prevent thi
 }
 ```
 
----
-
-# Protocol: The Plan Registry
-
-This protocol introduces a Plan Registry to create a more robust, modular, and discoverable system for hierarchical plans. It decouples the act of calling a plan from its physical file path, allowing plans to be referenced by a logical name.
-
-## The Problem with Path-Based Calls
-
-The initial implementation of the Context-Free Development Cycle (CFDC) relied on direct file paths (e.g., `call_plan path/to/plan.txt`). This is brittle:
-- If a registered plan is moved or renamed, all plans that call it will break.
-- It is difficult for an agent to discover and reuse existing, validated plans.
-
-## The Solution: A Central Registry
-
-The Plan Registry solves this by creating a single source of truth that maps logical, human-readable plan names to their corresponding file paths.
-
-- **Location:** `knowledge_core/plan_registry.json`
-- **Format:** A simple JSON object of key-value pairs:
-  ```json
-  {
-    "logical-name-1": "path/to/plan_1.txt",
-    "run-all-tests": "plans/common/run_tests.txt"
-  }
-  ```
-
-## Updated `call_plan` Logic
-
-The `call_plan` directive is now significantly more powerful. When executing `call_plan <argument>`, the system will follow a **registry-first** approach:
-
-1.  **Registry Lookup:** The system will first treat `<argument>` as a logical name and look it up in `knowledge_core/plan_registry.json`.
-2.  **Path Fallback:** If the name is not found in the registry, the system will fall back to treating `<argument>` as a direct file path. This ensures full backward compatibility with existing plans.
-
-## Management
-
-A new tool, `tooling/plan_manager.py`, will be introduced to manage the registry with simple commands like `register`, `deregister`, and `list`, making it easy to maintain the library of reusable plans.
 
 ---
 
@@ -431,34 +505,6 @@ A new tool, `tooling/plan_manager.py`, will be introduced to manage the registry
 }
 ```
 
----
-
-# Protocol: The Closed-Loop Self-Correction Cycle
-
-This protocol describes the automated workflow that enables the agent to programmatically improve its own governing protocols based on new knowledge. It transforms the ad-hoc, manual process of learning into a reliable, machine-driven feedback loop.
-
-## The Problem: The Open Loop
-
-Previously, "lessons learned" were compiled into a simple markdown file, `knowledge_core/lessons_learned.md`. While this captured knowledge, it was a dead end. There was no automated process to translate these text-based insights into actual changes to the protocol source files. This required manual intervention, creating a significant bottleneck and a high risk of protocols becoming stale.
-
-## The Solution: A Protocol-Driven Self-Correction (PDSC) Workflow
-
-The PDSC workflow closes the feedback loop by introducing a set of new tools and structured data formats that allow the agent to enact its own improvements.
-
-**1. Structured, Actionable Lessons (`knowledge_core/lessons.jsonl`):**
-- Post-mortem analysis now generates lessons as structured JSON objects, not free-form text.
-- Each lesson includes a machine-readable `action` field, which contains a specific, executable command.
-
-**2. The Protocol Updater (`tooling/protocol_updater.py`):**
-- A new, dedicated tool for programmatically modifying the protocol source files (`*.protocol.json`).
-- It accepts commands like `add-tool`, allowing for precise, automated changes to protocol definitions.
-
-**3. The Orchestrator (`tooling/self_correction_orchestrator.py`):**
-- This script is the engine of the cycle. It reads `lessons.jsonl`, identifies pending lessons, and uses the `protocol_updater.py` to execute the defined actions.
-- After applying a lesson, it updates the lesson's status, creating a clear audit trail.
-- It finishes by running `make AGENTS.md` to ensure the changes are compiled into the live protocol.
-
-This new, automated cycle—**Analyze -> Structure Lesson -> Execute Correction -> Re-compile Protocol**—is a fundamental step towards autonomous self-improvement.
 
 ---
 
@@ -479,6 +525,7 @@ This new, automated cycle—**Analyze -> Structure Lesson -> Execute Correction 
   ]
 }
 ```
+
 
 ---
 
@@ -501,20 +548,6 @@ This new, automated cycle—**Analyze -> Structure Lesson -> Execute Correction 
 }
 ```
 
----
-
-# Protocol: Deep Research Cycle
-
-This protocol defines a standardized, multi-step plan for conducting in-depth research on a complex topic. It is designed to be a reusable, callable plan that ensures a systematic and thorough investigation.
-
-The cycle consists of five main phases:
-1.  **Review Scanned Documents:** The agent first reviews the content of documents found in the repository during the initial scan. This provides immediate, project-specific context.
-2.  **Initial Scoping & Keyword Generation:** Based on the initial topic and the information from scanned documents, the agent generates a set of search keywords.
-3.  **Broad Information Gathering:** The agent uses the keywords to perform broad web searches and collect a list of relevant URLs.
-4.  **Targeted Information Extraction:** The agent visits the most promising URLs to extract detailed information.
-5.  **Synthesis & Summary:** The agent synthesizes the gathered information into a coherent summary, which is saved to a research report file.
-
-This structured approach ensures that research is not ad-hoc but is instead a repeatable and verifiable process.
 
 ---
 
@@ -548,26 +581,5 @@ This structured approach ensures that research is not ad-hoc but is instead a re
 }
 ```
 
----
-
-# Protocol: The Formal Research Cycle (L4)
-
-This protocol establishes the L4 Deep Research Cycle, a specialized, self-contained Finite Development Cycle (FDC) designed for comprehensive knowledge acquisition. It elevates research from a simple tool-based action to a formal, verifiable process.
-
-## The Problem: Ad-Hoc Research
-
-Previously, research was an unstructured activity. The agent could use tools like `google_search` or `read_file`, but there was no formal process for planning, executing, and synthesizing complex research tasks. This made it difficult to tackle "unknown unknowns" in a reliable and auditable way.
-
-## The Solution: A Dedicated Research FDC
-
-The L4 Research Cycle solves this by introducing a new, specialized Finite State Machine (FSM) tailored specifically for research. When the main orchestrator (`master_control.py`) determines that a task requires deep knowledge, it initiates this cycle.
-
-### Key Features:
-
-1.  **Specialized FSM (`tooling/research_fsm.json`):** Unlike the generic development FSM, the research FSM has states that reflect a true research workflow: `GATHERING`, `SYNTHESIZING`, and `REPORTING`. This provides a more accurate model for the task.
-2.  **Executable Plans:** The `tooling/research_planner.py` is upgraded to generate formal, executable plans that are validated against the new research FSM. These are no longer just templates but are verifiable artifacts that guide the agent through the research process.
-3.  **Formal Invocation:** The L4 cycle is a first-class citizen in the agent's architecture. The main orchestrator can formally invoke it, execute the research plan, and then integrate the resulting knowledge back into its main task.
-
-This new protocol provides a robust, reliable, and formally verifiable mechanism for the agent to explore complex topics, making it significantly more autonomous and capable.
 
 ---

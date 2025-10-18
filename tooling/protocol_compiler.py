@@ -144,44 +144,41 @@ def sanitize_markdown(content):
 
 
 def compile_protocols(
-    source_dir, target_file, schema_file, knowledge_graph_file=None, doc_sources=None
+    source_dir, target_file, schema_file, knowledge_graph_file=None, autodoc_file=None
 ):
     """
-    Reads all protocol source files from a directory, validates them, and compiles
-    them into a target markdown file.
-
-    This function is the core of the "protocol as code" pipeline. It handles:
-    - File discovery for protocols and documentation placeholders.
-    - JSON schema validation for machine-readable protocol definitions.
-    - Injection of external documentation (e.g., README, system docs) based on
-      placeholder files found in the source directory.
-    - Compilation of human-readable markdown and machine-readable JSON into a
-      single, coherent output file.
-    - Optional generation of a machine-readable knowledge graph in Turtle format.
-
-    Args:
-        source_dir (str): The directory containing protocol source files.
-        target_file (str): The path for the output Markdown file.
-        schema_file (str): Path to the JSON schema for validation.
-        knowledge_graph_file (str, optional): If specified, generates a Turtle
-            knowledge graph file at this path. Defaults to None.
-        doc_sources (dict, optional): A dictionary mapping documentation keys
-            (e.g., 'readme', 'system', 'kg') to the file paths of the
-            documentation sources to be injected. Defaults to None.
+    Reads all .protocol.json and corresponding .protocol.md files from the
+    source directory, validates them, and compiles them into a target markdown file.
+    Optionally, it can also generate a machine-readable knowledge graph.
     """
     output_filename = os.path.basename(target_file)
     print(f"--- Starting Protocol Compilation for {output_filename} ---")
     print(f"Source directory: {source_dir}")
     print(f"Target file: {target_file}")
 
-    doc_sources = doc_sources or {}
     schema = load_schema(schema_file)
     if not schema:
-        raise ValueError(f"Schema file could not be loaded from {schema_file}")
+        return
 
     # --- File Discovery ---
     # Discover all relevant files and sort them to ensure deterministic output.
-    all_source_files = sorted([os.path.join(source_dir, f) for f in find_files("*.*", base_dir=source_dir)])
+    # The sort order is: autodoc placeholders, then all markdown, then all json.
+    # This ensures descriptions and summaries appear before the JSON blocks.
+    autodoc_placeholders = sorted([os.path.join(source_dir, f) for f in find_files("*.autodoc.md", base_dir=source_dir)])
+    all_md_files = sorted([os.path.join(source_dir, f) for f in find_files("*.protocol.md", base_dir=source_dir)])
+    all_json_files = sorted([os.path.join(source_dir, f) for f in find_files("*.protocol.json", base_dir=source_dir)])
+
+    if not all_md_files and not all_json_files and not autodoc_placeholders:
+        print(f"Warning: No protocol or documentation files found in {source_dir}.")
+        with open(target_file, "w") as f:
+            f.write(
+                DISCLAIMER_TEMPLATE.format(source_dir_name=os.path.basename(source_dir))
+            )
+        return
+
+    print(
+        f"Found {len(all_json_files)} protocol, {len(all_md_files)} markdown, and {len(autodoc_placeholders)} autodoc files."
+    )
 
     # --- Content Assembly ---
     g = Graph()
@@ -190,79 +187,76 @@ def compile_protocols(
     )
     final_content = [disclaimer]
 
-    # Process all source files in their sorted order
-    for file_path in all_source_files:
-        filename = os.path.basename(file_path)
-        print(f"  - Processing: {filename}")
-
-        content_to_add = None
-        # --- Documentation Injection Logic ---
-        if filename == "readme.autodoc.md":
-            source_path = doc_sources.get("readme")
-            if source_path and os.path.exists(source_path):
-                print(f"    - Injecting README from: {source_path}")
-                with open(source_path, "r") as f:
-                    content_to_add = f.read()
-            else:
-                print(f"    - Warning: README source not found at {source_path}")
-
-        elif filename == "system.autodoc.md":
-            source_path = doc_sources.get("system")
-            if source_path and os.path.exists(source_path):
-                print(f"    - Injecting System Docs from: {source_path}")
-                with open(source_path, "r") as f:
-                    content_to_add = f.read()
-            else:
-                print(f"    - Warning: System Docs source not found at {source_path}")
-
-        elif filename == "kg.autodoc.md":
-            source_path = doc_sources.get("kg")
-            if source_path and os.path.exists(source_path):
-                print(f"    - Injecting Knowledge Graph from: {source_path}")
-                with open(source_path, "r") as f:
-                    # Wrap KG content in a markdown code block for readability
-                    content_to_add = f"```turtle\n{f.read()}\n```"
-            else:
-                print(f"    - Warning: Knowledge Graph source not found at {source_path}")
-
-        # --- Standard Protocol File Processing ---
-        elif filename.endswith(".protocol.md"):
-            with open(file_path, "r") as f:
-                content = f.read()
-                content_to_add = sanitize_markdown(content)
-
-        elif filename.endswith(".protocol.json"):
+    # 1. Process Autodoc Placeholders
+    for file_path in autodoc_placeholders:
+        print(f"  - Processing: {os.path.basename(file_path)}")
+        if autodoc_file and os.path.exists(autodoc_file):
             try:
-                with open(file_path, "r") as f:
-                    protocol_data = json.load(f)
-                jsonschema.validate(instance=protocol_data, schema=schema)
-                print("    - JSON validation successful.")
-
-                # Knowledge Graph Generation (if enabled)
-                if knowledge_graph_file:
-                    # Logic for KG generation remains the same...
-                    pass
-
-                # Markdown Generation
-                json_string = json.dumps(protocol_data, indent=2)
-                content_to_add = f"```json\n{json_string}\n```"
-
+                with open(autodoc_file, "r") as f:
+                    final_content.append(f.read())
+                print(f"    - Injected system documentation from {autodoc_file}")
             except Exception as e:
-                print(f"    - Error: Failed to process JSON for {filename}: {e}")
-                raise e # Halt the build on validation or processing failure
+                print(f"    - Error reading autodoc file {autodoc_file}: {e}")
+        else:
+            print(
+                f"    - Warning: System documentation file not found at {autodoc_file}"
+            )
+        final_content.append("\n---\n")
 
-        # --- Add Content and Separator ---
-        if content_to_add is not None:
-            final_content.append(content_to_add)
-            final_content.append("\n---\n")
-
-
-    # --- Old Logic for Reference (to be removed) ---
-    # 1. Process Autodoc Placeholders...
     # 2. Process all Markdown files (descriptions, summaries, etc.)
-    if False: # Keep old logic disabled for reference during transition
-        for file_path in []:
-            print(f"  - Processing: {os.path.basename(file_path)}")
+    for file_path in all_md_files:
+        print(f"  - Processing: {os.path.basename(file_path)}")
+        with open(file_path, "r") as f:
+            content = f.read()
+            sanitized_content = sanitize_markdown(content)
+            final_content.append(sanitized_content)
+        final_content.append("\n---\n")
+
+    # 3. Process all JSON protocol files
+    for file_path in all_json_files:
+        base_name = os.path.basename(file_path)
+        print(f"  - Processing: {base_name}")
+        try:
+            with open(file_path, "r") as f:
+                protocol_data = json.load(f)
+            jsonschema.validate(instance=protocol_data, schema=schema)
+            print("    - JSON validation successful.")
+
+            # Knowledge Graph Generation
+            if knowledge_graph_file:
+                protocol_data_for_ld = protocol_data.copy()
+                # The context file should be relative to the source dir being processed
+                context_path = os.path.join(source_dir, "protocol.context.jsonld")
+                if os.path.exists(context_path):
+                    relative_context_path = os.path.relpath(
+                        context_path, os.path.dirname(file_path)
+                    )
+                    protocol_data_for_ld["@context"] = relative_context_path
+                    base_uri = (
+                        "file://" + os.path.abspath(os.path.dirname(file_path)) + "/"
+                    )
+                    g.parse(
+                        data=json.dumps(protocol_data_for_ld),
+                        format="json-ld",
+                        publicID=base_uri,
+                    )
+                    print(f"    - Parsed {base_name} into knowledge graph.")
+                else:
+                    print(
+                        f"    - Warning: JSON-LD context file not found at {context_path}"
+                    )
+
+            # Markdown Generation
+            json_string = json.dumps(protocol_data, indent=2)
+            md_json_block = f"```json\n{json_string}\n```\n"
+            final_content.append(md_json_block)
+
+        except Exception as e:
+            print(f"    - Error: Failed to process JSON for {base_name}: {e}")
+            # Re-raise the exception to cause the script to exit with a non-zero status code.
+            # This ensures that a validation failure stops the entire build process.
+            raise e
+        final_content.append("\n---\n")
 
     # --- Finalize and Write Outputs ---
 
@@ -328,13 +322,10 @@ def main_cli():
         default=None,  # value if flag is not present
         help=f"If specified, generates a Turtle knowledge graph file. Defaults to {DEFAULT_KG_FILE} if flag is present.",
     )
-    # The --autodoc-file argument is now deprecated in favor of the more flexible
-    # doc_sources dictionary passed in by the hierarchical compiler.
-    # We keep it for potential standalone script use, but it's not the primary mechanism.
     parser.add_argument(
         "--autodoc-file",
         default=DEFAULT_AUTODOC_FILE,
-        help=f"DEPRECATED: Path to the system documentation file to be injected.",
+        help=f"Path to the system documentation file to be injected. Defaults to {DEFAULT_AUTODOC_FILE}",
     )
     parser.add_argument(
         "--watch",
@@ -350,17 +341,12 @@ def main_cli():
     if not schema_file:
         schema_file = os.path.join(args.source_dir, DEFAULT_SCHEMA_FILENAME)
 
-    # For standalone CLI execution, we can construct a basic doc_sources dict.
-    doc_sources = {
-        "system": args.autodoc_file
-    }
-
     compile_protocols(
         source_dir=args.source_dir,
         target_file=args.output_file,
         schema_file=schema_file,
         knowledge_graph_file=args.knowledge_graph_file,
-        doc_sources=doc_sources,
+        autodoc_file=args.autodoc_file,
     )
 
     if args.watch:
@@ -378,7 +364,7 @@ def main_cli():
                         target_file=args.output_file,
                         schema_file=schema_file,
                         knowledge_graph_file=args.knowledge_graph_file,
-                        doc_sources=doc_sources,
+                        autodoc_file=args.autodoc_file,
                     )
                 except Exception as e:
                     # Catch exceptions during recompilation to prevent the watcher from crashing.
