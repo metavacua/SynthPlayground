@@ -8,10 +8,8 @@ This protocol establishes a critical safeguard to protect the integrity of the d
 
 The agent assigned the role of 'Code Review Critic' is explicitly and strictly forbidden from using the `reset_all` tool.
 
-**Rationale:** The `reset_all` tool is a destructive action that reverts all changes in the workspace. Its use by a review agent could lead to the accidental deletion of work-in-progress, creating a significant disruption. This protocol ensures that the critic's function is limited to analysis and feedback, preventing it from taking destructive actions.
+**Rationale:** The `reset_all` tool is a destructive action that reverts all changes in the workspace. Its use by a review agent could lead to the accidental deletion of work-in-progress. This protocol ensures that the critic's function is limited to analysis and feedback. This prohibition is non-negotiable.
 
-This prohibition is non-negotiable and must be adhered to by any agent assuming the 'Code Review Critic' role.
-
-**Enforcement Mechanism:** The Code Review Critic is not implemented in this repository. Its behavior is governed by the compiled `AGENTS.md` file, which is consumed by an external orchestration system. The inclusion of this protocol in `AGENTS.md` constitutes the complete implementation of this safeguard from the perspective of this codebase.
+**Enforcement Mechanism:** This protocol is enforced by an external orchestration system that consumes the compiled `AGENTS.md` file.
 
 ---

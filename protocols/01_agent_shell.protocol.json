@@ -1,11 +1,11 @@
 {
   "protocol_id": "agent-shell-001",
-  "description": "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.",
+  "description": "Governs the use of the interactive agent shell as the primary entry point for all tasks.",
   "rules": [
     {
       "rule_id": "shell-is-primary-entry-point",
-      "description": "All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation.",
-      "enforcement": "This is a procedural rule. The agent's operational framework should only expose the agent_shell.py as the means of starting a new task."
+      "description": "All agent tasks must be initiated through the `agent_shell.py` script to ensure proper initialization.",
+      "enforcement": "Procedural rule. The agent's operational framework should only expose `agent_shell.py` as the means of starting a new task."
     }
   ],
   "associated_tools": [

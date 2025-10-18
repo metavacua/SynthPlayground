@@ -4,8 +4,8 @@
   "rules": [
     {
       "rule_id": "use-csdc-cli",
-      "description": "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP).",
-      "enforcement": "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments."
+      "description": "The `csdc_cli.py` tool must be used to validate plans under the CSDC, enforcing model-specific (A or B) and complexity (P or EXP) constraints.",
+      "enforcement": "The tool is used by invoking it from the command line."
     },
     {
       "rule_id": "model-a-constraints",

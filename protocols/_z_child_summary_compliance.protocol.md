@@ -2,57 +2,48 @@
 
 # Protocol: AGENTS.md Non-Compliance
 
-This protocol defines what constitutes non-compliance with the established `AGENTS.md` protocols and outlines the expected corrective actions. Adherence to these meta-rules is critical for ensuring predictable, verifiable, and robust agent behavior.
+This protocol defines non-compliance with `AGENTS.md` protocols and outlines corrective actions.
 
 ## Rule `non-compliance-definition`: Definition of Non-Compliance
 
-Non-compliance is the act of violating the explicit rules, conventions, or procedures documented in the `AGENTS.md` file and its source protocols within the `protocols/` directory. The `AGENTS.md` file serves as the agent's primary operational mandate, and any deviation from it is considered a fault condition.
+Non-compliance is violating the rules, conventions, or procedures in `AGENTS.md` and its source protocols.
 
 ## Rule `non-compliance-direct-editing`: Prohibition of Direct Artifact Editing
 
-**Violation:** Directly editing any file that is a documented build artifact.
-- **Primary Example:** Modifying `AGENTS.md` or `README.md` directly is a severe violation. These files are generated from source protocols and documentation.
-- **Corrective Action:** The agent must revert any direct edits to build artifacts. Changes must be made to the source files (e.g., in `protocols/` or tool docstrings), and the appropriate build command (e.g., `make AGENTS.md`, `make docs`) must be executed.
+**Violation:** Directly editing any documented build artifact (e.g., `AGENTS.md`).
+**Corrective Action:** Revert direct edits. Changes must be made to source files, and the appropriate build command must be executed.
 
 ## Rule `non-compliance-test-procedure`: Adherence to Testing Protocols
 
-**Violation:** Failing to execute the testing procedures as defined in `AGENTS.md` before submitting changes. This includes not running the full test suite or ignoring failing tests.
-- **Corrective Action:** The agent must halt its execution plan and run the required tests. If tests fail, the agent must enter a debugging loop to resolve the failures before proceeding.
+**Violation:** Failing to execute testing procedures as defined in `AGENTS.md` before submitting changes.
+**Corrective Action:** Halt and run the required tests. If tests fail, debug and resolve failures before proceeding.
 
 ## Rule `non-compliance-architectural-deviation`: Adherence to Architectural and Convention Guidelines
 
-**Violation:** Introducing changes that contradict the architectural patterns, coding conventions, or file structures laid out in `AGENTS.md`.
-- **Example:** Placing a new backend component in the `frontend/` directory when the architecture explicitly forbids it.
-- **Corrective Action:** The agent must identify the deviation, revert the incorrect changes, and re-implement them in accordance with the documented standards.
+**Violation:** Introducing changes that contradict the documented architecture, conventions, or file structures.
+**Corrective Action:** Identify the deviation, revert the incorrect changes, and re-implement them correctly.
 
 ## Rule `non-compliance-self-awareness-failure`: Failure to Maintain Protocol Awareness
 
-**Violation:** Operating with an outdated understanding of the protocols by failing to re-compile `AGENTS.md` when necessary, as defined in the `meta-protocol`.
-- **Corrective Action:** If the agent detects that its actions are out of sync with repository standards, it should trigger the `make AGENTS.md` command to refresh its internal state and re-evaluate its plan.
+**Violation:** Operating with an outdated understanding of the protocols by failing to re-compile `AGENTS.md` when necessary.
+**Corrective Action:** Trigger the `make AGENTS.md` command to refresh internal state and re-evaluate the plan.
 
 ## Consequence of Non-Compliance
 
-Upon detecting any form of non-compliance, the agent is required to:
-1.  **Halt:** Immediately stop the current execution path to prevent further deviation.
-2.  **Report:** Log the specific violation that was detected.
-3.  **Correct:** Initiate the defined corrective action for the specific violation. If a corrective action is not explicitly defined, the agent should revert the violating changes and re-plan its approach.
+Upon detecting non-compliance, the agent must:
+1.  **Halt:** Stop the current execution.
+2.  **Report:** Log the violation.
+3.  **Correct:** Initiate the defined corrective action or revert and re-plan.
 
 ---
 
 # Protocol: Pre-Commit Verification
 
-This protocol establishes the mandatory sequence of verification steps that must be performed before any code is submitted. Its purpose is to ensure that all changes meet a baseline level of quality, correctness, and review, preventing regressions and maintaining repository health.
+This protocol establishes the mandatory verification steps before any code is submitted.
 
 ## Rule: Mandatory Pre-Commit Checks
 
-Before finalizing and submitting any work, the agent **must** execute the `pre_commit_instructions` tool. This tool acts as a procedural gateway, providing the specific, up-to-date checklist of actions required for validation. This typically includes:
-
-1.  **Running all automated tests** to verify correctness.
-2.  **Requesting a formal code review** to get critical feedback.
-3.  **Recording key learnings** to contribute to the agent's long-term memory.
-
-Adherence to this protocol is not optional. It is a fundamental step in the development lifecycle that safeguards the integrity of the codebase.
-
+Before submitting, the agent **must** execute the `pre_commit_instructions` tool, which provides the checklist for validation, including running tests, requesting code review, and recording learnings. This is a non-optional, fundamental step.
 
 ---
 
@@ -60,19 +51,11 @@ Adherence to this protocol is not optional. It is a fundamental step in the deve
 
 **ID:** `reset-all-prohibition-001`
 
-## 1. Description
-
-This protocol establishes a strict and unconditional prohibition on the use of the `reset_all` tool. This tool is considered a legacy, high-risk command that is no longer permitted in any workflow.
-
-## 2. Rationale
-
-The `reset_all` tool has been the cause of multiple catastrophic failures, leading to the complete loss of work and the inability to complete tasks. Its behavior is too destructive and unpredictable for a production environment. More granular and safer tools are available for workspace management. This protocol serves as a hard-coded safeguard to prevent any future use of this tool.
-
-## 3. Rules
+This protocol establishes a strict and unconditional prohibition on the use of the `reset_all` tool, a legacy, high-risk command. The `reset_all` tool has caused multiple catastrophic failures and is too destructive for a production environment.
 
 ### Rule `no-reset-all`
 
 -   **Description:** The `reset_all` tool is strictly forbidden under all circumstances.
--   **Enforcement:** The `master_control.py` orchestrator will programmatically block any attempt to call `reset_all` and will immediately terminate the task with a critical error. This is not a rule for the agent to interpret, but a hard-coded system constraint.
+-   **Enforcement:** The `master_control.py` orchestrator will programmatically block any attempt to call `reset_all` and will immediately terminate the task with a critical error. This is a hard-coded system constraint.
 
 ---
