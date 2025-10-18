@@ -142,11 +142,6 @@ def compile_single_module(source_dir, target_file, schema_file, knowledge_graph=
             protocol_data = json.load(f)
         jsonschema.validate(instance=protocol_data, schema=schema)
 
-    if not os.path.exists(local_builder):
-        # This case should ideally not be hit if find_protocol_dirs is accurate.
-        print(f"--- Warning: No local builder found in {path_to_protocol_dir}. Skipping. ---", file=sys.stderr)
-        return path_to_protocol_dir, False
-
         if knowledge_graph is not None:
             protocol_data_for_ld = protocol_data.copy()
             context_path = os.path.join(source_dir, "protocol.context.jsonld")
@@ -180,6 +175,7 @@ def compile_single_module(source_dir, target_file, schema_file, knowledge_graph=
 def compile_module_wrapper(path_to_protocol_dir):
     target_md_file = os.path.join(path_to_protocol_dir, "AGENTS.md")
     schema_file = os.path.join(ROOT_PROTOCOLS_DIR, "protocol.schema.json")
+    local_builder = os.path.join(path_to_protocol_dir, LOCAL_BUILD_SCRIPT_NAME)
     try:
         print(f"--- Executing local builder: {local_builder} ---")
         subprocess.check_call([sys.executable, local_builder], cwd=path_to_protocol_dir, stdout=sys.stdout, stderr=sys.stderr)
@@ -250,6 +246,7 @@ def main_orchestrator():
     args = parser.parse_args()
 
     print("--- Starting Parallel Protocol Build Orchestration ---")
+    start_time = time.time()
 
     # find_protocol_dirs should be adapted to find dirs containing 'build.py'
     all_dirs = find_protocol_dirs(ROOT_PROTOCOLS_DIR)
@@ -266,23 +263,16 @@ def main_orchestrator():
         return
 
     with ThreadPoolExecutor() as executor:
-        future_to_dir = {executor.submit(run_local_build, dir_path): dir_path for dir_path in build_script_dirs}
+        future_to_dir = {executor.submit(compile_module_wrapper, dir_path): dir_path for dir_path in build_script_dirs}
         for future in as_completed(future_to_dir):
             path, success = future.result()
-            if success:
-                successful_compilations.append(path)
-            else:
-                failed_compilations.append(path)
-
-    if failed_compilations:
-        print("\n--- Compilation Summary: Failures Detected ---")
-        for path in failed_compilations:
-            print(f"- {get_protocol_dir_name(path)}")
-        sys.exit(1)
+            if not success:
+                print(f"\n--- Compilation failed for: {get_protocol_dir_name(path)} ---")
+                sys.exit(1)
 
     print("\n--- All protocol modules compiled successfully. ---")
 
-    generate_root_agents_md(successful_compilations)
+    generate_root_agents_md(build_script_dirs)
 
     print("\n--- Parallel Protocol Build Orchestration Finished ---")
 
