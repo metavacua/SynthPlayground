@@ -84,7 +84,38 @@ def find_protocol_dirs(root_dir):
     return sorted(protocol_dirs, key=lambda x: -x.count(os.sep))
 
 
-def run_compiler(source_dir):
+def run_system_doc_generator():
+    """Invokes the doc_builder.py script to generate system docs."""
+    doc_builder_script = os.path.join(ROOT_DIR, "tooling", "doc_builder.py")
+    output_file = os.path.join(ROOT_DIR, "knowledge_core", "SYSTEM_DOCUMENTATION.md")
+
+    command = [
+        "python3",
+        doc_builder_script,
+        "--format", "system",
+        "--output-file", output_file,
+        "--source-dir", "tooling/",
+        "--source-dir", "utils/"
+    ]
+
+    print("--- Generating System-Wide Documentation ---")
+    print(f"Command: {' '.join(command)}")
+    try:
+        # Run with check=True to raise an exception on failure
+        result = subprocess.run(command, check=True, capture_output=True, text=True, cwd=ROOT_DIR)
+        print(result.stdout)
+        print(f"Successfully generated {output_file}")
+        return output_file
+    except subprocess.CalledProcessError as e:
+        print(f"Error generating system documentation:")
+        print(e.stderr)
+        # In a real build, we might want to exit here. For now, we return None.
+        return None
+
+
+
+
+def run_compiler(source_dir, doc_sources):
     """Invokes the protocol_compiler.py script as a library."""
     parent_dir = os.path.dirname(source_dir)
     target_agents_md = os.path.join(parent_dir, AGENTS_MD_FILENAME)
@@ -95,17 +126,27 @@ def run_compiler(source_dir):
 
     print(f"Running AGENTS.md compiler for: {source_dir}")
     try:
-        protocol_compiler.compile_protocols(source_dir, target_agents_md, schema_file)
+        protocol_compiler.compile_protocols(
+            source_dir,
+            target_agents_md,
+            schema_file,
+            doc_sources=doc_sources
+        )
         print(f"Successfully compiled {target_agents_md}")
         return target_agents_md
     except Exception as e:
         print(f"Error compiling AGENTS.md in {source_dir}:")
         print(e)
-        return None
+        # Re-raise to halt the build on error
+        raise
 
 
 def run_readme_generator(source_agents_md):
     """Invokes the doc_builder.py script to generate a README."""
+    if not source_agents_md or not os.path.exists(source_agents_md):
+        print(f"Warning: Source AGENTS.md not found. Cannot generate README.md.")
+        return None
+
     parent_dir = os.path.dirname(source_agents_md)
     target_readme = os.path.join(parent_dir, README_FILENAME)
     doc_builder_script = os.path.join(ROOT_DIR, "tooling", "doc_builder.py")
@@ -239,6 +280,22 @@ def main():
     Main function to orchestrate the hierarchical compilation.
     """
     print("--- Starting Hierarchical Build ---")
+
+    # --- Pre-computation: Generate all documentation that might be injected ---
+    # This breaks the dependency on the Makefile's ordering, making the build
+    # system more robust and self-contained.
+    system_doc_path = run_system_doc_generator()
+    # The root README is generated after the root AGENTS.md, so we just
+    # define the path here for the compiler to use if a placeholder exists.
+    root_readme_path = os.path.join(ROOT_DIR, README_FILENAME)
+    kg_path = os.path.join(ROOT_DIR, "knowledge_core", "protocols.ttl")
+
+    doc_sources = {
+        "system": system_doc_path,
+        "readme": root_readme_path,
+        "kg": kg_path
+    }
+
     all_protocol_dirs = find_protocol_dirs(ROOT_DIR)
     module_paths = [os.path.dirname(p) for p in all_protocol_dirs]
 
@@ -249,8 +306,6 @@ def main():
         current_module_path = os.path.dirname(proto_dir)
         print(f"\n--- Processing Module: {current_module_path} ---")
 
-        # Always start with a clean slate by removing old summary files.
-        # This prevents stale data from being included if a previous run failed.
         cleanup_summaries(proto_dir)
 
         # Inject summaries from children that have already been compiled
@@ -268,11 +323,15 @@ def main():
                         f"Injected summary for '{child_module_path}' into {summary_filepath}"
                     )
 
-        # Compile the current module's AGENTS.md
-        target_agents_md = run_compiler(proto_dir)
+        # Compile the current module's AGENTS.md, passing in the paths to all
+        # potential documentation sources. The protocol_compiler will be responsible
+        # for deciding which ones to use based on placeholders.
+        target_agents_md = run_compiler(proto_dir, doc_sources)
+
+        # Generate the corresponding README.md for the newly compiled AGENTS.md
+        target_readme = run_readme_generator(target_agents_md)
+
         if target_agents_md:
-            # Generate the corresponding README.md
-            target_readme = run_readme_generator(target_agents_md)
             compiled_artifacts[current_module_path] = {
                 "agents_md": target_agents_md,
                 "readme": target_readme,
@@ -281,12 +340,15 @@ def main():
     print("\n--- Hierarchical Build Summary ---")
     for module, artifacts in sorted(compiled_artifacts.items()):
         print(f"Module: {module}")
-        if artifacts.get("agents_md"):
-            print(f"  - Compiled: {artifacts['agents_md']}")
-        if artifacts.get("readme"):
-            print(f"  - Generated: {artifacts['readme']}")
+        agents_md_path = artifacts.get("agents_md")
+        readme_path = artifacts.get("readme")
+        if agents_md_path:
+            print(f"  - Compiled: {os.path.relpath(agents_md_path, ROOT_DIR)}")
+        if readme_path:
+            print(f"  - Generated: {os.path.relpath(readme_path, ROOT_DIR)}")
 
     # --- Pass 2: Compile Centralized Knowledge Graph ---
+    # This runs last, after all protocols have been compiled and validated.
     compile_centralized_knowledge_graph()
 
     print("\n--- Hierarchical Build Finished ---")

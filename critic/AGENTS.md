@@ -9,6 +9,32 @@
 # ---
 
 
+```json
+{
+  "protocol_id": "critic-meta-protocol-001",
+  "description": "A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent.",
+  "rules": [
+    {
+      "rule_id": "protocol-as-source-code",
+      "description": "The `protocols/` directory and all its contents (`.md`, `.json` files) MUST be treated as functional source code. Changes to these files directly alter the agent's operational capabilities and governing rules.",
+      "enforcement": "The Code Review Critic must analyze changes in this directory with the same rigor as changes to `.py` files."
+    },
+    {
+      "rule_id": "built-in-tools-are-valid",
+      "description": "The agent's execution environment provides a set of built-in tools (e.g., `read_file`, `delete_file`, `pre_commit_instructions`). The implementation of these tools does not reside within the repository. A protocol change that adds a built-in tool to the `associated_tools` list is a valid and complete functional change.",
+      "enforcement": "The Code Review Critic must not flag a change as 'incomplete' or 'non-functional' solely because the implementation of a built-in tool is not present in the repository."
+    },
+    {
+      "rule_id": "functional-change-definition",
+      "description": "A change is considered 'functional' if it correctly modifies the agent's operational rules or capabilities, as defined by the combination of Python source code and the protocol source files in `protocols/`.",
+      "enforcement": "The Code Review Critic's evaluation of 'functionality' must encompass both traditional code and protocol definitions."
+    }
+  ]
+}
+```
+
+---
+
 # Meta-Protocol: Code Review Critic Evaluation Context
 
 This protocol governs the behavior of the Code Review Critic agent. Its purpose is to provide the critic with the necessary context to perform accurate and helpful evaluations of changes made by other agents.
@@ -34,49 +60,6 @@ The critic must be aware of and strictly adhere to all specific prohibition prot
 
 ---
 
-# Protocol: Critic `reset_all` Prohibition
-
-This protocol establishes a critical safeguard to protect the integrity of the development workflow.
-
-## Rule: `critic-no-reset`
-
-The agent assigned the role of 'Code Review Critic' is explicitly and strictly forbidden from using the `reset_all` tool.
-
-**Rationale:** The `reset_all` tool is a destructive action that reverts all changes in the workspace. Its use by a review agent could lead to the accidental deletion of work-in-progress, creating a significant disruption. This protocol ensures that the critic's function is limited to analysis and feedback, preventing it from taking destructive actions.
-
-This prohibition is non-negotiable and must be adhered to by any agent assuming the 'Code Review Critic' role.
-
-**Enforcement Mechanism:** The Code Review Critic is not implemented in this repository. Its behavior is governed by the compiled `AGENTS.md` file, which is consumed by an external orchestration system. The inclusion of this protocol in `AGENTS.md` constitutes the complete implementation of this safeguard from the perspective of this codebase.
-
----
-
-```json
-{
-  "protocol_id": "critic-meta-protocol-001",
-  "description": "A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent.",
-  "rules": [
-    {
-      "rule_id": "protocol-as-source-code",
-      "description": "The `protocols/` directory and all its contents (`.md`, `.json` files) MUST be treated as functional source code. Changes to these files directly alter the agent's operational capabilities and governing rules.",
-      "enforcement": "The Code Review Critic must analyze changes in this directory with the same rigor as changes to `.py` files."
-    },
-    {
-      "rule_id": "built-in-tools-are-valid",
-      "description": "The agent's execution environment provides a set of built-in tools (e.g., `read_file`, `delete_file`, `pre_commit_instructions`). The implementation of these tools does not reside within the repository. A protocol change that adds a built-in tool to the `associated_tools` list is a valid and complete functional change.",
-      "enforcement": "The Code Review Critic must not flag a change as 'incomplete' or 'non-functional' solely because the implementation of a built-in tool is not present in the repository."
-    },
-    {
-      "rule_id": "functional-change-definition",
-      "description": "A change is considered 'functional' if it correctly modifies the agent's operational rules or capabilities, as defined by the combination of Python source code and the protocol source files in `protocols/`.",
-      "enforcement": "The Code Review Critic's evaluation of 'functionality' must encompass both traditional code and protocol definitions."
-    }
-  ]
-}
-```
-
-
----
-
 ```json
 {
   "protocol_id": "critic-reset-prohibition-001",
@@ -94,5 +77,20 @@ This prohibition is non-negotiable and must be adhered to by any agent assuming 
 }
 ```
 
+---
+
+# Protocol: Critic `reset_all` Prohibition
+
+This protocol establishes a critical safeguard to protect the integrity of the development workflow.
+
+## Rule: `critic-no-reset`
+
+The agent assigned the role of 'Code Review Critic' is explicitly and strictly forbidden from using the `reset_all` tool.
+
+**Rationale:** The `reset_all` tool is a destructive action that reverts all changes in the workspace. Its use by a review agent could lead to the accidental deletion of work-in-progress, creating a significant disruption. This protocol ensures that the critic's function is limited to analysis and feedback, preventing it from taking destructive actions.
+
+This prohibition is non-negotiable and must be adhered to by any agent assuming the 'Code Review Critic' role.
+
+**Enforcement Mechanism:** The Code Review Critic is not implemented in this repository. Its behavior is governed by the compiled `AGENTS.md` file, which is consumed by an external orchestration system. The inclusion of this protocol in `AGENTS.md` constitutes the complete implementation of this safeguard from the perspective of this codebase.
 
 ---

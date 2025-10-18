@@ -9,6 +9,25 @@
 # ---
 
 
+```json
+{
+  "protocol_id": "agent-bootstrap-001",
+  "description": "A foundational protocol that dictates the agent's initial actions upon starting any task.",
+  "rules": [
+    {
+      "rule_id": "bootstrap-load-agents-md",
+      "description": "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins.",
+      "enforcement": "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase."
+    }
+  ],
+  "associated_tools": [
+    "read_file"
+  ]
+}
+```
+
+---
+
 # Protocol: Agent Bootstrap
 
 **Rule `bootstrap-load-agents-md`**: Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the `AGENTS.md` file in the repository root.
@@ -32,6 +51,25 @@
 
 ---
 
+```json
+{
+  "protocol_id": "dependency-management-001",
+  "description": "A protocol for ensuring a reliable execution environment through formal dependency management.",
+  "rules": [
+    {
+      "rule_id": "dependency-install-on-start",
+      "description": "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed.",
+      "enforcement": "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions."
+    }
+  ],
+  "associated_tools": [
+    "run_in_bash_session"
+  ]
+}
+```
+
+---
+
 # Protocol: Dependency Management
 
 This protocol establishes a formal process for managing Python dependencies to ensure a reliable and repeatable execution environment.
@@ -51,6 +89,25 @@ This protocol transforms dependency management from an ad-hoc, reactive process 
 
 ---
 
+```json
+{
+  "protocol_id": "experimental-prologue-001",
+  "description": "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.",
+  "rules": [
+    {
+      "rule_id": "create-prologue-file",
+      "description": "Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols.",
+      "enforcement": "This is a procedural rule. The agent must verify the existence of 'prologue.txt' before using 'create_file_with_block' or similar tools for other files."
+    }
+  ],
+  "associated_tools": [
+    "create_file_with_block"
+  ]
+}
+```
+
+---
+
 # Protocol: Experimental Prologue
 
 This protocol is a test case to verify the agent's ability to dynamically adapt its behavior to new rules.
@@ -58,6 +115,25 @@ This protocol is a test case to verify the agent's ability to dynamically adapt 
 ## Rule: `create-prologue-file`
 
 Before creating any file, the agent must first create a file named `prologue.txt` with the content "This is a prologue file." This serves as a behavioral check. If the agent creates this file before other requested files, it demonstrates that it has successfully loaded and is following this experimental protocol.
+
+---
+
+```json
+{
+  "protocol_id": "agent-shell-001",
+  "description": "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.",
+  "rules": [
+    {
+      "rule_id": "shell-is-primary-entry-point",
+      "description": "All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation.",
+      "enforcement": "This is a procedural rule. The agent's operational framework should only expose the agent_shell.py as the means of starting a new task."
+    }
+  ],
+  "associated_tools": [
+    "tooling/agent_shell.py"
+  ]
+}
+```
 
 ---
 
@@ -84,6 +160,27 @@ By enforcing a single entry point, this protocol enhances the reliability, audit
 
 ---
 
+```json
+{
+  "protocol_id": "toolchain-review-on-schema-change-001",
+  "description": "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.",
+  "rules": [
+    {
+      "rule_id": "toolchain-audit-on-schema-change",
+      "description": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.",
+      "enforcement": "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files."
+    }
+  ],
+  "associated_tools": [
+    "tooling/protocol_auditor.py",
+    "tooling/protocol_compiler.py",
+    "tooling/hierarchical_compiler.py"
+  ]
+}
+```
+
+---
+
 # Meta-Protocol: Toolchain Review on Schema Change
 
 This protocol establishes a critical feedback loop to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
@@ -99,24 +196,6 @@ This protocol closes that gap by introducing a new rule that explicitly links ch
 **Rule `toolchain-audit-on-schema-change`**: If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory **must** be performed as a subsequent step.
 
 This ensures that any modification to the fundamental way protocols are defined or processed is immediately followed by a conscious verification that all dependent tools are still functioning correctly and are aware of the new structure. This transforms the previously manual and error-prone discovery process into a formal, required step of the development lifecycle.
-
----
-
-# Protocol: Hierarchical Protocol Scoping
-
-This protocol defines the agent's behavior regarding the loading and enforcement of `AGENTS.md` files in a hierarchical file structure. It is a fundamental principle of the agent's operation.
-
-## The Principle of Proximity
-
-The agent's governing protocols are determined by the `AGENTS.md` file that is "closest" to its current operational scope. When the agent performs an action on a file or directory, it adheres to the rules defined in the `AGENTS.md` file located in the deepest common parent directory.
-
-- **Example:** If the agent is instructed to write to `/a/b/c.txt`, it will first look for an `AGENTS.md` in `/a/b/`. If not found, it will look in `/a/`, and finally in the root directory `/`.
-
-This mechanism allows for both global, repository-wide protocols and fine-grained, module-specific overrides.
-
-## Experimental Verification
-
-This principle was empirically verified through an experiment (see `experiments/hierarchical_test` during development). An `AGENTS.md` file was placed in a subdirectory with a unique, observable rule. When the agent was tasked with an operation within that subdirectory, it correctly followed the local rule, demonstrating that the local `AGENTS.md` took precedence over the root `AGENTS.md`. This confirms that protocol loading is dynamically scoped to the file system hierarchy.
 
 ---
 
@@ -358,6 +437,92 @@ This prohibition is non-negotiable and must be adhered to by any agent assuming 
 
 ---
 
+```json
+{
+  "protocol_id": "unified-auditor-001",
+  "description": "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.",
+  "rules": [
+    {
+      "rule_id": "run-all-audits",
+      "description": "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness.",
+      "enforcement": "The tool is invoked via the command line, typically through the `make audit` target."
+    }
+  ],
+  "associated_tools": [
+    "tooling/auditor.py"
+  ]
+}
+```
+
+---
+
+```json
+{
+  "protocol_id": "aura-execution-001",
+  "description": "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.",
+  "rules": [
+    {
+      "rule_id": "execute-aura-script",
+      "description": "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter.",
+      "enforcement": "The tool is used by invoking it from the command line with the path to the Aura script as an argument."
+    }
+  ],
+  "associated_tools": [
+    "tooling/aura_executor.py"
+  ]
+}
+```
+
+---
+
+```json
+{
+  "protocol_id": "capability-verification-001",
+  "description": "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.",
+  "rules": [
+    {
+      "rule_id": "verify-capability-acquisition",
+      "description": "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process.",
+      "enforcement": "The tool is used by invoking it from the command line with the path to the target test file."
+    }
+  ],
+  "associated_tools": [
+    "tooling/capability_verifier.py"
+  ]
+}
+```
+
+---
+
+```json
+{
+  "protocol_id": "csdc-001",
+  "description": "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.",
+  "rules": [
+    {
+      "rule_id": "use-csdc-cli",
+      "description": "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP).",
+      "enforcement": "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments."
+    },
+    {
+      "rule_id": "model-a-constraints",
+      "description": "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`.",
+      "enforcement": "Enforced by the `fsm_model_a.json` FSM used by the `csdc_cli.py` tool."
+    },
+    {
+      "rule_id": "model-b-constraints",
+      "description": "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`.",
+      "enforcement": "Enforced by the `fsm_model_b.json` FSM used by the `csdc_cli.py` tool."
+    }
+  ],
+  "associated_tools": [
+    "tooling/csdc_cli.py"
+  ]
+}
+```
+
+---
+
 # Protocol: The Context-Sensitive Development Cycle (CSDC)
 
 This protocol introduces a new form of development cycle that is sensitive to the logical context in which it operates. It moves beyond the purely structural validation of the FDC and CFDC to incorporate constraints based on fundamental principles of logic and computability.
@@ -390,256 +555,6 @@ The CSDC is enforced by the `tooling/csdc_cli.py` tool. This tool validates a pl
 
 ---
 
-# Protocol: pLLLU Execution
-
-This protocol establishes the `plllu_runner.py` script as the official entry point for executing pLLLU (`.plllu`) files.
-
-## The Problem: Lack of a Standard Runner
-
-The pLLLU language provides a powerful way to define complex logic, but without a standardized execution tool, there is no reliable way to integrate these files into the agent's workflow.
-
-## The Solution: A Dedicated Runner
-
-This protocol mandates the use of `tooling/plllu_runner.py` for all pLLLU file executions.
-
-**Rule `plllu-runner-is-entry-point`**: All pLLLU files must be executed through the `plllu_runner.py` script.
-
-This ensures that every pLLLU file is executed in a controlled, programmatic environment.
-
----
-
-# Security Protocol
-
-This document outlines the security policies and procedures for this project. It includes guidelines for handling sensitive data, reporting vulnerabilities, and maintaining a secure development environment. All contributors are expected to adhere to these protocols to ensure the integrity and safety of the project.
-
----
-
-# Protocol: Speculative Execution
-
-This protocol empowers the agent to engage in creative and exploratory tasks when it is otherwise idle. It provides a formal framework for the agent to generate novel ideas, plans, or artifacts that are not direct responses to a user request, but are instead products of its own "imagination" and analysis of the repository.
-
-The goal is to enable proactive, creative problem-solving and self-improvement, allowing the agent to "dream" productively within safe and well-defined boundaries.
-
-## Rules
-
-- **`idle-state-trigger`**: The Speculative Execution Protocol can only be invoked when the agent has no active, user-assigned task. This ensures that speculative work never interferes with primary duties.
-- **`formal-proposal-required`**: The first action in any speculative task must be the creation of a formal proposal document. This document must outline the objective, rationale, and a detailed plan for the task.
-- **`resource-constraints`**: All speculative tasks must operate under predefined resource constraints (e.g., time limits, computational resources) to prevent runaway processes.
-- **`user-review-gate`**: The final output or artifact of a speculative task cannot be integrated or submitted directly. It must be presented to the user for formal review and approval.
-- **`speculative-logging`**: All logs, artifacts, and actions generated during a speculative task must be clearly tagged with a `speculative` flag to distinguish them from standard, user-directed work.
-
----
-
-```json
-{
-  "protocol_id": "agent-bootstrap-001",
-  "description": "A foundational protocol that dictates the agent's initial actions upon starting any task.",
-  "rules": [
-    {
-      "rule_id": "bootstrap-load-agents-md",
-      "description": "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins.",
-      "enforcement": "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase."
-    }
-  ],
-  "associated_tools": [
-    "read_file"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "dependency-management-001",
-  "description": "A protocol for ensuring a reliable execution environment through formal dependency management.",
-  "rules": [
-    {
-      "rule_id": "dependency-install-on-start",
-      "description": "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed.",
-      "enforcement": "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions."
-    }
-  ],
-  "associated_tools": [
-    "run_in_bash_session"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "experimental-prologue-001",
-  "description": "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.",
-  "rules": [
-    {
-      "rule_id": "create-prologue-file",
-      "description": "Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols.",
-      "enforcement": "This is a procedural rule. The agent must verify the existence of 'prologue.txt' before using 'create_file_with_block' or similar tools for other files."
-    }
-  ],
-  "associated_tools": [
-    "create_file_with_block"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "agent-shell-001",
-  "description": "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.",
-  "rules": [
-    {
-      "rule_id": "shell-is-primary-entry-point",
-      "description": "All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation.",
-      "enforcement": "This is a procedural rule. The agent's operational framework should only expose the agent_shell.py as the means of starting a new task."
-    }
-  ],
-  "associated_tools": [
-    "tooling/agent_shell.py"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "toolchain-review-on-schema-change-001",
-  "description": "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.",
-  "rules": [
-    {
-      "rule_id": "toolchain-audit-on-schema-change",
-      "description": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.",
-      "enforcement": "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files."
-    }
-  ],
-  "associated_tools": [
-    "tooling/protocol_auditor.py",
-    "tooling/protocol_compiler.py",
-    "tooling/hierarchical_compiler.py"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "protocol-scoping-001",
-  "description": "A protocol describing the hierarchical loading and enforcement of AGENTS.md files.",
-  "rules": [
-    {
-      "rule_id": "principle-of-proximity",
-      "description": "The agent's behavior is governed by the AGENTS.md file closest to its current operational scope. A local AGENTS.md will always override a parent or root AGENTS.md for operations within its directory tree.",
-      "enforcement": "This is an intrinsic behavior of the agent's core programming. The agent is designed to look for and use the AGENTS.md file that is closest to its current point of operation."
-    }
-  ],
-  "associated_tools": []
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "unified-auditor-001",
-  "description": "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.",
-  "rules": [
-    {
-      "rule_id": "run-all-audits",
-      "description": "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness.",
-      "enforcement": "The tool is invoked via the command line, typically through the `make audit` target."
-    }
-  ],
-  "associated_tools": [
-    "tooling/auditor.py"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "aura-execution-001",
-  "description": "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.",
-  "rules": [
-    {
-      "rule_id": "execute-aura-script",
-      "description": "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter.",
-      "enforcement": "The tool is used by invoking it from the command line with the path to the Aura script as an argument."
-    }
-  ],
-  "associated_tools": [
-    "tooling/aura_executor.py"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "capability-verification-001",
-  "description": "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.",
-  "rules": [
-    {
-      "rule_id": "verify-capability-acquisition",
-      "description": "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process.",
-      "enforcement": "The tool is used by invoking it from the command line with the path to the target test file."
-    }
-  ],
-  "associated_tools": [
-    "tooling/capability_verifier.py"
-  ]
-}
-```
-
-
----
-
-```json
-{
-  "protocol_id": "csdc-001",
-  "description": "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.",
-  "rules": [
-    {
-      "rule_id": "use-csdc-cli",
-      "description": "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP).",
-      "enforcement": "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments."
-    },
-    {
-      "rule_id": "model-a-constraints",
-      "description": "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`.",
-      "enforcement": "Enforced by the `fsm_model_a.json` FSM used by the `csdc_cli.py` tool."
-    },
-    {
-      "rule_id": "model-b-constraints",
-      "description": "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`.",
-      "enforcement": "Enforced by the `fsm_model_b.json` FSM used by the `csdc_cli.py` tool."
-    }
-  ],
-  "associated_tools": [
-    "tooling/csdc_cli.py"
-  ]
-}
-```
-
-
----
-
 ```json
 {
   "protocol_id": "unified-doc-builder-001",
@@ -656,7 +571,6 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
   ]
 }
 ```
-
 
 ---
 
@@ -677,7 +591,6 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 }
 ```
 
-
 ---
 
 ```json
@@ -696,7 +609,6 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
   ]
 }
 ```
-
 
 ---
 
@@ -723,6 +635,441 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 }
 ```
 
+---
+
+```turtle
+@prefix proto: <https://factory.ai/ns/protocol/> .
+@prefix schema: <https://schema.org/> .
+
+<file:///app/compliance/protocols/best-practices-001> proto:associatedTool <file:///app/compliance/protocols/create_file_with_block>,
+        <file:///app/compliance/protocols/delete_file>,
+        <file:///app/compliance/protocols/grep>,
+        <file:///app/compliance/protocols/list_files>,
+        <file:///app/compliance/protocols/overwrite_file_with_block>,
+        <file:///app/compliance/protocols/read_file>,
+        <file:///app/compliance/protocols/replace_with_git_merge_diff> ;
+    proto:hasRule <file:///app/compliance/protocols/verify-after-write> ;
+    schema:description "A set of best practices derived from observing successful, data-driven workflow patterns." .
+
+<file:///app/compliance/protocols/meta-protocol-001> proto:associatedTool <file:///app/compliance/protocols/run_in_bash_session> ;
+    proto:hasRule <file:///app/compliance/protocols/agents-md-self-awareness> ;
+    schema:description "A meta-protocol governing the agent's awareness and maintenance of its own core protocol files." .
+
+<file:///app/compliance/protocols/non-compliance-protocol-001> proto:hasRule <file:///app/compliance/protocols/non-compliance-architectural-deviation>,
+        <file:///app/compliance/protocols/non-compliance-definition>,
+        <file:///app/compliance/protocols/non-compliance-direct-editing>,
+        <file:///app/compliance/protocols/non-compliance-self-awareness-failure>,
+        <file:///app/compliance/protocols/non-compliance-test-procedure> ;
+    schema:description "A protocol that defines non-compliance with AGENTS.md and specifies corrective actions." .
+
+<file:///app/compliance/protocols/pre-commit-protocol-001> proto:associatedTool <file:///app/compliance/protocols/code_linter>,
+        <file:///app/compliance/protocols/pre_commit_instructions> ;
+    proto:hasRule <file:///app/compliance/protocols/pre-commit-instructions-mandate> ;
+    schema:description "Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission." .
+
+<file:///app/compliance/protocols/reset-all-prohibition-001> proto:associatedTool <file:///app/compliance/protocols/reset_all> ;
+    proto:hasRule <file:///app/compliance/protocols/no-reset-all> ;
+    schema:description "A high-priority protocol that unconditionally forbids the use of the `reset_all` tool." .
+
+<file:///app/core/protocols/aorp-header> proto:hasRule <file:///app/core/protocols/aorp-identity>,
+        <file:///app/core/protocols/aorp-versioning> ;
+    schema:description "Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP)." .
+
+<file:///app/core/protocols/cfdc-protocol-001> proto:associatedTool <file:///app/core/protocols/tooling/fdc_cli.py>,
+        <file:///app/core/protocols/tooling/master_control.py> ;
+    proto:hasRule <file:///app/core/protocols/hierarchical-planning-via-call-plan>,
+        <file:///app/core/protocols/max-recursion-depth> ;
+    schema:description "Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model." .
+
+<file:///app/core/protocols/core-directive-001> proto:associatedTool <file:///app/core/protocols/tooling/fdc_cli.py> ;
+    proto:hasRule <file:///app/core/protocols/mandatory-fdc-start> ;
+    schema:description "The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC)." .
+
+<file:///app/core/protocols/decidability-constraints-001> proto:associatedTool <file:///app/core/protocols/tooling/fdc_cli.py>,
+        <file:///app/core/protocols/tooling/fdc_fsm.json> ;
+    proto:hasRule <file:///app/core/protocols/bounded-recursion>,
+        <file:///app/core/protocols/fsm-adherence>,
+        <file:///app/core/protocols/non-turing-completeness> ;
+    schema:description "Ensures all development processes are formally decidable and computationally tractable." .
+
+<file:///app/core/protocols/deep-research-cycle-001> proto:associatedTool <file:///app/core/protocols/create_file_with_block>,
+        <file:///app/core/protocols/google_search>,
+        <file:///app/core/protocols/view_text_website> ;
+    proto:hasRule <file:///app/core/protocols/structured-research-phases> ;
+    schema:description "A standardized, callable plan for conducting in-depth research on a complex topic." .
+
+<file:///app/core/protocols/fdc-protocol-001> proto:associatedTool <file:///app/core/protocols/LOGGING_SCHEMA.md>,
+        <file:///app/core/protocols/knowledge_core/dependency_graph.json>,
+        <file:///app/core/protocols/knowledge_core/symbols.json>,
+        <file:///app/core/protocols/message_user>,
+        <file:///app/core/protocols/set_plan>,
+        <file:///app/core/protocols/tooling/fdc_cli.py>,
+        <file:///app/core/protocols/tooling/fdc_fsm.json> ;
+    proto:hasRule <file:///app/core/protocols/fdc-entry-point>,
+        <file:///app/core/protocols/fdc-state-transitions>,
+        <file:///app/core/protocols/phase1-deconstruction>,
+        <file:///app/core/protocols/phase2-planning>,
+        <file:///app/core/protocols/phase3-execution>,
+        <file:///app/core/protocols/phase4-post-mortem> ;
+    schema:description "Defines the Finite Development Cycle (FDC), a formally defined process for executing a single, coherent task." .
+
+<file:///app/core/protocols/orientation-cascade-001> proto:associatedTool <file:///app/core/protocols/google_search>,
+        <file:///app/core/protocols/tooling/environmental_probe.py>,
+        <file:///app/core/protocols/view_text_website> ;
+    proto:hasRule <file:///app/core/protocols/l1-self-awareness>,
+        <file:///app/core/protocols/l2-repository-sync>,
+        <file:///app/core/protocols/l3-environmental-probing>,
+        <file:///app/core/protocols/l4-deep-research-cycle> ;
+    schema:description "Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state." .
+
+<file:///app/core/protocols/plan-registry-001> proto:associatedTool <file:///app/core/protocols/tooling/fdc_cli.py>,
+        <file:///app/core/protocols/tooling/master_control.py>,
+        <file:///app/core/protocols/tooling/plan_manager.py> ;
+    proto:hasRule <file:///app/core/protocols/registry-definition>,
+        <file:///app/core/protocols/registry-first-resolution>,
+        <file:///app/core/protocols/registry-management-tool> ;
+    schema:description "Defines a central registry for discovering and executing hierarchical plans by a logical name." .
+
+<file:///app/core/protocols/research-fdc-001> proto:associatedTool <file:///app/core/protocols/tooling/fdc_cli.py>,
+        <file:///app/core/protocols/tooling/master_control.py>,
+        <file:///app/core/protocols/tooling/research.py>,
+        <file:///app/core/protocols/tooling/research_planner.py> ;
+    proto:hasRule <file:///app/core/protocols/executable-plans>,
+        <file:///app/core/protocols/l4-invocation>,
+        <file:///app/core/protocols/specialized-fsm> ;
+    schema:description "Defines the formal Finite Development Cycle (FDC) for conducting deep research." .
+
+<file:///app/core/protocols/research-protocol-001> proto:associatedTool <file:///app/core/protocols/tooling.research.execute_research_protocol>,
+        <file:///app/core/protocols/tooling.research_planner.plan_deep_research> ;
+    proto:hasRule <file:///app/core/protocols/mandate-research-tools> ;
+    schema:description "A protocol for conducting systematic research using the integrated research toolchain." .
+
+<file:///app/core/protocols/self-correction-protocol-001> proto:associatedTool <file:///app/core/protocols/initiate_memory_recording>,
+        <file:///app/core/protocols/tooling/code_suggester.py>,
+        <file:///app/core/protocols/tooling/knowledge_compiler.py>,
+        <file:///app/core/protocols/tooling/protocol_updater.py>,
+        <file:///app/core/protocols/tooling/self_correction_orchestrator.py> ;
+    proto:hasRule <file:///app/core/protocols/automated-orchestration>,
+        <file:///app/core/protocols/autonomous-code-suggestion>,
+        <file:///app/core/protocols/programmatic-rule-refinement>,
+        <file:///app/core/protocols/programmatic-updates>,
+        <file:///app/core/protocols/structured-lessons> ;
+    schema:description "Defines the automated, closed-loop workflow for protocol self-correction." .
+
+<file:///app/core/protocols/standing-orders-001> proto:associatedTool <file:///app/core/protocols/google_search>,
+        <file:///app/core/protocols/tooling/fdc_cli.py>,
+        <file:///app/core/protocols/view_text_website> ;
+    proto:hasRule <file:///app/core/protocols/aorp-mandate>,
+        <file:///app/core/protocols/fdc-toolchain-mandate>,
+        <file:///app/core/protocols/rag-mandate> ;
+    schema:description "A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks." .
+
+<file:///app/critic/protocols/critic-meta-protocol-001> proto:hasRule <file:///app/critic/protocols/built-in-tools-are-valid>,
+        <file:///app/critic/protocols/functional-change-definition>,
+        <file:///app/critic/protocols/protocol-as-source-code> ;
+    schema:description "A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent." .
+
+<file:///app/critic/protocols/critic-reset-prohibition-001> proto:associatedTool <file:///app/critic/protocols/reset_all> ;
+    proto:hasRule <file:///app/critic/protocols/critic-no-reset> ;
+    schema:description "A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool." .
+
+<file:///app/protocols/agent-bootstrap-001> proto:associatedTool <file:///app/protocols/read_file> ;
+    proto:hasRule <file:///app/protocols/bootstrap-load-agents-md> ;
+    schema:description "A foundational protocol that dictates the agent's initial actions upon starting any task." .
+
+<file:///app/protocols/agent-interaction-001> proto:associatedTool <file:///app/protocols/message_user>,
+        <file:///app/protocols/set_plan> ;
+    proto:hasRule <file:///app/protocols/communication-tool-access>,
+        <file:///app/protocols/planning-tool-access> ;
+    schema:description "A protocol governing the agent's core interaction and planning tools." .
+
+<file:///app/protocols/agent-shell-001> proto:associatedTool <file:///app/protocols/tooling/agent_shell.py> ;
+    proto:hasRule <file:///app/protocols/shell-is-primary-entry-point> ;
+    schema:description "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks." .
+
+<file:///app/protocols/aura-execution-001> proto:associatedTool <file:///app/protocols/tooling/aura_executor.py> ;
+    proto:hasRule <file:///app/protocols/execute-aura-script> ;
+    schema:description "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent." .
+
+<file:///app/protocols/capability-verification-001> proto:associatedTool <file:///app/protocols/tooling/capability_verifier.py> ;
+    proto:hasRule <file:///app/protocols/verify-capability-acquisition> ;
+    schema:description "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement." .
+
+<file:///app/protocols/csdc-001> proto:associatedTool <file:///app/protocols/tooling/csdc_cli.py> ;
+    proto:hasRule <file:///app/protocols/model-a-constraints>,
+        <file:///app/protocols/model-b-constraints>,
+        <file:///app/protocols/use-csdc-cli> ;
+    schema:description "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints." .
+
+<file:///app/protocols/dependency-management-001> proto:associatedTool <file:///app/protocols/run_in_bash_session> ;
+    proto:hasRule <file:///app/protocols/dependency-install-on-start> ;
+    schema:description "A protocol for ensuring a reliable execution environment through formal dependency management." .
+
+<file:///app/protocols/experimental-prologue-001> proto:associatedTool <file:///app/protocols/create_file_with_block> ;
+    proto:hasRule <file:///app/protocols/create-prologue-file> ;
+    schema:description "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation." .
+
+<file:///app/protocols/file-indexing-001> proto:associatedTool <file:///app/protocols/tooling/file_indexer.py> ;
+    proto:hasRule <file:///app/protocols/update-index-before-submit> ;
+    schema:description "A protocol for maintaining an up-to-date file index to accelerate tool performance." .
+
+<file:///app/protocols/hdl-proving-001> proto:associatedTool <file:///app/protocols/tooling/hdl_prover.py> ;
+    proto:hasRule <file:///app/protocols/prove-sequent> ;
+    schema:description "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs." .
+
+<file:///app/protocols/plllu-execution-001> proto:associatedTool <file:///app/protocols/tooling/plllu_runner.py> ;
+    proto:hasRule <file:///app/protocols/execute-plllu-script> ;
+    schema:description "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent." .
+
+<file:///app/protocols/security/security-header> schema:description "Defines the identity and purpose of the Security Protocol document." .
+
+<file:///app/protocols/security/security-vuln-reporting-001> proto:hasRule <file:///app/protocols/security/no-public-disclosure>,
+        <file:///app/protocols/security/vuln-reporting-channel> ;
+    schema:description "Defines the official policy and procedure for reporting security vulnerabilities." .
+
+<file:///app/protocols/speculative-execution-001> proto:associatedTool <file:///app/protocols/create_file_with_block>,
+        <file:///app/protocols/request_user_input>,
+        <file:///app/protocols/set_plan> ;
+    proto:hasRule <file:///app/protocols/formal-proposal-required>,
+        <file:///app/protocols/idle-state-trigger>,
+        <file:///app/protocols/resource-constraints>,
+        <file:///app/protocols/speculative-logging>,
+        <file:///app/protocols/user-review-gate> ;
+    schema:description "A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods." .
+
+<file:///app/protocols/toolchain-review-on-schema-change-001> proto:associatedTool <file:///app/protocols/tooling/hierarchical_compiler.py>,
+        <file:///app/protocols/tooling/protocol_auditor.py>,
+        <file:///app/protocols/tooling/protocol_compiler.py> ;
+    proto:hasRule <file:///app/protocols/toolchain-audit-on-schema-change> ;
+    schema:description "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols." .
+
+<file:///app/protocols/unified-auditor-001> proto:associatedTool <file:///app/protocols/tooling/auditor.py> ;
+    proto:hasRule <file:///app/protocols/run-all-audits> ;
+    schema:description "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface." .
+
+<file:///app/protocols/unified-doc-builder-001> proto:associatedTool <file:///app/protocols/tooling/doc_builder.py> ;
+    proto:hasRule <file:///app/protocols/use-doc-builder-for-all-docs> ;
+    schema:description "A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth." .
+
+<file:///app/compliance/protocols/agents-md-self-awareness> proto:enforcement "The agent should incorporate this check into its standard operating procedure, particularly at the beginning of a task or when unexpected behavior occurs." ;
+    schema:description "The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols." .
+
+<file:///app/compliance/protocols/no-reset-all> proto:enforcement "This rule is enforced by the `master_control.py` orchestrator, which will immediately terminate the workflow with an error if an attempt is made to call this tool." ;
+    schema:description "The `reset_all` tool is strictly forbidden under all circumstances. It is a legacy tool that has been superseded by more granular and safer methods of workspace management. Its use is considered a critical failure." .
+
+<file:///app/compliance/protocols/non-compliance-architectural-deviation> proto:enforcement "Agent must revert non-compliant changes and re-implement them according to standards." ;
+    schema:description "Forbids changes that contradict documented architectural patterns or coding conventions." .
+
+<file:///app/compliance/protocols/non-compliance-definition> proto:enforcement "This is a definitional rule. Enforcement is achieved through the agent's adherence to the specific non-compliance rules that follow." ;
+    schema:description "Defines non-compliance as a violation of any rule, convention, or procedure in AGENTS.md or its source protocols." .
+
+<file:///app/compliance/protocols/non-compliance-direct-editing> proto:associatedTool <file:///app/compliance/protocols/restore_file>,
+        <file:///app/compliance/protocols/run_in_bash_session> ;
+    proto:enforcement "Agent must revert direct edits and modify source files, then run the appropriate build command." ;
+    schema:description "Prohibits the direct editing of build artifacts like AGENTS.md or README.md. Changes must be made to source files, followed by a rebuild." .
+
+<file:///app/compliance/protocols/non-compliance-self-awareness-failure> proto:associatedTool <file:///app/compliance/protocols/run_in_bash_session> ;
+    proto:enforcement "Agent should run 'make AGENTS.md' to refresh its protocol knowledge and re-evaluate its plan." ;
+    schema:description "Requires the agent to maintain an up-to-date understanding of protocols by recompiling AGENTS.md when necessary." .
+
+<file:///app/compliance/protocols/non-compliance-test-procedure> proto:associatedTool <file:///app/compliance/protocols/run_in_bash_session> ;
+    proto:enforcement "Agent must halt execution and run the required tests, debugging any failures before proceeding." ;
+    schema:description "Requires adherence to all documented testing procedures before submitting changes." .
+
+<file:///app/compliance/protocols/pre-commit-instructions-mandate> proto:enforcement "The agent's core logic should invoke this tool as the entry point to the pre-submission phase." ;
+    schema:description "Before submitting changes, the agent MUST execute the `pre_commit_instructions` tool to receive the required sequence of validation steps (e.g., running tests, requesting code review)." .
+
+<file:///app/compliance/protocols/verify-after-write> proto:enforcement "This is a core operational discipline. Future tooling, such as a trace validator, could enforce this by analyzing the execution log against this protocol." ;
+    schema:description "After every file creation or modification action (`create_file_with_block`, `overwrite_file_with_block`, `replace_with_git_merge_diff`), the agent MUST use a subsequent read-only tool (`read_file`, `list_files`, `grep`) to verify that the action was executed successfully and had the intended effect. A plan step should only be marked as complete after this verification." .
+
+<file:///app/core/protocols/aorp-identity> proto:enforcement "Protocol is identified by its name in documentation and compiled artifacts." ;
+    schema:description "The governing protocol set is identified as the Advanced Orientation and Research Protocol (AORP)." .
+
+<file:///app/core/protocols/aorp-mandate> proto:enforcement "Enforced by the agent's core operational loop and the `start` command in `tooling/fdc_cli.py`." ;
+    schema:description "All Finite Development Cycles (FDCs) MUST be initiated using the FDC toolchain's 'start' command. This is non-negotiable." .
+
+<file:///app/core/protocols/aorp-versioning> proto:enforcement "Build or validation scripts should verify the presence and format of the VERSION file." ;
+    schema:description "The official protocol version is tracked in the VERSION file in the repository root, following Semantic Versioning (SemVer)." .
+
+<file:///app/core/protocols/automated-orchestration> proto:enforcement "This script is the designated engine for the PDSC workflow." ;
+    schema:description "The self-correction cycle must be managed by the `tooling/self_correction_orchestrator.py` script, which processes pending lessons and triggers the necessary updates." .
+
+<file:///app/core/protocols/autonomous-code-suggestion> proto:enforcement "The `tooling/self_correction_orchestrator.py` invokes the code suggester when it processes a lesson of this type." ;
+    schema:description "The self-correction system can generate and apply code changes to its own tooling. This is achieved through a `PROPOSE_CODE_CHANGE` action, which is processed by `tooling/code_suggester.py` to create an executable plan." .
+
+<file:///app/core/protocols/bounded-recursion> proto:enforcement "The `lint` command in `tooling/fdc_cli.py` scans plans for disallowed recursive calls." ;
+    schema:description "The agent MUST NOT generate plans that involve recursion or self-invocation. A plan cannot trigger another FDC or a sub-plan, with the sole exception of the 'Deep Research Cycle'." .
+
+<file:///app/core/protocols/executable-plans> proto:enforcement "The output of the research planner must be linted and validated by the `fdc_cli.py` tool using the `research_fsm.json`." ;
+    schema:description "Research plans must be generated by `tooling/research_planner.py` as valid, executable plans that conform to the `research_fsm.json` definition. They are not just templates but formal, verifiable artifacts." .
+
+<file:///app/core/protocols/fdc-entry-point> proto:enforcement "Enforced by the `start` command in `tooling/fdc_cli.py`." ;
+    schema:description "The AORP cascade is the mandatory entry point to every FDC." .
+
+<file:///app/core/protocols/fdc-state-transitions> proto:enforcement "Validated by the `lint` command in `tooling/fdc_cli.py`." ;
+    schema:description "The FDC is a Finite State Machine (FSM) formally defined in `tooling/fdc_fsm.json`. Plans must be valid strings in the language defined by this FSM." .
+
+<file:///app/core/protocols/fdc-toolchain-mandate> proto:enforcement "The agent's internal logic is designed to prefer these specific tool commands for FDC state transitions." ;
+    schema:description "Use the `fdc_cli.py` tool for all core FDC state transitions: task initiation ('start'), plan linting ('lint'), and task closure ('close')." .
+
+<file:///app/core/protocols/fsm-adherence> proto:enforcement "The `lint` command in `tooling/fdc_cli.py` validates the plan against the FSM definition." ;
+    schema:description "All plans must be valid strings in the language defined by the tooling/fdc_fsm.json Finite State Machine." .
+
+<file:///app/core/protocols/hierarchical-planning-via-call-plan> proto:enforcement "The plan validator must be able to parse this directive and recursively validate sub-plans. The execution engine must implement a plan execution stack to manage the context of nested calls." ;
+    schema:description "Plans may execute other plans as sub-routines using the 'call_plan <path_to_plan>' directive. This enables a modular, hierarchical workflow." .
+
+<file:///app/core/protocols/l1-self-awareness> proto:enforcement "The `start` command of the FDC toolchain executes this step and fails if the artifact is missing or invalid." ;
+    schema:description "Level 1 (Self-Awareness): The agent must first establish its own identity and inherent limitations by reading the `knowledge_core/agent_meta.json` artifact." .
+
+<file:///app/core/protocols/l2-repository-sync> proto:enforcement "The `start` command of the FDC toolchain executes this step." ;
+    schema:description "Level 2 (Repository Sync): The agent must understand the current state of the local repository by loading primary artifacts from the `knowledge_core/` directory." .
+
+<file:///app/core/protocols/l3-environmental-probing> proto:enforcement "The `start` command of the FDC toolchain executes this step, utilizing tools like `google_search` and `view_text_website`." ;
+    schema:description "Level 3 (Environmental Probing & Targeted RAG): The agent must discover the rules and constraints of its operational environment by executing a probe script and using targeted RAG to resolve 'known unknowns'." .
+
+<file:///app/core/protocols/l4-deep-research-cycle> proto:enforcement "This is a special case of recursion, explicitly allowed and managed by the FDC toolchain." ;
+    schema:description "Level 4 (Deep Research Cycle): To investigate 'unknown unknowns', the agent must initiate a formal, self-contained Finite Development Cycle (FDC) of the 'Analysis Modality'." .
+
+<file:///app/core/protocols/l4-invocation> proto:enforcement "The `master_control.py` orchestrator is responsible for triggering the L4 cycle." ;
+    schema:description "The L4 Deep Research Cycle is the designated mechanism for resolving complex 'unknown unknowns'. It is invoked by the main orchestrator when a task requires knowledge that cannot be obtained through simple L1-L3 orientation probes." .
+
+<file:///app/core/protocols/mandate-research-tools> proto:enforcement "Adherence is monitored by the Code Review Critic and through post-mortem analysis of the activity log." ;
+    schema:description "For all complex research tasks, the `plan_deep_research` tool MUST be used to generate a plan, and the `execute_research_protocol` tool MUST be used for data gathering. This ensures a systematic and auditable research process." .
+
+<file:///app/core/protocols/mandatory-fdc-start> proto:enforcement "This is a hard-coded behavior in the agent's core operational loop and is verified by the FDC toolchain." ;
+    schema:description "Upon receiving a new task, the agent's first action MUST be to programmatically execute the FDC 'start' command to formally initiate the task and run the AORP orientation cascade." .
+
+<file:///app/core/protocols/max-recursion-depth> proto:enforcement "The execution engine must check the stack depth before every 'call_plan' execution and terminate with a fatal error if the limit would be exceeded." ;
+    schema:description "To ensure decidability, the plan execution stack must not exceed a system-wide constant, MAX_RECURSION_DEPTH. This prevents infinite recursion and guarantees all processes will terminate." .
+
+<file:///app/core/protocols/non-turing-completeness> proto:enforcement "Enforced by the design of the plan runner and validated by the `lint` command in the FDC toolchain." ;
+    schema:description "The agent's planning and execution language is, by design, not Turing-complete. This is a fundamental constraint to guarantee that all processes will terminate." .
+
+<file:///app/core/protocols/phase1-deconstruction> proto:enforcement "Procedural step guided by the agent's core logic, using artifacts in `logs/` and `knowledge_core/`." ;
+    schema:description "Phase 1 (Deconstruction & Contextualization): The agent must ingest the task, query historical logs, identify entities using the symbol map, and analyze impact using the dependency graph." .
+
+<file:///app/core/protocols/phase2-planning> proto:enforcement "The `lint` command in `tooling/fdc_cli.py` is a mandatory pre-flight check." ;
+    schema:description "Phase 2 (Planning & Self-Correction): The agent must generate a granular plan, lint it using the FDC toolchain, cite evidence for its steps, and perform a critical review." .
+
+<file:///app/core/protocols/phase3-execution> proto:enforcement "Logging is performed by the agent's action execution wrapper." ;
+    schema:description "Phase 3 (Execution & Structured Logging): The agent must execute the validated plan and log every action according to the `LOGGING_SCHEMA.md`." .
+
+<file:///app/core/protocols/phase4-post-mortem> proto:enforcement "The `close` command in `tooling/fdc_cli.py` initiates this phase." ;
+    schema:description "Phase 4 (Pre-Submission Post-Mortem): The agent must formally close the task using the `close` command and complete the generated post-mortem report." .
+
+<file:///app/core/protocols/programmatic-rule-refinement> proto:enforcement "The `tooling/knowledge_compiler.py` can generate `update-rule` actions, and the `tooling/self_correction_orchestrator.py` executes them." ;
+    schema:description "The self-correction system can modify the description of existing protocol rules via the `update-rule` command in `tooling/protocol_updater.py`, allowing it to refine its own logic." .
+
+<file:///app/core/protocols/programmatic-updates> proto:enforcement "Agent's core logic should be designed to use this tool for all protocol modifications." ;
+    schema:description "All modifications to protocol source files must be performed programmatically via the `tooling/protocol_updater.py` tool to ensure consistency and prevent manual errors." .
+
+<file:///app/core/protocols/rag-mandate> proto:enforcement "This is a core principle of the L3 orientation phase, utilizing tools like `google_search`." ;
+    schema:description "For any task involving external technologies, Just-In-Time External RAG is REQUIRED to verify current best practices. Do not trust internal knowledge." .
+
+<file:///app/core/protocols/registry-definition> proto:enforcement "The file's existence and format can be checked by the validation toolchain." ;
+    schema:description "A central plan registry MUST exist at 'knowledge_core/plan_registry.json'. It maps logical plan names to their file paths." .
+
+<file:///app/core/protocols/registry-first-resolution> proto:enforcement "This logic must be implemented in both the plan validator (`fdc_cli.py`) and the execution engine (`master_control.py`)." ;
+    schema:description "The 'call_plan <argument>' directive MUST first attempt to resolve '<argument>' as a logical name in the plan registry. If resolution fails, it MUST fall back to treating '<argument>' as a direct file path for backward compatibility." .
+
+<file:///app/core/protocols/registry-management-tool> proto:enforcement "The tool's existence and functionality can be verified via integration tests." ;
+    schema:description "A dedicated tool (`tooling/plan_manager.py`) MUST be provided for managing the plan registry, with functions to register, deregister, and list plans." .
+
+<file:///app/core/protocols/specialized-fsm> proto:enforcement "The `master_control.py` orchestrator must load and execute plans against this specific FSM when initiating an L4 Deep Research Cycle." ;
+    schema:description "The Research FDC must be governed by its own dedicated Finite State Machine, defined in `tooling/research_fsm.json`. This FSM is tailored for a research workflow, with states for gathering, synthesis, and reporting." .
+
+<file:///app/core/protocols/structured-lessons> proto:enforcement "The `tooling/knowledge_compiler.py` script is responsible for generating lessons in the correct format." ;
+    schema:description "Lessons learned from post-mortem analysis must be generated as structured, machine-readable JSON objects in `knowledge_core/lessons.jsonl`." .
+
+<file:///app/core/protocols/structured-research-phases> proto:enforcement "The plan's structure itself enforces this rule. The `lint` command can be extended to validate the structure of registered research plans." ;
+    schema:description "The deep research plan MUST follow a structured four-phase process: Scoping, Broad Gathering, Targeted Extraction, and Synthesis." .
+
+<file:///app/critic/protocols/built-in-tools-are-valid> proto:enforcement "The Code Review Critic must not flag a change as 'incomplete' or 'non-functional' solely because the implementation of a built-in tool is not present in the repository." ;
+    schema:description "The agent's execution environment provides a set of built-in tools (e.g., `read_file`, `delete_file`, `pre_commit_instructions`). The implementation of these tools does not reside within the repository. A protocol change that adds a built-in tool to the `associated_tools` list is a valid and complete functional change." .
+
+<file:///app/critic/protocols/critic-no-reset> proto:enforcement "This rule is enforced by its inclusion in the compiled AGENTS.md, which serves as the context for the Code Review Critic. The critic must be programmed to parse and adhere to this prohibition." ;
+    schema:description "The agent role-playing as the 'Code Review Critic' is explicitly forbidden from invoking the 'reset_all' tool under any circumstances. This is a critical safeguard to prevent the loss of work during the review process." .
+
+<file:///app/critic/protocols/functional-change-definition> proto:enforcement "The Code Review Critic's evaluation of 'functionality' must encompass both traditional code and protocol definitions." ;
+    schema:description "A change is considered 'functional' if it correctly modifies the agent's operational rules or capabilities, as defined by the combination of Python source code and the protocol source files in `protocols/`." .
+
+<file:///app/critic/protocols/protocol-as-source-code> proto:enforcement "The Code Review Critic must analyze changes in this directory with the same rigor as changes to `.py` files." ;
+    schema:description "The `protocols/` directory and all its contents (`.md`, `.json` files) MUST be treated as functional source code. Changes to these files directly alter the agent's operational capabilities and governing rules." .
+
+<file:///app/protocols/bootstrap-load-agents-md> proto:enforcement "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase." ;
+    schema:description "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins." .
+
+<file:///app/protocols/communication-tool-access> proto:enforcement "The agent's core logic should be designed to use this tool for all user-facing communication." ;
+    schema:description "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow." .
+
+<file:///app/protocols/create-prologue-file> proto:enforcement "This is a procedural rule. The agent must verify the existence of 'prologue.txt' before using 'create_file_with_block' or similar tools for other files." ;
+    schema:description "Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols." .
+
+<file:///app/protocols/dependency-install-on-start> proto:enforcement "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions." ;
+    schema:description "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed." .
+
+<file:///app/protocols/execute-aura-script> proto:enforcement "The tool is used by invoking it from the command line with the path to the Aura script as an argument." ;
+    schema:description "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter." .
+
+<file:///app/protocols/execute-plllu-script> proto:enforcement "The tool is used by invoking it from the command line with the path to the pLLLU script as an argument." ;
+    schema:description "The `plllu_runner.py` tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter." .
+
+<file:///app/protocols/formal-proposal-required> proto:enforcement "The initial plan for any speculative task must include a step to generate and save a proposal artifact." ;
+    schema:description "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan." .
+
+<file:///app/protocols/idle-state-trigger> proto:enforcement "The agent's main control loop must verify an idle state before allowing the invocation of a speculative plan." ;
+    schema:description "The agent may only initiate a speculative task when it has no active, user-assigned tasks." .
+
+<file:///app/protocols/model-a-constraints> proto:enforcement "Enforced by the `fsm_model_a.json` FSM used by the `csdc_cli.py` tool." ;
+    schema:description "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`." .
+
+<file:///app/protocols/model-b-constraints> proto:enforcement "Enforced by the `fsm_model_b.json` FSM used by the `csdc_cli.py` tool." ;
+    schema:description "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`." .
+
+<file:///app/protocols/planning-tool-access> proto:enforcement "The agent's core logic should be designed to use this tool for all planning activities." ;
+    schema:description "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution." .
+
+<file:///app/protocols/prove-sequent> proto:enforcement "The tool is used by invoking it from the command line with the sequent to be proved as an argument." ;
+    schema:description "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover." .
+
+<file:///app/protocols/resource-constraints> proto:enforcement "This is a system-level constraint that the agent orchestrator must enforce." ;
+    schema:description "Speculative tasks must operate under defined resource limits." .
+
+<file:///app/protocols/run-all-audits> proto:enforcement "The tool is invoked via the command line, typically through the `make audit` target." ;
+    schema:description "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness." .
+
+<file:///app/protocols/security/no-public-disclosure> proto:enforcement "Violation of this rule may result in being banned from the project community." ;
+    schema:description "Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed." .
+
+<file:///app/protocols/security/vuln-reporting-channel> proto:enforcement "This is a procedural rule. The designated contact is specified in the project's main SECURITY.md file." ;
+    schema:description "All suspected security vulnerabilities MUST be reported privately to the designated security contact." .
+
+<file:///app/protocols/shell-is-primary-entry-point> proto:enforcement "This is a procedural rule. The agent's operational framework should only expose the agent_shell.py as the means of starting a new task." ;
+    schema:description "All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation." .
+
+<file:///app/protocols/speculative-logging> proto:enforcement "The agent's logging and file-creation tools should be context-aware and apply this tag when in a speculative mode." ;
+    schema:description "All logs and artifacts generated during a speculative task must be tagged as 'speculative'." .
+
+<file:///app/protocols/toolchain-audit-on-schema-change> proto:enforcement "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files." ;
+    schema:description "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure." .
+
+<file:///app/protocols/update-index-before-submit> proto:enforcement "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/file_indexer.py build'." ;
+    schema:description "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem." .
+
+<file:///app/protocols/use-csdc-cli> proto:enforcement "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments." ;
+    schema:description "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP)." .
+
+<file:///app/protocols/use-doc-builder-for-all-docs> proto:enforcement "The tool is invoked via the command line, typically through the `make docs`, `make readme`, or `make pages` targets." ;
+    schema:description "The `doc_builder.py` script is the single entry point for generating all user-facing documentation, including system-level docs, README files, and GitHub Pages. It should be called with the appropriate '--format' argument." .
+
+<file:///app/protocols/user-review-gate> proto:enforcement "The agent is forbidden from using tools like 'submit' or 'merge' within a speculative context. It must use 'request_user_input' to present the results." ;
+    schema:description "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly." .
+
+<file:///app/protocols/verify-capability-acquisition> proto:enforcement "The tool is used by invoking it from the command line with the path to the target test file." ;
+    schema:description "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process." .
+
+
+```
 
 ---
 
@@ -743,6 +1090,885 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 }
 ```
 
+---
+
+# Protocol: pLLLU Execution
+
+This protocol establishes the `plllu_runner.py` script as the official entry point for executing pLLLU (`.plllu`) files.
+
+## The Problem: Lack of a Standard Runner
+
+The pLLLU language provides a powerful way to define complex logic, but without a standardized execution tool, there is no reliable way to integrate these files into the agent's workflow.
+
+## The Solution: A Dedicated Runner
+
+This protocol mandates the use of `tooling/plllu_runner.py` for all pLLLU file executions.
+
+**Rule `plllu-runner-is-entry-point`**: All pLLLU files must be executed through the `plllu_runner.py` script.
+
+This ensures that every pLLLU file is executed in a controlled, programmatic environment.
+
+---
+
+# Module Documentation
+
+## Overview
+
+This document provides a human-readable summary of the protocols and key components defined within this module. It is automatically generated.
+
+## Core Protocols
+
+- **`agent-bootstrap-001`**: A foundational protocol that dictates the agent's initial actions upon starting any task.
+- **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
+- **`experimental-prologue-001`**: An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.
+- **`agent-shell-001`**: A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.
+- **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
+- **`aura-execution-001`**: A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.
+- **`capability-verification-001`**: A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.
+- **`csdc-001`**: A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.
+- **`unified-doc-builder-001`**: A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth.
+- **`file-indexing-001`**: A protocol for maintaining an up-to-date file index to accelerate tool performance.
+- **`hdl-proving-001`**: A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.
+- **`agent-interaction-001`**: A protocol governing the agent's core interaction and planning tools.
+- **`plllu-execution-001`**: A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent.
+- **`security-header`**: Defines the identity and purpose of the Security Protocol document.
+- **`security-vuln-reporting-001`**: Defines the official policy and procedure for reporting security vulnerabilities.
+- **`speculative-execution-001`**: A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.
+
+## Key Components
+
+- **`tooling/__init__.py`**:
+
+  > This module contains the various tools and utilities that support the agent's
+  > development, testing, and operational workflows.
+  >
+  > The tools in this package are the building blocks of the agent's capabilities,
+  > ranging from code analysis and refactoring to protocol compilation and
+  > self-correction. Each script is designed to be a self-contained unit of
+  > functionality that can be invoked either from the command line or programmatically
+  > by the agent's master control system.
+  >
+  > This __init__.py file marks the 'tooling' directory as a Python package,
+  > allowing for the organized import of its various modules.
+
+- **`tooling/agent_shell.py`**:
+
+  > The new, interactive, API-driven entry point for the agent.
+  >
+  > This script replaces the old file-based signaling system with a direct,
+  > programmatic interface to the MasterControlGraph FSM. It is responsible for:
+  > 1.  Initializing the agent's state and a centralized logger.
+  > 2.  Instantiating and running the MasterControlGraph.
+  > 3.  Driving the FSM by calling its methods and passing data and the logger.
+  > 4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans
+  >     and respond to requests for action.
+
+- **`tooling/__init__.py`**:
+
+  > _No module-level docstring found._
+
+- **`tooling/generate_and_test.py`**:
+
+  > _No module-level docstring found._
+
+- **`tooling/appl_runner.py`**:
+
+  > A command-line tool for executing APPL files.
+  >
+  > This script provides a simple interface to run APPL files using the main
+  > `run.py` interpreter. It captures and prints the output of the execution,
+  > and provides detailed error reporting if the execution fails.
+
+- **`tooling/appl_to_lfi_ill.py`**:
+
+  > A compiler that translates APPL (a simple functional language) to LFI-ILL.
+  >
+  > This script takes a Python file containing an APPL AST, and compiles it into
+  > an LFI-ILL AST. The resulting AST is then written to a `.lfi_ill` file.
+
+- **`tooling/auditor.py`**:
+
+  > A unified auditing tool for maintaining repository health and compliance.
+  >
+  > This script combines the functionality of several disparate auditing tools into a
+  > single, comprehensive command-line interface. It serves as the central tool for
+  > validating the key components of the agent's architecture, including protocols,
+  > plans, and documentation.
+  >
+  > The auditor can perform the following checks:
+  > 1.  **Protocol Audit (`protocol`):**
+  >     - Checks if `AGENTS.md` artifacts are stale compared to their source files.
+  >     - Verifies protocol completeness by comparing tools used in logs against
+  >       tools defined in protocols.
+  >     - Analyzes tool usage frequency (centrality).
+  > 2.  **Plan Registry Audit (`plans`):**
+  >     - Scans `knowledge_core/plan_registry.json` for "dead links" where the
+  >       target plan file does not exist.
+  > 3.  **Documentation Audit (`docs`):**
+  >     - Scans the generated `SYSTEM_DOCUMENTATION.md` to find Python modules
+  >       that are missing module-level docstrings.
+  >
+  > The tool is designed to be run from the command line and can execute specific
+  > audits or all of them, generating a consolidated `audit_report.md` file.
+
+- **`tooling/aura_executor.py`**:
+
+  > This script serves as the command-line executor for `.aura` files.
+  >
+  > It bridges the gap between the high-level Aura scripting language and the
+  > agent's underlying Python-based toolset. The executor is responsible for:
+  > 1.  Parsing the `.aura` source code using the lexer and parser from the
+  >     `aura_lang` package.
+  > 2.  Setting up an execution environment for the interpreter.
+  > 3.  Injecting a "tool-calling" capability into the Aura environment, which
+  >     allows Aura scripts to dynamically invoke registered Python tools
+  >     (e.g., `hdl_prover`, `environmental_probe`).
+  > 4.  Executing the parsed program and printing the final result.
+  >
+  > This makes it a key component for enabling more expressive and complex
+  > automation scripts for the agent.
+
+- **`tooling/aura_to_lfi_ill.py`**:
+
+  > A compiler that translates AURA code to LFI-ILL.
+  >
+  > This script takes an AURA file, parses it, and compiles it into an LFI-ILL
+  > AST. The resulting AST is then written to a `.lfi_ill` file.
+
+- **`tooling/background_researcher.py`**:
+
+  > This script performs a simulated research task in the background.
+  > It takes a task ID as a command-line argument and writes its findings
+  > to a temporary file that the main agent can poll.
+
+- **`tooling/builder.py`**:
+
+  > A unified, configuration-driven build script for the project.
+  >
+  > This script serves as the central entry point for all build-related tasks, such
+  > as generating documentation, compiling protocols, and running code quality checks.
+  > It replaces a traditional Makefile's direct command execution with a more
+  > structured, maintainable, and introspectable approach.
+  >
+  > The core logic is driven by a `build_config.json` file, which defines a series
+  > of "targets." Each target specifies:
+  > - The `type` of target: "compiler" or "command".
+  > - For "compiler" types: `compiler` script, `output`, `sources`, and `options`.
+  > - For "command" types: the `command` to execute.
+  >
+  > The configuration also defines "build_groups", which are ordered collections of
+  > targets (e.g., "all", "quality").
+  >
+  > This centralized builder provides several advantages:
+  > - **Single Source of Truth:** The `build_config.json` file is the definitive
+  >   source for all build logic.
+  > - **Consistency:** Ensures all build tasks are executed in a uniform way.
+  > - **Extensibility:** New build targets can be added by simply updating the
+  >   configuration file.
+  > - **Discoverability:** The script can list all available targets and groups.
+
+- **`tooling/capability_verifier.py`**:
+
+  > A tool to verify that the agent can monotonically improve its capabilities.
+  >
+  > This script is designed to provide a formal, automated test for the agent's
+  > self-correction and learning mechanisms. It ensures that when the agent learns
+  > a new capability, it does so without losing (regressing) any of its existing
+  > capabilities. This is a critical safeguard for ensuring robust and reliable
+  > agent evolution.
+  >
+  > The tool works by orchestrating a four-step process:
+  > 1.  **Confirm Initial Failure:** It runs a specific test file that is known to
+  >     fail, verifying that the agent currently lacks the target capability.
+  > 2.  **Invoke Self-Correction:** It simulates the discovery of a new "lesson" and
+  >     triggers the `self_correction_orchestrator.py` script, which is responsible
+  >     for integrating new knowledge and skills.
+  > 3.  **Confirm Final Success:** It runs the same test file again, confirming that
+  >     the agent has successfully learned the new capability and the test now passes.
+  > 4.  **Check for Regressions:** It runs the full, existing test suite to ensure
+  >     that the process of learning the new skill has not inadvertently broken any
+  >     previously functional capabilities.
+  >
+  > This provides a closed-loop verification of monotonic improvement, which is a
+  > cornerstone of the agent's design philosophy.
+
+- **`tooling/code_suggester.py`**:
+
+  > Handles the generation and application of autonomous code change suggestions.
+  >
+  > This tool is a key component of the advanced self-correction loop. It is
+  > designed to be invoked by the self-correction orchestrator when a lesson
+  > contains a 'propose-code-change' action.
+  >
+  > For its initial implementation, this tool acts as a structured executor. It
+  > takes a lesson where the 'details' field contains a fully-formed git-style
+  > merge diff and applies it to the target file. It does this by generating a
+  > temporary, single-step plan file and signaling its location for the master
+  > controller to execute.
+  >
+  > This establishes the fundamental workflow for autonomous code modification,
+  > decoupling the suggestion logic from the execution logic. Future iterations
+  > can enhance this tool with more sophisticated code generation capabilities
+  > (e.g., using an LLM to generate the diff from a natural language description)
+  > without altering the core orchestration process.
+
+- **`tooling/context_awareness_scanner.py`**:
+
+  > A tool for performing static analysis on a Python file to understand its context.
+  >
+  > This script provides a "contextual awareness" scan of a specified Python file
+  > to help an agent (or a human) understand its role, dependencies, and connections
+  > within a larger codebase. This is crucial for planning complex changes or
+  > refactoring efforts, as it provides a snapshot of the potential impact of
+  > modifying a file.
+  >
+  > The scanner performs three main functions:
+  > 1.  **Symbol Definition Analysis:** It uses Python's Abstract Syntax Tree (AST)
+  >     module to parse the target file and identify all the functions and classes
+  >     that are defined within it.
+  > 2.  **Import Analysis:** It also uses the AST to find all modules and symbols
+  >     that the target file imports, revealing its dependencies on other parts of
+  >     the codebase or external libraries.
+  > 3.  **Reference Finding:** It performs a repository-wide search to find all other
+  >     files that reference the symbols defined in the target file. This helps to
+  >     understand how the file is used by the rest of the system.
+  >
+  > The final output is a detailed JSON report containing all of this information,
+  > which can be used as a foundational artifact for automated planning or human review.
+
+- **`tooling/csdc_cli.py`**:
+
+  > A command-line tool for managing the Context-Sensitive Development Cycle (CSDC).
+  >
+  > This script provides an interface to validate a development plan against a specific
+  > CSDC model (A or B) and a given complexity class (P or EXP). It ensures that a
+  > plan adheres to the strict logical and computational constraints defined by the
+  > CSDC protocol before it is executed.
+  >
+  > The tool performs two main checks:
+  > 1.  **Complexity Analysis:** It analyzes the plan to determine its computational
+  >     complexity and verifies that it matches the expected complexity class.
+  > 2.  **Model Validation:** It validates the plan's commands against the rules of
+  >     the specified CSDC model, ensuring that it does not violate any of the
+  >     model's constraints (e.g., forbidding certain functions).
+  >
+  > This serves as a critical gateway for ensuring that all development work within
+  > the CSDC framework is sound, predictable, and compliant with the governing
+  > meta-mathematical principles.
+
+- **`tooling/dependency_graph_generator.py`**:
+
+  > Scans the repository for dependency files and generates a unified dependency graph.
+  >
+  > This script is a crucial component of the agent's environmental awareness,
+  > providing a clear map of the software supply chain. It recursively searches the
+  > entire repository for common dependency management files, specifically:
+  > - `package.json` (for JavaScript/Node.js projects)
+  > - `requirements.txt` (for Python projects)
+  >
+  > It parses these files to identify two key types of relationships:
+  > 1.  **Internal Dependencies:** Links between different projects within this repository.
+  > 2.  **External Dependencies:** Links to third-party libraries and packages.
+  >
+  > The final output is a JSON file, `knowledge_core/dependency_graph.json`, which
+  > represents these relationships as a graph structure with nodes (projects and
+  > dependencies) and edges (the dependency links). This artifact is a primary
+  > input for the agent's orientation and planning phases, allowing it to reason
+  > about the potential impact of its changes.
+
+- **`tooling/doc_builder.py`**:
+
+  > A unified documentation builder for the project.
+  > ...
+
+- **`tooling/document_scanner.py`**:
+
+  > A tool for scanning the repository for human-readable documents and extracting their text content.
+  >
+  > This script is a crucial component of the agent's initial information-gathering
+  > and orientation phase. It allows the agent to ingest knowledge from unstructured
+  > or semi-structured documents that are not part of the formal codebase, but which
+  > may contain critical context, requirements, or specifications.
+  >
+  > The scanner searches a given directory for files with common document extensions:
+  > - `.pdf`: Uses the `pypdf` library to extract text from PDF files.
+  > - `.md`: Reads Markdown files.
+  > - `.txt`: Reads plain text files.
+  >
+  > The output is a dictionary where the keys are the file paths of the discovered
+  > documents and the values are their extracted text content. This data can then
+  > be used by the agent to inform its planning and execution process. This tool
+  > is essential for bridging the gap between human-written documentation and the
+  > agent's operational awareness.
+
+- **`tooling/environmental_probe.py`**:
+
+  > Performs a series of checks to assess the capabilities of the execution environment.
+  >
+  > This script is a critical diagnostic tool run at the beginning of a task to
+  > ensure the agent understands its operational sandbox. It verifies fundamental
+  > capabilities required for most software development tasks:
+  >
+  > 1.  **Filesystem I/O:** Confirms that the agent can create, write to, read from,
+  >     and delete files. It also provides a basic latency measurement for these
+  >     operations.
+  > 2.  **Network Connectivity:** Checks for external network access by attempting to
+  >     connect to a highly-available public endpoint (google.com). This is crucial
+  >     for tasks requiring `git` operations, package downloads, or API calls.
+  > 3.  **Environment Variables:** Verifies that standard environment variables are
+  >     accessible, which is a prerequisite for many command-line tools.
+  >
+  > The script generates a human-readable report summarizing the results of these
+  > probes, allowing the agent to quickly identify any environmental constraints
+  > that might impact its ability to complete a task.
+
+- **`tooling/fdc_cli.py`**:
+
+  > This script provides a command-line interface (CLI) for managing the Finite
+  > Development Cycle (FDC).
+  >
+  > The FDC is a structured workflow for agent-driven software development. This CLI
+  > is the primary human interface for interacting with that cycle, providing
+  > commands to:
+  > - **start:** Initiates a new development task, triggering the "Advanced
+  >   Orientation and Research Protocol" (AORP) to ensure the agent is fully
+  >   contextualized.
+  > - **close:** Formally concludes a task, creating a post-mortem template for
+  >   analysis and lesson-learning.
+  > - **validate:** Checks a given plan file for both syntactic and semantic
+  >   correctness against the FDC's governing Finite State Machine (FSM). This
+  >   ensures that a plan is executable and will not violate protocol.
+  > - **analyze:** Examines a plan to determine its computational complexity (e.g.,
+  >   Constant, Polynomial, Exponential) and its modality (Read-Only vs.
+  >   Read-Write), providing insight into the plan's potential impact.
+
+- **`tooling/filesystem_lister.py`**:
+
+  > A tool for listing files and directories in a repository, with an option to respect .gitignore.
+
+- **`tooling/halting_heuristic_analyzer.py`**:
+
+  > A static analysis tool to estimate the termination risk of a UDC plan.
+  >
+  > This script reads a `.udc` plan file, parses its instructions, and uses a
+  > series of heuristics to identify potential infinite loops. It is not a
+  > formal decider (as the halting problem is undecidable), but rather a
+  > practical tool to flag common patterns that lead to non-termination.
+  >
+  > The analysis focuses on:
+  > 1.  Detecting backward jumps, which are the primary indicator of loops.
+  > 2.  Analyzing the exit conditions of these loops (e.g., `JE`, `JNE`).
+  > 3.  Checking if the registers involved in the exit conditions are modified
+  >     within the loop body in a way that is likely to lead to termination.
+  >
+  > The tool outputs a JSON report detailing the estimated risk level (LOW,
+  > MEDIUM, HIGH) and the specific loops that were identified.
+
+- **`tooling/hdl_prover.py`**:
+
+  > A command-line tool for proving sequents in Intuitionistic Linear Logic.
+  >
+  > This script provides a basic interface to a simple logic prover. It takes a
+  > sequent as a command-line argument, parses it into a logical structure, and
+  > then attempts to prove it using a rudimentary proof search algorithm.
+  >
+  > The primary purpose of this tool is to allow the agent to perform formal
+  > reasoning and verification tasks by checking the validity of logical entailments.
+  > For example, it can be used to verify that a certain conclusion follows from a
+  > set of premises according to the rules of linear logic.
+  >
+  > The current implementation uses a very basic parser and proof algorithm,
+  > serving as a placeholder and demonstration for a more sophisticated, underlying
+  > logic engine.
+
+- **`tooling/hierarchical_compiler.py`**:
+
+  > A hierarchical build system for compiling nested protocol modules.
+  >
+  > This script orchestrates the compilation of `AGENTS.md` and `README.md` files
+  > across a repository with a nested or hierarchical module structure. It is a key
+  > component of the system's ability to manage complexity by allowing protocols to
+  > be defined in a modular, distributed way while still being presented as a unified,
+  > coherent whole at each level of the hierarchy.
+  >
+  > The compiler operates in two main passes:
+  >
+  > **Pass 1: Documentation Compilation (Bottom-Up)**
+  > 1.  **Discovery:** It finds all `protocols` directories in the repository, which
+  >     signify the root of a documentation module.
+  > 2.  **Bottom-Up Traversal:** It processes these directories from the most deeply
+  >     nested ones upwards. This ensures that child modules are always built before
+  >     their parents.
+  > 3.  **Child Summary Injection:** For each compiled child module, it generates a
+  >     summary of its protocols and injects this summary into the parent's
+  >     `protocols` directory as a temporary file.
+  > 4.  **Parent Compilation:** When the parent module is compiled, the standard
+  >     `protocol_compiler.py` automatically includes the injected child summaries,
+  >     creating a single `AGENTS.md` file that contains both the parent's native
+  >     protocols and the full protocols of all its direct children.
+  > 5.  **README Generation:** After each `AGENTS.md` is compiled, the corresponding
+  >     `README.md` is generated.
+  >
+  > **Pass 2: Centralized Knowledge Graph Compilation**
+  > 1.  After all documentation is built, it performs a full repository scan to find
+  >     every `*.protocol.json` file.
+  > 2.  It parses all of these files and compiles them into a single, centralized
+  >     RDF knowledge graph (`protocols.ttl`). This provides a unified,
+  >     machine-readable view of every protocol defined anywhere in the system.
+  >
+  > This hierarchical approach allows for both localized, context-specific protocol
+  > definitions and a holistic, system-wide understanding of the agent's governing rules.
+
+- **`tooling/knowledge_compiler.py`**:
+
+  > Extracts structured lessons from post-mortem reports and compiles them into a
+  > centralized, long-term knowledge base.
+  >
+  > This script is a core component of the agent's self-improvement feedback loop.
+  > After a task is completed, a post-mortem report is generated that includes a
+  > section for "Corrective Actions & Lessons Learned." This script automates the
+  > process of parsing that section to extract key insights.
+  >
+  > It identifies pairs of "Lesson" and "Action" statements and transforms them
+  > into a standardized, machine-readable format. These formatted entries are then
+  > appended to the `knowledge_core/lessons.jsonl` file, which serves as the
+  > agent's persistent memory of what has worked, what has failed, and what can be
+  > improved in future tasks.
+  >
+  > The script is executed via the command line, taking the path to a completed
+  > post-mortem file as its primary argument.
+
+- **`tooling/knowledge_integrator.py`**:
+
+  > Enriches the local knowledge graph with data from external sources like DBPedia.
+  >
+  > This script loads the RDF graph generated from the project's protocols,
+  > identifies key concepts (like tools and rules), queries the DBPedia SPARQL
+  > endpoint to find related information, and merges the external data into a new,
+  > enriched knowledge graph.
+
+- **`tooling/lba_validator.py`**:
+
+  > A Linear Bounded Automaton (LBA) for validating Context-Sensitive Development Cycle (CSDC) plans.
+  >
+  > This module implements a validator that enforces the context-sensitive rules of the CSDC.
+  > Unlike a simple FSM, an LBA can inspect the entire input "tape" (the plan) to make
+  > validation decisions. This is necessary to enforce rules where the validity of one
+  > command depends on the presence or absence of another command elsewhere in the plan.
+  >
+  > The CSDC defines two mutually exclusive models:
+  > - Model A: Permits `define_set_of_names`, but forbids `define_diagonalization_function`.
+  > - Model B: Permits `define_diagonalization_function`, but forbids `define_set_of_names`.
+  >
+  > This validator checks for these co-occurrence constraints.
+
+- **`tooling/lfi_ill_halting_decider.py`**:
+
+  > A tool for analyzing the termination of LFI-ILL programs.
+  >
+  > This script takes an LFI-ILL file, interprets it in a paraconsistent logic
+  > environment, and reports on its halting status. It does this by setting up
+  > a paradoxical initial state and observing how the program resolves it.
+
+- **`tooling/lfi_udc_model.py`**:
+
+  > A paraconsistent execution model for UDC plans.
+  >
+  > This module provides the classes necessary to interpret a UDC (Un-decidable
+  > Computation) plan within a Logic of Formal Inconsistency (LFI). Instead of
+  > concrete values, the state of the machine (registers, tape, etc.) is modeled
+  > using paraconsistent truth values (TRUE, FALSE, BOTH, NEITHER).
+  >
+  > This allows the system to reason about paradoxical programs, such as a program
+  > that halts if and only if it does not halt. By executing the program under
+  > paraconsistent semantics, the model can arrive at a final state of `BOTH`,
+  > effectively demonstrating the paradoxical nature of the input without crashing.
+  >
+  > Key classes:
+  > - `ParaconsistentTruth`: An enum for the four truth values.
+  > - `ParaconsistentState`: A wrapper for a value that holds a paraconsistent truth.
+  > - `LFIInstruction`: A UDC instruction that operates on paraconsistent states.
+  > - `LFIExecutor`: A virtual machine that executes a UDC plan using LFI semantics.
+  > - `ParaconsistentHaltingDecider`: The main entry point that orchestrates the
+  >   analysis of a UDC plan.
+
+- **`tooling/log_failure.py`**:
+
+  > A dedicated script to log a catastrophic failure event to the main activity log.
+  >
+  > This tool is designed to be invoked in the rare case of a severe, unrecoverable
+  > error that violates a core protocol. Its primary purpose is to ensure that such
+  > a critical event is formally and structurally documented in the standard agent
+  > activity log (`logs/activity.log.jsonl`), even if the main agent loop has
+  > crashed or been terminated.
+  >
+  > The script is pre-configured to log a `SYSTEM_FAILURE` event, specifically
+  > attributing it to the "Unauthorized use of the `reset_all` tool." This creates a
+  > permanent, machine-readable record of the failure, which is essential for
+  > post-mortem analysis, debugging, and the development of future safeguards.
+  >
+  > By using the standard `Logger` class, it ensures that the failure log entry
+  > conforms to the established `LOGGING_SCHEMA.md`, making it processable by
+  > auditing and analysis tools.
+
+- **`tooling/master_control.py`**:
+
+  > The master orchestrator for the agent's lifecycle, implementing the Context-Free Development Cycle (CFDC).
+  >
+  > This script, master_control.py, is the heart of the agent's operational loop.
+  > It implements the CFDC, a hierarchical planning and execution model based on a
+  > Pushdown Automaton. This allows the agent to execute complex tasks by calling
+  > plans as sub-routines.
+  >
+  > Core Responsibilities:
+  > - **Hierarchical Plan Execution:** Manages a plan execution stack to enable
+  >   plans to call other plans via the `call_plan` directive. This allows for
+  >   modular, reusable, and complex task decomposition. A maximum recursion depth
+  >   is enforced to guarantee decidability.
+  > - **Plan Validation:** Contains the in-memory plan validator. Before execution,
+  >   it parses a plan and simulates its execution against a Finite State Machine
+  >   (FSM) to ensure it complies with the agent's operational protocols.
+  > - **"Registry-First" Plan Resolution:** When resolving a `call_plan` directive,
+  >   it first attempts to look up the plan by its logical name in the
+  >   `knowledge_core/plan_registry.json`. If not found, it falls back to treating
+  >   the argument as a direct file path.
+  > - **FSM-Governed Lifecycle:** The entire workflow, from orientation to
+  >   finalization, is governed by a strict FSM definition (e.g., `tooling/fsm.json`)
+  >   to ensure predictable and auditable behavior.
+  >
+  > This module is designed as a library to be controlled by an external shell
+  > (e.g., `agent_shell.py`), making its interaction purely programmatic.
+
+- **`tooling/master_control_cli.py`**:
+
+  > The official command-line interface for the agent's master control loop.
+  >
+  > This script is now a lightweight wrapper that passes control to the new,
+  > API-driven `agent_shell.py`. It preserves the command-line interface while
+  > decoupling the entry point from the FSM implementation.
+
+- **`tooling/message_user.py`**:
+
+  > A dummy tool that prints its arguments to simulate the message_user tool.
+  >
+  > This script is a simple command-line utility that takes a string as an
+  > argument and prints it to standard output, prefixed with "[Message User]:".
+  > Its purpose is to serve as a stand-in or mock for the actual `message_user`
+  > tool in testing environments where the full agent framework is not required.
+  >
+  > This allows for the testing of scripts or workflows that call the
+  > `message_user` tool without needing to invoke the entire agent messaging
+  > subsystem.
+
+- **`tooling/pda_parser.py`**:
+
+  > A parser for pLLLU (paraconsistent Linear Logic with Undeterminedness) formulas.
+  >
+  > This script uses the PLY (Python Lex-Yacc) library to define a lexer and a
+  > parser for a simple, string-based representation of pLLLU formulas. It can
+  > handle basic atomic formulas, unary operators (like negation and consistency),
+  > and binary operators (like implication and conjunction).
+  >
+  > The main function `parse_formula` takes a string and returns a simple AST
+  > (Abstract Syntax Tree) represented as nested tuples.
+
+- **`tooling/plan_executor.py`**:
+
+  > A simple plan executor for simulating agent behavior.
+  >
+  > This script reads a plan file, parses it, and executes the commands in a
+  > simplified, simulated environment. It supports a limited set of tools
+  > (`message_user` and `run_in_bash_session`) to provide a basic demonstration
+  > of how an agent would execute a plan.
+
+- **`tooling/plan_manager.py`**:
+
+  > Provides a command-line interface for managing the agent's Plan Registry.
+  >
+  > This script is the administrative tool for the Plan Registry, a key component
+  > of the Context-Free Development Cycle (CFDC) that enables hierarchical and
+  > modular planning. The registry, located at `knowledge_core/plan_registry.json`,
+  > maps human-readable, logical names to the file paths of specific plans. This
+  > decouples the `call_plan` directive from hardcoded file paths, making plans
+  > more reusable and the system more robust.
+  >
+  > This CLI provides three essential functions:
+  > - **register**: Associates a new logical name with a plan file path, adding it
+  >   to the central registry.
+  > - **deregister**: Removes an existing logical name and its associated path from
+  >   the registry.
+  > - **list**: Displays all current name-to-path mappings in the registry.
+  >
+  > By providing a simple, standardized interface for managing this library of
+  > reusable plans, this tool improves the agent's ability to compose complex
+  > workflows from smaller, validated sub-plans.
+
+- **`tooling/plan_parser.py`**:
+
+  > Parses a plan file into a structured list of commands.
+  >
+  > This module provides the `parse_plan` function and the `Command` dataclass,
+  > which are central to the agent's ability to understand and execute plans.
+  > The parser correctly handles multi-line arguments and ignores comments,
+  > allowing for robust and readable plan files.
+
+- **`tooling/plllu_interpreter.py`**:
+
+  > A resource-sensitive, four-valued interpreter for pLLLU formulas.
+  >
+  > This script implements an interpreter for the pLLLU language. It operates on
+  > an AST generated by the `pda_parser.py` script. The interpreter is designed
+  > to be resource-sensitive, meaning that each atomic formula in the initial
+  > context must be consumed exactly once during the evaluation of the proof.
+  >
+  > The logic is four-valued, supporting TRUE, FALSE, BOTH, and NEITHER, allowing
+  > it to reason about paraconsistent and paracomplete states.
+  >
+  > The core of the interpreter is the `FourValuedInterpreter` class, which
+  > recursively walks the AST, consuming resources from a context (a Counter of
+  > available atoms) and returning the resulting logical value.
+
+- **`tooling/plllu_runner.py`**:
+
+  > A command-line runner for pLLLU files.
+  >
+  > This script provides an entry point for executing `.plllu` files. It
+  > integrates the pLLLU lexer, parser, and interpreter to execute the logic
+  > defined in a given pLLLU source file and print the result.
+
+- **`tooling/pre_submit_check.py`**:
+
+  > _No module-level docstring found._
+
+- **`tooling/protocol_compiler.py`**:
+
+  > Compiles source protocol files into unified, human-readable and machine-readable artifacts.
+  >
+  > This script is the engine behind the "protocol as code" principle. It discovers,
+  > validates, and assembles protocol definitions from a source directory (e.g., `protocols/`)
+  > into high-level documents like `AGENTS.md`.
+  >
+  > Key Functions:
+  > - **Discovery:** Scans a directory for source files, including `.protocol.json`
+  >   (machine-readable rules) and `.protocol.md` (human-readable context).
+  > - **Validation:** Uses a JSON schema (`protocol.schema.json`) to validate every
+  >   `.protocol.json` file, ensuring all protocol definitions are syntactically
+  >   correct and adhere to the established structure.
+  > - **Compilation:** Combines the human-readable markdown and the machine-readable
+  >   JSON into a single, cohesive Markdown file, embedding the JSON in code blocks.
+  > - **Documentation Injection:** Can inject other generated documents, like the
+  >   `SYSTEM_DOCUMENTATION.md`, into the final output at specified locations.
+  > - **Knowledge Graph Generation:** Optionally, it can process the validated JSON
+  >   protocols and serialize them into an RDF knowledge graph (in Turtle format),
+  >   creating a machine-queryable version of the agent's governing rules.
+  >
+  > This process ensures that `AGENTS.md` and other protocol documents are not edited
+  > manually but are instead generated from a validated, single source of truth,
+  > making the agent's protocols robust, verifiable, and maintainable.
+
+- **`tooling/protocol_updater.py`**:
+
+  > A command-line tool for programmatically updating protocol source files.
+  >
+  > This script provides the mechanism for the agent to perform self-correction
+  > by modifying its own governing protocols based on structured, actionable
+  > lessons. It is a key component of the Protocol-Driven Self-Correction (PDSC)
+  > workflow.
+  >
+  > The tool operates on the .protocol.json files located in the `protocols/`
+  > directory, performing targeted updates based on command-line arguments.
+
+- **`tooling/refactor.py`**:
+
+  > A tool for performing automated symbol renaming in Python code.
+  >
+  > This script provides a command-line interface to find a specific symbol
+  > (a function or a class) in a given Python file and rename it, along with all of
+  > its textual references throughout the entire repository. This provides a safe
+  > and automated way to perform a common refactoring task, reducing the risk of
+  > manual errors.
+  >
+  > The tool operates in three main stages:
+  > 1.  **Definition Finding:** It uses Python's Abstract Syntax Tree (AST) module
+  >     to parse the source file and precisely locate the definition of the target
+  >     symbol. This ensures that the tool is targeting the correct code construct.
+  > 2.  **Reference Finding:** It performs a text-based search across the specified
+  >     search path (defaulting to the entire repository) to find all files that
+  >     mention the symbol's old name.
+  > 3.  **Plan Generation:** Instead of modifying files directly, it generates a
+  >     refactoring "plan." This plan is a sequence of `replace_with_git_merge_diff`
+  >     commands, one for each file that needs to be changed. The path to this
+  >     generated plan file is printed to standard output.
+  >
+  > This plan-based approach allows the agent's master controller to execute the
+  > refactoring in a controlled, verifiable, and atomic way, consistent with its
+  > standard operational procedures.
+
+- **`tooling/reliable_ls.py`**:
+
+  > A tool for reliably listing files and directories.
+  >
+  > This script provides a consistent, sorted, and recursive listing of files and
+  > directories, excluding the `.git` directory. It is intended to be a more
+  > reliable alternative to the standard `ls` command for agent use cases.
+
+- **`tooling/reorientation_manager.py`**:
+
+  > Re-orientation Manager
+  >
+  > This script is the core of the automated re-orientation process. It is
+  > designed to be triggered by the build system whenever the agent's core
+  > protocols (`AGENTS.md`) are re-compiled.
+  >
+  > The manager performs the following key functions:
+  > 1.  **Diff Analysis:** It compares the old version of AGENTS.md with the new
+  >     version to identify new protocols, tools, or other key concepts that have
+  >     been introduced.
+  > 2.  **Temporal Orientation (Shallow Research):** For each new concept, it
+  >     invokes the `temporal_orienter.py` tool to fetch a high-level summary from
+  >     an external knowledge base like DBpedia. This ensures the agent has a
+  >     baseline understanding of new terms.
+  > 3.  **Knowledge Storage:** The summaries from the temporal orientation are
+  >     stored in a structured JSON file (`knowledge_core/temporal_orientations.json`),
+  >     creating a persistent, queryable knowledge artifact.
+  > 4.  **Deep Research Trigger:** It analyzes the nature of the changes. If a
+  >     change is deemed significant (e.g., the addition of a new core
+  >     architectural protocol), it programmatically triggers a formal L4 Deep
+  >     Research Cycle by creating a `deep_research_required.json` file.
+  >
+  > This automated workflow ensures that the agent never operates with an outdated
+  > understanding of its own protocols. It closes the loop between protocol
+  > modification and the agent's self-awareness, making the system more robust,
+  > adaptive, and reliable.
+
+- **`tooling/research.py`**:
+
+  > This module contains the logic for executing research tasks based on a set of
+  > constraints. It acts as a dispatcher, calling the appropriate tool (e.g.,
+  > read_file, google_search) based on the specified target and scope.
+
+- **`tooling/research_planner.py`**:
+
+  > This module is responsible for generating a formal, FSM-compliant research plan
+  > for a given topic. The output is a string that can be executed by the agent's
+  > master controller.
+
+- **`tooling/self_correction_orchestrator.py`**:
+
+  > Orchestrates the Protocol-Driven Self-Correction (PDSC) workflow.
+  >
+  > This script is the engine of the automated feedback loop. It reads structured,
+  > actionable lessons from `knowledge_core/lessons.jsonl` and uses the
+  > `protocol_updater.py` tool to apply them to the source protocol files.
+
+- **`tooling/self_improvement_cli.py`**:
+
+  > Analyzes agent activity logs to identify opportunities for self-improvement.
+  >
+  > This script is a command-line tool that serves as a key part of the agent's
+  > meta-cognitive loop. It parses the structured activity log
+  > (`logs/activity.log.jsonl`) to identify patterns that may indicate
+  > inefficiencies or errors in the agent's workflow.
+  >
+  > The primary analysis currently implemented is:
+  > - **Planning Efficiency Analysis:** It scans the logs for tasks that required
+  >   multiple `set_plan` actions. A high number of plan revisions for a single
+  >   task can suggest that the initial planning phase was insufficient, the task
+  >   was poorly understood, or the agent struggled to adapt to unforeseen
+  >   challenges.
+  >
+  > By flagging these tasks, the script provides a starting point for a deeper
+  > post-mortem analysis, helping the agent (or its developers) to understand the
+  > root causes of the planning churn and to develop strategies for more effective
+  > upfront planning in the future.
+  >
+  > The tool is designed to be extensible, with future analyses (such as error
+  > rate tracking or tool usage anti-patterns) to be added as the system evolves.
+
+- **`tooling/standard_agents_compiler.py`**:
+
+  > A compiler that generates a simplified, standard-compliant `AGENTS.md` file.
+  >
+  > This script acts as an "adapter" to make the repository more accessible to
+  > third-party AI agents that expect a conventional set of instructions. While the
+  > repository's primary `AGENTS.md` is a complex, hierarchical, and
+  > machine-readable artifact for its own specialized agent, the `AGENTS.standard.md`
+  > file produced by this script offers a simple, human-readable summary of the
+  > most common development commands.
+  >
+  > The script works by:
+  > 1.  **Parsing the Makefile:** It dynamically parses the project's `Makefile`,
+  >     which is the single source of truth for high-level commands. It specifically
+  >     extracts the exact commands for common targets like `install`, `test`,
+  >     `lint`, and `format`. This ensures the generated instructions are never
+  >     stale.
+  > 2.  **Injecting into a Template:** It injects these extracted commands into a
+  >     pre-defined, user-friendly Markdown template.
+  > 3.  **Generating the Artifact:** The final output is written to
+  >     `AGENTS.standard.md`, providing a simple, stable, and conventional entry
+  >     point for external tools, effectively bridging the gap between the complex
+  >     internal protocol system and the broader agent ecosystem.
+
+- **`tooling/state.py`**:
+
+  > Defines the core data structures for managing the agent's state.
+  >
+  > This module provides the `AgentState` and `PlanContext` dataclasses, which are
+  > fundamental to the operation of the Context-Free Development Cycle (CFDC). These
+  > structures allow the `master_control.py` orchestrator to maintain a complete,
+  > snapshot-able representation of the agent's progress through a task.
+  >
+  > - `AgentState`: The primary container for all information related to the current
+  >   task, including the plan execution stack, message history, and error states.
+  > - `PlanContext`: A specific structure that holds the state of a single plan
+  >   file, including its content and the current execution step. This is the
+  >   element that gets pushed onto the `plan_stack` in `AgentState`.
+  >
+  > Together, these classes enable the hierarchical, stack-based planning and
+  > execution that is the hallmark of the CFDC.
+
+- **`tooling/symbol_map_generator.py`**:
+
+  > Generates a code symbol map for the repository to aid in contextual understanding.
+  >
+  > This script creates a `symbols.json` file in the `knowledge_core` directory,
+  > which acts as a high-level index of the codebase. This map contains information
+  > about key programming constructs like classes and functions, including their
+  > name, location (file path and line number), and language.
+  >
+  > The script employs a two-tiered approach for symbol generation:
+  > 1.  **Universal Ctags (Preferred):** It first checks for the presence of the
+  >     `ctags` command-line tool. If available, it uses `ctags` to perform a
+  >     comprehensive, multi-language scan of the repository. This is the most
+  >     robust and accurate method.
+  > 2.  **AST Fallback (Python-only):** If `ctags` is not found, the script falls
+  >     back to using Python's built-in Abstract Syntax Tree (`ast`) module. This
+  >     method parses all `.py` files and extracts symbol information for Python
+  >     code. While less comprehensive than `ctags`, it ensures that a baseline
+  >     symbol map is always available.
+  >
+  > The resulting `symbols.json` artifact is a critical input for the agent's
+  > orientation and planning phases, allowing it to quickly locate relevant code
+  > and understand the structure of the repository without having to read every file.
+
+- **`tooling/udc_orchestrator.py`**:
+
+  > An orchestrator for executing Unrestricted Development Cycle (UDC) plans.
+  >
+  > This script provides a sandboxed environment for running UDC plans, which are
+  > low-level assembly-like programs that can perform Turing-complete computations.
+  > The orchestrator acts as a virtual machine with a tape-based memory model,
+  > registers, and a set of simple instructions.
+  >
+  > To prevent non-termination and other resource-exhaustion issues, the
+  > orchestrator imposes strict limits on the number of instructions executed,
+  > the amount of memory used, and the total wall-clock time.
+
+---
+
+# Security Protocol
+
+This document outlines the security policies and procedures for this project. It includes guidelines for handling sensitive data, reporting vulnerabilities, and maintaining a secure development environment. All contributors are expected to adhere to these protocols to ensure the integrity and safety of the project.
 
 ---
 
@@ -753,7 +1979,6 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
   "rules": []
 }
 ```
-
 
 ---
 
@@ -775,7 +2000,6 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
   ]
 }
 ```
-
 
 ---
 
@@ -817,6 +2041,2460 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
   ]
 }
 ```
+
+---
+
+# Protocol: Speculative Execution
+
+This protocol empowers the agent to engage in creative and exploratory tasks when it is otherwise idle. It provides a formal framework for the agent to generate novel ideas, plans, or artifacts that are not direct responses to a user request, but are instead products of its own "imagination" and analysis of the repository.
+
+The goal is to enable proactive, creative problem-solving and self-improvement, allowing the agent to "dream" productively within safe and well-defined boundaries.
+
+## Rules
+
+- **`idle-state-trigger`**: The Speculative Execution Protocol can only be invoked when the agent has no active, user-assigned task. This ensures that speculative work never interferes with primary duties.
+- **`formal-proposal-required`**: The first action in any speculative task must be the creation of a formal proposal document. This document must outline the objective, rationale, and a detailed plan for the task.
+- **`resource-constraints`**: All speculative tasks must operate under predefined resource constraints (e.g., time limits, computational resources) to prevent runaway processes.
+- **`user-review-gate`**: The final output or artifact of a speculative task cannot be integrated or submitted directly. It must be presented to the user for formal review and approval.
+- **`speculative-logging`**: All logs, artifacts, and actions generated during a speculative task must be clearly tagged with a `speculative` flag to distinguish them from standard, user-directed work.
+
+---
+
+# System Documentation
+
+---
+
+## `tooling/` Directory
+
+### `tooling/__init__.py`
+
+This module contains the various tools and utilities that support the agent's
+development, testing, and operational workflows.
+
+The tools in this package are the building blocks of the agent's capabilities,
+ranging from code analysis and refactoring to protocol compilation and
+self-correction. Each script is designed to be a self-contained unit of
+functionality that can be invoked either from the command line or programmatically
+by the agent's master control system.
+
+This __init__.py file marks the 'tooling' directory as a Python package,
+allowing for the organized import of its various modules.
+
+### `tooling/agent_shell.py`
+
+The new, interactive, API-driven entry point for the agent.
+
+This script replaces the old file-based signaling system with a direct,
+programmatic interface to the MasterControlGraph FSM. It is responsible for:
+1.  Initializing the agent's state and a centralized logger.
+2.  Instantiating and running the MasterControlGraph.
+3.  Driving the FSM by calling its methods and passing data and the logger.
+4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans
+    and respond to requests for action.
+
+
+**Public Functions:**
+
+
+- #### `def find_fsm_transition(fsm, source_state, trigger)`
+
+  > Finds the destination state for a given source and trigger.
+
+
+- #### `def main()`
+
+  > Main entry point for the agent shell.
+
+
+- #### `def run_agent_loop(task_description, tools, model=None)`
+
+  > The main loop that drives the agent's lifecycle via the FSM.
+
+
+### `tooling/appl_runner.py`
+
+A command-line tool for executing APPL files.
+
+This script provides a simple interface to run APPL files using the main
+`run.py` interpreter. It captures and prints the output of the execution,
+and provides detailed error reporting if the execution fails.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Main function to run the APPL runner from the command line.
+
+
+- #### `def run_appl_file(filepath)`
+
+  > Executes an APPL file using the run.py interpreter.
+  >
+  > Args:
+  >     filepath: The path to the .appl file to execute.
+  >
+  > Returns:
+  >     The output from the APPL interpreter.
+
+
+### `tooling/appl_to_lfi_ill.py`
+
+A compiler that translates APPL (a simple functional language) to LFI-ILL.
+
+This script takes a Python file containing an APPL AST, and compiles it into
+an LFI-ILL AST. The resulting AST is then written to a `.lfi_ill` file.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+
+**Public Classes:**
+
+
+- #### `class ApplToLfiIllCompiler`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self)`
+
+  - ##### `def compile(self, appl_node)`
+
+    > Recursively walks the APPL AST and translates it to an LFI ILL AST.
+
+  - ##### `def compile_type(self, type_)`
+
+    > Translates APPL types to LFI ILL types.
+
+
+### `tooling/auditor.py`
+
+A unified auditing tool for maintaining repository health and compliance.
+
+This script combines the functionality of several disparate auditing tools into a
+single, comprehensive command-line interface. It serves as the central tool for
+validating the key components of the agent's architecture, including protocols,
+plans, and documentation.
+
+The auditor can perform the following checks:
+1.  **Protocol Audit (`protocol`):**
+    - Checks if `AGENTS.md` artifacts are stale compared to their source files.
+    - Verifies protocol completeness by comparing tools used in logs against
+      tools defined in protocols.
+    - Analyzes tool usage frequency (centrality).
+2.  **Plan Registry Audit (`plans`):**
+    - Scans `knowledge_core/plan_registry.json` for "dead links" where the
+      target plan file does not exist.
+3.  **Documentation Audit (`docs`):**
+    - Scans the generated `SYSTEM_DOCUMENTATION.md` to find Python modules
+      that are missing module-level docstrings.
+
+The tool is designed to be run from the command line and can execute specific
+audits or all of them, generating a consolidated `audit_report.md` file.
+
+
+**Public Functions:**
+
+
+- #### `def find_all_agents_md_files(root_dir)`
+
+
+- #### `def get_protocol_tools_from_agents_md(agents_md_paths)`
+
+
+- #### `def get_used_tools_from_log(log_path)`
+
+
+- #### `def main()`
+
+
+- #### `def run_doc_audit()`
+
+
+- #### `def run_plan_registry_audit()`
+
+
+- #### `def run_protocol_audit()`
+
+
+### `tooling/aura_executor.py`
+
+This script serves as the command-line executor for `.aura` files.
+
+It bridges the gap between the high-level Aura scripting language and the
+agent's underlying Python-based toolset. The executor is responsible for:
+1.  Parsing the `.aura` source code using the lexer and parser from the
+    `aura_lang` package.
+2.  Setting up an execution environment for the interpreter.
+3.  Injecting a "tool-calling" capability into the Aura environment, which
+    allows Aura scripts to dynamically invoke registered Python tools
+    (e.g., `hdl_prover`, `environmental_probe`).
+4.  Executing the parsed program and printing the final result.
+
+This makes it a key component for enabling more expressive and complex
+automation scripts for the agent.
+
+
+**Public Functions:**
+
+
+- #### `def dynamic_agent_call_tool(tool_name_obj, *args)`
+
+  > Dynamically imports and calls a tool from the 'tooling' directory and wraps the result.
+  >
+  > This function provides the bridge between the Aura scripting environment and the
+  > Python-based agent tools. It takes the tool's module name and arguments,
+  > runs the tool in a subprocess, and wraps the captured output in an Aura `Object`.
+  >
+  > Args:
+  >     tool_name_obj: An Aura Object containing the tool's module name (e.g., 'hdl_prover').
+  >     *args: A variable number of Aura Objects to be passed as string arguments to the tool.
+  >
+  > Returns:
+  >     An Aura `Object` containing the tool's stdout as a string, or an error message.
+
+
+- #### `def main()`
+
+  > Main entry point for the Aura script executor.
+
+
+### `tooling/aura_to_lfi_ill.py`
+
+A compiler that translates AURA code to LFI-ILL.
+
+This script takes an AURA file, parses it, and compiles it into an LFI-ILL
+AST. The resulting AST is then written to a `.lfi_ill` file.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+
+**Public Classes:**
+
+
+- #### `class AuraToLfiIllCompiler`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self)`
+
+  - ##### `def compile(self, node)`
+
+  - ##### `def compile_BlockStatement(self, node)`
+
+  - ##### `def compile_CallExpression(self, node)`
+
+  - ##### `def compile_ExpressionStatement(self, node)`
+
+  - ##### `def compile_ForStatement(self, node)`
+
+  - ##### `def compile_FunctionDefinition(self, node)`
+
+  - ##### `def compile_Identifier(self, node)`
+
+  - ##### `def compile_IfStatement(self, node)`
+
+  - ##### `def compile_InfixExpression(self, node)`
+
+  - ##### `def compile_IntegerLiteral(self, node)`
+
+  - ##### `def compile_LetStatement(self, node)`
+
+  - ##### `def compile_PrintStatement(self, node)`
+
+  - ##### `def compile_Program(self, node)`
+
+  - ##### `def compile_ReturnStatement(self, node)`
+
+  - ##### `def compile_StringLiteral(self, node)`
+
+  - ##### `def generic_compiler(self, node)`
+
+
+### `tooling/background_researcher.py`
+
+This script performs a simulated research task in the background.
+It takes a task ID as a command-line argument and writes its findings
+to a temporary file that the main agent can poll.
+
+
+**Public Functions:**
+
+
+- #### `def perform_research(task_id)`
+
+  > Simulates a research task and writes the result to a file.
+
+
+### `tooling/builder.py`
+
+A unified, configuration-driven build script for the project.
+
+This script serves as the central entry point for all build-related tasks, such
+as generating documentation, compiling protocols, and running code quality checks.
+It replaces a traditional Makefile's direct command execution with a more
+structured, maintainable, and introspectable approach.
+
+The core logic is driven by a `build_config.json` file, which defines a series
+of "targets." Each target specifies:
+- The `type` of target: "compiler" or "command".
+- For "compiler" types: `compiler` script, `output`, `sources`, and `options`.
+- For "command" types: the `command` to execute.
+
+The configuration also defines "build_groups", which are ordered collections of
+targets (e.g., "all", "quality").
+
+This centralized builder provides several advantages:
+- **Single Source of Truth:** The `build_config.json` file is the definitive
+  source for all build logic.
+- **Consistency:** Ensures all build tasks are executed in a uniform way.
+- **Extensibility:** New build targets can be added by simply updating the
+  configuration file.
+- **Discoverability:** The script can list all available targets and groups.
+
+
+**Public Functions:**
+
+
+- #### `def execute_build(target_name, config)`
+
+  > Executes the build process for a specific target.
+
+
+- #### `def execute_command_target(target_name, target_config)`
+
+  > Executes a 'command' type build target.
+
+
+- #### `def execute_compiler_target(target_name, target_config)`
+
+  > Executes a 'compiler' type build target.
+
+
+- #### `def load_config()`
+
+  > Loads the build configuration file.
+
+
+- #### `def main()`
+
+  > Main function to parse arguments and drive the build process.
+
+
+### `tooling/capability_verifier.py`
+
+A tool to verify that the agent can monotonically improve its capabilities.
+
+This script is designed to provide a formal, automated test for the agent's
+self-correction and learning mechanisms. It ensures that when the agent learns
+a new capability, it does so without losing (regressing) any of its existing
+capabilities. This is a critical safeguard for ensuring robust and reliable
+agent evolution.
+
+The tool works by orchestrating a four-step process:
+1.  **Confirm Initial Failure:** It runs a specific test file that is known to
+    fail, verifying that the agent currently lacks the target capability.
+2.  **Invoke Self-Correction:** It simulates the discovery of a new "lesson" and
+    triggers the `self_correction_orchestrator.py` script, which is responsible
+    for integrating new knowledge and skills.
+3.  **Confirm Final Success:** It runs the same test file again, confirming that
+    the agent has successfully learned the new capability and the test now passes.
+4.  **Check for Regressions:** It runs the full, existing test suite to ensure
+    that the process of learning the new skill has not inadvertently broken any
+    previously functional capabilities.
+
+This provides a closed-loop verification of monotonic improvement, which is a
+cornerstone of the agent's design philosophy.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > A tool to verify that the agent can monotonically improve its capabilities.
+  >
+  > This tool works by:
+  > 1. Running a target test file that is known to fail, confirming the agent lacks a capability.
+  > 2. Invoking the agent's self-correction mechanism to learn the new capability.
+  > 3. Running the target test again to confirm it now passes.
+  > 4. Running the full test suite to ensure no existing capabilities were lost.
+
+
+### `tooling/code_suggester.py`
+
+Handles the generation and application of autonomous code change suggestions.
+
+This tool is a key component of the advanced self-correction loop. It is
+designed to be invoked by the self-correction orchestrator when a lesson
+contains a 'propose-code-change' action.
+
+For its initial implementation, this tool acts as a structured executor. It
+takes a lesson where the 'details' field contains a fully-formed git-style
+merge diff and applies it to the target file. It does this by generating a
+temporary, single-step plan file and signaling its location for the master
+controller to execute.
+
+This establishes the fundamental workflow for autonomous code modification,
+decoupling the suggestion logic from the execution logic. Future iterations
+can enhance this tool with more sophisticated code generation capabilities
+(e.g., using an LLM to generate the diff from a natural language description)
+without altering the core orchestration process.
+
+
+**Public Functions:**
+
+
+- #### `def generate_suggestion_plan(filepath, diff_content)`
+
+  > Generates a temporary, single-step plan file to apply a code change.
+  >
+  > Args:
+  >     filepath: The path to the file that needs to be modified.
+  >     diff_content: The git-style merge diff block to be applied.
+  >
+  > Returns:
+  >     The path to the generated temporary plan file.
+
+
+- #### `def main()`
+
+  > Main entry point for the code suggester tool.
+  > Parses arguments, generates a plan, and prints the plan's path to stdout.
+
+
+### `tooling/context_awareness_scanner.py`
+
+A tool for performing static analysis on a Python file to understand its context.
+
+This script provides a "contextual awareness" scan of a specified Python file
+to help an agent (or a human) understand its role, dependencies, and connections
+within a larger codebase. This is crucial for planning complex changes or
+refactoring efforts, as it provides a snapshot of the potential impact of
+modifying a file.
+
+The scanner performs three main functions:
+1.  **Symbol Definition Analysis:** It uses Python's Abstract Syntax Tree (AST)
+    module to parse the target file and identify all the functions and classes
+    that are defined within it.
+2.  **Import Analysis:** It also uses the AST to find all modules and symbols
+    that the target file imports, revealing its dependencies on other parts of
+    the codebase or external libraries.
+3.  **Reference Finding:** It performs a repository-wide search to find all other
+    files that reference the symbols defined in the target file. This helps to
+    understand how the file is used by the rest of the system.
+
+The final output is a detailed JSON report containing all of this information,
+which can be used as a foundational artifact for automated planning or human review.
+
+
+**Public Functions:**
+
+
+- #### `def find_references(symbol_name, search_path)`
+
+  > Finds all files in a directory that reference a given symbol.
+
+
+- #### `def get_defined_symbols(filepath)`
+
+  > Parses a Python file to find all defined functions and classes.
+
+
+- #### `def get_imported_symbols(filepath)`
+
+  > Parses a Python file to find all imported modules and symbols.
+
+
+- #### `def main()`
+
+
+### `tooling/csdc_cli.py`
+
+A command-line tool for managing the Context-Sensitive Development Cycle (CSDC).
+
+This script provides an interface to validate a development plan against a specific
+CSDC model (A or B) and a given complexity class (P or EXP). It ensures that a
+plan adheres to the strict logical and computational constraints defined by the
+CSDC protocol before it is executed.
+
+The tool performs two main checks:
+1.  **Complexity Analysis:** It analyzes the plan to determine its computational
+    complexity and verifies that it matches the expected complexity class.
+2.  **Model Validation:** It validates the plan's commands against the rules of
+    the specified CSDC model, ensuring that it does not violate any of the
+    model's constraints (e.g., forbidding certain functions).
+
+This serves as a critical gateway for ensuring that all development work within
+the CSDC framework is sound, predictable, and compliant with the governing
+meta-mathematical principles.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+### `tooling/dependency_graph_generator.py`
+
+Scans the repository for dependency files and generates a unified dependency graph.
+
+This script is a crucial component of the agent's environmental awareness,
+providing a clear map of the software supply chain. It recursively searches the
+entire repository for common dependency management files, specifically:
+- `package.json` (for JavaScript/Node.js projects)
+- `requirements.txt` (for Python projects)
+
+It parses these files to identify two key types of relationships:
+1.  **Internal Dependencies:** Links between different projects within this repository.
+2.  **External Dependencies:** Links to third-party libraries and packages.
+
+The final output is a JSON file, `knowledge_core/dependency_graph.json`, which
+represents these relationships as a graph structure with nodes (projects and
+dependencies) and edges (the dependency links). This artifact is a primary
+input for the agent's orientation and planning phases, allowing it to reason
+about the potential impact of its changes.
+
+
+**Public Functions:**
+
+
+- #### `def find_dependency_files(root_dir)`
+
+  > Finds all package.json and requirements.txt files, excluding node_modules.
+
+
+- #### `def generate_dependency_graph(root_dir='.')`
+
+  > Generates a dependency graph for all supported dependency files found.
+
+
+- #### `def main()`
+
+  > Main function to generate and save the dependency graph.
+
+
+- #### `def parse_package_json(package_json_path)`
+
+  > Parses a single package.json file to extract its name and dependencies.
+
+
+- #### `def parse_requirements_txt(requirements_path, root_dir)`
+
+  > Parses a requirements.txt file to extract its dependencies.
+
+
+### `tooling/doc_builder.py`
+
+A unified documentation builder for the project.
+...
+
+
+**Public Functions:**
+
+
+- #### `def find_python_files(directories)`
+
+
+- #### `def format_args(args)`
+
+
+- #### `def generate_documentation_for_module(mod_doc)`
+
+
+- #### `def generate_pages(readme_path, agents_md_path, output_file)`
+
+  > Generates the index.html for GitHub Pages.
+
+
+- #### `def generate_readme(agents_md_path, output_file)`
+
+  > Generates the high-level README.md for a module.
+
+
+- #### `def generate_system_docs(source_dirs, output_file)`
+
+  > Generates the detailed SYSTEM_DOCUMENTATION.md.
+
+
+- #### `def get_module_docstring(filepath)`
+
+  > Parses a Python file and extracts its module-level docstring.
+
+
+- #### `def get_protocol_summary(agents_md_path)`
+
+  > Parses an AGENTS.md file and extracts a list of protocol summaries.
+
+
+- #### `def main()`
+
+
+- #### `def parse_file_for_docs(filepath)`
+
+
+
+**Public Classes:**
+
+
+- #### `class ClassDoc`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, name, docstring, methods)`
+
+
+- #### `class DocVisitor`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self)`
+
+  - ##### `def visit_ClassDef(self, node)`
+
+  - ##### `def visit_FunctionDef(self, node)`
+
+
+- #### `class FunctionDoc`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, name, signature, docstring)`
+
+
+- #### `class ModuleDoc`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, name, docstring, classes, functions)`
+
+
+### `tooling/document_scanner.py`
+
+A tool for scanning the repository for human-readable documents and extracting their text content.
+
+This script is a crucial component of the agent's initial information-gathering
+and orientation phase. It allows the agent to ingest knowledge from unstructured
+or semi-structured documents that are not part of the formal codebase, but which
+may contain critical context, requirements, or specifications.
+
+The scanner searches a given directory for files with common document extensions:
+- `.pdf`: Uses the `pypdf` library to extract text from PDF files.
+- `.md`: Reads Markdown files.
+- `.txt`: Reads plain text files.
+
+The output is a dictionary where the keys are the file paths of the discovered
+documents and the values are their extracted text content. This data can then
+be used by the agent to inform its planning and execution process. This tool
+is essential for bridging the gap between human-written documentation and the
+agent's operational awareness.
+
+
+**Public Functions:**
+
+
+- #### `def scan_documents(directory='.')`
+
+  > Scans a directory for PDF, Markdown, and text files and extracts their content.
+
+
+### `tooling/environmental_probe.py`
+
+Performs a series of checks to assess the capabilities of the execution environment.
+
+This script is a critical diagnostic tool run at the beginning of a task to
+ensure the agent understands its operational sandbox. It verifies fundamental
+capabilities required for most software development tasks:
+
+1.  **Filesystem I/O:** Confirms that the agent can create, write to, read from,
+    and delete files. It also provides a basic latency measurement for these
+    operations.
+2.  **Network Connectivity:** Checks for external network access by attempting to
+    connect to a highly-available public endpoint (google.com). This is crucial
+    for tasks requiring `git` operations, package downloads, or API calls.
+3.  **Environment Variables:** Verifies that standard environment variables are
+    accessible, which is a prerequisite for many command-line tools.
+
+The script generates a human-readable report summarizing the results of these
+probes, allowing the agent to quickly identify any environmental constraints
+that might impact its ability to complete a task.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Runs all environmental probes and prints a summary report.
+
+
+- #### `def probe_environment_variables()`
+
+  > Checks for the presence of a common environment variable.
+
+
+- #### `def probe_filesystem()`
+
+  > Tests file system write/read/delete capabilities and measures latency.
+
+
+- #### `def probe_network()`
+
+  > Tests network connectivity and measures latency to a reliable external endpoint.
+
+
+### `tooling/fdc_cli.py`
+
+This script provides a command-line interface (CLI) for managing the Finite
+Development Cycle (FDC).
+
+The FDC is a structured workflow for agent-driven software development. This CLI
+is the primary human interface for interacting with that cycle, providing
+commands to:
+- **start:** Initiates a new development task, triggering the "Advanced
+  Orientation and Research Protocol" (AORP) to ensure the agent is fully
+  contextualized.
+- **close:** Formally concludes a task, creating a post-mortem template for
+  analysis and lesson-learning.
+- **validate:** Checks a given plan file for both syntactic and semantic
+  correctness against the FDC's governing Finite State Machine (FSM). This
+  ensures that a plan is executable and will not violate protocol.
+- **analyze:** Examines a plan to determine its computational complexity (e.g.,
+  Constant, Polynomial, Exponential) and its modality (Read-Only vs.
+  Read-Write), providing insight into the plan's potential impact.
+
+
+**Public Functions:**
+
+
+- #### `def analyze_plan(plan_filepath, return_results=False)`
+
+  > Analyzes a plan file to determine its complexity class and modality.
+
+
+- #### `def close_task(task_id)`
+
+  > Automates the closing of a Finite Development Cycle.
+
+
+- #### `def main()`
+
+
+- #### `def start_task(task_id)`
+
+  > Initiates the AORP cascade for a new task.
+
+
+- #### `def validate_plan(plan_filepath)`
+
+
+### `tooling/filesystem_lister.py`
+
+A tool for listing files and directories in a repository, with an option to respect .gitignore.
+
+
+**Public Functions:**
+
+
+- #### `def list_all_files_and_dirs(root_dir='.', use_gitignore=True)`
+
+  > Walks through a directory and its subdirectories and returns a sorted list of all
+  > files and directories.
+  >
+  > Args:
+  >     root_dir (str): The root directory to start the walk from.
+  >     use_gitignore (bool): If True, respects the patterns in the .gitignore file.
+
+
+### `tooling/halting_heuristic_analyzer.py`
+
+A static analysis tool to estimate the termination risk of a UDC plan.
+
+This script reads a `.udc` plan file, parses its instructions, and uses a
+series of heuristics to identify potential infinite loops. It is not a
+formal decider (as the halting problem is undecidable), but rather a
+practical tool to flag common patterns that lead to non-termination.
+
+The analysis focuses on:
+1.  Detecting backward jumps, which are the primary indicator of loops.
+2.  Analyzing the exit conditions of these loops (e.g., `JE`, `JNE`).
+3.  Checking if the registers involved in the exit conditions are modified
+    within the loop body in a way that is likely to lead to termination.
+
+The tool outputs a JSON report detailing the estimated risk level (LOW,
+MEDIUM, HIGH) and the specific loops that were identified.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Main entry point for the command-line tool.
+
+
+
+**Public Classes:**
+
+
+- #### `class HaltingHeuristicAnalyzer`
+
+  > Performs static analysis on a UDC plan to provide a heuristic-based
+  > estimate of its likelihood to terminate.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, plan_path)`
+
+  - ##### `def analyze(self)`
+
+    > Runs the full analysis pipeline and returns a report.
+
+
+- #### `class Instruction`
+
+
+- #### `class Loop`
+
+
+### `tooling/hdl_prover.py`
+
+A command-line tool for proving sequents in Intuitionistic Linear Logic.
+
+This script provides a basic interface to a simple logic prover. It takes a
+sequent as a command-line argument, parses it into a logical structure, and
+then attempts to prove it using a rudimentary proof search algorithm.
+
+The primary purpose of this tool is to allow the agent to perform formal
+reasoning and verification tasks by checking the validity of logical entailments.
+For example, it can be used to verify that a certain conclusion follows from a
+set of premises according to the rules of linear logic.
+
+The current implementation uses a very basic parser and proof algorithm,
+serving as a placeholder and demonstration for a more sophisticated, underlying
+logic engine.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+- #### `def parse_formula(s)`
+
+  > A very basic parser for formulas.
+
+
+- #### `def parse_sequent(s)`
+
+  > A very basic parser for sequents.
+
+
+- #### `def prove_sequent(sequent)`
+
+  > A very simple proof search algorithm.
+  > This is a placeholder for a more sophisticated prover.
+
+
+### `tooling/hierarchical_compiler.py`
+
+A hierarchical build system for compiling nested protocol modules.
+
+This script orchestrates the compilation of `AGENTS.md` and `README.md` files
+across a repository with a nested or hierarchical module structure. It is a key
+component of the system's ability to manage complexity by allowing protocols to
+be defined in a modular, distributed way while still being presented as a unified,
+coherent whole at each level of the hierarchy.
+
+The compiler operates in two main passes:
+
+**Pass 1: Documentation Compilation (Bottom-Up)**
+1.  **Discovery:** It finds all `protocols` directories in the repository, which
+    signify the root of a documentation module.
+2.  **Bottom-Up Traversal:** It processes these directories from the most deeply
+    nested ones upwards. This ensures that child modules are always built before
+    their parents.
+3.  **Child Summary Injection:** For each compiled child module, it generates a
+    summary of its protocols and injects this summary into the parent's
+    `protocols` directory as a temporary file.
+4.  **Parent Compilation:** When the parent module is compiled, the standard
+    `protocol_compiler.py` automatically includes the injected child summaries,
+    creating a single `AGENTS.md` file that contains both the parent's native
+    protocols and the full protocols of all its direct children.
+5.  **README Generation:** After each `AGENTS.md` is compiled, the corresponding
+    `README.md` is generated.
+
+**Pass 2: Centralized Knowledge Graph Compilation**
+1.  After all documentation is built, it performs a full repository scan to find
+    every `*.protocol.json` file.
+2.  It parses all of these files and compiles them into a single, centralized
+    RDF knowledge graph (`protocols.ttl`). This provides a unified,
+    machine-readable view of every protocol defined anywhere in the system.
+
+This hierarchical approach allows for both localized, context-specific protocol
+definitions and a holistic, system-wide understanding of the agent's governing rules.
+
+
+**Public Functions:**
+
+
+- #### `def cleanup_summaries(directory)`
+
+  > Removes temporary summary files from a protocols directory.
+
+
+- #### `def compile_centralized_knowledge_graph()`
+
+  > Finds all protocol.json files in the entire repository, loads them, and
+  > compiles them into a single, unified knowledge graph.
+
+
+- #### `def find_protocol_dirs(root_dir)`
+
+  > Finds all directories named 'protocols' within the root directory,
+  > ignoring any special-cased directories.
+
+
+- #### `def generate_summary(child_agents_md_path)`
+
+  > Extracts the full, rendered protocol blocks from a child AGENTS.md file.
+  > This function finds all protocol definitions (human-readable markdown and
+  > the associated machine-readable JSON block) and concatenates them into a
+  > single string to be injected into the parent AGENTS.md.
+
+
+- #### `def get_parent_module(module_path, all_module_paths)`
+
+  > Finds the direct parent module of a given module.
+
+
+- #### `def main()`
+
+  > Main function to orchestrate the hierarchical compilation.
+
+
+- #### `def run_compiler(source_dir, doc_sources)`
+
+  > Invokes the protocol_compiler.py script as a library.
+
+
+- #### `def run_readme_generator(source_agents_md)`
+
+  > Invokes the doc_builder.py script to generate a README.
+
+
+- #### `def run_system_doc_generator()`
+
+  > Invokes the doc_builder.py script to generate system docs.
+
+
+### `tooling/knowledge_compiler.py`
+
+Extracts structured lessons from post-mortem reports and compiles them into a
+centralized, long-term knowledge base.
+
+This script is a core component of the agent's self-improvement feedback loop.
+After a task is completed, a post-mortem report is generated that includes a
+section for "Corrective Actions & Lessons Learned." This script automates the
+process of parsing that section to extract key insights.
+
+It identifies pairs of "Lesson" and "Action" statements and transforms them
+into a standardized, machine-readable format. These formatted entries are then
+appended to the `knowledge_core/lessons.jsonl` file, which serves as the
+agent's persistent memory of what has worked, what has failed, and what can be
+improved in future tasks.
+
+The script is executed via the command line, taking the path to a completed
+post-mortem file as its primary argument.
+
+
+**Public Functions:**
+
+
+- #### `def extract_lessons_from_postmortem(postmortem_content)`
+
+  > Parses a post-mortem report to extract lessons learned.
+  > Handles multiple possible section headers and formats.
+
+
+- #### `def extract_metadata_from_postmortem(postmortem_content)`
+
+  > Parses a post-mortem report to extract metadata like Task ID and Date.
+
+
+- #### `def format_lesson_entry(metadata, lesson_data)`
+
+  > Formats an extracted lesson into a structured JSON object.
+
+
+- #### `def main()`
+
+
+- #### `def parse_action_to_command(action_text)`
+
+  > Parses a natural language action string into a machine-executable command.
+  >
+  > This is the core of translating insights into automated actions. It uses
+  > pattern matching to identify specific, supported commands.
+
+
+### `tooling/knowledge_integrator.py`
+
+Enriches the local knowledge graph with data from external sources like DBPedia.
+
+This script loads the RDF graph generated from the project's protocols,
+identifies key concepts (like tools and rules), queries the DBPedia SPARQL
+endpoint to find related information, and merges the external data into a new,
+enriched knowledge graph.
+
+
+**Public Functions:**
+
+
+- #### `def extract_concepts(graph)`
+
+  > Extracts key concepts (e.g., tools) from the local graph to query externally.
+  > This version dynamically extracts tool names from the graph.
+
+
+- #### `def load_local_graph(graph_file)`
+
+  > Loads the local RDF graph from a file.
+
+
+- #### `def query_dbpedia(concept)`
+
+  > Queries DBPedia for a given concept and returns a graph of results.
+
+
+- #### `def run_knowledge_integration(input_graph_path, output_graph_path)`
+
+  > The main library function to run the knowledge integration process.
+  > It loads a graph, extracts concepts, queries DBPedia, and saves the
+  > enriched graph.
+
+
+### `tooling/lba_validator.py`
+
+A Linear Bounded Automaton (LBA) for validating Context-Sensitive Development Cycle (CSDC) plans.
+
+This module implements a validator that enforces the context-sensitive rules of the CSDC.
+Unlike a simple FSM, an LBA can inspect the entire input "tape" (the plan) to make
+validation decisions. This is necessary to enforce rules where the validity of one
+command depends on the presence or absence of another command elsewhere in the plan.
+
+The CSDC defines two mutually exclusive models:
+- Model A: Permits `define_set_of_names`, but forbids `define_diagonalization_function`.
+- Model B: Permits `define_diagonalization_function`, but forbids `define_set_of_names`.
+
+This validator checks for these co-occurrence constraints.
+
+
+**Public Classes:**
+
+
+- #### `class LBAValidator`
+
+  > A validator that uses LBA principles to enforce CSDC rules.
+
+
+  **Methods:**
+
+  - ##### `def validate(self, plan_content, model)`
+
+    > Validates a plan against a given CSDC model.
+    >
+    > Args:
+    >     plan_content: The string content of the plan.
+    >     model: The CSDC model to validate against ('A' or 'B').
+    >
+    > Returns:
+    >     A tuple containing a boolean indicating validity and a string with an error message.
+
+
+### `tooling/lfi_ill_halting_decider.py`
+
+A tool for analyzing the termination of LFI-ILL programs.
+
+This script takes an LFI-ILL file, interprets it in a paraconsistent logic
+environment, and reports on its halting status. It does this by setting up
+a paradoxical initial state and observing how the program resolves it.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+
+**Public Classes:**
+
+
+- #### `class LfiIllHaltingDecider`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, lfi_ill_file)`
+
+  - ##### `def analyze(self)`
+
+    > Analyzes the LFI ILL program for termination.
+
+
+### `tooling/lfi_udc_model.py`
+
+A paraconsistent execution model for UDC plans.
+
+This module provides the classes necessary to interpret a UDC (Un-decidable
+Computation) plan within a Logic of Formal Inconsistency (LFI). Instead of
+concrete values, the state of the machine (registers, tape, etc.) is modeled
+using paraconsistent truth values (TRUE, FALSE, BOTH, NEITHER).
+
+This allows the system to reason about paradoxical programs, such as a program
+that halts if and only if it does not halt. By executing the program under
+paraconsistent semantics, the model can arrive at a final state of `BOTH`,
+effectively demonstrating the paradoxical nature of the input without crashing.
+
+Key classes:
+- `ParaconsistentTruth`: An enum for the four truth values.
+- `ParaconsistentState`: A wrapper for a value that holds a paraconsistent truth.
+- `LFIInstruction`: A UDC instruction that operates on paraconsistent states.
+- `LFIExecutor`: A virtual machine that executes a UDC plan using LFI semantics.
+- `ParaconsistentHaltingDecider`: The main entry point that orchestrates the
+  analysis of a UDC plan.
+
+
+**Public Classes:**
+
+
+- #### `class LFIExecutor`
+
+  > A paraconsistent interpreter for UDC plans.
+  >
+  > It models the state of the UDC machine not with concrete values, but with
+  > ParaconsistentState objects. This allows it to explore the consequences
+  > of contradictory assumptions.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, instructions, labels)`
+
+  - ##### `def get_register(self, name)`
+
+    > Gets a register's state, initializing if not present.
+
+  - ##### `def run_step(self)`
+
+    > Executes a single instruction step.
+
+
+- #### `class LFIInstruction`
+
+  > A wrapper for UDC instructions to be used in the LFI Executor.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, opcode, args)`
+
+  - ##### `def __repr__(self)`
+
+  - ##### `def execute(self, executor)`
+
+    > Executes the instruction on the given LFI executor state.
+
+
+- #### `class ParaconsistentHaltingDecider`
+
+  > Analyzes a UDC plan using the LFI Executor to determine its
+  > paraconsistent halting status.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, plan_path, max_steps=100)`
+
+  - ##### `def analyze(self)`
+
+    > Runs the analysis and returns the final paraconsistent halting state.
+
+
+- #### `class ParaconsistentState`
+
+  > A variable whose truth value is modeled paraconsistently.
+  > It can be true, false, both, or neither.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, value=...)`
+
+  - ##### `def __repr__(self)`
+
+  - ##### `def is_consistent(self)`
+
+    > A state is consistent if it's not BOTH.
+
+  - ##### `def is_false(self)`
+
+    > Classical check: Is False in the value set?
+
+  - ##### `def is_true(self)`
+
+    > Classical check: Is True in the value set?
+
+
+- #### `class ParaconsistentTruth`
+
+  > Represents the four truth values in a first-degree entailment logic (FDE),
+  > which is a common foundation for Logics of Formal Inconsistency.
+
+
+  **Methods:**
+
+  - ##### `def __str__(self)`
+
+
+### `tooling/log_failure.py`
+
+A dedicated script to log a catastrophic failure event to the main activity log.
+
+This tool is designed to be invoked in the rare case of a severe, unrecoverable
+error that violates a core protocol. Its primary purpose is to ensure that such
+a critical event is formally and structurally documented in the standard agent
+activity log (`logs/activity.log.jsonl`), even if the main agent loop has
+crashed or been terminated.
+
+The script is pre-configured to log a `SYSTEM_FAILURE` event, specifically
+attributing it to the "Unauthorized use of the `reset_all` tool." This creates a
+permanent, machine-readable record of the failure, which is essential for
+post-mortem analysis, debugging, and the development of future safeguards.
+
+By using the standard `Logger` class, it ensures that the failure log entry
+conforms to the established `LOGGING_SCHEMA.md`, making it processable by
+auditing and analysis tools.
+
+
+**Public Functions:**
+
+
+- #### `def log_catastrophic_failure()`
+
+  > Logs the catastrophic failure event.
+
+
+### `tooling/master_control.py`
+
+The master orchestrator for the agent's lifecycle, implementing the Context-Free Development Cycle (CFDC).
+
+This script, master_control.py, is the heart of the agent's operational loop.
+It implements the CFDC, a hierarchical planning and execution model based on a
+Pushdown Automaton. This allows the agent to execute complex tasks by calling
+plans as sub-routines.
+
+Core Responsibilities:
+- **Hierarchical Plan Execution:** Manages a plan execution stack to enable
+  plans to call other plans via the `call_plan` directive. This allows for
+  modular, reusable, and complex task decomposition. A maximum recursion depth
+  is enforced to guarantee decidability.
+- **Plan Validation:** Contains the in-memory plan validator. Before execution,
+  it parses a plan and simulates its execution against a Finite State Machine
+  (FSM) to ensure it complies with the agent's operational protocols.
+- **"Registry-First" Plan Resolution:** When resolving a `call_plan` directive,
+  it first attempts to look up the plan by its logical name in the
+  `knowledge_core/plan_registry.json`. If not found, it falls back to treating
+  the argument as a direct file path.
+- **FSM-Governed Lifecycle:** The entire workflow, from orientation to
+  finalization, is governed by a strict FSM definition (e.g., `tooling/fsm.json`)
+  to ensure predictable and auditable behavior.
+
+This module is designed as a library to be controlled by an external shell
+(e.g., `agent_shell.py`), making its interaction purely programmatic.
+
+
+**Public Classes:**
+
+
+- #### `class MasterControlGraph`
+
+  > A Finite State Machine (FSM) that enforces the agent's protocol.
+  > This graph reads a state definition and orchestrates the agent's workflow,
+  > ensuring that all protocol steps are followed in the correct order.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, fsm_path='tooling/fsm.json')`
+
+  - ##### `def do_awaiting_result(self, agent_state, logger)`
+
+    > Checks for the result of the background research process.
+
+  - ##### `def do_debugging(self, agent_state, logger)`
+
+    > Handles the debugging state.
+
+  - ##### `def do_execution(self, agent_state, step_result, logger)`
+
+    > Processes the result of a step and advances the execution state.
+
+  - ##### `def do_finalizing(self, agent_state, analysis_content, logger)`
+
+    > Handles the finalization of the task, guiding the agent through
+    > the structured post-mortem process.
+
+  - ##### `def do_generating_code(self, agent_state, logger)`
+
+    > Handles the code generation state.
+
+  - ##### `def do_orientation(self, agent_state, logger, tools)`
+
+    > Executes orientation, including analyzing the last post-mortem and scanning the filesystem.
+
+  - ##### `def do_planning(self, agent_state, plan_content, logger)`
+
+    > Validates a given plan, parses it, and initializes the plan stack.
+
+  - ##### `def do_researching(self, agent_state, logger)`
+
+    > Launches the background research process.
+
+  - ##### `def do_running_tests(self, agent_state, logger)`
+
+    > Handles the test execution state.
+
+  - ##### `def get_current_step(self, agent_state)`
+
+    > Returns the current command to be executed by the agent, or None if execution is complete.
+
+  - ##### `def get_trigger(self, source_state, dest_state)`
+
+    > Finds a trigger in the FSM definition for a transition from a source
+    > to a destination state. This is a helper to avoid hardcoding trigger
+    > strings in the state handlers.
+
+  - ##### `def validate_plan_for_model(self, plan_content, model)`
+
+    > Validates a plan against a specific CSDC model using the LBAValidator.
+
+
+### `tooling/master_control_cli.py`
+
+The official command-line interface for the agent's master control loop.
+
+This script is now a lightweight wrapper that passes control to the new,
+API-driven `agent_shell.py`. It preserves the command-line interface while
+decoupling the entry point from the FSM implementation.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > The main entry point for the agent.
+  >
+  > This script parses the task description and invokes the agent shell.
+
+
+### `tooling/message_user.py`
+
+A dummy tool that prints its arguments to simulate the message_user tool.
+
+This script is a simple command-line utility that takes a string as an
+argument and prints it to standard output, prefixed with "[Message User]:".
+Its purpose is to serve as a stand-in or mock for the actual `message_user`
+tool in testing environments where the full agent framework is not required.
+
+This allows for the testing of scripts or workflows that call the
+`message_user` tool without needing to invoke the entire agent messaging
+subsystem.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Prints the first command-line argument to simulate a user message.
+
+
+### `tooling/pda_parser.py`
+
+A parser for pLLLU (paraconsistent Linear Logic with Undeterminedness) formulas.
+
+This script uses the PLY (Python Lex-Yacc) library to define a lexer and a
+parser for a simple, string-based representation of pLLLU formulas. It can
+handle basic atomic formulas, unary operators (like negation and consistency),
+and binary operators (like implication and conjunction).
+
+The main function `parse_formula` takes a string and returns a simple AST
+(Abstract Syntax Tree) represented as nested tuples.
+
+
+**Public Functions:**
+
+
+- #### `def AtomNode(name)`
+
+
+- #### `def BinaryOpNode(op, left, right)`
+
+
+- #### `def UnaryOpNode(op, child)`
+
+
+- #### `def p_error(p)`
+
+
+- #### `def p_formula_atom(p)`
+
+  > formula : ATOM
+
+
+- #### `def p_formula_binary(p)`
+
+  > formula : formula IMPLIES formula
+  >         | formula WITH formula
+  >         | formula PLUS formula
+
+
+- #### `def p_formula_group(p)`
+
+  > formula : LPAREN formula RPAREN
+
+
+- #### `def p_formula_unary(p)`
+
+  > formula : NOT formula
+  >         | BANG formula
+  >         | CONSISTENCY formula
+  >         | SECTION formula
+  >         | WHYNOT formula
+
+
+- #### `def parse_formula(formula_string)`
+
+  > Parses a pLLLU formula string into an AST.
+
+
+- #### `def t_ATOM(t)`
+
+  > [A-Z][A-Z0-9]*
+
+
+- #### `def t_error(t)`
+
+
+- #### `def t_newline(t)`
+
+  > \n+
+
+
+### `tooling/plan_executor.py`
+
+A simple plan executor for simulating agent behavior.
+
+This script reads a plan file, parses it, and executes the commands in a
+simplified, simulated environment. It supports a limited set of tools
+(`message_user` and `run_in_bash_session`) to provide a basic demonstration
+of how an agent would execute a plan.
+
+
+**Public Functions:**
+
+
+- #### `def execute_plan(filepath)`
+
+  > Executes a plan file, simulating the agent's execution loop.
+  >
+  > Args:
+  >     filepath: The path to the plan file.
+
+
+- #### `def main()`
+
+  > Main function to run the plan executor from the command line.
+
+
+### `tooling/plan_manager.py`
+
+Provides a command-line interface for managing the agent's Plan Registry.
+
+This script is the administrative tool for the Plan Registry, a key component
+of the Context-Free Development Cycle (CFDC) that enables hierarchical and
+modular planning. The registry, located at `knowledge_core/plan_registry.json`,
+maps human-readable, logical names to the file paths of specific plans. This
+decouples the `call_plan` directive from hardcoded file paths, making plans
+more reusable and the system more robust.
+
+This CLI provides three essential functions:
+- **register**: Associates a new logical name with a plan file path, adding it
+  to the central registry.
+- **deregister**: Removes an existing logical name and its associated path from
+  the registry.
+- **list**: Displays all current name-to-path mappings in the registry.
+
+By providing a simple, standardized interface for managing this library of
+reusable plans, this tool improves the agent's ability to compose complex
+workflows from smaller, validated sub-plans.
+
+
+**Public Functions:**
+
+
+- #### `def deregister_plan(name)`
+
+  > Removes a plan from the registry by its logical name.
+
+
+- #### `def get_registry()`
+
+  > Loads the plan registry from its JSON file.
+
+
+- #### `def list_plans()`
+
+  > Lists all currently registered plans.
+
+
+- #### `def main()`
+
+  > Main function to run the plan management CLI.
+
+
+- #### `def register_plan(name, path)`
+
+  > Registers a new plan by mapping a logical name to a file path.
+
+
+- #### `def save_registry(registry_data)`
+
+  > Saves the given data to the plan registry JSON file.
+
+
+### `tooling/plan_parser.py`
+
+Parses a plan file into a structured list of commands.
+
+This module provides the `parse_plan` function and the `Command` dataclass,
+which are central to the agent's ability to understand and execute plans.
+The parser correctly handles multi-line arguments and ignores comments,
+allowing for robust and readable plan files.
+
+
+**Public Functions:**
+
+
+- #### `def parse_plan(plan_content)`
+
+  > Parses the raw text of a plan into a list of Command objects.
+  > This parser correctly handles multi-line arguments, comments, and the '---' separator.
+
+
+
+**Public Classes:**
+
+
+- #### `class Command`
+
+  > Represents a single, parsed command from a plan.
+  > This structure correctly handles multi-line arguments for tools.
+
+
+### `tooling/plllu_interpreter.py`
+
+A resource-sensitive, four-valued interpreter for pLLLU formulas.
+
+This script implements an interpreter for the pLLLU language. It operates on
+an AST generated by the `pda_parser.py` script. The interpreter is designed
+to be resource-sensitive, meaning that each atomic formula in the initial
+context must be consumed exactly once during the evaluation of the proof.
+
+The logic is four-valued, supporting TRUE, FALSE, BOTH, and NEITHER, allowing
+it to reason about paraconsistent and paracomplete states.
+
+The core of the interpreter is the `FourValuedInterpreter` class, which
+recursively walks the AST, consuming resources from a context (a Counter of
+available atoms) and returning the resulting logical value.
+
+
+**Public Functions:**
+
+
+- #### `def create_context_from_string(s)`
+
+  > Helper to create a context from a string like 'A:T, B:B'.
+  > The interpreter now expects the context to be a dictionary mapping
+  > the unique atom tuple (name, id) to its LogicValue.
+
+
+- #### `def patch_atom_values(node, context_values)`
+
+  > Recursively patches the AST to replace atom names with (value, id) tuples.
+  > This is a hack for testing, as the parser doesn't know about logic values.
+
+
+
+**Public Classes:**
+
+
+- #### `class FourValuedInterpreter`
+
+  > Interprets a pLLLU AST using a four-valued logic and a resource-passing model.
+
+
+  **Methods:**
+
+  - ##### `def interpret(self, ast_node, initial_context)`
+
+    > Main entry point for interpreting an AST.
+    > The initial context is a Counter of atoms available.
+
+
+- #### `class InterpretationError`
+
+  > Custom exception for errors during interpretation.
+
+
+- #### `class LogicValue`
+
+
+### `tooling/plllu_runner.py`
+
+A command-line runner for pLLLU files.
+
+This script provides an entry point for executing `.plllu` files. It
+integrates the pLLLU lexer, parser, and interpreter to execute the logic
+defined in a given pLLLU source file and print the result.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > This tool provides a command-line interface for running .plllu files.
+  > It integrates the pLLLU lexer, parser, and interpreter to execute
+  > the logic defined in a given pLLLU source file.
+
+
+### `tooling/pre_submit_check.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Main function to run pre-submission checks.
+
+
+- #### `def run_command(command, description)`
+
+  > Runs a command and exits if it fails.
+
+
+### `tooling/protocol_compiler.py`
+
+Compiles source protocol files into unified, human-readable and machine-readable artifacts.
+
+This script is the engine behind the "protocol as code" principle. It discovers,
+validates, and assembles protocol definitions from a source directory (e.g., `protocols/`)
+into high-level documents like `AGENTS.md`.
+
+Key Functions:
+- **Discovery:** Scans a directory for source files, including `.protocol.json`
+  (machine-readable rules) and `.protocol.md` (human-readable context).
+- **Validation:** Uses a JSON schema (`protocol.schema.json`) to validate every
+  `.protocol.json` file, ensuring all protocol definitions are syntactically
+  correct and adhere to the established structure.
+- **Compilation:** Combines the human-readable markdown and the machine-readable
+  JSON into a single, cohesive Markdown file, embedding the JSON in code blocks.
+- **Documentation Injection:** Can inject other generated documents, like the
+  `SYSTEM_DOCUMENTATION.md`, into the final output at specified locations.
+- **Knowledge Graph Generation:** Optionally, it can process the validated JSON
+  protocols and serialize them into an RDF knowledge graph (in Turtle format),
+  creating a machine-queryable version of the agent's governing rules.
+
+This process ensures that `AGENTS.md` and other protocol documents are not edited
+manually but are instead generated from a validated, single source of truth,
+making the agent's protocols robust, verifiable, and maintainable.
+
+
+**Public Functions:**
+
+
+- #### `def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file=None, doc_sources=None)`
+
+  > Reads all protocol source files from a directory, validates them, and compiles
+  > them into a target markdown file.
+  >
+  > This function is the core of the "protocol as code" pipeline. It handles:
+  > - File discovery for protocols and documentation placeholders.
+  > - JSON schema validation for machine-readable protocol definitions.
+  > - Injection of external documentation (e.g., README, system docs) based on
+  >   placeholder files found in the source directory.
+  > - Compilation of human-readable markdown and machine-readable JSON into a
+  >   single, coherent output file.
+  > - Optional generation of a machine-readable knowledge graph in Turtle format.
+  >
+  > Args:
+  >     source_dir (str): The directory containing protocol source files.
+  >     target_file (str): The path for the output Markdown file.
+  >     schema_file (str): Path to the JSON schema for validation.
+  >     knowledge_graph_file (str, optional): If specified, generates a Turtle
+  >         knowledge graph file at this path. Defaults to None.
+  >     doc_sources (dict, optional): A dictionary mapping documentation keys
+  >         (e.g., 'readme', 'system', 'kg') to the file paths of the
+  >         documentation sources to be injected. Defaults to None.
+
+
+- #### `def install_dependencies()`
+
+  > Checks for required packages from requirements.txt and installs them if missing.
+
+
+- #### `def load_schema(schema_file)`
+
+  > Loads the protocol JSON schema.
+
+
+- #### `def main_cli()`
+
+  > Main function to run the compiler from the command line.
+
+
+- #### `def sanitize_markdown(content)`
+
+  > Sanitizes markdown content to remove potentially malicious instructions.
+  > This function removes script tags and other potentially malicious HTML/JS.
+
+
+### `tooling/protocol_updater.py`
+
+A command-line tool for programmatically updating protocol source files.
+
+This script provides the mechanism for the agent to perform self-correction
+by modifying its own governing protocols based on structured, actionable
+lessons. It is a key component of the Protocol-Driven Self-Correction (PDSC)
+workflow.
+
+The tool operates on the .protocol.json files located in the `protocols/`
+directory, performing targeted updates based on command-line arguments.
+
+
+**Public Functions:**
+
+
+- #### `def add_tool_to_protocol(protocol_id, tool_name, protocols_dir)`
+
+  > Adds a tool to the 'associated_tools' list of a specified protocol.
+
+
+- #### `def find_protocol_file(protocol_id, protocols_dir)`
+
+  > Recursively finds the protocol file path corresponding to a given protocol_id.
+
+
+- #### `def main()`
+
+  > Main function to parse arguments and call the appropriate handler.
+
+
+- #### `def update_rule_in_protocol(protocol_id, rule_id, new_description, protocols_dir)`
+
+  > Updates the description of a specific rule within a protocol.
+
+
+### `tooling/refactor.py`
+
+A tool for performing automated symbol renaming in Python code.
+
+This script provides a command-line interface to find a specific symbol
+(a function or a class) in a given Python file and rename it, along with all of
+its textual references throughout the entire repository. This provides a safe
+and automated way to perform a common refactoring task, reducing the risk of
+manual errors.
+
+The tool operates in three main stages:
+1.  **Definition Finding:** It uses Python's Abstract Syntax Tree (AST) module
+    to parse the source file and precisely locate the definition of the target
+    symbol. This ensures that the tool is targeting the correct code construct.
+2.  **Reference Finding:** It performs a text-based search across the specified
+    search path (defaulting to the entire repository) to find all files that
+    mention the symbol's old name.
+3.  **Plan Generation:** Instead of modifying files directly, it generates a
+    refactoring "plan." This plan is a sequence of `replace_with_git_merge_diff`
+    commands, one for each file that needs to be changed. The path to this
+    generated plan file is printed to standard output.
+
+This plan-based approach allows the agent's master controller to execute the
+refactoring in a controlled, verifiable, and atomic way, consistent with its
+standard operational procedures.
+
+
+**Public Functions:**
+
+
+- #### `def find_references(symbol_name, search_path)`
+
+  > Finds all files in a directory that reference a given symbol.
+
+
+- #### `def find_symbol_definition(filepath, symbol_name)`
+
+  > Finds the definition of a symbol in a Python file.
+
+
+- #### `def main()`
+
+
+### `tooling/reliable_ls.py`
+
+A tool for reliably listing files and directories.
+
+This script provides a consistent, sorted, and recursive listing of files and
+directories, excluding the `.git` directory. It is intended to be a more
+reliable alternative to the standard `ls` command for agent use cases.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Main function to run the reliable_ls tool from the command line.
+
+
+- #### `def reliable_ls(start_path='.')`
+
+  > Recursively lists all directories and files under the start_path.
+  >
+  > Args:
+  >     start_path: The directory to start the traversal from.
+
+
+### `tooling/reorientation_manager.py`
+
+Re-orientation Manager
+
+This script is the core of the automated re-orientation process. It is
+designed to be triggered by the build system whenever the agent's core
+protocols (`AGENTS.md`) are re-compiled.
+
+The manager performs the following key functions:
+1.  **Diff Analysis:** It compares the old version of AGENTS.md with the new
+    version to identify new protocols, tools, or other key concepts that have
+    been introduced.
+2.  **Temporal Orientation (Shallow Research):** For each new concept, it
+    invokes the `temporal_orienter.py` tool to fetch a high-level summary from
+    an external knowledge base like DBpedia. This ensures the agent has a
+    baseline understanding of new terms.
+3.  **Knowledge Storage:** The summaries from the temporal orientation are
+    stored in a structured JSON file (`knowledge_core/temporal_orientations.json`),
+    creating a persistent, queryable knowledge artifact.
+4.  **Deep Research Trigger:** It analyzes the nature of the changes. If a
+    change is deemed significant (e.g., the addition of a new core
+    architectural protocol), it programmatically triggers a formal L4 Deep
+    Research Cycle by creating a `deep_research_required.json` file.
+
+This automated workflow ensures that the agent never operates with an outdated
+understanding of its own protocols. It closes the loop between protocol
+modification and the agent's self-awareness, making the system more robust,
+adaptive, and reliable.
+
+
+**Public Functions:**
+
+
+- #### `def check_for_deep_research_trigger(new_concepts)`
+
+  > Checks if any of the new concepts should trigger a deep research cycle.
+
+
+- #### `def main()`
+
+
+- #### `def parse_concepts_from_agents_md(content)`
+
+  > Parses an AGENTS.md file to extract a set of key concepts.
+  > This version uses a simple regex to find protocol IDs and tool names.
+
+
+- #### `def run_temporal_orientation(concept)`
+
+  > Runs the temporal_orienter.py tool for a given concept.
+
+
+- #### `def update_temporal_orientations(new_orientations)`
+
+  > Updates the temporal orientations knowledge base.
+
+
+### `tooling/research.py`
+
+This module contains the logic for executing research tasks based on a set of
+constraints. It acts as a dispatcher, calling the appropriate tool (e.g.,
+read_file, google_search) based on the specified target and scope.
+
+
+**Public Functions:**
+
+
+- #### `def execute_research_protocol(constraints)`
+
+  > Executes a research task based on a provided constraints dictionary.
+  >
+  > Args:
+  >     constraints (dict): A dictionary specifying the research target,
+  >                         scope, and other parameters.
+  >
+  > Returns:
+  >     str: The result of the research action, or an error message.
+
+
+### `tooling/research_planner.py`
+
+This module is responsible for generating a formal, FSM-compliant research plan
+for a given topic. The output is a string that can be executed by the agent's
+master controller.
+
+
+**Public Functions:**
+
+
+- #### `def plan_deep_research(topic, research_id)`
+
+  > Generates a multi-step, FSM-compliant plan for conducting deep research
+  > using the official project templates.
+  >
+  > Args:
+  >     topic (str): The research topic.
+  >     research_id (str): A unique ID for this research task.
+  >
+  > Returns:
+  >     str: A string containing the executable plan.
+
+
+### `tooling/self_correction_orchestrator.py`
+
+Orchestrates the Protocol-Driven Self-Correction (PDSC) workflow.
+
+This script is the engine of the automated feedback loop. It reads structured,
+actionable lessons from `knowledge_core/lessons.jsonl` and uses the
+`protocol_updater.py` tool to apply them to the source protocol files.
+
+
+**Public Functions:**
+
+
+- #### `def load_lessons()`
+
+  > Loads all lessons from the JSONL file.
+
+
+- #### `def main()`
+
+  > Main function to run the self-correction workflow.
+
+
+- #### `def process_lessons(lessons, protocols_dir)`
+
+  > Processes all pending lessons, applies them, and updates their status.
+  > Returns True if any changes were made, False otherwise.
+
+
+- #### `def run_command(command)`
+
+  > Runs a command and returns True on success, False on failure.
+
+
+- #### `def save_lessons(lessons)`
+
+  > Saves a list of lessons back to the JSONL file, overwriting it.
+
+
+### `tooling/self_improvement_cli.py`
+
+Analyzes agent activity logs to identify opportunities for self-improvement.
+
+This script is a command-line tool that serves as a key part of the agent's
+meta-cognitive loop. It parses the structured activity log
+(`logs/activity.log.jsonl`) to identify patterns that may indicate
+inefficiencies or errors in the agent's workflow.
+
+The primary analysis currently implemented is:
+- **Planning Efficiency Analysis:** It scans the logs for tasks that required
+  multiple `set_plan` actions. A high number of plan revisions for a single
+  task can suggest that the initial planning phase was insufficient, the task
+  was poorly understood, or the agent struggled to adapt to unforeseen
+  challenges.
+
+By flagging these tasks, the script provides a starting point for a deeper
+post-mortem analysis, helping the agent (or its developers) to understand the
+root causes of the planning churn and to develop strategies for more effective
+upfront planning in the future.
+
+The tool is designed to be extensible, with future analyses (such as error
+rate tracking or tool usage anti-patterns) to be added as the system evolves.
+
+
+**Public Functions:**
+
+
+- #### `def analyze_error_rates(log_file)`
+
+  > Analyzes the log file to calculate action success/failure rates.
+  >
+  > Args:
+  >     log_file (str): Path to the activity log file.
+  >
+  > Returns:
+  >     dict: A dictionary containing total counts, success/failure counts,
+  >           and a breakdown of failures by action type.
+
+
+- #### `def analyze_planning_efficiency(log_file)`
+
+  > Analyzes the log file to find tasks with multiple plan revisions.
+  >
+  > Args:
+  >     log_file (str): Path to the activity log file.
+  >
+  > Returns:
+  >     dict: A dictionary mapping task IDs to the number of plan updates.
+
+
+- #### `def analyze_protocol_violations(log_file)`
+
+  > Scans the log file for critical protocol violations, such as the
+  > unauthorized use of `reset_all`.
+  >
+  > This function checks for two conditions:
+  > 1. A `SYSTEM_FAILURE` log explicitly blaming `reset_all`.
+  > 2. A `TOOL_EXEC` log where the command contains "reset_all".
+  >
+  > Args:
+  >     log_file (str): Path to the activity log file.
+  >
+  > Returns:
+  >     list: A list of unique task IDs where `reset_all` was used.
+
+
+- #### `def main()`
+
+  > Main function to run the self-improvement analysis CLI.
+
+
+- #### `def run_self_improvement_task(model)`
+
+  > Invokes the agent_shell.py to run a self-improvement task for a specific model.
+
+
+### `tooling/standard_agents_compiler.py`
+
+A compiler that generates a simplified, standard-compliant `AGENTS.md` file.
+
+This script acts as an "adapter" to make the repository more accessible to
+third-party AI agents that expect a conventional set of instructions. While the
+repository's primary `AGENTS.md` is a complex, hierarchical, and
+machine-readable artifact for its own specialized agent, the `AGENTS.standard.md`
+file produced by this script offers a simple, human-readable summary of the
+most common development commands.
+
+The script works by:
+1.  **Parsing the Makefile:** It dynamically parses the project's `Makefile`,
+    which is the single source of truth for high-level commands. It specifically
+    extracts the exact commands for common targets like `install`, `test`,
+    `lint`, and `format`. This ensures the generated instructions are never
+    stale.
+2.  **Injecting into a Template:** It injects these extracted commands into a
+    pre-defined, user-friendly Markdown template.
+3.  **Generating the Artifact:** The final output is written to
+    `AGENTS.standard.md`, providing a simple, stable, and conventional entry
+    point for external tools, effectively bridging the gap between the complex
+    internal protocol system and the broader agent ecosystem.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Generates a standard-compliant AGENTS.md file by parsing commands
+  > from the project's Makefile.
+
+
+- #### `def parse_makefile_command(target_name, makefile_content)`
+
+  > Parses a Makefile to find the main command for a specific target,
+  > skipping any 'echo' lines. This version iterates through lines for robustness.
+
+
+### `tooling/state.py`
+
+Defines the core data structures for managing the agent's state.
+
+This module provides the `AgentState` and `PlanContext` dataclasses, which are
+fundamental to the operation of the Context-Free Development Cycle (CFDC). These
+structures allow the `master_control.py` orchestrator to maintain a complete,
+snapshot-able representation of the agent's progress through a task.
+
+- `AgentState`: The primary container for all information related to the current
+  task, including the plan execution stack, message history, and error states.
+- `PlanContext`: A specific structure that holds the state of a single plan
+  file, including its content and the current execution step. This is the
+  element that gets pushed onto the `plan_stack` in `AgentState`.
+
+Together, these classes enable the hierarchical, stack-based planning and
+execution that is the hallmark of the CFDC.
+
+
+**Public Classes:**
+
+
+- #### `class AgentState`
+
+  > Represents the complete, serializable state of the agent's workflow.
+  >
+  > This dataclass acts as a central container for all information related to the
+  > agent's current task. It is designed to be passed between the different states
+  > of the `MasterControlGraph` FSM, ensuring that context is maintained
+  > throughout the lifecycle of a task.
+  >
+  > Attributes:
+  >     task: A string describing the overall objective.
+  >     plan_path: The file path to the root plan for the current task.
+  >     plan_stack: A list of `PlanContext` objects, forming the execution
+  >         stack for the CFDC. The plan at the top of the stack is the one
+  >         currently being executed.
+  >     messages: A history of messages, typically for interaction with an LLM.
+  >     orientation_complete: A flag indicating if the initial orientation
+  >         phase has been successfully completed.
+  >     vm_capability_report: A string summarizing the results of the
+  >         environmental probe.
+  >     research_findings: A dictionary to store the results of research tasks.
+  >     draft_postmortem_path: The file path to the draft post-mortem report
+  >         generated during the AWAITING_ANALYSIS state.
+  >     final_report: A string containing a summary of the final, completed
+  >         post-mortem report.
+  >     error: An optional string that holds an error message if the FSM
+  >         enters an error state, providing a clear reason for the failure.
+
+
+  **Methods:**
+
+  - ##### `def to_json(self)`
+
+
+- #### `class PlanContext`
+
+  > Represents the execution context of a single plan file within the plan stack.
+  >
+  > This class holds the state of a specific plan being executed, including its
+  > file path, its content (as a list of parsed Command objects), and a pointer
+  > to the current step being executed.
+
+
+### `tooling/symbol_map_generator.py`
+
+Generates a code symbol map for the repository to aid in contextual understanding.
+
+This script creates a `symbols.json` file in the `knowledge_core` directory,
+which acts as a high-level index of the codebase. This map contains information
+about key programming constructs like classes and functions, including their
+name, location (file path and line number), and language.
+
+The script employs a two-tiered approach for symbol generation:
+1.  **Universal Ctags (Preferred):** It first checks for the presence of the
+    `ctags` command-line tool. If available, it uses `ctags` to perform a
+    comprehensive, multi-language scan of the repository. This is the most
+    robust and accurate method.
+2.  **AST Fallback (Python-only):** If `ctags` is not found, the script falls
+    back to using Python's built-in Abstract Syntax Tree (`ast`) module. This
+    method parses all `.py` files and extracts symbol information for Python
+    code. While less comprehensive than `ctags`, it ensures that a baseline
+    symbol map is always available.
+
+The resulting `symbols.json` artifact is a critical input for the agent's
+orientation and planning phases, allowing it to quickly locate relevant code
+and understand the structure of the repository without having to read every file.
+
+
+**Public Functions:**
+
+
+- #### `def generate_symbols_with_ast(root_dir='.')`
+
+  > Fallback to generate a symbol map for Python files using the AST module.
+
+
+- #### `def generate_symbols_with_ctags(root_dir='.')`
+
+  > Generates a symbol map using Universal Ctags.
+
+
+- #### `def has_ctags()`
+
+  > Check if Universal Ctags is installed and available in the PATH.
+
+
+- #### `def main()`
+
+  > Main function to generate and save the symbol map.
+
+
+### `tooling/udc_orchestrator.py`
+
+An orchestrator for executing Unrestricted Development Cycle (UDC) plans.
+
+This script provides a sandboxed environment for running UDC plans, which are
+low-level assembly-like programs that can perform Turing-complete computations.
+The orchestrator acts as a virtual machine with a tape-based memory model,
+registers, and a set of simple instructions.
+
+To prevent non-termination and other resource-exhaustion issues, the
+orchestrator imposes strict limits on the number of instructions executed,
+the amount of memory used, and the total wall-clock time.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+
+**Public Classes:**
+
+
+- #### `class Instruction`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, opcode, args)`
+
+  - ##### `def __repr__(self)`
+
+
+- #### `class UDCOrchestrator`
+
+  > Executes an Unrestricted Development Cycle (UDC) plan within a sandboxed
+  > Turing Machine-like environment with strict resource limits.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, plan_path, max_instructions=10000, max_memory_cells=1000, max_time_s=5)`
+
+  - ##### `def run(self)`
+
+    > Parses and runs the UDC plan until it halts or a limit is exceeded.
+
+
+---
+
+## `tooling/agent_smith/` Directory
+
+### `tooling/agent_smith/__init__.py`
+
+_No module-level docstring found._
+
+### `tooling/agent_smith/generate_and_test.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def apply_mutation(sandbox_path, mutation_target)`
+
+  > Applies the specified mutation to the sandboxed sources.
+
+
+- #### `def cleanup_sandbox(sandbox_path)`
+
+  > Deletes the sandbox directory.
+
+
+- #### `def compile_variant(sandbox_path, python_path_ext)`
+
+  > Runs the hierarchical compiler inside the sandbox.
+
+
+- #### `def copy_sources(root_dir, sandbox_path)`
+
+  > Copies the necessary source files and compiler into the sandbox.
+
+
+- #### `def create_sandbox(root_dir, sandbox_path)`
+
+  > Creates a clean sandbox directory.
+
+
+- #### `def get_repo_root()`
+
+  > Gets the absolute path of the repository root.
+
+
+- #### `def install_dependencies(sandbox_path)`
+
+  > Installs dependencies from requirements.txt into the sandbox.
+
+
+- #### `def log_step(message)`
+
+  > Prints a formatted step message.
+
+
+- #### `def main()`
+
+  > Main function to orchestrate the generation and testing process.
+
+
+- #### `def run_command(command, cwd)`
+
+  > Runs a command in a subprocess and handles errors.
+
+
+- #### `def verify_variant(variant_path, mutation_check_string)`
+
+  > Performs a basic verification to check the variant was created correctly.
+
+
+---
+
+## `utils/` Directory
+
+### `utils/__init__.py`
+
+_No module-level docstring found._
+
+### `utils/file_system_utils.py`
+
+This module provides a centralized and standardized interface for all file
+system operations within the agent's environment. It aims to address issues of
+inconsistent path handling, duplicated file discovery logic, and ad-hoc
+filtering by providing a single, reliable implementation for these common tasks.
+
+Core Features:
+- **Standardized Path Construction:** All path manipulations are handled using
+  `os.path.join` to ensure cross-platform compatibility.
+- **Centralized File Discovery:** A single function for finding files based on
+  patterns, with built-in support for a centralized ignore mechanism.
+- **Robust Error Handling:** Functions are designed to gracefully handle common
+  file system errors, such as permission issues or broken links.
+- **Centralized Ignore Mechanism:** File and directory filtering is managed via
+  a `.julesignore` file in the repository root, providing a single source of
+  truth for exclusion patterns.
+
+
+**Public Functions:**
+
+
+- #### `def find_files(pattern, base_dir=ROOT_DIR)`
+
+  > Finds all files matching a given pattern, respecting the .julesignore file.
+
+
+- #### `def get_ignore_patterns(base_dir)`
+
+  > Loads ignore patterns from the .julesignore file in the specified base directory.
+  > Returns two sets of patterns: one for directories and one for files.
+
+
+### `utils/logger.py`
+
+Provides a standardized, schema-validated logger for producing structured JSONL logs.
+
+This module contains the `Logger` class, which is responsible for creating all
+entries in the `logs/activity.log.jsonl` file. This is a critical component for
+maintaining an auditable, machine-readable record of the agent's actions.
+
+The logger enforces a strict structure on all log entries by validating them
+against a formal JSON schema, which is extracted from the `LOGGING_SCHEMA.md`
+document. This ensures that every log entry, regardless of its source, is
+consistent and contains the required fields.
+
+Key features of the `Logger` class:
+- **Schema Validation:** Each log entry is validated against the official
+  project schema before being written to disk, preventing data corruption.
+- **Structured Data:** Logs are written in JSONL format, where each line is a
+  valid JSON object, making them easy to parse and query.
+- **Session Management:** It automatically assigns a unique `session_id` to
+  all logs generated during its lifecycle, allowing actions to be traced back
+  to a specific run.
+- **Automatic Timestamps:** It injects a UTC timestamp into every log entry,
+  providing a precise timeline of events.
+
+This centralized logger is the sole mechanism by which the agent should record
+its activities, ensuring a single source of truth for all post-mortem analysis
+and self-improvement activities.
+
+
+**Public Classes:**
+
+
+- #### `class Logger`
+
+  > A class to handle structured logging to a JSONL file, validated against a schema.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, schema_path='LOGGING_SCHEMA.md', log_path='logs/activity.log.jsonl')`
+
+    > Initializes the Logger, loading the schema and setting up the session.
+    >
+    > Args:
+    >     schema_path (str): The path to the Markdown file containing the logging schema.
+    >     log_path (str): The path to the log file to be written.
+
+  - ##### `def log(self, phase, task_id, plan_step, action_type, action_details, outcome_status, outcome_message='', error_details=None, evidence='', context=None)`
+
+    > Constructs, validates, and writes a log entry.
+    >
+    > Args:
+    >     phase (str): The current protocol phase (e.g., "Phase 7").
+    >     task_id (str): The ID of the current task.
+    >     plan_step (int): The current plan step number.
+    >     action_type (str): The type of action (e.g., "TOOL_EXEC").
+    >     action_details (dict): Details specific to the action.
+    >     outcome_status (str): The outcome of the action ("SUCCESS", "FAILURE").
+    >     outcome_message (str, optional): A message describing the outcome. Defaults to "".
+    >     error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.
+    >     evidence (str, optional): Citation for the action. Defaults to "".
+    >     context (dict, optional): The agent's internal context. Defaults to None.
+    >
+    > Raises:
+    >     ValidationError: If the generated log entry does not conform to the schema.
 
 
 ---
