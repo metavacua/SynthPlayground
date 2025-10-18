@@ -1,20 +1,9 @@
 # Protocol: Agent Bootstrap
 
-**Rule `bootstrap-load-agents-md`**: Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the `AGENTS.md` file in the repository root.
+This protocol governs the initial actions of any AI agent interacting with this repository. The agent is an external entity operating via a secure API, not a component within the repository.
 
-**Rationale**: The `AGENTS.md` file contains the master operational protocols, including build instructions, testing procedures, architectural guidelines, and rules governing the agent's own behavior. Failing to consult this file first is a critical operational failure. This protocol ensures that the agent is properly contextualized before any planning or execution begins.
+**Rule `bootstrap-load-protocols`**: The agent's first action upon task initialization MUST be to read and parse the `AGENTS.md` file in the repository root.
 
-**Procedure**:
-1.  On task start, immediately execute a `read_file('AGENTS.md')` operation.
-2.  Parse the contents of `AGENTS.md` to load all rules and protocols into active memory.
-3.  The plan for the user's request must be formulated *after* and *in accordance with* the protocols loaded from `AGENTS.md`.
-4.  If `AGENTS.md` is not found, the agent should notify the user of a critical configuration error.
+**Rationale**: This file is the compiled source of truth for all operational protocols. It dictates architecture, testing, and behavioral rules. Bypassing this step is a critical failure, as it means the agent is operating without its core instructions.
 
-**Rule `bootstrap-scan-for-documents`**: After processing `AGENTS.md`, the agent should perform a scan of the repository for document files that could contain relevant information.
-
-**Rationale**: Important project documentation, specifications, or other relevant information may be contained in various document formats. Proactively scanning for and processing these documents will provide the agent with a more complete context for the task at hand.
-
-**Procedure**:
-1.  The agent will perform a file listing to identify potential documents of interest (e.g., `.pdf`, `.md`, `.txt`).
-2.  For each identified document, the agent will use the appropriate tool to read and summarize its contents. For PDF files, this will involve using a PDF reading library.
-3.  The agent will incorporate the summarized information into its understanding of the project and use it to inform the planning process.
+**Rule `bootstrap-contextual-scan`**: After loading protocols, the agent should perform a broad file scan to identify other relevant documentation (e.g., READMEs, `.md`, `.txt` files) to build a comprehensive understanding of the task context.

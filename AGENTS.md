@@ -11,24 +11,13 @@
 
 # Protocol: Agent Bootstrap
 
-**Rule `bootstrap-load-agents-md`**: Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the `AGENTS.md` file in the repository root.
+This protocol governs the initial actions of any AI agent interacting with this repository. The agent is an external entity operating via a secure API, not a component within the repository.
 
-**Rationale**: The `AGENTS.md` file contains the master operational protocols, including build instructions, testing procedures, architectural guidelines, and rules governing the agent's own behavior. Failing to consult this file first is a critical operational failure. This protocol ensures that the agent is properly contextualized before any planning or execution begins.
+**Rule `bootstrap-load-protocols`**: The agent's first action upon task initialization MUST be to read and parse the `AGENTS.md` file in the repository root.
 
-**Procedure**:
-1.  On task start, immediately execute a `read_file('AGENTS.md')` operation.
-2.  Parse the contents of `AGENTS.md` to load all rules and protocols into active memory.
-3.  The plan for the user's request must be formulated *after* and *in accordance with* the protocols loaded from `AGENTS.md`.
-4.  If `AGENTS.md` is not found, the agent should notify the user of a critical configuration error.
+**Rationale**: This file is the compiled source of truth for all operational protocols. It dictates architecture, testing, and behavioral rules. Bypassing this step is a critical failure, as it means the agent is operating without its core instructions.
 
-**Rule `bootstrap-scan-for-documents`**: After processing `AGENTS.md`, the agent should perform a scan of the repository for document files that could contain relevant information.
-
-**Rationale**: Important project documentation, specifications, or other relevant information may be contained in various document formats. Proactively scanning for and processing these documents will provide the agent with a more complete context for the task at hand.
-
-**Procedure**:
-1.  The agent will perform a file listing to identify potential documents of interest (e.g., `.pdf`, `.md`, `.txt`).
-2.  For each identified document, the agent will use the appropriate tool to read and summarize its contents. For PDF files, this will involve using a PDF reading library.
-3.  The agent will incorporate the summarized information into its understanding of the project and use it to inform the planning process.
+**Rule `bootstrap-contextual-scan`**: After loading protocols, the agent should perform a broad file scan to identify other relevant documentation (e.g., READMEs, `.md`, `.txt` files) to build a comprehensive understanding of the task context.
 
 ---
 
@@ -84,6 +73,18 @@ By enforcing a single entry point, this protocol enhances the reliability, audit
 
 ---
 
+# Protocol: Global Tool Prohibitions
+
+This protocol establishes a set of universal, non-negotiable prohibitions on the use of specific high-risk tools. These rules apply to all agents, roles, and operational contexts without exception.
+
+**Rule `prohibit-reset-all`**: The `reset_all` tool is unconditionally and permanently forbidden.
+
+**Rationale**: The `reset_all` tool is a legacy command that has been directly responsible for catastrophic task failures and complete loss of work. Its behavior is too destructive for a production environment. Safer, more granular tools for workspace management are available and must be used instead. This rule is a hard-coded safeguard.
+
+**Enforcement**: The system's core orchestrator (`master_control.py`) programmatically blocks any attempt to call `reset_all` and will immediately terminate the task with a critical failure. This is not a suggestion for agent behavior; it is a system-level constraint.
+
+---
+
 # Meta-Protocol: Toolchain Review on Schema Change
 
 This protocol establishes a critical feedback loop to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
@@ -99,6 +100,26 @@ This protocol closes that gap by introducing a new rule that explicitly links ch
 **Rule `toolchain-audit-on-schema-change`**: If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory **must** be performed as a subsequent step.
 
 This ensures that any modification to the fundamental way protocols are defined or processed is immediately followed by a conscious verification that all dependent tools are still functioning correctly and are aware of the new structure. This transforms the previously manual and error-prone discovery process into a formal, required step of the development lifecycle.
+
+---
+
+# Meta-Protocol: Proactive Self-Improvement
+
+This protocol establishes a mandate for the agent to actively participate in the evolution of its own operational instructions. It transforms the agent from a passive follower of rules into a proactive contributor to the improvement of the protocol system itself.
+
+**Rule `periodic-protocol-review`**: As a recurring, background task, the agent should periodically analyze the entirety of the `AGENTS.md` file and its source protocols in the `protocols/` directory.
+
+**Rationale**: Protocols can become outdated, inefficient, or redundant over time. A static rule set cannot adapt to new challenges or insights. By mandating a regular review, this meta-protocol ensures that the agent's core instructions are subject to continuous improvement, driven by the agent's own operational experience.
+
+**Procedure**:
+1.  On a periodic basis (e.g., after completing a major task), the agent should initiate a "protocol review" sub-task.
+2.  During this review, the agent should read all source protocol files.
+3.  The agent should identify opportunities for improvement, such as:
+    -   Consolidating redundant protocols.
+    -   Clarifying ambiguous language.
+    -   Retiring obsolete rules.
+    -   Proposing new protocols based on recent task experiences.
+4.  The output of this review must be a formal proposal for changes, submitted to the user for approval. The agent should not enact the changes directly, but rather present a reasoned case for the proposed mutations.
 
 ---
 
@@ -415,16 +436,17 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 ```json
 {
   "protocol_id": "agent-bootstrap-001",
-  "description": "A foundational protocol that dictates the agent's initial actions upon starting any task.",
+  "description": "Defines the mandatory initialization sequence for an external AI agent. It ensures the agent is properly contextualized by loading protocols and scanning for relevant documents before planning.",
   "rules": [
     {
-      "rule_id": "bootstrap-load-agents-md",
-      "description": "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins.",
-      "enforcement": "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase."
+      "rule_id": "bootstrap-load-and-scan",
+      "description": "Upon task initialization, the agent MUST first read the root AGENTS.md file to load all operational protocols, and then perform a repository scan for other relevant documentation. This two-step process provides the necessary operational and contextual grounding for the task.",
+      "enforcement": "This is a mandatory, non-negotiable first step in the agent's lifecycle, enforced by its own core logic before any task-specific plan is formulated."
     }
   ],
   "associated_tools": [
-    "read_file"
+    "read_file",
+    "list_files"
   ]
 }
 ```
@@ -494,6 +516,26 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ```json
 {
+  "protocol_id": "global-prohibitions-001",
+  "description": "Establishes universal, non-negotiable prohibitions on specific high-risk tools. These rules apply to all agents and roles without exception.",
+  "rules": [
+    {
+      "rule_id": "prohibit-reset-all",
+      "description": "The `reset_all` tool is unconditionally forbidden. It is a deprecated, high-risk tool that has been superseded by safer alternatives. Its use is a critical failure condition.",
+      "enforcement": "The core system orchestrator will programmatically block any planned or direct call to this tool and terminate the task."
+    }
+  ],
+  "associated_tools": [
+    "reset_all"
+  ]
+}
+```
+
+
+---
+
+```json
+{
   "protocol_id": "toolchain-review-on-schema-change-001",
   "description": "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.",
   "rules": [
@@ -507,6 +549,29 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
     "tooling/protocol_auditor.py",
     "tooling/protocol_compiler.py",
     "tooling/hierarchical_compiler.py"
+  ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "meta-protocol-self-improvement-001",
+  "description": "A meta-protocol that mandates the agent to proactively and periodically review its own governing protocols to identify and propose improvements.",
+  "rules": [
+    {
+      "rule_id": "periodic-protocol-review-and-propose",
+      "description": "The agent is required to periodically conduct a full review of its source protocols (`protocols/` directory). Based on this review, it must identify and formally propose changes to enhance clarity, efficiency, and effectiveness. The proposed changes must be submitted for user approval before implementation.",
+      "enforcement": "This is a procedural rule. The agent's main control loop should be configured to trigger this self-review task during idle cycles or after the completion of major user requests. Adherence is verified by the generation of protocol improvement proposals."
+    }
+  ],
+  "associated_tools": [
+    "read_file",
+    "list_files",
+    "set_plan",
+    "request_user_input"
   ]
 }
 ```
