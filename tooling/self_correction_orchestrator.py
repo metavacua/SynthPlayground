@@ -9,24 +9,25 @@ actionable lessons from `knowledge_core/lessons.jsonl` and uses the
 import json
 import os
 import subprocess
+import argparse
 
 LESSONS_FILE = "knowledge_core/lessons.jsonl"
 UPDATER_SCRIPT = "tooling/protocol_updater.py"
 CODE_SUGGESTER_SCRIPT = "tooling/code_suggester.py"
 
 
-def load_lessons():
+def load_lessons(lesson_file):
     """Loads all lessons from the JSONL file."""
-    if not os.path.exists(LESSONS_FILE):
+    if not os.path.exists(lesson_file):
         return []
 
-    with open(LESSONS_FILE, "r") as f:
+    with open(lesson_file, "r") as f:
         return [json.loads(line) for line in f]
 
 
-def save_lessons(lessons):
+def save_lessons(lessons, lesson_file):
     """Saves a list of lessons back to the JSONL file, overwriting it."""
-    with open(LESSONS_FILE, "w") as f:
+    with open(lesson_file, "w") as f:
         for lesson in lessons:
             f.write(json.dumps(lesson) + "\n")
 
@@ -160,13 +161,18 @@ def main():
     """
     Main function to run the self-correction workflow.
     """
-    # This script is intended to be called from a controlled environment
-    # like a test or a dedicated plan, so we don't use argparse here.
-    # The search for protocols should start from the repository root.
+    parser = argparse.ArgumentParser(description="Orchestrate the Protocol-Driven Self-Correction (PDSC) workflow.")
+    parser.add_argument(
+        "--lesson-file",
+        default=LESSONS_FILE,
+        help="Path to the lessons JSONL file."
+    )
+    args = parser.parse_args()
+
     protocols_directory = "."
 
     print("--- Starting Protocol-Driven Self-Correction Cycle ---")
-    lessons = load_lessons()
+    lessons = load_lessons(args.lesson_file)
 
     if not any(lesson.get("status") == "pending" for lesson in lessons):
         print("No pending lessons to process. Exiting.")
@@ -175,7 +181,7 @@ def main():
     changes_were_applied = process_lessons(lessons, protocols_directory)
 
     print("\n--- Saving updated lesson statuses ---")
-    save_lessons(lessons)
+    save_lessons(lessons, args.lesson_file)
 
     if changes_were_applied:
         print("\n--- Protocol sources updated. Rebuilding AGENTS.md... ---")

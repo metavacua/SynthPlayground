@@ -13,6 +13,7 @@ programmatic interface to the MasterControlGraph FSM. It is responsible for:
 import uuid
 import os
 import sys
+import subprocess
 
 # Add the root directory to the path to allow for absolute imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -37,6 +38,16 @@ def run_agent_loop(task_description: str, tools: dict, model: str = None):
     """
     The main loop that drives the agent's lifecycle via the FSM.
     """
+    # Install dependencies from requirements.txt
+    try:
+        print("[AgentShell] Installing dependencies from requirements.txt...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
+        print("[AgentShell] Dependencies installed successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"[AgentShell] Error installing dependencies: {e}")
+        # Depending on the desired behavior, you might want to exit or handle the error
+        # For now, we'll just print the error and continue.
+
     # 1. Initialize State and Logger
     task_id = f"task-{uuid.uuid4()}"
     agent_state = AgentState(task=task_id)
