@@ -1,3 +1,4 @@
+---
 # --- Child Module: `core` ---
 
 # Protocol: The Context-Free Development Cycle (CFDC)
@@ -114,7 +115,7 @@ This protocol establishes the L4 Deep Research Cycle, a specialized, self-contai
 
 ## The Problem: Ad-Hoc Research
 
-Previously, research was an unstructured activity. The agent could use tools like `google_search` or `read_file`, but there was no formal process for planning, executing, and synthesizing complex research tasks. This made it difficult to tackle "unknown unknowns" in a reliable and auditable way.
+Previously, research was an unstructured activity. The agent could use tools like `google_search` or `read_file`,. but there was no formal process for planning, executing, and synthesizing complex research tasks. This made it difficult to tackle "unknown unknowns" in a reliable and auditable way.
 
 ## The Solution: A Dedicated Research FDC
 
@@ -128,4 +129,5 @@ The L4 Research Cycle solves this by introducing a new, specialized Finite State
 
 This new protocol provides a robust, reliable, and formally verifiable mechanism for the agent to explore complex topics, making it significantly more autonomous and capable.
 
+---
 ---

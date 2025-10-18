@@ -1,3 +1,4 @@
+---
 # --- Child Module: `compliance` ---
 
 # Protocol: AGENTS.md Non-Compliance
@@ -75,4 +76,5 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
 -   **Description:** The `reset_all` tool is strictly forbidden under all circumstances.
 -   **Enforcement:** The `master_control.py` orchestrator will programmatically block any attempt to call `reset_all` and will immediately terminate the task with a critical error. This is not a rule for the agent to interpret, but a hard-coded system constraint.
 
+---
 ---

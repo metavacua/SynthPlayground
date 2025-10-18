@@ -1,0 +1,13 @@
+---
+protocol_id: capability-verification-001
+description: |
+  A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.
+rules:
+  - rule_id: verify-capability-acquisition
+    description: |
+      The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process.
+    enforcement: |
+      The tool is used by invoking it from the command line with the path to the target test file.
+associated_tools:
+  - tooling/capability_verifier.py
+---

@@ -1,3 +1,4 @@
+---
 # --- Child Module: `critic` ---
 
 # Protocol: Critic `reset_all` Prohibition
@@ -14,4 +15,5 @@ This prohibition is non-negotiable and must be adhered to by any agent assuming 
 
 **Enforcement Mechanism:** The Code Review Critic is not implemented in this repository. Its behavior is governed by the compiled `AGENTS.md` file, which is consumed by an external orchestration system. The inclusion of this protocol in `AGENTS.md` constitutes the complete implementation of this safeguard from the perspective of this codebase.
 
+---
 ---
