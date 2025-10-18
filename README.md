@@ -20,8 +20,6 @@ This document provides a human-readable summary of the protocols and key compone
 - **`plllu-execution-001`**: A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent.
 - **`security-header`**: Defines the identity and purpose of the Security Protocol document.
 - **`security-vuln-reporting-001`**: Defines the official policy and procedure for reporting security vulnerabilities.
-- **`base-security-protocol`**: A base protocol for general security rules.
-- **`csp-security-protocol`**: A specific protocol for Content Security Policy (CSP).
 - **`speculative-execution-001`**: A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.
 
 ## Key Components
@@ -51,26 +49,6 @@ This document provides a human-readable summary of the protocols and key compone
   > 3.  Driving the FSM by calling its methods and passing data and the logger.
   > 4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans
   >     and respond to requests for action.
-
-- **`tooling/__init__.py`**:
-
-  > _No module-level docstring found._
-
-- **`tooling/compiler_harness.py`**:
-
-  > _No module-level docstring found._
-
-- **`tooling/fitness_evaluator.py`**:
-
-  > _No module-level docstring found._
-
-- **`tooling/genetic_algorithm.py`**:
-
-  > _No module-level docstring found._
-
-- **`tooling/mutator.py`**:
-
-  > _No module-level docstring found._
 
 - **`tooling/appl_runner.py`**:
 
@@ -666,6 +644,10 @@ This document provides a human-readable summary of the protocols and key compone
   > This process ensures that `AGENTS.md` and other protocol documents are not edited
   > manually but are instead generated from a validated, single source of truth,
   > making the agent's protocols robust, verifiable, and maintainable.
+
+- **`tooling/protocol_mutator.py`**:
+
+  > _No module-level docstring found._
 
 - **`tooling/protocol_updater.py`**:
 
