@@ -25,12 +25,11 @@ def log_action(action_text, cwd):
     log_section_regex = re.compile(r"(^# Jules' Action Log\n)(.*?)(^#|\Z)", re.MULTILINE | re.DOTALL)
     match = log_section_regex.search(content)
 
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    log_entry = f"- {timestamp}: {action_text}\n"
+    log_entry = f"- {action_text}\n"
 
     if match:
         # Append to existing log
-        new_content = content.replace(match.group(2), match.group(2) + log_entry)
+        new_content = content[:match.end(2)] + log_entry + content[match.end(2):]
     else:
         # Add new log section
         new_content = content + "\n\n" + log_header + "\n\n" + log_entry
