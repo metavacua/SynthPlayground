@@ -1,0 +1,5 @@
+{
+  "protocol_id": "security-header",
+  "description": "Defines the identity and purpose of the Security Protocol document.",
+  "rules": []
+}

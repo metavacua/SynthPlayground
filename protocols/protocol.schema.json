@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Agent Protocol Definition",
+  "description": "A schema for defining a single, modular agent protocol.",
+  "type": "object",
+  "properties": {
+    "protocol_id": {
+      "description": "A unique, machine-readable identifier for the protocol (e.g., 'core-directive-001').",
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "description": {
+      "description": "A human-readable summary of the protocol's purpose.",
+      "type": "string"
+    },
+    "rules": {
+      "description": "An array of formal rules that constitute the protocol.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rule_id": {
+            "description": "A unique identifier for the rule within the protocol.",
+            "type": "string"
+          },
+          "description": {
+            "description": "A detailed, formal description of the rule to be followed.",
+            "type": "string"
+          },
+          "enforcement": {
+            "description": "Describes how the rule is programmatically enforced.",
+            "type": "string"
+          }
+        },
+        "required": ["rule_id", "description", "enforcement"]
+      }
+    },
+    "associated_tools": {
+      "description": "An optional list of tools that are directly related to or governed by this protocol.",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "The name of the tool or script (e.g., 'tooling/fdc_cli.py')."
+      }
+    }
+  },
+  "required": ["protocol_id", "description", "rules"]
+}
