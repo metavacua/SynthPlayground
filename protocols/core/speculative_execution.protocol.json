@@ -28,5 +28,9 @@
       "enforcement": "The agent's logging and file-creation tools should be context-aware and apply this tag when in a speculative mode."
     }
   ],
-  "associated_tools": []
+  "associated_tools": [
+    "set_plan",
+    "create_file_with_block",
+    "request_user_input"
+  ]
 }

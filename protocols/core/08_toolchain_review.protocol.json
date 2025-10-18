@@ -9,6 +9,8 @@
     }
   ],
   "associated_tools": [
-    "tooling/protocol_compiler.py"
+    "tooling/protocol_auditor.py",
+    "tooling/protocol_compiler.py",
+    "tooling/hierarchical_compiler.py"
   ]
 }

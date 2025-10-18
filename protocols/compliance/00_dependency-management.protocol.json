@@ -8,5 +8,7 @@
       "enforcement": "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions."
     }
   ],
-  "associated_tools": []
+  "associated_tools": [
+    "run_in_bash_session"
+  ]
 }
