@@ -9,6 +9,10 @@
       "type": "string",
       "pattern": "^[a-z0-9-]+$"
     },
+    "extends": {
+      "description": "An optional path to a parent protocol file that this protocol extends. The child protocol inherits all rules from the parent and can add or override them.",
+      "type": "string"
+    },
     "description": {
       "description": "A human-readable summary of the protocol's purpose.",
       "type": "string"

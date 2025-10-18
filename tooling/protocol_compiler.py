@@ -143,6 +143,46 @@ def sanitize_markdown(content):
     return content
 
 
+def load_and_merge_protocol(file_path, base_dir, schema):
+    """
+    Recursively loads a protocol file and merges it with its parent if 'extends' is present.
+    It validates the protocol data against the schema after merging.
+    """
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+
+    if "extends" in data:
+        parent_path = os.path.abspath(os.path.join(os.path.dirname(file_path), data["extends"]))
+        if not os.path.exists(parent_path):
+            raise FileNotFoundError(f"Parent protocol file not found at {parent_path} (extended by {file_path})")
+
+        print(f"    - Extending from: {os.path.relpath(parent_path, base_dir)}")
+        # Pass the schema down for validation at each level
+        parent_data = load_and_merge_protocol(parent_path, base_dir, schema)
+
+        # Merge rules: Child's rules override parent's on rule_id collision
+        merged_rules = {rule['rule_id']: rule for rule in parent_data.get('rules', [])}
+        for child_rule in data.get('rules', []):
+            merged_rules[child_rule['rule_id']] = child_rule
+
+        # Merge top-level properties: Child's properties override parent's
+        final_data = parent_data.copy()
+        final_data.update(data)
+        final_data['rules'] = list(merged_rules.values())
+
+        # The 'extends' key is consumed and removed from the final, compiled protocol
+        del final_data['extends']
+
+        # Validate the final merged data against the schema
+        jsonschema.validate(instance=final_data, schema=schema)
+
+        return final_data
+    else:
+        # Validate the base protocol data if it doesn't extend another
+        jsonschema.validate(instance=data, schema=schema)
+        return data
+
+
 def compile_protocols(
     source_dir, target_file, schema_file, knowledge_graph_file=None, autodoc_file=None
 ):
@@ -217,10 +257,9 @@ def compile_protocols(
         base_name = os.path.basename(file_path)
         print(f"  - Processing: {base_name}")
         try:
-            with open(file_path, "r") as f:
-                protocol_data = json.load(f)
-            jsonschema.validate(instance=protocol_data, schema=schema)
-            print("    - JSON validation successful.")
+            # Use the new inheritance-aware loader
+            protocol_data = load_and_merge_protocol(file_path, source_dir, schema)
+            print("    - Protocol loaded and validated successfully (with inheritance).")
 
             # Knowledge Graph Generation
             if knowledge_graph_file:
