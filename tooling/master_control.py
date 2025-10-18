@@ -225,6 +225,11 @@ class MasterControlGraph:
             "run_in_bash_session": "tool_exec",
             "call_plan": "call_plan_op",
             "research": "research_requested",
+            "pre_commit_instructions": "step_op",
+            "request_user_input": "step_op",
+            "record_user_approval_for_plan": "step_op",
+            "request_code_review": "step_op",
+            "reply_to_pr_comments": "step_op",
             # Add CSDC tools to the map so they are recognized by the base FSM validator.
             # The LBA validator will handle the context-sensitive rules.
             "define_set_of_names": "step_op",

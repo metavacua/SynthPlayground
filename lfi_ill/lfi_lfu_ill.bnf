@@ -38,7 +38,9 @@
 <consistency> ::= "∘" <formula>        # Consistency operator: "A is consistent"
 
 # Paracomplete (LFU - Handles Incompleteness/Gaps)
-<paracomplete> ::= <completeness>
+<paracomplete> ::= <co_negation> | <undeterminedness> | <completeness>
+<co_negation> ::= "-" <formula>         # Paracomplete co-negation
+<undeterminedness> ::= "*" <formula>     # Undeterminedness operator
 <completeness> ::= "~" <formula>       # Completeness/Determinedness operator: "A is determined"
 
 # --- Main Production Rule ---

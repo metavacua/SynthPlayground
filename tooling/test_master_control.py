@@ -196,6 +196,13 @@ class TestMasterControlRedesigned(unittest.TestCase):
         )
         self.assertEqual(trigger, self.graph.get_trigger("EXECUTING", "GENERATING_CODE"))
 
+    def test_validate_plan_with_invalid_transition(self):
+        # This plan uses a tool that is mapped, but has no valid transition from PLANNING
+        plan_content = "pre_commit_instructions"
+        is_valid, error_message = self.graph._validate_plan_with_cli(plan_content)
+        self.assertFalse(is_valid, "Plan with invalid transition should be invalid")
+        self.assertIn("Invalid FSM transition", error_message)
+
     @patch("tooling.master_control.datetime")
     def test_do_finalizing(self, mock_datetime):
         mock_datetime.date.today.return_value = datetime.date(2025, 10, 13)

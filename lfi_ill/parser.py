@@ -6,7 +6,7 @@ from lfi_ill.ast import *
 precedence = (
     ('left', 'TENSOR', 'PAR'),
     ('left', 'PLUS', 'WITH'),
-    ('right', 'NEG', 'CIRC', 'COMP', 'OFC', 'WHYNOT', 'SEC'),
+    ('right', 'NEG', 'CIRC', 'COMP', 'MINUS', 'STAR', 'OFC', 'WHYNOT', 'SEC'),
 )
 
 # --- Parsing Rules ---
@@ -41,6 +41,8 @@ def p_formula_unary_op(p):
     '''formula : NEG formula
                | CIRC formula
                | COMP formula
+               | MINUS formula
+               | STAR formula
                | OFC formula
                | WHYNOT formula
                | SEC formula'''
@@ -50,6 +52,10 @@ def p_formula_unary_op(p):
         p[0] = Consistency(p[2])
     elif p[1] == '~':
         p[0] = Completeness(p[2])
+    elif p[1] == '-':
+        p[0] = CoNegation(p[2])
+    elif p[1] == '*':
+        p[0] = Undeterminedness(p[2])
     elif p[1] == '!':
         p[0] = OfCourse(p[2])
     elif p[1] == '?':
