@@ -1,5 +1,6 @@
 {
   "protocol_id": "critic-meta-protocol-001",
+  "version": "1.0.0",
   "description": "A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent.",
   "rules": [
     {

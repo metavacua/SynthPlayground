@@ -1,4 +1,5 @@
 {
+  "version": "1.0.0",
   "protocol_id": "dependency-management-001",
   "description": "A protocol for ensuring a reliable execution environment through formal dependency management.",
   "rules": [

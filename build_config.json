@@ -20,6 +20,11 @@
       "command": "python3 -m unittest discover -v .",
       "description": "Runs all unit tests in the repository."
     },
+    "test:protocols": {
+      "type": "command",
+      "command": "python3 -m unittest discover -v tests/protocols",
+      "description": "Runs all protocol tests."
+    },
     "docs": {
       "type": "compiler",
       "compiler": "tooling/doc_builder.py",
@@ -98,6 +103,6 @@
   },
   "build_groups": {
     "all": ["docs", "security", "agents", "readme", "pages", "doc-tooling"],
-    "quality": ["format", "lint", "test"]
+    "quality": ["format", "lint", "test", "test:protocols"]
   }
 }

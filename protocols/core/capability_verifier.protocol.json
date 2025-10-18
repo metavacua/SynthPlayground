@@ -1,4 +1,5 @@
 {
+  "version": "1.0.0",
   "protocol_id": "capability-verification-001",
   "description": "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.",
   "rules": [

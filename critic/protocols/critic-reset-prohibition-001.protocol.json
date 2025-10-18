@@ -1,5 +1,6 @@
 {
   "protocol_id": "critic-reset-prohibition-001",
+  "version": "1.0.0",
   "description": "A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool.",
   "rules": [
     {

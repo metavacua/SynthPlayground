@@ -81,3 +81,4 @@ This repository uses a hierarchical protocol system. Each of the following direc
 - [Core](protocols/core/AGENTS.md)
 - [Critic](protocols/critic/AGENTS.md)
 - [Security](protocols/security/AGENTS.md)
+- [Self_improvement](protocols/self_improvement/AGENTS.md)
