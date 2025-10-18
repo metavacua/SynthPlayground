@@ -8,7 +8,5 @@
       "enforcement": "This is a procedural rule. The agent must verify the existence of 'prologue.txt' before using 'create_file_with_block' or similar tools for other files."
     }
   ],
-  "associated_tools": [
-    "create_file_with_block"
-  ]
+  "associated_tools": []
 }

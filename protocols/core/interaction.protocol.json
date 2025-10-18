@@ -13,8 +13,5 @@
       "enforcement": "The agent's core logic should be designed to use this tool for all user-facing communication."
     }
   ],
-  "associated_tools": [
-    "set_plan",
-    "message_user"
-  ]
+  "associated_tools": []
 }

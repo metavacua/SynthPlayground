@@ -8,7 +8,5 @@
       "enforcement": "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/file_indexer.py build'."
     }
   ],
-  "associated_tools": [
-    "tooling/file_indexer.py"
-  ]
+  "associated_tools": []
 }

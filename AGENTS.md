@@ -80,4 +80,5 @@ This repository uses a hierarchical protocol system. Each of the following direc
 - [Compliance](protocols/compliance/AGENTS.md)
 - [Core](protocols/core/AGENTS.md)
 - [Critic](protocols/critic/AGENTS.md)
+- [Meta](protocols/meta/AGENTS.md)
 - [Security](protocols/security/AGENTS.md)

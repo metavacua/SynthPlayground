@@ -11,18 +11,12 @@ import json
 import argparse
 import subprocess
 import sys
-import re
-import time
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
-from concurrent.futures import ThreadPoolExecutor, as_completed
-
-# Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from utils.file_system_utils import find_files, find_protocol_dirs, get_protocol_dir_name
+import os
+import subprocess
 
 # --- Dependency Management ---
 def install_dependencies():
+    # This must be run before any other imports that might be missing.
     script_dir = os.path.dirname(os.path.abspath(__file__))
     requirements_path = os.path.join(script_dir, "requirements.txt")
     if not os.path.exists(requirements_path):
@@ -34,7 +28,7 @@ def install_dependencies():
     if freeze:
         installed_packages = [line.split('==')[0] for line in freeze.freeze()]
     else:
-        req = subprocess.run([sys.executable, '-m', 'pip', 'freeze'], capture_output=True, text=T)
+        req = subprocess.run([sys.executable, '-m', 'pip', 'freeze'], capture_output=True, text=True)
         installed_packages = [line.split('==')[0] for line in req.stdout.split('\n')]
     with open(requirements_path, 'r') as f:
         required_packages = [line.strip() for line in f if line.strip() and not line.startswith('#')]
@@ -44,6 +38,19 @@ def install_dependencies():
         subprocess.check_call([sys.executable, "-m", "pip", "install", *missing_packages])
 
 install_dependencies()
+
+import glob
+import json
+import argparse
+import re
+import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# Add the root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from utils.file_system_utils import find_files, find_protocol_dirs, get_protocol_dir_name
 
 import jsonschema
 from rdflib import Graph
@@ -84,6 +91,17 @@ def sanitize_markdown(content):
     content = re.sub(r" on\w+=\".*?\"", "", content, flags=re.IGNORECASE)
     content = re.sub(r"<<<SENSITIVE_INSTRUCTIONS>>>.*<<<SENSITIVE_INSTRUCTIONS>>>", "", content, flags=re.DOTALL)
     return content
+
+def validate_associated_tools(protocol_data, protocol_filepath):
+    """
+    Validates that the tools listed in the 'associated_tools' field of a protocol exist in the repository.
+    Raises a FileNotFoundError if a tool is not found.
+    """
+    if "associated_tools" in protocol_data:
+        for tool_path in protocol_data["associated_tools"]:
+            full_tool_path = os.path.join(ROOT_DIR, tool_path)
+            if not os.path.exists(full_tool_path):
+                raise FileNotFoundError(f"Associated tool '{tool_path}' in protocol '{protocol_filepath}' does not exist at '{full_tool_path}'")
 
 def compile_single_module(source_dir, target_file, schema_file, knowledge_graph=None, autodoc_file=None):
     output_filename = os.path.basename(target_file)
@@ -126,6 +144,7 @@ def compile_single_module(source_dir, target_file, schema_file, knowledge_graph=
         with open(file_path, "r") as f:
             protocol_data = json.load(f)
         jsonschema.validate(instance=protocol_data, schema=schema)
+        validate_associated_tools(protocol_data, file_path)
 
         if "associated_tools" in protocol_data:
             all_associated_tools.update(protocol_data["associated_tools"])
@@ -210,7 +229,10 @@ def generate_root_agents_md(child_protocol_dirs):
     print(f"Successfully generated root AGENTS.md at {ROOT_AGENTS_MD}")
 
 def main_hierarchical_compiler():
-    """Main function to run the hierarchical compiler."""
+    """
+    Main function to run the hierarchical compiler.
+    This function discovers all protocol directories and compiles them.
+    """
     parser = argparse.ArgumentParser(description="Hierarchical Protocol Compiler")
     parser.add_argument("--knowledge-graph-file", help="Path to output knowledge graph file.")
     args = parser.parse_args()

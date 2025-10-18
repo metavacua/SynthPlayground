@@ -8,7 +8,5 @@
       "enforcement": "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase."
     }
   ],
-  "associated_tools": [
-    "read_file"
-  ]
+  "associated_tools": []
 }
