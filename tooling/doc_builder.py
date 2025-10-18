@@ -259,17 +259,53 @@ def generate_pages(readme_path: str, agents_md_path: str, output_file: str):
 
 
 # --- Main CLI ---
+def generate_tool_readme(source_file: str, output_file: str):
+    """Generates a README.md for a single tool from its docstring."""
+    print(f"Current working directory: {os.getcwd()}")
+    print(f"Source file: {source_file}")
+    print(f"Output file: {output_file}")
+    original_dir = os.getcwd()
+    try:
+        source_dir = os.path.dirname(source_file)
+        os.chdir(source_dir)
+        print(f"Changed directory to: {os.getcwd()}")
+        docstring = get_module_docstring(os.path.basename(source_file))
+        filename = os.path.basename(source_file)
+        template = f"# Tool: `{filename}`\n\n{docstring}"
+        with open(output_file, "w", encoding="utf-8") as f:
+            f.write(template)
+        print(f"--> Tool README written to {os.path.join(os.getcwd(), output_file)}")
+    finally:
+        os.chdir(original_dir)
+
+
+def generate_tooling_readme(source_dir: str, output_file: str):
+    """Generates a single README.md for the tooling directory."""
+    py_files = find_python_files([source_dir])
+
+    parts = ["# Tooling Directory Documentation\n\nThis document provides an overview of the tools available in the `tooling/` directory. It is automatically generated from the docstrings of the tools.\n"]
+
+    for filepath in py_files:
+        filename = os.path.basename(filepath)
+        docstring = get_module_docstring(filepath)
+        parts.append(f"\n---\n\n## `{filename}`\n\n{docstring}\n")
+
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write("".join(parts))
+    print(f"--> Tooling README written to {output_file}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Unified documentation builder.")
-    parser.add_argument("--format", required=True, choices=["system", "readme", "pages"])
+    parser.add_argument("--format", required=True, choices=["system", "readme", "pages", "tooling-readme"])
     parser.add_argument("--source-file", help="Source file for 'readme' or 'pages' format.")
     parser.add_argument("--output-file", help="Output file for any format.")
-    parser.add_argument("--source-dir", action="append", help="Source directory for 'system' format.")
+    parser.add_argument("--source-dir", help="Source directory for 'system' or 'tooling-readme' format.")
     args = parser.parse_args()
 
     print(f"--- Running Documentation Builder (Format: {args.format.upper()}) ---")
     if args.format == "system":
-        source_dirs = args.source_dir or [os.path.join(ROOT_DIR, "tooling/"), os.path.join(ROOT_DIR, "utils/")]
+        source_dirs = [args.source_dir] if args.source_dir else [os.path.join(ROOT_DIR, "tooling/"), os.path.join(ROOT_DIR, "utils/")]
         output_file = args.output_file or os.path.join(ROOT_DIR, "knowledge_core", "SYSTEM_DOCUMENTATION.md")
         generate_system_docs(source_dirs, output_file)
     elif args.format == "readme":
@@ -281,6 +317,11 @@ def main():
         agents_file = os.path.join(os.path.dirname(readme_file), "AGENTS.md")
         output_file = args.output_file or os.path.join(ROOT_DIR, "index.html")
         generate_pages(readme_file, agents_file, output_file)
+    elif args.format == "tooling-readme":
+        if not args.source_dir:
+            parser.error("--source-dir is required for 'tooling-readme' format.")
+        output_file = args.output_file or os.path.join(args.source_dir, "README.md")
+        generate_tooling_readme(args.source_dir, output_file)
     print("--- Documentation Builder Finished ---")
 
 if __name__ == "__main__":

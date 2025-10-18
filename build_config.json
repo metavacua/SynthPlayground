@@ -21,18 +21,37 @@
       "description": "Runs all unit tests in the repository."
     },
     "docs": {
-      "type": "command",
-      "command": "python3 tooling/doc_builder.py --format system",
-      "description": "Generates detailed system documentation."
+      "type": "compiler",
+      "compiler": "tooling/doc_builder.py",
+      "options": {
+        "--format": "system"
+      },
+      "description": "Generates detailed system documentation from docstrings."
     },
     "readme": {
-      "type": "command",
-      "command": "python3 tooling/doc_builder.py --format readme",
+      "type": "compiler",
+      "compiler": "tooling/doc_builder.py",
+       "options": {
+        "--format": "readme"
+      },
       "description": "Generates the root README.md file."
     },
+    "doc-tooling": {
+        "type": "compiler",
+        "compiler": "tooling/doc_builder.py",
+        "options": {
+            "--format": "tooling-readme",
+            "--source-dir": "tooling/",
+            "--output-file": "tooling/README.md"
+        },
+        "description": "Generates a README for the tooling directory."
+    },
     "pages": {
-      "type": "command",
-      "command": "python3 tooling/doc_builder.py --format pages",
+      "type": "compiler",
+      "compiler": "tooling/doc_builder.py",
+      "options": {
+        "--format": "pages"
+      },
       "description": "Generates index.html for GitHub Pages."
     },
     "security": {
@@ -49,12 +68,22 @@
     },
     "agents": {
       "type": "compiler",
-      "output": "AGENTS.md",
-      "compiler": "tooling/hierarchical_compiler.py",
-      "sources": [
-        "protocols/"
-      ],
+      "compiler": "tooling/protocol_compiler.py",
       "description": "Recursively compiles all AGENTS.md files."
+    },
+    "knowledge-graph": {
+        "type": "compiler",
+        "compiler": "tooling/protocol_compiler.py",
+        "options": {
+            "--knowledge-graph-file": "knowledge_core/protocols.ttl"
+        },
+        "description": "Generates the knowledge graph from all protocols."
+    },
+    "knowledge": {
+        "type": "compiler",
+        "compiler": "tooling/knowledge_compiler.py",
+        "sources": ["postmortems/"],
+        "description": "Compiles lessons learned from post-mortem reports."
     },
     "audit": {
       "type": "command",
@@ -63,12 +92,12 @@
     },
     "clean": {
         "type": "command",
-        "command": "rm -f AGENTS.md README.md SECURITY.md knowledge_core/SYSTEM_DOCUMENTATION.md index.html",
+        "command": "rm -f AGENTS.md README.md SECURITY.md knowledge_core/SYSTEM_DOCUMENTATION.md index.html tooling/README.md",
         "description": "Removes all compiled protocol and documentation artifacts."
     }
   },
   "build_groups": {
-    "all": ["docs", "security", "agents", "readme", "pages"],
+    "all": ["docs", "security", "agents", "readme", "pages", "doc-tooling"],
     "quality": ["format", "lint", "test"]
   }
 }
