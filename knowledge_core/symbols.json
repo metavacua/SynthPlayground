@@ -3695,7 +3695,7 @@
       "name": "generate_root_agents_md",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 190,
+      "line": 194,
       "kind": "function",
       "docstring": "Generates the root AGENTS.md file, linking to all successfully compiled child modules."
     },
@@ -3704,7 +3704,7 @@
       "name": "main_orchestrator",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 238,
+      "line": 242,
       "kind": "function",
       "docstring": "Main function to find and run all local build scripts in parallel."
     },
@@ -6929,6 +6929,69 @@
       "line": 41,
       "kind": "function",
       "docstring": "Tests the main function of the code suggester."
+    },
+    {
+      "_type": "tag",
+      "name": "ExecutableCommand",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "class",
+      "docstring": "Represents a single, parsed command from a self-executing plan."
+    },
+    {
+      "_type": "tag",
+      "name": "parse_executable_plan",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function",
+      "docstring": "Parses the raw text of a plan into a list of ExecutableCommand objects."
+    },
+    {
+      "_type": "tag",
+      "name": "run_in_bash_session",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 78,
+      "kind": "function",
+      "docstring": "Simulates running a command in a bash session."
+    },
+    {
+      "_type": "tag",
+      "name": "message_user",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 88,
+      "kind": "function",
+      "docstring": "Simulates sending a message to the user."
+    },
+    {
+      "_type": "tag",
+      "name": "execute_command",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 100,
+      "kind": "function",
+      "docstring": "Executes a single command and returns True on success, False on failure."
+    },
+    {
+      "_type": "tag",
+      "name": "run_plan",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 129,
+      "kind": "function",
+      "docstring": "Parses and executes a plan."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 145,
+      "kind": "function",
+      "docstring": "Main function to run the plan runner from the command line."
     },
     {
       "_type": "tag",
