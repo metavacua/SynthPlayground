@@ -2936,48 +2936,21 @@
     },
     {
       "_type": "tag",
-      "name": "analyze_planning_efficiency",
+      "name": "create_proposal",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
-      "line": 36,
+      "line": 53,
       "kind": "function",
-      "docstring": "Analyzes the log file to find tasks with multiple plan revisions.\n\nArgs:\n    log_file (str): Path to the activity log file.\n\nReturns:\n    dict: A dictionary mapping task IDs to the number of plan updates."
-    },
-    {
-      "_type": "tag",
-      "name": "analyze_protocol_violations",
-      "path": "./tooling/self_improvement_cli.py",
-      "language": "Python",
-      "line": 77,
-      "kind": "function",
-      "docstring": "Scans the log file for critical protocol violations, such as the\nunauthorized use of `reset_all`.\n\nThis function checks for two conditions:\n1. A `SYSTEM_FAILURE` log explicitly blaming `reset_all`.\n2. A `TOOL_EXEC` log where the command contains \"reset_all\".\n\nArgs:\n    log_file (str): Path to the activity log file.\n\nReturns:\n    list: A list of unique task IDs where `reset_all` was used."
-    },
-    {
-      "_type": "tag",
-      "name": "analyze_error_rates",
-      "path": "./tooling/self_improvement_cli.py",
-      "language": "Python",
-      "line": 127,
-      "kind": "function",
-      "docstring": "Analyzes the log file to calculate action success/failure rates.\n\nArgs:\n    log_file (str): Path to the activity log file.\n\nReturns:\n    dict: A dictionary containing total counts, success/failure counts,\n          and a breakdown of failures by action type."
-    },
-    {
-      "_type": "tag",
-      "name": "run_self_improvement_task",
-      "path": "./tooling/self_improvement_cli.py",
-      "language": "Python",
-      "line": 180,
-      "kind": "function",
-      "docstring": "Invokes the agent_shell.py to run a self-improvement task for a specific model."
+      "docstring": "Creates a new, structured proposal for self-improvement."
     },
     {
       "_type": "tag",
       "name": "main",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
-      "line": 201,
+      "line": 75,
       "kind": "function",
-      "docstring": "Main function to run the self-improvement analysis CLI."
+      "docstring": "Main function to run the self-improvement proposal generator."
     },
     {
       "_type": "tag",
@@ -3665,19 +3638,55 @@
     },
     {
       "_type": "tag",
-      "name": "run_local_build",
+      "name": "load_schema",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 59,
+      "line": 71,
       "kind": "function",
-      "docstring": "Executes the local build script for a given protocol module.\nReturns the path and a boolean indicating success."
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "sanitize_markdown",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 84,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "extract_docstring",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 90,
+      "kind": "function",
+      "docstring": "Extracts the module-level docstring from a Python file."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_single_module",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 103,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_module_wrapper",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 180,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
       "name": "generate_root_agents_md",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 83,
+      "line": 195,
       "kind": "function",
       "docstring": "Generates the root AGENTS.md file, linking to all successfully compiled child modules."
     },
@@ -3686,7 +3695,7 @@
       "name": "main_orchestrator",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 131,
+      "line": 243,
       "kind": "function",
       "docstring": "Main function to find and run all local build scripts in parallel."
     },
@@ -4736,114 +4745,6 @@
     },
     {
       "_type": "tag",
-      "name": "TestPlanningEfficiencyAnalysis",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 15,
-      "kind": "class",
-      "docstring": "Tests for the analyze_planning_efficiency function."
-    },
-    {
-      "_type": "tag",
-      "name": "TestProtocolViolationAnalysis",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 66,
-      "kind": "class",
-      "docstring": "Tests for the analyze_protocol_violations function."
-    },
-    {
-      "_type": "tag",
-      "name": "TestErrorRateAnalysis",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 125,
-      "kind": "class",
-      "docstring": "Tests for the analyze_error_rates function."
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 18,
-      "kind": "function",
-      "docstring": "Set up a temporary log file for testing planning efficiency."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 53,
-      "kind": "function",
-      "docstring": "Clean up the temporary log file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_analyze_planning_efficiency",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 58,
-      "kind": "function",
-      "docstring": "Test that the analysis correctly identifies tasks with multiple plan updates."
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 69,
-      "kind": "function",
-      "docstring": "Set up a temporary log file for testing protocol violations."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 112,
-      "kind": "function",
-      "docstring": "Clean up the temporary log file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_analyze_protocol_violations",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 117,
-      "kind": "function",
-      "docstring": "Test that `reset_all` is detected in both SYSTEM_FAILURE and TOOL_EXEC logs."
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 128,
-      "kind": "function",
-      "docstring": "Set up a temporary log file for testing error rate analysis."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 158,
-      "kind": "function",
-      "docstring": "Clean up the temporary log file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_analyze_error_rates",
-      "path": "./tooling/test_self_improvement_cli.py",
-      "language": "Python",
-      "line": 163,
-      "kind": "function",
-      "docstring": "Test that error rates and failure types are calculated correctly."
-    },
-    {
-      "_type": "tag",
       "name": "AtomNode",
       "path": "./tooling/pda_parser.py",
       "language": "Python",
@@ -5306,27 +5207,54 @@
       "name": "TestNewSelfImprovementCLI",
       "path": "./tooling/test_new_self_improvement_cli.py",
       "language": "Python",
-      "line": 5,
+      "line": 6,
       "kind": "class",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_run_improvement_for_model_a",
+      "name": "setUp",
       "path": "./tooling/test_new_self_improvement_cli.py",
       "language": "Python",
       "line": 8,
       "kind": "function",
-      "docstring": null
+      "docstring": "Set up a clean proposals directory for each test."
     },
     {
       "_type": "tag",
-      "name": "test_run_improvement_for_model_b",
+      "name": "tearDown",
       "path": "./tooling/test_new_self_improvement_cli.py",
       "language": "Python",
-      "line": 14,
+      "line": 15,
       "kind": "function",
-      "docstring": null
+      "docstring": "Clean up the proposals directory after each test."
+    },
+    {
+      "_type": "tag",
+      "name": "test_create_proposal_creates_directory_and_file",
+      "path": "./tooling/test_new_self_improvement_cli.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": "Tests that `create_proposal` successfully creates a directory and a\nproposal.md file inside it."
+    },
+    {
+      "_type": "tag",
+      "name": "test_create_proposal_file_contains_template",
+      "path": "./tooling/test_new_self_improvement_cli.py",
+      "language": "Python",
+      "line": 40,
+      "kind": "function",
+      "docstring": "Tests that the generated proposal.md file contains the correct\ntemplate content."
+    },
+    {
+      "_type": "tag",
+      "name": "test_create_proposal_is_idempotent",
+      "path": "./tooling/test_new_self_improvement_cli.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function",
+      "docstring": "Tests that calling create_proposal multiple times results in multiple,\nunique proposal directories."
     },
     {
       "_type": "tag",
