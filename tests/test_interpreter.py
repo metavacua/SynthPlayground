@@ -43,13 +43,26 @@ class TestInterpreter(unittest.TestCase):
         let_pair = LetPair('x', 'y', Pair(Int(1), String("hello")), Var('x'))
         self.assertEqual(interpret(let_pair), Int(1))
 
+    def test_let_pair_error(self):
+        let_pair = LetPair('x', 'y', Int(1), Var('x'))
+        with self.assertRaises(InterpError):
+            interpret(let_pair)
+
     def test_inl_inr(self):
         self.assertEqual(interpret(Inl(Int(1), TString())), Inl(Int(1), TString()))
         self.assertEqual(interpret(Inr(String("hello"), TInt())), Inr(String("hello"), TInt()))
 
     def test_case(self):
-        case_exp = Case(Inl(Int(1), TString()), 'x', Var('x'), 'y', Int(2))
-        self.assertEqual(interpret(case_exp), Int(1))
+        case_exp_inl = Case(Inl(Int(1), TString()), 'x', Var('x'), 'y', Int(2))
+        self.assertEqual(interpret(case_exp_inl), Int(1))
+
+        case_exp_inr = Case(Inr(String("hello"), TInt()), 'x', Int(2), 'y', Var('y'))
+        self.assertEqual(interpret(case_exp_inr), String("hello"))
+
+    def test_case_error(self):
+        case_exp = Case(Int(1), 'x', Var('x'), 'y', Int(2))
+        with self.assertRaises(InterpError):
+            interpret(case_exp)
 
     def test_promote(self):
         self.assertEqual(interpret(Promote(Int(1))), Int(1))
