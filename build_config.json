@@ -17,8 +17,8 @@
     },
     "test": {
       "type": "command",
-      "command": "python3 -m unittest discover -v .",
-      "description": "Runs all unit tests in the repository."
+      "command": "python3 tooling/agent_shell.py \"Run tests\"",
+      "description": "Runs all unit tests in the repository via the agent shell."
     },
     "docs": {
       "type": "command",

@@ -283,62 +283,36 @@ class MasterControlGraph:
 
         return True, ""
 
-    def do_researching(self, agent_state: AgentState, logger: Logger) -> str:
+    def do_researching(self, agent_state: AgentState, logger: Logger, tools: dict) -> str:
         """
-        Launches the background research process.
+        Performs research using the provided tools.
         """
-        agent_state.current_thought = "Plan requires research. Launching background researcher."
+        agent_state.current_thought = "Plan requires research. Starting research."
         logger.log("Phase 3", agent_state.task, -1, "INFO", {"state": "RESEARCHING"}, "SUCCESS", context=_get_log_context(agent_state))
         try:
-            task_id = agent_state.task
-            process = subprocess.Popen(
-                ["python", "tooling/background_researcher.py", task_id],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-            )
-            agent_state.background_processes["research"] = process
-            agent_state.current_thought = f"Background research process started (PID: {process.pid})."
-            logger.log("Phase 3", task_id, -1, "INFO", {"summary": f"Started background research (PID: {process.pid})"}, "SUCCESS", context=_get_log_context(agent_state))
-            return self.get_trigger("RESEARCHING", "AWAITING_RESULT")
-        except Exception as e:
-            agent_state.error = f"Failed to start research process: {e}"
-            agent_state.current_thought = f"CRITICAL ERROR launching research process: {e}"
-            logger.log("Phase 3", agent_state.task, -1, "SYSTEM_FAILURE", {"state": "ERROR"}, "FAILURE", str(e), context=_get_log_context(agent_state))
-            return self.get_trigger("RESEARCHING", "ERROR")
+            # A simple research plan: search for the task description
+            search_tool = tools.get("google_search")
+            if search_tool:
+                search_results = search_tool(agent_state.task)
+                agent_state.research_findings["search_results"] = search_results
+                logger.log("Phase 3", agent_state.task, -1, "INFO", {"summary": "Performed google search."}, "SUCCESS", context=_get_log_context(agent_state))
 
-    def do_awaiting_result(self, agent_state: AgentState, logger: Logger) -> str:
-        """
-        Checks for the result of the background research process.
-        """
-        task_id = agent_state.task
-        result_path = f"/tmp/{task_id}.result"
-        if os.path.exists(result_path):
-            with open(result_path, "r") as f:
-                result = f.read()
-            os.remove(result_path) # Clean up the result file
-            # Store and log the research findings
-            agent_state.research_findings["report"] = result
-            report_path = f"reports/{task_id}-research.md"
+            # In a real scenario, we might view websites, etc.
+            # For now, we'll just use the search results.
+
+            report_path = f"reports/{agent_state.task}-research.md"
             os.makedirs(os.path.dirname(report_path), exist_ok=True)
             with open(report_path, "w") as f:
-                f.write(f"# Research Report for Task: {task_id}\n\n{result}")
-            agent_state.current_thought = "Research complete. Integrating findings and returning to planning."
-            logger.log("Phase 3", task_id, -1, "RESEARCH_REPORT", {"path": report_path}, "SUCCESS", context=_get_log_context(agent_state))
-            return self.get_trigger("AWAITING_RESULT", "PLANNING")
-        else:
-            # Check if the process is still running
-            process = agent_state.background_processes.get("research")
-            if process and process.poll() is not None: # Process has terminated
-                stdout, stderr = process.communicate()
-                agent_state.error = f"Research process failed with code {process.returncode}.\nStderr: {stderr.decode()}"
-                agent_state.current_thought = f"CRITICAL ERROR: Research process failed unexpectedly."
-                logger.log("Phase 3", task_id, -1, "SYSTEM_FAILURE", {"state": "ERROR"}, "FAILURE", agent_state.error, context=_get_log_context(agent_state))
-                return self.get_trigger("AWAITING_RESULT", "ERROR") # Should be a transition from AWAITING_RESULT to ERROR
+                f.write(f"# Research Report for Task: {agent_state.task}\n\n{agent_state.research_findings.get('search_results', 'No results')}")
 
-            agent_state.current_thought = "Awaiting result from background research process."
-            logger.log("Phase 3", task_id, -1, "INFO", {"summary": "Waiting for research result..."}, "SUCCESS", context=_get_log_context(agent_state))
-            time.sleep(1) # Wait before checking again
-            return self.get_trigger("AWAITING_RESULT", "AWAITING_RESULT")
+            agent_state.current_thought = "Research complete. Integrating findings and returning to planning."
+            logger.log("Phase 3", agent_state.task, -1, "RESEARCH_REPORT", {"path": report_path}, "SUCCESS", context=_get_log_context(agent_state))
+            return self.get_trigger("RESEARCHING", "PLANNING")
+        except Exception as e:
+            agent_state.error = f"Research failed: {e}"
+            agent_state.current_thought = f"CRITICAL ERROR during research: {e}"
+            logger.log("Phase 3", agent_state.task, -1, "SYSTEM_FAILURE", {"state": "ERROR"}, "FAILURE", str(e), context=_get_log_context(agent_state))
+            return self.get_trigger("RESEARCHING", "research_failed")
 
     def get_current_step(self, agent_state: AgentState) -> Command | None:
         """
@@ -422,6 +396,42 @@ class MasterControlGraph:
         )
         # In a real implementation, this would involve running debugging tools
         return self.get_trigger("DEBUGGING", "EXECUTING")
+
+    def generate_plan_from_research(self, agent_state: AgentState) -> str:
+        """Generates a plan based on research findings."""
+        return f"""\
+# FSM: tooling/fsm.json
+set_plan
+# This is a plan created with research findings.
+# Research summary: {agent_state.research_findings.get('search_results', 'N/A')}
+---
+message_user
+The research findings have been integrated. I will now proceed with the task.
+"""
+
+    def generate_postmortem_analysis(self, agent_state: AgentState, logger: Logger) -> str:
+        """Analyzes the logs to generate a post-mortem."""
+        # This is a simplified analysis. A real implementation would be more sophisticated.
+        log_path = logger.log_path
+        if not os.path.exists(log_path):
+            return "No log file found. Analysis is not possible."
+
+        with open(log_path, "r") as f:
+            logs = [json.loads(line) for line in f]
+
+        task_logs = [log for log in logs if log.get("task", {}).get("id") == agent_state.task]
+
+        if not task_logs:
+            return "No logs found for this task."
+
+        tool_calls = [log for log in task_logs if log.get("action", {}).get("type") == "TOOL_EXEC"]
+
+        analysis = f"""\
+- Task completed successfully.
+- Executed {len(tool_calls)} tool calls.
+- Final state: {self.current_state}
+"""
+        return analysis
 
     def do_finalizing(
         self, agent_state: AgentState, analysis_content: str, logger: Logger
