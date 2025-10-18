@@ -1,6 +1,6 @@
 {
   "protocol_id": "agent-shell-001",
-  "description": "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.\n\n**Associated Tool Documentation (`tooling/agent_shell.py`):**\n\n  \n  ### `/app/tooling/agent_shell.py`\n  The new, interactive, API-driven entry point for the agent.\n  \n  This script replaces the old file-based signaling system with a direct,\n  programmatic interface to the MasterControlGraph FSM. It is responsible for:\n  1.  Initializing the agent's state and a centralized logger.\n  2.  Instantiating and running the MasterControlGraph.\n  3.  Driving the FSM by calling its methods and passing data and the logger.\n  4.  Containing the core \"agent logic\" (e.g., an LLM call) to generate plans\n      and respond to requests for action.\n  \n  **Public Functions:**\n  \n  - #### `def find_fsm_transition(fsm, source_state, trigger)`\n    > Finds the destination state for a given source and trigger.\n  \n  - #### `def main()`\n    > Main entry point for the agent shell.\n  \n  - #### `def run_agent_loop(task_description, tools, model=None)`\n    > The main loop that drives the agent's lifecycle via the FSM.\n",
+  "description": "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.",
   "rules": [
     {
       "rule_id": "shell-is-primary-entry-point",

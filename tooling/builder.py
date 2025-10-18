@@ -98,9 +98,15 @@ def execute_build(target_name, config):
 
     if target_type == "compiler":
         command, command_str = execute_compiler_target(target_name, target_config)
+        shell = False
     elif target_type == "command":
         command, command_str = execute_command_target(target_name, target_config)
-        shell = True # Shell commands run with shell=True
+        shell = True  # Shell commands run with shell=True
+    elif target_type == "group":
+        print(f"  - Executing group '{target_name}'...")
+        for step in target_config.get("steps", []):
+            execute_build(step, config)
+        return  # Return after the group is executed
     else:
         raise ValueError(f"Unknown target type '{target_type}' for target '{target_name}'")
 

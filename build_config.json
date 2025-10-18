@@ -15,10 +15,15 @@
       "command": "flake8 .",
       "description": "Lints all Python code using flake8."
     },
-    "test": {
+    "test-command": {
       "type": "command",
       "command": "python3 -m unittest discover -v .",
-      "description": "Runs all unit tests in the repository."
+      "description": "Helper command to run unit tests."
+    },
+    "test": {
+      "type": "group",
+      "steps": ["install", "test-command"],
+      "description": "Installs dependencies and runs all unit tests."
     },
     "docs": {
       "type": "command",

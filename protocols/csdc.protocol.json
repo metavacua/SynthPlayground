@@ -1,6 +1,6 @@
 {
   "protocol_id": "csdc-001",
-  "description": "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.\n\n**Associated Tool Documentation (`tooling/csdc_cli.py`):**\n\n  \n  ### `/app/tooling/csdc_cli.py`\n  A command-line tool for managing the Context-Sensitive Development Cycle (CSDC).\n  \n  This script provides an interface to validate a development plan against a specific\n  CSDC model (A or B) and a given complexity class (P or EXP). It ensures that a\n  plan adheres to the strict logical and computational constraints defined by the\n  CSDC protocol before it is executed.\n  \n  The tool performs two main checks:\n  1.  **Complexity Analysis:** It analyzes the plan to determine its computational\n      complexity and verifies that it matches the expected complexity class.\n  2.  **Model Validation:** It validates the plan's commands against the rules of\n      the specified CSDC model, ensuring that it does not violate any of the\n      model's constraints (e.g., forbidding certain functions).\n  \n  This serves as a critical gateway for ensuring that all development work within\n  the CSDC framework is sound, predictable, and compliant with the governing\n  meta-mathematical principles.\n  \n  **Public Functions:**\n  \n  - #### `def main()`\n",
+  "description": "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.",
   "rules": [
     {
       "rule_id": "use-csdc-cli",
