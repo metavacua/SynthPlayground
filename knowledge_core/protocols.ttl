@@ -1,261 +1,232 @@
-@prefix ns1: <https://w3id.org/ai-protocol/v1/> .
+@prefix protocol: <https://www.aida.org/protocol#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-<urn:protocol:agent-bootstrap-001> a ns1:Protocol ;
-    rdfs:label "A foundational protocol that dictates the agent's initial actions upon starting any task." ;
-    ns1:hasVersion <urn:protocol:agent-bootstrap-001:version:1.0.0> .
+protocol:agent-bootstrap-001 a protocol:Protocol ;
+    rdfs:label "agent-bootstrap-001" ;
+    protocol:description "A foundational protocol that dictates the agent's initial actions upon starting any task." ;
+    protocol:hasRule protocol:bootstrap-load-agents-md .
 
-<urn:protocol:agent-interaction-001> a ns1:Protocol ;
-    rdfs:label "A protocol governing the agent's core interaction and planning tools." ;
-    ns1:hasVersion <urn:protocol:agent-interaction-001:version:1.0.0> .
+protocol:agent-interaction-001 a protocol:Protocol ;
+    rdfs:label "agent-interaction-001" ;
+    protocol:description "A protocol governing the agent's core interaction and planning tools." ;
+    protocol:hasRule protocol:communication-tool-access,
+        protocol:planning-tool-access .
 
-<urn:protocol:agent-shell-001> a ns1:Protocol ;
-    rdfs:label "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks." ;
-    ns1:hasVersion <urn:protocol:agent-shell-001:version:1.0.0> .
+protocol:agent-shell-001 a protocol:Protocol ;
+    rdfs:label "agent-shell-001" ;
+    protocol:description "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks." ;
+    protocol:hasRule protocol:shell-is-primary-entry-point .
 
-<urn:protocol:aura-execution-001> a ns1:Protocol ;
-    rdfs:label "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent." ;
-    ns1:hasVersion <urn:protocol:aura-execution-001:version:1.0.0> .
+protocol:aura-execution-001 a protocol:Protocol ;
+    rdfs:label "aura-execution-001" ;
+    protocol:description "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent." ;
+    protocol:hasRule protocol:execute-aura-script .
 
-<urn:protocol:capability-verification-001> a ns1:Protocol ;
-    rdfs:label "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement." ;
-    ns1:hasVersion <urn:protocol:capability-verification-001:version:1.0.0> .
+protocol:capability-verification-001 a protocol:Protocol ;
+    rdfs:label "capability-verification-001" ;
+    protocol:description "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement." ;
+    protocol:hasRule protocol:verify-capability-acquisition .
 
-<urn:protocol:csdc-001> a ns1:Protocol ;
-    rdfs:label "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints." ;
-    ns1:hasVersion <urn:protocol:csdc-001:version:1.0.0> .
+protocol:core-conditional-refactoring-001 a protocol:Protocol ;
+    rdfs:label "core-conditional-refactoring-001" ;
+    protocol:description "A protocol that applies specific refactoring guidelines only when working on the 'legacy' module." ;
+    protocol:hasApplicabilityCondition "/app/protocols/core/conditional_refactoring.protocol.py" ;
+    protocol:hasRule protocol:cr-001,
+        protocol:cr-002 .
 
-<urn:protocol:dependency-management-001> a ns1:Protocol ;
-    rdfs:label "A protocol for ensuring a reliable execution environment through formal dependency management." ;
-    ns1:hasVersion <urn:protocol:dependency-management-001:version:1.0.0> .
+protocol:csdc-001 a protocol:Protocol ;
+    rdfs:label "csdc-001" ;
+    protocol:description "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints." ;
+    protocol:hasRule protocol:model-a-constraints,
+        protocol:model-b-constraints,
+        protocol:use-csdc-cli .
 
-<urn:protocol:experimental-prologue-001> a ns1:Protocol ;
-    rdfs:label "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation." ;
-    ns1:hasVersion <urn:protocol:experimental-prologue-001:version:1.0.0> .
+protocol:dependency-management-001 a protocol:Protocol ;
+    rdfs:label "dependency-management-001" ;
+    protocol:description "A protocol for ensuring a reliable execution environment through formal dependency management." ;
+    protocol:hasRule protocol:dependency-install-on-start .
 
-<urn:protocol:file-indexing-001> a ns1:Protocol ;
-    rdfs:label "A protocol for maintaining an up-to-date file index to accelerate tool performance." ;
-    ns1:hasVersion <urn:protocol:file-indexing-001:version:1.0.0> .
+protocol:experimental-prologue-001 a protocol:Protocol ;
+    rdfs:label "experimental-prologue-001" ;
+    protocol:description "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation." ;
+    protocol:hasRule protocol:create-prologue-file .
 
-<urn:protocol:hdl-proving-001> a ns1:Protocol ;
-    rdfs:label "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs." ;
-    ns1:hasVersion <urn:protocol:hdl-proving-001:version:1.0.0> .
+protocol:file-indexing-001 a protocol:Protocol ;
+    rdfs:label "file-indexing-001" ;
+    protocol:description "A protocol for maintaining an up-to-date file index to accelerate tool performance." ;
+    protocol:hasRule protocol:update-index-before-submit .
 
-<urn:protocol:plllu-execution-001> a ns1:Protocol ;
-    rdfs:label "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent." ;
-    ns1:hasVersion <urn:protocol:plllu-execution-001:version:1.0.0> .
+protocol:hdl-proving-001 a protocol:Protocol ;
+    rdfs:label "hdl-proving-001" ;
+    protocol:description "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs." ;
+    protocol:hasRule protocol:prove-sequent .
 
-<urn:protocol:security-header> a ns1:Protocol ;
-    rdfs:label "Defines the identity and purpose of the Security Protocol document." ;
-    ns1:hasVersion <urn:protocol:security-header:version:1.0.0> .
+protocol:plllu-execution-001 a protocol:Protocol ;
+    rdfs:label "plllu-execution-001" ;
+    protocol:description "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent." ;
+    protocol:hasRule protocol:execute-plllu-script .
 
-<urn:protocol:security-vuln-reporting-001> a ns1:Protocol ;
-    rdfs:label "Defines the official policy and procedure for reporting security vulnerabilities." ;
-    ns1:hasVersion <urn:protocol:security-vuln-reporting-001:version:1.0.0> .
+protocol:security-header a protocol:Protocol ;
+    rdfs:label "security-header" ;
+    protocol:description "Defines the identity and purpose of the Security Protocol document." .
 
-<urn:protocol:self-improvement-protocol-001> a ns1:Protocol ;
-    rdfs:label "A protocol governing the process for an agent to propose, implement, and validate improvements to the agent's own operational protocols and tools." ;
-    ns1:hasVersion <urn:protocol:self-improvement-protocol-001:version:1.0.0> .
+protocol:security-vuln-reporting-001 a protocol:Protocol ;
+    rdfs:label "security-vuln-reporting-001" ;
+    protocol:description "Defines the official policy and procedure for reporting security vulnerabilities." ;
+    protocol:hasRule protocol:no-public-disclosure,
+        protocol:vuln-reporting-channel .
 
-<urn:protocol:speculative-execution-001> a ns1:Protocol ;
-    rdfs:label "A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods." ;
-    ns1:hasVersion <urn:protocol:speculative-execution-001:version:1.0.0> .
+protocol:speculative-execution-001 a protocol:Protocol ;
+    rdfs:label "speculative-execution-001" ;
+    protocol:description "A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods." ;
+    protocol:hasRule protocol:formal-proposal-required,
+        protocol:idle-state-trigger,
+        protocol:resource-constraints,
+        protocol:speculative-logging,
+        protocol:user-review-gate .
 
-<urn:protocol:toolchain-review-on-schema-change-001> a ns1:Protocol ;
-    rdfs:label "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols." ;
-    ns1:hasVersion <urn:protocol:toolchain-review-on-schema-change-001:version:1.0.0> .
+protocol:toolchain-review-on-schema-change-001 a protocol:Protocol ;
+    rdfs:label "toolchain-review-on-schema-change-001" ;
+    protocol:description "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols." ;
+    protocol:hasRule protocol:toolchain-audit-on-schema-change .
 
-<urn:protocol:unified-auditor-001> a ns1:Protocol ;
-    rdfs:label "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface." ;
-    ns1:hasVersion <urn:protocol:unified-auditor-001:version:1.0.0> .
+protocol:unified-auditor-001 a protocol:Protocol ;
+    rdfs:label "unified-auditor-001" ;
+    protocol:description "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface." ;
+    protocol:hasRule protocol:run-all-audits .
 
-<urn:protocol:unified-doc-builder-001> a ns1:Protocol ;
-    rdfs:label "A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth." ;
-    ns1:hasVersion <urn:protocol:unified-doc-builder-001:version:1.0.0> .
+protocol:unified-doc-builder-001 a protocol:Protocol ;
+    rdfs:label "unified-doc-builder-001" ;
+    protocol:description "A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth." ;
+    protocol:hasRule protocol:use-doc-builder-for-all-docs .
 
-<urn:protocol:agent-bootstrap-001:rule:bootstrap-load-agents-md> a ns1:Rule ;
-    rdfs:label "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins." .
+protocol:bootstrap-load-agents-md a protocol:Rule ;
+    rdfs:label "bootstrap-load-agents-md" ;
+    protocol:description "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins." ;
+    protocol:enforcement "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase." .
 
-<urn:protocol:agent-bootstrap-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of agent-bootstrap-001" ;
-    ns1:hasRule <urn:protocol:agent-bootstrap-001:rule:bootstrap-load-agents-md> ;
-    ns1:versionString "1.0.0" .
+protocol:communication-tool-access a protocol:Rule ;
+    rdfs:label "communication-tool-access" ;
+    protocol:description "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow." ;
+    protocol:enforcement "The agent's core logic should be designed to use this tool for all user-facing communication." .
 
-<urn:protocol:agent-interaction-001:rule:communication-tool-access> a ns1:Rule ;
-    rdfs:label "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow." .
+protocol:cr-001 a protocol:Rule ;
+    rdfs:label "cr-001" ;
+    protocol:description "When refactoring legacy code, prioritize replacing deprecated function calls with their modern equivalents as defined in the 'Modernization Guide'." ;
+    protocol:enforcement "The 'refactor.py' tool will cross-reference changes against a list of known deprecated functions when operating in legacy mode." .
 
-<urn:protocol:agent-interaction-001:rule:planning-tool-access> a ns1:Rule ;
-    rdfs:label "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution." .
+protocol:cr-002 a protocol:Rule ;
+    rdfs:label "cr-002" ;
+    protocol:description "Dynamic rule from /app/protocols/core/conditional_refactoring.protocol.py" ;
+    protocol:enforcement "Procedural. The agent must explicitly tag the 'Legacy Systems Team' in the pull request description." .
 
-<urn:protocol:agent-interaction-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of agent-interaction-001" ;
-    ns1:hasRule <urn:protocol:agent-interaction-001:rule:communication-tool-access>,
-        <urn:protocol:agent-interaction-001:rule:planning-tool-access> ;
-    ns1:versionString "1.0.0" .
+protocol:create-prologue-file a protocol:Rule ;
+    rdfs:label "create-prologue-file" ;
+    protocol:description "Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols." ;
+    protocol:enforcement "This is a procedural rule. The agent must verify the existence of 'prologue.txt' before using 'create_file_with_block' or similar tools for other files." .
 
-<urn:protocol:agent-shell-001:rule:shell-is-primary-entry-point> a ns1:Rule ;
-    rdfs:label "All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation." .
+protocol:dependency-install-on-start a protocol:Rule ;
+    rdfs:label "dependency-install-on-start" ;
+    protocol:description "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed." ;
+    protocol:enforcement "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions." .
 
-<urn:protocol:agent-shell-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of agent-shell-001" ;
-    ns1:hasRule <urn:protocol:agent-shell-001:rule:shell-is-primary-entry-point> ;
-    ns1:versionString "1.0.0" .
+protocol:execute-aura-script a protocol:Rule ;
+    rdfs:label "execute-aura-script" ;
+    protocol:description "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter." ;
+    protocol:enforcement "The tool is used by invoking it from the command line with the path to the Aura script as an argument." .
 
-<urn:protocol:aura-execution-001:rule:execute-aura-script> a ns1:Rule ;
-    rdfs:label "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter." .
+protocol:execute-plllu-script a protocol:Rule ;
+    rdfs:label "execute-plllu-script" ;
+    protocol:description "The `plllu_runner.py` tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter." ;
+    protocol:enforcement "The tool is used by invoking it from the command line with the path to the pLLLU script as an argument." .
 
-<urn:protocol:aura-execution-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of aura-execution-001" ;
-    ns1:hasRule <urn:protocol:aura-execution-001:rule:execute-aura-script> ;
-    ns1:versionString "1.0.0" .
+protocol:formal-proposal-required a protocol:Rule ;
+    rdfs:label "formal-proposal-required" ;
+    protocol:description "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan." ;
+    protocol:enforcement "The initial plan for any speculative task must include a step to generate and save a proposal artifact." .
 
-<urn:protocol:capability-verification-001:rule:verify-capability-acquisition> a ns1:Rule ;
-    rdfs:label "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process." .
+protocol:idle-state-trigger a protocol:Rule ;
+    rdfs:label "idle-state-trigger" ;
+    protocol:description "The agent may only initiate a speculative task when it has no active, user-assigned tasks." ;
+    protocol:enforcement "The agent's main control loop must verify an idle state before allowing the invocation of a speculative plan." .
 
-<urn:protocol:capability-verification-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of capability-verification-001" ;
-    ns1:hasRule <urn:protocol:capability-verification-001:rule:verify-capability-acquisition> ;
-    ns1:versionString "1.0.0" .
+protocol:model-a-constraints a protocol:Rule ;
+    rdfs:label "model-a-constraints" ;
+    protocol:description "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`." ;
+    protocol:enforcement "Enforced by the `fsm_model_a.json` FSM used by the `csdc_cli.py` tool." .
 
-<urn:protocol:csdc-001:rule:model-a-constraints> a ns1:Rule ;
-    rdfs:label "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`." .
+protocol:model-b-constraints a protocol:Rule ;
+    rdfs:label "model-b-constraints" ;
+    protocol:description "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`." ;
+    protocol:enforcement "Enforced by the `fsm_model_b.json` FSM used by the `csdc_cli.py` tool." .
 
-<urn:protocol:csdc-001:rule:model-b-constraints> a ns1:Rule ;
-    rdfs:label "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`." .
+protocol:no-public-disclosure a protocol:Rule ;
+    rdfs:label "no-public-disclosure" ;
+    protocol:description "Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed." ;
+    protocol:enforcement "Violation of this rule may result in being banned from the project community." .
 
-<urn:protocol:csdc-001:rule:use-csdc-cli> a ns1:Rule ;
-    rdfs:label "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP)." .
+protocol:planning-tool-access a protocol:Rule ;
+    rdfs:label "planning-tool-access" ;
+    protocol:description "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution." ;
+    protocol:enforcement "The agent's core logic should be designed to use this tool for all planning activities." .
 
-<urn:protocol:csdc-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of csdc-001" ;
-    ns1:hasRule <urn:protocol:csdc-001:rule:model-a-constraints>,
-        <urn:protocol:csdc-001:rule:model-b-constraints>,
-        <urn:protocol:csdc-001:rule:use-csdc-cli> ;
-    ns1:versionString "1.0.0" .
+protocol:prove-sequent a protocol:Rule ;
+    rdfs:label "prove-sequent" ;
+    protocol:description "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover." ;
+    protocol:enforcement "The tool is used by invoking it from the command line with the sequent to be proved as an argument." .
 
-<urn:protocol:dependency-management-001:rule:dependency-install-on-start> a ns1:Rule ;
-    rdfs:label "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed." .
+protocol:resource-constraints a protocol:Rule ;
+    rdfs:label "resource-constraints" ;
+    protocol:description "Speculative tasks must operate under defined resource limits." ;
+    protocol:enforcement "This is a system-level constraint that the agent orchestrator must enforce." .
 
-<urn:protocol:dependency-management-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of dependency-management-001" ;
-    ns1:hasRule <urn:protocol:dependency-management-001:rule:dependency-install-on-start> ;
-    ns1:versionString "1.0.0" .
+protocol:run-all-audits a protocol:Rule ;
+    rdfs:label "run-all-audits" ;
+    protocol:description "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness." ;
+    protocol:enforcement "The tool is invoked via the command line, typically through the `make audit` target." .
 
-<urn:protocol:experimental-prologue-001:rule:create-prologue-file> a ns1:Rule ;
-    rdfs:label "Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols." .
+protocol:shell-is-primary-entry-point a protocol:Rule ;
+    rdfs:label "shell-is-primary-entry-point" ;
+    protocol:description "All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation." ;
+    protocol:enforcement "This is a procedural rule. The agent's operational framework should only expose the agent_shell.py as the means of starting a new task." .
 
-<urn:protocol:experimental-prologue-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of experimental-prologue-001" ;
-    ns1:hasRule <urn:protocol:experimental-prologue-001:rule:create-prologue-file> ;
-    ns1:versionString "1.0.0" .
+protocol:speculative-logging a protocol:Rule ;
+    rdfs:label "speculative-logging" ;
+    protocol:description "All logs and artifacts generated during a speculative task must be tagged as 'speculative'." ;
+    protocol:enforcement "The agent's logging and file-creation tools should be context-aware and apply this tag when in a speculative mode." .
 
-<urn:protocol:file-indexing-001:rule:update-index-before-submit> a ns1:Rule ;
-    rdfs:label "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem." .
+protocol:toolchain-audit-on-schema-change a protocol:Rule ;
+    rdfs:label "toolchain-audit-on-schema-change" ;
+    protocol:description "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure." ;
+    protocol:enforcement "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files." .
 
-<urn:protocol:file-indexing-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of file-indexing-001" ;
-    ns1:hasRule <urn:protocol:file-indexing-001:rule:update-index-before-submit> ;
-    ns1:versionString "1.0.0" .
+protocol:update-index-before-submit a protocol:Rule ;
+    rdfs:label "update-index-before-submit" ;
+    protocol:description "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem." ;
+    protocol:enforcement "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/file_indexer.py build'." .
 
-<urn:protocol:hdl-proving-001:rule:prove-sequent> a ns1:Rule ;
-    rdfs:label "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover." .
+protocol:use-csdc-cli a protocol:Rule ;
+    rdfs:label "use-csdc-cli" ;
+    protocol:description "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP)." ;
+    protocol:enforcement "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments." .
 
-<urn:protocol:hdl-proving-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of hdl-proving-001" ;
-    ns1:hasRule <urn:protocol:hdl-proving-001:rule:prove-sequent> ;
-    ns1:versionString "1.0.0" .
+protocol:use-doc-builder-for-all-docs a protocol:Rule ;
+    rdfs:label "use-doc-builder-for-all-docs" ;
+    protocol:description "The `doc_builder.py` script is the single entry point for generating all user-facing documentation, including system-level docs, README files, and GitHub Pages. It should be called with the appropriate '--format' argument." ;
+    protocol:enforcement "The tool is invoked via the command line, typically through the `make docs`, `make readme`, or `make pages` targets." .
 
-<urn:protocol:plllu-execution-001:rule:execute-plllu-script> a ns1:Rule ;
-    rdfs:label "The `plllu_runner.py` tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter." .
+protocol:user-review-gate a protocol:Rule ;
+    rdfs:label "user-review-gate" ;
+    protocol:description "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly." ;
+    protocol:enforcement "The agent is forbidden from using tools like 'submit' or 'merge' within a speculative context. It must use 'request_user_input' to present the results." .
 
-<urn:protocol:plllu-execution-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of plllu-execution-001" ;
-    ns1:hasRule <urn:protocol:plllu-execution-001:rule:execute-plllu-script> ;
-    ns1:versionString "1.0.0" .
+protocol:verify-capability-acquisition a protocol:Rule ;
+    rdfs:label "verify-capability-acquisition" ;
+    protocol:description "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process." ;
+    protocol:enforcement "The tool is used by invoking it from the command line with the path to the target test file." .
 
-<urn:protocol:security-header:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of security-header" ;
-    ns1:versionString "1.0.0" .
-
-<urn:protocol:security-vuln-reporting-001:rule:no-public-disclosure> a ns1:Rule ;
-    rdfs:label "Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed." .
-
-<urn:protocol:security-vuln-reporting-001:rule:vuln-reporting-channel> a ns1:Rule ;
-    rdfs:label "All suspected security vulnerabilities MUST be reported privately to the designated security contact." .
-
-<urn:protocol:security-vuln-reporting-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of security-vuln-reporting-001" ;
-    ns1:hasRule <urn:protocol:security-vuln-reporting-001:rule:no-public-disclosure>,
-        <urn:protocol:security-vuln-reporting-001:rule:vuln-reporting-channel> ;
-    ns1:versionString "1.0.0" .
-
-<urn:protocol:self-improvement-protocol-001:rule:sip-001-proposal> a ns1:Rule ;
-    rdfs:label "Any proposed change to the protocol system must be formalized as a Self-Improvement Proposal (SIP) and submitted to the `proposals/` directory. The SIP must include a detailed description of the proposed change, its rationale, and a plan for implementation and verification." ;
-    ns1:hasTest <urn:test:file:tests/protocols/test_self-improvement-protocol-001.py> .
-
-<urn:protocol:self-improvement-protocol-001:rule:sip-002-implementation> a ns1:Rule ;
-    rdfs:label "The implementation of an approved SIP must be developed on a separate feature branch. The branch name must follow the pattern `feature/sip-XXX`, where `XXX` is the SIP number." ;
-    ns1:hasTest <urn:test:file:tests/protocols/test_self-improvement-protocol-001.py> .
-
-<urn:protocol:self-improvement-protocol-001:rule:sip-003-verification> a ns1:Rule ;
-    rdfs:label "All changes to the protocol system must be accompanied by corresponding tests in the `tests/protocols/` directory. The tests must be executed and pass before the SIP can be merged." ;
-    ns1:hasTest <urn:test:file:tests/protocols/test_self-improvement-protocol-001.py> .
-
-<urn:protocol:self-improvement-protocol-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of self-improvement-protocol-001" ;
-    ns1:hasRule <urn:protocol:self-improvement-protocol-001:rule:sip-001-proposal>,
-        <urn:protocol:self-improvement-protocol-001:rule:sip-002-implementation>,
-        <urn:protocol:self-improvement-protocol-001:rule:sip-003-verification> ;
-    ns1:versionString "1.0.0" .
-
-<urn:protocol:speculative-execution-001:rule:formal-proposal-required> a ns1:Rule ;
-    rdfs:label "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan." .
-
-<urn:protocol:speculative-execution-001:rule:idle-state-trigger> a ns1:Rule ;
-    rdfs:label "The agent may only initiate a speculative task when it has no active, user-assigned tasks." .
-
-<urn:protocol:speculative-execution-001:rule:resource-constraints> a ns1:Rule ;
-    rdfs:label "Speculative tasks must operate under defined resource limits." .
-
-<urn:protocol:speculative-execution-001:rule:speculative-logging> a ns1:Rule ;
-    rdfs:label "All logs and artifacts generated during a speculative task must be tagged as 'speculative'." .
-
-<urn:protocol:speculative-execution-001:rule:user-review-gate> a ns1:Rule ;
-    rdfs:label "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly." .
-
-<urn:protocol:speculative-execution-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of speculative-execution-001" ;
-    ns1:hasRule <urn:protocol:speculative-execution-001:rule:formal-proposal-required>,
-        <urn:protocol:speculative-execution-001:rule:idle-state-trigger>,
-        <urn:protocol:speculative-execution-001:rule:resource-constraints>,
-        <urn:protocol:speculative-execution-001:rule:speculative-logging>,
-        <urn:protocol:speculative-execution-001:rule:user-review-gate> ;
-    ns1:versionString "1.0.0" .
-
-<urn:protocol:toolchain-review-on-schema-change-001:rule:toolchain-audit-on-schema-change> a ns1:Rule ;
-    rdfs:label "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure." .
-
-<urn:protocol:toolchain-review-on-schema-change-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of toolchain-review-on-schema-change-001" ;
-    ns1:hasRule <urn:protocol:toolchain-review-on-schema-change-001:rule:toolchain-audit-on-schema-change> ;
-    ns1:versionString "1.0.0" .
-
-<urn:protocol:unified-auditor-001:rule:run-all-audits> a ns1:Rule ;
-    rdfs:label "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness." .
-
-<urn:protocol:unified-auditor-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of unified-auditor-001" ;
-    ns1:hasRule <urn:protocol:unified-auditor-001:rule:run-all-audits> ;
-    ns1:versionString "1.0.0" .
-
-<urn:protocol:unified-doc-builder-001:rule:use-doc-builder-for-all-docs> a ns1:Rule ;
-    rdfs:label "The `doc_builder.py` script is the single entry point for generating all user-facing documentation, including system-level docs, README files, and GitHub Pages. It should be called with the appropriate '--format' argument." .
-
-<urn:protocol:unified-doc-builder-001:version:1.0.0> a ns1:ProtocolVersion ;
-    rdfs:label "Version 1.0.0 of unified-doc-builder-001" ;
-    ns1:hasRule <urn:protocol:unified-doc-builder-001:rule:use-doc-builder-for-all-docs> ;
-    ns1:versionString "1.0.0" .
-
-<urn:test:file:tests/protocols/test_self-improvement-protocol-001.py> a ns1:Test ;
-    rdfs:label "Test for self-improvement-protocol-001" .
+protocol:vuln-reporting-channel a protocol:Rule ;
+    rdfs:label "vuln-reporting-channel" ;
+    protocol:description "All suspected security vulnerabilities MUST be reported privately to the designated security contact." ;
+    protocol:enforcement "This is a procedural rule. The designated contact is specified in the project's main SECURITY.md file." .
 
