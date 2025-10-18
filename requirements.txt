@@ -20,3 +20,10 @@ markdown
 ply
 black
 flake8
+jsonschema
+rdflib
+markdown
+pypdf
+requests
+watchdog
+ply

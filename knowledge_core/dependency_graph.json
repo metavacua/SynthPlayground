@@ -198,7 +198,7 @@
       "target": "ply"
     },
     {
-      "source": "root-python-.project",
+      "source": "root-python-project",
       "target": "black"
     },
     {

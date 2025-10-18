@@ -1,7 +1,0 @@
-jsonschema
-rdflib
-markdown
-pypdf
-requests
-watchdog
-ply

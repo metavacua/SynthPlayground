@@ -34,14 +34,14 @@ class TestSelfCorrectionOrchestrator(unittest.TestCase):
             for lesson in lessons_data:
                 f.write(json.dumps(lesson) + "\n")
 
-        loaded = load_lessons(self.lessons_file)
+        loaded = load_lessons()
         self.assertEqual(len(loaded), 2)
         self.assertEqual(loaded[0]['lesson_id'], 'L001')
 
         loaded[0]['status'] = 'failed'
-        save_lessons(loaded, self.lessons_file)
+        save_lessons(loaded)
 
-        reloaded = load_lessons(self.lessons_file)
+        reloaded = load_lessons()
         self.assertEqual(reloaded[0]['status'], 'failed')
 
     @patch('tooling.self_correction_orchestrator.UPDATER_SCRIPT', 'mock_updater.py')
@@ -103,10 +103,8 @@ class TestSelfCorrectionOrchestrator(unittest.TestCase):
         self.assertEqual(lessons[0]['status'], 'failed')
 
     @patch('tooling.self_correction_orchestrator.process_lessons', return_value=True)
-    @patch('argparse.ArgumentParser.parse_args')
-    def test_main_flow_rebuilds_agents_md(self, mock_parse_args, mock_process):
+    def test_main_flow_rebuilds_agents_md(self, mock_process):
         """Tests that the main function calls to rebuild AGENTS.md after changes."""
-        mock_parse_args.return_value = MagicMock(lesson_file=self.lessons_file)
         with open(self.lessons_file, "w") as f:
             f.write(json.dumps({"lesson_id": "L001", "status": "pending"}) + "\n")
 
@@ -118,10 +116,8 @@ class TestSelfCorrectionOrchestrator(unittest.TestCase):
         # Check that 'make AGENTS.md' was called
         self.mock_run_command.assert_called_with(["make", "AGENTS.md"])
 
-    @patch('argparse.ArgumentParser.parse_args')
-    def test_no_pending_lessons(self, mock_parse_args):
+    def test_no_pending_lessons(self):
         """Tests that the orchestrator does nothing if there are no pending lessons."""
-        mock_parse_args.return_value = MagicMock(lesson_file=self.lessons_file)
         lessons = [{"lesson_id": "L001", "status": "applied"}]
         with open(self.lessons_file, "w") as f:
             for lesson in lessons:

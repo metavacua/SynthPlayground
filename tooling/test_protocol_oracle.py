@@ -60,5 +60,27 @@ class TestProtocolOracle(unittest.TestCase):
         self.assertEqual(len(rules), 1)
         self.assertEqual(rules[0]["rule_id"], "rule-1")
 
+    def test_get_rules_for_protocol_with_no_rules(self):
+        """Tests that an empty list is returned for a protocol with no rules."""
+        p1_uri = PROTOCOL["proto-without-rules"]
+        self.g.add((p1_uri, RDF.type, PROTOCOL.Protocol))
+
+        rules = get_rules_for_protocols(self.g, [str(p1_uri)])
+        self.assertEqual(len(rules), 0)
+
+    def test_applicability_script_error(self):
+        """Tests that the system handles errors in the applicability script gracefully."""
+        p1_uri = PROTOCOL["error-proto"]
+        error_script_path = os.path.join(self.test_dir, "error.protocol.py")
+        with open(error_script_path, "w") as f:
+            f.write('def is_applicable(context):\n')
+            f.write('    raise ValueError("This is a test error")\n')
+
+        self.g.add((p1_uri, RDF.type, PROTOCOL.Protocol))
+        self.g.add((p1_uri, PROTOCOL.hasApplicabilityCondition, Literal(error_script_path)))
+
+        applicable = get_applicable_protocols(self.g, {})
+        self.assertNotIn(str(p1_uri), applicable)
+
 if __name__ == "__main__":
     unittest.main()
