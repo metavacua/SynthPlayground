@@ -119,6 +119,11 @@
       "id": "flake8",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "PyYAML",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
@@ -209,6 +214,10 @@
     {
       "source": "root-python-project",
       "target": "flake8"
+    },
+    {
+      "source": "root-python-project",
+      "target": "PyYAML"
     },
     {
       "source": "tooling",
