@@ -5,7 +5,7 @@
       "name": "TestTypeChecker",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 5,
+      "line": 29,
       "kind": "class",
       "docstring": null
     },
@@ -14,7 +14,7 @@
       "name": "test_literals",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 6,
+      "line": 30,
       "kind": "function",
       "docstring": null
     },
@@ -23,7 +23,7 @@
       "name": "test_var_unrestricted",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 12,
+      "line": 36,
       "kind": "function",
       "docstring": null
     },
@@ -32,7 +32,7 @@
       "name": "test_var_linear",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 16,
+      "line": 40,
       "kind": "function",
       "docstring": null
     },
@@ -41,7 +41,7 @@
       "name": "test_var_not_found",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 20,
+      "line": 44,
       "kind": "function",
       "docstring": null
     },
@@ -50,7 +50,7 @@
       "name": "test_fun",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 24,
+      "line": 48,
       "kind": "function",
       "docstring": null
     },
@@ -59,7 +59,7 @@
       "name": "test_fun_unrestricted",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 29,
+      "line": 53,
       "kind": "function",
       "docstring": null
     },
@@ -68,7 +68,7 @@
       "name": "test_app",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 34,
+      "line": 58,
       "kind": "function",
       "docstring": null
     },
@@ -77,7 +77,7 @@
       "name": "test_app_type_mismatch",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 40,
+      "line": 64,
       "kind": "function",
       "docstring": null
     },
@@ -86,7 +86,7 @@
       "name": "test_pair",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 47,
+      "line": 71,
       "kind": "function",
       "docstring": null
     },
@@ -95,7 +95,7 @@
       "name": "test_let_pair",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 51,
+      "line": 75,
       "kind": "function",
       "docstring": null
     },
@@ -104,7 +104,7 @@
       "name": "test_inl_inr",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 56,
+      "line": 80,
       "kind": "function",
       "docstring": null
     },
@@ -113,7 +113,7 @@
       "name": "test_case",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 60,
+      "line": 84,
       "kind": "function",
       "docstring": null
     },
@@ -122,7 +122,7 @@
       "name": "test_case_type_mismatch",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 64,
+      "line": 88,
       "kind": "function",
       "docstring": null
     },
@@ -131,7 +131,7 @@
       "name": "test_promote",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 69,
+      "line": 93,
       "kind": "function",
       "docstring": null
     },
@@ -140,7 +140,7 @@
       "name": "test_promote_linear_error",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 72,
+      "line": 96,
       "kind": "function",
       "docstring": null
     },
@@ -149,7 +149,7 @@
       "name": "test_let_bang",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 76,
+      "line": 100,
       "kind": "function",
       "docstring": null
     },
@@ -158,7 +158,7 @@
       "name": "test_unused_linear_variable",
       "path": "./test_type_checker.py",
       "language": "Python",
-      "line": 80,
+      "line": 104,
       "kind": "function",
       "docstring": null
     },
@@ -167,7 +167,7 @@
       "name": "InterpError",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 5,
+      "line": 32,
       "kind": "class",
       "docstring": null
     },
@@ -176,7 +176,7 @@
       "name": "Closure",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 8,
+      "line": 36,
       "kind": "class",
       "docstring": null
     },
@@ -185,7 +185,7 @@
       "name": "_appl_to_python",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 13,
+      "line": 42,
       "kind": "function",
       "docstring": null
     },
@@ -194,7 +194,7 @@
       "name": "_appl_list_to_python_list",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 24,
+      "line": 54,
       "kind": "function",
       "docstring": null
     },
@@ -203,7 +203,7 @@
       "name": "Primitive",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 31,
+      "line": 62,
       "kind": "class",
       "docstring": null
     },
@@ -212,7 +212,7 @@
       "name": "Interpreter",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 43,
+      "line": 75,
       "kind": "class",
       "docstring": null
     },
@@ -221,7 +221,7 @@
       "name": "_unparse",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 132,
+      "line": 165,
       "kind": "function",
       "docstring": null
     },
@@ -230,31 +230,13 @@
       "name": "interpret",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 136,
+      "line": 170,
       "kind": "function",
       "docstring": "Interprets the given term in the provided environment."
     },
     {
       "_type": "tag",
       "name": "__init__",
-      "path": "./interpreter.py",
-      "language": "Python",
-      "line": 9,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./interpreter.py",
-      "language": "Python",
-      "line": 32,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "apply",
       "path": "./interpreter.py",
       "language": "Python",
       "line": 37,
@@ -266,7 +248,25 @@
       "name": "__init__",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 44,
+      "line": 63,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "apply",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 68,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 76,
       "kind": "function",
       "docstring": null
     },
@@ -275,7 +275,7 @@
       "name": "interpret",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 47,
+      "line": 79,
       "kind": "function",
       "docstring": null
     },
@@ -1328,7 +1328,7 @@
       "name": "TestParser",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 5,
+      "line": 25,
       "kind": "class",
       "docstring": null
     },
@@ -1337,7 +1337,7 @@
       "name": "test_literals",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 7,
+      "line": 27,
       "kind": "function",
       "docstring": null
     },
@@ -1346,7 +1346,7 @@
       "name": "test_var",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 12,
+      "line": 32,
       "kind": "function",
       "docstring": null
     },
@@ -1355,7 +1355,7 @@
       "name": "test_fun",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 15,
+      "line": 35,
       "kind": "function",
       "docstring": null
     },
@@ -1364,7 +1364,7 @@
       "name": "test_app",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 18,
+      "line": 38,
       "kind": "function",
       "docstring": null
     },
@@ -1373,7 +1373,7 @@
       "name": "test_pair",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 23,
+      "line": 43,
       "kind": "function",
       "docstring": null
     },
@@ -1382,7 +1382,7 @@
       "name": "test_let_pair",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 26,
+      "line": 46,
       "kind": "function",
       "docstring": null
     },
@@ -1391,7 +1391,7 @@
       "name": "test_inl_inr",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 29,
+      "line": 49,
       "kind": "function",
       "docstring": null
     },
@@ -1400,7 +1400,7 @@
       "name": "test_case",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 33,
+      "line": 53,
       "kind": "function",
       "docstring": null
     },
@@ -1409,7 +1409,7 @@
       "name": "test_promote",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 36,
+      "line": 56,
       "kind": "function",
       "docstring": null
     },
@@ -1418,7 +1418,7 @@
       "name": "test_let_bang",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 39,
+      "line": 59,
       "kind": "function",
       "docstring": null
     },
@@ -1427,7 +1427,7 @@
       "name": "test_complex_expression",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 42,
+      "line": 62,
       "kind": "function",
       "docstring": null
     },
@@ -1436,7 +1436,7 @@
       "name": "test_parse_error",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 62,
+      "line": 82,
       "kind": "function",
       "docstring": null
     },
@@ -1445,7 +1445,7 @@
       "name": "test_unit",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 66,
+      "line": 86,
       "kind": "function",
       "docstring": null
     },
@@ -1454,7 +1454,7 @@
       "name": "test_nil",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 69,
+      "line": 89,
       "kind": "function",
       "docstring": null
     },
@@ -1463,7 +1463,7 @@
       "name": "test_cons",
       "path": "./test_parser.py",
       "language": "Python",
-      "line": 72,
+      "line": 92,
       "kind": "function",
       "docstring": null
     },
@@ -1697,7 +1697,7 @@
       "name": "TestInterpreter",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 6,
+      "line": 26,
       "kind": "class",
       "docstring": null
     },
@@ -1706,7 +1706,7 @@
       "name": "test_literals",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 7,
+      "line": 27,
       "kind": "function",
       "docstring": null
     },
@@ -1715,7 +1715,7 @@
       "name": "test_var",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 13,
+      "line": 33,
       "kind": "function",
       "docstring": null
     },
@@ -1724,7 +1724,7 @@
       "name": "test_var_not_found",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 17,
+      "line": 37,
       "kind": "function",
       "docstring": null
     },
@@ -1733,7 +1733,7 @@
       "name": "test_fun",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 21,
+      "line": 41,
       "kind": "function",
       "docstring": null
     },
@@ -1742,7 +1742,7 @@
       "name": "test_app",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 26,
+      "line": 46,
       "kind": "function",
       "docstring": null
     },
@@ -1751,7 +1751,7 @@
       "name": "test_app_non_function",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 32,
+      "line": 52,
       "kind": "function",
       "docstring": null
     },
@@ -1760,7 +1760,7 @@
       "name": "test_pair",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 38,
+      "line": 58,
       "kind": "function",
       "docstring": null
     },
@@ -1769,7 +1769,7 @@
       "name": "test_let_pair",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 42,
+      "line": 62,
       "kind": "function",
       "docstring": null
     },
@@ -1778,7 +1778,7 @@
       "name": "test_inl_inr",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 46,
+      "line": 66,
       "kind": "function",
       "docstring": null
     },
@@ -1787,7 +1787,7 @@
       "name": "test_case",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 50,
+      "line": 70,
       "kind": "function",
       "docstring": null
     },
@@ -1796,7 +1796,7 @@
       "name": "test_promote",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 54,
+      "line": 74,
       "kind": "function",
       "docstring": null
     },
@@ -1805,7 +1805,7 @@
       "name": "test_let_bang",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 57,
+      "line": 77,
       "kind": "function",
       "docstring": null
     },
@@ -1814,7 +1814,7 @@
       "name": "test_list",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 61,
+      "line": 81,
       "kind": "function",
       "docstring": null
     },
@@ -1823,7 +1823,7 @@
       "name": "test_planning_primitive",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 65,
+      "line": 85,
       "kind": "function",
       "docstring": null
     },
@@ -1832,7 +1832,7 @@
       "name": "test_homoiconicity",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 81,
+      "line": 101,
       "kind": "function",
       "docstring": null
     },
@@ -2408,7 +2408,7 @@
       "name": "Instruction",
       "path": "./tooling/halting_heuristic_analyzer.py",
       "language": "Python",
-      "line": 9,
+      "line": 26,
       "kind": "class",
       "docstring": null
     },
@@ -2417,7 +2417,7 @@
       "name": "Loop",
       "path": "./tooling/halting_heuristic_analyzer.py",
       "language": "Python",
-      "line": 17,
+      "line": 34,
       "kind": "class",
       "docstring": null
     },
@@ -2426,7 +2426,7 @@
       "name": "HaltingHeuristicAnalyzer",
       "path": "./tooling/halting_heuristic_analyzer.py",
       "language": "Python",
-      "line": 24,
+      "line": 41,
       "kind": "class",
       "docstring": "Performs static analysis on a UDC plan to provide a heuristic-based\nestimate of its likelihood to terminate."
     },
@@ -2435,7 +2435,7 @@
       "name": "main",
       "path": "./tooling/halting_heuristic_analyzer.py",
       "language": "Python",
-      "line": 221,
+      "line": 238,
       "kind": "function",
       "docstring": "Main entry point for the command-line tool."
     },
@@ -2444,7 +2444,7 @@
       "name": "__init__",
       "path": "./tooling/halting_heuristic_analyzer.py",
       "language": "Python",
-      "line": 30,
+      "line": 47,
       "kind": "function",
       "docstring": null
     },
@@ -2453,7 +2453,7 @@
       "name": "analyze",
       "path": "./tooling/halting_heuristic_analyzer.py",
       "language": "Python",
-      "line": 35,
+      "line": 52,
       "kind": "function",
       "docstring": "Runs the full analysis pipeline and returns a report."
     },
@@ -2462,7 +2462,7 @@
       "name": "_parse_plan",
       "path": "./tooling/halting_heuristic_analyzer.py",
       "language": "Python",
-      "line": 69,
+      "line": 86,
       "kind": "function",
       "docstring": "Parses the .udc file into instructions and builds a label map.\nLabels point to the index of the *next* instruction in the list."
     },
@@ -2471,7 +2471,7 @@
       "name": "_detect_loops",
       "path": "./tooling/halting_heuristic_analyzer.py",
       "language": "Python",
-      "line": 97,
+      "line": 114,
       "kind": "function",
       "docstring": "Detects loops by finding backward jumps."
     },
@@ -2480,7 +2480,7 @@
       "name": "_analyze_loop",
       "path": "./tooling/halting_heuristic_analyzer.py",
       "language": "Python",
-      "line": 123,
+      "line": 140,
       "kind": "function",
       "docstring": "Analyzes a single loop to determine its termination risk.\nThis is the heuristic core of the analyzer."
     },
@@ -2489,7 +2489,7 @@
       "name": "_generate_report",
       "path": "./tooling/halting_heuristic_analyzer.py",
       "language": "Python",
-      "line": 202,
+      "line": 219,
       "kind": "function",
       "docstring": "Formats the analysis results into a JSON-compatible dictionary."
     },
@@ -3281,7 +3281,7 @@
       "name": "execute_plan",
       "path": "./tooling/plan_executor.py",
       "language": "Python",
-      "line": 5,
+      "line": 13,
       "kind": "function",
       "docstring": "Executes a plan file, simulating the agent's execution loop.\n\nArgs:\n    filepath: The path to the plan file."
     },
@@ -3290,7 +3290,7 @@
       "name": "main",
       "path": "./tooling/plan_executor.py",
       "language": "Python",
-      "line": 50,
+      "line": 58,
       "kind": "function",
       "docstring": "Main function to run the plan executor from the command line."
     },
@@ -3299,7 +3299,7 @@
       "name": "run_appl_file",
       "path": "./tooling/appl_runner.py",
       "language": "Python",
-      "line": 4,
+      "line": 11,
       "kind": "function",
       "docstring": "Executes an APPL file using the run.py interpreter.\n\nArgs:\n    filepath: The path to the .appl file to execute.\n\nReturns:\n    The output from the APPL interpreter."
     },
@@ -3308,7 +3308,7 @@
       "name": "main",
       "path": "./tooling/appl_runner.py",
       "language": "Python",
-      "line": 39,
+      "line": 46,
       "kind": "function",
       "docstring": "Main function to run the APPL runner from the command line."
     },
@@ -3722,7 +3722,7 @@
       "name": "AuraToLfiIllCompiler",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 21,
+      "line": 27,
       "kind": "class",
       "docstring": null
     },
@@ -3731,7 +3731,7 @@
       "name": "main",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 104,
+      "line": 110,
       "kind": "function",
       "docstring": null
     },
@@ -3740,7 +3740,7 @@
       "name": "__init__",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 22,
+      "line": 28,
       "kind": "function",
       "docstring": null
     },
@@ -3749,7 +3749,7 @@
       "name": "compile",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 25,
+      "line": 31,
       "kind": "function",
       "docstring": null
     },
@@ -3758,7 +3758,7 @@
       "name": "generic_compiler",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 30,
+      "line": 36,
       "kind": "function",
       "docstring": null
     },
@@ -3767,7 +3767,7 @@
       "name": "compile_Program",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 33,
+      "line": 39,
       "kind": "function",
       "docstring": null
     },
@@ -3776,7 +3776,7 @@
       "name": "compile_LetStatement",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 40,
+      "line": 46,
       "kind": "function",
       "docstring": null
     },
@@ -3785,7 +3785,7 @@
       "name": "compile_ExpressionStatement",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 48,
+      "line": 54,
       "kind": "function",
       "docstring": null
     },
@@ -3794,7 +3794,7 @@
       "name": "compile_IntegerLiteral",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 51,
+      "line": 57,
       "kind": "function",
       "docstring": null
     },
@@ -3803,7 +3803,7 @@
       "name": "compile_StringLiteral",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 54,
+      "line": 60,
       "kind": "function",
       "docstring": null
     },
@@ -3812,7 +3812,7 @@
       "name": "compile_Identifier",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 57,
+      "line": 63,
       "kind": "function",
       "docstring": null
     },
@@ -3821,7 +3821,7 @@
       "name": "compile_InfixExpression",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 60,
+      "line": 66,
       "kind": "function",
       "docstring": null
     },
@@ -3830,7 +3830,7 @@
       "name": "compile_CallExpression",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 65,
+      "line": 71,
       "kind": "function",
       "docstring": null
     },
@@ -3839,7 +3839,7 @@
       "name": "compile_PrintStatement",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 73,
+      "line": 79,
       "kind": "function",
       "docstring": null
     },
@@ -3848,7 +3848,7 @@
       "name": "compile_IfStatement",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 77,
+      "line": 83,
       "kind": "function",
       "docstring": null
     },
@@ -3857,7 +3857,7 @@
       "name": "compile_BlockStatement",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 83,
+      "line": 89,
       "kind": "function",
       "docstring": null
     },
@@ -3866,7 +3866,7 @@
       "name": "compile_ForStatement",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 90,
+      "line": 96,
       "kind": "function",
       "docstring": null
     },
@@ -3875,7 +3875,7 @@
       "name": "compile_ReturnStatement",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 95,
+      "line": 101,
       "kind": "function",
       "docstring": null
     },
@@ -3884,7 +3884,7 @@
       "name": "compile_FunctionDefinition",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 98,
+      "line": 104,
       "kind": "function",
       "docstring": null
     },
@@ -4190,7 +4190,7 @@
       "name": "Instruction",
       "path": "./tooling/udc_orchestrator.py",
       "language": "Python",
-      "line": 8,
+      "line": 20,
       "kind": "class",
       "docstring": null
     },
@@ -4199,7 +4199,7 @@
       "name": "UDCOrchestrator",
       "path": "./tooling/udc_orchestrator.py",
       "language": "Python",
-      "line": 16,
+      "line": 28,
       "kind": "class",
       "docstring": "Executes an Unrestricted Development Cycle (UDC) plan within a sandboxed\nTuring Machine-like environment with strict resource limits."
     },
@@ -4208,7 +4208,7 @@
       "name": "main",
       "path": "./tooling/udc_orchestrator.py",
       "language": "Python",
-      "line": 169,
+      "line": 181,
       "kind": "function",
       "docstring": null
     },
@@ -4217,7 +4217,7 @@
       "name": "__init__",
       "path": "./tooling/udc_orchestrator.py",
       "language": "Python",
-      "line": 9,
+      "line": 21,
       "kind": "function",
       "docstring": null
     },
@@ -4226,7 +4226,7 @@
       "name": "__repr__",
       "path": "./tooling/udc_orchestrator.py",
       "language": "Python",
-      "line": 13,
+      "line": 25,
       "kind": "function",
       "docstring": null
     },
@@ -4235,7 +4235,7 @@
       "name": "__init__",
       "path": "./tooling/udc_orchestrator.py",
       "language": "Python",
-      "line": 22,
+      "line": 34,
       "kind": "function",
       "docstring": null
     },
@@ -4244,7 +4244,7 @@
       "name": "run",
       "path": "./tooling/udc_orchestrator.py",
       "language": "Python",
-      "line": 45,
+      "line": 57,
       "kind": "function",
       "docstring": "Parses and runs the UDC plan until it halts or a limit is exceeded."
     },
@@ -4253,7 +4253,7 @@
       "name": "_parse_plan",
       "path": "./tooling/udc_orchestrator.py",
       "language": "Python",
-      "line": 97,
+      "line": 109,
       "kind": "function",
       "docstring": null
     },
@@ -4262,7 +4262,7 @@
       "name": "_get_value",
       "path": "./tooling/udc_orchestrator.py",
       "language": "Python",
-      "line": 116,
+      "line": 128,
       "kind": "function",
       "docstring": "Resolves an argument to an integer value, either from a register or a literal."
     },
@@ -4271,7 +4271,7 @@
       "name": "_execute_instruction",
       "path": "./tooling/udc_orchestrator.py",
       "language": "Python",
-      "line": 125,
+      "line": 137,
       "kind": "function",
       "docstring": null
     },
@@ -4631,7 +4631,7 @@
       "name": "LfiIllHaltingDecider",
       "path": "./tooling/lfi_ill_halting_decider.py",
       "language": "Python",
-      "line": 10,
+      "line": 17,
       "kind": "class",
       "docstring": null
     },
@@ -4640,7 +4640,7 @@
       "name": "main",
       "path": "./tooling/lfi_ill_halting_decider.py",
       "language": "Python",
-      "line": 48,
+      "line": 55,
       "kind": "function",
       "docstring": null
     },
@@ -4649,7 +4649,7 @@
       "name": "__init__",
       "path": "./tooling/lfi_ill_halting_decider.py",
       "language": "Python",
-      "line": 11,
+      "line": 18,
       "kind": "function",
       "docstring": null
     },
@@ -4658,7 +4658,7 @@
       "name": "analyze",
       "path": "./tooling/lfi_ill_halting_decider.py",
       "language": "Python",
-      "line": 14,
+      "line": 21,
       "kind": "function",
       "docstring": "Analyzes the LFI ILL program for termination."
     },
@@ -4856,7 +4856,7 @@
       "name": "AtomNode",
       "path": "./tooling/pda_parser.py",
       "language": "Python",
-      "line": 10,
+      "line": 21,
       "kind": "function",
       "docstring": null
     },
@@ -4865,7 +4865,7 @@
       "name": "UnaryOpNode",
       "path": "./tooling/pda_parser.py",
       "language": "Python",
-      "line": 13,
+      "line": 24,
       "kind": "function",
       "docstring": null
     },
@@ -4874,7 +4874,7 @@
       "name": "BinaryOpNode",
       "path": "./tooling/pda_parser.py",
       "language": "Python",
-      "line": 16,
+      "line": 27,
       "kind": "function",
       "docstring": null
     },
@@ -4883,7 +4883,7 @@
       "name": "t_ATOM",
       "path": "./tooling/pda_parser.py",
       "language": "Python",
-      "line": 47,
+      "line": 58,
       "kind": "function",
       "docstring": "[A-Z][A-Z0-9]*"
     },
@@ -4892,7 +4892,7 @@
       "name": "t_newline",
       "path": "./tooling/pda_parser.py",
       "language": "Python",
-      "line": 54,
+      "line": 65,
       "kind": "function",
       "docstring": "\\n+"
     },
@@ -4901,7 +4901,7 @@
       "name": "t_error",
       "path": "./tooling/pda_parser.py",
       "language": "Python",
-      "line": 58,
+      "line": 69,
       "kind": "function",
       "docstring": null
     },
@@ -4910,7 +4910,7 @@
       "name": "p_formula_binary",
       "path": "./tooling/pda_parser.py",
       "language": "Python",
-      "line": 75,
+      "line": 86,
       "kind": "function",
       "docstring": "formula : formula IMPLIES formula\n        | formula WITH formula\n        | formula PLUS formula"
     },
@@ -4919,7 +4919,7 @@
       "name": "p_formula_unary",
       "path": "./tooling/pda_parser.py",
       "language": "Python",
-      "line": 83,
+      "line": 94,
       "kind": "function",
       "docstring": "formula : NOT formula\n        | BANG formula\n        | CONSISTENCY formula\n        | SECTION formula\n        | WHYNOT formula"
     },
@@ -4928,7 +4928,7 @@
       "name": "p_formula_group",
       "path": "./tooling/pda_parser.py",
       "language": "Python",
-      "line": 93,
+      "line": 104,
       "kind": "function",
       "docstring": "formula : LPAREN formula RPAREN"
     },
@@ -4937,7 +4937,7 @@
       "name": "p_formula_atom",
       "path": "./tooling/pda_parser.py",
       "language": "Python",
-      "line": 99,
+      "line": 110,
       "kind": "function",
       "docstring": "formula : ATOM"
     },
@@ -4946,7 +4946,7 @@
       "name": "p_error",
       "path": "./tooling/pda_parser.py",
       "language": "Python",
-      "line": 105,
+      "line": 116,
       "kind": "function",
       "docstring": null
     },
@@ -4955,7 +4955,7 @@
       "name": "parse_formula",
       "path": "./tooling/pda_parser.py",
       "language": "Python",
-      "line": 114,
+      "line": 125,
       "kind": "function",
       "docstring": "Parses a pLLLU formula string into an AST."
     },
@@ -5135,7 +5135,7 @@
       "name": "reliable_ls",
       "path": "./tooling/reliable_ls.py",
       "language": "Python",
-      "line": 4,
+      "line": 11,
       "kind": "function",
       "docstring": "Recursively lists all directories and files under the start_path.\n\nArgs:\n    start_path: The directory to start the traversal from."
     },
@@ -5144,7 +5144,7 @@
       "name": "main",
       "path": "./tooling/reliable_ls.py",
       "language": "Python",
-      "line": 39,
+      "line": 46,
       "kind": "function",
       "docstring": "Main function to run the reliable_ls tool from the command line."
     },
@@ -5495,7 +5495,7 @@
       "name": "LogicValue",
       "path": "./tooling/plllu_interpreter.py",
       "language": "Python",
-      "line": 9,
+      "line": 24,
       "kind": "class",
       "docstring": null
     },
@@ -5504,7 +5504,7 @@
       "name": "InterpretationError",
       "path": "./tooling/plllu_interpreter.py",
       "language": "Python",
-      "line": 15,
+      "line": 30,
       "kind": "class",
       "docstring": "Custom exception for errors during interpretation."
     },
@@ -5513,7 +5513,7 @@
       "name": "FourValuedInterpreter",
       "path": "./tooling/plllu_interpreter.py",
       "language": "Python",
-      "line": 19,
+      "line": 34,
       "kind": "class",
       "docstring": "Interprets a pLLLU AST using a four-valued logic and a resource-passing model."
     },
@@ -5522,7 +5522,7 @@
       "name": "create_context_from_string",
       "path": "./tooling/plllu_interpreter.py",
       "language": "Python",
-      "line": 163,
+      "line": 178,
       "kind": "function",
       "docstring": "Helper to create a context from a string like 'A:T, B:B'.\nThe interpreter now expects the context to be a dictionary mapping\nthe unique atom tuple (name, id) to its LogicValue."
     },
@@ -5531,7 +5531,7 @@
       "name": "patch_atom_values",
       "path": "./tooling/plllu_interpreter.py",
       "language": "Python",
-      "line": 189,
+      "line": 204,
       "kind": "function",
       "docstring": "Recursively patches the AST to replace atom names with (value, id) tuples.\nThis is a hack for testing, as the parser doesn't know about logic values."
     },
@@ -5540,7 +5540,7 @@
       "name": "interpret",
       "path": "./tooling/plllu_interpreter.py",
       "language": "Python",
-      "line": 23,
+      "line": 38,
       "kind": "function",
       "docstring": "Main entry point for interpreting an AST.\nThe initial context is a Counter of atoms available."
     },
@@ -5549,7 +5549,7 @@
       "name": "_evaluate",
       "path": "./tooling/plllu_interpreter.py",
       "language": "Python",
-      "line": 36,
+      "line": 51,
       "kind": "function",
       "docstring": "Dispatcher that evaluates a node against a given context.\nReturns a tuple: (LogicValue, remaining_context_as_Counter)."
     },
@@ -5558,7 +5558,7 @@
       "name": "_eval_atom",
       "path": "./tooling/plllu_interpreter.py",
       "language": "Python",
-      "line": 51,
+      "line": 66,
       "kind": "function",
       "docstring": "Evaluates an atom by consuming it from the context."
     },
@@ -5567,7 +5567,7 @@
       "name": "_eval_unary_op",
       "path": "./tooling/plllu_interpreter.py",
       "language": "Python",
-      "line": 68,
+      "line": 83,
       "kind": "function",
       "docstring": "Evaluates a unary op by evaluating its child and transforming the value.\nThe context is passed through the operation."
     },
@@ -5576,7 +5576,7 @@
       "name": "_eval_binary_op",
       "path": "./tooling/plllu_interpreter.py",
       "language": "Python",
-      "line": 106,
+      "line": 121,
       "kind": "function",
       "docstring": "Evaluates a binary op. Additives use a shared context, multiplicatives split it."
     },
@@ -5774,7 +5774,7 @@
       "name": "ApplToLfiIllCompiler",
       "path": "./tooling/appl_to_lfi_ill.py",
       "language": "Python",
-      "line": 11,
+      "line": 17,
       "kind": "class",
       "docstring": null
     },
@@ -5783,7 +5783,7 @@
       "name": "main",
       "path": "./tooling/appl_to_lfi_ill.py",
       "language": "Python",
-      "line": 92,
+      "line": 98,
       "kind": "function",
       "docstring": null
     },
@@ -5792,7 +5792,7 @@
       "name": "__init__",
       "path": "./tooling/appl_to_lfi_ill.py",
       "language": "Python",
-      "line": 12,
+      "line": 18,
       "kind": "function",
       "docstring": null
     },
@@ -5801,7 +5801,7 @@
       "name": "compile",
       "path": "./tooling/appl_to_lfi_ill.py",
       "language": "Python",
-      "line": 15,
+      "line": 21,
       "kind": "function",
       "docstring": "Recursively walks the APPL AST and translates it to an LFI ILL AST."
     },
@@ -5810,7 +5810,7 @@
       "name": "compile_type",
       "path": "./tooling/appl_to_lfi_ill.py",
       "language": "Python",
-      "line": 86,
+      "line": 92,
       "kind": "function",
       "docstring": "Translates APPL types to LFI ILL types."
     },
@@ -5819,7 +5819,7 @@
       "name": "_get_gitignore_patterns",
       "path": "./tooling/filesystem_lister.py",
       "language": "Python",
-      "line": 4,
+      "line": 7,
       "kind": "function",
       "docstring": "Reads and parses the .gitignore file."
     },
@@ -5828,7 +5828,7 @@
       "name": "list_all_files_and_dirs",
       "path": "./tooling/filesystem_lister.py",
       "language": "Python",
-      "line": 13,
+      "line": 16,
       "kind": "function",
       "docstring": "Walks through a directory and its subdirectories and returns a sorted list of all\nfiles and directories.\n\nArgs:\n    root_dir (str): The root directory to start the walk from.\n    use_gitignore (bool): If True, respects the patterns in the .gitignore file."
     },
@@ -5837,7 +5837,7 @@
       "name": "main",
       "path": "./tooling/plllu_runner.py",
       "language": "Python",
-      "line": 12,
+      "line": 19,
       "kind": "function",
       "docstring": "This tool provides a command-line interface for running .plllu files.\nIt integrates the pLLLU lexer, parser, and interpreter to execute\nthe logic defined in a given pLLLU source file."
     },
@@ -6377,7 +6377,7 @@
       "name": "run_command",
       "path": "./tooling/pre_submit_check.py",
       "language": "Python",
-      "line": 13,
+      "line": 4,
       "kind": "function",
       "docstring": "Runs a command and exits if it fails."
     },
@@ -6386,7 +6386,7 @@
       "name": "main",
       "path": "./tooling/pre_submit_check.py",
       "language": "Python",
-      "line": 26,
+      "line": 16,
       "kind": "function",
       "docstring": "Main function to run pre-submission checks."
     },
@@ -6539,7 +6539,7 @@
       "name": "ParaconsistentTruth",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 6,
+      "line": 27,
       "kind": "class",
       "docstring": "Represents the four truth values in a first-degree entailment logic (FDE),\nwhich is a common foundation for Logics of Formal Inconsistency."
     },
@@ -6548,7 +6548,7 @@
       "name": "ParaconsistentState",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 19,
+      "line": 40,
       "kind": "class",
       "docstring": "A variable whose truth value is modeled paraconsistently.\nIt can be true, false, both, or neither."
     },
@@ -6557,7 +6557,7 @@
       "name": "LFIInstruction",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 42,
+      "line": 63,
       "kind": "class",
       "docstring": "A wrapper for UDC instructions to be used in the LFI Executor."
     },
@@ -6566,7 +6566,7 @@
       "name": "LFIExecutor",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 117,
+      "line": 138,
       "kind": "class",
       "docstring": "A paraconsistent interpreter for UDC plans.\n\nIt models the state of the UDC machine not with concrete values, but with\nParaconsistentState objects. This allows it to explore the consequences\nof contradictory assumptions."
     },
@@ -6575,7 +6575,7 @@
       "name": "ParaconsistentHaltingDecider",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 162,
+      "line": 183,
       "kind": "class",
       "docstring": "Analyzes a UDC plan using the LFI Executor to determine its\nparaconsistent halting status."
     },
@@ -6584,7 +6584,7 @@
       "name": "__str__",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 16,
+      "line": 37,
       "kind": "function",
       "docstring": null
     },
@@ -6593,7 +6593,7 @@
       "name": "__init__",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 24,
+      "line": 45,
       "kind": "function",
       "docstring": null
     },
@@ -6602,7 +6602,7 @@
       "name": "is_true",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 27,
+      "line": 48,
       "kind": "function",
       "docstring": "Classical check: Is True in the value set?"
     },
@@ -6611,7 +6611,7 @@
       "name": "is_false",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 31,
+      "line": 52,
       "kind": "function",
       "docstring": "Classical check: Is False in the value set?"
     },
@@ -6620,7 +6620,7 @@
       "name": "is_consistent",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 35,
+      "line": 56,
       "kind": "function",
       "docstring": "A state is consistent if it's not BOTH."
     },
@@ -6629,7 +6629,7 @@
       "name": "__repr__",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 39,
+      "line": 60,
       "kind": "function",
       "docstring": null
     },
@@ -6638,7 +6638,7 @@
       "name": "__init__",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 44,
+      "line": 65,
       "kind": "function",
       "docstring": null
     },
@@ -6647,7 +6647,7 @@
       "name": "execute",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 48,
+      "line": 69,
       "kind": "function",
       "docstring": "Executes the instruction on the given LFI executor state."
     },
@@ -6656,7 +6656,7 @@
       "name": "_exec_unknown",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 55,
+      "line": 76,
       "kind": "function",
       "docstring": null
     },
@@ -6665,7 +6665,7 @@
       "name": "_exec_halt",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 59,
+      "line": 80,
       "kind": "function",
       "docstring": "The HALT instruction sets the halted state to TRUE."
     },
@@ -6674,7 +6674,7 @@
       "name": "__repr__",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 70,
+      "line": 91,
       "kind": "function",
       "docstring": null
     },
@@ -6683,7 +6683,7 @@
       "name": "_exec_left",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 76,
+      "line": 97,
       "kind": "function",
       "docstring": null
     },
@@ -6692,7 +6692,7 @@
       "name": "_exec_right",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 77,
+      "line": 98,
       "kind": "function",
       "docstring": null
     },
@@ -6701,7 +6701,7 @@
       "name": "_exec_read",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 78,
+      "line": 99,
       "kind": "function",
       "docstring": null
     },
@@ -6710,7 +6710,7 @@
       "name": "_exec_write",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 79,
+      "line": 100,
       "kind": "function",
       "docstring": null
     },
@@ -6719,7 +6719,7 @@
       "name": "_exec_mov",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 80,
+      "line": 101,
       "kind": "function",
       "docstring": null
     },
@@ -6728,7 +6728,7 @@
       "name": "_exec_add",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 81,
+      "line": 102,
       "kind": "function",
       "docstring": null
     },
@@ -6737,7 +6737,7 @@
       "name": "_exec_sub",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 82,
+      "line": 103,
       "kind": "function",
       "docstring": null
     },
@@ -6746,7 +6746,7 @@
       "name": "_exec_inc",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 83,
+      "line": 104,
       "kind": "function",
       "docstring": null
     },
@@ -6755,7 +6755,7 @@
       "name": "_exec_dec",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 84,
+      "line": 105,
       "kind": "function",
       "docstring": null
     },
@@ -6764,7 +6764,7 @@
       "name": "_exec_jmp",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 85,
+      "line": 106,
       "kind": "function",
       "docstring": null
     },
@@ -6773,7 +6773,7 @@
       "name": "_exec_cmp",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 90,
+      "line": 111,
       "kind": "function",
       "docstring": null
     },
@@ -6782,7 +6782,7 @@
       "name": "_exec_je",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 98,
+      "line": 119,
       "kind": "function",
       "docstring": null
     },
@@ -6791,7 +6791,7 @@
       "name": "_exec_jne",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 111,
+      "line": 132,
       "kind": "function",
       "docstring": null
     },
@@ -6800,7 +6800,7 @@
       "name": "_exec_jg",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 112,
+      "line": 133,
       "kind": "function",
       "docstring": null
     },
@@ -6809,7 +6809,7 @@
       "name": "_exec_jl",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 113,
+      "line": 134,
       "kind": "function",
       "docstring": null
     },
@@ -6818,7 +6818,7 @@
       "name": "_exec_call",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 114,
+      "line": 135,
       "kind": "function",
       "docstring": null
     },
@@ -6827,7 +6827,7 @@
       "name": "__init__",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 125,
+      "line": 146,
       "kind": "function",
       "docstring": null
     },
@@ -6836,7 +6836,7 @@
       "name": "get_register",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 138,
+      "line": 159,
       "kind": "function",
       "docstring": "Gets a register's state, initializing if not present."
     },
@@ -6845,7 +6845,7 @@
       "name": "run_step",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 144,
+      "line": 165,
       "kind": "function",
       "docstring": "Executes a single instruction step."
     },
@@ -6854,7 +6854,7 @@
       "name": "__init__",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 167,
+      "line": 188,
       "kind": "function",
       "docstring": null
     },
@@ -6863,7 +6863,7 @@
       "name": "_parse_plan",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 174,
+      "line": 195,
       "kind": "function",
       "docstring": "Parses the .udc file into instructions and labels, reusing the logic\nfrom the heuristic analyzer."
     },
@@ -6872,7 +6872,7 @@
       "name": "analyze",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
-      "line": 201,
+      "line": 222,
       "kind": "function",
       "docstring": "Runs the analysis and returns the final paraconsistent halting state."
     },
@@ -9761,7 +9761,7 @@
       "name": "TestGrammar",
       "path": "./lfi_ill/test_grammar.py",
       "language": "Python",
-      "line": 7,
+      "line": 16,
       "kind": "class",
       "docstring": null
     },
@@ -9770,7 +9770,7 @@
       "name": "TestInterpreter",
       "path": "./lfi_ill/test_grammar.py",
       "language": "Python",
-      "line": 44,
+      "line": 54,
       "kind": "class",
       "docstring": null
     },
@@ -9779,7 +9779,7 @@
       "name": "test_tensor_parsing",
       "path": "./lfi_ill/test_grammar.py",
       "language": "Python",
-      "line": 8,
+      "line": 17,
       "kind": "function",
       "docstring": null
     },
@@ -9788,7 +9788,7 @@
       "name": "test_par_parsing",
       "path": "./lfi_ill/test_grammar.py",
       "language": "Python",
-      "line": 14,
+      "line": 23,
       "kind": "function",
       "docstring": null
     },
@@ -9797,7 +9797,7 @@
       "name": "test_negation_parsing",
       "path": "./lfi_ill/test_grammar.py",
       "language": "Python",
-      "line": 20,
+      "line": 29,
       "kind": "function",
       "docstring": null
     },
@@ -9806,7 +9806,7 @@
       "name": "test_consistency_parsing",
       "path": "./lfi_ill/test_grammar.py",
       "language": "Python",
-      "line": 26,
+      "line": 35,
       "kind": "function",
       "docstring": null
     },
@@ -9815,7 +9815,7 @@
       "name": "test_completeness_parsing",
       "path": "./lfi_ill/test_grammar.py",
       "language": "Python",
-      "line": 32,
+      "line": 41,
       "kind": "function",
       "docstring": null
     },
@@ -9824,7 +9824,7 @@
       "name": "test_of_course_parsing",
       "path": "./lfi_ill/test_grammar.py",
       "language": "Python",
-      "line": 38,
+      "line": 47,
       "kind": "function",
       "docstring": null
     },
@@ -9833,7 +9833,7 @@
       "name": "setUp",
       "path": "./lfi_ill/test_grammar.py",
       "language": "Python",
-      "line": 45,
+      "line": 55,
       "kind": "function",
       "docstring": null
     },
@@ -9842,7 +9842,7 @@
       "name": "_run_interp",
       "path": "./lfi_ill/test_grammar.py",
       "language": "Python",
-      "line": 48,
+      "line": 58,
       "kind": "function",
       "docstring": null
     },
@@ -9851,7 +9851,7 @@
       "name": "test_completeness_operator",
       "path": "./lfi_ill/test_grammar.py",
       "language": "Python",
-      "line": 57,
+      "line": 67,
       "kind": "function",
       "docstring": null
     },
@@ -9860,7 +9860,7 @@
       "name": "test_consistency_operator",
       "path": "./lfi_ill/test_grammar.py",
       "language": "Python",
-      "line": 76,
+      "line": 86,
       "kind": "function",
       "docstring": null
     },
@@ -9869,7 +9869,7 @@
       "name": "test_negation_operator",
       "path": "./lfi_ill/test_grammar.py",
       "language": "Python",
-      "line": 95,
+      "line": 105,
       "kind": "function",
       "docstring": null
     },
