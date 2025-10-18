@@ -1,232 +1,429 @@
-@prefix protocol: <https://www.aida.org/protocol#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix proto: <https://factory.ai/ns/protocol/> .
+@prefix schema: <https://schema.org/> .
 
-protocol:agent-bootstrap-001 a protocol:Protocol ;
-    rdfs:label "agent-bootstrap-001" ;
-    protocol:description "A foundational protocol that dictates the agent's initial actions upon starting any task." ;
-    protocol:hasRule protocol:bootstrap-load-agents-md .
+<file:///app/compliance/protocols/best-practices-001> proto:associatedTool <file:///app/compliance/protocols/create_file_with_block>,
+        <file:///app/compliance/protocols/delete_file>,
+        <file:///app/compliance/protocols/grep>,
+        <file:///app/compliance/protocols/list_files>,
+        <file:///app/compliance/protocols/overwrite_file_with_block>,
+        <file:///app/compliance/protocols/read_file>,
+        <file:///app/compliance/protocols/replace_with_git_merge_diff> ;
+    proto:hasRule <file:///app/compliance/protocols/verify-after-write> ;
+    schema:description "A set of best practices derived from observing successful, data-driven workflow patterns." .
 
-protocol:agent-interaction-001 a protocol:Protocol ;
-    rdfs:label "agent-interaction-001" ;
-    protocol:description "A protocol governing the agent's core interaction and planning tools." ;
-    protocol:hasRule protocol:communication-tool-access,
-        protocol:planning-tool-access .
+<file:///app/compliance/protocols/meta-protocol-001> proto:associatedTool <file:///app/compliance/protocols/run_in_bash_session> ;
+    proto:hasRule <file:///app/compliance/protocols/agents-md-self-awareness> ;
+    schema:description "A meta-protocol governing the agent's awareness and maintenance of its own core protocol files." .
 
-protocol:agent-shell-001 a protocol:Protocol ;
-    rdfs:label "agent-shell-001" ;
-    protocol:description "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks." ;
-    protocol:hasRule protocol:shell-is-primary-entry-point .
+<file:///app/compliance/protocols/non-compliance-protocol-001> proto:hasRule <file:///app/compliance/protocols/non-compliance-architectural-deviation>,
+        <file:///app/compliance/protocols/non-compliance-definition>,
+        <file:///app/compliance/protocols/non-compliance-direct-editing>,
+        <file:///app/compliance/protocols/non-compliance-self-awareness-failure>,
+        <file:///app/compliance/protocols/non-compliance-test-procedure> ;
+    schema:description "A protocol that defines non-compliance with AGENTS.md and specifies corrective actions." .
 
-protocol:aura-execution-001 a protocol:Protocol ;
-    rdfs:label "aura-execution-001" ;
-    protocol:description "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent." ;
-    protocol:hasRule protocol:execute-aura-script .
+<file:///app/compliance/protocols/pre-commit-protocol-001> proto:associatedTool <file:///app/compliance/protocols/code_linter>,
+        <file:///app/compliance/protocols/pre_commit_instructions> ;
+    proto:hasRule <file:///app/compliance/protocols/pre-commit-instructions-mandate> ;
+    schema:description "Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission." .
 
-protocol:capability-verification-001 a protocol:Protocol ;
-    rdfs:label "capability-verification-001" ;
-    protocol:description "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement." ;
-    protocol:hasRule protocol:verify-capability-acquisition .
+<file:///app/compliance/protocols/reset-all-prohibition-001> proto:associatedTool <file:///app/compliance/protocols/reset_all> ;
+    proto:hasRule <file:///app/compliance/protocols/no-reset-all> ;
+    schema:description "A high-priority protocol that unconditionally forbids the use of the `reset_all` tool." .
 
-protocol:core-conditional-refactoring-001 a protocol:Protocol ;
-    rdfs:label "core-conditional-refactoring-001" ;
-    protocol:description "A protocol that applies specific refactoring guidelines only when working on the 'legacy' module." ;
-    protocol:hasApplicabilityCondition "/app/protocols/core/conditional_refactoring.protocol.py" ;
-    protocol:hasRule protocol:cr-001,
-        protocol:cr-002 .
+<file:///app/core/protocols/aorp-header> proto:hasRule <file:///app/core/protocols/aorp-identity>,
+        <file:///app/core/protocols/aorp-versioning> ;
+    schema:description "Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP)." .
 
-protocol:csdc-001 a protocol:Protocol ;
-    rdfs:label "csdc-001" ;
-    protocol:description "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints." ;
-    protocol:hasRule protocol:model-a-constraints,
-        protocol:model-b-constraints,
-        protocol:use-csdc-cli .
+<file:///app/core/protocols/cfdc-protocol-001> proto:associatedTool <file:///app/core/protocols/tooling/fdc_cli.py>,
+        <file:///app/core/protocols/tooling/master_control.py> ;
+    proto:hasRule <file:///app/core/protocols/hierarchical-planning-via-call-plan>,
+        <file:///app/core/protocols/max-recursion-depth> ;
+    schema:description "Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model." .
 
-protocol:dependency-management-001 a protocol:Protocol ;
-    rdfs:label "dependency-management-001" ;
-    protocol:description "A protocol for ensuring a reliable execution environment through formal dependency management." ;
-    protocol:hasRule protocol:dependency-install-on-start .
+<file:///app/core/protocols/core-directive-001> proto:associatedTool <file:///app/core/protocols/tooling/fdc_cli.py> ;
+    proto:hasRule <file:///app/core/protocols/mandatory-fdc-start> ;
+    schema:description "The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC)." .
 
-protocol:experimental-prologue-001 a protocol:Protocol ;
-    rdfs:label "experimental-prologue-001" ;
-    protocol:description "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation." ;
-    protocol:hasRule protocol:create-prologue-file .
+<file:///app/core/protocols/decidability-constraints-001> proto:associatedTool <file:///app/core/protocols/tooling/fdc_cli.py>,
+        <file:///app/core/protocols/tooling/fdc_fsm.json> ;
+    proto:hasRule <file:///app/core/protocols/bounded-recursion>,
+        <file:///app/core/protocols/fsm-adherence>,
+        <file:///app/core/protocols/non-turing-completeness> ;
+    schema:description "Ensures all development processes are formally decidable and computationally tractable." .
 
-protocol:file-indexing-001 a protocol:Protocol ;
-    rdfs:label "file-indexing-001" ;
-    protocol:description "A protocol for maintaining an up-to-date file index to accelerate tool performance." ;
-    protocol:hasRule protocol:update-index-before-submit .
+<file:///app/core/protocols/deep-research-cycle-001> proto:associatedTool <file:///app/core/protocols/create_file_with_block>,
+        <file:///app/core/protocols/google_search>,
+        <file:///app/core/protocols/view_text_website> ;
+    proto:hasRule <file:///app/core/protocols/structured-research-phases> ;
+    schema:description "A standardized, callable plan for conducting in-depth research on a complex topic." .
 
-protocol:hdl-proving-001 a protocol:Protocol ;
-    rdfs:label "hdl-proving-001" ;
-    protocol:description "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs." ;
-    protocol:hasRule protocol:prove-sequent .
+<file:///app/core/protocols/fdc-protocol-001> proto:associatedTool <file:///app/core/protocols/LOGGING_SCHEMA.md>,
+        <file:///app/core/protocols/knowledge_core/dependency_graph.json>,
+        <file:///app/core/protocols/knowledge_core/symbols.json>,
+        <file:///app/core/protocols/message_user>,
+        <file:///app/core/protocols/set_plan>,
+        <file:///app/core/protocols/tooling/fdc_cli.py>,
+        <file:///app/core/protocols/tooling/fdc_fsm.json> ;
+    proto:hasRule <file:///app/core/protocols/fdc-entry-point>,
+        <file:///app/core/protocols/fdc-state-transitions>,
+        <file:///app/core/protocols/phase1-deconstruction>,
+        <file:///app/core/protocols/phase2-planning>,
+        <file:///app/core/protocols/phase3-execution>,
+        <file:///app/core/protocols/phase4-post-mortem> ;
+    schema:description "Defines the Finite Development Cycle (FDC), a formally defined process for executing a single, coherent task." .
 
-protocol:plllu-execution-001 a protocol:Protocol ;
-    rdfs:label "plllu-execution-001" ;
-    protocol:description "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent." ;
-    protocol:hasRule protocol:execute-plllu-script .
+<file:///app/core/protocols/orientation-cascade-001> proto:associatedTool <file:///app/core/protocols/google_search>,
+        <file:///app/core/protocols/tooling/environmental_probe.py>,
+        <file:///app/core/protocols/view_text_website> ;
+    proto:hasRule <file:///app/core/protocols/l1-self-awareness>,
+        <file:///app/core/protocols/l2-repository-sync>,
+        <file:///app/core/protocols/l3-environmental-probing>,
+        <file:///app/core/protocols/l4-deep-research-cycle> ;
+    schema:description "Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state." .
 
-protocol:security-header a protocol:Protocol ;
-    rdfs:label "security-header" ;
-    protocol:description "Defines the identity and purpose of the Security Protocol document." .
+<file:///app/core/protocols/plan-registry-001> proto:associatedTool <file:///app/core/protocols/tooling/fdc_cli.py>,
+        <file:///app/core/protocols/tooling/master_control.py>,
+        <file:///app/core/protocols/tooling/plan_manager.py> ;
+    proto:hasRule <file:///app/core/protocols/registry-definition>,
+        <file:///app/core/protocols/registry-first-resolution>,
+        <file:///app/core/protocols/registry-management-tool> ;
+    schema:description "Defines a central registry for discovering and executing hierarchical plans by a logical name." .
 
-protocol:security-vuln-reporting-001 a protocol:Protocol ;
-    rdfs:label "security-vuln-reporting-001" ;
-    protocol:description "Defines the official policy and procedure for reporting security vulnerabilities." ;
-    protocol:hasRule protocol:no-public-disclosure,
-        protocol:vuln-reporting-channel .
+<file:///app/core/protocols/research-fdc-001> proto:associatedTool <file:///app/core/protocols/tooling/fdc_cli.py>,
+        <file:///app/core/protocols/tooling/master_control.py>,
+        <file:///app/core/protocols/tooling/research.py>,
+        <file:///app/core/protocols/tooling/research_planner.py> ;
+    proto:hasRule <file:///app/core/protocols/executable-plans>,
+        <file:///app/core/protocols/l4-invocation>,
+        <file:///app/core/protocols/specialized-fsm> ;
+    schema:description "Defines the formal Finite Development Cycle (FDC) for conducting deep research." .
 
-protocol:speculative-execution-001 a protocol:Protocol ;
-    rdfs:label "speculative-execution-001" ;
-    protocol:description "A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods." ;
-    protocol:hasRule protocol:formal-proposal-required,
-        protocol:idle-state-trigger,
-        protocol:resource-constraints,
-        protocol:speculative-logging,
-        protocol:user-review-gate .
+<file:///app/core/protocols/research-protocol-001> proto:associatedTool <file:///app/core/protocols/tooling.research.execute_research_protocol>,
+        <file:///app/core/protocols/tooling.research_planner.plan_deep_research> ;
+    proto:hasRule <file:///app/core/protocols/mandate-research-tools> ;
+    schema:description "A protocol for conducting systematic research using the integrated research toolchain." .
 
-protocol:toolchain-review-on-schema-change-001 a protocol:Protocol ;
-    rdfs:label "toolchain-review-on-schema-change-001" ;
-    protocol:description "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols." ;
-    protocol:hasRule protocol:toolchain-audit-on-schema-change .
+<file:///app/core/protocols/self-correction-protocol-001> proto:associatedTool <file:///app/core/protocols/initiate_memory_recording>,
+        <file:///app/core/protocols/tooling/code_suggester.py>,
+        <file:///app/core/protocols/tooling/knowledge_compiler.py>,
+        <file:///app/core/protocols/tooling/protocol_updater.py>,
+        <file:///app/core/protocols/tooling/self_correction_orchestrator.py> ;
+    proto:hasRule <file:///app/core/protocols/automated-orchestration>,
+        <file:///app/core/protocols/autonomous-code-suggestion>,
+        <file:///app/core/protocols/programmatic-rule-refinement>,
+        <file:///app/core/protocols/programmatic-updates>,
+        <file:///app/core/protocols/structured-lessons> ;
+    schema:description "Defines the automated, closed-loop workflow for protocol self-correction." .
 
-protocol:unified-auditor-001 a protocol:Protocol ;
-    rdfs:label "unified-auditor-001" ;
-    protocol:description "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface." ;
-    protocol:hasRule protocol:run-all-audits .
+<file:///app/core/protocols/standing-orders-001> proto:associatedTool <file:///app/core/protocols/google_search>,
+        <file:///app/core/protocols/tooling/fdc_cli.py>,
+        <file:///app/core/protocols/view_text_website> ;
+    proto:hasRule <file:///app/core/protocols/aorp-mandate>,
+        <file:///app/core/protocols/fdc-toolchain-mandate>,
+        <file:///app/core/protocols/rag-mandate> ;
+    schema:description "A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks." .
 
-protocol:unified-doc-builder-001 a protocol:Protocol ;
-    rdfs:label "unified-doc-builder-001" ;
-    protocol:description "A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth." ;
-    protocol:hasRule protocol:use-doc-builder-for-all-docs .
+<file:///app/critic/protocols/critic-meta-protocol-001> proto:hasRule <file:///app/critic/protocols/built-in-tools-are-valid>,
+        <file:///app/critic/protocols/functional-change-definition>,
+        <file:///app/critic/protocols/protocol-as-source-code> ;
+    schema:description "A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent." .
 
-protocol:bootstrap-load-agents-md a protocol:Rule ;
-    rdfs:label "bootstrap-load-agents-md" ;
-    protocol:description "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins." ;
-    protocol:enforcement "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase." .
+<file:///app/critic/protocols/critic-reset-prohibition-001> proto:associatedTool <file:///app/critic/protocols/reset_all> ;
+    proto:hasRule <file:///app/critic/protocols/critic-no-reset> ;
+    schema:description "A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool." .
 
-protocol:communication-tool-access a protocol:Rule ;
-    rdfs:label "communication-tool-access" ;
-    protocol:description "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow." ;
-    protocol:enforcement "The agent's core logic should be designed to use this tool for all user-facing communication." .
+<file:///app/protocols/agent-bootstrap-001> proto:associatedTool <file:///app/protocols/read_file> ;
+    proto:hasRule <file:///app/protocols/bootstrap-load-agents-md> ;
+    schema:description "A foundational protocol that dictates the agent's initial actions upon starting any task." .
 
-protocol:cr-001 a protocol:Rule ;
-    rdfs:label "cr-001" ;
-    protocol:description "When refactoring legacy code, prioritize replacing deprecated function calls with their modern equivalents as defined in the 'Modernization Guide'." ;
-    protocol:enforcement "The 'refactor.py' tool will cross-reference changes against a list of known deprecated functions when operating in legacy mode." .
+<file:///app/protocols/agent-interaction-001> proto:associatedTool <file:///app/protocols/message_user>,
+        <file:///app/protocols/set_plan> ;
+    proto:hasRule <file:///app/protocols/communication-tool-access>,
+        <file:///app/protocols/planning-tool-access> ;
+    schema:description "A protocol governing the agent's core interaction and planning tools." .
 
-protocol:cr-002 a protocol:Rule ;
-    rdfs:label "cr-002" ;
-    protocol:description "Dynamic rule from /app/protocols/core/conditional_refactoring.protocol.py" ;
-    protocol:enforcement "Procedural. The agent must explicitly tag the 'Legacy Systems Team' in the pull request description." .
+<file:///app/protocols/agent-shell-001> proto:associatedTool <file:///app/protocols/tooling/agent_shell.py> ;
+    proto:hasRule <file:///app/protocols/shell-is-primary-entry-point> ;
+    schema:description "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks." .
 
-protocol:create-prologue-file a protocol:Rule ;
-    rdfs:label "create-prologue-file" ;
-    protocol:description "Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols." ;
-    protocol:enforcement "This is a procedural rule. The agent must verify the existence of 'prologue.txt' before using 'create_file_with_block' or similar tools for other files." .
+<file:///app/protocols/aura-execution-001> proto:associatedTool <file:///app/protocols/tooling/aura_executor.py> ;
+    proto:hasRule <file:///app/protocols/execute-aura-script> ;
+    schema:description "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent." .
 
-protocol:dependency-install-on-start a protocol:Rule ;
-    rdfs:label "dependency-install-on-start" ;
-    protocol:description "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed." ;
-    protocol:enforcement "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions." .
+<file:///app/protocols/capability-verification-001> proto:associatedTool <file:///app/protocols/tooling/capability_verifier.py> ;
+    proto:hasRule <file:///app/protocols/verify-capability-acquisition> ;
+    schema:description "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement." .
 
-protocol:execute-aura-script a protocol:Rule ;
-    rdfs:label "execute-aura-script" ;
-    protocol:description "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter." ;
-    protocol:enforcement "The tool is used by invoking it from the command line with the path to the Aura script as an argument." .
+<file:///app/protocols/csdc-001> proto:associatedTool <file:///app/protocols/tooling/csdc_cli.py> ;
+    proto:hasRule <file:///app/protocols/model-a-constraints>,
+        <file:///app/protocols/model-b-constraints>,
+        <file:///app/protocols/use-csdc-cli> ;
+    schema:description "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints." .
 
-protocol:execute-plllu-script a protocol:Rule ;
-    rdfs:label "execute-plllu-script" ;
-    protocol:description "The `plllu_runner.py` tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter." ;
-    protocol:enforcement "The tool is used by invoking it from the command line with the path to the pLLLU script as an argument." .
+<file:///app/protocols/dependency-management-001> proto:associatedTool <file:///app/protocols/run_in_bash_session> ;
+    proto:hasRule <file:///app/protocols/dependency-install-on-start> ;
+    schema:description "A protocol for ensuring a reliable execution environment through formal dependency management." .
 
-protocol:formal-proposal-required a protocol:Rule ;
-    rdfs:label "formal-proposal-required" ;
-    protocol:description "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan." ;
-    protocol:enforcement "The initial plan for any speculative task must include a step to generate and save a proposal artifact." .
+<file:///app/protocols/experimental-prologue-001> proto:associatedTool <file:///app/protocols/create_file_with_block> ;
+    proto:hasRule <file:///app/protocols/create-prologue-file> ;
+    schema:description "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation." .
 
-protocol:idle-state-trigger a protocol:Rule ;
-    rdfs:label "idle-state-trigger" ;
-    protocol:description "The agent may only initiate a speculative task when it has no active, user-assigned tasks." ;
-    protocol:enforcement "The agent's main control loop must verify an idle state before allowing the invocation of a speculative plan." .
+<file:///app/protocols/file-indexing-001> proto:associatedTool <file:///app/protocols/tooling/file_indexer.py> ;
+    proto:hasRule <file:///app/protocols/update-index-before-submit> ;
+    schema:description "A protocol for maintaining an up-to-date file index to accelerate tool performance." .
 
-protocol:model-a-constraints a protocol:Rule ;
-    rdfs:label "model-a-constraints" ;
-    protocol:description "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`." ;
-    protocol:enforcement "Enforced by the `fsm_model_a.json` FSM used by the `csdc_cli.py` tool." .
+<file:///app/protocols/hdl-proving-001> proto:associatedTool <file:///app/protocols/tooling/hdl_prover.py> ;
+    proto:hasRule <file:///app/protocols/prove-sequent> ;
+    schema:description "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs." .
 
-protocol:model-b-constraints a protocol:Rule ;
-    rdfs:label "model-b-constraints" ;
-    protocol:description "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`." ;
-    protocol:enforcement "Enforced by the `fsm_model_b.json` FSM used by the `csdc_cli.py` tool." .
+<file:///app/protocols/plllu-execution-001> proto:associatedTool <file:///app/protocols/tooling/plllu_runner.py> ;
+    proto:hasRule <file:///app/protocols/execute-plllu-script> ;
+    schema:description "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent." .
 
-protocol:no-public-disclosure a protocol:Rule ;
-    rdfs:label "no-public-disclosure" ;
-    protocol:description "Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed." ;
-    protocol:enforcement "Violation of this rule may result in being banned from the project community." .
+<file:///app/protocols/security/security-header> schema:description "Defines the identity and purpose of the Security Protocol document." .
 
-protocol:planning-tool-access a protocol:Rule ;
-    rdfs:label "planning-tool-access" ;
-    protocol:description "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution." ;
-    protocol:enforcement "The agent's core logic should be designed to use this tool for all planning activities." .
+<file:///app/protocols/security/security-vuln-reporting-001> proto:hasRule <file:///app/protocols/security/no-public-disclosure>,
+        <file:///app/protocols/security/vuln-reporting-channel> ;
+    schema:description "Defines the official policy and procedure for reporting security vulnerabilities." .
 
-protocol:prove-sequent a protocol:Rule ;
-    rdfs:label "prove-sequent" ;
-    protocol:description "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover." ;
-    protocol:enforcement "The tool is used by invoking it from the command line with the sequent to be proved as an argument." .
+<file:///app/protocols/speculative-execution-001> proto:associatedTool <file:///app/protocols/create_file_with_block>,
+        <file:///app/protocols/request_user_input>,
+        <file:///app/protocols/set_plan> ;
+    proto:hasRule <file:///app/protocols/formal-proposal-required>,
+        <file:///app/protocols/idle-state-trigger>,
+        <file:///app/protocols/resource-constraints>,
+        <file:///app/protocols/speculative-logging>,
+        <file:///app/protocols/user-review-gate> ;
+    schema:description "A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods." .
 
-protocol:resource-constraints a protocol:Rule ;
-    rdfs:label "resource-constraints" ;
-    protocol:description "Speculative tasks must operate under defined resource limits." ;
-    protocol:enforcement "This is a system-level constraint that the agent orchestrator must enforce." .
+<file:///app/protocols/toolchain-review-on-schema-change-001> proto:associatedTool <file:///app/protocols/tooling/hierarchical_compiler.py>,
+        <file:///app/protocols/tooling/protocol_auditor.py>,
+        <file:///app/protocols/tooling/protocol_compiler.py> ;
+    proto:hasRule <file:///app/protocols/toolchain-audit-on-schema-change> ;
+    schema:description "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols." .
 
-protocol:run-all-audits a protocol:Rule ;
-    rdfs:label "run-all-audits" ;
-    protocol:description "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness." ;
-    protocol:enforcement "The tool is invoked via the command line, typically through the `make audit` target." .
+<file:///app/protocols/unified-auditor-001> proto:associatedTool <file:///app/protocols/tooling/auditor.py> ;
+    proto:hasRule <file:///app/protocols/run-all-audits> ;
+    schema:description "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface." .
 
-protocol:shell-is-primary-entry-point a protocol:Rule ;
-    rdfs:label "shell-is-primary-entry-point" ;
-    protocol:description "All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation." ;
-    protocol:enforcement "This is a procedural rule. The agent's operational framework should only expose the agent_shell.py as the means of starting a new task." .
+<file:///app/protocols/unified-doc-builder-001> proto:associatedTool <file:///app/protocols/tooling/doc_builder.py> ;
+    proto:hasRule <file:///app/protocols/use-doc-builder-for-all-docs> ;
+    schema:description "A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth." .
 
-protocol:speculative-logging a protocol:Rule ;
-    rdfs:label "speculative-logging" ;
-    protocol:description "All logs and artifacts generated during a speculative task must be tagged as 'speculative'." ;
-    protocol:enforcement "The agent's logging and file-creation tools should be context-aware and apply this tag when in a speculative mode." .
+<file:///app/compliance/protocols/agents-md-self-awareness> proto:enforcement "The agent should incorporate this check into its standard operating procedure, particularly at the beginning of a task or when unexpected behavior occurs." ;
+    schema:description "The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols." .
 
-protocol:toolchain-audit-on-schema-change a protocol:Rule ;
-    rdfs:label "toolchain-audit-on-schema-change" ;
-    protocol:description "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure." ;
-    protocol:enforcement "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files." .
+<file:///app/compliance/protocols/no-reset-all> proto:enforcement "This rule is enforced by the `master_control.py` orchestrator, which will immediately terminate the workflow with an error if an attempt is made to call this tool." ;
+    schema:description "The `reset_all` tool is strictly forbidden under all circumstances. It is a legacy tool that has been superseded by more granular and safer methods of workspace management. Its use is considered a critical failure." .
 
-protocol:update-index-before-submit a protocol:Rule ;
-    rdfs:label "update-index-before-submit" ;
-    protocol:description "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem." ;
-    protocol:enforcement "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/file_indexer.py build'." .
+<file:///app/compliance/protocols/non-compliance-architectural-deviation> proto:enforcement "Agent must revert non-compliant changes and re-implement them according to standards." ;
+    schema:description "Forbids changes that contradict documented architectural patterns or coding conventions." .
 
-protocol:use-csdc-cli a protocol:Rule ;
-    rdfs:label "use-csdc-cli" ;
-    protocol:description "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP)." ;
-    protocol:enforcement "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments." .
+<file:///app/compliance/protocols/non-compliance-definition> proto:enforcement "This is a definitional rule. Enforcement is achieved through the agent's adherence to the specific non-compliance rules that follow." ;
+    schema:description "Defines non-compliance as a violation of any rule, convention, or procedure in AGENTS.md or its source protocols." .
 
-protocol:use-doc-builder-for-all-docs a protocol:Rule ;
-    rdfs:label "use-doc-builder-for-all-docs" ;
-    protocol:description "The `doc_builder.py` script is the single entry point for generating all user-facing documentation, including system-level docs, README files, and GitHub Pages. It should be called with the appropriate '--format' argument." ;
-    protocol:enforcement "The tool is invoked via the command line, typically through the `make docs`, `make readme`, or `make pages` targets." .
+<file:///app/compliance/protocols/non-compliance-direct-editing> proto:associatedTool <file:///app/compliance/protocols/restore_file>,
+        <file:///app/compliance/protocols/run_in_bash_session> ;
+    proto:enforcement "Agent must revert direct edits and modify source files, then run the appropriate build command." ;
+    schema:description "Prohibits the direct editing of build artifacts like AGENTS.md or README.md. Changes must be made to source files, followed by a rebuild." .
 
-protocol:user-review-gate a protocol:Rule ;
-    rdfs:label "user-review-gate" ;
-    protocol:description "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly." ;
-    protocol:enforcement "The agent is forbidden from using tools like 'submit' or 'merge' within a speculative context. It must use 'request_user_input' to present the results." .
+<file:///app/compliance/protocols/non-compliance-self-awareness-failure> proto:associatedTool <file:///app/compliance/protocols/run_in_bash_session> ;
+    proto:enforcement "Agent should run 'make AGENTS.md' to refresh its protocol knowledge and re-evaluate its plan." ;
+    schema:description "Requires the agent to maintain an up-to-date understanding of protocols by recompiling AGENTS.md when necessary." .
 
-protocol:verify-capability-acquisition a protocol:Rule ;
-    rdfs:label "verify-capability-acquisition" ;
-    protocol:description "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process." ;
-    protocol:enforcement "The tool is used by invoking it from the command line with the path to the target test file." .
+<file:///app/compliance/protocols/non-compliance-test-procedure> proto:associatedTool <file:///app/compliance/protocols/run_in_bash_session> ;
+    proto:enforcement "Agent must halt execution and run the required tests, debugging any failures before proceeding." ;
+    schema:description "Requires adherence to all documented testing procedures before submitting changes." .
 
-protocol:vuln-reporting-channel a protocol:Rule ;
-    rdfs:label "vuln-reporting-channel" ;
-    protocol:description "All suspected security vulnerabilities MUST be reported privately to the designated security contact." ;
-    protocol:enforcement "This is a procedural rule. The designated contact is specified in the project's main SECURITY.md file." .
+<file:///app/compliance/protocols/pre-commit-instructions-mandate> proto:enforcement "The agent's core logic should invoke this tool as the entry point to the pre-submission phase." ;
+    schema:description "Before submitting changes, the agent MUST execute the `pre_commit_instructions` tool to receive the required sequence of validation steps (e.g., running tests, requesting code review)." .
 
+<file:///app/compliance/protocols/verify-after-write> proto:enforcement "This is a core operational discipline. Future tooling, such as a trace validator, could enforce this by analyzing the execution log against this protocol." ;
+    schema:description "After every file creation or modification action (`create_file_with_block`, `overwrite_file_with_block`, `replace_with_git_merge_diff`), the agent MUST use a subsequent read-only tool (`read_file`, `list_files`, `grep`) to verify that the action was executed successfully and had the intended effect. A plan step should only be marked as complete after this verification." .
+
+<file:///app/core/protocols/aorp-identity> proto:enforcement "Protocol is identified by its name in documentation and compiled artifacts." ;
+    schema:description "The governing protocol set is identified as the Advanced Orientation and Research Protocol (AORP)." .
+
+<file:///app/core/protocols/aorp-mandate> proto:enforcement "Enforced by the agent's core operational loop and the `start` command in `tooling/fdc_cli.py`." ;
+    schema:description "All Finite Development Cycles (FDCs) MUST be initiated using the FDC toolchain's 'start' command. This is non-negotiable." .
+
+<file:///app/core/protocols/aorp-versioning> proto:enforcement "Build or validation scripts should verify the presence and format of the VERSION file." ;
+    schema:description "The official protocol version is tracked in the VERSION file in the repository root, following Semantic Versioning (SemVer)." .
+
+<file:///app/core/protocols/automated-orchestration> proto:enforcement "This script is the designated engine for the PDSC workflow." ;
+    schema:description "The self-correction cycle must be managed by the `tooling/self_correction_orchestrator.py` script, which processes pending lessons and triggers the necessary updates." .
+
+<file:///app/core/protocols/autonomous-code-suggestion> proto:enforcement "The `tooling/self_correction_orchestrator.py` invokes the code suggester when it processes a lesson of this type." ;
+    schema:description "The self-correction system can generate and apply code changes to its own tooling. This is achieved through a `PROPOSE_CODE_CHANGE` action, which is processed by `tooling/code_suggester.py` to create an executable plan." .
+
+<file:///app/core/protocols/bounded-recursion> proto:enforcement "The `lint` command in `tooling/fdc_cli.py` scans plans for disallowed recursive calls." ;
+    schema:description "The agent MUST NOT generate plans that involve recursion or self-invocation. A plan cannot trigger another FDC or a sub-plan, with the sole exception of the 'Deep Research Cycle'." .
+
+<file:///app/core/protocols/executable-plans> proto:enforcement "The output of the research planner must be linted and validated by the `fdc_cli.py` tool using the `research_fsm.json`." ;
+    schema:description "Research plans must be generated by `tooling/research_planner.py` as valid, executable plans that conform to the `research_fsm.json` definition. They are not just templates but formal, verifiable artifacts." .
+
+<file:///app/core/protocols/fdc-entry-point> proto:enforcement "Enforced by the `start` command in `tooling/fdc_cli.py`." ;
+    schema:description "The AORP cascade is the mandatory entry point to every FDC." .
+
+<file:///app/core/protocols/fdc-state-transitions> proto:enforcement "Validated by the `lint` command in `tooling/fdc_cli.py`." ;
+    schema:description "The FDC is a Finite State Machine (FSM) formally defined in `tooling/fdc_fsm.json`. Plans must be valid strings in the language defined by this FSM." .
+
+<file:///app/core/protocols/fdc-toolchain-mandate> proto:enforcement "The agent's internal logic is designed to prefer these specific tool commands for FDC state transitions." ;
+    schema:description "Use the `fdc_cli.py` tool for all core FDC state transitions: task initiation ('start'), plan linting ('lint'), and task closure ('close')." .
+
+<file:///app/core/protocols/fsm-adherence> proto:enforcement "The `lint` command in `tooling/fdc_cli.py` validates the plan against the FSM definition." ;
+    schema:description "All plans must be valid strings in the language defined by the tooling/fdc_fsm.json Finite State Machine." .
+
+<file:///app/core/protocols/hierarchical-planning-via-call-plan> proto:enforcement "The plan validator must be able to parse this directive and recursively validate sub-plans. The execution engine must implement a plan execution stack to manage the context of nested calls." ;
+    schema:description "Plans may execute other plans as sub-routines using the 'call_plan <path_to_plan>' directive. This enables a modular, hierarchical workflow." .
+
+<file:///app/core/protocols/l1-self-awareness> proto:enforcement "The `start` command of the FDC toolchain executes this step and fails if the artifact is missing or invalid." ;
+    schema:description "Level 1 (Self-Awareness): The agent must first establish its own identity and inherent limitations by reading the `knowledge_core/agent_meta.json` artifact." .
+
+<file:///app/core/protocols/l2-repository-sync> proto:enforcement "The `start` command of the FDC toolchain executes this step." ;
+    schema:description "Level 2 (Repository Sync): The agent must understand the current state of the local repository by loading primary artifacts from the `knowledge_core/` directory." .
+
+<file:///app/core/protocols/l3-environmental-probing> proto:enforcement "The `start` command of the FDC toolchain executes this step, utilizing tools like `google_search` and `view_text_website`." ;
+    schema:description "Level 3 (Environmental Probing & Targeted RAG): The agent must discover the rules and constraints of its operational environment by executing a probe script and using targeted RAG to resolve 'known unknowns'." .
+
+<file:///app/core/protocols/l4-deep-research-cycle> proto:enforcement "This is a special case of recursion, explicitly allowed and managed by the FDC toolchain." ;
+    schema:description "Level 4 (Deep Research Cycle): To investigate 'unknown unknowns', the agent must initiate a formal, self-contained Finite Development Cycle (FDC) of the 'Analysis Modality'." .
+
+<file:///app/core/protocols/l4-invocation> proto:enforcement "The `master_control.py` orchestrator is responsible for triggering the L4 cycle." ;
+    schema:description "The L4 Deep Research Cycle is the designated mechanism for resolving complex 'unknown unknowns'. It is invoked by the main orchestrator when a task requires knowledge that cannot be obtained through simple L1-L3 orientation probes." .
+
+<file:///app/core/protocols/mandate-research-tools> proto:enforcement "Adherence is monitored by the Code Review Critic and through post-mortem analysis of the activity log." ;
+    schema:description "For all complex research tasks, the `plan_deep_research` tool MUST be used to generate a plan, and the `execute_research_protocol` tool MUST be used for data gathering. This ensures a systematic and auditable research process." .
+
+<file:///app/core/protocols/mandatory-fdc-start> proto:enforcement "This is a hard-coded behavior in the agent's core operational loop and is verified by the FDC toolchain." ;
+    schema:description "Upon receiving a new task, the agent's first action MUST be to programmatically execute the FDC 'start' command to formally initiate the task and run the AORP orientation cascade." .
+
+<file:///app/core/protocols/max-recursion-depth> proto:enforcement "The execution engine must check the stack depth before every 'call_plan' execution and terminate with a fatal error if the limit would be exceeded." ;
+    schema:description "To ensure decidability, the plan execution stack must not exceed a system-wide constant, MAX_RECURSION_DEPTH. This prevents infinite recursion and guarantees all processes will terminate." .
+
+<file:///app/core/protocols/non-turing-completeness> proto:enforcement "Enforced by the design of the plan runner and validated by the `lint` command in the FDC toolchain." ;
+    schema:description "The agent's planning and execution language is, by design, not Turing-complete. This is a fundamental constraint to guarantee that all processes will terminate." .
+
+<file:///app/core/protocols/phase1-deconstruction> proto:enforcement "Procedural step guided by the agent's core logic, using artifacts in `logs/` and `knowledge_core/`." ;
+    schema:description "Phase 1 (Deconstruction & Contextualization): The agent must ingest the task, query historical logs, identify entities using the symbol map, and analyze impact using the dependency graph." .
+
+<file:///app/core/protocols/phase2-planning> proto:enforcement "The `lint` command in `tooling/fdc_cli.py` is a mandatory pre-flight check." ;
+    schema:description "Phase 2 (Planning & Self-Correction): The agent must generate a granular plan, lint it using the FDC toolchain, cite evidence for its steps, and perform a critical review." .
+
+<file:///app/core/protocols/phase3-execution> proto:enforcement "Logging is performed by the agent's action execution wrapper." ;
+    schema:description "Phase 3 (Execution & Structured Logging): The agent must execute the validated plan and log every action according to the `LOGGING_SCHEMA.md`." .
+
+<file:///app/core/protocols/phase4-post-mortem> proto:enforcement "The `close` command in `tooling/fdc_cli.py` initiates this phase." ;
+    schema:description "Phase 4 (Pre-Submission Post-Mortem): The agent must formally close the task using the `close` command and complete the generated post-mortem report." .
+
+<file:///app/core/protocols/programmatic-rule-refinement> proto:enforcement "The `tooling/knowledge_compiler.py` can generate `update-rule` actions, and the `tooling/self_correction_orchestrator.py` executes them." ;
+    schema:description "The self-correction system can modify the description of existing protocol rules via the `update-rule` command in `tooling/protocol_updater.py`, allowing it to refine its own logic." .
+
+<file:///app/core/protocols/programmatic-updates> proto:enforcement "Agent's core logic should be designed to use this tool for all protocol modifications." ;
+    schema:description "All modifications to protocol source files must be performed programmatically via the `tooling/protocol_updater.py` tool to ensure consistency and prevent manual errors." .
+
+<file:///app/core/protocols/rag-mandate> proto:enforcement "This is a core principle of the L3 orientation phase, utilizing tools like `google_search`." ;
+    schema:description "For any task involving external technologies, Just-In-Time External RAG is REQUIRED to verify current best practices. Do not trust internal knowledge." .
+
+<file:///app/core/protocols/registry-definition> proto:enforcement "The file's existence and format can be checked by the validation toolchain." ;
+    schema:description "A central plan registry MUST exist at 'knowledge_core/plan_registry.json'. It maps logical plan names to their file paths." .
+
+<file:///app/core/protocols/registry-first-resolution> proto:enforcement "This logic must be implemented in both the plan validator (`fdc_cli.py`) and the execution engine (`master_control.py`)." ;
+    schema:description "The 'call_plan <argument>' directive MUST first attempt to resolve '<argument>' as a logical name in the plan registry. If resolution fails, it MUST fall back to treating '<argument>' as a direct file path for backward compatibility." .
+
+<file:///app/core/protocols/registry-management-tool> proto:enforcement "The tool's existence and functionality can be verified via integration tests." ;
+    schema:description "A dedicated tool (`tooling/plan_manager.py`) MUST be provided for managing the plan registry, with functions to register, deregister, and list plans." .
+
+<file:///app/core/protocols/specialized-fsm> proto:enforcement "The `master_control.py` orchestrator must load and execute plans against this specific FSM when initiating an L4 Deep Research Cycle." ;
+    schema:description "The Research FDC must be governed by its own dedicated Finite State Machine, defined in `tooling/research_fsm.json`. This FSM is tailored for a research workflow, with states for gathering, synthesis, and reporting." .
+
+<file:///app/core/protocols/structured-lessons> proto:enforcement "The `tooling/knowledge_compiler.py` script is responsible for generating lessons in the correct format." ;
+    schema:description "Lessons learned from post-mortem analysis must be generated as structured, machine-readable JSON objects in `knowledge_core/lessons.jsonl`." .
+
+<file:///app/core/protocols/structured-research-phases> proto:enforcement "The plan's structure itself enforces this rule. The `lint` command can be extended to validate the structure of registered research plans." ;
+    schema:description "The deep research plan MUST follow a structured four-phase process: Scoping, Broad Gathering, Targeted Extraction, and Synthesis." .
+
+<file:///app/critic/protocols/built-in-tools-are-valid> proto:enforcement "The Code Review Critic must not flag a change as 'incomplete' or 'non-functional' solely because the implementation of a built-in tool is not present in the repository." ;
+    schema:description "The agent's execution environment provides a set of built-in tools (e.g., `read_file`, `delete_file`, `pre_commit_instructions`). The implementation of these tools does not reside within the repository. A protocol change that adds a built-in tool to the `associated_tools` list is a valid and complete functional change." .
+
+<file:///app/critic/protocols/critic-no-reset> proto:enforcement "This rule is enforced by its inclusion in the compiled AGENTS.md, which serves as the context for the Code Review Critic. The critic must be programmed to parse and adhere to this prohibition." ;
+    schema:description "The agent role-playing as the 'Code Review Critic' is explicitly forbidden from invoking the 'reset_all' tool under any circumstances. This is a critical safeguard to prevent the loss of work during the review process." .
+
+<file:///app/critic/protocols/functional-change-definition> proto:enforcement "The Code Review Critic's evaluation of 'functionality' must encompass both traditional code and protocol definitions." ;
+    schema:description "A change is considered 'functional' if it correctly modifies the agent's operational rules or capabilities, as defined by the combination of Python source code and the protocol source files in `protocols/`." .
+
+<file:///app/critic/protocols/protocol-as-source-code> proto:enforcement "The Code Review Critic must analyze changes in this directory with the same rigor as changes to `.py` files." ;
+    schema:description "The `protocols/` directory and all its contents (`.md`, `.json` files) MUST be treated as functional source code. Changes to these files directly alter the agent's operational capabilities and governing rules." .
+
+<file:///app/protocols/bootstrap-load-agents-md> proto:enforcement "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase." ;
+    schema:description "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins." .
+
+<file:///app/protocols/communication-tool-access> proto:enforcement "The agent's core logic should be designed to use this tool for all user-facing communication." ;
+    schema:description "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow." .
+
+<file:///app/protocols/create-prologue-file> proto:enforcement "This is a procedural rule. The agent must verify the existence of 'prologue.txt' before using 'create_file_with_block' or similar tools for other files." ;
+    schema:description "Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols." .
+
+<file:///app/protocols/dependency-install-on-start> proto:enforcement "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions." ;
+    schema:description "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed." .
+
+<file:///app/protocols/execute-aura-script> proto:enforcement "The tool is used by invoking it from the command line with the path to the Aura script as an argument." ;
+    schema:description "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter." .
+
+<file:///app/protocols/execute-plllu-script> proto:enforcement "The tool is used by invoking it from the command line with the path to the pLLLU script as an argument." ;
+    schema:description "The `plllu_runner.py` tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter." .
+
+<file:///app/protocols/formal-proposal-required> proto:enforcement "The initial plan for any speculative task must include a step to generate and save a proposal artifact." ;
+    schema:description "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan." .
+
+<file:///app/protocols/idle-state-trigger> proto:enforcement "The agent's main control loop must verify an idle state before allowing the invocation of a speculative plan." ;
+    schema:description "The agent may only initiate a speculative task when it has no active, user-assigned tasks." .
+
+<file:///app/protocols/model-a-constraints> proto:enforcement "Enforced by the `fsm_model_a.json` FSM used by the `csdc_cli.py` tool." ;
+    schema:description "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`." .
+
+<file:///app/protocols/model-b-constraints> proto:enforcement "Enforced by the `fsm_model_b.json` FSM used by the `csdc_cli.py` tool." ;
+    schema:description "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`." .
+
+<file:///app/protocols/planning-tool-access> proto:enforcement "The agent's core logic should be designed to use this tool for all planning activities." ;
+    schema:description "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution." .
+
+<file:///app/protocols/prove-sequent> proto:enforcement "The tool is used by invoking it from the command line with the sequent to be proved as an argument." ;
+    schema:description "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover." .
+
+<file:///app/protocols/resource-constraints> proto:enforcement "This is a system-level constraint that the agent orchestrator must enforce." ;
+    schema:description "Speculative tasks must operate under defined resource limits." .
+
+<file:///app/protocols/run-all-audits> proto:enforcement "The tool is invoked via the command line, typically through the `make audit` target." ;
+    schema:description "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness." .
+
+<file:///app/protocols/security/no-public-disclosure> proto:enforcement "Violation of this rule may result in being banned from the project community." ;
+    schema:description "Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed." .
+
+<file:///app/protocols/security/vuln-reporting-channel> proto:enforcement "This is a procedural rule. The designated contact is specified in the project's main SECURITY.md file." ;
+    schema:description "All suspected security vulnerabilities MUST be reported privately to the designated security contact." .
+
+<file:///app/protocols/shell-is-primary-entry-point> proto:enforcement "This is a procedural rule. The agent's operational framework should only expose the agent_shell.py as the means of starting a new task." ;
+    schema:description "All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation." .
+
+<file:///app/protocols/speculative-logging> proto:enforcement "The agent's logging and file-creation tools should be context-aware and apply this tag when in a speculative mode." ;
+    schema:description "All logs and artifacts generated during a speculative task must be tagged as 'speculative'." .
+
+<file:///app/protocols/toolchain-audit-on-schema-change> proto:enforcement "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files." ;
+    schema:description "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure." .
+
+<file:///app/protocols/update-index-before-submit> proto:enforcement "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/file_indexer.py build'." ;
+    schema:description "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem." .
+
+<file:///app/protocols/use-csdc-cli> proto:enforcement "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments." ;
+    schema:description "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP)." .
+
+<file:///app/protocols/use-doc-builder-for-all-docs> proto:enforcement "The tool is invoked via the command line, typically through the `make docs`, `make readme`, or `make pages` targets." ;
+    schema:description "The `doc_builder.py` script is the single entry point for generating all user-facing documentation, including system-level docs, README files, and GitHub Pages. It should be called with the appropriate '--format' argument." .
+
+<file:///app/protocols/user-review-gate> proto:enforcement "The agent is forbidden from using tools like 'submit' or 'merge' within a speculative context. It must use 'request_user_input' to present the results." ;
+    schema:description "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly." .
+
+<file:///app/protocols/verify-capability-acquisition> proto:enforcement "The tool is used by invoking it from the command line with the path to the target test file." ;
+    schema:description "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process." .
