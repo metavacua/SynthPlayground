@@ -1,0 +1,12 @@
+{
+  "protocol_id": "protocol-scoping-001",
+  "description": "A protocol describing the hierarchical loading and enforcement of AGENTS.md files.",
+  "rules": [
+    {
+      "rule_id": "principle-of-proximity",
+      "description": "The agent's behavior is governed by the AGENTS.md file closest to its current operational scope. A local AGENTS.md will always override a parent or root AGENTS.md for operations within its directory tree.",
+      "enforcement": "This is an intrinsic behavior of the agent's core programming. The agent is designed to look for and use the AGENTS.md file that is closest to its current point of operation."
+    }
+  ],
+  "associated_tools": []
+}

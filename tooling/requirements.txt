@@ -4,4 +4,3 @@ watchdog
 markdown
 pypdf
 requests
-ply

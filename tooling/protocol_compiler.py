@@ -32,6 +32,8 @@ import subprocess
 import sys
 import re
 import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 
 # Add the root directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -348,8 +350,6 @@ def main_cli():
     )
 
     if args.watch:
-        from watchdog.observers import Observer
-        from watchdog.events import FileSystemEventHandler
         print(f"\n--- Entering Watch Mode ---")
         print(f"Monitoring {args.source_dir} for changes...")
 

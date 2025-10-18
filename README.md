@@ -10,6 +10,7 @@ This document provides a human-readable summary of the protocols and key compone
 - **`experimental-prologue-001`**: An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.
 - **`agent-shell-001`**: A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.
 - **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
+- **`protocol-scoping-001`**: A protocol describing the hierarchical loading and enforcement of AGENTS.md files.
 - **`unified-auditor-001`**: A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.
 - **`aura-execution-001`**: A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.
 - **`capability-verification-001`**: A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.

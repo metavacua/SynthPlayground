@@ -102,6 +102,24 @@ This ensures that any modification to the fundamental way protocols are defined 
 
 ---
 
+# Protocol: Hierarchical Protocol Scoping
+
+This protocol defines the agent's behavior regarding the loading and enforcement of `AGENTS.md` files in a hierarchical file structure. It is a fundamental principle of the agent's operation.
+
+## The Principle of Proximity
+
+The agent's governing protocols are determined by the `AGENTS.md` file that is "closest" to its current operational scope. When the agent performs an action on a file or directory, it adheres to the rules defined in the `AGENTS.md` file located in the deepest common parent directory.
+
+- **Example:** If the agent is instructed to write to `/a/b/c.txt`, it will first look for an `AGENTS.md` in `/a/b/`. If not found, it will look in `/a/`, and finally in the root directory `/`.
+
+This mechanism allows for both global, repository-wide protocols and fine-grained, module-specific overrides.
+
+## Experimental Verification
+
+This principle was empirically verified through an experiment (see `experiments/hierarchical_test` during development). An `AGENTS.md` file was placed in a subdirectory with a unique, observable rule. When the agent was tasked with an operation within that subdirectory, it correctly followed the local rule, demonstrating that the local `AGENTS.md` took precedence over the root `AGENTS.md`. This confirms that protocol loading is dynamically scoped to the file system hierarchy.
+
+---
+
 # --- Child Module: `compliance` ---
 
 # Protocol: AGENTS.md Non-Compliance
@@ -508,6 +526,24 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
     "tooling/protocol_compiler.py",
     "tooling/hierarchical_compiler.py"
   ]
+}
+```
+
+
+---
+
+```json
+{
+  "protocol_id": "protocol-scoping-001",
+  "description": "A protocol describing the hierarchical loading and enforcement of AGENTS.md files.",
+  "rules": [
+    {
+      "rule_id": "principle-of-proximity",
+      "description": "The agent's behavior is governed by the AGENTS.md file closest to its current operational scope. A local AGENTS.md will always override a parent or root AGENTS.md for operations within its directory tree.",
+      "enforcement": "This is an intrinsic behavior of the agent's core programming. The agent is designed to look for and use the AGENTS.md file that is closest to its current point of operation."
+    }
+  ],
+  "associated_tools": []
 }
 ```
 

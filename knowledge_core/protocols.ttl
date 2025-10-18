@@ -181,6 +181,9 @@
     proto:hasRule <file:///app/protocols/execute-plllu-script> ;
     schema:description "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent." .
 
+<file:///app/protocols/protocol-scoping-001> proto:hasRule <file:///app/protocols/principle-of-proximity> ;
+    schema:description "A protocol describing the hierarchical loading and enforcement of AGENTS.md files." .
+
 <file:///app/protocols/security/security-header> schema:description "Defines the identity and purpose of the Security Protocol document." .
 
 <file:///app/protocols/security/security-vuln-reporting-001> proto:hasRule <file:///app/protocols/security/no-public-disclosure>,
@@ -388,6 +391,9 @@
 
 <file:///app/protocols/planning-tool-access> proto:enforcement "The agent's core logic should be designed to use this tool for all planning activities." ;
     schema:description "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution." .
+
+<file:///app/protocols/principle-of-proximity> proto:enforcement "This is an intrinsic behavior of the agent's core programming. The agent is designed to look for and use the AGENTS.md file that is closest to its current point of operation." ;
+    schema:description "The agent's behavior is governed by the AGENTS.md file closest to its current operational scope. A local AGENTS.md will always override a parent or root AGENTS.md for operations within its directory tree." .
 
 <file:///app/protocols/prove-sequent> proto:enforcement "The tool is used by invoking it from the command line with the sequent to be proved as an argument." ;
     schema:description "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover." .
