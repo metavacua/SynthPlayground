@@ -3686,7 +3686,7 @@
       "name": "generate_root_agents_md",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 192,
+      "line": 190,
       "kind": "function",
       "docstring": "Generates the root AGENTS.md file, linking to all successfully compiled child modules."
     },
@@ -3695,7 +3695,7 @@
       "name": "main_orchestrator",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 240,
+      "line": 238,
       "kind": "function",
       "docstring": "Main function to find and run all local build scripts in parallel."
     },
@@ -6920,6 +6920,42 @@
       "line": 41,
       "kind": "function",
       "docstring": "Tests the main function of the code suggester."
+    },
+    {
+      "_type": "tag",
+      "name": "get_agents_md_path",
+      "path": "./tooling/jules_agent/action_logger.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "Finds the AGENTS.md file in the given directory."
+    },
+    {
+      "_type": "tag",
+      "name": "log_action",
+      "path": "./tooling/jules_agent/action_logger.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": "Logs an action to the AGENTS.md file."
+    },
+    {
+      "_type": "tag",
+      "name": "get_agents_md_path",
+      "path": "./tooling/jules_agent/plan_manager.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Finds the AGENTS.md file in the given directory."
+    },
+    {
+      "_type": "tag",
+      "name": "inject_plan",
+      "path": "./tooling/jules_agent/plan_manager.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": "Injects or updates the plan in the AGENTS.md file."
     },
     {
       "_type": "tag",
