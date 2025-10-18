@@ -79,11 +79,26 @@ def load_schema(schema_file):
         print(f"Error: Could not decode JSON from schema file at {schema_file}")
         return None
 
+import ast
+
 def sanitize_markdown(content):
     content = re.sub(r"<script.*?>.*?</script>", "", content, flags=re.IGNORECASE | re.DOTALL)
     content = re.sub(r" on\w+=\".*?\"", "", content, flags=re.IGNORECASE)
     content = re.sub(r"<<<SENSITIVE_INSTRUCTIONS>>>.*<<<SENSITIVE_INSTRUCTIONS>>>", "", content, flags=re.DOTALL)
     return content
+
+def extract_docstring(filepath):
+    """Extracts the module-level docstring from a Python file."""
+    full_path = os.path.join(ROOT_DIR, filepath)
+    if not os.path.exists(full_path):
+        return f"_File not found: {filepath}_"
+    try:
+        with open(full_path, "r", encoding="utf-8") as f:
+            tree = ast.parse(f.read(), filename=filepath)
+        docstring = ast.get_docstring(tree)
+        return docstring if docstring else "_No module-level docstring found._"
+    except Exception as e:
+        return f"_Error parsing file {filepath}: {e}_"
 
 def compile_single_module(source_dir, target_file, schema_file, knowledge_graph=None, autodoc_file=None):
     output_filename = os.path.basename(target_file)
@@ -146,11 +161,12 @@ def compile_single_module(source_dir, target_file, schema_file, knowledge_graph=
     if all_associated_tools:
         final_content.append("\n\n# --- Associated Tool Documentation ---\n")
         for tool_path in sorted(list(all_associated_tools)):
-            tool_readme_path = os.path.join(ROOT_DIR, os.path.dirname(tool_path), "README.md")
-            if os.path.exists(tool_readme_path):
-                with open(tool_readme_path, "r") as f:
-                    final_content.append(f.read())
-                final_content.append("\n---\n")
+            if tool_path.endswith(".py"):
+                docstring = extract_docstring(tool_path)
+                final_content.append(f"## `{os.path.basename(tool_path)}`\n\n{docstring}\n\n---\n")
+            else:
+                # Handle built-in or non-script tools
+                final_content.append(f"## `{tool_path}`\n\n_This is a built-in or conceptual tool. Documentation is not available via automated extraction._\n\n---\n")
 
     final_output_string = "\n".join(final_content)
     temp_target_file = target_file + ".tmp"

@@ -5,10 +5,8 @@
     {
       "rule_id": "update-index-before-submit",
       "description": "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem.",
-      "enforcement": "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/file_indexer.py build'."
+      "enforcement": "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/some_indexer.py build'."
     }
   ],
-  "associated_tools": [
-    "tooling/file_indexer.py"
-  ]
+  "associated_tools": []
 }
