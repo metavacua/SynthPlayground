@@ -8,6 +8,16 @@
 # with machine-readable JSON definitions embedded.
 # ---
 
+# Protocol: Experimental Prologue
+
+This protocol is a test case to verify the agent's ability to dynamically adapt its behavior to new rules.
+
+## Rule: `create-prologue-file`
+
+Before creating any file, the agent must first create a file named `prologue.txt` with the content "This is a prologue file." This serves as a behavioral check. If the agent creates this file before other requested files, it demonstrates that it has successfully loaded and is following this experimental protocol.
+
+---
+
 # Experimental Protocol
 
 This protocol is a test case for the decentralized build system. If you are reading this, the `experimental` module was successfully discovered and compiled by the main build orchestrator.
@@ -29,6 +39,26 @@ This protocol is a test case to verify the agent's ability to dynamically adapt 
 ## Rule: `create-prologue-file`
 
 Before creating any file, the agent must first create a file named `prologue.txt` with the content "This is a prologue file." This serves as a behavioral check. If the agent creates this file before other requested files, it demonstrates that it has successfully loaded and is following this experimental protocol.
+
+
+---
+
+```json
+{
+  "protocol_id": "experimental-prologue-001",
+  "description": "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.",
+  "rules": [
+    {
+      "rule_id": "create-prologue-file",
+      "description": "Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols.",
+      "enforcement": "This is a procedural rule. The agent must verify the existence of 'prologue.txt' before using 'create_file_with_block' or similar tools for other files."
+    }
+  ],
+  "associated_tools": [
+    "create_file_with_block"
+  ]
+}
+```
 
 
 ---
