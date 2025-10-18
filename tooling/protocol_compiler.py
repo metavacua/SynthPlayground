@@ -174,8 +174,6 @@ def compile_single_module(source_dir, target_file, schema_file, knowledge_graph=
     os.rename(temp_target_file, target_file)
 
 def compile_module_wrapper(path_to_protocol_dir):
-    target_md_file = os.path.join(path_to_protocol_dir, "AGENTS.md")
-    schema_file = os.path.join(ROOT_PROTOCOLS_DIR, "protocol.schema.json")
     local_builder = os.path.join(path_to_protocol_dir, LOCAL_BUILD_SCRIPT_NAME)
     try:
         print(f"--- Executing local builder: {local_builder} ---")
@@ -257,14 +255,8 @@ def main_orchestrator():
         print("No protocol directories with a 'build.py' script found. Exiting.", file=sys.stderr)
         return
 
-    all_protocol_dirs = find_protocol_dirs(ROOT_PROTOCOLS_DIR)
-    if not all_protocol_dirs:
-        print("No protocol directories found. Exiting.")
-        return
-
     successful_compilations = []
     failed_compilations = []
-
     with ThreadPoolExecutor() as executor:
         future_to_dir = {executor.submit(compile_module_wrapper, dir_path): dir_path for dir_path in build_script_dirs}
         for future in as_completed(future_to_dir):

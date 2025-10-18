@@ -24,3 +24,34 @@ This repository uses a hierarchical, decentralized protocol system. Each of the 
 ## Root Protocols
 
 General protocols are defined in the [root protocol module](./protocols/AGENTS.md).
+# --- Child Protocol Modules ---
+
+This repository uses a hierarchical protocol system. Each of the following directories contains a self-contained set of protocols in its own `AGENTS.md` file.
+- [Compliance](protocols/compliance/AGENTS.md)
+- [Core](protocols/core/AGENTS.md)
+- [Critic](protocols/critic/AGENTS.md)
+- [Security](protocols/security/AGENTS.md)
+- [Self-improvement](protocols/self-improvement/AGENTS.md)
+- [Testing](protocols/testing/AGENTS.md)
+- [Self_improvement](protocols/self_improvement/AGENTS.md)
+
+
+# Jules' Plan
+
+1. *Create a `jules_agent` directory in `tooling`.* This will house the logic for my agent's operations.
+2. *Implement a `plan_manager.py` in `tooling/jules_agent`.* This module will be responsible for creating, updating, and storing the plan in the correct `AGENTS.md` file based on the current working directory.
+3. *Implement an `action_logger.py` in `tooling/jules_agent`.* This module will be responsible for logging actions to the correct `AGENTS.md` file.
+4. *Integrate the `plan_manager` and `action_logger` into my workflow.* I will call these tools to update the `AGENTS.md` files as I work.
+5. *Complete pre commit steps*
+   - Complete pre commit steps to make sure proper testing, verifications, reviews and reflections are done.
+6. *Submit the change.*
+   - Once the new `AGENTS.md` is generated and integrated, I will submit the change.
+
+
+
+# Jules' Action Log
+
+- 2025-10-18 22:04:02: Created `tooling/jules_agent` directory.
+- 2025-10-18 22:04:02: Implemented `plan_manager.py`.
+- 2025-10-18 22:04:02: Implemented `action_logger.py`.
+- 2025-10-18 22:04:02: Injected the current plan into the root AGENTS.md.
