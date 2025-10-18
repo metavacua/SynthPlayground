@@ -1,7 +1,7 @@
 jsonschema
 rdflib
-watchdog
 markdown
 pypdf
 requests
+watchdog
 ply
