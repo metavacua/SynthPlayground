@@ -1,5 +1,4 @@
 {
-  "version": "1.0.0",
   "protocol_id": "aura-execution-001",
   "description": "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.",
   "rules": [

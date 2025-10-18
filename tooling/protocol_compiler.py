@@ -46,8 +46,7 @@ def install_dependencies():
 install_dependencies()
 
 import jsonschema
-from rdflib import Graph, Namespace, URIRef, Literal
-from rdflib.namespace import RDF, RDFS
+from rdflib import Graph
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -132,48 +131,26 @@ def compile_single_module(source_dir, target_file, schema_file, knowledge_graph=
             all_associated_tools.update(protocol_data["associated_tools"])
 
         if knowledge_graph is not None:
-            PROTO = Namespace("https://w3id.org/ai-protocol/v1/")
-            protocol_uri = URIRef(f"urn:protocol:{protocol_data['protocol_id']}")
-            version = protocol_data.get("version", "N/A")
-            version_uri = URIRef(f"urn:protocol:{protocol_data['protocol_id']}:version:{version}")
-
-            knowledge_graph.add((protocol_uri, RDF.type, PROTO.Protocol))
-            knowledge_graph.add((protocol_uri, RDFS.label, Literal(protocol_data['description'])))
-            knowledge_graph.add((protocol_uri, PROTO.hasVersion, version_uri))
-
-            knowledge_graph.add((version_uri, RDF.type, PROTO.ProtocolVersion))
-            knowledge_graph.add((version_uri, RDFS.label, Literal(f"Version {version} of {protocol_data['protocol_id']}")))
-            knowledge_graph.add((version_uri, PROTO.versionString, Literal(version)))
-
-            for rule in protocol_data.get("rules", []):
-                rule_uri = URIRef(f"urn:protocol:{protocol_data['protocol_id']}:rule:{rule['rule_id']}")
-                knowledge_graph.add((version_uri, PROTO.hasRule, rule_uri))
-                knowledge_graph.add((rule_uri, RDF.type, PROTO.Rule))
-                knowledge_graph.add((rule_uri, RDFS.label, Literal(rule['description'])))
-
-                test_file_path = os.path.join(ROOT_DIR, "tests", "protocols", f"test_{protocol_data['protocol_id']}.py")
-                if os.path.exists(test_file_path):
-                    test_uri = URIRef(f"urn:test:file:{os.path.relpath(test_file_path, ROOT_DIR)}")
-                    knowledge_graph.add((rule_uri, PROTO.hasTest, test_uri))
-                    knowledge_graph.add((test_uri, RDF.type, PROTO.Test))
-                    knowledge_graph.add((test_uri, RDFS.label, Literal(f"Test for {protocol_data['protocol_id']}")))
+            protocol_data_for_ld = protocol_data.copy()
+            context_path = os.path.join(source_dir, "protocol.context.jsonld")
+            if os.path.exists(context_path):
+                relative_context_path = os.path.relpath(context_path, os.path.dirname(file_path))
+                protocol_data_for_ld["@context"] = relative_context_path
+                base_uri = "file://" + os.path.abspath(os.path.dirname(file_path)) + "/"
+                knowledge_graph.parse(data=json.dumps(protocol_data_for_ld), format="json-ld", publicID=base_uri)
         json_string = json.dumps(protocol_data, indent=2)
-        version = protocol_data.get("version", "N/A")
-        md_json_block = f"**Version:** {version}\n\n```json\n{json_string}\n```\n"
+        md_json_block = f"```json\n{json_string}\n```\n"
         final_content.append(md_json_block)
         final_content.append("\n---\n")
 
     if all_associated_tools:
         final_content.append("\n\n# --- Associated Tool Documentation ---\n")
         for tool_path in sorted(list(all_associated_tools)):
-            tool_abs_path = os.path.join(ROOT_DIR, tool_path)
-            if os.path.exists(tool_abs_path):
-                with open(tool_abs_path, "r") as f:
-                    tool_content = f.read()
-                    match = re.search(r'\"\"\"(.*?)\"\"\"', tool_content, re.DOTALL)
-                    if match:
-                        docstring = match.group(1).strip()
-                        final_content.append(f"## `{os.path.basename(tool_path)}`\n\n{docstring}\n\n---\n")
+            tool_readme_path = os.path.join(ROOT_DIR, os.path.dirname(tool_path), "README.md")
+            if os.path.exists(tool_readme_path):
+                with open(tool_readme_path, "r") as f:
+                    final_content.append(f.read())
+                final_content.append("\n---\n")
 
     final_output_string = "\n".join(final_content)
     temp_target_file = target_file + ".tmp"
@@ -182,7 +159,7 @@ def compile_single_module(source_dir, target_file, schema_file, knowledge_graph=
         f.write(final_output_string)
     os.rename(temp_target_file, target_file)
 
-def compile_module_wrapper(path_to_protocol_dir, knowledge_graph=None):
+def compile_module_wrapper(path_to_protocol_dir):
     target_md_file = os.path.join(path_to_protocol_dir, "AGENTS.md")
     schema_file = os.path.join(ROOT_PROTOCOLS_DIR, "protocol.schema.json")
     try:
@@ -190,7 +167,6 @@ def compile_module_wrapper(path_to_protocol_dir, knowledge_graph=None):
             source_dir=path_to_protocol_dir,
             target_file=target_md_file,
             schema_file=schema_file,
-            knowledge_graph=knowledge_graph
         )
         return True, path_to_protocol_dir
     except Exception as e:
@@ -253,11 +229,17 @@ def main_hierarchical_compiler():
     # Note: ThreadPoolExecutor is not used here because the rdflib.Graph object is not thread-safe.
     # A more advanced implementation might use a thread-safe graph or a different parallelization strategy.
     for dir_path in all_dirs:
-        success, path = compile_module_wrapper(dir_path, knowledge_graph=g)
-        if success:
-            successful_compilations.append(path)
-        else:
-            failed_compilations.append(path)
+        try:
+            compile_single_module(
+                source_dir=dir_path,
+                target_file=os.path.join(dir_path, "AGENTS.md"),
+                schema_file=os.path.join(ROOT_PROTOCOLS_DIR, "protocol.schema.json"),
+                knowledge_graph=g
+            )
+            successful_compilations.append(dir_path)
+        except Exception as e:
+            print(f"Error compiling {dir_path}: {e}")
+            failed_compilations.append(dir_path)
 
 
     if failed_compilations:

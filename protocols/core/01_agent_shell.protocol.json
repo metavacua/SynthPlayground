@@ -1,5 +1,4 @@
 {
-  "version": "1.0.0",
   "protocol_id": "agent-shell-001",
   "description": "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.",
   "rules": [

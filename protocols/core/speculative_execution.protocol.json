@@ -1,5 +1,4 @@
 {
-  "version": "1.0.0",
   "protocol_id": "speculative-execution-001",
   "description": "A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.",
   "rules": [

@@ -1,5 +1,4 @@
 {
-  "version": "1.0.0",
   "protocol_id": "experimental-prologue-001",
   "description": "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.",
   "rules": [

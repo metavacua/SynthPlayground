@@ -1,5 +1,4 @@
 {
-  "version": "1.0.0",
   "protocol_id": "unified-doc-builder-001",
   "description": "A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth.",
   "rules": [
