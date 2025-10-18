@@ -1,6 +1,26 @@
 import unittest
-from appl_ast import *
+from appl_ast import (
+    Int,
+    String,
+    Bool,
+    Unit,
+    Var,
+    Fun,
+    App,
+    Pair,
+    LetPair,
+    Inl,
+    Inr,
+    Case,
+    Promote,
+    LetBang,
+    Cons,
+    Nil,
+    TInt,
+    TString,
+)
 from parser import parse
+
 
 class TestParser(unittest.TestCase):
 
@@ -60,7 +80,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(parse(code), expected)
 
     def test_parse_error(self):
-        with self.assertRaisesRegex(ValueError, "Expected 'in' but got 'let' at position 12. Remaining tokens: \['let', 'z', '=', 'x', 'in', 'z'\]"):
+        with self.assertRaisesRegex(ValueError, r"Expected 'in' but got 'let' at position 12. Remaining tokens: \['let', 'z', '=', 'x', 'in', 'z'\]"):
             parse("let (x, y) = (1, 2) let z = x in z")
 
     def test_unit(self):
@@ -71,6 +91,7 @@ class TestParser(unittest.TestCase):
 
     def test_cons(self):
         self.assertEqual(parse("1 :: 2 :: Nil(Int)"), Cons(Int(1), Cons(Int(2), Nil(TInt()))))
+
 
 if __name__ == '__main__':
     unittest.main()

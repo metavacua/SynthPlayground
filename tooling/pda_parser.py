@@ -1,3 +1,14 @@
+"""
+A parser for pLLLU (paraconsistent Linear Logic with Undeterminedness) formulas.
+
+This script uses the PLY (Python Lex-Yacc) library to define a lexer and a
+parser for a simple, string-based representation of pLLLU formulas. It can
+handle basic atomic formulas, unary operators (like negation and consistency),
+and binary operators (like implication and conjunction).
+
+The main function `parse_formula` takes a string and returns a simple AST
+(Abstract Syntax Tree) represented as nested tuples.
+"""
 import sys
 import os
 import ply.lex as lex

@@ -1,3 +1,10 @@
+"""
+A command-line tool for executing APPL files.
+
+This script provides a simple interface to run APPL files using the main
+`run.py` interpreter. It captures and prints the output of the execution,
+and provides detailed error reporting if the execution fails.
+"""
 import subprocess
 import sys
 

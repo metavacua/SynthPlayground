@@ -1,3 +1,20 @@
+"""
+A static analysis tool to estimate the termination risk of a UDC plan.
+
+This script reads a `.udc` plan file, parses its instructions, and uses a
+series of heuristics to identify potential infinite loops. It is not a
+formal decider (as the halting problem is undecidable), but rather a
+practical tool to flag common patterns that lead to non-termination.
+
+The analysis focuses on:
+1.  Detecting backward jumps, which are the primary indicator of loops.
+2.  Analyzing the exit conditions of these loops (e.g., `JE`, `JNE`).
+3.  Checking if the registers involved in the exit conditions are modified
+    within the loop body in a way that is likely to lead to termination.
+
+The tool outputs a JSON report detailing the estimated risk level (LOW,
+MEDIUM, HIGH) and the specific loops that were identified.
+"""
 import argparse
 import json
 import re

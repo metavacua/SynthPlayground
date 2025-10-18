@@ -1,14 +1,43 @@
-from appl_ast import *
-from planning import *
+from appl_ast import (
+    Term,
+    Var,
+    Int,
+    String,
+    Bool,
+    Unit,
+    Fun,
+    App,
+    Pair,
+    LetPair,
+    Let,
+    Inl,
+    Inr,
+    Case,
+    Promote,
+    LetBang,
+    Nil,
+    Cons,
+    AST,
+)
+from planning import (
+    create_action,
+    create_goal,
+    create_state,
+    apply_action,
+    is_goal,
+)
 from parser import parse
+
 
 class InterpError(Exception):
     pass
+
 
 class Closure:
     def __init__(self, fun, env):
         self.fun = fun
         self.env = env
+
 
 def _appl_to_python(val):
     if isinstance(val, String):
@@ -21,12 +50,14 @@ def _appl_to_python(val):
         return _appl_list_to_python_list(val)
     return val
 
-def _appl_list_to_python_list(l):
+
+def _appl_list_to_python_list(appl_list):
     py_list = []
-    while isinstance(l, Cons):
-        py_list.append(_appl_to_python(l.head))
-        l = l.tail
+    while isinstance(appl_list, Cons):
+        py_list.append(_appl_to_python(appl_list.head))
+        appl_list = appl_list.tail
     return py_list
+
 
 class Primitive:
     def __init__(self, fun, arity):
@@ -39,6 +70,7 @@ class Primitive:
         if len(self.args) == self.arity:
             return self.fun(*self.args)
         return self
+
 
 class Interpreter:
     def __init__(self, env):
@@ -104,7 +136,7 @@ class Interpreter:
                 new_env[term.v1] = sum_val.e
                 new_interpreter = Interpreter(new_env)
                 return new_interpreter.interpret(term.e1)
-            else: # Inr
+            else:  # Inr
                 new_env[term.v2] = sum_val.e
                 new_interpreter = Interpreter(new_env)
                 return new_interpreter.interpret(term.e2)
@@ -129,9 +161,11 @@ class Interpreter:
         else:
             raise NotImplementedError(f"Interpretation not implemented for {type(term).__name__}")
 
+
 def _unparse(term: Term) -> str:
     # This is a simplified unparser. A more complete implementation would be needed for full homoiconicity.
     return repr(term)
+
 
 def interpret(term: Term, env: dict = None) -> Term:
     """

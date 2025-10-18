@@ -1,3 +1,9 @@
+"""
+A compiler that translates APPL (a simple functional language) to LFI-ILL.
+
+This script takes a Python file containing an APPL AST, and compiles it into
+an LFI-ILL AST. The resulting AST is then written to a `.lfi_ill` file.
+"""
 import argparse
 import sys
 import os

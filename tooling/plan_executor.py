@@ -1,3 +1,11 @@
+"""
+A simple plan executor for simulating agent behavior.
+
+This script reads a plan file, parses it, and executes the commands in a
+simplified, simulated environment. It supports a limited set of tools
+(`message_user` and `run_in_bash_session`) to provide a basic demonstration
+of how an agent would execute a plan.
+"""
 import subprocess
 import sys
 from tooling.plan_parser import parse_plan
