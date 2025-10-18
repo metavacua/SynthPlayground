@@ -233,6 +233,10 @@
     {
       "source": "tooling",
       "target": "requests"
+    },
+    {
+      "source": "tooling",
+      "target": "ply"
     }
   ]
 }

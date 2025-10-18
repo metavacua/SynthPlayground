@@ -2081,6 +2081,60 @@
     },
     {
       "_type": "tag",
+      "name": "run_tests",
+      "path": "./tests/protocols/test_runner.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Discovers and runs all protocol tests."
+    },
+    {
+      "_type": "tag",
+      "name": "TestSelfImprovementProtocol",
+      "path": "./tests/protocols/test_self_improvement_protocol_001.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/protocols/test_self_improvement_protocol_001.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": "Load the self-improvement protocol from the JSON file."
+    },
+    {
+      "_type": "tag",
+      "name": "test_protocol_id",
+      "path": "./tests/protocols/test_self_improvement_protocol_001.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "function",
+      "docstring": "Test that the protocol has the correct ID."
+    },
+    {
+      "_type": "tag",
+      "name": "test_rules_exist",
+      "path": "./tests/protocols/test_self_improvement_protocol_001.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": "Test that the protocol has the expected number of rules."
+    },
+    {
+      "_type": "tag",
+      "name": "test_associated_tool_exists",
+      "path": "./tests/protocols/test_self_improvement_protocol_001.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": "Test that the associated tool exists in the tooling directory."
+    },
+    {
+      "_type": "tag",
       "name": "Logger",
       "path": "./utils/logger.py",
       "language": "Python",
@@ -2212,7 +2266,25 @@
       "language": "Python",
       "line": 52,
       "kind": "function",
-      "docstring": "Finds all files matching a given pattern, respecting the .julesignore file."
+      "docstring": "Finds all files matching a given pattern, respecting the .julesignore file.\nCan perform both recursive and non-recursive searches."
+    },
+    {
+      "_type": "tag",
+      "name": "find_protocol_dirs",
+      "path": "./utils/file_system_utils.py",
+      "language": "Python",
+      "line": 86,
+      "kind": "function",
+      "docstring": "Finds all directories within the root_dir that contain at least one\n`.protocol.json` or `.protocol.md` file, indicating they are protocol modules."
+    },
+    {
+      "_type": "tag",
+      "name": "get_protocol_dir_name",
+      "path": "./utils/file_system_utils.py",
+      "language": "Python",
+      "line": 100,
+      "kind": "function",
+      "docstring": "Returns a human-readable name for a protocol directory.\nIf it's the root protocols directory, it returns 'root'.\nOtherwise, it returns the directory's base name."
     },
     {
       "_type": "tag",
@@ -2354,7 +2426,7 @@
       "name": "TestHierarchicalCompiler",
       "path": "./tooling/test_hierarchical_compiler.py",
       "language": "Python",
-      "line": 8,
+      "line": 7,
       "kind": "class",
       "docstring": null
     },
@@ -2363,7 +2435,7 @@
       "name": "setUp",
       "path": "./tooling/test_hierarchical_compiler.py",
       "language": "Python",
-      "line": 10,
+      "line": 9,
       "kind": "function",
       "docstring": null
     },
@@ -2372,36 +2444,36 @@
       "name": "tearDown",
       "path": "./tooling/test_hierarchical_compiler.py",
       "language": "Python",
-      "line": 35,
+      "line": 25,
       "kind": "function",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_find_protocol_dirs_bottom_up",
+      "name": "test_find_protocol_dirs",
       "path": "./tooling/test_hierarchical_compiler.py",
       "language": "Python",
-      "line": 38,
+      "line": 28,
       "kind": "function",
-      "docstring": "Tests that protocol directories are found in deepest-first order."
+      "docstring": "Tests that all protocol directories are found."
     },
     {
       "_type": "tag",
-      "name": "test_generate_summary",
+      "name": "test_generate_root_agents_md",
       "path": "./tooling/test_hierarchical_compiler.py",
       "language": "Python",
-      "line": 47,
+      "line": 35,
       "kind": "function",
-      "docstring": "Tests the generation of a summary from a child AGENTS.md."
+      "docstring": "Tests the generation of the root AGENTS.md file."
     },
     {
       "_type": "tag",
-      "name": "test_main_orchestration",
+      "name": "test_main_hierarchical_compiler",
       "path": "./tooling/test_hierarchical_compiler.py",
       "language": "Python",
-      "line": 64,
+      "line": 51,
       "kind": "function",
-      "docstring": "Tests the main orchestration logic of the hierarchical compiler."
+      "docstring": "Tests the main orchestration logic."
     },
     {
       "_type": "tag",
@@ -2492,6 +2564,42 @@
       "line": 219,
       "kind": "function",
       "docstring": "Formats the analysis results into a JSON-compatible dictionary."
+    },
+    {
+      "_type": "tag",
+      "name": "create_protocol",
+      "path": "./tooling/protocol_manager.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": "Creates a new protocol from a template."
+    },
+    {
+      "_type": "tag",
+      "name": "run_tests",
+      "path": "./tooling/protocol_manager.py",
+      "language": "Python",
+      "line": 37,
+      "kind": "function",
+      "docstring": "Runs the protocol tests."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/protocol_manager.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": "Main function for the protocol manager."
+    },
+    {
+      "_type": "tag",
+      "name": "update_version",
+      "path": "./tooling/protocol_manager.py",
+      "language": "Python",
+      "line": 72,
+      "kind": "function",
+      "docstring": "Updates the version of a protocol."
     },
     {
       "_type": "tag",
@@ -3269,10 +3377,19 @@
     },
     {
       "_type": "tag",
-      "name": "main",
+      "name": "process_postmortem_file",
       "path": "./tooling/knowledge_compiler.py",
       "language": "Python",
       "line": 178,
+      "kind": "function",
+      "docstring": "Reads a single post-mortem file and returns its lessons."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/knowledge_compiler.py",
+      "language": "Python",
+      "line": 196,
       "kind": "function",
       "docstring": null
     },
@@ -3362,7 +3479,7 @@
       "name": "TestKnowledgeCompilerAdvanced",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 108,
+      "line": 110,
       "kind": "class",
       "docstring": null
     },
@@ -3380,7 +3497,7 @@
       "name": "tearDown",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 56,
+      "line": 58,
       "kind": "function",
       "docstring": "Clean up the temporary directory and restore original state."
     },
@@ -3389,7 +3506,7 @@
       "name": "test_knowledge_compiler_end_to_end",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 66,
+      "line": 68,
       "kind": "function",
       "docstring": "Verify that the compiler correctly parses a post-mortem and\ngenerates a structured lessons.jsonl file with both machine-readable\nand placeholder commands."
     },
@@ -3398,7 +3515,7 @@
       "name": "setUp",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 110,
+      "line": 112,
       "kind": "function",
       "docstring": "Set up a temporary directory for advanced parsing tests."
     },
@@ -3407,7 +3524,7 @@
       "name": "tearDown",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 145,
+      "line": 149,
       "kind": "function",
       "docstring": "Clean up the temporary directory and restore original state."
     },
@@ -3416,7 +3533,7 @@
       "name": "test_advanced_parsing_and_deprecate_command",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 155,
+      "line": 159,
       "kind": "function",
       "docstring": "Verify the compiler can handle different section headers and parse\nthe 'deprecate-tool' command."
     },
@@ -3596,63 +3713,63 @@
       "name": "install_dependencies",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 47,
+      "line": 25,
       "kind": "function",
-      "docstring": "Checks for required packages from requirements.txt and installs them if missing."
+      "docstring": null
     },
     {
       "_type": "tag",
       "name": "load_schema",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 119,
+      "line": 71,
       "kind": "function",
-      "docstring": "Loads the protocol JSON schema."
+      "docstring": null
     },
     {
       "_type": "tag",
       "name": "sanitize_markdown",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 132,
+      "line": 82,
       "kind": "function",
-      "docstring": "Sanitizes markdown content to remove potentially malicious instructions.\nThis function removes script tags and other potentially malicious HTML/JS."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "compile_protocols",
+      "name": "compile_single_module",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 146,
+      "line": 88,
       "kind": "function",
-      "docstring": "Reads all .protocol.json and corresponding .protocol.md files from the\nsource directory, validates them, and compiles them into a target markdown file.\nOptionally, it can also generate a machine-readable knowledge graph."
-    },
-    {
-      "_type": "tag",
-      "name": "main_cli",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 298,
-      "kind": "function",
-      "docstring": "Main function to run the compiler from the command line."
-    },
-    {
-      "_type": "tag",
-      "name": "ProtocolChangeHandler",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 356,
-      "kind": "class",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "on_any_event",
+      "name": "compile_module_wrapper",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 357,
+      "line": 162,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_root_agents_md",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 176,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main_hierarchical_compiler",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 212,
+      "kind": "function",
+      "docstring": "Main function to run the hierarchical compiler."
     },
     {
       "_type": "tag",
@@ -3911,7 +4028,7 @@
       "name": "execute_command_target",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 77,
+      "line": 76,
       "kind": "function",
       "docstring": "Executes a 'command' type build target."
     },
@@ -3920,7 +4037,7 @@
       "name": "execute_build",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 83,
+      "line": 82,
       "kind": "function",
       "docstring": "Executes the build process for a specific target."
     },
@@ -3929,7 +4046,7 @@
       "name": "main",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 140,
+      "line": 139,
       "kind": "function",
       "docstring": "Main function to parse arguments and drive the build process."
     },
@@ -4685,7 +4802,7 @@
       "name": "tearDown",
       "path": "./tooling/test_protocol_compiler.py",
       "language": "Python",
-      "line": 33,
+      "line": 29,
       "kind": "function",
       "docstring": null
     },
@@ -4694,7 +4811,7 @@
       "name": "test_successful_compilation",
       "path": "./tooling/test_protocol_compiler.py",
       "language": "Python",
-      "line": 36,
+      "line": 32,
       "kind": "function",
       "docstring": "Tests that valid protocols are compiled correctly."
     },
@@ -4703,45 +4820,9 @@
       "name": "test_validation_error",
       "path": "./tooling/test_protocol_compiler.py",
       "language": "Python",
-      "line": 76,
+      "line": 53,
       "kind": "function",
       "docstring": "Tests that the compiler raises a validation error for invalid JSON."
-    },
-    {
-      "_type": "tag",
-      "name": "test_knowledge_graph_generation",
-      "path": "./tooling/test_protocol_compiler.py",
-      "language": "Python",
-      "line": 90,
-      "kind": "function",
-      "docstring": "Tests that the knowledge graph is generated when requested."
-    },
-    {
-      "_type": "tag",
-      "name": "test_empty_source_directory",
-      "path": "./tooling/test_protocol_compiler.py",
-      "language": "Python",
-      "line": 123,
-      "kind": "function",
-      "docstring": "Tests that the compiler handles an empty source directory."
-    },
-    {
-      "_type": "tag",
-      "name": "test_malformed_json",
-      "path": "./tooling/test_protocol_compiler.py",
-      "language": "Python",
-      "line": 141,
-      "kind": "function",
-      "docstring": "Tests that the compiler raises an error for malformed JSON."
-    },
-    {
-      "_type": "tag",
-      "name": "test_missing_schema",
-      "path": "./tooling/test_protocol_compiler.py",
-      "language": "Python",
-      "line": 154,
-      "kind": "function",
-      "docstring": "Tests that the compiler returns None when the schema is missing."
     },
     {
       "_type": "tag",
@@ -4958,78 +5039,6 @@
       "line": 125,
       "kind": "function",
       "docstring": "Parses a pLLLU formula string into an AST."
-    },
-    {
-      "_type": "tag",
-      "name": "find_protocol_dirs",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 64,
-      "kind": "function",
-      "docstring": "Finds all directories named 'protocols' within the root directory,\nignoring any special-cased directories."
-    },
-    {
-      "_type": "tag",
-      "name": "run_compiler",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 87,
-      "kind": "function",
-      "docstring": "Invokes the protocol_compiler.py script as a library."
-    },
-    {
-      "_type": "tag",
-      "name": "run_readme_generator",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 107,
-      "kind": "function",
-      "docstring": "Invokes the doc_builder.py script to generate a README."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_summary",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 133,
-      "kind": "function",
-      "docstring": "Extracts the full, rendered protocol blocks from a child AGENTS.md file.\nThis function finds all protocol definitions (human-readable markdown and\nthe associated machine-readable JSON block) and concatenates them into a\nsingle string to be injected into the parent AGENTS.md."
-    },
-    {
-      "_type": "tag",
-      "name": "cleanup_summaries",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 164,
-      "kind": "function",
-      "docstring": "Removes temporary summary files from a protocols directory."
-    },
-    {
-      "_type": "tag",
-      "name": "get_parent_module",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 174,
-      "kind": "function",
-      "docstring": "Finds the direct parent module of a given module."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_centralized_knowledge_graph",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 184,
-      "kind": "function",
-      "docstring": "Finds all protocol.json files in the entire repository, loads them, and\ncompiles them into a single, unified knowledge graph."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/hierarchical_compiler.py",
-      "language": "Python",
-      "line": 237,
-      "kind": "function",
-      "docstring": "Main function to orchestrate the hierarchical compilation."
     },
     {
       "_type": "tag",
@@ -5978,10 +5987,28 @@
     },
     {
       "_type": "tag",
-      "name": "main",
+      "name": "generate_tool_readme",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
       "line": 262,
+      "kind": "function",
+      "docstring": "Generates a README.md for a single tool from its docstring."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_tooling_readme",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 282,
+      "kind": "function",
+      "docstring": "Generates a single README.md for the tooling directory."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 298,
       "kind": "function",
       "docstring": null
     },
@@ -6974,6 +7001,105 @@
       "line": 41,
       "kind": "function",
       "docstring": "Tests the main function of the code suggester."
+    },
+    {
+      "_type": "tag",
+      "name": "get_repo_root",
+      "path": "./tooling/agent_smith/generate_and_test.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "function",
+      "docstring": "Gets the absolute path of the repository root."
+    },
+    {
+      "_type": "tag",
+      "name": "log_step",
+      "path": "./tooling/agent_smith/generate_and_test.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": "Prints a formatted step message."
+    },
+    {
+      "_type": "tag",
+      "name": "run_command",
+      "path": "./tooling/agent_smith/generate_and_test.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": "Runs a command in a subprocess and handles errors."
+    },
+    {
+      "_type": "tag",
+      "name": "create_sandbox",
+      "path": "./tooling/agent_smith/generate_and_test.py",
+      "language": "Python",
+      "line": 42,
+      "kind": "function",
+      "docstring": "Creates a clean sandbox directory."
+    },
+    {
+      "_type": "tag",
+      "name": "copy_sources",
+      "path": "./tooling/agent_smith/generate_and_test.py",
+      "language": "Python",
+      "line": 51,
+      "kind": "function",
+      "docstring": "Copies the necessary source files and compiler into the sandbox."
+    },
+    {
+      "_type": "tag",
+      "name": "install_dependencies",
+      "path": "./tooling/agent_smith/generate_and_test.py",
+      "language": "Python",
+      "line": 79,
+      "kind": "function",
+      "docstring": "Installs dependencies from requirements.txt into the sandbox."
+    },
+    {
+      "_type": "tag",
+      "name": "apply_mutation",
+      "path": "./tooling/agent_smith/generate_and_test.py",
+      "language": "Python",
+      "line": 105,
+      "kind": "function",
+      "docstring": "Applies the specified mutation to the sandboxed sources."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_variant",
+      "path": "./tooling/agent_smith/generate_and_test.py",
+      "language": "Python",
+      "line": 122,
+      "kind": "function",
+      "docstring": "Runs the hierarchical compiler inside the sandbox."
+    },
+    {
+      "_type": "tag",
+      "name": "verify_variant",
+      "path": "./tooling/agent_smith/generate_and_test.py",
+      "language": "Python",
+      "line": 164,
+      "kind": "function",
+      "docstring": "Performs a basic verification to check the variant was created correctly."
+    },
+    {
+      "_type": "tag",
+      "name": "cleanup_sandbox",
+      "path": "./tooling/agent_smith/generate_and_test.py",
+      "language": "Python",
+      "line": 181,
+      "kind": "function",
+      "docstring": "Deletes the sandbox directory."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/agent_smith/generate_and_test.py",
+      "language": "Python",
+      "line": 190,
+      "kind": "function",
+      "docstring": "Main function to orchestrate the generation and testing process."
     },
     {
       "_type": "tag",
