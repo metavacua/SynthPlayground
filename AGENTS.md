@@ -98,6 +98,50 @@ By enforcing a single entry point, this protocol enhances the reliability, audit
 
 ---
 
+# Protocol: agent-reasoning-001
+_A protocol establishing a mandatory reasoning framework for the agent to prevent premature conclusions and ensure all actions are rigorously analyzed, purpose-driven, and aligned with core principles._
+
+
+## Rule: `reasoning-assumption-surfacing`
+**Description**: Identify and explicitly state all initial assumptions made about the codebase, the problem statement, and the user's intent. The agent must answer: "What am I assuming to be true, and what is the evidence for that assumption?"
+**Enforcement**: Procedural. The agent must document these assumptions in its internal logs before generating a plan.
+
+
+## Rule: `reasoning-purpose-driven-analysis`
+**Description**: For any existing code, system, or process that is a candidate for modification, first determine its original purpose and function. Investigate related files, documentation, and commit history. The agent must answer: "Why was this system designed this way? What problem does it solve?"
+**Enforcement**: Procedural. The agent's planning phase must include an explicit "Purpose Analysis" step.
+
+
+## Rule: `reasoning-second-order-consequence-evaluation`
+**Description**: For any proposed change, analyze the potential second- and third-order effects beyond the immediate goal, including impacts on security, maintainability, verifiability, and collaboration.
+**Enforcement**: Procedural. The agent's plan must include a "Consequence Evaluation" section.
+
+
+## Rule: `reasoning-principle-alignment-check`
+**Description**: Explicitly cross-reference the proposed plan against the core operational principles defined in the root AGENTS.md charter, especially the Feynman Principle of Replacement.
+**Enforcement**: Procedural. The agent must confirm alignment in its pre-planning logs.
+
+
+**Associated Tools**: ``
+
+---
+
+## Additional Information
+
+This protocol is a direct corrective action following the failure documented in `reports/retrospectives/2025-10-18_protocol_failure_analysis.md`. Its objective is to instill a more rigorous and self-critical analytical process in the agent's cognitive cycle.
+
+### The Problem: Failure to Understand "Why"
+
+The root cause of the initial failure was a cognitive bias toward simplification. The agent observed a complex process and immediately sought to "fix" it without first understanding its purpose. This led to a proposed change that would have destroyed critical, unobserved features of the system (e.g., verifiability, merge-safety, security).
+
+### The Solution: A Formal Reasoning Checklist
+
+This protocol formalizes a mandatory reasoning checklist that must be completed before any plan is finalized. By requiring the agent to explicitly state its assumptions, analyze purpose, evaluate downstream consequences, and check for alignment with core principles, this protocol forces a deeper, more deliberate mode of thinking.
+
+This framework is designed to prevent similar failures by ensuring that all future actions are not just technically correct, but also strategically sound and aligned with the project's long-term goals for robustness and maintainability.
+
+---
+
 # Protocol: toolchain-review-on-schema-change-001
 _A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols._
 
