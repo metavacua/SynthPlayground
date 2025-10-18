@@ -162,6 +162,8 @@ def eval_infix_expression(op, left, right):
         if op == '-': return Integer(l - r)
         if op == '*': return Integer(l * r)
         if op == '/': return Integer(l // r)
+        if op == '>': return Object(l > r)
+        if op == '<': return Object(l < r)
         return Object(False) # Unsupported operator for integers
 
     return Object(False) # Unsupported operator for the given types
