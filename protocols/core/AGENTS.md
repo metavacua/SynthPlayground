@@ -92,6 +92,23 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ## Protocol: `UNIFIED-AUDITOR-001`
 
+```json
+{
+  "protocol_id": "toolchain-review-on-schema-change-001",
+  "description": "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.",
+  "rules": [
+    {
+      "rule_id": "toolchain-audit-on-schema-change",
+      "description": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.",
+      "enforcement": "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files."
+    }
+  ],
+  "associated_tools": [
+    "tooling/auditor.py",
+    "tooling/protocol_compiler.py"
+  ]
+}
+```
 **Description**: A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.
 
 
@@ -122,6 +139,20 @@ This protocol mandates the use of `tooling/agent_shell.py` for all task initiati
 
 **Rule `shell-is-primary-entry-point`**: All agent tasks must be initiated through the `agent_shell.py` script.
 
+```json
+{
+  "protocol_id": "file-indexing-001",
+  "description": "A protocol for maintaining an up-to-date file index to accelerate tool performance.",
+  "rules": [
+    {
+      "rule_id": "update-index-before-submit",
+      "description": "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem.",
+      "enforcement": "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/some_indexer.py build'."
+    }
+  ],
+  "associated_tools": []
+}
+```
 This ensures that every task begins within a controlled, programmatic environment where:
 1.  The MasterControlGraph FSM is correctly instantiated and run.
 2.  The centralized logger is initialized for comprehensive, structured logging.
@@ -149,6 +180,183 @@ By enforcing a single entry point, this protocol enhances the reliability, audit
 
 **Description**: A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.
 
+# --- Associated Tool Documentation ---
+
+## `create_file_with_block`
+
+_This is a built-in or conceptual tool. Documentation is not available via automated extraction._
+
+---
+
+## `message_user`
+
+_This is a built-in or conceptual tool. Documentation is not available via automated extraction._
+
+---
+
+## `request_user_input`
+
+_This is a built-in or conceptual tool. Documentation is not available via automated extraction._
+
+---
+
+## `set_plan`
+
+_This is a built-in or conceptual tool. Documentation is not available via automated extraction._
+
+---
+
+## `agent_shell.py`
+
+The new, interactive, API-driven entry point for the agent.
+
+This script replaces the old file-based signaling system with a direct,
+programmatic interface to the MasterControlGraph FSM. It is responsible for:
+1.  Initializing the agent's state and a centralized logger.
+2.  Instantiating and running the MasterControlGraph.
+3.  Driving the FSM by calling its methods and passing data and the logger.
+4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans
+    and respond to requests for action.
+
+---
+
+## `auditor.py`
+
+A unified auditing tool for maintaining repository health and compliance.
+
+This script combines the functionality of several disparate auditing tools into a
+single, comprehensive command-line interface. It serves as the central tool for
+validating the key components of the agent's architecture, including protocols,
+plans, and documentation.
+
+The auditor can perform the following checks:
+1.  **Protocol Audit (`protocol`):**
+    - Checks if `AGENTS.md` artifacts are stale compared to their source files.
+    - Verifies protocol completeness by comparing tools used in logs against
+      tools defined in protocols.
+    - Analyzes tool usage frequency (centrality).
+2.  **Plan Registry Audit (`plans`):**
+    - Scans `knowledge_core/plan_registry.json` for "dead links" where the
+      target plan file does not exist.
+3.  **Documentation Audit (`docs`):**
+    - Scans the generated `SYSTEM_DOCUMENTATION.md` to find Python modules
+      that are missing module-level docstrings.
+
+The tool is designed to be run from the command line and can execute specific
+audits or all of them, generating a consolidated `audit_report.md` file.
+
+---
+
+## `aura_executor.py`
+
+This script serves as the command-line executor for `.aura` files.
+
+It bridges the gap between the high-level Aura scripting language and the
+agent's underlying Python-based toolset. The executor is responsible for:
+1.  Parsing the `.aura` source code using the lexer and parser from the
+    `aura_lang` package.
+2.  Setting up an execution environment for the interpreter.
+3.  Injecting a "tool-calling" capability into the Aura environment, which
+    allows Aura scripts to dynamically invoke registered Python tools
+    (e.g., `hdl_prover`, `environmental_probe`).
+4.  Executing the parsed program and printing the final result.
+
+This makes it a key component for enabling more expressive and complex
+automation scripts for the agent.
+
+---
+
+## `capability_verifier.py`
+
+A tool to verify that the agent can monotonically improve its capabilities.
+
+This script is designed to provide a formal, automated test for the agent's
+self-correction and learning mechanisms. It ensures that when the agent learns
+a new capability, it does so without losing (regressing) any of its existing
+capabilities. This is a critical safeguard for ensuring robust and reliable
+agent evolution.
+
+The tool works by orchestrating a four-step process:
+1.  **Confirm Initial Failure:** It runs a specific test file that is known to
+    fail, verifying that the agent currently lacks the target capability.
+2.  **Invoke Self-Correction:** It simulates the discovery of a new "lesson" and
+    triggers the `self_correction_orchestrator.py` script, which is responsible
+    for integrating new knowledge and skills.
+3.  **Confirm Final Success:** It runs the same test file again, confirming that
+    the agent has successfully learned the new capability and the test now passes.
+4.  **Check for Regressions:** It runs the full, existing test suite to ensure
+    that the process of learning the new skill has not inadvertently broken any
+    previously functional capabilities.
+
+This provides a closed-loop verification of monotonic improvement, which is a
+cornerstone of the agent's design philosophy.
+
+---
+
+## `csdc_cli.py`
+
+A command-line tool for managing the Context-Sensitive Development Cycle (CSDC).
+
+This script provides an interface to validate a development plan against a specific
+CSDC model (A or B) and a given complexity class (P or EXP). It ensures that a
+plan adheres to the strict logical and computational constraints defined by the
+CSDC protocol before it is executed.
+
+The tool performs two main checks:
+1.  **Complexity Analysis:** It analyzes the plan to determine its computational
+    complexity and verifies that it matches the expected complexity class.
+2.  **Model Validation:** It validates the plan's commands against the rules of
+    the specified CSDC model, ensuring that it does not violate any of the
+    model's constraints (e.g., forbidding certain functions).
+
+This serves as a critical gateway for ensuring that all development work within
+the CSDC framework is sound, predictable, and compliant with the governing
+meta-mathematical principles.
+
+---
+
+## `doc_builder.py`
+
+A unified documentation builder for the project.
+...
+
+---
+
+## `hdl_prover.py`
+
+A command-line tool for proving sequents in Intuitionistic Linear Logic.
+
+This script provides a basic interface to a simple logic prover. It takes a
+sequent as a command-line argument, parses it into a logical structure, and
+then attempts to prove it using a rudimentary proof search algorithm.
+
+The primary purpose of this tool is to allow the agent to perform formal
+reasoning and verification tasks by checking the validity of logical entailments.
+For example, it can be used to verify that a certain conclusion follows from a
+set of premises according to the rules of linear logic.
+
+The current implementation uses a very basic parser and proof algorithm,
+serving as a placeholder and demonstration for a more sophisticated, underlying
+logic engine.
+
+---
+
+## `plllu_runner.py`
+
+A command-line runner for pLLLU files.
+
+This script provides an entry point for executing `.plllu` files. It
+integrates the pLLLU lexer, parser, and interpreter to execute the logic
+defined in a given pLLLU source file and print the result.
+
+---
+
+## `protocol_compiler.py`
+
+This script now serves as the entry point for the hierarchical protocol compilation.
+It discovers all protocol modules (subdirectories within `protocols/`) and compiles
+each one into its own `AGENTS.md` file. It then generates a root `AGENTS.md`
+that links to all the compiled modules, creating a unified, navigable system.
 # Protocol: The Context-Sensitive Development Cycle (CSDC)
 
 This protocol introduces a new form of development cycle that is sensitive to the logical context in which it operates. It moves beyond the purely structural validation of the FDC and CFDC to incorporate constraints based on fundamental principles of logic and computability.

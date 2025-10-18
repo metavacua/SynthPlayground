@@ -122,3 +122,6 @@ parsetab.py
 
 # Agent Smith experimental sandbox
 agent_smith_sandbox/
+
+# Test artifacts
+test.ttl
