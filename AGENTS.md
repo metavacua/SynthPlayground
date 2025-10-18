@@ -922,6 +922,23 @@ This protocol establishes the `lfi_ill_runner.py` script as the official entry p
 
 ---
 
+protocol_id: logging-verification-001
+description: |
+  A protocol to ensure the agent verifies its own logging activity before completing a task.
+rules:
+  - rule_id: verify-log-before-submit
+    description: |
+      Before submitting any work, the agent MUST read the `logs/activity.log.jsonl` file to confirm that its actions have been successfully logged. This serves as a final self-auditing step.
+    enforcement: |
+      This is a procedural rule. The agent must include a step in its plan to read the log file before calling the `submit` tool.
+associated_tools:
+  - read_file
+  - submit
+---
+This protocol adds a final, crucial verification step to the agent's workflow. By requiring the agent to check its own log file, it ensures that the structured logging system—which is essential for learning and auditing—is functioning correctly. This self-auditing step increases the overall reliability of the agent's operations.
+
+---
+
 # Protocol: plllu-execution-001
 _A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent._
 
