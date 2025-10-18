@@ -3,7 +3,7 @@ import os
 import json
 import shutil
 from rdflib import Graph, Literal, Namespace, RDF, RDFS
-from protocol_oracle import get_applicable_protocols, get_rules_for_protocols
+from tooling.protocol_oracle import get_applicable_protocols, get_rules_for_protocols
 
 PROTOCOL = Namespace("https://www.aida.org/protocol#")
 

@@ -1,8 +1,13 @@
-from appl_ast import *
-from planning import *
+from appl_ast import (
+    AST, App, Bool, Case, Cons, Fun, Inl, Inr, Int, Let, LetBang, LetPair, Nil,
+    Pair, Promote, String, TAction, TBool, TExponential, TFun, TGoal, TInt,
+    TList, TProd, TState, TString, TSum, TTerm, TUnit, Term, Type, Unit, Var
+)
+
 
 class TypeCheckError(Exception):
     pass
+
 
 class TypeChecker:
     def __init__(self):
@@ -121,6 +126,7 @@ class TypeChecker:
         else:
             raise NotImplementedError(f"Type checking not implemented for {type(term).__name__}")
 
+
 def type_check(term: Term, unrestricted_context: dict = None, linear_context: dict = None) -> Type:
     """
     Type-checks the given term in the provided contexts.
@@ -135,7 +141,7 @@ def type_check(term: Term, unrestricted_context: dict = None, linear_context: di
         'is_goal': TFun(TState(), TFun(TGoal(), TBool())),
         'parse': TFun(TString(), TTerm()),
         'unparse': TFun(TTerm(), TString()),
-        'eval': TFun(TTerm(), TTerm()), # This is a simplification
+        'eval': TFun(TTerm(), TTerm()),  # This is a simplification
     }
 
     if unrestricted_context:
