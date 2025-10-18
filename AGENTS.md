@@ -5,11 +5,23 @@
 # It provides a top-level view of the repository's protocol modules.
 # For dynamic, context-aware protocol queries, use the 'protocol_oracle.py' tool.
 # All changes to agent protocols must be made in the source files
-# located in the `protocols/` subdirectories.
+# located in the `protocols/` subdirectories, each with its own `build.py`.
 # ---
 
 
 
+# --- Protocol Modules ---
+
+This repository uses a hierarchical, decentralized protocol system. Each of the following directories contains a self-contained set of protocols and is compiled by its own local build script.
+- [Compliance](protocols/compliance/AGENTS.md)
+- [Core](protocols/core/AGENTS.md)
+- [Critic](protocols/critic/AGENTS.md)
+- [Experimental](protocols/experimental/AGENTS.md)
+- [Security](protocols/security/AGENTS.md)
+
+## Root Protocols
+
+General protocols are defined in the [root protocol module](./protocols/AGENTS.md).
 # --- Child Protocol Modules ---
 
 This repository uses a hierarchical protocol system. Each of the following directories contains a self-contained set of protocols in its own `AGENTS.md` file.

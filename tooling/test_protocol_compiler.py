@@ -1,96 +1,89 @@
-import unittest
 import os
-import json
+import unittest
+import tempfile
 import shutil
-from protocol_compiler import compile_single_module, load_schema, process_protocol_file
-import jsonschema
-from rdflib import Graph
+import json
+from unittest.mock import patch
 
-class TestProtocolCompiler(unittest.TestCase):
+# Add root to path to allow imports
+import sys
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from tooling.protocol_compiler import main_orchestrator
+from utils.file_system_utils import find_protocol_dirs
+
+class TestProtocolCompilerOrchestrator(unittest.TestCase):
 
     def setUp(self):
-        self.test_dir = "test_protocol_compiler_dir"
-        self.source_dir = os.path.join(self.test_dir, "protocols")
-        os.makedirs(self.source_dir, exist_ok=True)
+        """Set up a temporary directory structure for testing."""
+        self.test_dir = tempfile.mkdtemp()
+        self.protocols_dir = os.path.join(self.test_dir, 'protocols')
+        self.core_module_dir = os.path.join(self.protocols_dir, 'core')
+        os.makedirs(self.core_module_dir)
 
-        self.schema_path = os.path.join(self.source_dir, "protocol.schema.json")
-        self.schema = {
-            "type": "object",
-            "properties": {
-                "protocol_id": {"type": "string"},
-                "description": {"type": "string"},
-                "rules": {"type": "array"},
-                "associated_tools": {"type": "array"},
-                "is_applicable_path": {"type": "string"}
-            },
-            "required": ["protocol_id", "description", "rules"]
-        }
-        with open(self.schema_path, "w") as f:
-            json.dump(self.schema, f)
+        # Create a dummy schema file
+        self.schema_path = os.path.join(self.protocols_dir, 'protocol.schema.json')
+        with open(self.schema_path, 'w') as f:
+            json.dump({
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "title": "Test Schema",
+                "type": "object",
+                "properties": {"protocol_id": {"type": "string"}},
+                "required": ["protocol_id"]
+            }, f)
+
+        # Create a dummy local build script in the core module
+        self.core_build_script_path = os.path.join(self.core_module_dir, 'build.py')
+        with open(self.core_build_script_path, 'w') as f:
+            f.write("""
+import os
+print("--- Core module build script running ---")
+with open('AGENTS.md', 'w') as f:
+    f.write('# Core Module AGENTS.md')
+""")
+        # Create a dummy protocol file for the build script to "compile"
+        with open(os.path.join(self.core_module_dir, 'core.protocol.md'), 'w') as f:
+            f.write("A core protocol.")
+
 
     def tearDown(self):
+        """Clean up the temporary directory."""
         shutil.rmtree(self.test_dir)
 
-    def test_process_json_protocol(self):
-        """Tests that a valid JSON protocol is processed correctly."""
-        json_path = os.path.join(self.source_dir, "p1.protocol.json")
-        protocol_data = {"protocol_id": "TEST-001", "description": "First test protocol.", "rules": [], "associated_tools": []}
-        with open(json_path, "w") as f:
-            json.dump(protocol_data, f)
+    def test_orchestrator_discovers_and_runs_local_build(self):
+        """
+        Verify the orchestrator finds the local build.py, runs it,
+        and generates the root AGENTS.md.
+        """
+        # We need to patch the configuration constants in protocol_compiler
+        # to point to our temporary directory structure.
+        root_agents_md_path = os.path.join(self.test_dir, 'AGENTS.md')
+        with patch('tooling.protocol_compiler.ROOT_PROTOCOLS_DIR', self.protocols_dir), \
+             patch('tooling.protocol_compiler.ROOT_DIR', self.test_dir), \
+             patch('tooling.protocol_compiler.ROOT_AGENTS_MD', root_agents_md_path):
 
-        processed_data = process_protocol_file(json_path, self.schema)
-        self.assertEqual(processed_data["protocol_id"], "TEST-001")
+            # Run the main orchestrator function
+            # We also patch sys.argv to avoid argparse issues
+            with patch('sys.argv', ['tooling/protocol_compiler.py']):
+                 main_orchestrator()
 
-    def test_process_python_protocol(self):
-        """Tests that a valid Python protocol is processed correctly."""
-        py_path = os.path.join(self.source_dir, "p2.protocol.py")
-        with open(py_path, "w") as f:
-            f.write('PROTOCOL_ID = "PY-001"\n')
-            f.write('DESCRIPTION = "Python protocol."\n')
-            f.write('RULES = []\n')
-            f.write('ASSOCIATED_TOOLS = []\n')
-            f.write('def is_applicable(context): return True\n')
+            # --- Assertions ---
+            # 1. Check that the local build script created the module's AGENTS.md
+            core_agents_md = os.path.join(self.core_module_dir, 'AGENTS.md')
+            self.assertTrue(os.path.exists(core_agents_md))
+            with open(core_agents_md, 'r') as f:
+                content = f.read()
+                self.assertEqual(content, '# Core Module AGENTS.md')
 
-        processed_data = process_protocol_file(py_path, self.schema)
-        self.assertEqual(processed_data["protocol_id"], "PY-001")
-        self.assertIn("is_applicable_path", processed_data)
+            # 2. Check that the orchestrator created the root AGENTS.md
+            root_agents_md = os.path.join(self.test_dir, 'AGENTS.md')
+            self.assertTrue(os.path.exists(root_agents_md))
 
-    def test_compile_single_module(self):
-        """Tests that a module with mixed protocols is compiled correctly."""
-        # Create a JSON protocol
-        json_path = os.path.join(self.source_dir, "p1.protocol.json")
-        with open(json_path, "w") as f:
-            json.dump({"protocol_id": "TEST-001", "description": "JSON protocol.", "rules": [], "associated_tools": []}, f)
-
-        # Create a Python protocol
-        py_path = os.path.join(self.source_dir, "p2.protocol.py")
-        with open(py_path, "w") as f:
-            f.write('PROTOCOL_ID = "PY-001"\n')
-            f.write('DESCRIPTION = "Python protocol."\n')
-            f.write('RULES = [{"rule_id": "py-rule-1", "description": "desc", "enforcement": "enf"}]\n')
-            f.write('ASSOCIATED_TOOLS = []\n')
-
-        target_file = os.path.join(self.source_dir, "AGENTS.md")
-        g = Graph()
-
-        compile_single_module(
-            source_dir=self.source_dir,
-            target_file=target_file,
-            schema=self.schema,
-            knowledge_graph=g
-        )
-
-        # Check AGENTS.md content
-        self.assertTrue(os.path.exists(target_file))
-        with open(target_file, "r") as f:
-            content = f.read()
-        self.assertIn("TEST-001", content)
-        self.assertIn("PY-001", content)
-
-        # Check graph content
-        self.assertIn((None, None, None), g) # check if graph is not empty
-        self.assertGreater(len(g), 0)
+            # 3. Check that the root AGENTS.md links to the core module's AGENTS.md
+            with open(root_agents_md, 'r') as f:
+                content = f.read()
+                self.assertIn('- [Core](protocols/core/AGENTS.md)', content)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
