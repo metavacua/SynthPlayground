@@ -175,38 +175,60 @@ def format_lesson_entry(metadata: dict, lesson_data: dict) -> dict:
     }
 
 
-def main():
-    parser = argparse.ArgumentParser(
-        description="Parses a post-mortem report and compiles the lessons learned into a structured JSONL file."
-    )
-    parser.add_argument(
-        "postmortem_path", help="The path to the completed post-mortem markdown file."
-    )
-    args = parser.parse_args()
+def process_postmortem_file(filepath):
+    """Reads a single post-mortem file and returns its lessons."""
+    if not os.path.exists(filepath):
+        print(f"Error: Post-mortem file not found at '{filepath}'")
+        return []
 
-    if not os.path.exists(args.postmortem_path):
-        print(f"Error: Post-mortem file not found at '{args.postmortem_path}'")
-        return
-
-    with open(args.postmortem_path, "r") as f:
+    with open(filepath, "r") as f:
         content = f.read()
 
     metadata = extract_metadata_from_postmortem(content)
-    lessons = extract_lessons_from_postmortem(content)
+    lessons_data = extract_lessons_from_postmortem(content)
 
-    if not lessons:
-        print("No lessons found in the specified post-mortem file.")
+    if not lessons_data:
+        return []
+
+    formatted_lessons = [format_lesson_entry(metadata, lesson) for lesson in lessons_data]
+    return formatted_lessons
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Parses post-mortem reports and compiles lessons into a knowledge base."
+    )
+    parser.add_argument(
+        "--source-dir",
+        required=True,
+        help="Directory containing the post-mortem markdown files."
+    )
+    args = parser.parse_args()
+
+    if not os.path.isdir(args.source_dir):
+        print(f"Error: Source directory not found at '{args.source_dir}'")
         return
 
-    print(f"Found {len(lessons)} new lesson(s) in '{args.postmortem_path}'.")
+    all_lessons = []
+    for filename in os.listdir(args.source_dir):
+        if filename.endswith(".md"):
+            filepath = os.path.join(args.source_dir, filename)
+            lessons = process_postmortem_file(filepath)
+            if lessons:
+                print(f"Found {len(lessons)} new lesson(s) in '{filepath}'.")
+                all_lessons.extend(lessons)
 
+    if not all_lessons:
+        print("No new lessons found in any post-mortem files.")
+        return
+
+    # To prevent duplicates, we can load existing lessons and check IDs.
+    # For simplicity here, we just append. A more robust system might check for existing lesson_ids.
     with open(KNOWLEDGE_CORE_PATH, "a") as f:
-        for lesson in lessons:
-            formatted_entry = format_lesson_entry(metadata, lesson)
-            f.write(json.dumps(formatted_entry) + "\n")
+        for entry in all_lessons:
+            f.write(json.dumps(entry) + "\n")
 
     print(
-        f"Successfully compiled {len(lessons)} lesson(s) into '{KNOWLEDGE_CORE_PATH}'."
+        f"Successfully compiled a total of {len(all_lessons)} lesson(s) into '{KNOWLEDGE_CORE_PATH}'."
     )
 
 
