@@ -14,8 +14,11 @@ This document outlines the security policies and procedures for this project. It
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "security-header",
   "description": "Defines the identity and purpose of the Security Protocol document.",
   "rules": []
@@ -25,8 +28,11 @@ This document outlines the security policies and procedures for this project. It
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "security-vuln-reporting-001",
   "description": "Defines the official policy and procedure for reporting security vulnerabilities.",
   "rules": [

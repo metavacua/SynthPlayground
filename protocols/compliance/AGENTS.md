@@ -142,8 +142,11 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "agent-bootstrap-001",
   "description": "A foundational protocol that dictates the agent's initial actions upon starting any task.",
   "rules": [
@@ -162,8 +165,11 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "dependency-management-001",
   "description": "A protocol for ensuring a reliable execution environment through formal dependency management.",
   "rules": [
@@ -182,8 +188,11 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "experimental-prologue-001",
   "description": "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.",
   "rules": [
@@ -205,21 +214,3 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
 
 
 # --- Associated Tool Documentation ---
-
-## `create_file_with_block`
-
-_This is a built-in or conceptual tool. Documentation is not available via automated extraction._
-
----
-
-## `read_file`
-
-_This is a built-in or conceptual tool. Documentation is not available via automated extraction._
-
----
-
-## `run_in_bash_session`
-
-_This is a built-in or conceptual tool. Documentation is not available via automated extraction._
-
----

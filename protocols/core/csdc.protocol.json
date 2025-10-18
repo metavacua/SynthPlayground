@@ -1,4 +1,5 @@
 {
+  "version": "1.0.0",
   "protocol_id": "csdc-001",
   "description": "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.",
   "rules": [

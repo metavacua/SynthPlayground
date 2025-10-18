@@ -250,8 +250,11 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "agent-shell-001",
   "description": "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.",
   "rules": [
@@ -270,20 +273,24 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "toolchain-review-on-schema-change-001",
   "description": "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.",
   "rules": [
     {
       "rule_id": "toolchain-audit-on-schema-change",
-      "description": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.",
+      "description": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`, `hierarchical_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.",
       "enforcement": "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files."
     }
   ],
   "associated_tools": [
-    "tooling/auditor.py",
-    "tooling/protocol_compiler.py"
+    "tooling/protocol_auditor.py",
+    "tooling/protocol_compiler.py",
+    "tooling/hierarchical_compiler.py"
   ]
 }
 ```
@@ -291,8 +298,11 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "unified-auditor-001",
   "description": "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.",
   "rules": [
@@ -311,8 +321,11 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "aura-execution-001",
   "description": "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.",
   "rules": [
@@ -331,8 +344,11 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "capability-verification-001",
   "description": "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.",
   "rules": [
@@ -351,8 +367,11 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "csdc-001",
   "description": "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.",
   "rules": [
@@ -381,8 +400,11 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "unified-doc-builder-001",
   "description": "A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth.",
   "rules": [
@@ -401,26 +423,34 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "file-indexing-001",
   "description": "A protocol for maintaining an up-to-date file index to accelerate tool performance.",
   "rules": [
     {
       "rule_id": "update-index-before-submit",
       "description": "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem.",
-      "enforcement": "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/some_indexer.py build'."
+      "enforcement": "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/file_indexer.py build'."
     }
   ],
-  "associated_tools": []
+  "associated_tools": [
+    "tooling/file_indexer.py"
+  ]
 }
 ```
 
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "hdl-proving-001",
   "description": "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.",
   "rules": [
@@ -439,8 +469,11 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "agent-interaction-001",
   "description": "A protocol governing the agent's core interaction and planning tools.",
   "rules": [
@@ -465,8 +498,11 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "plllu-execution-001",
   "description": "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent.",
   "rules": [
@@ -485,8 +521,11 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ---
 
+**Version:** 1.0.0
+
 ```json
 {
+  "version": "1.0.0",
   "protocol_id": "speculative-execution-001",
   "description": "A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.",
   "rules": [
@@ -530,30 +569,6 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 
 # --- Associated Tool Documentation ---
-
-## `create_file_with_block`
-
-_This is a built-in or conceptual tool. Documentation is not available via automated extraction._
-
----
-
-## `message_user`
-
-_This is a built-in or conceptual tool. Documentation is not available via automated extraction._
-
----
-
-## `request_user_input`
-
-_This is a built-in or conceptual tool. Documentation is not available via automated extraction._
-
----
-
-## `set_plan`
-
-_This is a built-in or conceptual tool. Documentation is not available via automated extraction._
-
----
 
 ## `agent_shell.py`
 
