@@ -3749,7 +3749,7 @@
       "name": "compile_module_wrapper",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 162,
+      "line": 167,
       "kind": "function",
       "docstring": null
     },
@@ -3758,7 +3758,7 @@
       "name": "generate_root_agents_md",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 176,
+      "line": 181,
       "kind": "function",
       "docstring": null
     },
@@ -3767,7 +3767,7 @@
       "name": "main_hierarchical_compiler",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 212,
+      "line": 217,
       "kind": "function",
       "docstring": "Main function to run the hierarchical compiler."
     },
