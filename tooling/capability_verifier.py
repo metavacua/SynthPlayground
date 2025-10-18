@@ -25,6 +25,10 @@ cornerstone of the agent's design philosophy.
 import argparse
 import subprocess
 import sys
+import os
+import tempfile
+import shutil
+import json
 
 def main():
     """
@@ -58,29 +62,33 @@ def main():
 
     # Step 2: Create a lesson and invoke the self-correction orchestrator
     print("\n--- Step 2: Invoking self-correction ---")
-    lesson_content = {
-        "lesson_id": "verify-fibonacci-capability",
-        "status": "pending",
-        "failure": {
-            "test_file": args.test_file,
-            "error_message": initial_result.stderr
-        },
-        "action": {
-            "type": "PROPOSE_CODE_CHANGE",
-            "parameters": {
-                "filepath": "self_improvement_project/main.py",
-                "diff": "No-op for this test, as the fix is already applied."
+    temp_dir = tempfile.mkdtemp()
+    try:
+        lesson_content = {
+            "lesson_id": "verify-fibonacci-capability",
+            "status": "pending",
+            "failure": {
+                "test_file": args.test_file,
+                "error_message": initial_result.stderr
+            },
+            "action": {
+                "type": "PROPOSE_CODE_CHANGE",
+                "parameters": {
+                    "filepath": "self_improvement_project/main.py",
+                    "diff": "No-op for this test, as the fix is already applied."
+                }
             }
         }
-    }
-    import json
-    with open("knowledge_core/lessons.jsonl", "w") as f:
-        f.write(json.dumps(lesson_content) + "\n")
+        lesson_file_path = os.path.join(temp_dir, "lessons.jsonl")
+        with open(lesson_file_path, "w") as f:
+            f.write(json.dumps(lesson_content) + "\n")
 
-    orchestrator_result = subprocess.run(
-        [sys.executable, "tooling/self_correction_orchestrator.py"],
-        capture_output=True, text=True
-    )
+        orchestrator_result = subprocess.run(
+            [sys.executable, "tooling/self_correction_orchestrator.py", f"--lesson-file={lesson_file_path}"],
+            capture_output=True, text=True
+        )
+    finally:
+        shutil.rmtree(temp_dir)
     if orchestrator_result.returncode != 0:
         print("Error: Self-correction orchestrator failed.")
         print(orchestrator_result.stderr)
