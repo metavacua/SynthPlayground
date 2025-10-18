@@ -1,0 +1,32 @@
+{
+  "protocol_id": "self-modification-001",
+  "description": "A meta-protocol governing the agent's modification of its own governing protocols.",
+  "rules": [
+    {
+      "rule_id": "source-only-modification",
+      "description": "The agent MUST NOT edit any 'AGENTS.md' file directly. All modifications to protocols must be made to the '.protocol.json' source files within the 'protocols/' directories.",
+      "enforcement": "Procedural rule. The agent must demonstrate awareness of this by using tools like 'replace_with_git_merge_diff' or 'create_file_with_block' on source files, not build artifacts."
+    },
+    {
+      "rule_id": "rebuild-after-modification",
+      "description": "After modifying any '.protocol.json' source file, the agent MUST execute the main build script 'tooling/hierarchical_compiler.py' to regenerate all 'AGENTS.md' artifacts and the 'protocols.ttl' knowledge graph.",
+      "enforcement": "The agent's plan for modifying protocols must include a final step to run the build script. This can be verified by reviewing the execution log."
+    },
+    {
+      "rule_id": "validation-is-mandatory",
+      "description": "Any new or modified protocol source file MUST be successfully validated against the 'protocols/protocol.schema.json'. The build process, which includes this validation, must complete without errors.",
+      "enforcement": "The `hierarchical_compiler.py` script's successful execution serves as the enforcement mechanism."
+    },
+    {
+      "rule_id": "test-driven-protocol-development",
+      "description": "When adding or significantly altering a protocol, the agent SHOULD, where practical, create a temporary, illustrative test case (e.g., a deliberately invalid file) to prove the change has the intended effect and that the build system's error handling is robust.",
+      "enforcement": "This is a best-practice guideline. Adherence can be checked during code review by observing the agent's workflow."
+    }
+  ],
+  "associated_tools": [
+    "tooling/hierarchical_compiler.py",
+    "tooling/compiler.py",
+    "tooling/knowledge_graph_generator.py",
+    "protocols/protocol.schema.json"
+  ]
+}
