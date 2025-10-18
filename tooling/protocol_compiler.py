@@ -138,6 +138,11 @@ def compile_single_module(source_dir, target_file, schema_file, knowledge_graph=
                 protocol_data_for_ld["@context"] = relative_context_path
                 base_uri = "file://" + os.path.abspath(os.path.dirname(file_path)) + "/"
                 knowledge_graph.parse(data=json.dumps(protocol_data_for_ld), format="json-ld", publicID=base_uri)
+
+        for rule in protocol_data.get("rules", []):
+            if "validation_command" in rule:
+                final_content.append(f"**Validation Command:** `{rule['validation_command']}`\n")
+
         json_string = json.dumps(protocol_data, indent=2)
         md_json_block = f"```json\n{json_string}\n```\n"
         final_content.append(md_json_block)
