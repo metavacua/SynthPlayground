@@ -4010,7 +4010,7 @@
       "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 264,
+      "line": 269,
       "kind": "function",
       "docstring": "Validates a plan against a specific CSDC model using the LBAValidator."
     },
@@ -4019,7 +4019,7 @@
       "name": "do_researching",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 281,
+      "line": 286,
       "kind": "function",
       "docstring": "Launches the background research process."
     },
@@ -4028,7 +4028,7 @@
       "name": "do_awaiting_result",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 304,
+      "line": 309,
       "kind": "function",
       "docstring": "Checks for the result of the background research process."
     },
@@ -4037,7 +4037,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 338,
+      "line": 343,
       "kind": "function",
       "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
     },
@@ -4046,7 +4046,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 349,
+      "line": 354,
       "kind": "function",
       "docstring": "Processes the result of a step and advances the execution state."
     },
@@ -4055,7 +4055,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 393,
+      "line": 398,
       "kind": "function",
       "docstring": "Handles the code generation state."
     },
@@ -4064,7 +4064,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 402,
+      "line": 407,
       "kind": "function",
       "docstring": "Handles the test execution state."
     },
@@ -4073,7 +4073,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 412,
+      "line": 417,
       "kind": "function",
       "docstring": "Handles the debugging state."
     },
@@ -4082,7 +4082,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 421,
+      "line": 426,
       "kind": "function",
       "docstring": "Handles the finalization of the task, guiding the agent through\nthe structured post-mortem process."
     },
@@ -5123,10 +5123,19 @@
     },
     {
       "_type": "tag",
+      "name": "test_validate_plan_with_invalid_transition",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 199,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "test_do_finalizing",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 200,
+      "line": 207,
       "kind": "function",
       "docstring": null
     },
@@ -9596,7 +9605,7 @@
     },
     {
       "_type": "tag",
-      "name": "visit_WhyNot",
+      "name": "visit_CoNegation",
       "path": "./lfi_ill/interpreter.py",
       "language": "Python",
       "line": 121,
@@ -9605,10 +9614,28 @@
     },
     {
       "_type": "tag",
+      "name": "visit_Undeterminedness",
+      "path": "./lfi_ill/interpreter.py",
+      "language": "Python",
+      "line": 137,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "visit_WhyNot",
+      "path": "./lfi_ill/interpreter.py",
+      "language": "Python",
+      "line": 144,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "visit_LetWhyNot",
       "path": "./lfi_ill/interpreter.py",
       "language": "Python",
-      "line": 124,
+      "line": 147,
       "kind": "function",
       "docstring": null
     },
@@ -9617,7 +9644,7 @@
       "name": "visit_Par",
       "path": "./lfi_ill/interpreter.py",
       "language": "Python",
-      "line": 132,
+      "line": 155,
       "kind": "function",
       "docstring": null
     },
@@ -9626,7 +9653,7 @@
       "name": "visit_LetPar",
       "path": "./lfi_ill/interpreter.py",
       "language": "Python",
-      "line": 135,
+      "line": 158,
       "kind": "function",
       "docstring": null
     },
@@ -9635,7 +9662,7 @@
       "name": "visit_Fun",
       "path": "./lfi_ill/interpreter.py",
       "language": "Python",
-      "line": 143,
+      "line": 166,
       "kind": "function",
       "docstring": null
     },
@@ -9644,7 +9671,7 @@
       "name": "visit_App",
       "path": "./lfi_ill/interpreter.py",
       "language": "Python",
-      "line": 146,
+      "line": 169,
       "kind": "function",
       "docstring": null
     },
@@ -9653,7 +9680,7 @@
       "name": "visit_Atom",
       "path": "./lfi_ill/interpreter.py",
       "language": "Python",
-      "line": 156,
+      "line": 179,
       "kind": "function",
       "docstring": null
     },
@@ -9662,7 +9689,7 @@
       "name": "visit_Inl",
       "path": "./lfi_ill/interpreter.py",
       "language": "Python",
-      "line": 163,
+      "line": 186,
       "kind": "function",
       "docstring": null
     },
@@ -9671,7 +9698,7 @@
       "name": "visit_Inr",
       "path": "./lfi_ill/interpreter.py",
       "language": "Python",
-      "line": 166,
+      "line": 189,
       "kind": "function",
       "docstring": null
     },
@@ -9680,7 +9707,7 @@
       "name": "visit_Case",
       "path": "./lfi_ill/interpreter.py",
       "language": "Python",
-      "line": 169,
+      "line": 192,
       "kind": "function",
       "docstring": null
     },
@@ -9689,7 +9716,7 @@
       "name": "visit_TensorPair",
       "path": "./lfi_ill/interpreter.py",
       "language": "Python",
-      "line": 211,
+      "line": 234,
       "kind": "function",
       "docstring": null
     },
@@ -9698,7 +9725,7 @@
       "name": "visit_LetTensor",
       "path": "./lfi_ill/interpreter.py",
       "language": "Python",
-      "line": 216,
+      "line": 239,
       "kind": "function",
       "docstring": null
     },
@@ -9734,7 +9761,7 @@
       "name": "t_ID",
       "path": "./lfi_ill/lexer.py",
       "language": "Python",
-      "line": 41,
+      "line": 45,
       "kind": "function",
       "docstring": "[a-zA-Z_][a-zA-Z_0-9]*"
     },
@@ -9743,7 +9770,7 @@
       "name": "t_newline",
       "path": "./lfi_ill/lexer.py",
       "language": "Python",
-      "line": 48,
+      "line": 52,
       "kind": "function",
       "docstring": "\\n+"
     },
@@ -9752,7 +9779,7 @@
       "name": "t_error",
       "path": "./lfi_ill/lexer.py",
       "language": "Python",
-      "line": 52,
+      "line": 56,
       "kind": "function",
       "docstring": null
     },
@@ -9983,7 +10010,7 @@
     },
     {
       "_type": "tag",
-      "name": "One",
+      "name": "CoNegation",
       "path": "./lfi_ill/ast.py",
       "language": "Python",
       "line": 76,
@@ -9992,10 +10019,28 @@
     },
     {
       "_type": "tag",
+      "name": "Undeterminedness",
+      "path": "./lfi_ill/ast.py",
+      "language": "Python",
+      "line": 82,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "One",
+      "path": "./lfi_ill/ast.py",
+      "language": "Python",
+      "line": 88,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "Bottom",
       "path": "./lfi_ill/ast.py",
       "language": "Python",
-      "line": 80,
+      "line": 92,
       "kind": "class",
       "docstring": null
     },
@@ -10004,7 +10049,7 @@
       "name": "Zero",
       "path": "./lfi_ill/ast.py",
       "language": "Python",
-      "line": 84,
+      "line": 96,
       "kind": "class",
       "docstring": null
     },
@@ -10013,7 +10058,7 @@
       "name": "Top",
       "path": "./lfi_ill/ast.py",
       "language": "Python",
-      "line": 88,
+      "line": 100,
       "kind": "class",
       "docstring": null
     },
@@ -10217,7 +10262,7 @@
     },
     {
       "_type": "tag",
-      "name": "__repr__",
+      "name": "__init__",
       "path": "./lfi_ill/ast.py",
       "language": "Python",
       "line": 77,
@@ -10229,7 +10274,16 @@
       "name": "__repr__",
       "path": "./lfi_ill/ast.py",
       "language": "Python",
-      "line": 81,
+      "line": 79,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./lfi_ill/ast.py",
+      "language": "Python",
+      "line": 83,
       "kind": "function",
       "docstring": null
     },
@@ -10248,6 +10302,33 @@
       "path": "./lfi_ill/ast.py",
       "language": "Python",
       "line": 89,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./lfi_ill/ast.py",
+      "language": "Python",
+      "line": 93,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./lfi_ill/ast.py",
+      "language": "Python",
+      "line": 97,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__repr__",
+      "path": "./lfi_ill/ast.py",
+      "language": "Python",
+      "line": 101,
       "kind": "function",
       "docstring": null
     },
@@ -10294,14 +10375,14 @@
       "language": "Python",
       "line": 40,
       "kind": "function",
-      "docstring": "formula : NEG formula\n| CIRC formula\n| COMP formula\n| OFC formula\n| WHYNOT formula\n| SEC formula"
+      "docstring": "formula : NEG formula\n| CIRC formula\n| COMP formula\n| MINUS formula\n| STAR formula\n| OFC formula\n| WHYNOT formula\n| SEC formula"
     },
     {
       "_type": "tag",
       "name": "p_formula_units",
       "path": "./lfi_ill/parser.py",
       "language": "Python",
-      "line": 60,
+      "line": 66,
       "kind": "function",
       "docstring": "formula : ONE\n| BOT\n| ZERO\n| TOP"
     },
@@ -10310,7 +10391,7 @@
       "name": "p_formula_group",
       "path": "./lfi_ill/parser.py",
       "language": "Python",
-      "line": 74,
+      "line": 80,
       "kind": "function",
       "docstring": "formula : LPAREN formula RPAREN"
     },
@@ -10319,7 +10400,7 @@
       "name": "p_error",
       "path": "./lfi_ill/parser.py",
       "language": "Python",
-      "line": 78,
+      "line": 84,
       "kind": "function",
       "docstring": null
     },
@@ -10328,7 +10409,79 @@
       "name": "parse",
       "path": "./lfi_ill/parser.py",
       "language": "Python",
-      "line": 86,
+      "line": 92,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestParadefiniteGrammar",
+      "path": "./lfi_ill/test_paradefinite.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestParadefiniteInterpreter",
+      "path": "./lfi_ill/test_paradefinite.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_co_negation_parsing",
+      "path": "./lfi_ill/test_paradefinite.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_undeterminedness_parsing",
+      "path": "./lfi_ill/test_paradefinite.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./lfi_ill/test_paradefinite.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_run_interp",
+      "path": "./lfi_ill/test_paradefinite.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_co_negation_operator",
+      "path": "./lfi_ill/test_paradefinite.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_undeterminedness_operator",
+      "path": "./lfi_ill/test_paradefinite.py",
+      "language": "Python",
+      "line": 48,
       "kind": "function",
       "docstring": null
     },
