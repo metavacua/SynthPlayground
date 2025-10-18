@@ -1,3 +1,6 @@
+"""
+A tool for listing files and directories in a repository, with an option to respect .gitignore.
+"""
 import os
 import fnmatch
 

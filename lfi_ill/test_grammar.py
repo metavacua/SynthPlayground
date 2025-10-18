@@ -2,7 +2,16 @@ import unittest
 from lfi_ill.lexer import lexer
 from lfi_ill.parser import parser
 from lfi_ill.interpreter import Interpreter, ParaconsistentTruth, ParaconsistentState
-from lfi_ill.ast import *
+from lfi_ill.ast import (
+    Tensor,
+    Atom,
+    Par,
+    Negation,
+    Consistency,
+    Completeness,
+    OfCourse,
+)
+
 
 class TestGrammar(unittest.TestCase):
     def test_tensor_parsing(self):
@@ -40,6 +49,7 @@ class TestGrammar(unittest.TestCase):
         result = parser.parse(data, lexer=lexer)
         expected = OfCourse(Atom('p'))
         self.assertEqual(repr(result), repr(expected))
+
 
 class TestInterpreter(unittest.TestCase):
     def setUp(self):

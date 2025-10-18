@@ -1,3 +1,10 @@
+"""
+A tool for analyzing the termination of LFI-ILL programs.
+
+This script takes an LFI-ILL file, interprets it in a paraconsistent logic
+environment, and reports on its halting status. It does this by setting up
+a paradoxical initial state and observing how the program resolves it.
+"""
 import argparse
 import sys
 import os

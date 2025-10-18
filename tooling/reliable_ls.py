@@ -1,3 +1,10 @@
+"""
+A tool for reliably listing files and directories.
+
+This script provides a consistent, sorted, and recursive listing of files and
+directories, excluding the `.git` directory. It is intended to be a more
+reliable alternative to the standard `ls` command for agent use cases.
+"""
 import os
 import sys
 

@@ -1,6 +1,30 @@
 import unittest
-from appl_ast import *
+from appl_ast import (
+    Int,
+    String,
+    Bool,
+    Unit,
+    Var,
+    Fun,
+    App,
+    Pair,
+    LetPair,
+    Inl,
+    Inr,
+    Case,
+    Promote,
+    LetBang,
+    TInt,
+    TString,
+    TBool,
+    TUnit,
+    TFun,
+    TExponential,
+    TProd,
+    TSum,
+)
 from type_checker import type_check, TypeCheckError
+
 
 class TestTypeChecker(unittest.TestCase):
     def test_literals(self):
@@ -80,6 +104,7 @@ class TestTypeChecker(unittest.TestCase):
     def test_unused_linear_variable(self):
         with self.assertRaises(TypeCheckError):
             type_check(Int(1), linear_context={'x': TInt()})
+
 
 if __name__ == '__main__':
     unittest.main()

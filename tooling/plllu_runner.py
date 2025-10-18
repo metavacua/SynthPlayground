@@ -1,3 +1,10 @@
+"""
+A command-line runner for pLLLU files.
+
+This script provides an entry point for executing `.plllu` files. It
+integrates the pLLLU lexer, parser, and interpreter to execute the logic
+defined in a given pLLLU source file and print the result.
+"""
 import argparse
 import sys
 import os

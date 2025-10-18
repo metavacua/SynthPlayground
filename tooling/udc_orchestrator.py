@@ -1,3 +1,15 @@
+"""
+An orchestrator for executing Unrestricted Development Cycle (UDC) plans.
+
+This script provides a sandboxed environment for running UDC plans, which are
+low-level assembly-like programs that can perform Turing-complete computations.
+The orchestrator acts as a virtual machine with a tape-based memory model,
+registers, and a set of simple instructions.
+
+To prevent non-termination and other resource-exhaustion issues, the
+orchestrator imposes strict limits on the number of instructions executed,
+the amount of memory used, and the total wall-clock time.
+"""
 import argparse
 import re
 import time

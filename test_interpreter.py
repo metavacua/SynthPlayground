@@ -1,7 +1,27 @@
 import unittest
-from appl_ast import *
-from interpreter import interpret, InterpError
+from appl_ast import (
+    Int,
+    String,
+    Bool,
+    Unit,
+    Var,
+    Fun,
+    App,
+    Pair,
+    LetPair,
+    Inl,
+    Inr,
+    Case,
+    Promote,
+    LetBang,
+    Cons,
+    Nil,
+    TInt,
+    TString,
+)
+from interpreter import interpret, InterpError, Closure
 from planning import Action
+
 
 class TestInterpreter(unittest.TestCase):
     def test_literals(self):
@@ -21,7 +41,7 @@ class TestInterpreter(unittest.TestCase):
     def test_fun(self):
         # Test that a function evaluates to a closure
         id_fun = Fun('x', TInt(), Var('x'))
-        self.assertIsInstance(interpret(id_fun), object) # Should be a closure
+        self.assertIsInstance(interpret(id_fun), Closure)
 
     def test_app(self):
         # Test a simple function application
@@ -59,8 +79,8 @@ class TestInterpreter(unittest.TestCase):
         self.assertEqual(interpret(let_bang), Int(1))
 
     def test_list(self):
-        l = Cons(Int(1), Cons(Int(2), Nil(TInt())))
-        self.assertEqual(interpret(l), l)
+        my_list = Cons(Int(1), Cons(Int(2), Nil(TInt())))
+        self.assertEqual(interpret(my_list), my_list)
 
     def test_planning_primitive(self):
         # create_action("move", ["at A"], ["at B"])
@@ -81,6 +101,7 @@ class TestInterpreter(unittest.TestCase):
     def test_homoiconicity(self):
         program = App(Var("eval"), App(Var("parse"), String('"hello"')))
         self.assertEqual(interpret(program), String("hello"))
+
 
 if __name__ == '__main__':
     unittest.main()

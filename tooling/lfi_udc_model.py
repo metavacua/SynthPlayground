@@ -1,3 +1,24 @@
+"""
+A paraconsistent execution model for UDC plans.
+
+This module provides the classes necessary to interpret a UDC (Un-decidable
+Computation) plan within a Logic of Formal Inconsistency (LFI). Instead of
+concrete values, the state of the machine (registers, tape, etc.) is modeled
+using paraconsistent truth values (TRUE, FALSE, BOTH, NEITHER).
+
+This allows the system to reason about paradoxical programs, such as a program
+that halts if and only if it does not halt. By executing the program under
+paraconsistent semantics, the model can arrive at a final state of `BOTH`,
+effectively demonstrating the paradoxical nature of the input without crashing.
+
+Key classes:
+- `ParaconsistentTruth`: An enum for the four truth values.
+- `ParaconsistentState`: A wrapper for a value that holds a paraconsistent truth.
+- `LFIInstruction`: A UDC instruction that operates on paraconsistent states.
+- `LFIExecutor`: A virtual machine that executes a UDC plan using LFI semantics.
+- `ParaconsistentHaltingDecider`: The main entry point that orchestrates the
+  analysis of a UDC plan.
+"""
 import enum
 import re
 from tooling.halting_heuristic_analyzer import Instruction as UDCInstruction
