@@ -1,6 +1,6 @@
 {
   "protocol_id": "file-indexing-001",
-  "description": "A protocol for maintaining an up-to-date file index to accelerate tool performance.",
+  "description": "A protocol for maintaining an up-to-date file index to accelerate tool performance.\n\n*Documentation Warning: Tool `tooling/file_indexer.py` not found.*\n\n*Documentation Warning: Tool `tooling/file_indexer.py` not found.*",
   "rules": [
     {
       "rule_id": "update-index-before-submit",

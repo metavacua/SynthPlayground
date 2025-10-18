@@ -9,16 +9,439 @@ This document provides a human-readable summary of the protocols and key compone
 - **`dependency-management-001`**: A protocol for ensuring a reliable execution environment through formal dependency management.
 - **`experimental-prologue-001`**: An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.
 - **`agent-shell-001`**: A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.
+
+**Associated Tool Documentation (`tooling/agent_shell.py`):**
+
+
+  ### `/app/tooling/agent_shell.py`
+  The new, interactive, API-driven entry point for the agent.
+
+  This script replaces the old file-based signaling system with a direct,
+  programmatic interface to the MasterControlGraph FSM. It is responsible for:
+  1.  Initializing the agent's state and a centralized logger.
+  2.  Instantiating and running the MasterControlGraph.
+  3.  Driving the FSM by calling its methods and passing data and the logger.
+  4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans
+      and respond to requests for action.
+
+  **Public Functions:**
+
+  - #### `def find_fsm_transition(fsm, source_state, trigger)`
+    > Finds the destination state for a given source and trigger.
+
+  - #### `def main()`
+    > Main entry point for the agent shell.
+
+  - #### `def run_agent_loop(task_description, tools, model=None)`
+    > The main loop that drives the agent's lifecycle via the FSM.
+
 - **`toolchain-review-on-schema-change-001`**: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
+
+*Documentation Warning: Tool `tooling/protocol_auditor.py` not found.*
+
+*Documentation Warning: Tool `tooling/protocol_auditor.py` not found.*
+
+**Associated Tool Documentation (`tooling/protocol_compiler.py`):**
+
+
+  ### `/app/tooling/protocol_compiler.py`
+  Compiles source protocol files into unified, human-readable and machine-readable artifacts.
+
+  This script is the engine behind the "protocol as code" principle. It discovers,
+  validates, and assembles protocol definitions from a source directory (e.g., `protocols/`)
+  into high-level documents like `AGENTS.md`.
+
+  Key Functions:
+  - **Discovery:** Scans a directory for source files, including `.protocol.json`
+    (machine-readable rules) and `.protocol.md` (human-readable context).
+  - **Validation:** Uses a JSON schema (`protocol.schema.json`) to validate every
+    `.protocol.json` file, ensuring all protocol definitions are syntactically
+    correct and adhere to the established structure.
+  - **Compilation:** Combines the human-readable markdown and the machine-readable
+    JSON into a single, cohesive Markdown file, embedding the JSON in code blocks.
+  - **Documentation Injection:** Can inject other generated documents, like the
+    `SYSTEM_DOCUMENTATION.md`, into the final output at specified locations.
+  - **Knowledge Graph Generation:** Optionally, it can process the validated JSON
+    protocols and serialize them into an RDF knowledge graph (in Turtle format),
+    creating a machine-queryable version of the agent's governing rules.
+
+  This process ensures that `AGENTS.md` and other protocol documents are not edited
+  manually but are instead generated from a validated, single source of truth,
+  making the agent's protocols robust, verifiable, and maintainable.
+
+  **Public Functions:**
+
+  - #### `def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file=None, autodoc_file=None)`
+    > Reads all .protocol.json and corresponding .protocol.md files from the
+    > source directory, validates them, and compiles them into a target markdown file.
+    > Optionally, it can also generate a machine-readable knowledge graph.
+
+  - #### `def install_dependencies()`
+    > Checks for required packages from requirements.txt and installs them if missing.
+
+  - #### `def load_schema(schema_file)`
+    > Loads the protocol JSON schema.
+
+  - #### `def main_cli()`
+    > Main function to run the compiler from the command line.
+
+  - #### `def sanitize_markdown(content)`
+    > Sanitizes markdown content to remove potentially malicious instructions.
+    > This function removes script tags and other potentially malicious HTML/JS.
+
+
+**Associated Tool Documentation (`tooling/hierarchical_compiler.py`):**
+
+
+  ### `/app/tooling/hierarchical_compiler.py`
+  A hierarchical build system for compiling nested protocol modules.
+
+  This script orchestrates the compilation of `AGENTS.md` and `README.md` files
+  across a repository with a nested or hierarchical module structure. It is a key
+  component of the system's ability to manage complexity by allowing protocols to
+  be defined in a modular, distributed way while still being presented as a unified,
+  coherent whole at each level of the hierarchy.
+
+  The compiler operates in two main passes:
+
+  **Pass 1: Documentation Compilation (Bottom-Up)**
+  1.  **Discovery:** It finds all `protocols` directories in the repository, which
+      signify the root of a documentation module.
+  2.  **Bottom-Up Traversal:** It processes these directories from the most deeply
+      nested ones upwards. This ensures that child modules are always built before
+      their parents.
+  3.  **Child Summary Injection:** For each compiled child module, it generates a
+      summary of its protocols and injects this summary into the parent's
+      `protocols` directory as a temporary file.
+  4.  **Parent Compilation:** When the parent module is compiled, the standard
+      `protocol_compiler.py` automatically includes the injected child summaries,
+      creating a single `AGENTS.md` file that contains both the parent's native
+      protocols and the full protocols of all its direct children.
+  5.  **README Generation:** After each `AGENTS.md` is compiled, the corresponding
+      `README.md` is generated.
+
+  **Pass 2: Centralized Knowledge Graph Compilation**
+  1.  After all documentation is built, it performs a full repository scan to find
+      every `*.protocol.json` file.
+  2.  It parses all of these files and compiles them into a single, centralized
+      RDF knowledge graph (`protocols.ttl`). This provides a unified,
+      machine-readable view of every protocol defined anywhere in the system.
+
+  This hierarchical approach allows for both localized, context-specific protocol
+  definitions and a holistic, system-wide understanding of the agent's governing rules.
+
+  **Public Functions:**
+
+  - #### `def cleanup_summaries(directory)`
+    > Removes temporary summary files from a protocols directory.
+
+  - #### `def compile_centralized_knowledge_graph()`
+    > Finds all protocol.json files in the entire repository, loads them, and
+    > compiles them into a single, unified knowledge graph.
+
+  - #### `def enrich_protocol_descriptions(source_dir)`
+    > Finds protocol.json files, checks for associated tools,
+    > and injects their documentation into the description.
+
+  - #### `def find_protocol_dirs(root_dir)`
+    > Finds all directories named 'protocols' within the root directory,
+    > ignoring any special-cased directories.
+
+  - #### `def generate_summary(child_agents_md_path)`
+    > Extracts the full, rendered protocol blocks from a child AGENTS.md file.
+    > This function finds all protocol definitions (human-readable markdown and
+    > the associated machine-readable JSON block) and concatenates them into a
+    > single string to be injected into the parent AGENTS.md.
+
+  - #### `def get_parent_module(module_path, all_module_paths)`
+    > Finds the direct parent module of a given module.
+
+  - #### `def get_tool_documentation(tool_path)`
+    > Uses the doc_builder to extract documentation for a specific tool.
+
+  - #### `def main()`
+    > Main function to orchestrate the hierarchical compilation.
+
+  - #### `def run_compiler(source_dir)`
+    > Invokes the protocol_compiler.py script as a library.
+
+  - #### `def run_readme_generator(source_agents_md)`
+    > Invokes the doc_builder.py script to generate a README.
+
 - **`unified-auditor-001`**: A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.
+
+**Associated Tool Documentation (`tooling/auditor.py`):**
+
+
+  ### `/app/tooling/auditor.py`
+  A unified auditing tool for maintaining repository health and compliance.
+
+  This script combines the functionality of several disparate auditing tools into a
+  single, comprehensive command-line interface. It serves as the central tool for
+  validating the key components of the agent's architecture, including protocols,
+  plans, and documentation.
+
+  The auditor can perform the following checks:
+  1.  **Protocol Audit (`protocol`):**
+      - Checks if `AGENTS.md` artifacts are stale compared to their source files.
+      - Verifies protocol completeness by comparing tools used in logs against
+        tools defined in protocols.
+      - Analyzes tool usage frequency (centrality).
+  2.  **Plan Registry Audit (`plans`):**
+      - Scans `knowledge_core/plan_registry.json` for "dead links" where the
+        target plan file does not exist.
+  3.  **Documentation Audit (`docs`):**
+      - Scans the generated `SYSTEM_DOCUMENTATION.md` to find Python modules
+        that are missing module-level docstrings.
+
+  The tool is designed to be run from the command line and can execute specific
+  audits or all of them, generating a consolidated `audit_report.md` file.
+
+  **Public Functions:**
+
+  - #### `def find_all_agents_md_files(root_dir)`
+
+  - #### `def get_protocol_tools_from_agents_md(agents_md_paths)`
+
+  - #### `def get_used_tools_from_log(log_path)`
+
+  - #### `def main()`
+
+  - #### `def run_doc_audit()`
+
+  - #### `def run_plan_registry_audit()`
+
+  - #### `def run_protocol_audit()`
+
 - **`aura-execution-001`**: A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.
+
+**Associated Tool Documentation (`tooling/aura_executor.py`):**
+
+
+  ### `/app/tooling/aura_executor.py`
+  This script serves as the command-line executor for `.aura` files.
+
+  It bridges the gap between the high-level Aura scripting language and the
+  agent's underlying Python-based toolset. The executor is responsible for:
+  1.  Parsing the `.aura` source code using the lexer and parser from the
+      `aura_lang` package.
+  2.  Setting up an execution environment for the interpreter.
+  3.  Injecting a "tool-calling" capability into the Aura environment, which
+      allows Aura scripts to dynamically invoke registered Python tools
+      (e.g., `hdl_prover`, `environmental_probe`).
+  4.  Executing the parsed program and printing the final result.
+
+  This makes it a key component for enabling more expressive and complex
+  automation scripts for the agent.
+
+  **Public Functions:**
+
+  - #### `def dynamic_agent_call_tool(tool_name_obj, *args)`
+    > Dynamically imports and calls a tool from the 'tooling' directory and wraps the result.
+    >
+    > This function provides the bridge between the Aura scripting environment and the
+    > Python-based agent tools. It takes the tool's module name and arguments,
+    > runs the tool in a subprocess, and wraps the captured output in an Aura `Object`.
+    >
+    > Args:
+    >     tool_name_obj: An Aura Object containing the tool's module name (e.g., 'hdl_prover').
+    >     *args: A variable number of Aura Objects to be passed as string arguments to the tool.
+    >
+    > Returns:
+    >     An Aura `Object` containing the tool's stdout as a string, or an error message.
+
+  - #### `def main()`
+    > Main entry point for the Aura script executor.
+
 - **`capability-verification-001`**: A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.
+
+**Associated Tool Documentation (`tooling/capability_verifier.py`):**
+
+
+  ### `/app/tooling/capability_verifier.py`
+  A tool to verify that the agent can monotonically improve its capabilities.
+
+  This script is designed to provide a formal, automated test for the agent's
+  self-correction and learning mechanisms. It ensures that when the agent learns
+  a new capability, it does so without losing (regressing) any of its existing
+  capabilities. This is a critical safeguard for ensuring robust and reliable
+  agent evolution.
+
+  The tool works by orchestrating a four-step process:
+  1.  **Confirm Initial Failure:** It runs a specific test file that is known to
+      fail, verifying that the agent currently lacks the target capability.
+  2.  **Invoke Self-Correction:** It simulates the discovery of a new "lesson" and
+      triggers the `self_correction_orchestrator.py` script, which is responsible
+      for integrating new knowledge and skills.
+  3.  **Confirm Final Success:** It runs the same test file again, confirming that
+      the agent has successfully learned the new capability and the test now passes.
+  4.  **Check for Regressions:** It runs the full, existing test suite to ensure
+      that the process of learning the new skill has not inadvertently broken any
+      previously functional capabilities.
+
+  This provides a closed-loop verification of monotonic improvement, which is a
+  cornerstone of the agent's design philosophy.
+
+  **Public Functions:**
+
+  - #### `def main()`
+    > A tool to verify that the agent can monotonically improve its capabilities.
+    >
+    > This tool works by:
+    > 1. Running a target test file that is known to fail, confirming the agent lacks a capability.
+    > 2. Invoking the agent's self-correction mechanism to learn the new capability.
+    > 3. Running the target test again to confirm it now passes.
+    > 4. Running the full test suite to ensure no existing capabilities were lost.
+
 - **`csdc-001`**: A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.
+
+**Associated Tool Documentation (`tooling/csdc_cli.py`):**
+
+
+  ### `/app/tooling/csdc_cli.py`
+  A command-line tool for managing the Context-Sensitive Development Cycle (CSDC).
+
+  This script provides an interface to validate a development plan against a specific
+  CSDC model (A or B) and a given complexity class (P or EXP). It ensures that a
+  plan adheres to the strict logical and computational constraints defined by the
+  CSDC protocol before it is executed.
+
+  The tool performs two main checks:
+  1.  **Complexity Analysis:** It analyzes the plan to determine its computational
+      complexity and verifies that it matches the expected complexity class.
+  2.  **Model Validation:** It validates the plan's commands against the rules of
+      the specified CSDC model, ensuring that it does not violate any of the
+      model's constraints (e.g., forbidding certain functions).
+
+  This serves as a critical gateway for ensuring that all development work within
+  the CSDC framework is sound, predictable, and compliant with the governing
+  meta-mathematical principles.
+
+  **Public Functions:**
+
+  - #### `def main()`
+
 - **`unified-doc-builder-001`**: A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth.
+
+**Associated Tool Documentation (`tooling/doc_builder.py`):**
+
+
+  ### `/app/tooling/doc_builder.py`
+  A unified documentation builder for the project.
+  ...
+
+  **Public Functions:**
+
+  - #### `def find_python_files(directories)`
+
+  - #### `def format_args(args)`
+
+  - #### `def generate_documentation_for_module(mod_doc)`
+
+  - #### `def generate_pages(readme_path, agents_md_path, output_file)`
+    > Generates the index.html for GitHub Pages.
+
+  - #### `def generate_readme(agents_md_path, output_file)`
+    > Generates the high-level README.md for a module.
+
+  - #### `def generate_system_docs(source_dirs, output_file)`
+    > Generates the detailed SYSTEM_DOCUMENTATION.md.
+
+  - #### `def get_module_docstring(filepath)`
+    > Parses a Python file and extracts its module-level docstring.
+
+  - #### `def get_protocol_summary(agents_md_path)`
+    > Parses an AGENTS.md file and extracts a list of protocol summaries.
+
+  - #### `def main()`
+
+  - #### `def parse_file_for_docs(filepath)`
+
+
+  **Public Classes:**
+
+  - #### `class ClassDoc`
+
+    **Methods:**
+    - ##### `def __init__(self, name, docstring, methods)`
+
+  - #### `class DocVisitor`
+
+    **Methods:**
+    - ##### `def __init__(self)`
+    - ##### `def visit_ClassDef(self, node)`
+    - ##### `def visit_FunctionDef(self, node)`
+
+  - #### `class FunctionDoc`
+
+    **Methods:**
+    - ##### `def __init__(self, name, signature, docstring)`
+
+  - #### `class ModuleDoc`
+
+    **Methods:**
+    - ##### `def __init__(self, name, docstring, classes, functions)`
+
 - **`file-indexing-001`**: A protocol for maintaining an up-to-date file index to accelerate tool performance.
+
+*Documentation Warning: Tool `tooling/file_indexer.py` not found.*
+
+*Documentation Warning: Tool `tooling/file_indexer.py` not found.*
 - **`hdl-proving-001`**: A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.
+
+**Associated Tool Documentation (`tooling/hdl_prover.py`):**
+
+
+  ### `/app/tooling/hdl_prover.py`
+  A command-line tool for proving sequents in Intuitionistic Linear Logic.
+
+  This script provides a basic interface to a simple logic prover. It takes a
+  sequent as a command-line argument, parses it into a logical structure, and
+  then attempts to prove it using a rudimentary proof search algorithm.
+
+  The primary purpose of this tool is to allow the agent to perform formal
+  reasoning and verification tasks by checking the validity of logical entailments.
+  For example, it can be used to verify that a certain conclusion follows from a
+  set of premises according to the rules of linear logic.
+
+  The current implementation uses a very basic parser and proof algorithm,
+  serving as a placeholder and demonstration for a more sophisticated, underlying
+  logic engine.
+
+  **Public Functions:**
+
+  - #### `def main()`
+
+  - #### `def parse_formula(s)`
+    > A very basic parser for formulas.
+
+  - #### `def parse_sequent(s)`
+    > A very basic parser for sequents.
+
+  - #### `def prove_sequent(sequent)`
+    > A very simple proof search algorithm.
+    > This is a placeholder for a more sophisticated prover.
+
 - **`agent-interaction-001`**: A protocol governing the agent's core interaction and planning tools.
 - **`plllu-execution-001`**: A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent.
+
+**Associated Tool Documentation (`tooling/plllu_runner.py`):**
+
+
+  ### `/app/tooling/plllu_runner.py`
+  A command-line runner for pLLLU files.
+
+  This script provides an entry point for executing `.plllu` files. It
+  integrates the pLLLU lexer, parser, and interpreter to execute the logic
+  defined in a given pLLLU source file and print the result.
+
+  **Public Functions:**
+
+  - #### `def main()`
+    > This tool provides a command-line interface for running .plllu files.
+    > It integrates the pLLLU lexer, parser, and interpreter to execute
+    > the logic defined in a given pLLLU source file.
+
 - **`security-header`**: Defines the identity and purpose of the Security Protocol document.
 - **`security-vuln-reporting-001`**: Defines the official policy and procedure for reporting security vulnerabilities.
 - **`speculative-execution-001`**: A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.

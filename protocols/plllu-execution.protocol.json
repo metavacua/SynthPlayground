@@ -1,6 +1,6 @@
 {
   "protocol_id": "plllu-execution-001",
-  "description": "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent.",
+  "description": "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent.\n\n**Associated Tool Documentation (`tooling/plllu_runner.py`):**\n\n  \n  ### `/app/tooling/plllu_runner.py`\n  A command-line runner for pLLLU files.\n  \n  This script provides an entry point for executing `.plllu` files. It\n  integrates the pLLLU lexer, parser, and interpreter to execute the logic\n  defined in a given pLLLU source file and print the result.\n  \n  **Public Functions:**\n  \n  - #### `def main()`\n    > This tool provides a command-line interface for running .plllu files.\n    > It integrates the pLLLU lexer, parser, and interpreter to execute\n    > the logic defined in a given pLLLU source file.\n",
   "rules": [
     {
       "rule_id": "execute-plllu-script",

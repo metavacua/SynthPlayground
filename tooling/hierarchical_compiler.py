@@ -47,6 +47,7 @@ if ROOT_DIR not in sys.path:
 
 import subprocess
 from tooling import protocol_compiler
+from tooling import doc_builder  # Import the doc builder
 from utils.file_system_utils import find_files, get_ignore_patterns
 import fnmatch
 
@@ -59,6 +60,57 @@ SUMMARY_FILE_PREFIX = "_z_child_summary_"
 SPECIAL_DIRS = [
     "protocols/security"
 ]  # Directories to be ignored by the hierarchical scan
+
+
+def get_tool_documentation(tool_path: str) -> str:
+    """
+    Uses the doc_builder to extract documentation for a specific tool.
+    """
+    if not tool_path.endswith(".py"):
+        return ""  # Only handle Python files for now
+
+    full_path = os.path.join(ROOT_DIR, tool_path)
+    if not os.path.exists(full_path):
+        return f"\n\n*Documentation Warning: Tool `{tool_path}` not found.*"
+
+    module_doc = doc_builder.parse_file_for_docs(full_path)
+    if not module_doc:
+        return f"\n\n*Documentation Warning: Could not parse tool `{tool_path}`.*"
+
+    doc_parts = doc_builder.generate_documentation_for_module(module_doc)
+    # Indent the documentation to fit nicely under the protocol description
+    indented_docs = "\n".join([f"  {line}" for line in "".join(doc_parts).splitlines()])
+    return f"\n\n**Associated Tool Documentation (`{tool_path}`):**\n\n{indented_docs}\n"
+
+
+def enrich_protocol_descriptions(source_dir: str):
+    """
+    Finds protocol.json files, checks for associated tools,
+    and injects their documentation into the description.
+    """
+    protocol_files = find_files("*.protocol.json", base_dir=source_dir)
+    for fname in protocol_files:
+        fpath = os.path.join(source_dir, fname)
+        try:
+            with open(fpath, "r+") as f:
+                protocol = json.load(f)
+
+                # Remove old auto-generated docs to prevent duplication
+                protocol['description'] = re.sub(r'\n\n\*\*Associated Tool Documentation.*', '', protocol['description'], flags=re.DOTALL)
+
+                docs_to_add = ""
+                if "associated_tools" in protocol:
+                    for tool in protocol["associated_tools"]:
+                        docs_to_add += get_tool_documentation(tool)
+
+                if docs_to_add:
+                    protocol["description"] += docs_to_add
+                    # Go back to the beginning of the file and write the new content
+                    f.seek(0)
+                    json.dump(protocol, f, indent=2)
+                    f.truncate()
+        except (IOError, json.JSONDecodeError) as e:
+            print(f"Warning: Could not process {fname} for enrichment: {e}")
 
 
 def find_protocol_dirs(root_dir):
@@ -267,6 +319,9 @@ def main():
                     print(
                         f"Injected summary for '{child_module_path}' into {summary_filepath}"
                     )
+
+        # Enrich the protocol files with documentation from their associated tools
+        enrich_protocol_descriptions(proto_dir)
 
         # Compile the current module's AGENTS.md
         target_agents_md = run_compiler(proto_dir)
