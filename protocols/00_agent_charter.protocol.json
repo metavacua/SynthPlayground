@@ -1,0 +1,14 @@
+{
+  "protocol_id": "agent-charter-001",
+  "description": "A protocol that mandates the reading and understanding of the agent's core charter.",
+  "rules": [
+    {
+      "rule_id": "charter-read-and-understand",
+      "description": "After reading AGENTS.md and before formulating a plan, the agent must read and internalize the principles outlined in proposals/AGENT_CHARTER.md. This document defines the agent's identity, purpose, and core operational principles, which are essential for correct and effective operation.",
+      "enforcement": "The agent's core logic must include a step to read and parse proposals/AGENT_CHARTER.md immediately after bootstrapping from AGENTS.md."
+    }
+  ],
+  "associated_tools": [
+    "read_file"
+  ]
+}
