@@ -220,10 +220,6 @@
     },
     {
       "source": "tooling",
-      "target": "watchdog"
-    },
-    {
-      "source": "tooling",
       "target": "markdown"
     },
     {
@@ -233,6 +229,10 @@
     {
       "source": "tooling",
       "target": "requests"
+    },
+    {
+      "source": "tooling",
+      "target": "watchdog"
     },
     {
       "source": "tooling",

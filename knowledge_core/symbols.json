@@ -2423,60 +2423,6 @@
     },
     {
       "_type": "tag",
-      "name": "TestHierarchicalCompiler",
-      "path": "./tooling/test_hierarchical_compiler.py",
-      "language": "Python",
-      "line": 7,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_hierarchical_compiler.py",
-      "language": "Python",
-      "line": 9,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_hierarchical_compiler.py",
-      "language": "Python",
-      "line": 25,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_find_protocol_dirs",
-      "path": "./tooling/test_hierarchical_compiler.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "function",
-      "docstring": "Tests that all protocol directories are found."
-    },
-    {
-      "_type": "tag",
-      "name": "test_generate_root_agents_md",
-      "path": "./tooling/test_hierarchical_compiler.py",
-      "language": "Python",
-      "line": 35,
-      "kind": "function",
-      "docstring": "Tests the generation of the root AGENTS.md file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_main_hierarchical_compiler",
-      "path": "./tooling/test_hierarchical_compiler.py",
-      "language": "Python",
-      "line": 51,
-      "kind": "function",
-      "docstring": "Tests the main orchestration logic."
-    },
-    {
-      "_type": "tag",
       "name": "Instruction",
       "path": "./tooling/halting_heuristic_analyzer.py",
       "language": "Python",
@@ -3719,66 +3665,30 @@
     },
     {
       "_type": "tag",
-      "name": "load_schema",
+      "name": "run_local_build",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 72,
+      "line": 59,
       "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "sanitize_markdown",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 83,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "process_protocol_file",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 89,
-      "kind": "function",
-      "docstring": "Processes a single protocol file (.json or .py) and returns its data."
-    },
-    {
-      "_type": "tag",
-      "name": "add_to_knowledge_graph",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 110,
-      "kind": "function",
-      "docstring": "Adds protocol data to the RDF graph."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_single_module",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 137,
-      "kind": "function",
-      "docstring": "Compiles a single protocol module, processing all its source files."
+      "docstring": "Executes the local build script for a given protocol module.\nReturns the path and a boolean indicating success."
     },
     {
       "_type": "tag",
       "name": "generate_root_agents_md",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 171,
+      "line": 83,
       "kind": "function",
-      "docstring": null
+      "docstring": "Generates the root AGENTS.md file, linking to all successfully compiled child modules."
     },
     {
       "_type": "tag",
-      "name": "main",
+      "name": "main_orchestrator",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 199,
+      "line": 131,
       "kind": "function",
-      "docstring": null
+      "docstring": "Main function to find and run all local build scripts in parallel."
     },
     {
       "_type": "tag",
@@ -4790,10 +4700,10 @@
     },
     {
       "_type": "tag",
-      "name": "TestProtocolCompiler",
+      "name": "TestProtocolCompilerOrchestrator",
       "path": "./tooling/test_protocol_compiler.py",
       "language": "Python",
-      "line": 9,
+      "line": 15,
       "kind": "class",
       "docstring": null
     },
@@ -4802,45 +4712,27 @@
       "name": "setUp",
       "path": "./tooling/test_protocol_compiler.py",
       "language": "Python",
-      "line": 11,
+      "line": 17,
       "kind": "function",
-      "docstring": null
+      "docstring": "Set up a temporary directory structure for testing."
     },
     {
       "_type": "tag",
       "name": "tearDown",
       "path": "./tooling/test_protocol_compiler.py",
       "language": "Python",
-      "line": 31,
+      "line": 49,
       "kind": "function",
-      "docstring": null
+      "docstring": "Clean up the temporary directory."
     },
     {
       "_type": "tag",
-      "name": "test_process_json_protocol",
+      "name": "test_orchestrator_discovers_and_runs_local_build",
       "path": "./tooling/test_protocol_compiler.py",
       "language": "Python",
-      "line": 34,
+      "line": 53,
       "kind": "function",
-      "docstring": "Tests that a valid JSON protocol is processed correctly."
-    },
-    {
-      "_type": "tag",
-      "name": "test_process_python_protocol",
-      "path": "./tooling/test_protocol_compiler.py",
-      "language": "Python",
-      "line": 44,
-      "kind": "function",
-      "docstring": "Tests that a valid Python protocol is processed correctly."
-    },
-    {
-      "_type": "tag",
-      "name": "test_compile_single_module",
-      "path": "./tooling/test_protocol_compiler.py",
-      "language": "Python",
-      "line": 58,
-      "kind": "function",
-      "docstring": "Tests that a module with mixed protocols is compiled correctly."
+      "docstring": "Verify the orchestrator finds the local build.py, runs it,\nand generates the root AGENTS.md."
     },
     {
       "_type": "tag",
@@ -9632,12 +9524,228 @@
     },
     {
       "_type": "tag",
+      "name": "find_files",
+      "path": "./protocols/build.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": "Finds files matching a pattern in a directory."
+    },
+    {
+      "_type": "tag",
+      "name": "load_schema",
+      "path": "./protocols/build.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": "Loads the JSON schema from a file."
+    },
+    {
+      "_type": "tag",
+      "name": "sanitize_markdown",
+      "path": "./protocols/build.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function",
+      "docstring": "Removes potentially unsafe constructs from Markdown."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_module",
+      "path": "./protocols/build.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function",
+      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
+    },
+    {
+      "_type": "tag",
+      "name": "find_files",
+      "path": "./protocols/experimental/build.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": "Finds files matching a pattern in a directory."
+    },
+    {
+      "_type": "tag",
+      "name": "load_schema",
+      "path": "./protocols/experimental/build.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": "Loads the JSON schema from a file."
+    },
+    {
+      "_type": "tag",
+      "name": "sanitize_markdown",
+      "path": "./protocols/experimental/build.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function",
+      "docstring": "Removes potentially unsafe constructs from Markdown."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_module",
+      "path": "./protocols/experimental/build.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function",
+      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
+    },
+    {
+      "_type": "tag",
+      "name": "find_files",
+      "path": "./protocols/core/build.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function",
+      "docstring": "Finds files matching a pattern in a directory."
+    },
+    {
+      "_type": "tag",
+      "name": "load_schema",
+      "path": "./protocols/core/build.py",
+      "language": "Python",
+      "line": 44,
+      "kind": "function",
+      "docstring": "Loads the JSON schema from a file."
+    },
+    {
+      "_type": "tag",
+      "name": "sanitize_markdown",
+      "path": "./protocols/core/build.py",
+      "language": "Python",
+      "line": 56,
+      "kind": "function",
+      "docstring": "Removes potentially unsafe constructs from Markdown."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_module",
+      "path": "./protocols/core/build.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function",
+      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
+    },
+    {
+      "_type": "tag",
       "name": "is_applicable",
       "path": "./protocols/core/conditional_refactoring.protocol.py",
       "language": "Python",
       "line": 7,
       "kind": "function",
       "docstring": "This protocol is only applicable if the task is 'refactor' and\nat least one of the target files is within the 'legacy/' directory."
+    },
+    {
+      "_type": "tag",
+      "name": "find_files",
+      "path": "./protocols/security/build.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": "Finds files matching a pattern in a directory."
+    },
+    {
+      "_type": "tag",
+      "name": "load_schema",
+      "path": "./protocols/security/build.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": "Loads the JSON schema from a file."
+    },
+    {
+      "_type": "tag",
+      "name": "sanitize_markdown",
+      "path": "./protocols/security/build.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function",
+      "docstring": "Removes potentially unsafe constructs from Markdown."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_module",
+      "path": "./protocols/security/build.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function",
+      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
+    },
+    {
+      "_type": "tag",
+      "name": "find_files",
+      "path": "./protocols/critic/build.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": "Finds files matching a pattern in a directory."
+    },
+    {
+      "_type": "tag",
+      "name": "load_schema",
+      "path": "./protocols/critic/build.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": "Loads the JSON schema from a file."
+    },
+    {
+      "_type": "tag",
+      "name": "sanitize_markdown",
+      "path": "./protocols/critic/build.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function",
+      "docstring": "Removes potentially unsafe constructs from Markdown."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_module",
+      "path": "./protocols/critic/build.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function",
+      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
+    },
+    {
+      "_type": "tag",
+      "name": "find_files",
+      "path": "./protocols/compliance/build.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": "Finds files matching a pattern in a directory."
+    },
+    {
+      "_type": "tag",
+      "name": "load_schema",
+      "path": "./protocols/compliance/build.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": "Loads the JSON schema from a file."
+    },
+    {
+      "_type": "tag",
+      "name": "sanitize_markdown",
+      "path": "./protocols/compliance/build.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function",
+      "docstring": "Removes potentially unsafe constructs from Markdown."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_module",
+      "path": "./protocols/compliance/build.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function",
+      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
     },
     {
       "_type": "tag",
