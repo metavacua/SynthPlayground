@@ -30,6 +30,10 @@
           "enforcement": {
             "description": "Describes how the rule is programmatically enforced.",
             "type": "string"
+          },
+          "validation_command": {
+            "description": "An optional shell command that can be executed to automatically validate compliance with this rule.",
+            "type": "string"
           }
         },
         "required": ["rule_id", "description", "enforcement"]
@@ -44,5 +48,12 @@
       }
     }
   },
-  "required": ["protocol_id", "description", "rules"]
+  "required": ["protocol_id", "description", "rules"],
+  "properties": {
+    "version": {
+      "description": "The version of the protocol, following semantic versioning.",
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    }
+  }
 }
