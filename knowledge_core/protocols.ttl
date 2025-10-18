@@ -165,6 +165,10 @@
     proto:hasRule <file:///app/protocols/dependency-install-on-start> ;
     schema:description "A protocol for ensuring a reliable execution environment through formal dependency management." .
 
+<file:///app/protocols/experimental-prologue-001> proto:associatedTool <file:///app/protocols/create_file_with_block> ;
+    proto:hasRule <file:///app/protocols/create-prologue-file> ;
+    schema:description "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation." .
+
 <file:///app/protocols/file-indexing-001> proto:associatedTool <file:///app/protocols/tooling/file_indexer.py> ;
     proto:hasRule <file:///app/protocols/update-index-before-submit> ;
     schema:description "A protocol for maintaining an up-to-date file index to accelerate tool performance." .
@@ -172,6 +176,10 @@
 <file:///app/protocols/hdl-proving-001> proto:associatedTool <file:///app/protocols/tooling/hdl_prover.py> ;
     proto:hasRule <file:///app/protocols/prove-sequent> ;
     schema:description "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs." .
+
+<file:///app/protocols/plllu-execution-001> proto:associatedTool <file:///app/protocols/tooling/plllu_runner.py> ;
+    proto:hasRule <file:///app/protocols/execute-plllu-script> ;
+    schema:description "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent." .
 
 <file:///app/protocols/security/security-header> schema:description "Defines the identity and purpose of the Security Protocol document." .
 
@@ -354,11 +362,17 @@
 <file:///app/protocols/communication-tool-access> proto:enforcement "The agent's core logic should be designed to use this tool for all user-facing communication." ;
     schema:description "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow." .
 
+<file:///app/protocols/create-prologue-file> proto:enforcement "This is a procedural rule. The agent must verify the existence of 'prologue.txt' before using 'create_file_with_block' or similar tools for other files." ;
+    schema:description "Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols." .
+
 <file:///app/protocols/dependency-install-on-start> proto:enforcement "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions." ;
     schema:description "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed." .
 
 <file:///app/protocols/execute-aura-script> proto:enforcement "The tool is used by invoking it from the command line with the path to the Aura script as an argument." ;
     schema:description "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter." .
+
+<file:///app/protocols/execute-plllu-script> proto:enforcement "The tool is used by invoking it from the command line with the path to the pLLLU script as an argument." ;
+    schema:description "The `plllu_runner.py` tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter." .
 
 <file:///app/protocols/formal-proposal-required> proto:enforcement "The initial plan for any speculative task must include a step to generate and save a proposal artifact." ;
     schema:description "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan." .
