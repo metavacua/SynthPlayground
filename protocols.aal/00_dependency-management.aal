@@ -11,15 +11,13 @@ rules:
 associated_tools:
   - run_in_bash_session
 ---
-# Protocol: Dependency Management
-
 This protocol establishes a formal process for managing Python dependencies to ensure a reliable and repeatable execution environment.
 
-## The Problem: Environmental Brittleness
+### The Problem: Environmental Brittleness
 
 The agent's operating environment previously lacked a formal dependency declaration. This required manual, trial-and-error installation of necessary packages (`jsonschema`, `rdflib`, `requests`) upon encountering `ModuleNotFoundError` exceptions. This process is inefficient, error-prone, and makes the successful execution of tasks dependent on undocumented, ad-hoc environmental setup.
 
-## The Solution: Formal Dependency Declaration and Installation
+### The Solution: Formal Dependency Declaration and Installation
 
 To solve this, two components are introduced:
 

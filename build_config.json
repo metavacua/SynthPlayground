@@ -36,25 +36,14 @@
       "description": "Generates index.html for GitHub Pages."
     },
     "security": {
-      "type": "compiler",
-      "output": "SECURITY.md",
-      "compiler": "tooling/protocol_compiler.py",
-      "sources": [
-        "protocols/security/"
-      ],
-      "options": {
-        "--schema-file": "protocols/protocol.schema.json"
-      },
+      "type": "command",
+      "command": "echo 'Security documentation is now part of AGENTS.md'",
       "description": "Compiles security protocols into SECURITY.md."
     },
     "agents": {
-      "type": "compiler",
-      "output": "AGENTS.md",
-      "compiler": "tooling/hierarchical_compiler.py",
-      "sources": [
-        "protocols/"
-      ],
-      "description": "Recursively compiles all AGENTS.md files."
+      "type": "command",
+      "command": "python3 tooling/aal_compiler.py",
+      "description": "Compiles all AAL protocols into AGENTS.md."
     },
     "audit": {
       "type": "command",

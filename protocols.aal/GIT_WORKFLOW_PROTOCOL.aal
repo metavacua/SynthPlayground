@@ -70,4 +70,3 @@ After the pre-submission check passes (or if you are intentionally skipping it f
   git branch -D <descriptive-branch-name>
   ```
 - **Catastrophic Failure:** If the environment becomes unstable or unrecoverable, use `reset_all` as a last resort. This will revert the entire repository to its original state.
----

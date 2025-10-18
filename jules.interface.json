@@ -1,0 +1,70 @@
+{
+  "tooling/appl_runner.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/appl_to_lfi_ill.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/aura_to_lfi_ill.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/lfi_ill_runner.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/plllu_runner.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/auditor.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/capability_verifier.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/csdc_cli.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/doc_builder.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/file_indexer.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/hdl_prover.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/protocol_updater.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/refactor.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/self_correction_orchestrator.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/self_improvement_cli.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/standard_agents_compiler.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  },
+  "tooling/symbol_map_generator.py": {
+    "agent_tool": "run_in_bash_session",
+    "command_template": "python {tool_path} {args}"
+  }
+}

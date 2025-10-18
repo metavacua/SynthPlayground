@@ -1,0 +1,16 @@
+---
+protocol_id: aura-compilation-001
+description: |
+  A protocol for compiling AURA files to the LFI-ILL intermediate representation.
+rules:
+  - rule_id: compile-aura-to-lfi-ill
+    description: |
+      The `aura_to_lfi_ill.py` tool should be used to compile .aura files to .lfi_ill files.
+    enforcement: |
+      The tool is used by invoking it from the command line with the path to the AURA file as an argument. The output will be an LFI-ILL file.
+associated_tools:
+  - tooling/aura_to_lfi_ill.py
+---
+# Protocol: AURA Compilation
+
+This protocol establishes the `aura_to_lfi_ill.py` script as the official entry point for compiling AURA (`.aura`) files to the LFI-ILL (`.lfi_ill`) intermediate representation. This is the first step in the two-stage execution process for AURA.
