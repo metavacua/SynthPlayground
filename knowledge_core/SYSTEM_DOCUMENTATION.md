@@ -44,9 +44,71 @@ programmatic interface to the MasterControlGraph FSM. It is responsible for:
   > Main entry point for the agent shell.
 
 
-- #### `def run_agent_loop(task_description)`
+- #### `def run_agent_loop(task_description, tools, model=None)`
 
   > The main loop that drives the agent's lifecycle via the FSM.
+
+
+### `/app/tooling/appl_runner.py`
+
+A command-line tool for executing APPL files.
+
+This script provides a simple interface to run APPL files using the main
+`run.py` interpreter. It captures and prints the output of the execution,
+and provides detailed error reporting if the execution fails.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Main function to run the APPL runner from the command line.
+
+
+- #### `def run_appl_file(filepath)`
+
+  > Executes an APPL file using the run.py interpreter.
+  >
+  > Args:
+  >     filepath: The path to the .appl file to execute.
+  >
+  > Returns:
+  >     The output from the APPL interpreter.
+
+
+### `/app/tooling/appl_to_lfi_ill.py`
+
+A compiler that translates APPL (a simple functional language) to LFI-ILL.
+
+This script takes a Python file containing an APPL AST, and compiles it into
+an LFI-ILL AST. The resulting AST is then written to a `.lfi_ill` file.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+
+**Public Classes:**
+
+
+- #### `class ApplToLfiIllCompiler`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self)`
+
+  - ##### `def compile(self, appl_node)`
+
+    > Recursively walks the APPL AST and translates it to an LFI ILL AST.
+
+  - ##### `def compile_type(self, type_)`
+
+    > Translates APPL types to LFI ILL types.
 
 
 ### `/app/tooling/auditor.py`
@@ -139,6 +201,64 @@ automation scripts for the agent.
 - #### `def main()`
 
   > Main entry point for the Aura script executor.
+
+
+### `/app/tooling/aura_to_lfi_ill.py`
+
+A compiler that translates AURA code to LFI-ILL.
+
+This script takes an AURA file, parses it, and compiles it into an LFI-ILL
+AST. The resulting AST is then written to a `.lfi_ill` file.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+
+**Public Classes:**
+
+
+- #### `class AuraToLfiIllCompiler`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self)`
+
+  - ##### `def compile(self, node)`
+
+  - ##### `def compile_BlockStatement(self, node)`
+
+  - ##### `def compile_CallExpression(self, node)`
+
+  - ##### `def compile_ExpressionStatement(self, node)`
+
+  - ##### `def compile_ForStatement(self, node)`
+
+  - ##### `def compile_FunctionDefinition(self, node)`
+
+  - ##### `def compile_Identifier(self, node)`
+
+  - ##### `def compile_IfStatement(self, node)`
+
+  - ##### `def compile_InfixExpression(self, node)`
+
+  - ##### `def compile_IntegerLiteral(self, node)`
+
+  - ##### `def compile_LetStatement(self, node)`
+
+  - ##### `def compile_PrintStatement(self, node)`
+
+  - ##### `def compile_Program(self, node)`
+
+  - ##### `def compile_ReturnStatement(self, node)`
+
+  - ##### `def compile_StringLiteral(self, node)`
+
+  - ##### `def generic_compiler(self, node)`
 
 
 ### `/app/tooling/background_researcher.py`
@@ -390,14 +510,9 @@ about the potential impact of its changes.
 **Public Functions:**
 
 
-- #### `def find_package_json_files(root_dir)`
+- #### `def find_dependency_files(root_dir)`
 
-  > Finds all package.json files in the repository, excluding node_modules.
-
-
-- #### `def find_requirements_txt_files(root_dir)`
-
-  > Finds all requirements.txt files in the repository.
+  > Finds all package.json and requirements.txt files, excluding node_modules.
 
 
 - #### `def generate_dependency_graph(root_dir='.')`
@@ -628,6 +743,76 @@ commands to:
 - #### `def validate_plan(plan_filepath)`
 
 
+### `/app/tooling/filesystem_lister.py`
+
+A tool for listing files and directories in a repository, with an option to respect .gitignore.
+
+
+**Public Functions:**
+
+
+- #### `def list_all_files_and_dirs(root_dir='.', use_gitignore=True)`
+
+  > Walks through a directory and its subdirectories and returns a sorted list of all
+  > files and directories.
+  >
+  > Args:
+  >     root_dir (str): The root directory to start the walk from.
+  >     use_gitignore (bool): If True, respects the patterns in the .gitignore file.
+
+
+### `/app/tooling/halting_heuristic_analyzer.py`
+
+A static analysis tool to estimate the termination risk of a UDC plan.
+
+This script reads a `.udc` plan file, parses its instructions, and uses a
+series of heuristics to identify potential infinite loops. It is not a
+formal decider (as the halting problem is undecidable), but rather a
+practical tool to flag common patterns that lead to non-termination.
+
+The analysis focuses on:
+1.  Detecting backward jumps, which are the primary indicator of loops.
+2.  Analyzing the exit conditions of these loops (e.g., `JE`, `JNE`).
+3.  Checking if the registers involved in the exit conditions are modified
+    within the loop body in a way that is likely to lead to termination.
+
+The tool outputs a JSON report detailing the estimated risk level (LOW,
+MEDIUM, HIGH) and the specific loops that were identified.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Main entry point for the command-line tool.
+
+
+
+**Public Classes:**
+
+
+- #### `class HaltingHeuristicAnalyzer`
+
+  > Performs static analysis on a UDC plan to provide a heuristic-based
+  > estimate of its likelihood to terminate.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, plan_path)`
+
+  - ##### `def analyze(self)`
+
+    > Runs the full analysis pipeline and returns a report.
+
+
+- #### `class Instruction`
+
+
+- #### `class Loop`
+
+
 ### `/app/tooling/hdl_prover.py`
 
 A command-line tool for proving sequents in Intuitionistic Linear Logic.
@@ -670,89 +855,45 @@ logic engine.
 
 ### `/app/tooling/hierarchical_compiler.py`
 
-A hierarchical build system for compiling nested protocol modules.
-
-This script orchestrates the compilation of `AGENTS.md` and `README.md` files
-across a repository with a nested or hierarchical module structure. It is a key
-component of the system's ability to manage complexity by allowing protocols to
-be defined in a modular, distributed way while still being presented as a unified,
-coherent whole at each level of the hierarchy.
-
-The compiler operates in two main passes:
-
-**Pass 1: Documentation Compilation (Bottom-Up)**
-1.  **Discovery:** It finds all `protocols` directories in the repository, which
-    signify the root of a documentation module.
-2.  **Bottom-Up Traversal:** It processes these directories from the most deeply
-    nested ones upwards. This ensures that child modules are always built before
-    their parents.
-3.  **Child Summary Injection:** For each compiled child module, it generates a
-    summary of its protocols and injects this summary into the parent's
-    `protocols` directory as a temporary file.
-4.  **Parent Compilation:** When the parent module is compiled, the standard
-    `protocol_compiler.py` automatically includes the injected child summaries,
-    creating a single `AGENTS.md` file that contains both the parent's native
-    protocols and the full protocols of all its direct children.
-5.  **README Generation:** After each `AGENTS.md` is compiled, the corresponding
-    `README.md` is generated.
-
-**Pass 2: Centralized Knowledge Graph Compilation**
-1.  After all documentation is built, it performs a full repository scan to find
-    every `*.protocol.json` file.
-2.  It parses all of these files and compiles them into a single, centralized
-    RDF knowledge graph (`protocols.ttl`). This provides a unified,
-    machine-readable view of every protocol defined anywhere in the system.
-
-This hierarchical approach allows for both localized, context-specific protocol
-definitions and a holistic, system-wide understanding of the agent's governing rules.
+_No module-level docstring found._
 
 
 **Public Functions:**
 
 
-- #### `def cleanup_summaries(directory)`
+- #### `def compile_protocol_directory(path_to_protocol_dir)`
 
-  > Removes temporary summary files from a protocols directory.
-
-
-- #### `def compile_centralized_knowledge_graph()`
-
-  > Finds all protocol.json files in the entire repository, loads them, and
-  > compiles them into a single, unified knowledge graph.
-
-
-- #### `def find_protocol_dirs(root_dir)`
-
-  > Finds all directories named 'protocols' within the root directory,
-  > ignoring any special-cased directories.
+  > Invokes the protocol compiler for a single directory.
+  > This function is designed to be run in a separate process for each protocol
+  > directory to ensure that compilation is modular and can be parallelized.
+  >
+  > Args:
+  >     path_to_protocol_dir (str): The absolute path to the protocol directory.
+  >
+  > Returns:
+  >     A tuple containing the result of the compilation (True for success,
+  >     False for failure) and the path of the directory that was processed.
 
 
-- #### `def generate_summary(child_agents_md_path)`
+- #### `def generate_root_agents_md(child_protocol_dirs)`
 
-  > Extracts the full, rendered protocol blocks from a child AGENTS.md file.
-  > This function finds all protocol definitions (human-readable markdown and
-  > the associated machine-readable JSON block) and concatenates them into a
-  > single string to be injected into the parent AGENTS.md.
-
-
-- #### `def get_parent_module(module_path, all_module_paths)`
-
-  > Finds the direct parent module of a given module.
+  > Generates the root AGENTS.md file, which will serve as the main entry point
+  > and index for the hierarchical protocol system.
+  >
+  > This function creates a top-level summary that links to the `AGENTS.md`
+  > files in each of the child protocol directories, making the system more
+  > discoverable and easier to navigate.
+  >
+  > Args:
+  >     child_protocol_dirs (list): A list of paths to the child protocol directories.
 
 
 - #### `def main()`
 
-  > Main function to orchestrate the hierarchical compilation.
-
-
-- #### `def run_compiler(source_dir)`
-
-  > Invokes the protocol_compiler.py script as a library.
-
-
-- #### `def run_readme_generator(source_agents_md)`
-
-  > Invokes the doc_builder.py script to generate a README.
+  > Main function to orchestrate the hierarchical compilation process.
+  >
+  > This function discovers all protocol directories, compiles them in parallel,
+  > and then generates the root `AGENTS.md` to tie them all together.
 
 
 ### `/app/tooling/knowledge_compiler.py`
@@ -841,6 +982,190 @@ enriched knowledge graph.
   > enriched graph.
 
 
+### `/app/tooling/lba_validator.py`
+
+A Linear Bounded Automaton (LBA) for validating Context-Sensitive Development Cycle (CSDC) plans.
+
+This module implements a validator that enforces the context-sensitive rules of the CSDC.
+Unlike a simple FSM, an LBA can inspect the entire input "tape" (the plan) to make
+validation decisions. This is necessary to enforce rules where the validity of one
+command depends on the presence or absence of another command elsewhere in the plan.
+
+The CSDC defines two mutually exclusive models:
+- Model A: Permits `define_set_of_names`, but forbids `define_diagonalization_function`.
+- Model B: Permits `define_diagonalization_function`, but forbids `define_set_of_names`.
+
+This validator checks for these co-occurrence constraints.
+
+
+**Public Classes:**
+
+
+- #### `class LBAValidator`
+
+  > A validator that uses LBA principles to enforce CSDC rules.
+
+
+  **Methods:**
+
+  - ##### `def validate(self, plan_content, model)`
+
+    > Validates a plan against a given CSDC model.
+    >
+    > Args:
+    >     plan_content: The string content of the plan.
+    >     model: The CSDC model to validate against ('A' or 'B').
+    >
+    > Returns:
+    >     A tuple containing a boolean indicating validity and a string with an error message.
+
+
+### `/app/tooling/lfi_ill_halting_decider.py`
+
+A tool for analyzing the termination of LFI-ILL programs.
+
+This script takes an LFI-ILL file, interprets it in a paraconsistent logic
+environment, and reports on its halting status. It does this by setting up
+a paradoxical initial state and observing how the program resolves it.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+
+**Public Classes:**
+
+
+- #### `class LfiIllHaltingDecider`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, lfi_ill_file)`
+
+  - ##### `def analyze(self)`
+
+    > Analyzes the LFI ILL program for termination.
+
+
+### `/app/tooling/lfi_udc_model.py`
+
+A paraconsistent execution model for UDC plans.
+
+This module provides the classes necessary to interpret a UDC (Un-decidable
+Computation) plan within a Logic of Formal Inconsistency (LFI). Instead of
+concrete values, the state of the machine (registers, tape, etc.) is modeled
+using paraconsistent truth values (TRUE, FALSE, BOTH, NEITHER).
+
+This allows the system to reason about paradoxical programs, such as a program
+that halts if and only if it does not halt. By executing the program under
+paraconsistent semantics, the model can arrive at a final state of `BOTH`,
+effectively demonstrating the paradoxical nature of the input without crashing.
+
+Key classes:
+- `ParaconsistentTruth`: An enum for the four truth values.
+- `ParaconsistentState`: A wrapper for a value that holds a paraconsistent truth.
+- `LFIInstruction`: A UDC instruction that operates on paraconsistent states.
+- `LFIExecutor`: A virtual machine that executes a UDC plan using LFI semantics.
+- `ParaconsistentHaltingDecider`: The main entry point that orchestrates the
+  analysis of a UDC plan.
+
+
+**Public Classes:**
+
+
+- #### `class LFIExecutor`
+
+  > A paraconsistent interpreter for UDC plans.
+  >
+  > It models the state of the UDC machine not with concrete values, but with
+  > ParaconsistentState objects. This allows it to explore the consequences
+  > of contradictory assumptions.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, instructions, labels)`
+
+  - ##### `def get_register(self, name)`
+
+    > Gets a register's state, initializing if not present.
+
+  - ##### `def run_step(self)`
+
+    > Executes a single instruction step.
+
+
+- #### `class LFIInstruction`
+
+  > A wrapper for UDC instructions to be used in the LFI Executor.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, opcode, args)`
+
+  - ##### `def __repr__(self)`
+
+  - ##### `def execute(self, executor)`
+
+    > Executes the instruction on the given LFI executor state.
+
+
+- #### `class ParaconsistentHaltingDecider`
+
+  > Analyzes a UDC plan using the LFI Executor to determine its
+  > paraconsistent halting status.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, plan_path, max_steps=100)`
+
+  - ##### `def analyze(self)`
+
+    > Runs the analysis and returns the final paraconsistent halting state.
+
+
+- #### `class ParaconsistentState`
+
+  > A variable whose truth value is modeled paraconsistently.
+  > It can be true, false, both, or neither.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, value=...)`
+
+  - ##### `def __repr__(self)`
+
+  - ##### `def is_consistent(self)`
+
+    > A state is consistent if it's not BOTH.
+
+  - ##### `def is_false(self)`
+
+    > Classical check: Is False in the value set?
+
+  - ##### `def is_true(self)`
+
+    > Classical check: Is True in the value set?
+
+
+- #### `class ParaconsistentTruth`
+
+  > Represents the four truth values in a first-degree entailment logic (FDE),
+  > which is a common foundation for Logics of Formal Inconsistency.
+
+
+  **Methods:**
+
+  - ##### `def __str__(self)`
+
+
 ### `/app/tooling/log_failure.py`
 
 A dedicated script to log a catastrophic failure event to the main activity log.
@@ -926,15 +1251,16 @@ This module is designed as a library to be controlled by an external shell
 
   - ##### `def do_finalizing(self, agent_state, analysis_content, logger)`
 
-    > Handles the finalization of the task with agent-provided analysis.
+    > Handles the finalization of the task, guiding the agent through
+    > the structured post-mortem process.
 
   - ##### `def do_generating_code(self, agent_state, logger)`
 
     > Handles the code generation state.
 
-  - ##### `def do_orientation(self, agent_state, logger)`
+  - ##### `def do_orientation(self, agent_state, logger, tools)`
 
-    > Executes orientation, including analyzing the last post-mortem.
+    > Executes orientation, including analyzing the last post-mortem and scanning the filesystem.
 
   - ##### `def do_planning(self, agent_state, plan_content, logger)`
 
@@ -960,7 +1286,7 @@ This module is designed as a library to be controlled by an external shell
 
   - ##### `def validate_plan_for_model(self, plan_content, model)`
 
-    > Validates a plan against a specific model's FSM.
+    > Validates a plan against a specific CSDC model using the LBAValidator.
 
 
 ### `/app/tooling/master_control_cli.py`
@@ -1002,6 +1328,104 @@ subsystem.
 - #### `def main()`
 
   > Prints the first command-line argument to simulate a user message.
+
+
+### `/app/tooling/pda_parser.py`
+
+A parser for pLLLU (paraconsistent Linear Logic with Undeterminedness) formulas.
+
+This script uses the PLY (Python Lex-Yacc) library to define a lexer and a
+parser for a simple, string-based representation of pLLLU formulas. It can
+handle basic atomic formulas, unary operators (like negation and consistency),
+and binary operators (like implication and conjunction).
+
+The main function `parse_formula` takes a string and returns a simple AST
+(Abstract Syntax Tree) represented as nested tuples.
+
+
+**Public Functions:**
+
+
+- #### `def AtomNode(name)`
+
+
+- #### `def BinaryOpNode(op, left, right)`
+
+
+- #### `def UnaryOpNode(op, child)`
+
+
+- #### `def p_error(p)`
+
+
+- #### `def p_formula_atom(p)`
+
+  > formula : ATOM
+
+
+- #### `def p_formula_binary(p)`
+
+  > formula : formula IMPLIES formula
+  >         | formula WITH formula
+  >         | formula PLUS formula
+
+
+- #### `def p_formula_group(p)`
+
+  > formula : LPAREN formula RPAREN
+
+
+- #### `def p_formula_unary(p)`
+
+  > formula : NOT formula
+  >         | BANG formula
+  >         | CONSISTENCY formula
+  >         | SECTION formula
+  >         | WHYNOT formula
+
+
+- #### `def parse_formula(formula_string)`
+
+  > Parses a pLLLU formula string into an AST.
+
+
+- #### `def t_ATOM(t)`
+
+  > [A-Z][A-Z0-9]*
+
+
+- #### `def t_error(t)`
+
+
+- #### `def t_newline(t)`
+
+  > \n+
+
+
+### `/app/tooling/plan_executor.py`
+
+A simple plan executor for simulating agent behavior.
+
+This script reads a plan file, parses it, and executes the commands in a
+simplified, simulated environment. It supports a limited set of tools
+(`message_user` and `run_in_bash_session`) to provide a basic demonstration
+of how an agent would execute a plan.
+
+
+**Public Functions:**
+
+
+- #### `def execute_plan(filepath)`
+
+  > Executes a plan file, simulating the agent's execution loop.
+  >
+  > Args:
+  >     filepath: The path to the plan file.
+
+
+- #### `def main()`
+
+  > Main function to run the plan executor from the command line.
 
 
 ### `/app/tooling/plan_manager.py`
@@ -1089,62 +1513,133 @@ allowing for robust and readable plan files.
   > This structure correctly handles multi-line arguments for tools.
 
 
-### `/app/tooling/protocol_compiler.py`
+### `/app/tooling/plllu_interpreter.py`
 
-Compiles source protocol files into unified, human-readable and machine-readable artifacts.
+A resource-sensitive, four-valued interpreter for pLLLU formulas.
 
-This script is the engine behind the "protocol as code" principle. It discovers,
-validates, and assembles protocol definitions from a source directory (e.g., `protocols/`)
-into high-level documents like `AGENTS.md`.
+This script implements an interpreter for the pLLLU language. It operates on
+an AST generated by the `pda_parser.py` script. The interpreter is designed
+to be resource-sensitive, meaning that each atomic formula in the initial
+context must be consumed exactly once during the evaluation of the proof.
 
-Key Functions:
-- **Discovery:** Scans a directory for source files, including `.protocol.json`
-  (machine-readable rules) and `.protocol.md` (human-readable context).
-- **Validation:** Uses a JSON schema (`protocol.schema.json`) to validate every
-  `.protocol.json` file, ensuring all protocol definitions are syntactically
-  correct and adhere to the established structure.
-- **Compilation:** Combines the human-readable markdown and the machine-readable
-  JSON into a single, cohesive Markdown file, embedding the JSON in code blocks.
-- **Documentation Injection:** Can inject other generated documents, like the
-  `SYSTEM_DOCUMENTATION.md`, into the final output at specified locations.
-- **Knowledge Graph Generation:** Optionally, it can process the validated JSON
-  protocols and serialize them into an RDF knowledge graph (in Turtle format),
-  creating a machine-queryable version of the agent's governing rules.
+The logic is four-valued, supporting TRUE, FALSE, BOTH, and NEITHER, allowing
+it to reason about paraconsistent and paracomplete states.
 
-This process ensures that `AGENTS.md` and other protocol documents are not edited
-manually but are instead generated from a validated, single source of truth,
-making the agent's protocols robust, verifiable, and maintainable.
+The core of the interpreter is the `FourValuedInterpreter` class, which
+recursively walks the AST, consuming resources from a context (a Counter of
+available atoms) and returning the resulting logical value.
 
 
 **Public Functions:**
 
 
-- #### `def compile_protocols(source_dir, target_file, schema_file, knowledge_graph_file=None, autodoc_file=None)`
+- #### `def create_context_from_string(s)`
 
-  > Reads all .protocol.json and corresponding .protocol.md files from the
-  > source directory, validates them, and compiles them into a target markdown file.
-  > Optionally, it can also generate a machine-readable knowledge graph.
+  > Helper to create a context from a string like 'A:T, B:B'.
+  > The interpreter now expects the context to be a dictionary mapping
+  > the unique atom tuple (name, id) to its LogicValue.
+
+
+- #### `def patch_atom_values(node, context_values)`
+
+  > Recursively patches the AST to replace atom names with (value, id) tuples.
+  > This is a hack for testing, as the parser doesn't know about logic values.
+
+
+
+**Public Classes:**
+
+
+- #### `class FourValuedInterpreter`
+
+  > Interprets a pLLLU AST using a four-valued logic and a resource-passing model.
+
+
+  **Methods:**
+
+  - ##### `def interpret(self, ast_node, initial_context)`
+
+    > Main entry point for interpreting an AST.
+    > The initial context is a Counter of atoms available.
+
+
+- #### `class InterpretationError`
+
+  > Custom exception for errors during interpretation.
+
+
+- #### `class LogicValue`
+
+
+### `/app/tooling/plllu_runner.py`
+
+A command-line runner for pLLLU files.
+
+This script provides an entry point for executing `.plllu` files. It
+integrates the pLLLU lexer, parser, and interpreter to execute the logic
+defined in a given pLLLU source file and print the result.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > This tool provides a command-line interface for running .plllu files.
+  > It integrates the pLLLU lexer, parser, and interpreter to execute
+  > the logic defined in a given pLLLU source file.
+
+
+### `/app/tooling/pre_submit_check.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Main function to run pre-submission checks.
+
+
+- #### `def run_command(command, description)`
+
+  > Runs a command and exits if it fails.
+
+
+### `/app/tooling/protocol_compiler.py`
+
+This script now serves as the entry point for the hierarchical protocol compilation.
+It discovers all protocol modules (subdirectories within `protocols/`) and compiles
+each one into its own `AGENTS.md` file. It then generates a root `AGENTS.md`
+that links to all the compiled modules, creating a unified, navigable system.
+
+
+**Public Functions:**
+
+
+- #### `def compile_module_wrapper(path_to_protocol_dir)`
+
+
+- #### `def compile_single_module(source_dir, target_file, schema_file, knowledge_graph_file=None, autodoc_file=None)`
+
+
+- #### `def generate_root_agents_md(child_protocol_dirs)`
 
 
 - #### `def install_dependencies()`
 
-  > Checks for required packages from requirements.txt and installs them if missing.
-
 
 - #### `def load_schema(schema_file)`
 
-  > Loads the protocol JSON schema.
 
+- #### `def main_hierarchical_compiler()`
 
-- #### `def main_cli()`
-
-  > Main function to run the compiler from the command line.
+  > Main function to run the hierarchical compiler.
 
 
 - #### `def sanitize_markdown(content)`
-
-  > Sanitizes markdown content to remove potentially malicious instructions.
-  > This function removes script tags and other potentially malicious HTML/JS.
 
 
 ### `/app/tooling/protocol_updater.py`
@@ -1224,6 +1719,31 @@ standard operational procedures.
 
 
 - #### `def main()`
+
+
+### `/app/tooling/reliable_ls.py`
+
+A tool for reliably listing files and directories.
+
+This script provides a consistent, sorted, and recursive listing of files and
+directories, excluding the `.git` directory. It is intended to be a more
+reliable alternative to the standard `ls` command for agent use cases.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Main function to run the reliable_ls tool from the command line.
+
+
+- #### `def reliable_ls(start_path='.')`
+
+  > Recursively lists all directories and files under the start_path.
+  >
+  > Args:
+  >     start_path: The directory to start the traversal from.
 
 
 ### `/app/tooling/reorientation_manager.py`
@@ -1315,12 +1835,14 @@ master controller.
 **Public Functions:**
 
 
-- #### `def plan_deep_research(topic)`
+- #### `def plan_deep_research(topic, research_id)`
 
-  > Generates a multi-step, FSM-compliant plan for conducting deep research.
+  > Generates a multi-step, FSM-compliant plan for conducting deep research
+  > using the official project templates.
   >
   > Args:
   >     topic (str): The research topic.
+  >     research_id (str): A unique ID for this research task.
   >
   > Returns:
   >     str: A string containing the executable plan.
@@ -1434,6 +1956,11 @@ rate tracking or tool usage anti-patterns) to be added as the system evolves.
 - #### `def main()`
 
   > Main function to run the self-improvement analysis CLI.
+
+
+- #### `def run_self_improvement_task(model)`
+
+  > Invokes the agent_shell.py to run a self-improvement task for a specific model.
 
 
 ### `/app/tooling/standard_agents_compiler.py`
@@ -1589,6 +2116,126 @@ and understand the structure of the repository without having to read every file
   > Main function to generate and save the symbol map.
 
 
+### `/app/tooling/udc_orchestrator.py`
+
+An orchestrator for executing Unrestricted Development Cycle (UDC) plans.
+
+This script provides a sandboxed environment for running UDC plans, which are
+low-level assembly-like programs that can perform Turing-complete computations.
+The orchestrator acts as a virtual machine with a tape-based memory model,
+registers, and a set of simple instructions.
+
+To prevent non-termination and other resource-exhaustion issues, the
+orchestrator imposes strict limits on the number of instructions executed,
+the amount of memory used, and the total wall-clock time.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+
+**Public Classes:**
+
+
+- #### `class Instruction`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, opcode, args)`
+
+  - ##### `def __repr__(self)`
+
+
+- #### `class UDCOrchestrator`
+
+  > Executes an Unrestricted Development Cycle (UDC) plan within a sandboxed
+  > Turing Machine-like environment with strict resource limits.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, plan_path, max_instructions=10000, max_memory_cells=1000, max_time_s=5)`
+
+  - ##### `def run(self)`
+
+    > Parses and runs the UDC plan until it halts or a limit is exceeded.
+
+
+---
+
+## `/app/tooling/agent_smith/` Directory
+
+### `/app/tooling/agent_smith/__init__.py`
+
+_No module-level docstring found._
+
+### `/app/tooling/agent_smith/generate_and_test.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def apply_mutation(sandbox_path, mutation_target)`
+
+  > Applies the specified mutation to the sandboxed sources.
+
+
+- #### `def cleanup_sandbox(sandbox_path)`
+
+  > Deletes the sandbox directory.
+
+
+- #### `def compile_variant(sandbox_path, python_path_ext)`
+
+  > Runs the hierarchical compiler inside the sandbox.
+
+
+- #### `def copy_sources(root_dir, sandbox_path)`
+
+  > Copies the necessary source files and compiler into the sandbox.
+
+
+- #### `def create_sandbox(root_dir, sandbox_path)`
+
+  > Creates a clean sandbox directory.
+
+
+- #### `def get_repo_root()`
+
+  > Gets the absolute path of the repository root.
+
+
+- #### `def install_dependencies(sandbox_path)`
+
+  > Installs dependencies from requirements.txt into the sandbox.
+
+
+- #### `def log_step(message)`
+
+  > Prints a formatted step message.
+
+
+- #### `def main()`
+
+  > Main function to orchestrate the generation and testing process.
+
+
+- #### `def run_command(command, cwd)`
+
+  > Runs a command in a subprocess and handles errors.
+
+
+- #### `def verify_variant(variant_path, mutation_check_string)`
+
+  > Performs a basic verification to check the variant was created correctly.
+
+
 ---
 
 ## `/app/utils/` Directory
@@ -1596,6 +2243,53 @@ and understand the structure of the repository without having to read every file
 ### `/app/utils/__init__.py`
 
 _No module-level docstring found._
+
+### `/app/utils/file_system_utils.py`
+
+This module provides a centralized and standardized interface for all file
+system operations within the agent's environment. It aims to address issues of
+inconsistent path handling, duplicated file discovery logic, and ad-hoc
+filtering by providing a single, reliable implementation for these common tasks.
+
+Core Features:
+- **Standardized Path Construction:** All path manipulations are handled using
+  `os.path.join` to ensure cross-platform compatibility.
+- **Centralized File Discovery:** A single function for finding files based on
+  patterns, with built-in support for a centralized ignore mechanism.
+- **Robust Error Handling:** Functions are designed to gracefully handle common
+  file system errors, such as permission issues or broken links.
+- **Centralized Ignore Mechanism:** File and directory filtering is managed via
+  a `.julesignore` file in the repository root, providing a single source of
+  truth for exclusion patterns.
+
+
+**Public Functions:**
+
+
+- #### `def find_files(pattern, base_dir=ROOT_DIR, recursive=True)`
+
+  > Finds all files matching a given pattern, respecting the .julesignore file.
+  > Can perform both recursive and non-recursive searches.
+
+
+- #### `def find_protocol_dirs(root_dir)`
+
+  > Finds all directories within the root_dir that contain at least one
+  > `.protocol.json` or `.protocol.md` file, indicating they are protocol modules.
+
+
+- #### `def get_ignore_patterns(base_dir)`
+
+  > Loads ignore patterns from the .julesignore file in the specified base directory.
+  > Returns two sets of patterns: one for directories and one for files.
+
+
+- #### `def get_protocol_dir_name(dir_path)`
+
+  > Returns a human-readable name for a protocol directory.
+  > If it's the root protocols directory, it returns 'root'.
+  > Otherwise, it returns the directory's base name.
+
 
 ### `/app/utils/logger.py`
 
@@ -1644,7 +2338,7 @@ and self-improvement activities.
     >     schema_path (str): The path to the Markdown file containing the logging schema.
     >     log_path (str): The path to the log file to be written.
 
-  - ##### `def log(self, phase, task_id, plan_step, action_type, action_details, outcome_status, outcome_message='', error_details=None, evidence='')`
+  - ##### `def log(self, phase, task_id, plan_step, action_type, action_details, outcome_status, outcome_message='', error_details=None, evidence='', context=None)`
 
     > Constructs, validates, and writes a log entry.
     >
@@ -1658,6 +2352,7 @@ and self-improvement activities.
     >     outcome_message (str, optional): A message describing the outcome. Defaults to "".
     >     error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.
     >     evidence (str, optional): Citation for the action. Defaults to "".
+    >     context (dict, optional): The agent's internal context. Defaults to None.
     >
     > Raises:
     >     ValidationError: If the generated log entry does not conform to the schema.

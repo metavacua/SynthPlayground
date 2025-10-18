@@ -1,3 +1,9 @@
+# IMPORTANT NOTE
+# This document describes a repository architecture designed for a generic,
+# externally-hosted AI coding assistant (like the one editing this file).
+# The agent is NOT part of this repository. This document outlines a
+# structured environment to make the agent's work more reliable and verifiable.
+
 ﻿Architecting the Symbiont: A Step-by-Step Manual for an AI-Centric Development Environment
 
 
@@ -6,22 +12,22 @@
 Part 1: The Foundational Architecture: A Self-Aware Monorepo for Human-AI Collaboration
 
 
-This section establishes the repository architecture as the cornerstone of the strategy. The design is justified not only by conventional software engineering principles but by the primary requirement of creating a legible, navigable, and computationally tractable environment for an AI agent, Jules. The architecture's primary function is to serve as the initial and most critical mitigation against the agent's documented cognitive limitations.
+This section establishes the repository architecture as the cornerstone of the strategy. The design is justified not only by conventional software engineering principles but by the primary requirement of creating a legible, navigable, and computationally tractable environment for an AI agent, the agent. The architecture's primary function is to serve as the initial and most critical mitigation against the agent's documented cognitive limitations.
 
 
 1.1 Rationale for a Monolithic Architecture in an AI-Driven Context
 
 
 The initial architectural decision—choosing between a multi-repository or monolithic repository (monorepo) structure—is paramount. For a research initiative involving a large, interconnected codebase of 3 to 10 million tokens across diverse paradigms, a monorepo is the superior choice.1 This structure centralizes the entire codebase, which yields significant advantages in code reusability, dependency management, and the ability to perform atomic changes that span multiple projects.1 While a multi-repo architecture offers project isolation, it introduces complexities in managing cross-repository dependencies and coordinating changes, which are untenable for an AI agent with known contextual deficiencies.3
-The selection of a monorepo is the first and most critical step in counteracting Jules' profound "environmental awareness" deficit.3 The agent's documented inability to build a semantic model of a project's architecture, parse its dependency graph, or even comprehend symbols outside of its immediate, narrow context window makes a distributed, multi-repository architecture an immediate non-starter.3 Such a setup would introduce network-level complexity and require the agent to reason about multiple, disconnected version histories—a class of problem it is entirely unequipped to handle. A monorepo, by contrast, eliminates this entire category of challenges by definition. It creates a single, contained universe with a unified history, transforming the problem of contextual understanding from an impossible, distributed systems challenge into a difficult but ultimately tractable local analysis problem. By placing all relevant context within a single version-controlled boundary, we establish the necessary precondition for any subsequent attempt to index, analyze, and reason about the codebase.
+The selection of a monorepo is the first and most critical step in counteracting the agent' profound "environmental awareness" deficit.3 The agent's documented inability to build a semantic model of a project's architecture, parse its dependency graph, or even comprehend symbols outside of its immediate, narrow context window makes a distributed, multi-repository architecture an immediate non-starter.3 Such a setup would introduce network-level complexity and require the agent to reason about multiple, disconnected version histories—a class of problem it is entirely unequipped to handle. A monorepo, by contrast, eliminates this entire category of challenges by definition. It creates a single, contained universe with a unified history, transforming the problem of contextual understanding from an impossible, distributed systems challenge into a difficult but ultimately tractable local analysis problem. By placing all relevant context within a single version-controlled boundary, we establish the necessary precondition for any subsequent attempt to index, analyze, and reason about the codebase.
 
 
 1.2 The AI-Optimized Directory Structure
 
 
 A monorepo's effectiveness is contingent upon a clear and logical directory structure. This structure is not merely for human organizational convenience; it serves as a form of semantic partitioning of the problem space, providing crucial structural cues for the AI agent.1 The proposed layout is designed with this dual purpose in mind, separating deployable applications, shared internal libraries, tooling, and a novel directory dedicated to housing AI-specific knowledge artifacts. This design anticipates the future inclusion of Rust and WebAssembly projects, providing a scalable and forward-oriented foundation.4
-The clear separation between directories like projects/ (deployable units) and packages/ (internal dependencies) offers a structural heuristic that aids in dependency analysis. While Jules' native context-gathering mechanism relies on superficial text similarity between files—a flawed and unreliable method—a well-defined structure increases the probability that textually similar files are also logically related, providing a weak but useful signal.3
-More significantly, the introduction of a dedicated knowledge_core/ directory creates a stable, predictable location for the agent's externalized memory. This design choice allows us to bypass Jules' flawed file discovery mechanism entirely. Instead of relying on the agent to find relevant context, we can explicitly instruct it to query this single, known location, providing a reliable entry point for all its contextual reasoning tasks. This directory becomes the agent's designated "memory palace," a stable source of truth that is programmatically kept in sync with the codebase.
+The clear separation between directories like projects/ (deployable units) and packages/ (internal dependencies) offers a structural heuristic that aids in dependency analysis. While the agent' native context-gathering mechanism relies on superficial text similarity between files—a flawed and unreliable method—a well-defined structure increases the probability that textually similar files are also logically related, providing a weak but useful signal.3
+More significantly, the introduction of a dedicated knowledge_core/ directory creates a stable, predictable location for the agent's externalized memory. This design choice allows us to bypass the agent' flawed file discovery mechanism entirely. Instead of relying on the agent to find relevant context, we can explicitly instruct it to query this single, known location, providing a reliable entry point for all its contextual reasoning tasks. This directory becomes the agent's designated "memory palace," a stable source of truth that is programmatically kept in sync with the codebase.
 The proposed directory structure is as follows:
 
 
@@ -68,7 +74,7 @@ The following table provides a detailed justification for this structure, outlin
 Table 1: Monorepo Directory Structure Justification
 Directory
 	Description for Human Developers
-	Rationale for AI Agent (Jules)
+	Rationale for AI Agent (the agent)
 	/.github/workflows/
 	Centralized CI/CD automation scripts for building, testing, and deploying projects.
 	Location for agent-specific workflows that generate and maintain the knowledge artifacts.
@@ -79,7 +85,7 @@ Directory
 	Shared libraries and modules consumed by projects (e.g., the core logical language implementation).
 	Represents the nodes in the internal dependency graph, crucial for impact analysis.
 	/tooling/
-	Houses build scripts, code generators, and the tools Jules will develop for itself.
+	Houses build scripts, code generators, and the tools the agent will develop for itself.
 	The agent's own sandbox and toolkit, where it can create and refine its capabilities.
 	/knowledge_core/
 	Stores machine-readable artifacts generated by CI (dependency graphs, symbol maps, ASTs).
@@ -89,29 +95,29 @@ Directory
 	Source corpus for the llms.txt artifact, providing high-level conceptual and procedural knowledge.
 	
 
-Part 2: The Knowledge Core: Generating Actionable Intelligence for Jules
+Part 2: The Knowledge Core: Generating Actionable Intelligence for the agent
 
 
-This section details the construction of a suite of machine-readable artifacts—the "Knowledge Core"—designed to serve as a direct, high-fidelity replacement for Jules' deficient internal world model. Each artifact is generated automatically by CI/CD workflows, ensuring it remains a perfect reflection of the current state of the codebase. This externalized "world model" is the central mechanism by which we will overcome the agent's most critical limitations.
+This section details the construction of a suite of machine-readable artifacts—the "Knowledge Core"—designed to serve as a direct, high-fidelity replacement for the agent' deficient internal world model. Each artifact is generated automatically by CI/CD workflows, ensuring it remains a perfect reflection of the current state of the codebase. This externalized "world model" is the central mechanism by which we will overcome the agent's most critical limitations.
 
 
 2.1 Building the Project Dependency Graph
 
 
-A core deficiency of Jules is its inability to parse a project's complete dependency graph, leaving it blind to the relationships between modules and packages.3 To remedy this, we will generate an explicit, machine-readable graph. While industrial-strength monorepo tools like Bazel and Pants offer sophisticated dependency analysis, their complexity and specialized configuration languages (e.g., Starlark) present a steep learning curve for an LLM.6 The primary consumer of this artifact is Jules, which excels at processing structured text formats like JSON. Therefore, a simpler, custom-generated JSON graph is strategically superior, as it prioritizes
+A core deficiency of the agent is its inability to parse a project's complete dependency graph, leaving it blind to the relationships between modules and packages.3 To remedy this, we will generate an explicit, machine-readable graph. While industrial-strength monorepo tools like Bazel and Pants offer sophisticated dependency analysis, their complexity and specialized configuration languages (e.g., Starlark) present a steep learning curve for an LLM.6 The primary consumer of this artifact is the agent, which excels at processing structured text formats like JSON. Therefore, a simpler, custom-generated JSON graph is strategically superior, as it prioritizes
 AI-legibility over build optimization.7 Instructing an LLM to "find all nodes connected to 'X' in this JSON" is a straightforward text-based task, whereas asking it to parse and reason about a Bazel BUILD file is a higher-order cognitive challenge it is more likely to fail.
 The generation of this graph will be handled by a custom script located in /tooling/dependency-graph-generator/ and executed by a GitHub Actions workflow. This script will perform a multi-language analysis of the codebase:
 1. Utilize tree-sitter to parse import, export, and require statements in JavaScript, TypeScript, and Python files to identify file-level dependencies.8
 2. Parse the ASDF (.asd) system definition files to map dependencies within the Common Lisp projects.
 3. Parse all Cargo.toml files to understand the Rust workspace structure and dependencies between crates.4
 4. Analyze package.json files to identify dependencies on both external NPM packages and internal packages (including the compiled WebAssembly modules).
-The script will aggregate this information into a single, unified knowledge_core/dependency_graph.json file. This file will represent the entire repository as a directed graph, with nodes for each file/module and edges representing dependencies. This artifact provides Jules with a complete and accurate map of the project's structure, enabling it to perform impact analysis for any proposed change.
+The script will aggregate this information into a single, unified knowledge_core/dependency_graph.json file. This file will represent the entire repository as a directed graph, with nodes for each file/module and edges representing dependencies. This artifact provides the agent with a complete and accurate map of the project's structure, enabling it to perform impact analysis for any proposed change.
 
 
 2.2 Creating a Universal Symbol Map with Ctags
 
 
-Jules' environmental awareness is limited to the active file and a small cache of recently opened files, preventing it from recognizing project-specific functions and symbols unless they are manually brought into its context window.3 A universal symbol map provides a direct and comprehensive solution to this problem. We will use Universal Ctags, a powerful, multi-language tool capable of indexing the entire codebase and, crucially, outputting the results in a structured JSON format.9
+the agent' environmental awareness is limited to the active file and a small cache of recently opened files, preventing it from recognizing project-specific functions and symbols unless they are manually brought into its context window.3 A universal symbol map provides a direct and comprehensive solution to this problem. We will use Universal Ctags, a powerful, multi-language tool capable of indexing the entire codebase and, crucially, outputting the results in a structured JSON format.9
 A GitHub Actions workflow will execute on every push to the main branch, running the following command:
 ctags -R --languages=javascript,python,lisp,latex,rust --output-format=json --fields=+nKzSl -f knowledge_core/symbols.json.
 * -R: Recursively scan the entire repository.
@@ -125,13 +131,13 @@ The resulting symbols.json artifact fundamentally transforms the nature of Retri
 2.3 Deep Structural Analysis via Abstract Syntax Trees (ASTs)
 
 
-Jules' architectural flaw of treating code as "Context-as-Text" rather than "Context-as-Graph" prevents it from understanding the syntax and structure of the code it processes.3 This "semantic blindness" is the root cause of its most critical failures, such as violating the Rules of Hooks in React.3 Abstract Syntax Trees (ASTs) provide the deep structural understanding that the agent lacks, representing code not as a flat string but as a hierarchical tree of syntactic constructs.
+the agent' architectural flaw of treating code as "Context-as-Text" rather than "Context-as-Graph" prevents it from understanding the syntax and structure of the code it processes.3 This "semantic blindness" is the root cause of its most critical failures, such as violating the Rules of Hooks in React.3 Abstract Syntax Trees (ASTs) provide the deep structural understanding that the agent lacks, representing code not as a flat string but as a hierarchical tree of syntactic constructs.
 We will leverage tree-sitter, a robust and incremental parsing system, to generate ASTs for the entire codebase.11 A path-triggered GitHub Actions workflow, using the
 tree-sitter/setup-action for environment configuration, will execute whenever source files in projects/ or packages/ are modified.13 For each changed file, the workflow will:
 1. Identify the correct tree-sitter grammar based on the file extension.
 2. Parse the file to generate its AST.
 3. Save the resulting AST in a structured, machine-readable format (such as JSON or S-expressions) to a corresponding path within knowledge_core/asts/, mirroring the project's directory structure (e.g., knowledge_core/asts/projects/react-app/src/index.js.ast).
-The availability of these ASTs is the single most important prerequisite for achieving the project's goal of "automated tool development." To build a tool, such as a linter for the novel non-classical language, Jules must be able to reason about the language's grammar and structure. The ASTs provide this capability directly. An agent can be instructed to perform tasks like: "Analyze the ASTs of all .ncl files. Identify all nodes of type junction_sequent. Verify that they have exactly two children of type formula." This is the core logic of a linting rule, and it is impossible to formulate, let alone execute, without the structural awareness provided by ASTs.10
+The availability of these ASTs is the single most important prerequisite for achieving the project's goal of "automated tool development." To build a tool, such as a linter for the novel non-classical language, the agent must be able to reason about the language's grammar and structure. The ASTs provide this capability directly. An agent can be instructed to perform tasks like: "Analyze the ASTs of all .ncl files. Identify all nodes of type junction_sequent. Verify that they have exactly two children of type formula." This is the core logic of a linting rule, and it is impossible to formulate, let alone execute, without the structural awareness provided by ASTs.10
 
 
 2.4 Curating the LLM-Friendly Knowledge Base (llms.txt)
@@ -140,20 +146,20 @@ The availability of these ASTs is the single most important prerequisite for ach
 The structured artifacts—graphs, symbols, and ASTs—capture the "what" and "how" of the codebase's structure. However, they do not capture the "why"—the intent, the architectural rationale, and the philosophical underpinnings of the project. This is particularly critical for a codebase rooted in "pluralistic non-classical logical programming paradigms." To provide this essential conceptual context, we will curate a dedicated, LLM-friendly knowledge base.
 Drawing on the practice of providing LLMs with documentation in flat .txt files, we will create a knowledge_core/llms.txt artifact.14 A CI workflow will concatenate all human-readable documentation from the
 /docs/ directory—including architectural decision records, tutorials on the logical languages, and style guides—into this single file. The source documents will be written in Markdown, a format well-suited for structuring information for LLM consumption, and will adhere to best practices for technical documentation: clear, concise, outcome-focused, and rich with examples.15
-This llms.txt artifact serves as a complementary knowledge source, addressing Jules' stale 2022 knowledge cutoff by providing an up-to-date, project-specific corpus for high-level RAG.3 When asked to refactor a function, Jules can use the AST to understand its structure and the
+This llms.txt artifact serves as a complementary knowledge source, addressing the agent' stale 2022 knowledge cutoff by providing an up-to-date, project-specific corpus for high-level RAG.3 When asked to refactor a function, the agent can use the AST to understand its structure and the
 llms.txt file to understand the purpose of the function within the broader logical framework, leading to a much more semantically correct and intentional refactoring. A truly intelligent agent requires both structural and conceptual knowledge; the Knowledge Core is designed to provide this complete, multi-modal view.
-The following table summarizes the artifacts that constitute the Knowledge Core, explicitly linking each to the specific deficiency in Jules it is designed to mitigate.
+The following table summarizes the artifacts that constitute the Knowledge Core, explicitly linking each to the specific deficiency in the agent it is designed to mitigate.
 Table 2: Knowledge Core Artifacts and Their Purpose
 
 
 Artifact
 	Generation Tool
 	Format
-	Purpose & Mitigation of Jules' Weakness
+	Purpose & Mitigation of the agent' Weakness
 	dependency_graph.json
 	Custom tree-sitter Script
 	JSON
-	Mitigates: Lack of dependency graph analysis. Provides an explicit, machine-readable map of project relationships, bypassing the need for Jules to infer them.3
+	Mitigates: Lack of dependency graph analysis. Provides an explicit, machine-readable map of project relationships, bypassing the need for the agent to infer them.3
 	symbols.json
 	Universal Ctags
 	JSON
@@ -201,21 +207,21 @@ The ci-rust-wasm.yml workflow will be triggered by changes to source files withi
 2. Execute wasm-pack build --target web within the package's directory. This command orchestrates the compilation of the Rust code to a .wasm binary and, crucially, generates the necessary JavaScript "glue" code, TypeScript type definitions, and a package.json file.
 3. This entire output is placed in a pkg/ subdirectory within the Rust package.
 The package.json generated by wasm-pack is the critical bridge that allows our dependency graph to seamlessly cross the boundary from the JavaScript ecosystem to the Rust ecosystem. The monorepo's top-level package manager (e.g., Yarn Workspaces) will recognize packages/rust-wasm-module/pkg as a local package. The React application can then declare a dependency on this package in its own package.json.5 When the
-dependency-graph.json generator runs, it will parse these package.json files and create a direct, explicit edge in the graph from the JavaScript-based React project to the Rust-based WebAssembly package. This unified, cross-language view is essential for enabling Jules to reason about the full impact of a change—for instance, understanding that modifying a function signature in the Rust code will necessitate changes in the React frontend that consumes it.
+dependency-graph.json generator runs, it will parse these package.json files and create a direct, explicit edge in the graph from the JavaScript-based React project to the Rust-based WebAssembly package. This unified, cross-language view is essential for enabling the agent to reason about the full impact of a change—for instance, understanding that modifying a function signature in the Rust code will necessitate changes in the React frontend that consumes it.
 
 
 Part 4: The Agent's Charter: Crafting the Master Instruction Set for Self-Improvement
 
 
-This section directly addresses the user's core request to improve the instruction for Jules. The original high-level prompt is deconstructed and re-engineered into a precise, actionable, and algorithm-like directive that explicitly leverages the Knowledge Core. This new instruction set, stored in the root AGENTS.md file, serves as the agent's charter, guiding it through a rigorous process of contextualization, planning, self-correction, and learning.
+This section directly addresses the user's core request to improve the instruction for the agent. The original high-level prompt is deconstructed and re-engineered into a precise, actionable, and algorithm-like directive that explicitly leverages the Knowledge Core. This new instruction set, stored in the root AGENTS.md file, serves as the agent's charter, guiding it through a rigorous process of contextualization, planning, self-correction, and learning.
 
 
 4.1 Analysis of the Original Instruction
 
 
-The original prompt contains valuable high-level goals: "Re-evaluate your plan with your critic," "perform a post-mortem," "adhere to best practices," and "use RAG strategies." While these represent sound principles for an advanced agent, they are not executable instructions for an AI with Jules' documented limitations.3 They suffer from a critical "abstraction gap"—they state
+The original prompt contains valuable high-level goals: "Re-evaluate your plan with your critic," "perform a post-mortem," "adhere to best practices," and "use RAG strategies." While these represent sound principles for an advanced agent, they are not executable instructions for an AI with the agent' documented limitations.3 They suffer from a critical "abstraction gap"—they state
 what to do but provide no information on how to do it within the context of the provided environment.
-An instruction like "consult with industry standards" is functionally impossible for an agent whose knowledge base is frozen in 2022 and which lacks the ability to perform real-time web searches.3 Similarly, "perform rubber duck debugging" relies on an intuitive, internal process of self-reflection that a model like Jules cannot be assumed to possess. The original prompt fails because it presumes a level of implicit knowledge and autonomous reasoning capability that the agent does not have. The revised instruction must bridge this abstraction gap by replacing every abstract command with a concrete procedure that references a specific artifact in the Knowledge Core.
+An instruction like "consult with industry standards" is functionally impossible for an agent whose knowledge base is frozen in 2022 and which lacks the ability to perform real-time web searches.3 Similarly, "perform rubber duck debugging" relies on an intuitive, internal process of self-reflection that a model like the agent cannot be assumed to possess. The original prompt fails because it presumes a level of implicit knowledge and autonomous reasoning capability that the agent does not have. The revised instruction must bridge this abstraction gap by replacing every abstract command with a concrete procedure that references a specific artifact in the Knowledge Core.
 
 
 4.2 The Revised, Multi-Stage Instruction Protocol
@@ -224,7 +230,7 @@ An instruction like "consult with industry standards" is functionally impossible
 The new master instruction set is formulated as a detailed, multi-stage algorithm. It is structured in Markdown within AGENTS.md to be both human-readable and easily parsed by the LLM.15 It guides the agent through a formal process, transforming vague goals into a sequence of verifiable operations on known data sources.
 ________________
 AGENTS.md
-Subject: Jules Agent Protocol v1.0
+Subject: the agent Agent Protocol v1.0
 Objective: To provide a systematic protocol for task execution, self-correction, and knowledge acquisition within this repository. Adherence to this protocol is mandatory for all operations.
 Phase 1: Deconstruction & Contextualization
 1. Task Ingestion: Receive the user-provided task.
@@ -278,7 +284,7 @@ The purpose of the agent's logs extends beyond human debugging; they are a recor
 A LOGGING_SCHEMA.md file in the repository root will define the required schema for every log entry. This ensures consistency and allows for programmatic analysis of the agent's behavior. The schema will capture not only the action taken but also the agent's cognitive state at the time of the action.
 Key fields in the activity.log.jsonl schema will include:
 * timestamp_iso8601: An ISO 8601 formatted timestamp, providing an unambiguous record of when the event occurred.21
-* agent_id: A unique identifier for the specific Jules instance or session performing the task.
+* agent_id: A unique identifier for the specific the agent instance or session performing the task.
 * task_id: A unique identifier for the overall task assigned by the user.
 * plan_step_id: The specific step number from the agent's generated plan, allowing actions to be traced back to their original intent.
 * action_type: A standardized enum representing the action taken (e.g., FILE_READ, FILE_WRITE, TOOL_EXEC, RAG_QUERY, CRITIC_INVOCATION).
@@ -287,7 +293,7 @@ Key fields in the activity.log.jsonl schema will include:
 * critic_feedback: If the action was preceded by a critical review, this field contains the output from the critic model.
 * status: The outcome of the action (SUCCESS, FAILURE, RETRY).
 * output_summary: A brief, machine-generated summary of the action's result (e.g., hash of file contents after a write, exit code of a tool).
-This rich, structured log is more than a simple record; it is a high-quality dataset of (context, reasoning, action, outcome) tuples. This corpus is an invaluable asset, serving as a bespoke training dataset that can be used for future fine-tuning of Jules or its successors. The system is designed to document its own problem-solving process in a format that is ideal for machine learning, effectively generating its own improvement data as a natural byproduct of its operation.
+This rich, structured log is more than a simple record; it is a high-quality dataset of (context, reasoning, action, outcome) tuples. This corpus is an invaluable asset, serving as a bespoke training dataset that can be used for future fine-tuning of the agent or its successors. The system is designed to document its own problem-solving process in a format that is ideal for machine learning, effectively generating its own improvement data as a natural byproduct of its operation.
 
 
 5.2 Operationalizing the Feedback Cycle and Meta-RAG
@@ -298,9 +304,9 @@ This is achieved by introducing a "Meta-RAG" step into the agent's master protoc
 [Instruction] "Before beginning a new task, perform a RAG query against the logs/ directory. Search for log entries and postmortem.md reports from past tasks that are semantically similar to the current task (based on keywords from the new task description). Analyze the critic_feedback, status, and postmortem.md summaries from these past tasks to identify previously encountered failure patterns, successful strategies, and efficient tool usage. You must explicitly state in your new plan how you will leverage these historical lessons to avoid repeating past failures and to emulate past successes."
 This "Meta-RAG" step is the crucial mechanism that enables true learning. The agent is no longer just using the repository's code and documentation as context; it is using the history of its own interactions with the repository as a primary contextual source. This allows it to learn from experience in a concrete, auditable, and data-driven way. A single feedback loop (plan -> execute -> critique) improves the outcome of one task. This second, outer feedback loop (analyze past critiques -> form new plan) allows knowledge and experience to transfer between tasks. The structured logs serve as the persistent memory medium that enables this outer loop, transforming the agent from a simple, stateless executor into a genuine learning system.
 Works cited
-1. GitHub Repository Setup for Jules
+1. GitHub Repository Setup for the agent
 2. Monorepos: The Secret Weapon of Tech Giants for Scaling Codebases | by Sam Li | Medium, accessed October 5, 2025, https://wslisam.medium.com/monorepos-the-secret-weapon-of-tech-giants-for-scaling-codebases-cb8000dba3db
-3. Jules Environment Limitations Analysis
+3. the agent Environment Limitations Analysis
 4. Building a Monorepo with Rust - Earthly Blog - Earthly.dev, accessed October 5, 2025, https://earthly.dev/blog/rust-monorepo/
 5. Web Audio Effect Library with Rust and WASM - Ryosuke, accessed October 5, 2025, https://whoisryosuke.com/blog/2025/web-audio-effect-library-with-rust-and-wasm
 6. Top 5 Monorepo Tools for 2025 | Best Dev Workflow Tools - Aviator, accessed October 5, 2025, https://www.aviator.co/blog/monorepo-tools/

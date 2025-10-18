@@ -49,23 +49,60 @@ def get_ignore_patterns(base_dir):
     return dir_patterns, file_patterns
 
 
-def find_files(pattern, base_dir=ROOT_DIR):
+def find_files(pattern, base_dir=ROOT_DIR, recursive=True):
     """
     Finds all files matching a given pattern, respecting the .julesignore file.
+    Can perform both recursive and non-recursive searches.
     """
     dir_patterns, file_patterns = get_ignore_patterns(base_dir)
     matches = []
     try:
-        for root, dirnames, filenames in os.walk(base_dir, topdown=True):
-            # Exclude ignored directories from traversal
-            dirnames[:] = [d for d in dirnames if not any(fnmatch.fnmatch(d, p) for p in dir_patterns)]
+        if recursive:
+            for root, dirnames, filenames in os.walk(base_dir, topdown=True):
+                # Exclude ignored directories from traversal
+                dirnames[:] = [d for d in dirnames if not any(fnmatch.fnmatch(d, p) for p in dir_patterns)]
 
-            for filename in filenames:
-                if any(fnmatch.fnmatch(filename, p) for p in file_patterns):
-                    continue
-                if fnmatch.fnmatch(filename, pattern):
-                    filepath = os.path.join(root, filename)
-                    matches.append(os.path.relpath(filepath, base_dir))
+                for filename in filenames:
+                    if any(fnmatch.fnmatch(filename, p) for p in file_patterns):
+                        continue
+                    if fnmatch.fnmatch(filename, pattern):
+                        filepath = os.path.join(root, filename)
+                        matches.append(os.path.relpath(filepath, base_dir))
+        else:
+            # Non-recursive search
+            for item in os.listdir(base_dir):
+                item_path = os.path.join(base_dir, item)
+                if os.path.isfile(item_path):
+                    if any(fnmatch.fnmatch(item, p) for p in file_patterns):
+                        continue
+                    if fnmatch.fnmatch(item, pattern):
+                        matches.append(item)
+
     except (IOError, OSError) as e:
         print(f"Error during file search: {e}", file=sys.stderr)
     return matches
+
+
+def find_protocol_dirs(root_dir):
+    """
+    Finds all directories within the root_dir that contain at least one
+    `.protocol.json` or `.protocol.md` file, indicating they are protocol modules.
+    """
+    protocol_dirs = set()
+    for dirpath, _, filenames in os.walk(root_dir):
+        for filename in filenames:
+            if filename.endswith(".protocol.json") or filename.endswith(".protocol.md"):
+                protocol_dirs.add(dirpath)
+                break  # Move to the next directory once one protocol file is found
+    return list(protocol_dirs)
+
+
+def get_protocol_dir_name(dir_path):
+    """
+    Returns a human-readable name for a protocol directory.
+    If it's the root protocols directory, it returns 'root'.
+    Otherwise, it returns the directory's base name.
+    """
+    if os.path.basename(dir_path) == 'protocols':
+        return 'root'
+    return os.path.basename(dir_path)

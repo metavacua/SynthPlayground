@@ -20,9 +20,11 @@ class TestKnowledgeCompiler(unittest.TestCase):
     def setUp(self):
         """Set up a temporary directory with mock files."""
         self.test_dir = tempfile.mkdtemp()
+        self.source_dir = os.path.join(self.test_dir, "postmortems")
+        os.makedirs(self.source_dir)
 
         # Mock post-mortem file
-        self.postmortem_path = os.path.join(self.test_dir, "test_postmortem.md")
+        self.postmortem_path = os.path.join(self.source_dir, "test_postmortem.md")
         postmortem_content = """
 # Post-Mortem Report
 **Task ID:** `test-task-123`
@@ -51,7 +53,7 @@ class TestKnowledgeCompiler(unittest.TestCase):
         import sys
 
         self.original_argv = sys.argv
-        sys.argv = ["tooling/knowledge_compiler.py", self.postmortem_path]
+        sys.argv = ["tooling/knowledge_compiler.py", "--source-dir", self.source_dir]
 
     def tearDown(self):
         """Clean up the temporary directory and restore original state."""
@@ -110,7 +112,9 @@ class TestKnowledgeCompilerAdvanced(unittest.TestCase):
     def setUp(self):
         """Set up a temporary directory for advanced parsing tests."""
         self.test_dir = tempfile.mkdtemp()
-        self.postmortem_path = os.path.join(self.test_dir, "advanced_postmortem.md")
+        self.source_dir = os.path.join(self.test_dir, "postmortems")
+        os.makedirs(self.source_dir)
+        self.postmortem_path = os.path.join(self.source_dir, "advanced_postmortem.md")
         # This mock post-mortem uses a different header and action format
         postmortem_content = """
 # Post-Mortem: Advanced Failure Analysis
@@ -140,7 +144,7 @@ class TestKnowledgeCompilerAdvanced(unittest.TestCase):
         import sys
 
         self.original_argv = sys.argv
-        sys.argv = ["tooling/knowledge_compiler.py", self.postmortem_path]
+        sys.argv = ["tooling/knowledge_compiler.py", "--source-dir", self.source_dir]
 
     def tearDown(self):
         """Clean up the temporary directory and restore original state."""

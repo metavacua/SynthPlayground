@@ -45,31 +45,30 @@ def load_config():
 def execute_compiler_target(target_name, target_config):
     """Executes a 'compiler' type build target."""
     compiler_path = os.path.join(ROOT_DIR, target_config["compiler"])
-    output_path = (
-        os.path.join(ROOT_DIR, target_config["output"])
-        if "output" in target_config
-        else None
-    )
-
     command = ["python3", compiler_path]
 
-    # Handle different source types based on special target names
-    if target_name == "agents":
-        pass  # Hierarchical compiler finds its own sources
-    elif target_name == "readme":
-        source_file = os.path.join(ROOT_DIR, target_config["sources"][0])
-        command.extend(["--source-file", source_file])
-        if output_path:
-            command.extend(["--output-file", output_path])
-    elif "sources" in target_config:
-        source_dir = os.path.join(ROOT_DIR, target_config["sources"][0])
-        command.extend(["--source-dir", source_dir])
-        if output_path:
-            command.extend(["--output-file", output_path])
+    # Handle sources
+    if "sources" in target_config:
+        for source in target_config["sources"]:
+            # Check if it's a directory or a file
+            if source.endswith('/'):
+                command.extend(["--source-dir", os.path.join(ROOT_DIR, source)])
+            else:
+                 command.extend(["--source-file", os.path.join(ROOT_DIR, source)])
 
+    # Handle output
+    if "output" in target_config:
+        output_path = os.path.join(ROOT_DIR, target_config["output"])
+        command.extend(["--output-file", output_path])
+
+    # Handle options
     if "options" in target_config:
         for option, value in target_config["options"].items():
-            command.extend([option, os.path.join(ROOT_DIR, value)])
+            # For options that are paths, join with ROOT_DIR
+            if isinstance(value, str) and ('file' in option or 'dir' in option):
+                 command.extend([option, os.path.join(ROOT_DIR, value)])
+            else:
+                 command.extend([option, str(value)])
 
     return command, " ".join(command)
 
