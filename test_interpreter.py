@@ -1,4 +1,5 @@
 import unittest
+import os
 from appl_ast import (
     Int,
     String,
@@ -9,6 +10,7 @@ from appl_ast import (
     App,
     Pair,
     LetPair,
+    Let,
     Inl,
     Inr,
     Case,
@@ -20,10 +22,24 @@ from appl_ast import (
     TString,
 )
 from interpreter import interpret, InterpError, Closure
-from planning import Action
+from planning import PlanningError
 
 
 class TestInterpreter(unittest.TestCase):
+    def setUp(self):
+        """Create a dummy AAL file for testing."""
+        self.aal_filepath = "tests/test.aal"
+        with open(self.aal_filepath, "w") as f:
+            f.write("fluent at_A\n")
+            f.write("fluent at_B\n")
+            f.write("action move\n")
+            f.write("move causes at_B if at_A\n")
+
+    def tearDown(self):
+        """Clean up the dummy AAL file."""
+        if os.path.exists(self.aal_filepath):
+            os.remove(self.aal_filepath)
+
     def test_literals(self):
         self.assertEqual(interpret(Int(1)), Int(1))
         self.assertEqual(interpret(String("hello")), String("hello"))
@@ -82,26 +98,24 @@ class TestInterpreter(unittest.TestCase):
         my_list = Cons(Int(1), Cons(Int(2), Nil(TInt())))
         self.assertEqual(interpret(my_list), my_list)
 
-    def test_planning_primitive(self):
-        # create_action("move", ["at A"], ["at B"])
-        program = App(
-            App(
-                App(Var("create_action"), String("move")),
-                Cons(String("at A"), Nil(TString()))
-            ),
-            Cons(String("at B"), Nil(TString()))
+    def test_aal_integration(self):
+        # This test now verifies the AAL integration.
+        program = Let(
+            "!domain", App(Var("load_domain"), String(self.aal_filepath)),
+            Let(
+                "!state1", App(Var("create_state"), Cons(String("at_A"), Nil(TString()))),
+                Let(
+                    "!state2", App(Var("apply_action"), String("move")),
+                    App(Var("is_goal"), Cons(String("at_B"), Nil(TString())))
+                )
+            )
         )
-
         result = interpret(program)
-        self.assertIsInstance(result, Action)
-        self.assertEqual(result.name, "move")
-        self.assertEqual(result.preconditions, ["at A"])
-        self.assertEqual(result.effects, ["at B"])
+        self.assertEqual(result, Bool(True))
 
     def test_homoiconicity(self):
         program = App(Var("eval"), App(Var("parse"), String('"hello"')))
         self.assertEqual(interpret(program), String("hello"))
-
 
 if __name__ == '__main__':
     unittest.main()

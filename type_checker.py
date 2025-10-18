@@ -1,13 +1,8 @@
-from appl_ast import (
-    AST, App, Bool, Case, Cons, Fun, Inl, Inr, Int, Let, LetBang, LetPair, Nil,
-    Pair, Promote, String, TAction, TBool, TExponential, TFun, TGoal, TInt,
-    TList, TProd, TState, TString, TSum, TTerm, TUnit, Term, Type, Unit, Var
-)
-
+from appl_ast import *
+from planning import *
 
 class TypeCheckError(Exception):
     pass
-
 
 class TypeChecker:
     def __init__(self):
@@ -126,7 +121,6 @@ class TypeChecker:
         else:
             raise NotImplementedError(f"Type checking not implemented for {type(term).__name__}")
 
-
 def type_check(term: Term, unrestricted_context: dict = None, linear_context: dict = None) -> Type:
     """
     Type-checks the given term in the provided contexts.
@@ -134,14 +128,14 @@ def type_check(term: Term, unrestricted_context: dict = None, linear_context: di
     checker = TypeChecker()
 
     default_unrestricted_context = {
-        'create_action': TFun(TString(), TFun(TList(TString()), TFun(TList(TString()), TAction()))),
-        'create_goal': TFun(TString(), TFun(TList(TString()), TGoal())),
-        'create_state': TFun(TList(TString()), TState()),
-        'apply_action': TFun(TState(), TFun(TAction(), TState())),
-        'is_goal': TFun(TState(), TFun(TGoal(), TBool())),
+        'load_domain': TFun(TString(), TExponential(TUnit())),
+        'create_state': TFun(TList(TString()), TExponential(TState())),
+        'apply_action': TFun(TString(), TExponential(TState())),
+        'is_goal': TFun(TList(TString()), TBool()),
+        'get_current_state': TFun(TUnit(), TList(TString())),
         'parse': TFun(TString(), TTerm()),
         'unparse': TFun(TTerm(), TString()),
-        'eval': TFun(TTerm(), TTerm()),  # This is a simplification
+        'eval': TFun(TTerm(), TTerm()), # This is a simplification
     }
 
     if unrestricted_context:
