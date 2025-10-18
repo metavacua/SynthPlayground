@@ -77,27 +77,6 @@ Adherence to this protocol is not optional. It is a fundamental step in the deve
 
 ---
 
-# Protocol: `reset_all` Prohibition
-
-**ID:** `reset-all-prohibition-001`
-
-## 1. Description
-
-This protocol establishes a strict and unconditional prohibition on the use of the `reset_all` tool. This tool is considered a legacy, high-risk command that is no longer permitted in any workflow.
-
-## 2. Rationale
-
-The `reset_all` tool has been the cause of multiple catastrophic failures, leading to the complete loss of work and the inability to complete tasks. Its behavior is too destructive and unpredictable for a production environment. More granular and safer tools are available for workspace management. This protocol serves as a hard-coded safeguard to prevent any future use of this tool.
-
-## 3. Rules
-
-### Rule `no-reset-all`
-
--   **Description:** The `reset_all` tool is strictly forbidden under all circumstances.
--   **Enforcement:** The `master_control.py` orchestrator will programmatically block any attempt to call `reset_all` and will immediately terminate the task with a critical error. This is not a rule for the agent to interpret, but a hard-coded system constraint.
-
----
-
 ```json
 {
   "protocol_id": "best-practices-001",
@@ -215,13 +194,15 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
 ```json
 {
   "protocol_id": "reset-all-prohibition-001",
-  "protocol_name": "Prohibition of reset_all Tool",
-  "description": "A high-priority protocol that unconditionally forbids the use of the `reset_all` tool.",
+  "description": "This protocol establishes a strict and unconditional prohibition on the use of the `reset_all` tool. This tool is considered a legacy, high-risk command that is no longer permitted in any workflow.",
   "rules": [
     {
       "rule_id": "no-reset-all",
-      "description": "The `reset_all` tool is strictly forbidden under all circumstances. It is a legacy tool that has been superseded by more granular and safer methods of workspace management. Its use is considered a critical failure.",
-      "enforcement": "This rule is enforced by the `master_control.py` orchestrator, which will immediately terminate the workflow with an error if an attempt is made to call this tool."
+      "description": "The `reset_all` tool is strictly forbidden under all circumstances.",
+      "effect": "deny",
+      "tool_name": [
+        "reset_all"
+      ]
     }
   ],
   "associated_tools": [

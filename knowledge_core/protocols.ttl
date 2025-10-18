@@ -29,7 +29,7 @@
 
 <file:///app/compliance/protocols/reset-all-prohibition-001> proto:associatedTool <file:///app/compliance/protocols/reset_all> ;
     proto:hasRule <file:///app/compliance/protocols/no-reset-all> ;
-    schema:description "A high-priority protocol that unconditionally forbids the use of the `reset_all` tool." .
+    schema:description "This protocol establishes a strict and unconditional prohibition on the use of the `reset_all` tool. This tool is considered a legacy, high-risk command that is no longer permitted in any workflow." .
 
 <file:///app/core/protocols/aorp-header> proto:hasRule <file:///app/core/protocols/aorp-identity>,
         <file:///app/core/protocols/aorp-versioning> ;
@@ -173,6 +173,10 @@
     proto:hasRule <file:///app/protocols/prove-sequent> ;
     schema:description "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs." .
 
+<file:///app/protocols/plllu-execution-001> proto:associatedTool <file:///app/protocols/tooling/plllu_runner.py> ;
+    proto:hasRule <file:///app/protocols/execute-plllu-script> ;
+    schema:description "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent." .
+
 <file:///app/protocols/security/security-header> schema:description "Defines the identity and purpose of the Security Protocol document." .
 
 <file:///app/protocols/security/security-vuln-reporting-001> proto:hasRule <file:///app/protocols/security/no-public-disclosure>,
@@ -206,8 +210,7 @@
 <file:///app/compliance/protocols/agents-md-self-awareness> proto:enforcement "The agent should incorporate this check into its standard operating procedure, particularly at the beginning of a task or when unexpected behavior occurs." ;
     schema:description "The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols." .
 
-<file:///app/compliance/protocols/no-reset-all> proto:enforcement "This rule is enforced by the `master_control.py` orchestrator, which will immediately terminate the workflow with an error if an attempt is made to call this tool." ;
-    schema:description "The `reset_all` tool is strictly forbidden under all circumstances. It is a legacy tool that has been superseded by more granular and safer methods of workspace management. Its use is considered a critical failure." .
+<file:///app/compliance/protocols/no-reset-all> schema:description "The `reset_all` tool is strictly forbidden under all circumstances." .
 
 <file:///app/compliance/protocols/non-compliance-architectural-deviation> proto:enforcement "Agent must revert non-compliant changes and re-implement them according to standards." ;
     schema:description "Forbids changes that contradict documented architectural patterns or coding conventions." .
@@ -359,6 +362,9 @@
 
 <file:///app/protocols/execute-aura-script> proto:enforcement "The tool is used by invoking it from the command line with the path to the Aura script as an argument." ;
     schema:description "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter." .
+
+<file:///app/protocols/execute-plllu-script> proto:enforcement "The tool is used by invoking it from the command line with the path to the pLLLU script as an argument." ;
+    schema:description "The `plllu_runner.py` tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter." .
 
 <file:///app/protocols/formal-proposal-required> proto:enforcement "The initial plan for any speculative task must include a step to generate and save a proposal artifact." ;
     schema:description "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan." .

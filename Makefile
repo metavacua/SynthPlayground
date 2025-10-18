@@ -65,6 +65,9 @@ clean:
 pre-submit-check:
 	@python3 tooling/pre_submit_check.py
 
+run-experiment:
+	@python3 tooling/experiment_runner.py --directory $(dir)
+
 # --- Help/Discovery ---
 
 list:
