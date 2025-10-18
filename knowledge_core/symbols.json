@@ -164,15 +164,6 @@
     },
     {
       "_type": "tag",
-      "name": "verify_symbols",
-      "path": "./verify_symbols.py",
-      "language": "Python",
-      "line": 3,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
       "name": "InterpError",
       "path": "./interpreter.py",
       "language": "Python",
@@ -1850,7 +1841,7 @@
       "name": "TypeCheckError",
       "path": "./type_checker.py",
       "language": "Python",
-      "line": 8,
+      "line": 4,
       "kind": "class",
       "docstring": null
     },
@@ -1859,7 +1850,7 @@
       "name": "TypeChecker",
       "path": "./type_checker.py",
       "language": "Python",
-      "line": 12,
+      "line": 7,
       "kind": "class",
       "docstring": null
     },
@@ -1868,7 +1859,7 @@
       "name": "type_check",
       "path": "./type_checker.py",
       "language": "Python",
-      "line": 130,
+      "line": 124,
       "kind": "function",
       "docstring": "Type-checks the given term in the provided contexts."
     },
@@ -1877,7 +1868,7 @@
       "name": "__init__",
       "path": "./type_checker.py",
       "language": "Python",
-      "line": 13,
+      "line": 8,
       "kind": "function",
       "docstring": null
     },
@@ -1886,7 +1877,7 @@
       "name": "type_check",
       "path": "./type_checker.py",
       "language": "Python",
-      "line": 19,
+      "line": 14,
       "kind": "function",
       "docstring": null
     },
@@ -2264,7 +2255,7 @@
       "name": "get_ignore_patterns",
       "path": "./utils/file_system_utils.py",
       "language": "Python",
-      "line": 28,
+      "line": 27,
       "kind": "function",
       "docstring": "Loads ignore patterns from the .julesignore file in the specified base directory.\nReturns two sets of patterns: one for directories and one for files."
     },
@@ -2273,7 +2264,7 @@
       "name": "find_files",
       "path": "./utils/file_system_utils.py",
       "language": "Python",
-      "line": 53,
+      "line": 52,
       "kind": "function",
       "docstring": "Finds all files matching a given pattern, respecting the .julesignore file.\nCan perform both recursive and non-recursive searches."
     },
@@ -2282,7 +2273,7 @@
       "name": "find_protocol_dirs",
       "path": "./utils/file_system_utils.py",
       "language": "Python",
-      "line": 87,
+      "line": 86,
       "kind": "function",
       "docstring": "Finds all directories within the root_dir that contain at least one\n`.protocol.json` or `.protocol.md` file, indicating they are protocol modules."
     },
@@ -2291,7 +2282,7 @@
       "name": "get_protocol_dir_name",
       "path": "./utils/file_system_utils.py",
       "language": "Python",
-      "line": 101,
+      "line": 100,
       "kind": "function",
       "docstring": "Returns a human-readable name for a protocol directory.\nIf it's the root protocols directory, it returns 'root'.\nOtherwise, it returns the directory's base name."
     },
@@ -3695,7 +3686,7 @@
       "name": "generate_root_agents_md",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 190,
+      "line": 195,
       "kind": "function",
       "docstring": "Generates the root AGENTS.md file, linking to all successfully compiled child modules."
     },
@@ -3704,7 +3695,7 @@
       "name": "main_orchestrator",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 238,
+      "line": 243,
       "kind": "function",
       "docstring": "Main function to find and run all local build scripts in parallel."
     },
@@ -6929,42 +6920,6 @@
       "line": 41,
       "kind": "function",
       "docstring": "Tests the main function of the code suggester."
-    },
-    {
-      "_type": "tag",
-      "name": "get_agents_md_path",
-      "path": "./tooling/jules_agent/action_logger.py",
-      "language": "Python",
-      "line": 5,
-      "kind": "function",
-      "docstring": "Finds the AGENTS.md file in the given directory."
-    },
-    {
-      "_type": "tag",
-      "name": "log_action",
-      "path": "./tooling/jules_agent/action_logger.py",
-      "language": "Python",
-      "line": 12,
-      "kind": "function",
-      "docstring": "Logs an action to the AGENTS.md file."
-    },
-    {
-      "_type": "tag",
-      "name": "get_agents_md_path",
-      "path": "./tooling/jules_agent/plan_manager.py",
-      "language": "Python",
-      "line": 4,
-      "kind": "function",
-      "docstring": "Finds the AGENTS.md file in the given directory."
-    },
-    {
-      "_type": "tag",
-      "name": "inject_plan",
-      "path": "./tooling/jules_agent/plan_manager.py",
-      "language": "Python",
-      "line": 11,
-      "kind": "function",
-      "docstring": "Injects or updates the plan in the AGENTS.md file."
     },
     {
       "_type": "tag",
