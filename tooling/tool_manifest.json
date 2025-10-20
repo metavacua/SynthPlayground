@@ -26,28 +26,64 @@
       ]
     },
     {
-        "name": "run_in_bash_session",
-        "description": "Runs the given bash command in the sandbox.",
-        "path": "tooling/bash_runner.py",
-        "arguments": [
-            {
-                "name": "command",
-                "type": "string",
-                "description": "The bash command to run."
-            }
-        ]
+      "name": "run_in_bash_session",
+      "description": "Runs the given bash command in the sandbox.",
+      "path": "tooling/bash_runner.py",
+      "arguments": [
+        {
+          "name": "command",
+          "type": "string",
+          "description": "The bash command to run."
+        }
+      ]
     },
     {
-        "name": "hello_world",
-        "description": "Prints a message to the console.",
-        "path": "tooling/custom_tools/hello_world.py",
-        "arguments": [
-            {
-                "name": "message",
-                "type": "string",
-                "description": "The message to print."
-            }
-        ]
+      "name": "hello_world",
+      "description": "Prints a message to the console.",
+      "path": "tooling/custom_tools/hello_world.py",
+      "arguments": [
+        {
+          "name": "message",
+          "type": "string",
+          "description": "The message to print."
+        }
+      ]
+    },
+    {
+      "name": "code_mutator",
+      "description": "Generates a novel code mutation candidate for a specified target file.",
+      "path": "tooling/code_mutator.py",
+      "arguments": [
+        {
+          "name": "target_file",
+          "type": "string",
+          "description": "The file to mutate."
+        }
+      ]
+    },
+    {
+      "name": "mutation_evaluator",
+      "description": "Run tests and performance analysis to evaluate the impact of a mutation.",
+      "path": "tooling/mutation_evaluator.py",
+      "arguments": [
+        {
+          "name": "sandbox_path",
+          "type": "string",
+          "description": "The path to the sandbox environment containing the mutation."
+        }
+      ]
+    },
+    {
+      "name": "message_user",
+      "description": "Sends a message to the user.",
+      "path": "tooling/message_user.py",
+      "arguments": [
+        {
+          "name": "message",
+          "type": "string",
+          "description": "The message to send."
+        }
+      ]
     }
   ]
 }

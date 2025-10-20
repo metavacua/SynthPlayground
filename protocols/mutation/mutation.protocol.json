@@ -1,0 +1,54 @@
+{
+  "protocol_id": "MUTATION-001",
+  "description": "A protocol for proposing, applying, and evaluating code mutations.",
+  "rules": [
+    {
+      "rule_id": "generate-mutation-candidate",
+      "description": "Generate a novel code mutation candidate for a specified target file.",
+      "tool": "code_mutator",
+      "arguments": [
+        {
+          "name": "target_file",
+          "type": "string",
+          "description": "The file to mutate."
+        }
+      ]
+    },
+    {
+      "rule_id": "apply-mutation-to-sandbox",
+      "description": "Apply a mutation to a sandboxed environment for testing.",
+      "tool": "run_in_bash_session",
+      "arguments": [
+        {
+          "name": "command",
+          "type": "string",
+          "description": "A command to apply the mutation in a sandbox."
+        }
+      ]
+    },
+    {
+      "rule_id": "evaluate-mutation",
+      "description": "Run tests and performance analysis to evaluate the impact of a mutation.",
+      "tool": "mutation_evaluator",
+      "arguments": [
+        {
+          "name": "sandbox_path",
+          "type": "string",
+          "description": "The path to the sandbox environment containing the mutation."
+        }
+      ]
+    },
+    {
+      "rule_id": "report-mutation-results",
+      "description": "Report the results of the mutation evaluation.",
+      "tool": "message_user",
+      "arguments": [
+        {
+          "name": "message",
+          "type": "string",
+          "description": "A summary of the mutation evaluation results."
+        }
+      ]
+    }
+  ]
+}
