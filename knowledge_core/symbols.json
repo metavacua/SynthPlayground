@@ -14,7 +14,7 @@
       "name": "InterpError",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 32,
+      "line": 33,
       "kind": "class",
       "docstring": null
     },
@@ -23,7 +23,7 @@
       "name": "Closure",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 36,
+      "line": 37,
       "kind": "class",
       "docstring": null
     },
@@ -32,7 +32,7 @@
       "name": "_appl_to_python",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 42,
+      "line": 43,
       "kind": "function",
       "docstring": null
     },
@@ -41,7 +41,7 @@
       "name": "_appl_list_to_python_list",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 54,
+      "line": 55,
       "kind": "function",
       "docstring": null
     },
@@ -50,7 +50,7 @@
       "name": "_python_list_to_appl_list",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 61,
+      "line": 63,
       "kind": "function",
       "docstring": "Converts a Python list of strings to an APPL list of strings."
     },
@@ -59,7 +59,7 @@
       "name": "Primitive",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 69,
+      "line": 71,
       "kind": "class",
       "docstring": null
     },
@@ -68,7 +68,7 @@
       "name": "Interpreter",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 85,
+      "line": 87,
       "kind": "class",
       "docstring": null
     },
@@ -77,7 +77,7 @@
       "name": "_unparse",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 179,
+      "line": 181,
       "kind": "function",
       "docstring": null
     },
@@ -86,7 +86,7 @@
       "name": "interpret",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 184,
+      "line": 186,
       "kind": "function",
       "docstring": "Interprets the given term in the provided environment."
     },
@@ -95,7 +95,7 @@
       "name": "__init__",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 37,
+      "line": 38,
       "kind": "function",
       "docstring": null
     },
@@ -104,7 +104,7 @@
       "name": "__init__",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 70,
+      "line": 72,
       "kind": "function",
       "docstring": null
     },
@@ -113,7 +113,7 @@
       "name": "apply",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 75,
+      "line": 77,
       "kind": "function",
       "docstring": null
     },
@@ -122,7 +122,7 @@
       "name": "__init__",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 86,
+      "line": 88,
       "kind": "function",
       "docstring": null
     },
@@ -131,7 +131,7 @@
       "name": "interpret",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 89,
+      "line": 91,
       "kind": "function",
       "docstring": null
     },
@@ -1388,12 +1388,21 @@
     },
     {
       "_type": "tag",
+      "name": "calculate_heuristic",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 101,
+      "kind": "function",
+      "docstring": "Estimates the cost to reach the goal from the current state."
+    },
+    {
+      "_type": "tag",
       "name": "find_plan",
       "path": "./planning.py",
       "language": "Python",
-      "line": 93,
+      "line": 106,
       "kind": "function",
-      "docstring": "Finds a sequence of actions to achieve a goal using Breadth-First Search."
+      "docstring": "Finds a sequence of actions to achieve a goal using A* Search."
     },
     {
       "_type": "tag",
@@ -1409,7 +1418,7 @@
       "name": "__eq__",
       "path": "./planning.py",
       "language": "Python",
-      "line": 86,
+      "line": 89,
       "kind": "function",
       "docstring": null
     },
@@ -1418,7 +1427,16 @@
       "name": "__hash__",
       "path": "./planning.py",
       "language": "Python",
-      "line": 89,
+      "line": 92,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__lt__",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 95,
       "kind": "function",
       "docstring": null
     },
@@ -3665,10 +3683,19 @@
     },
     {
       "_type": "tag",
+      "name": "test_process_modify_tooling_lesson",
+      "path": "./tooling/test_self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 179,
+      "kind": "function",
+      "docstring": "Tests processing a lesson that modifies a tool."
+    },
+    {
+      "_type": "tag",
       "name": "test_unknown_action_type",
       "path": "./tooling/test_self_correction_orchestrator.py",
       "language": "Python",
-      "line": 178,
+      "line": 210,
       "kind": "function",
       "docstring": "Tests that lessons with unknown action types are skipped."
     },
@@ -7022,10 +7049,19 @@
     },
     {
       "_type": "tag",
-      "name": "process_lessons",
+      "name": "apply_merge_diff",
       "path": "./tooling/self_correction_orchestrator.py",
       "language": "Python",
       "line": 46,
+      "kind": "function",
+      "docstring": "Applies a git-style merge diff to a file."
+    },
+    {
+      "_type": "tag",
+      "name": "process_lessons",
+      "path": "./tooling/self_correction_orchestrator.py",
+      "language": "Python",
+      "line": 82,
       "kind": "function",
       "docstring": "Processes all pending lessons, applies them, and updates their status.\nReturns True if any changes were made, False otherwise."
     },
@@ -7034,7 +7070,7 @@
       "name": "main",
       "path": "./tooling/self_correction_orchestrator.py",
       "language": "Python",
-      "line": 159,
+      "line": 222,
       "kind": "function",
       "docstring": "Main function to run the self-correction workflow."
     },
