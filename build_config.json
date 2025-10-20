@@ -1,0 +1,62 @@
+{
+  "targets": {
+    "gemini-protocol": {
+      "type": "command",
+      "command": "python3 protocols/gemini/build.py",
+      "description": "Compile the Gemini protocol."
+    },
+    "external-apis-protocol": {
+      "type": "command",
+      "command": "python3 protocols/external_apis/build.py",
+      "description": "Compile the external APIs protocol."
+    },
+    "core-protocol": {
+      "type": "command",
+      "command": "python3 protocols/core/build.py",
+      "description": "Compile the core protocol."
+    },
+    "compliance-protocol": {
+      "type": "command",
+      "command": "python3 protocols/compliance/build.py",
+      "description": "Compile the compliance protocol."
+    },
+    "critic-protocol": {
+      "type": "command",
+      "command": "python3 protocols/critic/build.py",
+      "description": "Compile the critic protocol."
+    },
+    "experimental-protocol": {
+      "type": "command",
+      "command": "python3 protocols/experimental/build.py",
+      "description": "Compile the experimental protocol."
+    },
+    "security-protocol": {
+      "type": "command",
+      "command": "python3 protocols/security/build.py",
+      "description": "Compile the security protocol."
+    },
+    "self-improvement-protocol": {
+      "type": "command",
+      "command": "python3 protocols/self_improvement/build.py",
+      "description": "Compile the self-improvement protocol."
+    },
+    "testing-protocol": {
+      "type": "command",
+      "command": "python3 protocols/testing/build.py",
+      "description": "Compile the testing protocol."
+    }
+  },
+  "build_groups": {
+    "all": [
+      "gemini-protocol",
+      "external-apis-protocol",
+      "core-protocol",
+      "compliance-protocol",
+      "critic-protocol",
+      "experimental-protocol",
+      "security-protocol",
+      "self-improvement-protocol",
+      "testing-protocol"
+    ]
+  }
+}
