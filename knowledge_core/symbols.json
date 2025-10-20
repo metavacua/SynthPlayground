@@ -4316,7 +4316,7 @@
       "name": "_load_plan_registry",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 52,
+      "line": 53,
       "kind": "function",
       "docstring": "Loads the plan registry, returning an empty dict if it doesn't exist or is invalid."
     },
@@ -4325,7 +4325,7 @@
       "name": "_get_log_context",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 63,
+      "line": 64,
       "kind": "function",
       "docstring": "Creates a context dictionary for logging from the agent's state."
     },
@@ -4334,7 +4334,7 @@
       "name": "MasterControlGraph",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 77,
+      "line": 78,
       "kind": "class",
       "docstring": "A Finite State Machine (FSM) that enforces the agent's protocol.\nThis graph reads a state definition and orchestrates the agent's workflow,\nensuring that all protocol steps are followed in the correct order."
     },
@@ -4343,7 +4343,7 @@
       "name": "__init__",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 84,
+      "line": 85,
       "kind": "function",
       "docstring": null
     },
@@ -4352,7 +4352,7 @@
       "name": "get_trigger",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 89,
+      "line": 90,
       "kind": "function",
       "docstring": "Finds a trigger in the FSM definition for a transition from a source\nto a destination state. This is a helper to avoid hardcoding trigger\nstrings in the state handlers."
     },
@@ -4361,7 +4361,7 @@
       "name": "do_orientation",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 105,
+      "line": 106,
       "kind": "function",
       "docstring": "Executes orientation, including analyzing the last post-mortem and scanning the filesystem."
     },
@@ -4370,7 +4370,7 @@
       "name": "do_planning",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 212,
+      "line": 213,
       "kind": "function",
       "docstring": "Validates a given plan, parses it, and initializes the plan stack."
     },
@@ -4379,7 +4379,7 @@
       "name": "_validate_plan_with_cli",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 281,
+      "line": 295,
       "kind": "function",
       "docstring": "Validates a plan by writing it to a temporary file and using the fdc_cli.py script."
     },
@@ -4388,7 +4388,7 @@
       "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 362,
+      "line": 376,
       "kind": "function",
       "docstring": "Validates a plan against a specific CSDC model using the LBAValidator."
     },
@@ -4397,7 +4397,7 @@
       "name": "do_researching",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 379,
+      "line": 393,
       "kind": "function",
       "docstring": "Launches the background research process."
     },
@@ -4406,7 +4406,7 @@
       "name": "do_awaiting_result",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 433,
+      "line": 447,
       "kind": "function",
       "docstring": "Checks for the result of the background research process."
     },
@@ -4415,7 +4415,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 500,
+      "line": 514,
       "kind": "function",
       "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
     },
@@ -4424,7 +4424,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 511,
+      "line": 525,
       "kind": "function",
       "docstring": "Processes the result of a step and advances the execution state."
     },
@@ -4433,7 +4433,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 565,
+      "line": 579,
       "kind": "function",
       "docstring": "Handles the code generation state."
     },
@@ -4442,7 +4442,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 580,
+      "line": 594,
       "kind": "function",
       "docstring": "Handles the test execution state."
     },
@@ -4451,7 +4451,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 596,
+      "line": 610,
       "kind": "function",
       "docstring": "Handles the debugging state."
     },
@@ -4460,7 +4460,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 611,
+      "line": 625,
       "kind": "function",
       "docstring": "Handles the finalization of the task, guiding the agent through\nthe structured post-mortem process."
     },
@@ -5183,6 +5183,15 @@
       "line": 94,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "find_best_plan",
+      "path": "./tooling/goal_generator.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": "Finds the best plan to execute based on a natural language objective.\n\nArgs:\n    natural_language_objective: The user's objective in natural language.\n\nReturns:\n    The path to the best plan file."
     },
     {
       "_type": "tag",
@@ -6818,7 +6827,7 @@
       "name": "tearDown",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 134,
+      "line": 138,
       "kind": "function",
       "docstring": null
     },
@@ -6827,16 +6836,25 @@
       "name": "test_do_orientation",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 143,
+      "line": 147,
       "kind": "function",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_do_planning",
+      "name": "test_do_planning_with_file_path",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 162,
+      "line": 166,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_do_planning_with_natural_language",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 180,
       "kind": "function",
       "docstring": null
     },
@@ -6845,7 +6863,7 @@
       "name": "test_do_execution",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 172,
+      "line": 194,
       "kind": "function",
       "docstring": null
     },
@@ -6854,7 +6872,7 @@
       "name": "test_do_execution_to_generate_code",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 187,
+      "line": 209,
       "kind": "function",
       "docstring": null
     },
@@ -6863,7 +6881,7 @@
       "name": "test_validate_plan_with_invalid_transition",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 201,
+      "line": 223,
       "kind": "function",
       "docstring": null
     },
@@ -6872,7 +6890,7 @@
       "name": "test_do_finalizing",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 209,
+      "line": 231,
       "kind": "function",
       "docstring": null
     },
