@@ -32,6 +32,11 @@
       "output": "knowledge_core/integrated_knowledge.json",
       "description": "Integrate knowledge from various sources."
     },
+    "guardian-protocol": {
+      "type": "command",
+      "command": "python3 protocols/guardian/build.py",
+      "description": "Compile the guardian protocol."
+    },
     "agents-md": {
       "type": "compiler",
       "compiler": "tooling/master_agents_md_generator.py",

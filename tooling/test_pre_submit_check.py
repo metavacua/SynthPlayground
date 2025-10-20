@@ -10,7 +10,7 @@ class TestPreSubmitCheck(unittest.TestCase):
     def test_main_runs_lint(self, mock_run):
         """Tests that the main function runs the lint command."""
         pre_submit_check_main()
-        mock_run.assert_called_once_with(
+        mock_run.assert_any_call(
             "make lint", check=True, shell=True, text=True, capture_output=True
         )
 

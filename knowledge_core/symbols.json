@@ -3092,9 +3092,63 @@
       "name": "main",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
-      "line": 76,
+      "line": 98,
       "kind": "function",
       "docstring": "Main function to run the self-improvement proposal generator."
+    },
+    {
+      "_type": "tag",
+      "name": "TestGuardian",
+      "path": "./tooling/test_guardian.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_guardian.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_guardian.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_valid_review_document",
+      "path": "./tooling/test_guardian.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_missing_section",
+      "path": "./tooling/test_guardian.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_wrong_file_type",
+      "path": "./tooling/test_guardian.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -3905,6 +3959,15 @@
       "line": 18,
       "kind": "function",
       "docstring": "The main entry point for the agent.\n\nThis script parses the task description and invokes the agent shell."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/guardian.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "Validates a review document to ensure it complies with the Guardian Protocol."
     },
     {
       "_type": "tag",
@@ -9933,6 +9996,42 @@
       "path": "./protocols/security/build.py",
       "language": "Python",
       "line": 65,
+      "kind": "function",
+      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
+    },
+    {
+      "_type": "tag",
+      "name": "find_files",
+      "path": "./protocols/guardian/build.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": "Finds files matching a pattern in a directory."
+    },
+    {
+      "_type": "tag",
+      "name": "load_schema",
+      "path": "./protocols/guardian/build.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": "Loads the JSON schema from a file."
+    },
+    {
+      "_type": "tag",
+      "name": "sanitize_markdown",
+      "path": "./protocols/guardian/build.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function",
+      "docstring": "Removes potentially unsafe constructs from Markdown."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_module",
+      "path": "./protocols/guardian/build.py",
+      "language": "Python",
+      "line": 64,
       "kind": "function",
       "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
     },
