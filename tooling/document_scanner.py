@@ -7,7 +7,7 @@ or semi-structured documents that are not part of the formal codebase, but which
 may contain critical context, requirements, or specifications.
 
 The scanner searches a given directory for files with common document extensions:
-- `.pdf`: Uses the `pypdf` library to extract text from PDF files.
+- `.pdf`: Uses the Gemini API to extract text and understand the content of PDF files.
 - `.md`: Reads Markdown files.
 - `.txt`: Reads plain text files.
 
@@ -18,13 +18,12 @@ is essential for bridging the gap between human-written documentation and the
 agent's operational awareness.
 """
 import os
-import pypdf
-from pypdf import PdfReader
 import sys
 
 # Add the root directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from utils.file_system_utils import find_files
+from utils.gemini_api.client import GeminiApiClient
 
 def scan_documents(directory="."):
     """
@@ -35,16 +34,11 @@ def scan_documents(directory="."):
     md_files = find_files("*.md", base_dir=directory)
     txt_files = find_files("*.txt", base_dir=directory)
 
+    gemini_client = GeminiApiClient()
+
     for file in pdf_files:
         filepath = os.path.join(directory, file)
-        try:
-            reader = PdfReader(filepath)
-            text = ""
-            for page in reader.pages:
-                text += page.extract_text() or ""
-            scanned_data[filepath] = text
-        except (IOError, pypdf.errors.PdfReadError) as e:
-            scanned_data[filepath] = f"Error reading PDF {filepath}: {e}"
+        scanned_data[filepath] = gemini_client.process_document(filepath)
 
     for file in md_files + txt_files:
         filepath = os.path.join(directory, file)

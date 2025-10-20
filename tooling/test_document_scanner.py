@@ -3,7 +3,6 @@ import os
 import shutil
 from unittest.mock import patch, MagicMock
 from tooling.document_scanner import scan_documents
-import pypdf
 
 class TestDocumentScanner(unittest.TestCase):
 
@@ -25,7 +24,8 @@ class TestDocumentScanner(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.test_dir)
 
-    def test_scan_md_and_txt_files(self):
+    @patch('tooling.document_scanner.GeminiApiClient')
+    def test_scan_md_and_txt_files(self, mock_gemini_api_client):
         """Tests that the scanner correctly reads .md and .txt files."""
         scanned_data = scan_documents(self.test_dir)
         self.assertIn(self.md_file, scanned_data)
@@ -33,13 +33,11 @@ class TestDocumentScanner(unittest.TestCase):
         self.assertIn(self.txt_file, scanned_data)
         self.assertEqual(scanned_data[self.txt_file], "Text Content")
 
-    @patch('tooling.document_scanner.PdfReader')
-    def test_scan_pdf_file(self, mock_pdf_reader):
+    @patch('tooling.document_scanner.GeminiApiClient')
+    def test_scan_pdf_file(self, mock_gemini_api_client):
         """Tests that the scanner correctly reads .pdf files."""
-        # Mock the PdfReader to return a dummy page with text
-        mock_page = MagicMock()
-        mock_page.extract_text.return_value = "PDF Content"
-        mock_pdf_reader.return_value.pages = [mock_page]
+        # Mock the GeminiApiClient to return a dummy page with text
+        mock_gemini_api_client.return_value.process_document.return_value = "PDF Content"
 
         scanned_data = scan_documents(self.test_dir)
 
@@ -47,7 +45,8 @@ class TestDocumentScanner(unittest.TestCase):
         self.assertEqual(scanned_data[self.pdf_file], "PDF Content")
 
     @patch('builtins.open', side_effect=IOError("Read error"))
-    def test_read_error_handling(self, mock_open):
+    @patch('tooling.document_scanner.GeminiApiClient')
+    def test_read_error_handling(self, mock_gemini_api_client, mock_open):
         """Tests that the scanner handles file read errors gracefully."""
         scanned_data = scan_documents(self.test_dir)
         # The scanner should still return a result, but with an error message

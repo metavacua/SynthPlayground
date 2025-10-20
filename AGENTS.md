@@ -9,6 +9,7 @@ This is a Python-based project with a sophisticated, self-correcting agent archi
 ## Build & Commands
 
 This repository uses a hierarchical, decentralized protocol system. Each of the following directories contains a self-contained set of protocols and is compiled by its own local build script.
+- [Browser Control](protocols/browser_control/AGENTS.md)
 - [Compliance](protocols/compliance/AGENTS.md)
 - [Core](protocols/core/AGENTS.md)
 - [Critic](protocols/critic/AGENTS.md)
@@ -89,76 +90,51 @@ if __name__ == '__main__':
     execute_commands_from_agents_md()
 ```
 
-## Jules API Integration
+## Capabilities
 
-This section provides instructions for interacting with the Jules API, which allows for programmatic access to Jules's capabilities.
+This agent has the following capabilities:
+
+*   **Document Processing:** The agent can process and understand the content of PDF documents, including text, images, and tables.
+*   **Browser Control:** The agent can control a web browser to perform tasks like data entry, automated testing, and web research.
+
+## Gemini API Integration
+
+This section provides instructions for interacting with the Gemini API, which allows for programmatic access to the agent's capabilities.
 
 ### Authentication
 
-To use the Jules API, you need an API key. Pass the API key in the `X-Goog-Api-Key` header of your API calls.
+To use the Gemini API, you need an API key. Pass the API key in the `x-goog-api-key` header of your API calls.
 
 **Important:** Keep your API keys secure. Do not share them or embed them in public code.
 
-### API Concepts
+### System Instructions
 
-The Jules API is built around a few core resources:
+You can use system instructions to guide the behavior of the model. For example, you can use system instructions to:
 
-*   **Source:** An input source for the agent (e.g., a GitHub repository).
-*   **Session:** A continuous unit of work within a specific context, similar to a chat session. A session is initiated with a prompt and a source.
-*   **Activity:** A single unit of work within a Session. A Session contains multiple activities from both the user and the agent.
+*   **Define the agent's persona:** You can instruct the agent to act as a helpful and capable software engineering assistant.
+*   **Specify the agent's goals:** You can specify the agent's goals for a particular task, such as "implement a new feature" or "fix a bug."
+*   **Provide context:** You can provide the agent with the context it needs to understand the task at hand, such as information about the codebase, the project's architecture, and any relevant constraints or requirements.
+*   **Enforce protocol adherence:** You can instruct the agent to always use the tools and information provided in the `knowledge_core/` directory.
 
-### Quickstart: Your First API Call
+Here's an example of how to use system instructions to define the agent's persona:
 
-Here’s a quick guide to making your first API call with `curl`.
-
-**Step 1: List your available sources**
-
-Find the name of the source you want to work with (e.g., your GitHub repo).
-
-```bash
-curl 'https://jules.googleapis.com/v1alpha/sources' \
-    -H 'X-Goog-Api-Key: YOUR_API_KEY'
-```
-
-**Step 2: Create a new session**
-
-Create a new session using the source name from the previous step.
-
-```bash
-curl 'https://jules.googleapis.com/v1alpha/sessions' \
-    -X POST \
-    -H "Content-Type: application/json" \
-    -H 'X-Goog-Api-Key: YOUR_API_KEY' \
-    -d '{
-      "prompt": "Create a boba app!",
-      "sourceContext": {
-        "source": "sources/github/bobalover/boba",
-        "githubRepoContext": {
-          "startingBranch": "main"
+```json
+{
+  "system_instruction": {
+    "parts": [
+      {
+        "text": "You are a helpful and capable software engineering assistant. Your name is Jules."
+      }
+    ]
+  },
+  "contents": [
+    {
+      "parts": [
+        {
+          "text": "Hello there"
         }
-      },
-      "automationMode": "AUTO_CREATE_PR",
-      "title": "Boba App"
-    }'
-```
-
-**Step 3: List activities and interact with the agent**
-
-To list activities in a session:
-
-```bash
-curl 'https://jules.googleapis.com/v1alpha/sessions/SESSION_ID/activities?pageSize=30' \
-    -H 'X-Goog-Api-Key: YOUR_API_KEY'
-```
-
-To send a message to the agent:
-
-```bash
-curl 'https://jules.googleapis.com/v1alpha/sessions/SESSION_ID:sendMessage' \
-    -X POST \
-    -H "Content-Type: application/json" \
-    -H 'X-Goog-Api-Key: YOUR_API_KEY' \
-    -d '{
-      "prompt": "Can you make the app corgi themed?"
-    }'
+      ]
+    }
+  ]
+}
 ```
