@@ -3611,10 +3611,64 @@
     },
     {
       "_type": "tag",
+      "name": "AutonomousAgent",
+      "path": "./tooling/autonomous_agent.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/autonomous_agent.py",
+      "language": "Python",
+      "line": 80,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/autonomous_agent.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_plan",
+      "path": "./tooling/autonomous_agent.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "function",
+      "docstring": "Generates a plan to accomplish the task."
+    },
+    {
+      "_type": "tag",
+      "name": "execute_plan",
+      "path": "./tooling/autonomous_agent.py",
+      "language": "Python",
+      "line": 19,
+      "kind": "function",
+      "docstring": "Executes the generated plan."
+    },
+    {
+      "_type": "tag",
+      "name": "run",
+      "path": "./tooling/autonomous_agent.py",
+      "language": "Python",
+      "line": 73,
+      "kind": "function",
+      "docstring": "Runs the agent's main loop."
+    },
+    {
+      "_type": "tag",
       "name": "find_symbol_definition",
       "path": "./tooling/refactor.py",
       "language": "Python",
-      "line": 34,
+      "line": 17,
       "kind": "function",
       "docstring": "Finds the definition of a symbol in a Python file."
     },
@@ -3623,7 +3677,7 @@
       "name": "find_references",
       "path": "./tooling/refactor.py",
       "language": "Python",
-      "line": 48,
+      "line": 31,
       "kind": "function",
       "docstring": "Finds all files in a directory that reference a given symbol."
     },
@@ -3632,7 +3686,7 @@
       "name": "main",
       "path": "./tooling/refactor.py",
       "language": "Python",
-      "line": 66,
+      "line": 49,
       "kind": "function",
       "docstring": null
     },
@@ -5396,7 +5450,7 @@
       "name": "TestRefactor",
       "path": "./tooling/test_refactor.py",
       "language": "Python",
-      "line": 12,
+      "line": 8,
       "kind": "class",
       "docstring": null
     },
@@ -5405,54 +5459,36 @@
       "name": "setUp",
       "path": "./tooling/test_refactor.py",
       "language": "Python",
-      "line": 14,
+      "line": 9,
       "kind": "function",
-      "docstring": null
+      "docstring": "Set up a temporary directory and files for testing."
     },
     {
       "_type": "tag",
       "name": "tearDown",
       "path": "./tooling/test_refactor.py",
       "language": "Python",
-      "line": 26,
+      "line": 21,
       "kind": "function",
-      "docstring": null
+      "docstring": "Clean up the temporary directory and files."
     },
     {
       "_type": "tag",
-      "name": "test_find_symbol_definition",
+      "name": "test_refactor_e2e",
       "path": "./tooling/test_refactor.py",
       "language": "Python",
-      "line": 29,
+      "line": 30,
       "kind": "function",
-      "docstring": "Tests finding a symbol's definition."
-    },
-    {
-      "_type": "tag",
-      "name": "test_find_references",
-      "path": "./tooling/test_refactor.py",
-      "language": "Python",
-      "line": 35,
-      "kind": "function",
-      "docstring": "Tests finding references to a symbol."
-    },
-    {
-      "_type": "tag",
-      "name": "test_main_plan_generation",
-      "path": "./tooling/test_refactor.py",
-      "language": "Python",
-      "line": 57,
-      "kind": "function",
-      "docstring": "Tests that the main function generates a correct refactoring plan."
+      "docstring": "An end-to-end test to ensure the refactor tool works as expected."
     },
     {
       "_type": "tag",
       "name": "test_symbol_not_found",
       "path": "./tooling/test_refactor.py",
       "language": "Python",
-      "line": 74,
+      "line": 53,
       "kind": "function",
-      "docstring": "Tests that the tool exits if the symbol is not found."
+      "docstring": "Tests that the tool prints an error if the symbol is not found."
     },
     {
       "_type": "tag",
@@ -6455,6 +6491,24 @@
     },
     {
       "_type": "tag",
+      "name": "find_agent_that_produces",
+      "path": "./tooling/plan_generator.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": "Finds an agent in the repository that produces the given resource."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_plan",
+      "path": "./tooling/plan_generator.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": "Generates a plan to accomplish the given goal using backward-chaining."
+    },
+    {
+      "_type": "tag",
       "name": "ParaconsistentTruth",
       "path": "./tooling/lfi_udc_model.py",
       "language": "Python",
@@ -7091,6 +7145,42 @@
       "line": 1,
       "kind": "function",
       "docstring": "Prints a message to the console."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/custom_tools/read_file.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/custom_tools/create_file.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/custom_tools/fetch_data.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/custom_tools/analyze_data.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
