@@ -87,7 +87,7 @@ class TestKnowledgeCompiler(unittest.TestCase):
         # Check lesson 1 (machine-readable)
         self.assertEqual(lesson1["task_id"], "test-task-123")
         self.assertEqual(
-            lesson1["insight"], "A tool was used that was not in the protocol."
+            lesson1["lesson"], "A tool was used that was not in the protocol."
         )
         self.assertEqual(lesson1["status"], "pending")
         self.assertEqual(lesson1["action"]["command"], "add-tool")
@@ -99,7 +99,7 @@ class TestKnowledgeCompiler(unittest.TestCase):
         )
 
         # Check lesson 2 (placeholder)
-        self.assertEqual(lesson2["insight"], "The agent needs to be more careful.")
+        self.assertEqual(lesson2["lesson"], "The agent needs to be more careful.")
         self.assertEqual(lesson2["status"], "pending")
         self.assertEqual(lesson2["action"]["command"], "placeholder")
         self.assertIn(
@@ -173,7 +173,7 @@ class TestKnowledgeCompilerAdvanced(unittest.TestCase):
         lesson3 = json.loads(lines[2])
 
         # Test 1: Deprecate tool command
-        self.assertIn("A tool is no longer suitable", lesson1["insight"])
+        self.assertIn("A tool is no longer suitable", lesson1["lesson"])
         self.assertEqual(lesson1["action"]["command"], "deprecate-tool")
         self.assertEqual(lesson1["action"]["parameters"]["tool_name"], "old_tool")
         self.assertEqual(
@@ -182,7 +182,7 @@ class TestKnowledgeCompilerAdvanced(unittest.TestCase):
 
         # Test 2: Explicit Lesson and Placeholder Action
         self.assertEqual(
-            lesson2["insight"],
+            lesson2["lesson"],
             "The `reset_all` tool is dangerous and was used incorrectly.",
         )
         self.assertEqual(lesson2["action"]["command"], "placeholder")
@@ -191,7 +191,7 @@ class TestKnowledgeCompilerAdvanced(unittest.TestCase):
         )
 
         # Test 3: No explicit lesson, whole text becomes the action/insight
-        self.assertIn("A new protocol", lesson3["insight"])
+        self.assertIn("A new protocol", lesson3["lesson"])
         self.assertEqual(lesson3["action"]["command"], "placeholder")
 
 

@@ -6,10 +6,14 @@
       "rule_id": "tdd-writing-new-code",
       "description": "When writing any new function or class, a corresponding test must be written first. The test should fail before the new code is implemented, and pass after.",
       "enforcement": "This is a procedural rule. The agent should verify that a failing test is committed before the implementation is committed.",
-      "validation_command": "python3 tooling/validate_tdd.py"
+      "validation_command": "python3 tooling/validate_tdd.py",
+      "tags": [
+        "testing"
+      ]
     }
   ],
   "associated_tools": [
     "tooling/test_runner.py"
-  ]
+  ],
+  "version": "1.0.0"
 }

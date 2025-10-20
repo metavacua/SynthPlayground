@@ -5,10 +5,14 @@
     {
       "rule_id": "execute-plllu-script",
       "description": "The `plllu_runner.py` tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter.",
-      "enforcement": "The tool is used by invoking it from the command line with the path to the pLLLU script as an argument."
+      "enforcement": "The tool is used by invoking it from the command line with the path to the pLLLU script as an argument.",
+      "tags": [
+        "core"
+      ]
     }
   ],
   "associated_tools": [
     "tooling/plllu_runner.py"
-  ]
+  ],
+  "version": "1.0.0"
 }

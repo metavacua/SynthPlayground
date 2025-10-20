@@ -12,5 +12,6 @@
     "google_search",
     "view_text_website",
     "create_file_with_block"
-  ]
+  ],
+  "version": "1.0.0"
 }

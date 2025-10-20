@@ -5,10 +5,14 @@
     {
       "rule_id": "execute-aura-script",
       "description": "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter.",
-      "enforcement": "The tool is used by invoking it from the command line with the path to the Aura script as an argument."
+      "enforcement": "The tool is used by invoking it from the command line with the path to the Aura script as an argument.",
+      "tags": [
+        "core"
+      ]
     }
   ],
   "associated_tools": [
     "tooling/aura_executor.py"
-  ]
+  ],
+  "version": "1.0.0"
 }

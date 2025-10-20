@@ -214,9 +214,9 @@ def generate_documentation_for_module(mod_doc: ModuleDoc) -> List[str]:
 def find_python_files(directories: List[str]) -> List[str]:
     py_files = []
     for directory in directories:
-        files = [
-            os.path.join(directory, f) for f in find_files("*.py", base_dir=directory)
-        ]
+        # Ensure the directory path is absolute
+        abs_dir = os.path.join(ROOT_DIR, directory)
+        files = [os.path.join(abs_dir, f) for f in find_files("*.py", base_dir=abs_dir)]
         py_files.extend(files)
     return sorted([f for f in py_files if not os.path.basename(f).startswith("test_")])
 
@@ -368,14 +368,16 @@ def main():
     )
     parser.add_argument("--output-file", help="Output file for any format.")
     parser.add_argument(
-        "--source-dir", help="Source directory for 'system' or 'tooling-readme' format."
+        "--source-dir",
+        action="append",
+        help="Source directory for 'system' or 'tooling-readme' format. Can be specified multiple times.",
     )
     args = parser.parse_args()
 
     print(f"--- Running Documentation Builder (Format: {args.format.upper()}) ---")
     if args.format == "system":
         source_dirs = (
-            [args.source_dir]
+            args.source_dir
             if args.source_dir
             else [os.path.join(ROOT_DIR, "tooling/"), os.path.join(ROOT_DIR, "utils/")]
         )

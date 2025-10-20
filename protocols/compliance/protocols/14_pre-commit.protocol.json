@@ -11,5 +11,6 @@
   "associated_tools": [
     "pre_commit_instructions",
     "code_linter"
-  ]
+  ],
+  "version": "1.0.0"
 }

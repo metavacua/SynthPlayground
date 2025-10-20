@@ -37,5 +37,6 @@
   ],
   "associated_artifacts": [
     "knowledge_core/lessons.jsonl"
-  ]
+  ],
+  "version": "1.0.0"
 }

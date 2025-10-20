@@ -5,20 +5,30 @@
     {
       "rule_id": "use-csdc-cli",
       "description": "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP).",
-      "enforcement": "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments."
+      "enforcement": "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments.",
+      "tags": [
+        "core"
+      ]
     },
     {
       "rule_id": "model-a-constraints",
       "description": "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`.",
-      "enforcement": "Enforced by the `fsm_model_a.json` FSM used by the `csdc_cli.py` tool."
+      "enforcement": "Enforced by the `fsm_model_a.json` FSM used by the `csdc_cli.py` tool.",
+      "tags": [
+        "core"
+      ]
     },
     {
       "rule_id": "model-b-constraints",
       "description": "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`.",
-      "enforcement": "Enforced by the `fsm_model_b.json` FSM used by the `csdc_cli.py` tool."
+      "enforcement": "Enforced by the `fsm_model_b.json` FSM used by the `csdc_cli.py` tool.",
+      "tags": [
+        "core"
+      ]
     }
   ],
   "associated_tools": [
     "tooling/csdc_cli.py"
-  ]
+  ],
+  "version": "1.0.0"
 }

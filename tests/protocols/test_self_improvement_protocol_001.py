@@ -8,7 +8,7 @@ class TestSelfImprovementProtocol(unittest.TestCase):
         """
         Load the self-improvement protocol from the JSON file.
         """
-        protocol_path = "protocols/self-improvement/self-improvement.protocol.json"
+        protocol_path = "protocols/self_improvement/self-improvement.protocol.json"
         with open(protocol_path, "r") as f:
             self.protocol = json.load(f)
 

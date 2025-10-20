@@ -23,5 +23,6 @@
     "tooling/research_planner.py",
     "tooling/research.py",
     "tooling/fdc_cli.py"
-  ]
+  ],
+  "version": "1.0.0"
 }

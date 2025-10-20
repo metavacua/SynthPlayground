@@ -12,5 +12,6 @@
       "description": "The official protocol version is tracked in the VERSION file in the repository root, following Semantic Versioning (SemVer).",
       "enforcement": "Build or validation scripts should verify the presence and format of the VERSION file."
     }
-  ]
+  ],
+  "version": "1.0.0"
 }
