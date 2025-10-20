@@ -1,0 +1,19 @@
+{
+    "name": "refactor",
+    "description": "A tool for performing automated symbol renaming in Python code.",
+    "preconditions": [
+        {
+            "name": "filepath",
+            "description": "The path to the file where the symbol is defined."
+        },
+        {
+            "name": "old-name",
+            "description": "The current name of the symbol to rename."
+        },
+        {
+            "name": "new-name",
+            "description": "The new name for the symbol."
+        }
+    ],
+    "postconditions": []
+}
