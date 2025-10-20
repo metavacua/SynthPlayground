@@ -16,6 +16,7 @@ This repository uses a hierarchical, decentralized protocol system. Each of the 
 - [Security](protocols/security/AGENTS.md)
 - [Self-improvement](protocols/self_improvement/AGENTS.md)
 - [Testing](protocols/testing/AGENTS.md)
+- [CHC Bootstrap](protocols/chc_protocols/bootstrap/README.md)
 
 ### Dependency Installation
 
