@@ -5,10 +5,14 @@
     {
       "rule_id": "dependency-install-on-start",
       "description": "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed.",
-      "enforcement": "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions."
+      "enforcement": "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions.",
+      "tags": [
+        "compliance"
+      ]
     }
   ],
   "associated_tools": [
     "run_in_bash_session"
-  ]
+  ],
+  "version": "1.0.0"
 }

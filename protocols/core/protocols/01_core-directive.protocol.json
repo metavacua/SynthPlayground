@@ -10,5 +10,6 @@
   ],
   "associated_tools": [
     "tooling/fdc_cli.py"
-  ]
+  ],
+  "version": "1.0.0"
 }

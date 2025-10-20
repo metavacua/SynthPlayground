@@ -47,7 +47,7 @@ class TestDocBuilder(unittest.TestCase):
         with open(output_file, "r") as f:
             content = f.read()
 
-        self.assertIn("### `test_doc_builder_dir/tooling/sample_tool.py`", content)
+        self.assertIn(f"### `/app/{self.test_dir}/tooling/sample_tool.py`", content)
         self.assertIn("This is a sample tool.", content)
         self.assertIn("`def sample_function()`", content)
         self.assertIn("This is a sample function.", content)
@@ -117,7 +117,7 @@ class TestDocBuilder(unittest.TestCase):
         with open(output_file, "r") as f:
             content = f.read()
 
-        self.assertIn("### `test_doc_builder_dir/tooling/no_docstring.py`", content)
+        self.assertIn(f"### `/app/{self.test_dir}/tooling/no_docstring.py`", content)
         self.assertIn("_No module-level docstring found._", content)
 
 

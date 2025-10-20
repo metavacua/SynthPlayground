@@ -11,5 +11,6 @@
   "associated_tools": [
     "tooling.research_planner.plan_deep_research",
     "tooling.research.execute_research_protocol"
-  ]
+  ],
+  "version": "1.0.0"
 }

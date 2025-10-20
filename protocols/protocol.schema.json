@@ -9,6 +9,11 @@
       "type": "string",
       "pattern": "^[a-z0-9-]+$"
     },
+    "version": {
+      "description": "The version of the protocol, following semantic versioning.",
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
+    },
     "description": {
       "description": "A human-readable summary of the protocol's purpose.",
       "type": "string"
@@ -31,6 +36,13 @@
             "description": "Describes how the rule is programmatically enforced.",
             "type": "string"
           },
+          "tags": {
+            "description": "An optional list of tags for categorizing the rule.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "validation_command": {
             "description": "An optional shell command that can be executed to automatically validate compliance with this rule.",
             "type": "string"
@@ -52,12 +64,5 @@
       }
     }
   },
-  "required": ["protocol_id", "description", "rules"],
-  "properties": {
-    "version": {
-      "description": "The version of the protocol, following semantic versioning.",
-      "type": "string",
-      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$"
-    }
-  }
+  "required": ["protocol_id", "version", "description", "rules"]
 }

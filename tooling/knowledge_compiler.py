@@ -169,7 +169,7 @@ def format_lesson_entry(metadata: dict, lesson_data: dict) -> dict:
         "lesson_id": str(uuid.uuid4()),
         "task_id": metadata["task_id"],
         "date": metadata["date"],
-        "insight": lesson_data["lesson"],
+        "lesson": lesson_data["lesson"],
         "action": actionable_command,
         "status": "pending",
     }

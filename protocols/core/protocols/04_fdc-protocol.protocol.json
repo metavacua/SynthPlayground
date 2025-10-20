@@ -41,5 +41,6 @@
     "LOGGING_SCHEMA.md",
     "set_plan",
     "message_user"
-  ]
+  ],
+  "version": "1.0.0"
 }

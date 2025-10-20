@@ -16,5 +16,6 @@
     "read_file",
     "list_files",
     "grep"
-  ]
+  ],
+  "version": "1.0.0"
 }

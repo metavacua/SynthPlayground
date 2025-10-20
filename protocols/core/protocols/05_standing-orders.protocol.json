@@ -22,5 +22,6 @@
     "tooling/fdc_cli.py",
     "google_search",
     "view_text_website"
-  ]
+  ],
+  "version": "1.0.0"
 }

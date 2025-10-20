@@ -17,5 +17,6 @@
       "description": "A change is considered 'functional' if it correctly modifies the agent's operational rules or capabilities, as defined by the combination of Python source code and the protocol source files in `protocols/`.",
       "enforcement": "The Code Review Critic's evaluation of 'functionality' must encompass both traditional code and protocol definitions."
     }
-  ]
+  ],
+  "version": "1.0.0"
 }

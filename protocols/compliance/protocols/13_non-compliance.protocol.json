@@ -11,13 +11,18 @@
       "rule_id": "non-compliance-direct-editing",
       "description": "Prohibits the direct editing of build artifacts like AGENTS.md or README.md. Changes must be made to source files, followed by a rebuild.",
       "enforcement": "Agent must revert direct edits and modify source files, then run the appropriate build command.",
-      "associated_tools": ["restore_file", "run_in_bash_session"]
+      "associated_tools": [
+        "restore_file",
+        "run_in_bash_session"
+      ]
     },
     {
       "rule_id": "non-compliance-test-procedure",
       "description": "Requires adherence to all documented testing procedures before submitting changes.",
       "enforcement": "Agent must halt execution and run the required tests, debugging any failures before proceeding.",
-      "associated_tools": ["run_in_bash_session"]
+      "associated_tools": [
+        "run_in_bash_session"
+      ]
     },
     {
       "rule_id": "non-compliance-architectural-deviation",
@@ -28,7 +33,10 @@
       "rule_id": "non-compliance-self-awareness-failure",
       "description": "Requires the agent to maintain an up-to-date understanding of protocols by recompiling AGENTS.md when necessary.",
       "enforcement": "Agent should run 'make AGENTS.md' to refresh its protocol knowledge and re-evaluate its plan.",
-      "associated_tools": ["run_in_bash_session"]
+      "associated_tools": [
+        "run_in_bash_session"
+      ]
     }
-  ]
+  ],
+  "version": "1.0.0"
 }

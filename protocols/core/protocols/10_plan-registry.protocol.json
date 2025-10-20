@@ -22,5 +22,6 @@
     "tooling/plan_manager.py",
     "tooling/master_control.py",
     "tooling/fdc_cli.py"
-  ]
+  ],
+  "version": "1.0.0"
 }

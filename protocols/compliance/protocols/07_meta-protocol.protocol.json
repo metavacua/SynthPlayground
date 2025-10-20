@@ -10,5 +10,6 @@
   ],
   "associated_tools": [
     "run_in_bash_session"
-  ]
+  ],
+  "version": "1.0.0"
 }

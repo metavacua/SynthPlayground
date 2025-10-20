@@ -1,58 +1,47 @@
 {
   "targets": {
-    "gemini-protocol": {
+    "protocols": {
       "type": "command",
-      "command": "python3 protocols/gemini/build.py",
-      "description": "Compile the Gemini protocol."
+      "command": "python3 tooling/compile_protocols.py",
+      "description": "Compile all protocols."
     },
-    "external-apis-protocol": {
-      "type": "command",
-      "command": "python3 protocols/external_apis/build.py",
-      "description": "Compile the external APIs protocol."
+    "docs": {
+      "type": "compiler",
+      "compiler": "tooling/doc_builder.py",
+      "output": "docs/SYSTEM_DOCUMENTATION.md",
+      "options": {
+        "--format": "system",
+        "--source-dir": [
+          "tooling/",
+          "utils/",
+          "research/",
+          "language_theory/",
+          "logic_system/"
+        ]
+      },
+      "description": "Generate system documentation."
     },
-    "core-protocol": {
+    "knowledge-compile": {
       "type": "command",
-      "command": "python3 protocols/core/build.py",
-      "description": "Compile the core protocol."
+      "command": "rm -f knowledge_core/lessons.jsonl && python3 tooling/knowledge_compiler.py --source-dir postmortems/",
+      "description": "Compile lessons from post-mortems."
     },
-    "compliance-protocol": {
-      "type": "command",
-      "command": "python3 protocols/compliance/build.py",
-      "description": "Compile the compliance protocol."
-    },
-    "critic-protocol": {
-      "type": "command",
-      "command": "python3 protocols/critic/build.py",
-      "description": "Compile the critic protocol."
-    },
-    "experimental-protocol": {
-      "type": "command",
-      "command": "python3 protocols/experimental/build.py",
-      "description": "Compile the experimental protocol."
-    },
-    "security-protocol": {
-      "type": "command",
-      "command": "python3 protocols/security/build.py",
-      "description": "Compile the security protocol."
-    },
-    "self-improvement-protocol": {
-      "type": "command",
-      "command": "python3 protocols/self_improvement/build.py",
-      "description": "Compile the self-improvement protocol."
-    },
-    "testing-protocol": {
-      "type": "command",
-      "command": "python3 protocols/testing/build.py",
-      "description": "Compile the testing protocol."
+    "knowledge-integrate": {
+      "type": "compiler",
+      "compiler": "tooling/knowledge_integrator.py",
+      "output": "knowledge_core/integrated_knowledge.json",
+      "description": "Integrate knowledge from various sources."
     },
     "agents-md": {
       "type": "compiler",
-      "compiler": "tooling/generate_agents_md.py",
+      "compiler": "tooling/master_agents_md_generator.py",
       "output": "AGENTS.md",
-      "sources": [
-        "AGENTS.standard.md"
-      ],
-      "description": "Generate the self-executing AGENTS.md file."
+      "options": {
+        "--doc-file": "docs/SYSTEM_DOCUMENTATION.md",
+        "--knowledge-file": "knowledge_core/integrated_knowledge.json",
+        "--build-config": "build_config.json"
+      },
+      "description": "Generate the master AGENTS.md file."
     },
     "install": {
       "type": "command",
@@ -77,16 +66,15 @@
   },
   "build_groups": {
     "all": [
-      "agents-md",
-      "gemini-protocol",
-      "external-apis-protocol",
-      "core-protocol",
-      "compliance-protocol",
-      "critic-protocol",
-      "experimental-protocol",
-      "security-protocol",
-      "self-improvement-protocol",
-      "testing-protocol"
+      "protocols",
+      "docs",
+      "knowledge-compile",
+      "knowledge-integrate",
+      "agents-md"
+    ],
+    "knowledge": [
+      "knowledge-compile",
+      "knowledge-integrate"
     ]
   }
 }

@@ -65,11 +65,17 @@ def execute_compiler_target(target_name, target_config):
     # Handle options
     if "options" in target_config:
         for option, value in target_config["options"].items():
-            # For options that are paths, join with ROOT_DIR
-            if isinstance(value, str) and ("file" in option or "dir" in option):
-                command.extend([option, os.path.join(ROOT_DIR, value)])
+            if isinstance(value, list):
+                for item in value:
+                    if isinstance(item, str) and ("file" in option or "dir" in option):
+                        command.extend([option, os.path.join(ROOT_DIR, item)])
+                    else:
+                        command.extend([option, str(item)])
             else:
-                command.extend([option, str(value)])
+                if isinstance(value, str) and ("file" in option or "dir" in option):
+                    command.extend([option, os.path.join(ROOT_DIR, value)])
+                else:
+                    command.extend([option, str(value)])
 
     return command, " ".join(command)
 

@@ -5,10 +5,14 @@
     {
       "rule_id": "run-all-audits",
       "description": "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness.",
-      "enforcement": "The tool is invoked via the command line, typically through the `make audit` target."
+      "enforcement": "The tool is invoked via the command line, typically through the `make audit` target.",
+      "tags": [
+        "core"
+      ]
     }
   ],
   "associated_tools": [
     "tooling/auditor.py"
-  ]
+  ],
+  "version": "1.0.0"
 }

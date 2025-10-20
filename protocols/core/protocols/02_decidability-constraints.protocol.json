@@ -21,5 +21,6 @@
   "associated_tools": [
     "tooling/fdc_cli.py",
     "tooling/fdc_fsm.json"
-  ]
+  ],
+  "version": "1.0.0"
 }

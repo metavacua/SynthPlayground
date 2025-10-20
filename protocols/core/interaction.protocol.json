@@ -5,16 +5,23 @@
     {
       "rule_id": "planning-tool-access",
       "description": "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution.",
-      "enforcement": "The agent's core logic should be designed to use this tool for all planning activities."
+      "enforcement": "The agent's core logic should be designed to use this tool for all planning activities.",
+      "tags": [
+        "core"
+      ]
     },
     {
       "rule_id": "communication-tool-access",
       "description": "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow.",
-      "enforcement": "The agent's core logic should be designed to use this tool for all user-facing communication."
+      "enforcement": "The agent's core logic should be designed to use this tool for all user-facing communication.",
+      "tags": [
+        "core"
+      ]
     }
   ],
   "associated_tools": [
     "set_plan",
     "message_user"
-  ]
+  ],
+  "version": "1.0.0"
 }
