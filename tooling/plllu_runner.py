@@ -5,16 +5,18 @@ This script provides an entry point for executing `.plllu` files. It
 integrates the pLLLU lexer, parser, and interpreter to execute the logic
 defined in a given pLLLU source file and print the result.
 """
+
 import argparse
 import sys
 import os
 
 # Add the parent directory to the path to allow imports from lfi_ill
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from lfi_ill.lexer import lexer
 from lfi_ill.parser import parser
 from lfi_ill.interpreter import Interpreter
+
 
 def main():
     """
@@ -22,12 +24,14 @@ def main():
     It integrates the pLLLU lexer, parser, and interpreter to execute
     the logic defined in a given pLLLU source file.
     """
-    arg_parser = argparse.ArgumentParser(description="pLLLU file runner. This tool executes .plllu files.")
+    arg_parser = argparse.ArgumentParser(
+        description="pLLLU file runner. This tool executes .plllu files."
+    )
     arg_parser.add_argument("file", help="The .plllu file to execute.")
     args = arg_parser.parse_args()
 
     try:
-        with open(args.file, 'r') as f:
+        with open(args.file, "r") as f:
             data = f.read()
     except FileNotFoundError:
         print(f"Error: File not found at {args.file}")
@@ -54,6 +58,7 @@ def main():
     except Exception as e:
         print(f"An error occurred during execution: {e}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()

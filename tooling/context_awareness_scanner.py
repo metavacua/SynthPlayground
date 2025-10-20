@@ -21,6 +21,7 @@ The scanner performs three main functions:
 The final output is a detailed JSON report containing all of this information,
 which can be used as a foundational artifact for automated planning or human review.
 """
+
 import argparse
 import ast
 import json
@@ -28,7 +29,7 @@ import os
 import sys
 
 # Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.file_system_utils import find_files
 
 

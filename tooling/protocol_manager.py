@@ -5,9 +5,11 @@ This script provides a set of commands for creating, testing, and versioning
 agent protocols. It is designed to be used by developers to manage the
 protocol lifecycle.
 """
+
 import argparse
 import os
 import json
+
 
 def create_protocol(name, directory):
     """
@@ -26,7 +28,7 @@ def create_protocol(name, directory):
         "version": "1.0.0",
         "description": f"A protocol for {name}.",
         "rules": [],
-        "associated_tools": []
+        "associated_tools": [],
     }
 
     with open(protocol_path, "w") as f:
@@ -34,11 +36,13 @@ def create_protocol(name, directory):
 
     print(f"Created protocol '{protocol_id}' at {protocol_path}")
 
+
 def run_tests():
     """
     Runs the protocol tests.
     """
     os.system("python3 tests/protocols/test_runner.py")
+
 
 def main():
     """
@@ -50,13 +54,17 @@ def main():
     # Create command
     create_parser = subparsers.add_parser("create", help="Create a new protocol.")
     create_parser.add_argument("name", help="The name of the protocol.")
-    create_parser.add_argument("--dir", default="protocols", help="The directory to create the protocol in.")
+    create_parser.add_argument(
+        "--dir", default="protocols", help="The directory to create the protocol in."
+    )
 
     # Test command
     test_parser = subparsers.add_parser("test", help="Run the protocol tests.")
 
     # Version command
-    version_parser = subparsers.add_parser("version", help="Update the version of a protocol.")
+    version_parser = subparsers.add_parser(
+        "version", help="Update the version of a protocol."
+    )
     version_parser.add_argument("protocol_id", help="The ID of the protocol to update.")
     version_parser.add_argument("version", help="The new version.")
 
@@ -68,6 +76,7 @@ def main():
         run_tests()
     elif args.command == "version":
         update_version(args.protocol_id, args.version)
+
 
 def update_version(protocol_id, new_version):
     """
@@ -89,6 +98,7 @@ def update_version(protocol_id, new_version):
                 return
 
     print(f"Error: Protocol '{protocol_id}' not found.")
+
 
 if __name__ == "__main__":
     main()

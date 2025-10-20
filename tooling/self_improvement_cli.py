@@ -50,6 +50,7 @@ security, and other agent protocols.)*
 ...
 """
 
+
 def create_proposal():
     """
     Creates a new, structured proposal for self-improvement.

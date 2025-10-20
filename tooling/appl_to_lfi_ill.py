@@ -4,6 +4,7 @@ A compiler that translates APPL (a simple functional language) to LFI-ILL.
 This script takes a Python file containing an APPL AST, and compiles it into
 an LFI-ILL AST. The resulting AST is then written to a `.lfi_ill` file.
 """
+
 import argparse
 import sys
 import os
@@ -12,7 +13,8 @@ import appl_ast
 import lfi_ill
 
 # Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 
 class ApplToLfiIllCompiler:
     def __init__(self):
@@ -79,21 +81,24 @@ class ApplToLfiIllCompiler:
             return lfi_ill.Unit()
 
         elif isinstance(appl_node, appl_ast.Nil):
-            return lfi_ill.String("[]") # Simplification
+            return lfi_ill.String("[]")  # Simplification
 
         elif isinstance(appl_node, appl_ast.Cons):
             head = self.compile(appl_node.head)
             tail = self.compile(appl_node.tail)
-            return lfi_ill.TensorPair(head, tail) # Simplification
+            return lfi_ill.TensorPair(head, tail)  # Simplification
 
         else:
-            raise NotImplementedError(f"APPL node type not yet supported: {type(appl_node)}")
+            raise NotImplementedError(
+                f"APPL node type not yet supported: {type(appl_node)}"
+            )
 
     def compile_type(self, type_):
         """
         Translates APPL types to LFI ILL types.
         """
         return str(type_)
+
 
 def main():
     parser = argparse.ArgumentParser(description="Compile APPL code to LFI ILL.")
@@ -120,7 +125,7 @@ def main():
     print(repr(lfi_ill_ast))
 
     output_filename = args.file.replace(".py", ".lfi_ill")
-    with open(output_filename, 'w') as f:
+    with open(output_filename, "w") as f:
         f.write(repr(lfi_ill_ast))
 
     print(f"\nSuccessfully compiled to {output_filename}")

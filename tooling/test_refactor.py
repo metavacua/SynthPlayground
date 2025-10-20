@@ -2,7 +2,12 @@ import unittest
 import os
 import shutil
 from unittest.mock import patch
-from tooling.refactor import find_symbol_definition, find_references, main as refactor_main
+from tooling.refactor import (
+    find_symbol_definition,
+    find_references,
+    main as refactor_main,
+)
+
 
 class TestRefactor(unittest.TestCase):
 
@@ -34,8 +39,21 @@ class TestRefactor(unittest.TestCase):
         self.assertIn(self.file_with_symbol, references)
         self.assertIn(self.referencing_file, references)
 
-    @patch('sys.argv', new_callable=lambda: ['tooling/refactor.py', '--filepath', 'test_refactor_dir/file_with_symbol.py', '--old-name', 'old_name', '--new-name', 'new_name', '--search-path', 'test_refactor_dir'])
-    @patch('builtins.print')
+    @patch(
+        "sys.argv",
+        new_callable=lambda: [
+            "tooling/refactor.py",
+            "--filepath",
+            "test_refactor_dir/file_with_symbol.py",
+            "--old-name",
+            "old_name",
+            "--new-name",
+            "new_name",
+            "--search-path",
+            "test_refactor_dir",
+        ],
+    )
+    @patch("builtins.print")
     def test_main_plan_generation(self, mock_print, mock_argv):
         """Tests that the main function generates a correct refactoring plan."""
         refactor_main()
@@ -55,9 +73,21 @@ class TestRefactor(unittest.TestCase):
 
     def test_symbol_not_found(self):
         """Tests that the tool exits if the symbol is not found."""
-        with patch('sys.argv', ['tooling/refactor.py', '--filepath', self.file_with_symbol, '--old-name', 'non_existent', '--new-name', 'new_name']):
+        with patch(
+            "sys.argv",
+            [
+                "tooling/refactor.py",
+                "--filepath",
+                self.file_with_symbol,
+                "--old-name",
+                "non_existent",
+                "--new-name",
+                "new_name",
+            ],
+        ):
             with self.assertRaises(SystemExit):
                 refactor_main()
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -5,8 +5,10 @@ This script provides a simple interface to run APPL files using the main
 `run.py` interpreter. It captures and prints the output of the execution,
 and provides detailed error reporting if the execution fails.
 """
+
 import subprocess
 import sys
+
 
 def run_appl_file(filepath: str) -> str:
     """
@@ -21,11 +23,7 @@ def run_appl_file(filepath: str) -> str:
     try:
         command = [sys.executable, "run.py", filepath]
         result = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            check=True,
-            encoding='utf-8'
+            command, capture_output=True, text=True, check=True, encoding="utf-8"
         )
         return result.stdout.strip()
     except FileNotFoundError:
@@ -43,6 +41,7 @@ def run_appl_file(filepath: str) -> str:
     except Exception as e:
         return f"An unexpected error occurred: {str(e)}"
 
+
 def main():
     """
     Main function to run the APPL runner from the command line.
@@ -54,6 +53,7 @@ def main():
     filepath = sys.argv[1]
     output = run_appl_file(filepath)
     print(output)
+
 
 if __name__ == "__main__":
     main()

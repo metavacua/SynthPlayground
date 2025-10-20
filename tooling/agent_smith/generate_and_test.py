@@ -10,24 +10,23 @@ SANDBOX_DIR_NAME = "agent_smith_sandbox"
 # The name for the generated variant AGENTS.md
 VARIANT_AGENTS_MD_NAME = "AGENTS.variant.md"
 
+
 def get_repo_root():
     """Gets the absolute path of the repository root."""
     return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 
+
 def log_step(message):
     """Prints a formatted step message."""
     print(f"\n--- {message} ---")
+
 
 def run_command(command, cwd):
     """Runs a command in a subprocess and handles errors."""
     log_step(f"Executing: {' '.join(command)}")
     try:
         result = subprocess.run(
-            command,
-            check=True,
-            capture_output=True,
-            text=True,
-            cwd=cwd
+            command, check=True, capture_output=True, text=True, cwd=cwd
         )
         print("Output:\n" + result.stdout)
         if result.stderr:
@@ -39,6 +38,7 @@ def run_command(command, cwd):
         print("Stdout:\n" + e.stdout)
         return False
 
+
 def create_sandbox(root_dir, sandbox_path):
     """Creates a clean sandbox directory."""
     log_step(f"Creating sandbox at: {sandbox_path}")
@@ -47,6 +47,7 @@ def create_sandbox(root_dir, sandbox_path):
         shutil.rmtree(sandbox_path)
     os.makedirs(sandbox_path)
     print("Sandbox created successfully.")
+
 
 def copy_sources(root_dir, sandbox_path):
     """Copies the necessary source files and compiler into the sandbox."""
@@ -76,6 +77,7 @@ def copy_sources(root_dir, sandbox_path):
     print("Sources copied successfully.")
     return True
 
+
 def install_dependencies(sandbox_path):
     """Installs dependencies from requirements.txt into the sandbox."""
     log_step("Installing dependencies in sandbox")
@@ -88,11 +90,7 @@ def install_dependencies(sandbox_path):
     pip_target_dir = os.path.join(sandbox_path, ".pip_dependencies")
     os.makedirs(pip_target_dir, exist_ok=True)
 
-    command = [
-        "pip", "install",
-        "-r", requirements_path,
-        "--target", pip_target_dir
-    ]
+    command = ["pip", "install", "-r", requirements_path, "--target", pip_target_dir]
 
     # We run pip from the sandbox root
     if not run_command(command, cwd=sandbox_path):
@@ -101,6 +99,7 @@ def install_dependencies(sandbox_path):
 
     print("Dependencies installed successfully.")
     return pip_target_dir
+
 
 def apply_mutation(sandbox_path, mutation_target):
     """Applies the specified mutation to the sandboxed sources."""
@@ -118,6 +117,7 @@ def apply_mutation(sandbox_path, mutation_target):
     else:
         print(f"ERROR: Mutation target not found: {target_file}")
         return False
+
 
 def compile_variant(sandbox_path, python_path_ext):
     """Runs the hierarchical compiler inside the sandbox."""
@@ -138,7 +138,7 @@ def compile_variant(sandbox_path, python_path_ext):
             capture_output=True,
             text=True,
             cwd=sandbox_path,
-            env=env
+            env=env,
         )
         print("Output:\n" + result.stdout)
         if result.stderr:
@@ -161,6 +161,7 @@ def compile_variant(sandbox_path, python_path_ext):
         print("ERROR: Compiled AGENTS.md not found in sandbox.")
         return None
 
+
 def verify_variant(variant_path, mutation_check_string):
     """Performs a basic verification to check the variant was created correctly."""
     log_step(f"Verifying the generated variant: {variant_path}")
@@ -168,15 +169,20 @@ def verify_variant(variant_path, mutation_check_string):
         print("FAIL: Variant file was not created.")
         return False
 
-    with open(variant_path, 'r') as f:
+    with open(variant_path, "r") as f:
         content = f.read()
 
     if mutation_check_string in content:
-        print(f"FAIL: Verification check string '{mutation_check_string}' was found in the variant.")
+        print(
+            f"FAIL: Verification check string '{mutation_check_string}' was found in the variant."
+        )
         return False
     else:
-        print(f"PASS: Verification check string '{mutation_check_string}' was NOT found. Mutation was successful.")
+        print(
+            f"PASS: Verification check string '{mutation_check_string}' was NOT found. Mutation was successful."
+        )
         return True
+
 
 def cleanup_sandbox(sandbox_path):
     """Deletes the sandbox directory."""
@@ -187,18 +193,21 @@ def cleanup_sandbox(sandbox_path):
     else:
         print("Sandbox not found, no cleanup needed.")
 
+
 def main():
     """Main function to orchestrate the generation and testing process."""
-    parser = argparse.ArgumentParser(description="Agent Smith: AGENTS.md Variant Generator")
+    parser = argparse.ArgumentParser(
+        description="Agent Smith: AGENTS.md Variant Generator"
+    )
     parser.add_argument(
         "--mutate-delete",
         required=True,
-        help="The path of the protocol file to delete (relative to repo root)."
+        help="The path of the protocol file to delete (relative to repo root).",
     )
     parser.add_argument(
         "--verify-not-present",
         required=True,
-        help="A string that should NOT be present in the final compiled variant."
+        help="A string that should NOT be present in the final compiled variant.",
     )
     args = parser.parse_args()
 
@@ -227,7 +236,9 @@ def main():
 
         print("\nSUCCESS: AGENTS.md variant generated and verified successfully.")
         print(f"The variant is located at: {variant_path}")
-        print("The sandbox will be left for inspection. Run with --cleanup to remove it.")
+        print(
+            "The sandbox will be left for inspection. Run with --cleanup to remove it."
+        )
 
     except Exception as e:
         print(f"\nAn error occurred: {e}")
@@ -236,6 +247,7 @@ def main():
         sys.exit(1)
     # Note: We are not cleaning up on success so the agent can use the sandbox.
     # A final 'cleanup' command would be needed in a real workflow.
+
 
 if __name__ == "__main__":
     main()

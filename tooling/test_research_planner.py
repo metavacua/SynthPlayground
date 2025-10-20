@@ -3,6 +3,7 @@ import os
 import uuid
 from tooling.research_planner import plan_deep_research
 
+
 class TestNewResearchPlanner(unittest.TestCase):
     """
     Tests for the refactored, FSM-compliant research planner that uses templates.
@@ -16,7 +17,9 @@ class TestNewResearchPlanner(unittest.TestCase):
         os.makedirs("research", exist_ok=True)
 
         with open(self.research_plan_template_path, "w") as f:
-            f.write("# Research Plan: [Topic]\n**ID:** [RESEARCH_ID]\n**Objective:** [Objective]")
+            f.write(
+                "# Research Plan: [Topic]\n**ID:** [RESEARCH_ID]\n**Objective:** [Objective]"
+            )
 
         with open(self.research_report_template_path, "w") as f:
             f.write("# Research Report: [Topic]\n**ID:** [RESEARCH_ID]")
@@ -26,11 +29,10 @@ class TestNewResearchPlanner(unittest.TestCase):
         os.remove(self.research_plan_template_path)
         os.remove(self.research_report_template_path)
         # Clean up any generated files if they exist
-        if hasattr(self, 'plan_file') and os.path.exists(self.plan_file):
+        if hasattr(self, "plan_file") and os.path.exists(self.plan_file):
             os.remove(self.plan_file)
-        if hasattr(self, 'report_file') and os.path.exists(self.report_file):
+        if hasattr(self, "report_file") and os.path.exists(self.report_file):
             os.remove(self.report_file)
-
 
     def test_plan_deep_research_uses_templates_correctly(self):
         """
@@ -54,7 +56,11 @@ class TestNewResearchPlanner(unittest.TestCase):
         self.assertIn("# FSM: tooling/research_fsm.json", plan_lines[0])
 
         # 3. Verify the executable commands
-        executable_lines = [line for line in plan_lines if line.strip() and not line.strip().startswith("#")]
+        executable_lines = [
+            line
+            for line in plan_lines
+            if line.strip() and not line.strip().startswith("#")
+        ]
 
         # Check for the key commands in the new plan structure
         self.assertIn("set_plan", executable_lines[0])

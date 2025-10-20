@@ -5,8 +5,10 @@ This script provides a consistent, sorted, and recursive listing of files and
 directories, excluding the `.git` directory. It is intended to be a more
 reliable alternative to the standard `ls` command for agent use cases.
 """
+
 import os
 import sys
+
 
 def reliable_ls(start_path="."):
     """
@@ -16,7 +18,9 @@ def reliable_ls(start_path="."):
         start_path: The directory to start the traversal from.
     """
     if not os.path.isdir(start_path):
-        print(f"Error: Starting path '{start_path}' is not a directory or does not exist.")
+        print(
+            f"Error: Starting path '{start_path}' is not a directory or does not exist."
+        )
         return
 
     for root, dirs, files in os.walk(start_path, topdown=True):
@@ -43,6 +47,7 @@ def reliable_ls(start_path="."):
         for f in files:
             print(f"{sub_indent}{f}")
 
+
 def main():
     """
     Main function to run the reliable_ls tool from the command line.
@@ -53,6 +58,7 @@ def main():
 
     path_to_list = sys.argv[1] if len(sys.argv) == 2 else "."
     reliable_ls(path_to_list)
+
 
 if __name__ == "__main__":
     main()

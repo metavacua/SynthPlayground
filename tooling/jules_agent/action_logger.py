@@ -2,12 +2,14 @@ import os
 import re
 from datetime import datetime
 
+
 def get_agents_md_path(cwd):
     """Finds the AGENTS.md file in the given directory."""
     path = os.path.join(cwd, "AGENTS.md")
     if os.path.exists(path):
         return path
     return None
+
 
 def log_action(action_text, cwd):
     """Logs an action to the AGENTS.md file."""
@@ -22,14 +24,16 @@ def log_action(action_text, cwd):
         content = f.read()
 
     log_header = "# Jules' Action Log"
-    log_section_regex = re.compile(r"(^# Jules' Action Log\n)(.*?)(^#|\Z)", re.MULTILINE | re.DOTALL)
+    log_section_regex = re.compile(
+        r"(^# Jules' Action Log\n)(.*?)(^#|\Z)", re.MULTILINE | re.DOTALL
+    )
     match = log_section_regex.search(content)
 
     log_entry = f"- {action_text}\n"
 
     if match:
         # Append to existing log
-        new_content = content[:match.end(2)] + log_entry + content[match.end(2):]
+        new_content = content[: match.end(2)] + log_entry + content[match.end(2) :]
     else:
         # Add new log section
         new_content = content + "\n\n" + log_header + "\n\n" + log_entry

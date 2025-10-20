@@ -10,11 +10,13 @@ To prevent non-termination and other resource-exhaustion issues, the
 orchestrator imposes strict limits on the number of instructions executed,
 the amount of memory used, and the total wall-clock time.
 """
+
 import argparse
 import re
 import time
 from collections import defaultdict
 from typing import Dict, List, Any
+
 
 # A simple representation of a parsed instruction
 class Instruction:
@@ -25,13 +27,20 @@ class Instruction:
     def __repr__(self):
         return f"Instruction(opcode='{self.opcode}', args={self.args})"
 
+
 class UDCOrchestrator:
     """
     Executes an Unrestricted Development Cycle (UDC) plan within a sandboxed
     Turing Machine-like environment with strict resource limits.
     """
 
-    def __init__(self, plan_path: str, max_instructions: int = 10000, max_memory_cells: int = 1000, max_time_s: int = 5):
+    def __init__(
+        self,
+        plan_path: str,
+        max_instructions: int = 10000,
+        max_memory_cells: int = 1000,
+        max_time_s: int = 5,
+    ):
         self.plan_path = plan_path
         self.max_instructions = max_instructions
         self.max_memory_cells = max_memory_cells
@@ -60,7 +69,9 @@ class UDCOrchestrator:
         """
         print(f"--- UDC Orchestrator Initializing ---")
         print(f"Plan: {self.plan_path}")
-        print(f"Limits: {self.max_instructions} instructions, {self.max_memory_cells} memory cells, {self.max_time_s}s wall-clock time.")
+        print(
+            f"Limits: {self.max_instructions} instructions, {self.max_memory_cells} memory cells, {self.max_time_s}s wall-clock time."
+        )
 
         self._parse_plan()
 
@@ -71,14 +82,20 @@ class UDCOrchestrator:
         while self.running:
             # 1. Check all safety limits before executing the next instruction
             if self.instruction_count >= self.max_instructions:
-                print(f"\nERROR: Exceeded maximum instruction limit ({self.max_instructions}). Terminating.")
+                print(
+                    f"\nERROR: Exceeded maximum instruction limit ({self.max_instructions}). Terminating."
+                )
                 break
             if time.time() - self.start_time >= self.max_time_s:
-                print(f"\nERROR: Exceeded maximum wall-clock time ({self.max_time_s}s). Terminating.")
+                print(
+                    f"\nERROR: Exceeded maximum wall-clock time ({self.max_time_s}s). Terminating."
+                )
                 break
             if len(self.tape) > self.max_memory_cells:
-                 print(f"\nERROR: Exceeded maximum memory cells ({self.max_memory_cells}). Terminating.")
-                 break
+                print(
+                    f"\nERROR: Exceeded maximum memory cells ({self.max_memory_cells}). Terminating."
+                )
+                break
 
             # 2. Fetch and execute
             if self.ip >= len(self.instructions):
@@ -105,17 +122,16 @@ class UDCOrchestrator:
             if val != 0:
                 print(f"  Tape[{pos}] = {val}")
 
-
     def _parse_plan(self):
-        with open(self.plan_path, 'r') as f:
+        with open(self.plan_path, "r") as f:
             lines = f.readlines()
             for line_content in lines:
                 line_stripped = line_content.strip()
-                if not line_stripped or line_stripped.startswith('#'):
+                if not line_stripped or line_stripped.startswith("#"):
                     continue
 
-                line_stripped = line_stripped.split('#', 1)[0].strip()
-                parts = re.split(r'\s+', line_stripped)
+                line_stripped = line_stripped.split("#", 1)[0].strip()
+                parts = re.split(r"\s+", line_stripped)
                 opcode = parts[0].upper()
                 args = parts[1:]
 
@@ -139,38 +155,54 @@ class UDCOrchestrator:
         args = instruction.args
 
         # Tape Operations
-        if opcode == "LEFT": self.head_pos -= 1
-        elif opcode == "RIGHT": self.head_pos += 1
-        elif opcode == "READ": self.registers[args[0].upper()] = self.tape[self.head_pos]
-        elif opcode == "WRITE": self.tape[self.head_pos] = self._get_value(args[0])
+        if opcode == "LEFT":
+            self.head_pos -= 1
+        elif opcode == "RIGHT":
+            self.head_pos += 1
+        elif opcode == "READ":
+            self.registers[args[0].upper()] = self.tape[self.head_pos]
+        elif opcode == "WRITE":
+            self.tape[self.head_pos] = self._get_value(args[0])
 
         # Data Movement
-        elif opcode == "MOV": self.registers[args[0].upper()] = self._get_value(args[1])
+        elif opcode == "MOV":
+            self.registers[args[0].upper()] = self._get_value(args[1])
 
         # Arithmetic
-        elif opcode == "ADD": self.registers[args[0].upper()] += self._get_value(args[1])
-        elif opcode == "SUB": self.registers[args[0].upper()] -= self._get_value(args[1])
-        elif opcode == "INC": self.registers[args[0].upper()] += 1
-        elif opcode == "DEC": self.registers[args[0].upper()] -= 1
+        elif opcode == "ADD":
+            self.registers[args[0].upper()] += self._get_value(args[1])
+        elif opcode == "SUB":
+            self.registers[args[0].upper()] -= self._get_value(args[1])
+        elif opcode == "INC":
+            self.registers[args[0].upper()] += 1
+        elif opcode == "DEC":
+            self.registers[args[0].upper()] -= 1
 
         # Control Flow
-        elif opcode == "JMP": self.ip = self.labels[args[0]]
+        elif opcode == "JMP":
+            self.ip = self.labels[args[0]]
         elif opcode == "CMP":
             val1 = self._get_value(args[0])
             val2 = self._get_value(args[1])
-            self.cmp_flag_equal = (val1 == val2)
-            self.cmp_flag_greater = (val1 > val2)
-        elif opcode == "JE" and self.cmp_flag_equal: self.ip = self.labels[args[0]]
-        elif opcode == "JNE" and not self.cmp_flag_equal: self.ip = self.labels[args[0]]
-        elif opcode == "JG" and self.cmp_flag_greater: self.ip = self.labels[args[0]]
-        elif opcode == "JL" and not self.cmp_flag_greater and not self.cmp_flag_equal: self.ip = self.labels[args[0]]
+            self.cmp_flag_equal = val1 == val2
+            self.cmp_flag_greater = val1 > val2
+        elif opcode == "JE" and self.cmp_flag_equal:
+            self.ip = self.labels[args[0]]
+        elif opcode == "JNE" and not self.cmp_flag_equal:
+            self.ip = self.labels[args[0]]
+        elif opcode == "JG" and self.cmp_flag_greater:
+            self.ip = self.labels[args[0]]
+        elif opcode == "JL" and not self.cmp_flag_greater and not self.cmp_flag_equal:
+            self.ip = self.labels[args[0]]
 
         # Execution
         elif opcode == "HALT":
             print("\nHALT instruction encountered. Execution successful.")
             self.running = False
         elif opcode == "CALL":
-            print(f"SANDBOXED TOOL CALL: {args[0]} with args {args[1:]} (Not implemented)")
+            print(
+                f"SANDBOXED TOOL CALL: {args[0]} with args {args[1:]} (Not implemented)"
+            )
             # In a real implementation, this would call a secure, sandboxed tool runner.
 
         else:
@@ -183,16 +215,25 @@ def main():
         description="Executes a UDC plan with strict resource limits."
     )
     parser.add_argument("plan_path", help="The path to the .udc plan file.")
-    parser.add_argument("--max-instructions", type=int, default=10000, help="Max instructions to execute.")
-    parser.add_argument("--max-memory", type=int, default=1000, help="Max memory cells to use.")
-    parser.add_argument("--max-time", type=int, default=5, help="Max wall-clock time in seconds.")
+    parser.add_argument(
+        "--max-instructions",
+        type=int,
+        default=10000,
+        help="Max instructions to execute.",
+    )
+    parser.add_argument(
+        "--max-memory", type=int, default=1000, help="Max memory cells to use."
+    )
+    parser.add_argument(
+        "--max-time", type=int, default=5, help="Max wall-clock time in seconds."
+    )
     args = parser.parse_args()
 
     orchestrator = UDCOrchestrator(
         plan_path=args.plan_path,
         max_instructions=args.max_instructions,
         max_memory_cells=args.max_memory,
-        max_time_s=args.max_time
+        max_time_s=args.max_time,
     )
     orchestrator.run()
 

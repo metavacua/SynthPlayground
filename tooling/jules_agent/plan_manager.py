@@ -1,12 +1,14 @@
 import os
 import re
 
+
 def get_agents_md_path(cwd):
     """Finds the AGENTS.md file in the given directory."""
     path = os.path.join(cwd, "AGENTS.md")
     if os.path.exists(path):
         return path
     return None
+
 
 def inject_plan(plan_text, cwd):
     """Injects or updates the plan in the AGENTS.md file."""
@@ -21,7 +23,9 @@ def inject_plan(plan_text, cwd):
         content = f.read()
 
     plan_header = "# Jules' Plan"
-    plan_section_regex = re.compile(r"(^# Jules' Plan\n)(.*?)(^#|\Z)", re.MULTILINE | re.DOTALL)
+    plan_section_regex = re.compile(
+        r"(^# Jules' Plan\n)(.*?)(^#|\Z)", re.MULTILINE | re.DOTALL
+    )
     match = plan_section_regex.search(content)
 
     if match:

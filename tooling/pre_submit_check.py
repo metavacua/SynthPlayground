@@ -1,6 +1,7 @@
 import subprocess
 import sys
 
+
 def run_command(command, description):
     """Runs a command and exits if it fails."""
     print(f"--- Running: {description} ---")
@@ -12,6 +13,7 @@ def run_command(command, description):
         print(f"--- STDOUT ---\n{e.stdout}")
         print(f"--- STDERR ---\n{e.stderr}")
         sys.exit(1)
+
 
 def main():
     """Main function to run pre-submission checks."""
@@ -26,6 +28,7 @@ def main():
     # run_command("make test", "Unit Tests")
 
     print("--- All Pre-Submission Checks Passed Successfully! ---")
+
 
 if __name__ == "__main__":
     main()

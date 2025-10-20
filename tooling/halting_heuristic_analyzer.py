@@ -15,11 +15,13 @@ The analysis focuses on:
 The tool outputs a JSON report detailing the estimated risk level (LOW,
 MEDIUM, HIGH) and the specific loops that were identified.
 """
+
 import argparse
 import json
 import re
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
+
 
 # A simple representation of a parsed instruction
 @dataclass
@@ -28,6 +30,7 @@ class Instruction:
     original_line: str
     opcode: str
     args: List[str]
+
 
 # A representation of a detected loop
 @dataclass
@@ -38,6 +41,7 @@ class Loop:
     risk: str = "UNKNOWN"
     reason: str = "Analysis has not been performed."
 
+
 class HaltingHeuristicAnalyzer:
     """
     Performs static analysis on a UDC plan to provide a heuristic-based
@@ -47,7 +51,7 @@ class HaltingHeuristicAnalyzer:
     def __init__(self, plan_path: str):
         self.plan_path = plan_path
         self.instructions: List[Instruction] = []
-        self.labels: Dict[str, int] = {} # Maps label name to instruction index
+        self.labels: Dict[str, int] = {}  # Maps label name to instruction index
 
     def analyze(self) -> Dict:
         """
@@ -79,9 +83,13 @@ class HaltingHeuristicAnalyzer:
             return self._generate_report(overall_risk, reason, analyzed_loops)
 
         except FileNotFoundError:
-            return self._generate_report("ERROR", f"File not found: {self.plan_path}", [])
+            return self._generate_report(
+                "ERROR", f"File not found: {self.plan_path}", []
+            )
         except Exception as e:
-            return self._generate_report("ERROR", f"An error occurred during analysis: {e}", [])
+            return self._generate_report(
+                "ERROR", f"An error occurred during analysis: {e}", []
+            )
 
     def _parse_plan(self):
         """
@@ -89,17 +97,17 @@ class HaltingHeuristicAnalyzer:
         Labels point to the index of the *next* instruction in the list.
         """
         instruction_index = 0
-        with open(self.plan_path, 'r') as f:
+        with open(self.plan_path, "r") as f:
             lines = f.readlines()
             for i, line_content in enumerate(lines):
                 line_num = i + 1
                 line_stripped = line_content.strip()
 
-                if not line_stripped or line_stripped.startswith('#'):
+                if not line_stripped or line_stripped.startswith("#"):
                     continue
 
-                line_stripped = line_stripped.split('#', 1)[0].strip()
-                parts = re.split(r'\s+', line_stripped)
+                line_stripped = line_stripped.split("#", 1)[0].strip()
+                parts = re.split(r"\s+", line_stripped)
                 opcode = parts[0].upper()
                 args = parts[1:]
 
@@ -108,7 +116,9 @@ class HaltingHeuristicAnalyzer:
                         self.labels[args[0]] = instruction_index
                     # Do not add LABEL as an instruction itself
                 else:
-                    self.instructions.append(Instruction(line_num, line_stripped, opcode, args))
+                    self.instructions.append(
+                        Instruction(line_num, line_stripped, opcode, args)
+                    )
                     instruction_index += 1
 
     def _detect_loops(self) -> List[Loop]:
@@ -130,11 +140,13 @@ class HaltingHeuristicAnalyzer:
                     if target_idx < idx:
                         # The conditional jump is the primary exit condition
                         exit_cond = instruction if instruction.opcode != "JMP" else None
-                        loops.append(Loop(
-                            start_line=self.instructions[target_idx].line_number,
-                            end_line=instruction.line_number,
-                            exit_condition=exit_cond
-                        ))
+                        loops.append(
+                            Loop(
+                                start_line=self.instructions[target_idx].line_number,
+                                end_line=instruction.line_number,
+                                exit_condition=exit_cond,
+                            )
+                        )
         return loops
 
     def _analyze_loop(self, loop: Loop) -> Loop:
@@ -144,7 +156,9 @@ class HaltingHeuristicAnalyzer:
         """
         if not loop.exit_condition:
             loop.risk = "HIGH"
-            loop.reason = "Loop is unconditional (JMP) and has no detectable internal break."
+            loop.reason = (
+                "Loop is unconditional (JMP) and has no detectable internal break."
+            )
             return loop
 
         # Find the CMP instruction associated with the exit condition
@@ -154,7 +168,7 @@ class HaltingHeuristicAnalyzer:
         # Search backwards from the jump for the relevant CMP
         cmp_instr = None
         for i in range(current_idx - 1, -1, -1):
-            if self.instructions[i].opcode == 'CMP':
+            if self.instructions[i].opcode == "CMP":
                 cmp_instr = self.instructions[i]
                 break
 
@@ -167,7 +181,7 @@ class HaltingHeuristicAnalyzer:
 
         # Scan the body of the loop for modifications to this register
         loop_start_idx = self.labels.get(exit_cond_instr.args[0], -1)
-        if loop_start_idx == -1: # Should not happen if loop was detected correctly
+        if loop_start_idx == -1:  # Should not happen if loop was detected correctly
             loop.risk = "UNKNOWN"
             loop.reason = "Internal error: Could not find loop start label."
             return loop
@@ -180,7 +194,9 @@ class HaltingHeuristicAnalyzer:
             # Check for modifications to the register we care about
             if instr.opcode in {"INC", "DEC"} and instr.args[0] == reg_to_check:
                 modifying_instructions.append(instr)
-            elif instr.opcode in {"ADD", "SUB", "MOV"} and instr.args[0] == reg_to_check:
+            elif (
+                instr.opcode in {"ADD", "SUB", "MOV"} and instr.args[0] == reg_to_check
+            ):
                 modifying_instructions.append(instr)
 
             # Check if the register's value comes from an unpredictable source
@@ -201,8 +217,9 @@ class HaltingHeuristicAnalyzer:
         # Heuristic: if mods are complex (e.g., MOV from another register), risk is medium.
         # If mods are simple increments/decrements, risk is low.
         unpredictable_mods = [
-            i for i in modifying_instructions
-            if i.opcode in {"ADD", "SUB", "MOV"} and not i.args[1].lstrip('-').isdigit()
+            i
+            for i in modifying_instructions
+            if i.opcode in {"ADD", "SUB", "MOV"} and not i.args[1].lstrip("-").isdigit()
         ]
 
         if unpredictable_mods:
@@ -225,7 +242,7 @@ class HaltingHeuristicAnalyzer:
         for loop in loops:
             loop_dict = loop.__dict__
             if loop.exit_condition:
-                loop_dict['exit_condition'] = loop.exit_condition.__dict__
+                loop_dict["exit_condition"] = loop.exit_condition.__dict__
             loop_dicts.append(loop_dict)
 
         return {
@@ -242,9 +259,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Analyzes a UDC plan for non-termination risk. Outputs a JSON report."
     )
-    parser.add_argument(
-        "plan_path", help="The path to the .udc plan file to analyze."
-    )
+    parser.add_argument("plan_path", help="The path to the .udc plan file to analyze.")
     args = parser.parse_args()
 
     analyzer = HaltingHeuristicAnalyzer(args.plan_path)

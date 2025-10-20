@@ -17,6 +17,7 @@ commands to:
   Constant, Polynomial, Exponential) and its modality (Read-Only vs.
   Read-Write), providing insight into the plan's potential impact.
 """
+
 import argparse
 import datetime
 import json
@@ -26,7 +27,7 @@ import sys
 import uuid
 
 # Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.file_system_utils import find_files
 
 # --- Configuration ---
@@ -326,12 +327,17 @@ def start_task(task_id):
     # --- L1: Self-Awareness & Identity Verification ---
     print("\n--- L1: Self-Awareness & Identity Verification ---")
     try:
-        with open(os.path.join(ROOT_DIR, "knowledge_core", "agent_meta.json"), "r") as f:
+        with open(
+            os.path.join(ROOT_DIR, "knowledge_core", "agent_meta.json"), "r"
+        ) as f:
             agent_meta = json.load(f)
             print("Successfully loaded knowledge_core/agent_meta.json:")
             print(json.dumps(agent_meta, indent=2))
     except (FileNotFoundError, json.JSONDecodeError) as e:
-        print(f"Error during L1: Could not read or parse agent_meta.json. {e}", file=sys.stderr)
+        print(
+            f"Error during L1: Could not read or parse agent_meta.json. {e}",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     # --- L2: Repository State Synchronization ---
@@ -339,26 +345,31 @@ def start_task(task_id):
     try:
         kc_path = os.path.join(ROOT_DIR, "knowledge_core")
         artifacts = find_files("*", base_dir=kc_path)
-        artifacts = [f for f in artifacts if os.path.basename(f) != 'agent_meta.json']
+        artifacts = [f for f in artifacts if os.path.basename(f) != "agent_meta.json"]
         print("Found knowledge_core artifacts:")
         for artifact in artifacts:
             print(f"- {os.path.basename(artifact)}")
     except FileNotFoundError as e:
-        print(f"Error during L2: Could not list knowledge_core directory. {e}", file=sys.stderr)
+        print(
+            f"Error during L2: Could not list knowledge_core directory. {e}",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     # --- L3: Environmental Probing ---
     print("\n--- L3: Environmental Probing ---")
     probe_script_path = os.path.join(ROOT_DIR, "tooling", "environmental_probe.py")
     if not os.path.exists(probe_script_path):
-        print(f"Error during L3: Probe script not found at {probe_script_path}", file=sys.stderr)
+        print(
+            f"Error during L3: Probe script not found at {probe_script_path}",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     print(f"Executing: python3 {probe_script_path}")
     # We are already running in a bash session, so we can just run the script
     # and it will inherit the environment.
     os.system(f"python3 {probe_script_path}")
-
 
     # --- Logging ---
     _log_event(

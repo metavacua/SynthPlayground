@@ -17,23 +17,23 @@ This serves as a critical gateway for ensuring that all development work within
 the CSDC framework is sound, predictable, and compliant with the governing
 meta-mathematical principles.
 """
+
 import argparse
 import sys
 import os
 
 # Adjusting the path to import from the parent directory
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from tooling.fdc_cli import analyze_plan
 from tooling.master_control import MasterControlGraph
+
 
 def main():
     parser = argparse.ArgumentParser(
         description="A tool to manage the Context-Sensitive Development Cycle (CSDC)."
     )
-    parser.add_argument(
-        "plan_file", help="The path to the plan file to validate."
-    )
+    parser.add_argument("plan_file", help="The path to the plan file to validate.")
     parser.add_argument(
         "--model",
         required=True,
@@ -59,7 +59,9 @@ def main():
         )
         sys.exit(1)
 
-    print(f"Complexity check passed: Plan is in class {analysis_results['complexity_class']}.")
+    print(
+        f"Complexity check passed: Plan is in class {analysis_results['complexity_class']}."
+    )
 
     print(f"\n--- CSDC: Validating plan against Model {args.model} ---")
 
@@ -71,10 +73,14 @@ def main():
         sys.exit(1)
 
     validator = MasterControlGraph()
-    is_valid, error_message = validator.validate_plan_for_model(plan_content, args.model)
+    is_valid, error_message = validator.validate_plan_for_model(
+        plan_content, args.model
+    )
 
     if is_valid:
-        print("\nValidation successful! Plan is valid for the specified model and complexity.")
+        print(
+            "\nValidation successful! Plan is valid for the specified model and complexity."
+        )
     else:
         print(f"\nValidation failed: {error_message}", file=sys.stderr)
         sys.exit(1)

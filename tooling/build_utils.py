@@ -4,6 +4,7 @@ import json
 import re
 import jsonschema
 
+
 def find_files(pattern, base_dir=".", recursive=True):
     """Finds files matching a pattern in a directory."""
     if recursive:
@@ -20,6 +21,7 @@ def find_files(pattern, base_dir=".", recursive=True):
             if os.path.isfile(os.path.join(base_dir, f)) and f.endswith(pattern)
         ]
 
+
 def load_schema(schema_file):
     """Loads the JSON schema from a file."""
     try:
@@ -29,15 +31,27 @@ def load_schema(schema_file):
         print(f"Error: Schema file not found at {schema_file}", file=sys.stderr)
         sys.exit(1)
     except json.JSONDecodeError:
-        print(f"Error: Could not decode JSON from schema file at {schema_file}", file=sys.stderr)
+        print(
+            f"Error: Could not decode JSON from schema file at {schema_file}",
+            file=sys.stderr,
+        )
         sys.exit(1)
+
 
 def sanitize_markdown(content):
     """Removes potentially unsafe constructs from Markdown."""
-    content = re.sub(r"<script.*?>.*?</script>", "", content, flags=re.IGNORECASE | re.DOTALL)
+    content = re.sub(
+        r"<script.*?>.*?</script>", "", content, flags=re.IGNORECASE | re.DOTALL
+    )
     content = re.sub(r" on\w+=\".*?\"", "", content, flags=re.IGNORECASE)
-    content = re.sub(r"<<<SENSITIVE_INSTRUCTIONS>>>.*<<<SENSITIVE_INSTRUCTIONS>>>", "", content, flags=re.DOTALL)
+    content = re.sub(
+        r"<<<SENSITIVE_INSTRUCTIONS>>>.*<<<SENSITIVE_INSTRUCTIONS>>>",
+        "",
+        content,
+        flags=re.DOTALL,
+    )
     return content
+
 
 def execute_code(code, protocol_id, rule_id):
     """Executes a block of Python code in a controlled environment."""

@@ -6,6 +6,7 @@ import os
 import json
 import requests
 
+
 class ExternalApiClient:
     def __init__(self, api_name, api_key_env_var):
         self.api_name = api_name
@@ -17,7 +18,10 @@ class ExternalApiClient:
         Retrieves the base URL for the API from the external API registry.
         """
         registry_path = os.path.join(
-            os.path.dirname(__file__), "..", "knowledge_core", "external_api_registry.json"
+            os.path.dirname(__file__),
+            "..",
+            "knowledge_core",
+            "external_api_registry.json",
         )
         with open(registry_path, "r") as f:
             registry = json.load(f)

@@ -4,6 +4,7 @@ import shutil
 from unittest.mock import patch
 from tooling.background_researcher import perform_research
 
+
 class TestBackgroundResearcher(unittest.TestCase):
 
     def setUp(self):
@@ -17,7 +18,7 @@ class TestBackgroundResearcher(unittest.TestCase):
         if os.path.exists(self.result_path):
             os.remove(self.result_path)
 
-    @patch('time.sleep', return_value=None)
+    @patch("time.sleep", return_value=None)
     def test_perform_research(self, mock_sleep):
         """Tests that the research script writes the correct result file."""
         perform_research(self.task_id)
@@ -26,8 +27,11 @@ class TestBackgroundResearcher(unittest.TestCase):
         with open(self.result_path, "r") as f:
             content = f.read()
 
-        self.assertEqual(content, f"This is the research result for task {self.task_id}.")
+        self.assertEqual(
+            content, f"This is the research result for task {self.task_id}."
+        )
         mock_sleep.assert_called_once_with(5)
+
 
 if __name__ == "__main__":
     unittest.main()

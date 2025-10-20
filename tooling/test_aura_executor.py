@@ -4,6 +4,7 @@ import shutil
 from unittest.mock import patch, MagicMock, call
 from tooling.aura_executor import main as aura_main
 
+
 class TestAuraExecutor(unittest.TestCase):
 
     def setUp(self):
@@ -21,15 +22,23 @@ class TestAuraExecutor(unittest.TestCase):
         if os.path.exists(self.tool_path):
             os.remove(self.tool_path)
 
-    @patch('sys.argv', new_callable=lambda: ['tooling/aura_executor.py', 'test_aura_executor_dir/test.aura'])
-    @patch('tooling.aura_executor.subprocess.run')
+    @patch(
+        "sys.argv",
+        new_callable=lambda: [
+            "tooling/aura_executor.py",
+            "test_aura_executor_dir/test.aura",
+        ],
+    )
+    @patch("tooling.aura_executor.subprocess.run")
     def test_successful_execution(self, mock_subprocess_run, mock_argv):
         """Tests that a valid Aura script executes successfully."""
         with open(self.aura_file_path, "w") as f:
             f.write('let main = fn() { agent_call_tool("mock_tool", "arg1"); };')
 
         # Mock the subprocess call to the tool
-        mock_subprocess_run.return_value = MagicMock(returncode=0, stdout="Success", stderr="")
+        mock_subprocess_run.return_value = MagicMock(
+            returncode=0, stdout="Success", stderr=""
+        )
 
         aura_main()
 
@@ -43,20 +52,21 @@ class TestAuraExecutor(unittest.TestCase):
 
     def test_file_not_found(self):
         """Tests that the executor exits gracefully if the file is not found."""
-        with patch('sys.argv', ['tooling/aura_executor.py', 'non_existent.aura']):
+        with patch("sys.argv", ["tooling/aura_executor.py", "non_existent.aura"]):
             with self.assertRaises(SystemExit):
                 aura_main()
 
     @unittest.skip("Aura parser does not reliably raise errors on invalid syntax.")
-    @patch('sys.exit')
+    @patch("sys.exit")
     def test_parser_error(self, mock_exit):
         """Tests that the executor exits on a parser error."""
         with open(self.aura_file_path, "w") as f:
-            f.write('let x = 1 +') # Incomplete expression
+            f.write("let x = 1 +")  # Incomplete expression
 
-        with patch('sys.argv', ['tooling/aura_executor.py', self.aura_file_path]):
+        with patch("sys.argv", ["tooling/aura_executor.py", self.aura_file_path]):
             aura_main()
             mock_exit.assert_called_once_with(1)
+
 
 if __name__ == "__main__":
     unittest.main()
