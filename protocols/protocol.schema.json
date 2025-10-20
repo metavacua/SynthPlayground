@@ -34,6 +34,10 @@
           "validation_command": {
             "description": "An optional shell command that can be executed to automatically validate compliance with this rule.",
             "type": "string"
+          },
+          "executable_code": {
+            "description": "An optional block of python code that can be executed to automatically enforce or validate compliance with this rule.",
+            "type": "string"
           }
         },
         "required": ["rule_id", "description", "enforcement"]
