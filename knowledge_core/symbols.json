@@ -3881,57 +3881,39 @@
     },
     {
       "_type": "tag",
-      "name": "test_load_local_graph_success",
-      "path": "./tooling/test_knowledge_integrator.py",
+      "name": "summarize_system_documentation",
+      "path": "./tooling/master_agents_md_generator.py",
       "language": "Python",
-      "line": 33,
+      "line": 82,
       "kind": "function",
-      "docstring": "Test that the local graph loads successfully."
+      "docstring": "Reads the full system documentation and creates a high-level summary."
     },
     {
       "_type": "tag",
-      "name": "test_load_local_graph_not_found",
-      "path": "./tooling/test_knowledge_integrator.py",
+      "name": "summarize_knowledge_core",
+      "path": "./tooling/master_agents_md_generator.py",
       "language": "Python",
-      "line": 40,
+      "line": 106,
       "kind": "function",
-      "docstring": "Test that loading a non-existent graph returns None."
+      "docstring": "Reads the integrated knowledge graph and creates a high-level summary."
     },
     {
       "_type": "tag",
-      "name": "test_extract_concepts",
-      "path": "./tooling/test_knowledge_integrator.py",
+      "name": "summarize_build_commands",
+      "path": "./tooling/master_agents_md_generator.py",
       "language": "Python",
-      "line": 46,
+      "line": 144,
       "kind": "function",
-      "docstring": "Test that concepts are extracted and cleaned correctly."
+      "docstring": "Reads the build configuration and creates a summary of available commands."
     },
     {
       "_type": "tag",
-      "name": "test_query_dbpedia_success",
-      "path": "./tooling/test_knowledge_integrator.py",
+      "name": "main",
+      "path": "./tooling/master_agents_md_generator.py",
       "language": "Python",
-      "line": 54,
+      "line": 168,
       "kind": "function",
-      "docstring": "Test a successful query to DBPedia, mocking the HTTP request."
-    },
-    {
-      "_type": "tag",
-      "name": "test_query_dbpedia_http_error",
-      "path": "./tooling/test_knowledge_integrator.py",
-      "language": "Python",
-      "line": 77,
-      "kind": "function",
-      "docstring": "Test that a DBPedia query handles HTTP errors gracefully."
-    },
-    {
-      "_type": "tag",
-      "name": "test_run_knowledge_integration",
-      "path": "./tooling/test_knowledge_integrator.py",
-      "language": "Python",
-      "line": 87,
-      "kind": "function",
-      "docstring": "Test the main run_knowledge_integration function."
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -4163,7 +4145,7 @@
       "name": "execute_command_target",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 77,
+      "line": 83,
       "kind": "function",
       "docstring": "Executes a 'command' type build target."
     },
@@ -4172,7 +4154,7 @@
       "name": "execute_build",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 83,
+      "line": 89,
       "kind": "function",
       "docstring": "Executes the build process for a specific target."
     },
@@ -4181,7 +4163,7 @@
       "name": "main",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 142,
+      "line": 148,
       "kind": "function",
       "docstring": "Main function to parse arguments and drive the build process."
     },
@@ -5663,39 +5645,39 @@
     },
     {
       "_type": "tag",
-      "name": "load_local_graph",
+      "name": "integrate_lessons",
       "path": "./tooling/knowledge_integrator.py",
       "language": "Python",
-      "line": 18,
+      "line": 14,
       "kind": "function",
-      "docstring": "Loads the local RDF graph from a file."
+      "docstring": "Integrates lessons from a JSONL file into the knowledge graph."
     },
     {
       "_type": "tag",
-      "name": "extract_concepts",
+      "name": "integrate_protocols",
       "path": "./tooling/knowledge_integrator.py",
       "language": "Python",
-      "line": 27,
+      "line": 28,
       "kind": "function",
-      "docstring": "Extracts key concepts (e.g., tools) from the local graph to query externally.\nThis version dynamically extracts tool names from the graph."
+      "docstring": "Integrates protocol definitions into the knowledge graph."
     },
     {
       "_type": "tag",
-      "name": "query_dbpedia",
+      "name": "integrate_research",
       "path": "./tooling/knowledge_integrator.py",
       "language": "Python",
-      "line": 71,
+      "line": 44,
       "kind": "function",
-      "docstring": "Queries DBPedia for a given concept and returns a graph of results."
+      "docstring": "Integrates research findings into the knowledge graph."
     },
     {
       "_type": "tag",
-      "name": "run_knowledge_integration",
+      "name": "main",
       "path": "./tooling/knowledge_integrator.py",
       "language": "Python",
-      "line": 103,
+      "line": 57,
       "kind": "function",
-      "docstring": "The main library function to run the knowledge integration process.\nIt loads a graph, extracts concepts, queries DBPedia, and saves the\nenriched graph."
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -6158,21 +6140,21 @@
     },
     {
       "_type": "tag",
-      "name": "generate_executable_agents_md",
-      "path": "./tooling/generate_agents_md.py",
+      "name": "compile_module",
+      "path": "./tooling/compile_protocols.py",
       "language": "Python",
-      "line": 4,
+      "line": 27,
       "kind": "function",
-      "docstring": "Generates a self-executing AGENTS.md file by embedding the markdown\ncontent into a Python script's docstring."
+      "docstring": "Compiles the protocol files in a directory into a single AGENTS.md."
     },
     {
       "_type": "tag",
       "name": "main",
-      "path": "./tooling/generate_agents_md.py",
+      "path": "./tooling/compile_protocols.py",
       "language": "Python",
-      "line": 66,
+      "line": 76,
       "kind": "function",
-      "docstring": null
+      "docstring": "Main function to find and compile all protocol modules."
     },
     {
       "_type": "tag",
@@ -9857,147 +9839,12 @@
     },
     {
       "_type": "tag",
-      "name": "load_tool_manifest",
-      "path": "./protocols/build.py",
-      "language": "Python",
-      "line": 31,
-      "kind": "function",
-      "docstring": "Loads the tool manifest from the specified file."
-    },
-    {
-      "_type": "tag",
-      "name": "validate_protocol_tools",
-      "path": "./protocols/build.py",
-      "language": "Python",
-      "line": 39,
-      "kind": "function",
-      "docstring": "Validates the tools used in a protocol against the tool manifest."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_module",
-      "path": "./protocols/build.py",
-      "language": "Python",
-      "line": 51,
-      "kind": "function",
-      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_module",
-      "path": "./protocols/self_improvement/build.py",
-      "language": "Python",
-      "line": 29,
-      "kind": "function",
-      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_module",
-      "path": "./protocols/experimental/build.py",
-      "language": "Python",
-      "line": 27,
-      "kind": "function",
-      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
-    },
-    {
-      "_type": "tag",
-      "name": "build",
-      "path": "./protocols/aal_spec/build.py",
-      "language": "Python",
-      "line": 5,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_module",
-      "path": "./protocols/gemini/build.py",
-      "language": "Python",
-      "line": 29,
-      "kind": "function",
-      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
-    },
-    {
-      "_type": "tag",
-      "name": "find_files",
-      "path": "./protocols/core/build.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "function",
-      "docstring": "Finds files matching a pattern in a directory."
-    },
-    {
-      "_type": "tag",
-      "name": "load_schema",
-      "path": "./protocols/core/build.py",
-      "language": "Python",
-      "line": 44,
-      "kind": "function",
-      "docstring": "Loads the JSON schema from a file."
-    },
-    {
-      "_type": "tag",
-      "name": "sanitize_markdown",
-      "path": "./protocols/core/build.py",
-      "language": "Python",
-      "line": 56,
-      "kind": "function",
-      "docstring": "Removes potentially unsafe constructs from Markdown."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_module",
-      "path": "./protocols/core/build.py",
-      "language": "Python",
-      "line": 65,
-      "kind": "function",
-      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
-    },
-    {
-      "_type": "tag",
       "name": "is_applicable",
       "path": "./protocols/core/conditional_refactoring.protocol.py",
       "language": "Python",
       "line": 7,
       "kind": "function",
       "docstring": "This protocol is only applicable if the task is 'refactor' and\nat least one of the target files is within the 'legacy/' directory."
-    },
-    {
-      "_type": "tag",
-      "name": "find_files",
-      "path": "./protocols/security/build.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "function",
-      "docstring": "Finds files matching a pattern in a directory."
-    },
-    {
-      "_type": "tag",
-      "name": "load_schema",
-      "path": "./protocols/security/build.py",
-      "language": "Python",
-      "line": 44,
-      "kind": "function",
-      "docstring": "Loads the JSON schema from a file."
-    },
-    {
-      "_type": "tag",
-      "name": "sanitize_markdown",
-      "path": "./protocols/security/build.py",
-      "language": "Python",
-      "line": 56,
-      "kind": "function",
-      "docstring": "Removes potentially unsafe constructs from Markdown."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_module",
-      "path": "./protocols/security/build.py",
-      "language": "Python",
-      "line": 65,
-      "kind": "function",
-      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
     },
     {
       "_type": "tag",
@@ -10032,42 +9879,6 @@
       "path": "./protocols/guardian/build.py",
       "language": "Python",
       "line": 64,
-      "kind": "function",
-      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
-    },
-    {
-      "_type": "tag",
-      "name": "find_files",
-      "path": "./protocols/critic/build.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "function",
-      "docstring": "Finds files matching a pattern in a directory."
-    },
-    {
-      "_type": "tag",
-      "name": "load_schema",
-      "path": "./protocols/critic/build.py",
-      "language": "Python",
-      "line": 44,
-      "kind": "function",
-      "docstring": "Loads the JSON schema from a file."
-    },
-    {
-      "_type": "tag",
-      "name": "sanitize_markdown",
-      "path": "./protocols/critic/build.py",
-      "language": "Python",
-      "line": 56,
-      "kind": "function",
-      "docstring": "Removes potentially unsafe constructs from Markdown."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_module",
-      "path": "./protocols/critic/build.py",
-      "language": "Python",
-      "line": 65,
       "kind": "function",
       "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
     },
@@ -10115,60 +9926,6 @@
       "line": 5,
       "kind": "function",
       "docstring": "This function is the proof checker for the AGENT-BOOTSTRAP-001 proposition.\n\nIt verifies that the `bootstrap` function in `proof.py` is a valid\nconstructive proof of the proposition defined in `README.md`."
-    },
-    {
-      "_type": "tag",
-      "name": "find_files",
-      "path": "./protocols/compliance/build.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "function",
-      "docstring": "Finds files matching a pattern in a directory."
-    },
-    {
-      "_type": "tag",
-      "name": "load_schema",
-      "path": "./protocols/compliance/build.py",
-      "language": "Python",
-      "line": 44,
-      "kind": "function",
-      "docstring": "Loads the JSON schema from a file."
-    },
-    {
-      "_type": "tag",
-      "name": "sanitize_markdown",
-      "path": "./protocols/compliance/build.py",
-      "language": "Python",
-      "line": 56,
-      "kind": "function",
-      "docstring": "Removes potentially unsafe constructs from Markdown."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_module",
-      "path": "./protocols/compliance/build.py",
-      "language": "Python",
-      "line": 65,
-      "kind": "function",
-      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_module",
-      "path": "./protocols/testing/build.py",
-      "language": "Python",
-      "line": 29,
-      "kind": "function",
-      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_module",
-      "path": "./protocols/external_apis/build.py",
-      "language": "Python",
-      "line": 29,
-      "kind": "function",
-      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
     },
     {
       "_type": "tag",
