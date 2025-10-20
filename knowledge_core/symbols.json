@@ -3269,6 +3269,51 @@
     },
     {
       "_type": "tag",
+      "name": "ExternalApiClient",
+      "path": "./tooling/external_api_client.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/external_api_client.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_get_base_url",
+      "path": "./tooling/external_api_client.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "function",
+      "docstring": "Retrieves the base URL for the API from the external API registry."
+    },
+    {
+      "_type": "tag",
+      "name": "post",
+      "path": "./tooling/external_api_client.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": "Sends a POST request to the specified endpoint."
+    },
+    {
+      "_type": "tag",
+      "name": "get",
+      "path": "./tooling/external_api_client.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "function",
+      "docstring": "Sends a GET request to the specified endpoint."
+    },
+    {
+      "_type": "tag",
       "name": "extract_lessons_from_postmortem",
       "path": "./tooling/knowledge_compiler.py",
       "language": "Python",
@@ -9462,9 +9507,18 @@
     {
       "_type": "tag",
       "name": "compile_module",
+      "path": "./protocols/self_improvement/build.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_module",
       "path": "./protocols/experimental/build.py",
       "language": "Python",
-      "line": 26,
+      "line": 27,
       "kind": "function",
       "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
     },
@@ -9476,6 +9530,15 @@
       "line": 5,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_module",
+      "path": "./protocols/gemini/build.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
     },
     {
       "_type": "tag",
@@ -9527,7 +9590,7 @@
       "name": "find_files",
       "path": "./protocols/security/build.py",
       "language": "Python",
-      "line": 27,
+      "line": 28,
       "kind": "function",
       "docstring": "Finds files matching a pattern in a directory."
     },
@@ -9536,7 +9599,7 @@
       "name": "load_schema",
       "path": "./protocols/security/build.py",
       "language": "Python",
-      "line": 43,
+      "line": 44,
       "kind": "function",
       "docstring": "Loads the JSON schema from a file."
     },
@@ -9545,7 +9608,7 @@
       "name": "sanitize_markdown",
       "path": "./protocols/security/build.py",
       "language": "Python",
-      "line": 55,
+      "line": 56,
       "kind": "function",
       "docstring": "Removes potentially unsafe constructs from Markdown."
     },
@@ -9554,7 +9617,7 @@
       "name": "compile_module",
       "path": "./protocols/security/build.py",
       "language": "Python",
-      "line": 64,
+      "line": 65,
       "kind": "function",
       "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
     },
@@ -9563,7 +9626,7 @@
       "name": "find_files",
       "path": "./protocols/critic/build.py",
       "language": "Python",
-      "line": 27,
+      "line": 28,
       "kind": "function",
       "docstring": "Finds files matching a pattern in a directory."
     },
@@ -9572,7 +9635,7 @@
       "name": "load_schema",
       "path": "./protocols/critic/build.py",
       "language": "Python",
-      "line": 43,
+      "line": 44,
       "kind": "function",
       "docstring": "Loads the JSON schema from a file."
     },
@@ -9581,7 +9644,7 @@
       "name": "sanitize_markdown",
       "path": "./protocols/critic/build.py",
       "language": "Python",
-      "line": 55,
+      "line": 56,
       "kind": "function",
       "docstring": "Removes potentially unsafe constructs from Markdown."
     },
@@ -9590,7 +9653,7 @@
       "name": "compile_module",
       "path": "./protocols/critic/build.py",
       "language": "Python",
-      "line": 64,
+      "line": 65,
       "kind": "function",
       "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
     },
@@ -9644,7 +9707,7 @@
       "name": "find_files",
       "path": "./protocols/compliance/build.py",
       "language": "Python",
-      "line": 27,
+      "line": 28,
       "kind": "function",
       "docstring": "Finds files matching a pattern in a directory."
     },
@@ -9653,7 +9716,7 @@
       "name": "load_schema",
       "path": "./protocols/compliance/build.py",
       "language": "Python",
-      "line": 43,
+      "line": 44,
       "kind": "function",
       "docstring": "Loads the JSON schema from a file."
     },
@@ -9662,7 +9725,7 @@
       "name": "sanitize_markdown",
       "path": "./protocols/compliance/build.py",
       "language": "Python",
-      "line": 55,
+      "line": 56,
       "kind": "function",
       "docstring": "Removes potentially unsafe constructs from Markdown."
     },
@@ -9671,7 +9734,25 @@
       "name": "compile_module",
       "path": "./protocols/compliance/build.py",
       "language": "Python",
-      "line": 64,
+      "line": 65,
+      "kind": "function",
+      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_module",
+      "path": "./protocols/testing/build.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_module",
+      "path": "./protocols/external_apis/build.py",
+      "language": "Python",
+      "line": 29,
       "kind": "function",
       "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
     },

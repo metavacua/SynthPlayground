@@ -5,11 +5,14 @@ import re
 import jsonschema
 
 # --- Configuration ---
+# Assuming this script is in protocols/gemini/, the root is two levels up.
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 sys.path.append(ROOT_DIR)
 SOURCE_DIR = os.path.dirname(__file__)
 TARGET_FILE = os.path.join(SOURCE_DIR, "AGENTS.md")
 SCHEMA_FILE = os.path.join(ROOT_DIR, "protocols", "protocol.schema.json")
+
+from tooling.build_utils import find_files, load_schema, sanitize_markdown
 
 DISCLAIMER_TEMPLATE = """\
 # ---
@@ -23,48 +26,9 @@ DISCLAIMER_TEMPLATE = """\
 # ---
 """
 
-# --- Utility Functions (adapted from root compiler) ---
-
-def find_files(pattern, base_dir=".", recursive=True):
-    """Finds files matching a pattern in a directory."""
-    if recursive:
-        return [
-            os.path.join(dp, f)
-            for dp, dn, filenames in os.walk(base_dir)
-            for f in filenames
-            if f.endswith(pattern)
-        ]
-    else:
-        return [
-            f
-            for f in os.listdir(base_dir)
-            if os.path.isfile(os.path.join(base_dir, f)) and f.endswith(pattern)
-        ]
-
-def load_schema(schema_file):
-    """Loads the JSON schema from a file."""
-    try:
-        with open(schema_file, "r") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        print(f"Error: Schema file not found at {schema_file}", file=sys.stderr)
-        sys.exit(1)
-    except json.JSONDecodeError:
-        print(f"Error: Could not decode JSON from schema file at {schema_file}", file=sys.stderr)
-        sys.exit(1)
-
-def sanitize_markdown(content):
-    """Removes potentially unsafe constructs from Markdown."""
-    content = re.sub(r"<script.*?>.*?</script>", "", content, flags=re.IGNORECASE | re.DOTALL)
-    content = re.sub(r" on\w+=\".*?\"", "", content, flags=re.IGNORECASE)
-    content = re.sub(r"<<<SENSITIVE_INSTRUCTIONS>>>.*<<<SENSITIVE_INSTRUCTIONS>>>", "", content, flags=re.DOTALL)
-    return content
-
-# --- Core Compilation Logic ---
-
 def compile_module():
     """Compiles the protocol files in this directory into a single AGENTS.md."""
-    print(f"--- Starting Protocol Compilation for Compliance Module ---")
+    print(f"--- Starting Protocol Compilation for Gemini Module ---")
     print(f"Source directory: {SOURCE_DIR}")
     print(f"Target file: {TARGET_FILE}")
 
@@ -72,14 +36,12 @@ def compile_module():
     if not schema:
         return
 
-    # Find all protocol source files in the current directory (non-recursive)
     all_md_files = sorted([os.path.join(SOURCE_DIR, f) for f in find_files(".protocol.md", base_dir=SOURCE_DIR, recursive=False)])
     all_json_files = sorted([os.path.join(SOURCE_DIR, f) for f in find_files(".protocol.json", base_dir=SOURCE_DIR, recursive=False)])
 
     disclaimer = DISCLAIMER_TEMPLATE.format(source_dir_name=os.path.basename(SOURCE_DIR))
     final_content = [disclaimer]
 
-    # Process markdown files
     for file_path in all_md_files:
         with open(file_path, "r") as f:
             content = f.read()
@@ -87,7 +49,6 @@ def compile_module():
             final_content.append(sanitized_content)
         final_content.append("\n---\n")
 
-    # Process JSON files
     for file_path in all_json_files:
         try:
             with open(file_path, "r") as f:
@@ -102,14 +63,12 @@ def compile_module():
         except jsonschema.ValidationError as e:
             print(f"Warning: Schema validation failed for {file_path}: {e.message}", file=sys.stderr)
 
-
-    # Write the final output
     final_output_string = "\n".join(final_content)
     temp_target_file = TARGET_FILE + ".tmp"
     with open(temp_target_file, "w") as f:
         f.write(final_output_string)
     os.rename(temp_target_file, TARGET_FILE)
-    print(f"Successfully compiled AGENTS.md for compliance module at {TARGET_FILE}")
+    print(f"Successfully compiled AGENTS.md for gemini module at {TARGET_FILE}")
 
 if __name__ == "__main__":
     compile_module()

@@ -1,0 +1,7 @@
+{
+  "jules_api": {
+    "endpoint": "https://jules.googleapis.com/v1alpha",
+    "auth_method": "api_key",
+    "api_key_env_var": "JULES_API_KEY"
+  }
+}
