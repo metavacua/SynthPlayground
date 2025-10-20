@@ -1,0 +1,51 @@
+# Structured Post-Mortem Report
+
+## 1. Task Identification
+
+- **Task ID:** [TASK_ID]
+- **Completion Date:** [COMPLETION_DATE]
+
+## 2. Objective
+
+*A concise, one-sentence summary of the original goal.*
+
+## 3. Outcome
+
+- **Final Status:** [SUCCESS | FAILURE]
+- **Primary Artifacts:**
+    - *Link to the main PR, branch, or other key outputs.*
+    - *If applicable, link to any generated reports or logs.*
+
+## 4. General Reflections
+
+*A high-level, narrative description of how the task unfolded. What was the overall approach? Were there any major surprises or deviations from the initial plan?*
+
+## 5. Key Events & Decisions
+
+*A chronological log of the most important events, decisions, and observations.*
+
+| Step # | Action/Tool Used | Rationale | Outcome/Observation |
+|---|---|---|---|
+| 1 | `tool_name` | *Why was this tool chosen?* | *What was the result?* |
+| 2 | `another_tool` | *...* | *...* |
+
+## 6. Technical Root Cause Analysis (for failures)
+
+*A detailed breakdown of the technical reasons for a failure.*
+
+- **Symptom:** *What was the observable failure?*
+- **Proximate Cause:** *What was the direct cause of the failure?*
+- **Root Cause:** *What is the fundamental underlying reason for the failure?*
+
+## 7. Lessons Learned & Action Items
+
+*Specific, actionable takeaways from this task.*
+
+| Category | Lesson Learned | Action Item | Responsible |
+|---|---|---|---|
+| Protocol | *e.g., The protocol for X is ambiguous.* | *e.g., Propose a clarification to PROTOCOL-001.* | Agent |
+| Tooling | *e.g., The `linter` tool is too slow.* | *e.g., Investigate performance improvements.* | Agent |
+| Strategy | *e.g., I should have done more research upfront.* | *e.g., Update planning checklist to include a research step.* | Agent |
+
+---
+*This document is intended to be machine-readable and human-readable. It serves as a critical input for the agent's long-term learning and self-improvement loop.*

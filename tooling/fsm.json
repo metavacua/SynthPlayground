@@ -122,6 +122,11 @@
       "trigger": "finalization_failed"
     },
     {
+      "source": "FINALIZING",
+      "dest": "ERROR",
+      "trigger": "finalization_failed"
+    },
+    {
       "source": "ERROR",
       "dest": "ORIENTING",
       "trigger": "reorient"

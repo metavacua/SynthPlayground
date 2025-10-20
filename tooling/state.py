@@ -70,6 +70,7 @@ class AgentState:
     """
 
     task: str
+    task_description: str = ""
     plan_path: Optional[str] = None
     plan_stack: List[PlanContext] = field(default_factory=list)
     messages: List[Dict[str, Any]] = field(default_factory=list)
