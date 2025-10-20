@@ -9,6 +9,7 @@ This is a Python-based project with a sophisticated, self-correcting agent archi
 ## Build & Commands
 
 This repository uses a hierarchical, decentralized protocol system. Each of the following directories contains a self-contained set of protocols and is compiled by its own local build script.
+- [Browser Control](protocols/browser_control/AGENTS.md)
 - [Compliance](protocols/compliance/AGENTS.md)
 - [Core](protocols/core/AGENTS.md)
 - [Critic](protocols/critic/AGENTS.md)
@@ -89,5 +90,51 @@ if __name__ == '__main__':
     execute_commands_from_agents_md()
 ```
 
-- [Gemini API Integration](protocols/gemini/AGENTS.md)
-- [External Agent API Integration](protocols/external_apis/AGENTS.md)
+## Capabilities
+
+This agent has the following capabilities:
+
+*   **Document Processing:** The agent can process and understand the content of PDF documents, including text, images, and tables.
+*   **Browser Control:** The agent can control a web browser to perform tasks like data entry, automated testing, and web research.
+
+## Gemini API Integration
+
+This section provides instructions for interacting with the Gemini API, which allows for programmatic access to the agent's capabilities.
+
+### Authentication
+
+To use the Gemini API, you need an API key. Pass the API key in the `x-goog-api-key` header of your API calls.
+
+**Important:** Keep your API keys secure. Do not share them or embed them in public code.
+
+### System Instructions
+
+You can use system instructions to guide the behavior of the model. For example, you can use system instructions to:
+
+*   **Define the agent's persona:** You can instruct the agent to act as a helpful and capable software engineering assistant.
+*   **Specify the agent's goals:** You can specify the agent's goals for a particular task, such as "implement a new feature" or "fix a bug."
+*   **Provide context:** You can provide the agent with the context it needs to understand the task at hand, such as information about the codebase, the project's architecture, and any relevant constraints or requirements.
+*   **Enforce protocol adherence:** You can instruct the agent to always use the tools and information provided in the `knowledge_core/` directory.
+
+Here's an example of how to use system instructions to define the agent's persona:
+
+```json
+{
+  "system_instruction": {
+    "parts": [
+      {
+        "text": "You are a helpful and capable software engineering assistant. Your name is Jules."
+      }
+    ]
+  },
+  "contents": [
+    {
+      "parts": [
+        {
+          "text": "Hello there"
+        }
+      ]
+    }
+  ]
+}
+```
