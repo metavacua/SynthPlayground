@@ -1,0 +1,11 @@
+{
+    "name": "fetch_data",
+    "description": "A tool for fetching raw data.",
+    "preconditions": [],
+    "postconditions": [
+        {
+            "name": "raw_data",
+            "description": "The raw data that was fetched."
+        }
+    ]
+}

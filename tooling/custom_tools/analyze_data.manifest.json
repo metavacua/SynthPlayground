@@ -1,0 +1,16 @@
+{
+    "name": "analyze_data",
+    "description": "A tool for analyzing raw data.",
+    "preconditions": [
+        {
+            "name": "raw_data",
+            "description": "The raw data to analyze."
+        }
+    ],
+    "postconditions": [
+        {
+            "name": "analysis_report",
+            "description": "The analysis report."
+        }
+    ]
+}
