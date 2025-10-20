@@ -1676,6 +1676,19 @@ and keyboard inputs.
   > The main entry point for the GeminiComputerUse tool.
 
 
+### `/app/tooling/guardian.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Validates a review document to ensure it complies with the Guardian Protocol.
+
+
 ### `/app/tooling/halting_heuristic_analyzer.py`
 
 A static analysis tool to estimate the termination risk of a UDC plan.
