@@ -57,6 +57,7 @@ def create_proposal():
     """
     # Create the base proposals directory if it doesn't exist
     os.makedirs(PROPOSALS_DIR, exist_ok=True)
+    os.makedirs("reviews", exist_ok=True)
 
     # Generate a unique directory name for the new proposal
     timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S-%f")
@@ -69,7 +70,28 @@ def create_proposal():
     with open(proposal_file_path, "w") as f:
         f.write(PROPOSAL_TEMPLATE)
 
+    review_file_path = os.path.join("reviews", f"{proposal_dir_name}.md")
+    review_template = """\
+# Guardian Protocol Review
+
+## Summary
+
+...
+
+## Impact Analysis
+
+...
+
+## Verification Plan
+
+...
+"""
+    with open(review_file_path, "w") as f:
+        f.write(review_template)
+
+
     print(f"Successfully created new proposal at: {proposal_file_path}")
+    print(f"Successfully created new review document at: {review_file_path}")
     return proposal_file_path
 
 
