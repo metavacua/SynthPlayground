@@ -1,5 +1,5 @@
 import unittest
-from appl_ast import (
+from .ast import (
     Int,
     String,
     Bool,
@@ -19,8 +19,8 @@ from appl_ast import (
     TInt,
     TString,
 )
-from interpreter import interpret, InterpError, Closure
-from planning import Action
+from .interpreter import interpret, InterpError, Closure
+from .planning import Action
 
 
 class TestInterpreter(unittest.TestCase):

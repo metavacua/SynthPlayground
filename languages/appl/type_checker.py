@@ -1,4 +1,4 @@
-from appl_ast import (
+from .ast import (
     AST, App, Bool, Case, Cons, Fun, Inl, Inr, Int, Let, LetBang, LetPair, Nil,
     Pair, Promote, String, TAction, TBool, TExponential, TFun, TGoal, TInt,
     TList, TProd, TState, TString, TSum, TTerm, TUnit, Term, Type, Unit, Var

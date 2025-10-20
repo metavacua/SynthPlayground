@@ -1,7 +1,0 @@
-# Unhandled expression type in LetStatement: <class 'aura_lang.ast.StringLiteral'>
-# Unhandled expression type in LetStatement: <class 'aura_lang.ast.CallExpression'>
-# Unhandled AURA node: <class 'aura_lang.ast.PrintStatement'>
-# Unhandled AURA node: <class 'aura_lang.ast.ExpressionStatement'>
-# Unhandled AURA node: <class 'aura_lang.ast.PrintStatement'>
-# Unhandled AURA node: <class 'aura_lang.ast.ExpressionStatement'>
-# Unhandled AURA node: <class 'aura_lang.ast.IfStatement'>

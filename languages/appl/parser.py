@@ -1,5 +1,5 @@
 import re
-from appl_ast import *
+from .ast import *
 
 class Parser:
     def __init__(self, tokens):

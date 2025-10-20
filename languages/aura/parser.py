@@ -1,5 +1,5 @@
-from aura_lang.lexer import Lexer, Token
-from aura_lang.ast import (
+from .lexer import Lexer, Token
+from .ast import (
     Program, Statement, Expression, LetStatement, ReturnStatement,
     ExpressionStatement, Identifier, IntegerLiteral, StringLiteral,
     InfixExpression, CallExpression, FunctionDefinition, BlockStatement,

@@ -8,12 +8,9 @@ import argparse
 import sys
 import os
 
-# Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from aura_lang.lexer import Lexer as AuraLexer
-from aura_lang.parser import Parser as AuraParser
-from aura_lang.ast import (
+from languages.aura.lexer import Lexer as AuraLexer
+from languages.aura.parser import Parser as AuraParser
+from languages.aura.ast import (
     LetStatement, IntegerLiteral, StringLiteral, InfixExpression, Identifier,
     CallExpression, PrintStatement, IfStatement, ForStatement, ReturnStatement,
     FunctionDefinition, BlockStatement, ExpressionStatement

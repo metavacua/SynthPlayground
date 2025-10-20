@@ -1,8 +1,8 @@
 import sys
-from aura_lang.lexer import Lexer
-from aura_lang.parser import Parser
-from aura_lang.interpreter import evaluate, Environment, BUILTINS, Function as AuraFunction
-from aura_lang import ast
+from languages.aura.lexer import Lexer
+from languages.aura.parser import Parser
+from languages.aura.interpreter import evaluate, Environment, BUILTINS, Function as AuraFunction
+from languages.aura import ast
 
 def main():
     if len(sys.argv) < 2:

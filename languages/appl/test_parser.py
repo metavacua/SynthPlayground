@@ -1,5 +1,5 @@
 import unittest
-from appl_ast import (
+from .ast import (
     Int,
     String,
     Bool,
@@ -19,7 +19,7 @@ from appl_ast import (
     TInt,
     TString,
 )
-from parser import parse
+from .parser import parse
 
 
 class TestParser(unittest.TestCase):

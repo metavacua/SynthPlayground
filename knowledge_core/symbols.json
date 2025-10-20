@@ -3,7 +3,7 @@
     {
       "_type": "tag",
       "name": "TestTypeChecker",
-      "path": "./test_type_checker.py",
+      "path": "./languages/appl/test_type_checker.py",
       "language": "Python",
       "line": 29,
       "kind": "class",
@@ -174,7 +174,7 @@
     {
       "_type": "tag",
       "name": "InterpError",
-      "path": "./interpreter.py",
+      "path": "./languages/appl/interpreter.py",
       "language": "Python",
       "line": 32,
       "kind": "class",
@@ -291,7 +291,7 @@
     {
       "_type": "tag",
       "name": "TInt",
-      "path": "./appl_ast.py",
+      "path": "./languages/appl/ast.py",
       "language": "Python",
       "line": 3,
       "kind": "class",
@@ -1335,7 +1335,7 @@
     {
       "_type": "tag",
       "name": "TestParser",
-      "path": "./test_parser.py",
+      "path": "./languages/appl/test_parser.py",
       "language": "Python",
       "line": 25,
       "kind": "class",
@@ -1479,7 +1479,7 @@
     {
       "_type": "tag",
       "name": "Action",
-      "path": "./planning.py",
+      "path": "./languages/appl/planning.py",
       "language": "Python",
       "line": 1,
       "kind": "class",
@@ -1614,7 +1614,7 @@
     {
       "_type": "tag",
       "name": "Parser",
-      "path": "./parser.py",
+      "path": "./languages/appl/parser.py",
       "language": "Python",
       "line": 4,
       "kind": "class",
@@ -1704,7 +1704,7 @@
     {
       "_type": "tag",
       "name": "TestInterpreter",
-      "path": "./test_interpreter.py",
+      "path": "./languages/appl/test_interpreter.py",
       "language": "Python",
       "line": 26,
       "kind": "class",
@@ -1848,7 +1848,7 @@
     {
       "_type": "tag",
       "name": "TypeCheckError",
-      "path": "./type_checker.py",
+      "path": "./languages/appl/type_checker.py",
       "language": "Python",
       "line": 8,
       "kind": "class",
@@ -7275,7 +7275,7 @@
     {
       "_type": "tag",
       "name": "Object",
-      "path": "./aura_lang/interpreter.py",
+      "path": "./languages/aura/interpreter.py",
       "language": "Python",
       "line": 7,
       "kind": "class",
@@ -7527,7 +7527,7 @@
     {
       "_type": "tag",
       "name": "Token",
-      "path": "./aura_lang/lexer.py",
+      "path": "./languages/aura/lexer.py",
       "language": "Python",
       "line": 3,
       "kind": "class",
@@ -7653,7 +7653,7 @@
     {
       "_type": "tag",
       "name": "AST",
-      "path": "./aura_lang/ast.py",
+      "path": "./languages/aura/ast.py",
       "language": "Python",
       "line": 3,
       "kind": "class",
@@ -7986,7 +7986,7 @@
     {
       "_type": "tag",
       "name": "Parser",
-      "path": "./aura_lang/parser.py",
+      "path": "./languages/aura/parser.py",
       "language": "Python",
       "line": 26,
       "kind": "class",

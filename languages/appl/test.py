@@ -1,4 +1,4 @@
-from appl_ast import *
+from .ast import *
 
 # A simple APPL program: let !x = !5 in x * x
 # This will be translated to LFI ILL.

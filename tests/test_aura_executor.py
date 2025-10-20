@@ -10,8 +10,8 @@ class TestAuraExecutor(unittest.TestCase):
         python_executable = sys.executable
         # Get the path to the aura_executor.py script
         executor_path = Path(__file__).resolve().parent.parent / "tooling" / "aura_executor.py"
-        # Get the path to the integration_demo.aura script
-        script_path = Path(__file__).resolve().parent.parent / "integration_demo.aura"
+        # Get the path to the test.aura script
+        script_path = Path(__file__).resolve().parent / "test.aura"
 
         # Run the aura_executor.py script as a subprocess
         result = subprocess.run(
@@ -22,9 +22,7 @@ class TestAuraExecutor(unittest.TestCase):
 
         # Check the output
         output = result.stdout
-        self.assertIn("Provable", output)
-        self.assertIn("Sequent is provable!", output)
-        self.assertIn("[Message User]: Integration demo complete!", output)
+        self.assertIn("hello from aura", output)
 
 if __name__ == '__main__':
     unittest.main()

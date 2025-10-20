@@ -1,4 +1,4 @@
-from appl_ast import (
+from .ast import (
     Term,
     Var,
     Int,
@@ -19,14 +19,14 @@ from appl_ast import (
     Cons,
     AST,
 )
-from planning import (
+from .planning import (
     create_action,
     create_goal,
     create_state,
     apply_action,
     is_goal,
 )
-from parser import parse
+from .parser import parse
 
 
 class InterpError(Exception):

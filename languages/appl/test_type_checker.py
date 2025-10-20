@@ -1,5 +1,5 @@
 import unittest
-from appl_ast import (
+from .ast import (
     Int,
     String,
     Bool,
@@ -23,7 +23,7 @@ from appl_ast import (
     TProd,
     TSum,
 )
-from type_checker import type_check, TypeCheckError
+from .type_checker import type_check, TypeCheckError
 
 
 class TestTypeChecker(unittest.TestCase):
