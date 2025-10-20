@@ -134,6 +134,11 @@
       "id": "pytest",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "google.generativeai",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
@@ -264,6 +269,10 @@
     {
       "source": "tooling",
       "target": "ply"
+    },
+    {
+      "source": "tooling",
+      "target": "google.generativeai"
     }
   ]
 }
