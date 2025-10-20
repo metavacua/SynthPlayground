@@ -74,3 +74,58 @@ def is_goal(goal_conditions: List[str]) -> bool:
 def get_current_state() -> List[str]:
     """Returns the names of the fluents in the current state."""
     return [fluent.name for fluent in sorted(list(current_state), key=lambda f: f.name)]
+
+
+class Node:
+    """A node in a search tree for planning."""
+    def __init__(self, state, parent=None, action=None):
+        self.state = state
+        self.parent = parent
+        self.action = action
+
+    def __eq__(self, other):
+        return isinstance(other, Node) and self.state == other.state
+
+    def __hash__(self):
+        return hash(frozenset(self.state))
+
+
+def find_plan(goal_conditions: List[str]) -> List[str]:
+    """
+    Finds a sequence of actions to achieve a goal using Breadth-First Search.
+    """
+    if domain is None:
+        raise PlanningError("Cannot find plan before loading a domain.")
+
+    goal_fluents = {Fluent(name=cond) for cond in goal_conditions}
+    initial_node = Node(current_state)
+
+    if goal_fluents.issubset(initial_node.state):
+        return []  # Goal is already satisfied
+
+    queue = [initial_node]
+    visited = {frozenset(initial_node.state)}
+
+    while queue:
+        current_node = queue.pop(0)
+
+        for action in domain.actions:
+            # Create a temporary interpreter to avoid modifying the global state
+            temp_interpreter = AALInterpreter()
+            next_state = temp_interpreter.get_next_state(current_node.state, action, domain)
+
+            if frozenset(next_state) not in visited:
+                new_node = Node(next_state, parent=current_node, action=action)
+
+                if goal_fluents.issubset(new_node.state):
+                    # Goal found, reconstruct the plan
+                    plan = []
+                    while new_node.parent is not None:
+                        plan.insert(0, new_node.action.name)
+                        new_node = new_node.parent
+                    return plan
+
+                queue.append(new_node)
+                visited.add(frozenset(next_state))
+
+    return None # No plan found

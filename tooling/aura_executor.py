@@ -46,43 +46,56 @@ def dynamic_agent_call_tool(tool_name_obj: Object, *args: Object) -> Object:
     """
     try:
         tool_name = tool_name_obj.value
-        # Sanitize the tool_name to prevent directory traversal vulnerabilities.
-        if ".." in tool_name or "/" in tool_name:
-            raise ValueError("Invalid tool name format.")
-
-        tool_module_path = Path(__file__).resolve().parent / f"{tool_name}.py"
-        if not tool_module_path.exists():
-            raise ModuleNotFoundError(
-                f"Tool '{tool_name}' not found at '{tool_module_path}'"
-            )
-
         unwrapped_args = [str(arg.value) for arg in args]
-        command = [sys.executable, str(tool_module_path)] + unwrapped_args
 
-        print(f"[Aura Executor]: Calling tool '{tool_name}' with args: {args}")
-        result = subprocess.run(command, capture_output=True, text=True, check=False)
+        # --- Internal Python Tools ---
+        if tool_name == "setup_planning":
+            import planning
+            domain_file = unwrapped_args[0]
+            initial_state_fluents = unwrapped_args[1].split(',')
+            planning.load_domain(domain_file)
+            planning.create_state(initial_state_fluents)
+            return Object("OK")
 
-        if result.returncode != 0:
-            # Return the stderr as the result in case of an error
-            error_output = result.stderr.strip()
-            print(f"Error calling tool '{tool_name}': {error_output}", file=sys.stderr)
-            return Object(f"Error: {error_output}")
+        elif tool_name == "find_plan":
+            import planning
+            goal_conditions = unwrapped_args[0].split(',')
+            plan = planning.find_plan(goal_conditions)
+            if plan is not None:
+                return Object(",".join(plan))
+            else:
+                return Object("Error: No plan found")
 
-        # Print the captured output for visibility
-        if result.stdout:
-            print(result.stdout.strip())
-        if result.stderr:
-            print(result.stderr.strip(), file=sys.stderr)
+        # --- External Subprocess Tools ---
+        else:
+            # Sanitize the tool_name to prevent directory traversal vulnerabilities.
+            if ".." in tool_name or "/" in tool_name:
+                raise ValueError("Invalid tool name format.")
 
-        # Return the stdout as the result
-        return Object(result.stdout.strip())
+            tool_module_path = Path(__file__).resolve().parent / f"{tool_name}.py"
+            if not tool_module_path.exists():
+                raise ModuleNotFoundError(
+                    f"Tool '{tool_name}' not found at '{tool_module_path}'"
+                )
 
-    except (ModuleNotFoundError, ValueError) as e:
-        error_msg = f"Error preparing tool '{tool_name}': {e}"
-        print(error_msg, file=sys.stderr)
-        return Object(f"Error: {error_msg}")
+            command = [sys.executable, str(tool_module_path)] + unwrapped_args
+            print(f"[Aura Executor]: Calling tool '{tool_name}' with args: {unwrapped_args}")
+            result = subprocess.run(command, capture_output=True, text=True, check=False)
+
+            if result.returncode != 0:
+                error_output = result.stderr.strip()
+                print(f"Error calling tool '{tool_name}': {error_output}", file=sys.stderr)
+                return Object(f"Error: {error_output}")
+
+            if result.stdout:
+                print(result.stdout.strip())
+            if result.stderr:
+                print(result.stderr.strip(), file=sys.stderr)
+
+            return Object(result.stdout.strip())
+
     except Exception as e:
-        error_msg = f"An unexpected error occurred when calling tool '{tool_name}': {e}"
+        error_msg = f"An unexpected error occurred when calling tool '{tool_name_obj.value}': {e}"
         print(error_msg, file=sys.stderr)
         return Object(f"Error: {error_msg}")
 
