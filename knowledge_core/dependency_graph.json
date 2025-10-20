@@ -124,6 +124,11 @@
       "id": "PyYAML",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "pytest",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
@@ -218,6 +223,10 @@
     {
       "source": "root-python-project",
       "target": "PyYAML"
+    },
+    {
+      "source": "root-python-project",
+      "target": "pytest"
     },
     {
       "source": "tooling",

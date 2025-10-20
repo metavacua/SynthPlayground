@@ -21,6 +21,18 @@ This act of self-maintenance is a foundational element of robust, autonomous ope
 
 ---
 
+# Protocol: Experimental Prologue
+
+This protocol is a test case to verify the agent's ability to dynamically adapt its behavior to new rules.
+
+## Rule: `create-prologue-file`
+
+Before creating any file, the agent must first create a file named `prologue.txt` with the content "This is a prologue file." This serves as a behavioral check. If the agent creates this file before other requested files, it demonstrates that it has successfully loaded and is following this experimental protocol.
+
+---
+
+# --- Child Module: `compliance` ---
+
 # Protocol: AGENTS.md Non-Compliance
 
 This protocol defines what constitutes non-compliance with the established `AGENTS.md` protocols and outlines the expected corrective actions. Adherence to these meta-rules is critical for ensuring predictable, verifiable, and robust agent behavior.
