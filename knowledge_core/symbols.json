@@ -200,10 +200,19 @@
     },
     {
       "_type": "tag",
+      "name": "_python_list_to_appl_list",
+      "path": "./interpreter.py",
+      "language": "Python",
+      "line": 61,
+      "kind": "function",
+      "docstring": "Converts a Python list of strings to an APPL list of strings."
+    },
+    {
+      "_type": "tag",
       "name": "Primitive",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 62,
+      "line": 69,
       "kind": "class",
       "docstring": null
     },
@@ -212,7 +221,7 @@
       "name": "Interpreter",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 75,
+      "line": 85,
       "kind": "class",
       "docstring": null
     },
@@ -221,7 +230,7 @@
       "name": "_unparse",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 165,
+      "line": 179,
       "kind": "function",
       "docstring": null
     },
@@ -230,7 +239,7 @@
       "name": "interpret",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 170,
+      "line": 184,
       "kind": "function",
       "docstring": "Interprets the given term in the provided environment."
     },
@@ -248,7 +257,7 @@
       "name": "__init__",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 63,
+      "line": 70,
       "kind": "function",
       "docstring": null
     },
@@ -257,7 +266,7 @@
       "name": "apply",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 68,
+      "line": 75,
       "kind": "function",
       "docstring": null
     },
@@ -266,7 +275,7 @@
       "name": "__init__",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 76,
+      "line": 86,
       "kind": "function",
       "docstring": null
     },
@@ -275,7 +284,7 @@
       "name": "interpret",
       "path": "./interpreter.py",
       "language": "Python",
-      "line": 79,
+      "line": 89,
       "kind": "function",
       "docstring": null
     },
@@ -1469,129 +1478,57 @@
     },
     {
       "_type": "tag",
-      "name": "Action",
+      "name": "PlanningError",
       "path": "./planning.py",
       "language": "Python",
-      "line": 1,
+      "line": 15,
       "kind": "class",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "Goal",
-      "path": "./planning.py",
-      "language": "Python",
-      "line": 10,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "State",
+      "name": "load_domain",
       "path": "./planning.py",
       "language": "Python",
       "line": 18,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "create_action",
-      "path": "./planning.py",
-      "language": "Python",
-      "line": 25,
       "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "create_goal",
-      "path": "./planning.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "function",
-      "docstring": null
+      "docstring": "Loads an AAL domain from a file."
     },
     {
       "_type": "tag",
       "name": "create_state",
       "path": "./planning.py",
       "language": "Python",
-      "line": 31,
+      "line": 30,
       "kind": "function",
-      "docstring": null
+      "docstring": "Initializes the current world state from a list of fluent names."
     },
     {
       "_type": "tag",
       "name": "apply_action",
       "path": "./planning.py",
       "language": "Python",
-      "line": 34,
+      "line": 45,
       "kind": "function",
-      "docstring": null
+      "docstring": "Applies an action to the current state using the AAL interpreter\nand updates the current state."
     },
     {
       "_type": "tag",
       "name": "is_goal",
       "path": "./planning.py",
       "language": "Python",
-      "line": 47,
+      "line": 66,
       "kind": "function",
-      "docstring": null
+      "docstring": "Checks if the current state satisfies a set of goal conditions."
     },
     {
       "_type": "tag",
-      "name": "__init__",
+      "name": "get_current_state",
       "path": "./planning.py",
       "language": "Python",
-      "line": 2,
+      "line": 74,
       "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__repr__",
-      "path": "./planning.py",
-      "language": "Python",
-      "line": 7,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./planning.py",
-      "language": "Python",
-      "line": 11,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__repr__",
-      "path": "./planning.py",
-      "language": "Python",
-      "line": 15,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./planning.py",
-      "language": "Python",
-      "line": 19,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__repr__",
-      "path": "./planning.py",
-      "language": "Python",
-      "line": 22,
-      "kind": "function",
-      "docstring": null
+      "docstring": "Returns the names of the fluents in the current state."
     },
     {
       "_type": "tag",
@@ -1697,16 +1634,34 @@
       "name": "TestInterpreter",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 26,
+      "line": 28,
       "kind": "class",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": "Create a dummy AAL file for testing."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./test_interpreter.py",
+      "language": "Python",
+      "line": 38,
+      "kind": "function",
+      "docstring": "Clean up the dummy AAL file."
     },
     {
       "_type": "tag",
       "name": "test_literals",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 27,
+      "line": 43,
       "kind": "function",
       "docstring": null
     },
@@ -1715,7 +1670,7 @@
       "name": "test_var",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 33,
+      "line": 49,
       "kind": "function",
       "docstring": null
     },
@@ -1724,7 +1679,7 @@
       "name": "test_var_not_found",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 37,
+      "line": 53,
       "kind": "function",
       "docstring": null
     },
@@ -1733,7 +1688,7 @@
       "name": "test_fun",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 41,
+      "line": 57,
       "kind": "function",
       "docstring": null
     },
@@ -1742,7 +1697,7 @@
       "name": "test_app",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 46,
+      "line": 62,
       "kind": "function",
       "docstring": null
     },
@@ -1751,7 +1706,7 @@
       "name": "test_app_non_function",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 52,
+      "line": 68,
       "kind": "function",
       "docstring": null
     },
@@ -1760,7 +1715,7 @@
       "name": "test_pair",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 58,
+      "line": 74,
       "kind": "function",
       "docstring": null
     },
@@ -1769,7 +1724,7 @@
       "name": "test_let_pair",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 62,
+      "line": 78,
       "kind": "function",
       "docstring": null
     },
@@ -1778,7 +1733,7 @@
       "name": "test_inl_inr",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 66,
+      "line": 82,
       "kind": "function",
       "docstring": null
     },
@@ -1787,7 +1742,7 @@
       "name": "test_case",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 70,
+      "line": 86,
       "kind": "function",
       "docstring": null
     },
@@ -1796,7 +1751,7 @@
       "name": "test_promote",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 74,
+      "line": 90,
       "kind": "function",
       "docstring": null
     },
@@ -1805,7 +1760,7 @@
       "name": "test_let_bang",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 77,
+      "line": 93,
       "kind": "function",
       "docstring": null
     },
@@ -1814,16 +1769,16 @@
       "name": "test_list",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 81,
+      "line": 97,
       "kind": "function",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_planning_primitive",
+      "name": "test_aal_integration",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 85,
+      "line": 101,
       "kind": "function",
       "docstring": null
     },
@@ -1832,7 +1787,7 @@
       "name": "test_homoiconicity",
       "path": "./test_interpreter.py",
       "language": "Python",
-      "line": 101,
+      "line": 116,
       "kind": "function",
       "docstring": null
     },
@@ -3686,7 +3641,7 @@
       "name": "generate_root_agents_md",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 195,
+      "line": 194,
       "kind": "function",
       "docstring": "Generates the root AGENTS.md file, linking to all successfully compiled child modules."
     },
@@ -3695,7 +3650,7 @@
       "name": "main_orchestrator",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 243,
+      "line": 242,
       "kind": "function",
       "docstring": "Main function to find and run all local build scripts in parallel."
     },
@@ -6923,6 +6878,105 @@
     },
     {
       "_type": "tag",
+      "name": "ExecutableCommand",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "class",
+      "docstring": "Represents a single, parsed command from a self-executing plan."
+    },
+    {
+      "_type": "tag",
+      "name": "parse_executable_plan",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function",
+      "docstring": "Parses the raw text of a plan into a list of ExecutableCommand objects."
+    },
+    {
+      "_type": "tag",
+      "name": "run_in_bash_session",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 78,
+      "kind": "function",
+      "docstring": "Simulates running a command in a bash session."
+    },
+    {
+      "_type": "tag",
+      "name": "message_user",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 88,
+      "kind": "function",
+      "docstring": "Simulates sending a message to the user."
+    },
+    {
+      "_type": "tag",
+      "name": "execute_command",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 100,
+      "kind": "function",
+      "docstring": "Executes a single command and returns True on success, False on failure."
+    },
+    {
+      "_type": "tag",
+      "name": "run_plan",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 129,
+      "kind": "function",
+      "docstring": "Parses and executes a plan."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/jules_agent/plan_runner.py",
+      "language": "Python",
+      "line": 145,
+      "kind": "function",
+      "docstring": "Main function to run the plan runner from the command line."
+    },
+    {
+      "_type": "tag",
+      "name": "get_agents_md_path",
+      "path": "./tooling/jules_agent/action_logger.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "Finds the AGENTS.md file in the given directory."
+    },
+    {
+      "_type": "tag",
+      "name": "log_action",
+      "path": "./tooling/jules_agent/action_logger.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": "Logs an action to the AGENTS.md file."
+    },
+    {
+      "_type": "tag",
+      "name": "get_agents_md_path",
+      "path": "./tooling/jules_agent/plan_manager.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Finds the AGENTS.md file in the given directory."
+    },
+    {
+      "_type": "tag",
+      "name": "inject_plan",
+      "path": "./tooling/jules_agent/plan_manager.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": "Injects or updates the plan in the AGENTS.md file."
+    },
+    {
+      "_type": "tag",
       "name": "get_repo_root",
       "path": "./tooling/agent_smith/generate_and_test.py",
       "language": "Python",
@@ -7019,6 +7073,78 @@
       "line": 190,
       "kind": "function",
       "docstring": "Main function to orchestrate the generation and testing process."
+    },
+    {
+      "_type": "tag",
+      "name": "Interpreter",
+      "path": "./tooling/aal/interpreter.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": "The AAL interpreter, responsible for state transitions."
+    },
+    {
+      "_type": "tag",
+      "name": "get_next_state",
+      "path": "./tooling/aal/interpreter.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": "Calculates the next state based on the current state, an action, and the domain's causal laws.\nA fluent is in the next state if there is a causal law 'a causes f if C' where a is the action\nand C is a subset of the current state."
+    },
+    {
+      "_type": "tag",
+      "name": "Fluent",
+      "path": "./tooling/aal/domain.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "class",
+      "docstring": "Represents a fluent (a proposition) in the domain."
+    },
+    {
+      "_type": "tag",
+      "name": "Action",
+      "path": "./tooling/aal/domain.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "class",
+      "docstring": "Represents an action that can be performed by an agent."
+    },
+    {
+      "_type": "tag",
+      "name": "CausalLaw",
+      "path": "./tooling/aal/domain.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "class",
+      "docstring": "Represents a causal law of the form 'a causes f if p1, ..., pn'."
+    },
+    {
+      "_type": "tag",
+      "name": "Domain",
+      "path": "./tooling/aal/domain.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "class",
+      "docstring": "Represents a complete AAL domain description."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/aal/domain.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_aal",
+      "path": "./tooling/aal/parser.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": "Parses an AAL string and returns a Domain object."
     },
     {
       "_type": "tag",
@@ -9521,6 +9647,15 @@
       "line": 64,
       "kind": "function",
       "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
+    },
+    {
+      "_type": "tag",
+      "name": "build",
+      "path": "./protocols/aal_spec/build.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
