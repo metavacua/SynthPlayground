@@ -3584,138 +3584,12 @@
     },
     {
       "_type": "tag",
-      "name": "install_dependencies",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "load_schema",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 71,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "sanitize_markdown",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 84,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "extract_docstring",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 90,
-      "kind": "function",
-      "docstring": "Extracts the module-level docstring from a Python file."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_single_module",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 103,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_module_wrapper",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 180,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "generate_root_agents_md",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 194,
-      "kind": "function",
-      "docstring": "Generates the root AGENTS.md file, linking to all successfully compiled child modules."
-    },
-    {
-      "_type": "tag",
-      "name": "main_orchestrator",
-      "path": "./tooling/protocol_compiler.py",
-      "language": "Python",
-      "line": 242,
-      "kind": "function",
-      "docstring": "Main function to find and run all local build scripts in parallel."
-    },
-    {
-      "_type": "tag",
       "name": "main",
       "path": "./tooling/master_control_cli.py",
       "language": "Python",
       "line": 18,
       "kind": "function",
       "docstring": "The main entry point for the agent.\n\nThis script parses the task description and invokes the agent shell."
-    },
-    {
-      "_type": "tag",
-      "name": "TestStandardAgentsCompiler",
-      "path": "./tooling/test_standard_agents_compiler.py",
-      "language": "Python",
-      "line": 7,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_standard_agents_compiler.py",
-      "language": "Python",
-      "line": 9,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_standard_agents_compiler.py",
-      "language": "Python",
-      "line": 37,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_parse_makefile_command",
-      "path": "./tooling/test_standard_agents_compiler.py",
-      "language": "Python",
-      "line": 40,
-      "kind": "function",
-      "docstring": "Tests parsing commands from the Makefile content."
-    },
-    {
-      "_type": "tag",
-      "name": "test_main_generates_correct_file",
-      "path": "./tooling/test_standard_agents_compiler.py",
-      "language": "Python",
-      "line": 47,
-      "kind": "function",
-      "docstring": "Tests that the main function generates the AGENTS.standard.md correctly."
-    },
-    {
-      "_type": "tag",
-      "name": "test_makefile_not_found",
-      "path": "./tooling/test_standard_agents_compiler.py",
-      "language": "Python",
-      "line": 61,
-      "kind": "function",
-      "docstring": "Tests that the script handles a missing Makefile."
     },
     {
       "_type": "tag",
@@ -4547,24 +4421,6 @@
     },
     {
       "_type": "tag",
-      "name": "parse_makefile_command",
-      "path": "./tooling/standard_agents_compiler.py",
-      "language": "Python",
-      "line": 87,
-      "kind": "function",
-      "docstring": "Parses a Makefile to find the main command for a specific target,\nskipping any 'echo' lines. This version iterates through lines for robustness."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/standard_agents_compiler.py",
-      "language": "Python",
-      "line": 122,
-      "kind": "function",
-      "docstring": "Generates a standard-compliant AGENTS.md file by parsing commands\nfrom the project's Makefile."
-    },
-    {
-      "_type": "tag",
       "name": "log_catastrophic_failure",
       "path": "./tooling/log_failure.py",
       "language": "Python",
@@ -4661,42 +4517,6 @@
       "line": 21,
       "kind": "function",
       "docstring": "Analyzes the LFI ILL program for termination."
-    },
-    {
-      "_type": "tag",
-      "name": "TestProtocolCompilerOrchestrator",
-      "path": "./tooling/test_protocol_compiler.py",
-      "language": "Python",
-      "line": 15,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_protocol_compiler.py",
-      "language": "Python",
-      "line": 17,
-      "kind": "function",
-      "docstring": "Set up a temporary directory structure for testing."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_protocol_compiler.py",
-      "language": "Python",
-      "line": 49,
-      "kind": "function",
-      "docstring": "Clean up the temporary directory."
-    },
-    {
-      "_type": "tag",
-      "name": "test_orchestrator_discovers_and_runs_local_build",
-      "path": "./tooling/test_protocol_compiler.py",
-      "language": "Python",
-      "line": 53,
-      "kind": "function",
-      "docstring": "Verify the orchestrator finds the local build.py, runs it,\nand generates the root AGENTS.md."
     },
     {
       "_type": "tag",
@@ -5993,51 +5813,6 @@
       "line": 47,
       "kind": "function",
       "docstring": "Tests the environment variable probe when PATH is missing."
-    },
-    {
-      "_type": "tag",
-      "name": "TestProtocolOracle",
-      "path": "./tooling/test_protocol_oracle.py",
-      "language": "Python",
-      "line": 10,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_protocol_oracle.py",
-      "language": "Python",
-      "line": 12,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_protocol_oracle.py",
-      "language": "Python",
-      "line": 25,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_get_applicable_protocols",
-      "path": "./tooling/test_protocol_oracle.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "function",
-      "docstring": "Tests that the correct protocols are identified based on context."
-    },
-    {
-      "_type": "tag",
-      "name": "test_get_rules_for_protocols",
-      "path": "./tooling/test_protocol_oracle.py",
-      "language": "Python",
-      "line": 49,
-      "kind": "function",
-      "docstring": "Tests that rules are correctly retrieved for a given protocol."
     },
     {
       "_type": "tag",
