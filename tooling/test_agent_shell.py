@@ -1,5 +1,11 @@
 import unittest
 from unittest.mock import patch, MagicMock, ANY
+import sys
+import os
+
+# Add the root directory to the Python path to allow for absolute imports
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from tooling.agent_shell import main
 
 

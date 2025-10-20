@@ -1,0 +1,12 @@
+# Proof-of-Concept Agent: Hello, World!
+# This UDC plan defines an agent whose sole purpose is to greet the world.
+# It demonstrates the core mechanic of agent construction: defining a program
+# that can be executed by the UDC orchestrator.
+
+# Call the 'hello_world' tool. The protocol requires the message "Hello, World!".
+# Although the UDC orchestrator's CALL is a stub, this demonstrates the
+# correct invocation according to the tool manifest.
+CALL hello_world "Hello, World!"
+
+# Halt the virtual machine. This signifies the successful completion of the agent's task.
+HALT
