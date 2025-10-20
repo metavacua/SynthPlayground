@@ -9,7 +9,7 @@
 # retaining the convenience of traditional `make` commands.
 # ==============================================================================
 
-.PHONY: all install format lint test build clean docs security agents readme audit audit-docs quality pre-submit-check
+.PHONY: all install format lint test build clean docs security readme audit audit-docs quality pre-submit-check
 
 # --- Variables ---
 BUILDER = python3 tooling/builder.py
@@ -30,25 +30,22 @@ build: all
 # --- Individual Commands (Delegated to Builder) ---
 
 install:
-	@$(BUILDER) --target install
+	pip install -r requirements.txt
 
 format:
-	@$(BUILDER) --target format
+	python3 -m black .
 
 lint:
-	@$(BUILDER) --target lint
+	python3 -m flake8 .
 
 test:
-	@$(BUILDER) --target test
+	python3 -m pytest
 
 docs:
 	@$(BUILDER) --target docs
 
 security:
 	@$(BUILDER) --target security
-
-agents:
-	@$(BUILDER) --target agents
 
 readme:
 	@$(BUILDER) --target readme

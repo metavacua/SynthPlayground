@@ -20,3 +20,5 @@ markdown
 ply
 black
 flake8
+PyYAML==6.0.3
+pytest
