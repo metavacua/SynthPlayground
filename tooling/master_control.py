@@ -110,15 +110,15 @@ class MasterControlGraph:
         logger.log("Phase 1", agent_state.task, -1, "INFO", {"state": "ORIENTING"}, "SUCCESS", context=_get_log_context(agent_state))
         try:
             # Use the provided list_files tool to scan the directory
-            list_files = tools.get("list_files")
-            if list_files:
-                file_list = list_files()
+            list_files_tool = tools.get("list_files")
+            if list_files_tool:
+                file_list = list_files_tool()
                 # Ensure the file_list is serializable for the message
                 agent_state.messages.append({"role": "system", "content": f"Initial file listing:\n{str(file_list)}"})
                 agent_state.current_thought = "Initial file scan complete."
                 logger.log("Phase 1", agent_state.task, -1, "INFO", {"summary": "Performed initial file scan."}, "SUCCESS", context=_get_log_context(agent_state))
             else:
-                logger.log("Phase 1", agent_state.task, -1, "WARNING", {"summary": "`list_files` tool not provided to orientation."}, "SUCCESS")
+                logger.log("Phase 1", agent_state.task, -1, "INFO", {"summary": "`list_files` tool not provided to orientation."}, "SUCCESS")
 
             # Analyze the most recent post-mortem report
             postmortem_dir = "postmortems/"
@@ -189,21 +189,39 @@ class MasterControlGraph:
             return self.get_trigger("PLANNING", "ERROR")
 
         agent_state.current_thought = "Plan is valid. Initializing execution stack."
-        logger.log(
-            "Phase 2",
-            agent_state.task,
-            0,
-            "PLAN_UPDATE",
-            {"plan": plan_content},
-            "SUCCESS",
-            context=_get_log_context(agent_state),
-        )
         parsed_commands = parse_plan(plan_content)
+
+        # The first command should be set_plan. The rest are the actual steps.
+        if parsed_commands and parsed_commands[0].tool_name == 'set_plan':
+            plan_description = parsed_commands[0].args_text
+            execution_commands = parsed_commands[1:]
+            logger.log(
+                "Phase 2",
+                agent_state.task,
+                0,
+                "PLAN_UPDATE",
+                {"plan": plan_description},
+                "SUCCESS",
+                context=_get_log_context(agent_state),
+            )
+        else:
+            plan_description = plan_content
+            execution_commands = parsed_commands
+            logger.log(
+                "Phase 2",
+                agent_state.task,
+                0,
+                "PLAN_UPDATE",
+                {"plan": plan_description},
+                "SUCCESS",
+                context=_get_log_context(agent_state),
+            )
+
         agent_state.plan_path = "agent_generated_plan"
         agent_state.plan_stack.append(
-            PlanContext(plan_path=agent_state.plan_path, commands=parsed_commands)
+            PlanContext(plan_path=agent_state.plan_path, commands=execution_commands)
         )
-        return "plan_op"
+        return self.get_trigger("PLANNING", "EXECUTING")
 
     def _validate_plan_with_cli(self, plan_content: str) -> (bool, str):
         """
@@ -234,16 +252,21 @@ class MasterControlGraph:
             # The LBA validator will handle the context-sensitive rules.
             "define_set_of_names": "step_op",
             "define_diagonalization_function": "step_op",
+            "hello_world": "step_op",
         }
 
         commands = parse_plan(plan_content)
+
+        # The first command can be 'set_plan', which we ignore for validation.
+        if commands and commands[0].tool_name == 'set_plan':
+            commands = commands[1:]
 
         # Enforce the 'reset-all-prohibition-001' protocol
         for command in commands:
             if command.tool_name == "reset_all":
                 return False, "CRITICAL: Use of the forbidden tool `reset_all` was detected in the plan."
 
-        current_state = "PLANNING" # Validation always starts from the PLANNING state
+        current_state = "EXECUTING" # Validation starts from the EXECUTING state
 
         for command in commands:
             action_type = ACTION_TYPE_MAP.get(command.tool_name)
@@ -446,9 +469,21 @@ class MasterControlGraph:
             report_content = template.replace("[TASK_ID]", task_id)
             report_content = report_content.replace("[COMPLETION_DATE]", str(datetime.date.today()))
             report_content = report_content.replace("[SUCCESS | FAILURE]", "SUCCESS") # Assume success for now
-            report_content = report_content.replace("*A concise, one-sentence summary of the original goal.*", agent_state.task)
+            report_content = report_content.replace("*A concise, one-sentence summary of the original goal.*", agent_state.task_description)
             # This is where the agent would provide its analysis_content
-            report_content = report_content.replace("## 4. General Reflections", f"## 4. General Reflections\n\n{analysis_content}\n")
+            report_content = report_content.replace("## 4. General Reflections\n\n*A high-level, narrative description of how the task unfolded. What was the overall approach? Were there any major surprises or deviations from the initial plan?*", f"## 4. General Reflections\n\n{analysis_content}\n")
+
+            # Create a summary of the executed steps
+            executed_steps = []
+            for i, log in enumerate(logger.get_logs()):
+                if log.get("action", {}).get("type") == "TOOL_EXEC":
+                    tool_name = log["action"]["details"]["tool_name"]
+                    args_text = log["action"]["details"]["args_text"]
+                    status = log["outcome"]["status"]
+                    executed_steps.append(f"| {i+1} | `{tool_name}` | Executed with args: `{args_text}` | {status} |")
+
+            report_content = report_content.replace("| 1 | `tool_name` | *Why was this tool chosen?* | *What was the result?* |", "\n".join(executed_steps))
+            report_content = report_content.replace("| 2 | `another_tool` | *...* | *...* |", "")
 
 
             final_path = f"postmortems/{datetime.date.today()}-{task_id}.md"

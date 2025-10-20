@@ -2,6 +2,10 @@ import os
 import sys
 import json
 import jsonschema
+
+# Add the root directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from tooling.build_utils import find_files, load_schema, sanitize_markdown, execute_code
 
 # --- Configuration ---
@@ -9,6 +13,7 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SOURCE_DIR = os.path.dirname(__file__)
 TARGET_FILE = os.path.join(SOURCE_DIR, "AGENTS.md")
 SCHEMA_FILE = os.path.join(ROOT_DIR, "protocols", "protocol.schema.json")
+TOOL_MANIFEST_FILE = os.path.join(ROOT_DIR, "tooling", "tool_manifest.json")
 
 DISCLAIMER_TEMPLATE = """\
 # ---
@@ -22,6 +27,26 @@ DISCLAIMER_TEMPLATE = """\
 # ---
 """
 
+# --- Tool Manifest Logic ---
+def load_tool_manifest():
+    """Loads the tool manifest from the specified file."""
+    if not os.path.exists(TOOL_MANIFEST_FILE):
+        print(f"Warning: Tool manifest not found at {TOOL_MANIFEST_FILE}", file=sys.stderr)
+        return {}
+    with open(TOOL_MANIFEST_FILE, "r") as f:
+        return json.load(f)
+
+def validate_protocol_tools(protocol_data, tool_manifest):
+    """Validates the tools used in a protocol against the tool manifest."""
+    if "rules" not in protocol_data:
+        return
+
+    for rule in protocol_data["rules"]:
+        if "tool" in rule:
+            tool_name = rule["tool"]
+            if tool_name not in [tool["name"] for tool in tool_manifest.get("tools", [])]:
+                print(f"Warning: Tool '{tool_name}' in protocol '{protocol_data.get('protocol_id', 'N/A')}' not found in tool manifest.", file=sys.stderr)
+
 # --- Core Compilation Logic ---
 def compile_module():
     """Compiles the protocol files in this directory into a single AGENTS.md."""
@@ -32,6 +57,8 @@ def compile_module():
     schema = load_schema(SCHEMA_FILE)
     if not schema:
         return
+
+    tool_manifest = load_tool_manifest()
 
     # Find all protocol source files in the current directory (non-recursive)
     all_md_files = sorted([os.path.join(SOURCE_DIR, f) for f in find_files(".protocol.md", base_dir=SOURCE_DIR, recursive=False)])
@@ -54,6 +81,7 @@ def compile_module():
             with open(file_path, "r") as f:
                 protocol_data = json.load(f)
             jsonschema.validate(instance=protocol_data, schema=schema)
+            validate_protocol_tools(protocol_data, tool_manifest)
 
             # --- Handle Executable Code ---
             if "rules" in protocol_data:

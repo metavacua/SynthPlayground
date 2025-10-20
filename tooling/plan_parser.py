@@ -42,14 +42,27 @@ def parse_plan(plan_content: str) -> List[Command]:
         if not lines:
             continue
 
-        # The first non-comment line is the tool name
-        tool_name = lines[0].strip()
+        # The first non-comment line is the tool name and potentially arguments
+        first_line = lines[0].strip()
+        if first_line == "set_plan":
+            tool_name = "set_plan"
+            args_text = "\n".join(lines[1:]).strip()
+        else:
+            parts = first_line.split(" ", 1)
+            tool_name = parts[0]
+            args_text = ""
 
-        if not tool_name:
-            continue
+            if len(parts) > 1:
+                args_text = parts[1].strip()
 
-        # The rest of the lines are the arguments
-        args_text = "\n".join(lines[1:]).strip()
+            if not tool_name:
+                continue
+
+            # The rest of the lines are also arguments
+            if len(lines) > 1:
+                if args_text:
+                    args_text += "\n"
+                args_text += "\n".join(lines[1:]).strip()
 
         commands.append(Command(tool_name=tool_name, args_text=args_text))
 

@@ -136,3 +136,24 @@ class Logger:
 
         with open(self.log_path, "a") as f:
             f.write(json.dumps(log_entry) + "\n")
+
+    def get_logs(self):
+        """
+        Retrieves all log entries for the current session.
+
+        Returns:
+            list: A list of log entries for the current session.
+        """
+        if not os.path.exists(self.log_path):
+            return []
+
+        logs = []
+        with open(self.log_path, "r") as f:
+            for line in f:
+                try:
+                    log_entry = json.loads(line)
+                    if log_entry.get("session_id") == self.session_id:
+                        logs.append(log_entry)
+                except json.JSONDecodeError:
+                    continue
+        return logs
