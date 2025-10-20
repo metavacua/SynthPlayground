@@ -2126,6 +2126,15 @@
     },
     {
       "_type": "tag",
+      "name": "get_logs",
+      "path": "./utils/logger.py",
+      "language": "Python",
+      "line": 140,
+      "kind": "function",
+      "docstring": "Retrieves all log entries for the current session.\n\nReturns:\n    list: A list of log entries for the current session."
+    },
+    {
+      "_type": "tag",
       "name": "TestFileSystemUtils",
       "path": "./utils/test_file_system_utils.py",
       "language": "Python",
@@ -3125,6 +3134,15 @@
     },
     {
       "_type": "tag",
+      "name": "run_in_bash_session",
+      "path": "./tooling/bash_runner.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "function",
+      "docstring": "Runs the given bash command in the sandbox."
+    },
+    {
+      "_type": "tag",
       "name": "TestFdcCli",
       "path": "./tooling/test_fdc_cli.py",
       "language": "Python",
@@ -3245,7 +3263,7 @@
       "name": "to_json",
       "path": "./tooling/state.py",
       "language": "Python",
-      "line": 93,
+      "line": 94,
       "kind": "function",
       "docstring": null
     },
@@ -3911,7 +3929,7 @@
       "name": "_validate_plan_with_cli",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 208,
+      "line": 226,
       "kind": "function",
       "docstring": "Validates a plan by writing it to a temporary file and using the fdc_cli.py script."
     },
@@ -3920,7 +3938,7 @@
       "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 269,
+      "line": 292,
       "kind": "function",
       "docstring": "Validates a plan against a specific CSDC model using the LBAValidator."
     },
@@ -3929,7 +3947,7 @@
       "name": "do_researching",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 286,
+      "line": 309,
       "kind": "function",
       "docstring": "Launches the background research process."
     },
@@ -3938,7 +3956,7 @@
       "name": "do_awaiting_result",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 309,
+      "line": 332,
       "kind": "function",
       "docstring": "Checks for the result of the background research process."
     },
@@ -3947,7 +3965,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 343,
+      "line": 366,
       "kind": "function",
       "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
     },
@@ -3956,7 +3974,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 354,
+      "line": 377,
       "kind": "function",
       "docstring": "Processes the result of a step and advances the execution state."
     },
@@ -3965,7 +3983,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 398,
+      "line": 421,
       "kind": "function",
       "docstring": "Handles the code generation state."
     },
@@ -3974,7 +3992,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 407,
+      "line": 430,
       "kind": "function",
       "docstring": "Handles the test execution state."
     },
@@ -3983,7 +4001,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 417,
+      "line": 440,
       "kind": "function",
       "docstring": "Handles the debugging state."
     },
@@ -3992,7 +4010,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 426,
+      "line": 449,
       "kind": "function",
       "docstring": "Handles the finalization of the task, guiding the agent through\nthe structured post-mortem process."
     },
@@ -4664,10 +4682,19 @@
     },
     {
       "_type": "tag",
+      "name": "load_tools_from_manifest",
+      "path": "./tooling/agent_shell.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": "Loads tools from the tool manifest."
+    },
+    {
+      "_type": "tag",
       "name": "find_fsm_transition",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 26,
+      "line": 60,
       "kind": "function",
       "docstring": "Finds the destination state for a given source and trigger."
     },
@@ -4676,7 +4703,7 @@
       "name": "run_agent_loop",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 36,
+      "line": 70,
       "kind": "function",
       "docstring": "The main loop that drives the agent's lifecycle via the FSM."
     },
@@ -4685,7 +4712,7 @@
       "name": "main",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 158,
+      "line": 212,
       "kind": "function",
       "docstring": "Main entry point for the agent shell."
     },
@@ -5066,6 +5093,15 @@
       "line": 55,
       "kind": "function",
       "docstring": "Tests that calling create_proposal multiple times results in multiple,\nunique proposal directories."
+    },
+    {
+      "_type": "tag",
+      "name": "read_file",
+      "path": "./tooling/file_reader.py",
+      "language": "Python",
+      "line": 1,
+      "kind": "function",
+      "docstring": "Reads the content of the specified file."
     },
     {
       "_type": "tag",
@@ -6884,6 +6920,15 @@
       "line": 190,
       "kind": "function",
       "docstring": "Main function to orchestrate the generation and testing process."
+    },
+    {
+      "_type": "tag",
+      "name": "hello_world",
+      "path": "./tooling/custom_tools/hello_world.py",
+      "language": "Python",
+      "line": 1,
+      "kind": "function",
+      "docstring": "Prints a message to the console."
     },
     {
       "_type": "tag",
@@ -9389,10 +9434,28 @@
     },
     {
       "_type": "tag",
+      "name": "load_tool_manifest",
+      "path": "./protocols/build.py",
+      "language": "Python",
+      "line": 31,
+      "kind": "function",
+      "docstring": "Loads the tool manifest from the specified file."
+    },
+    {
+      "_type": "tag",
+      "name": "validate_protocol_tools",
+      "path": "./protocols/build.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": "Validates the tools used in a protocol against the tool manifest."
+    },
+    {
+      "_type": "tag",
       "name": "compile_module",
       "path": "./protocols/build.py",
       "language": "Python",
-      "line": 26,
+      "line": 51,
       "kind": "function",
       "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
     },
