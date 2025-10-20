@@ -175,6 +175,38 @@ class TestSelfCorrectionOrchestrator(unittest.TestCase):
             lessons[0]["status"], "pending"
         )  # Status should remain pending
 
+    @patch("tooling.self_correction_orchestrator.apply_merge_diff", return_value=True)
+    def test_process_modify_tooling_lesson(self, mock_apply_diff):
+        """Tests processing a lesson that modifies a tool."""
+        # Create a dummy tool file to be modified
+        dummy_tool_path = "tooling/dummy_tool.py"
+        os.makedirs("tooling", exist_ok=True)
+        with open(dummy_tool_path, "w") as f:
+            f.write("print('hello')")
+
+        lessons = [
+            {
+                "lesson_id": "L004",
+                "status": "pending",
+                "action": {
+                    "type": "MODIFY_TOOLING",
+                    "parameters": {
+                        "filepath": dummy_tool_path,
+                        "merge_diff": "<<<<<<< SEARCH\nprint('hello')\n=======\nprint('hello world')\n>>>>>>> REPLACE",
+                    },
+                },
+            }
+        ]
+
+        changes_made = process_lessons(lessons, ".")
+        self.assertTrue(changes_made)
+        self.assertEqual(lessons[0]["status"], "applied")
+        mock_apply_diff.assert_called_once_with(
+            dummy_tool_path,
+            "<<<<<<< SEARCH\nprint('hello')\n=======\nprint('hello world')\n>>>>>>> REPLACE",
+        )
+        os.remove(dummy_tool_path)
+
     def test_unknown_action_type(self):
         """Tests that lessons with unknown action types are skipped."""
         lessons = [

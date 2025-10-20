@@ -43,6 +43,42 @@ def run_command(command: list) -> bool:
         return False
 
 
+def apply_merge_diff(filepath, merge_diff):
+    """Applies a git-style merge diff to a file."""
+    try:
+        lines = merge_diff.split('\n')
+
+        # A simple validation for the merge diff format
+        if not (lines[0] == '<<<<<<< SEARCH' and '=======' in lines and lines[-1] == '>>>>>>> REPLACE'):
+            print("Error: Invalid merge diff format.")
+            return False
+
+        separator_index = lines.index('=======')
+        search_block = '\n'.join(lines[1:separator_index])
+        replace_block = '\n'.join(lines[separator_index+1:-1])
+
+        with open(filepath, 'r') as f:
+            original_content = f.read()
+
+        if search_block not in original_content:
+            print(f"Error: Search block not found in {filepath}.")
+            # For debugging, print what was expected vs what was found
+            # print("Expected to find:\n---\n" + search_block + "\n---")
+            return False
+
+        new_content = original_content.replace(search_block, replace_block, 1)
+
+        with open(filepath, 'w') as f:
+            f.write(new_content)
+
+        print(f"Successfully applied patch to {filepath}")
+        return True
+
+    except Exception as e:
+        print(f"An error occurred while applying merge diff: {e}")
+        return False
+
+
 def process_lessons(lessons: list, protocols_dir: str) -> bool:
     """
     Processes all pending lessons, applies them, and updates their status.
@@ -149,6 +185,33 @@ def process_lessons(lessons: list, protocols_dir: str) -> bool:
             else:
                 lesson["status"] = "failed"
             changes_made = True
+
+        elif action_type == "MODIFY_TOOLING":
+            params = action.get("parameters", {})
+            filepath = params.get("filepath")
+            merge_diff = params.get("merge_diff")
+
+            if not (filepath and merge_diff):
+                print("Error: Malformed 'MODIFY_TOOLING' lesson. Missing parameters.")
+                lesson["status"] = "failed"
+                changes_made = True
+                continue
+
+            # We must ensure the file path is within the tooling directory for safety
+            if not filepath.startswith("tooling/"):
+                print(f"Error: MODIFY_TOOLING is restricted to the 'tooling/' directory. Attempted path: {filepath}")
+                lesson["status"] = "failed"
+                changes_made = True
+                continue
+
+            if apply_merge_diff(filepath, merge_diff):
+                lesson["status"] = "applied"
+                print(f"Successfully applied code modification to {filepath}")
+            else:
+                lesson["status"] = "failed"
+                print(f"Failed to apply code modification to {filepath}")
+            changes_made = True
+
         else:
             # This handles cases where the action type itself is unknown.
             print(f"Warning: Skipping lesson with unknown action type: '{action_type}'")
@@ -166,6 +229,7 @@ def main():
     protocols_directory = "."
 
     print("--- Starting Protocol-Driven Self-Correction Cycle ---")
+    print("Meta-Mutation: Orchestrator is now self-aware.")
     lessons = load_lessons()
 
     if not any(lesson.get("status") == "pending" for lesson in lessons):
