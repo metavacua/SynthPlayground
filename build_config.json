@@ -45,6 +45,11 @@
       "command": "python3 protocols/testing/build.py",
       "description": "Compile the testing protocol."
     },
+    "guardian-protocol": {
+      "type": "command",
+      "command": "python3 protocols/guardian/build.py",
+      "description": "Compile the guardian protocol."
+    },
     "agents-md": {
       "type": "compiler",
       "compiler": "tooling/generate_agents_md.py",
@@ -86,7 +91,8 @@
       "experimental-protocol",
       "security-protocol",
       "self-improvement-protocol",
-      "testing-protocol"
+      "testing-protocol",
+      "guardian-protocol"
     ]
   }
 }
