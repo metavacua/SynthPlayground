@@ -1,0 +1,4 @@
+let !domain = load_domain("tests/test_domain.aal") in
+let !initial_state = create_state(Cons("light_off", Nil(String))) in
+let goal = Cons("light_on", Nil(String)) in
+find_plan(goal)

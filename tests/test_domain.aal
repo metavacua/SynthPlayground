@@ -1,0 +1,10 @@
+fluent light_on
+fluent light_off
+
+action turn_on
+action turn_off
+
+turn_on causes light_on if light_off
+turn_on causes NOT light_off if light_off
+turn_off causes light_off if light_on
+turn_off causes NOT light_on if light_on

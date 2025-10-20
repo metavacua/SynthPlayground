@@ -78,10 +78,13 @@ def get_current_state() -> List[str]:
 
 class Node:
     """A node in a search tree for planning."""
-    def __init__(self, state, parent=None, action=None):
+    def __init__(self, state, parent=None, action=None, g=0, h=0):
         self.state = state
         self.parent = parent
         self.action = action
+        self.g = g
+        self.h = h
+        self.f = g + h
 
     def __eq__(self, other):
         return isinstance(other, Node) and self.state == other.state
@@ -89,43 +92,63 @@ class Node:
     def __hash__(self):
         return hash(frozenset(self.state))
 
+    def __lt__(self, other):
+        return self.f < other.f
+
+
+import heapq
+
+def calculate_heuristic(state: Set[Fluent], goal: Set[Fluent]) -> int:
+    """Estimates the cost to reach the goal from the current state."""
+    return len(goal.difference(state))
+
 
 def find_plan(goal_conditions: List[str]) -> List[str]:
     """
-    Finds a sequence of actions to achieve a goal using Breadth-First Search.
+    Finds a sequence of actions to achieve a goal using A* Search.
     """
     if domain is None:
         raise PlanningError("Cannot find plan before loading a domain.")
 
     goal_fluents = {Fluent(name=cond) for cond in goal_conditions}
-    initial_node = Node(current_state)
 
-    if goal_fluents.issubset(initial_node.state):
+    initial_h = calculate_heuristic(current_state, goal_fluents)
+    initial_node = Node(current_state, g=0, h=initial_h)
+
+    if not goal_fluents.difference(initial_node.state):
         return []  # Goal is already satisfied
 
-    queue = [initial_node]
-    visited = {frozenset(initial_node.state)}
+    open_set = [initial_node]
+    closed_set = set()
 
-    while queue:
-        current_node = queue.pop(0)
+    while open_set:
+        current_node = heapq.heappop(open_set)
+
+        if frozenset(current_node.state) in closed_set:
+            continue
+
+        closed_set.add(frozenset(current_node.state))
+
+        if not goal_fluents.difference(current_node.state):
+            # Goal found, reconstruct the plan
+            plan = []
+            while current_node.parent is not None:
+                plan.insert(0, current_node.action.name)
+                current_node = current_node.parent
+            return plan
 
         for action in domain.actions:
             # Create a temporary interpreter to avoid modifying the global state
             temp_interpreter = AALInterpreter()
             next_state = temp_interpreter.get_next_state(current_node.state, action, domain)
 
-            if frozenset(next_state) not in visited:
-                new_node = Node(next_state, parent=current_node, action=action)
+            if frozenset(next_state) in closed_set:
+                continue
 
-                if goal_fluents.issubset(new_node.state):
-                    # Goal found, reconstruct the plan
-                    plan = []
-                    while new_node.parent is not None:
-                        plan.insert(0, new_node.action.name)
-                        new_node = new_node.parent
-                    return plan
+            g = current_node.g + 1
+            h = calculate_heuristic(next_state, goal_fluents)
+            new_node = Node(next_state, parent=current_node, action=action, g=g, h=h)
 
-                queue.append(new_node)
-                visited.add(frozenset(next_state))
+            heapq.heappush(open_set, new_node)
 
     return None # No plan found

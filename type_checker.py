@@ -133,6 +133,7 @@ def type_check(term: Term, unrestricted_context: dict = None, linear_context: di
         'apply_action': TFun(TString(), TExponential(TState())),
         'is_goal': TFun(TList(TString()), TBool()),
         'get_current_state': TFun(TUnit(), TList(TString())),
+        'find_plan': TFun(TList(TString()), TList(TString())),
         'parse': TFun(TString(), TTerm()),
         'unparse': TFun(TTerm(), TString()),
         'eval': TFun(TTerm(), TTerm()), # This is a simplification
