@@ -4,6 +4,7 @@ import shutil
 from unittest.mock import patch, MagicMock
 from tooling.document_scanner import scan_documents
 
+
 class TestDocumentScanner(unittest.TestCase):
 
     def setUp(self):
@@ -24,7 +25,7 @@ class TestDocumentScanner(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(self.test_dir)
 
-    @patch('tooling.document_scanner.GeminiApiClient')
+    @patch("tooling.document_scanner.GeminiApiClient")
     def test_scan_md_and_txt_files(self, mock_gemini_api_client):
         """Tests that the scanner correctly reads .md and .txt files."""
         scanned_data = scan_documents(self.test_dir)
@@ -33,24 +34,27 @@ class TestDocumentScanner(unittest.TestCase):
         self.assertIn(self.txt_file, scanned_data)
         self.assertEqual(scanned_data[self.txt_file], "Text Content")
 
-    @patch('tooling.document_scanner.GeminiApiClient')
+    @patch("tooling.document_scanner.GeminiApiClient")
     def test_scan_pdf_file(self, mock_gemini_api_client):
         """Tests that the scanner correctly reads .pdf files."""
         # Mock the GeminiApiClient to return a dummy page with text
-        mock_gemini_api_client.return_value.process_document.return_value = "PDF Content"
+        mock_gemini_api_client.return_value.process_document.return_value = (
+            "PDF Content"
+        )
 
         scanned_data = scan_documents(self.test_dir)
 
         self.assertIn(self.pdf_file, scanned_data)
         self.assertEqual(scanned_data[self.pdf_file], "PDF Content")
 
-    @patch('builtins.open', side_effect=IOError("Read error"))
-    @patch('tooling.document_scanner.GeminiApiClient')
+    @patch("builtins.open", side_effect=IOError("Read error"))
+    @patch("tooling.document_scanner.GeminiApiClient")
     def test_read_error_handling(self, mock_gemini_api_client, mock_open):
         """Tests that the scanner handles file read errors gracefully."""
         scanned_data = scan_documents(self.test_dir)
         # The scanner should still return a result, but with an error message
         self.assertTrue(any("Error reading file" in v for v in scanned_data.values()))
+
 
 if __name__ == "__main__":
     unittest.main()

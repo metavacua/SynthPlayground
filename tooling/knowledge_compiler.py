@@ -190,8 +190,11 @@ def process_postmortem_file(filepath):
     if not lessons_data:
         return []
 
-    formatted_lessons = [format_lesson_entry(metadata, lesson) for lesson in lessons_data]
+    formatted_lessons = [
+        format_lesson_entry(metadata, lesson) for lesson in lessons_data
+    ]
     return formatted_lessons
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -200,7 +203,7 @@ def main():
     parser.add_argument(
         "--source-dir",
         required=True,
-        help="Directory containing the post-mortem markdown files."
+        help="Directory containing the post-mortem markdown files.",
     )
     args = parser.parse_args()
 

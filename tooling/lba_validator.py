@@ -12,7 +12,9 @@ The CSDC defines two mutually exclusive models:
 
 This validator checks for these co-occurrence constraints.
 """
+
 from tooling.plan_parser import parse_plan, Command
+
 
 class LBAValidator:
     """
@@ -33,17 +35,29 @@ class LBAValidator:
         commands = parse_plan(plan_content)
         tool_names = {cmd.tool_name for cmd in commands}
 
-        if model.upper() == 'A':
-            if 'define_diagonalization_function' in tool_names:
-                return False, "Validation Error: `define_diagonalization_function` is forbidden in Model A."
-        elif model.upper() == 'B':
-            if 'define_set_of_names' in tool_names:
-                return False, "Validation Error: `define_set_of_names` is forbidden in Model B."
+        if model.upper() == "A":
+            if "define_diagonalization_function" in tool_names:
+                return (
+                    False,
+                    "Validation Error: `define_diagonalization_function` is forbidden in Model A.",
+                )
+        elif model.upper() == "B":
+            if "define_set_of_names" in tool_names:
+                return (
+                    False,
+                    "Validation Error: `define_set_of_names` is forbidden in Model B.",
+                )
         else:
             return False, f"Unknown model '{model}'."
 
         # Cross-model check for mutual exclusivity
-        if 'define_set_of_names' in tool_names and 'define_diagonalization_function' in tool_names:
-            return False, "Validation Error: `define_set_of_names` and `define_diagonalization_function` cannot be used in the same plan."
+        if (
+            "define_set_of_names" in tool_names
+            and "define_diagonalization_function" in tool_names
+        ):
+            return (
+                False,
+                "Validation Error: `define_set_of_names` and `define_diagonalization_function` cannot be used in the same plan.",
+            )
 
         return True, ""

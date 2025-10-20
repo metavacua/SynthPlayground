@@ -44,10 +44,40 @@
       "type": "command",
       "command": "python3 protocols/testing/build.py",
       "description": "Compile the testing protocol."
+    },
+    "agents-md": {
+      "type": "compiler",
+      "compiler": "tooling/generate_agents_md.py",
+      "output": "AGENTS.md",
+      "sources": [
+        "AGENTS.standard.md"
+      ],
+      "description": "Generate the self-executing AGENTS.md file."
+    },
+    "install": {
+      "type": "command",
+      "command": "pip install -r requirements.txt",
+      "description": "Install Python dependencies."
+    },
+    "format": {
+      "type": "command",
+      "command": "python3 -m black tooling/",
+      "description": "Format the code using black."
+    },
+    "lint": {
+      "type": "command",
+      "command": "python3 -m flake8 .",
+      "description": "Lint the code using flake8."
+    },
+    "test": {
+      "type": "command",
+      "command": "python3 -m pytest",
+      "description": "Run the test suite using pytest."
     }
   },
   "build_groups": {
     "all": [
+      "agents-md",
       "gemini-protocol",
       "external-apis-protocol",
       "core-protocol",

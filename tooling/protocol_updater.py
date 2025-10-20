@@ -44,7 +44,7 @@ def add_tool_to_protocol(protocol_id: str, tool_name: str, protocols_dir: str):
     if not protocol_file:
         print(
             f"Error: Protocol with ID '{protocol_id}' not found in '{protocols_dir}'.",
-            file=sys.stderr
+            file=sys.stderr,
         )
         exit(1)
 

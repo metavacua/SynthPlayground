@@ -6,6 +6,7 @@ and web research by controlling a web browser. It uses the Gemini Computer Use
 API to "see" the screen and "act" by generating UI actions like mouse clicks
 and keyboard inputs.
 """
+
 import argparse
 import sys
 import os
@@ -14,16 +15,19 @@ from playwright.sync_api import sync_playwright
 import google.generativeai as genai
 
 # Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.gemini_api.client import GeminiApiClient
+
 
 def denormalize_x(x, screen_width):
     """Convert normalized x coordinate (0-1000) to actual pixel coordinate."""
     return int(x / 1000 * screen_width)
 
+
 def denormalize_y(y, screen_height):
     """Convert normalized y coordinate (0-1000) to actual pixel coordinate."""
     return int(y / 1000 * screen_height)
+
 
 def execute_function_calls(candidate, page, screen_width, screen_height):
     results = []
@@ -40,7 +44,7 @@ def execute_function_calls(candidate, page, screen_width, screen_height):
 
         try:
             if fname == "open_web_browser":
-                pass # Already open
+                pass  # Already open
             elif fname == "click_at":
                 actual_x = denormalize_x(args["x"], screen_width)
                 actual_y = denormalize_y(args["y"], screen_height)
@@ -73,6 +77,7 @@ def execute_function_calls(candidate, page, screen_width, screen_height):
 
     return results
 
+
 def get_function_responses(page, results):
     screenshot_bytes = page.screenshot(type="png")
     current_url = page.url
@@ -84,14 +89,17 @@ def get_function_responses(page, results):
             genai.types.FunctionResponse(
                 name=name,
                 response=response_data,
-                parts=[genai.types.FunctionResponsePart(
+                parts=[
+                    genai.types.FunctionResponsePart(
                         inline_data=genai.types.FunctionResponseBlob(
-                            mime_type="image/png",
-                            data=screenshot_bytes))
-                ]
+                            mime_type="image/png", data=screenshot_bytes
+                        )
+                    )
+                ],
             )
         )
     return function_responses
+
 
 def main():
     """The main entry point for the GeminiComputerUse tool."""
@@ -109,12 +117,14 @@ def main():
 
     playwright = sync_playwright().start()
     browser = playwright.chromium.launch(headless=True)
-    context = browser.new_context(viewport={"width": SCREEN_WIDTH, "height": SCREEN_HEIGHT})
+    context = browser.new_context(
+        viewport={"width": SCREEN_WIDTH, "height": SCREEN_HEIGHT}
+    )
     page = context.new_page()
     page.goto("https://www.google.com")
 
     client = GeminiApiClient()
-    model = genai.GenerativeModel('gemini-2.5-computer-use-preview-10-2025')
+    model = genai.GenerativeModel("gemini-2.5-computer-use-preview-10-2025")
 
     initial_screenshot = page.screenshot(type="png")
     contents = [
@@ -143,7 +153,9 @@ def main():
 
         has_function_calls = any(part.function_call for part in candidate.content.parts)
         if not has_function_calls:
-            text_response = " ".join([part.text for part in candidate.content.parts if part.text])
+            text_response = " ".join(
+                [part.text for part in candidate.content.parts if part.text]
+            )
             print("Agent finished:", text_response)
             break
 
@@ -154,11 +166,17 @@ def main():
         function_responses = get_function_responses(page, results)
 
         contents.append(
-            genai.types.Content(role="user", parts=[genai.types.Part(function_response=fr) for fr in function_responses])
+            genai.types.Content(
+                role="user",
+                parts=[
+                    genai.types.Part(function_response=fr) for fr in function_responses
+                ],
+            )
         )
 
     browser.close()
     playwright.stop()
+
 
 if __name__ == "__main__":
     main()

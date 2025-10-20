@@ -3,6 +3,7 @@ This module contains the logic for executing research tasks based on a set of
 constraints. It acts as a dispatcher, calling the appropriate tool (e.g.,
 read_file, google_search) based on the specified target and scope.
 """
+
 import time
 
 # These tools are expected to be available in the global scope where this
@@ -57,4 +58,6 @@ def execute_research_protocol(constraints: dict) -> str:
             return "Error: 'url' not specified for external repository research."
         return view_text_website(url=url)
 
-    return "Error: The provided constraints do not map to a recognized research protocol."
+    return (
+        "Error: The provided constraints do not map to a recognized research protocol."
+    )

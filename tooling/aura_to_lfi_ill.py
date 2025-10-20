@@ -4,37 +4,61 @@ A compiler that translates AURA code to LFI-ILL.
 This script takes an AURA file, parses it, and compiles it into an LFI-ILL
 AST. The resulting AST is then written to a `.lfi_ill` file.
 """
+
 import argparse
 import sys
 import os
 
 # Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from aura_lang.lexer import Lexer as AuraLexer
 from aura_lang.parser import Parser as AuraParser
 from aura_lang.ast import (
-    LetStatement, IntegerLiteral, StringLiteral, InfixExpression, Identifier,
-    CallExpression, PrintStatement, IfStatement, ForStatement, ReturnStatement,
-    FunctionDefinition, BlockStatement, ExpressionStatement
+    LetStatement,
+    IntegerLiteral,
+    StringLiteral,
+    InfixExpression,
+    Identifier,
+    CallExpression,
+    PrintStatement,
+    IfStatement,
+    ForStatement,
+    ReturnStatement,
+    FunctionDefinition,
+    BlockStatement,
+    ExpressionStatement,
 )
 from lfi_ill import (
-    LetTensor, Int, Var, Fun, App, TensorPair,
-    Promotion, Dereliction, LetWhyNot, WhyNot,
-    Par, LetPar, Unit, Case, String
+    LetTensor,
+    Int,
+    Var,
+    Fun,
+    App,
+    TensorPair,
+    Promotion,
+    Dereliction,
+    LetWhyNot,
+    WhyNot,
+    Par,
+    LetPar,
+    Unit,
+    Case,
+    String,
 )
+
 
 class AuraToLfiIllCompiler:
     def __init__(self):
         pass
 
     def compile(self, node):
-        method_name = f'compile_{type(node).__name__}'
+        method_name = f"compile_{type(node).__name__}"
         compiler = getattr(self, method_name, self.generic_compiler)
         return compiler(node)
 
     def generic_compiler(self, node):
-        raise Exception(f'No compile_{type(node).__name__} method')
+        raise Exception(f"No compile_{type(node).__name__} method")
 
     def compile_Program(self, node):
         # This is a simplification. A more robust implementation would
@@ -66,13 +90,13 @@ class AuraToLfiIllCompiler:
     def compile_InfixExpression(self, node):
         left = self.compile(node.left)
         right = self.compile(node.right)
-        return TensorPair(left, right) # Simplification
+        return TensorPair(left, right)  # Simplification
 
     def compile_CallExpression(self, node):
         function = self.compile(node.function)
         args = [self.compile(arg) for arg in node.arguments]
         if args:
-            return App(function, args[0]) # Simplification
+            return App(function, args[0])  # Simplification
         else:
             return App(function, Unit())
 
@@ -113,7 +137,7 @@ def main():
     args = parser.parse_args()
 
     try:
-        with open(args.file, 'r') as f:
+        with open(args.file, "r") as f:
             aura_code = f.read()
     except FileNotFoundError:
         print(f"Error: File not found at {args.file}")
@@ -136,7 +160,7 @@ def main():
     print(repr(lfi_ill_ast))
 
     output_filename = args.file.replace(".aura", ".lfi_ill")
-    with open(output_filename, 'w') as f:
+    with open(output_filename, "w") as f:
         f.write(repr(lfi_ill_ast))
 
     print(f"\nSuccessfully compiled to {output_filename}")

@@ -10,7 +10,9 @@ This allows for the testing of scripts or workflows that call the
 `message_user` tool without needing to invoke the entire agent messaging
 subsystem.
 """
+
 import sys
+
 
 def main():
     """
@@ -18,6 +20,7 @@ def main():
     """
     if len(sys.argv) > 1:
         print(f"[Message User]: {sys.argv[1]}")
+
 
 if __name__ == "__main__":
     main()

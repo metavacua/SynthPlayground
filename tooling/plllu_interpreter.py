@@ -13,13 +13,15 @@ The core of the interpreter is the `FourValuedInterpreter` class, which
 recursively walks the AST, consuming resources from a context (a Counter of
 available atoms) and returning the resulting logical value.
 """
+
 import sys
 import os
 from enum import Enum
 from collections import Counter
 
 # Ensure the project root is in the Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 
 class LogicValue(Enum):
     TRUE = 1
@@ -27,14 +29,18 @@ class LogicValue(Enum):
     BOTH = 2
     NEITHER = 3
 
+
 class InterpretationError(Exception):
     """Custom exception for errors during interpretation."""
+
     pass
+
 
 class FourValuedInterpreter:
     """
     Interprets a pLLLU AST using a four-valued logic and a resource-passing model.
     """
+
     def interpret(self, ast_node, initial_context):
         """
         Main entry point for interpreting an AST.
@@ -44,7 +50,9 @@ class FourValuedInterpreter:
 
         # After evaluation, if any resources remain, it's a linearity error.
         if remaining_context:
-            raise InterpretationError(f"Linearity Error: The following resources were not consumed: {list(remaining_context.elements())}")
+            raise InterpretationError(
+                f"Linearity Error: The following resources were not consumed: {list(remaining_context.elements())}"
+            )
 
         return final_value
 
@@ -54,11 +62,11 @@ class FourValuedInterpreter:
         Returns a tuple: (LogicValue, remaining_context_as_Counter).
         """
         node_type = node[0]
-        if node_type == 'atom':
+        if node_type == "atom":
             return self._eval_atom(node, context)
-        elif node_type == 'unary_op':
+        elif node_type == "unary_op":
             return self._eval_unary_op(node, context)
-        elif node_type == 'binary_op':
+        elif node_type == "binary_op":
             return self._eval_binary_op(node, context)
         else:
             raise NotImplementedError(f"Unknown node type: {node_type}")
@@ -68,10 +76,12 @@ class FourValuedInterpreter:
         Evaluates an atom by consuming it from the context.
         """
         _, atom_details = node
-        atom_value, atom_key = atom_details # e.g. (LogicValue.TRUE, ('A', 1))
+        atom_value, atom_key = atom_details  # e.g. (LogicValue.TRUE, ('A', 1))
 
         if context[atom_key] <= 0:
-            raise InterpretationError(f"Linearity Error: Atom '{atom_key[0]}' (id: {atom_key[1]}) requested but not available in context {list(context.elements())}.")
+            raise InterpretationError(
+                f"Linearity Error: Atom '{atom_key[0]}' (id: {atom_key[1]}) requested but not available in context {list(context.elements())}."
+            )
 
         new_context = context.copy()
         new_context[atom_key] -= 1
@@ -91,24 +101,28 @@ class FourValuedInterpreter:
         child_value, remaining_context = self._evaluate(child, context)
 
         # Now, transform the value based on the operator
-        if op == '~': # Undeterminedness (LFU)
-            if child_value == LogicValue.TRUE: result_value = LogicValue.FALSE
-            elif child_value == LogicValue.FALSE: result_value = LogicValue.TRUE
-            elif child_value == LogicValue.BOTH: result_value = LogicValue.BOTH
-            else: result_value = LogicValue.NEITHER # NEITHER
+        if op == "~":  # Undeterminedness (LFU)
+            if child_value == LogicValue.TRUE:
+                result_value = LogicValue.FALSE
+            elif child_value == LogicValue.FALSE:
+                result_value = LogicValue.TRUE
+            elif child_value == LogicValue.BOTH:
+                result_value = LogicValue.BOTH
+            else:
+                result_value = LogicValue.NEITHER  # NEITHER
             return (result_value, remaining_context)
 
-        if op == '∘': # Consistency (LFI)
+        if op == "∘":  # Consistency (LFI)
             if child_value == LogicValue.TRUE or child_value == LogicValue.FALSE:
                 result_value = LogicValue.TRUE
-            else: # BOTH or NEITHER
+            else:  # BOTH or NEITHER
                 result_value = LogicValue.FALSE
             return (result_value, remaining_context)
 
-        if op == '!' or op == '?': # For now, these are transparent.
+        if op == "!" or op == "?":  # For now, these are transparent.
             return (child_value, remaining_context)
 
-        if op == '§':
+        if op == "§":
             # In a full proof-theoretic interpreter, the section modality would
             # constrain the structure of the proof (e.g., by limiting rule applications
             # within its scope) to ensure polynomial-time normalization.
@@ -125,40 +139,54 @@ class FourValuedInterpreter:
         _, op, left, right = node
 
         # Additive operators (&, |)
-        if op == '&' or op == '|':
+        if op == "&" or op == "|":
             # Both branches are evaluated with the same context.
             l_val, l_rem = self._evaluate(left, context)
             r_val, r_rem = self._evaluate(right, context)
 
             # Linearity check: Both branches must consume the exact same resources.
             if l_rem != r_rem:
-                raise InterpretationError(f"Linearity Error for additive '{op}': branches consume different resources.")
+                raise InterpretationError(
+                    f"Linearity Error for additive '{op}': branches consume different resources."
+                )
 
-            remaining_context = l_rem # They are the same, so we can pick one.
+            remaining_context = l_rem  # They are the same, so we can pick one.
 
-            if op == '&':
-                if l_val == LogicValue.FALSE or r_val == LogicValue.FALSE: result_value = LogicValue.FALSE
-                elif l_val == LogicValue.TRUE: result_value = r_val
-                elif r_val == LogicValue.TRUE: result_value = l_val
-                elif l_val == LogicValue.NEITHER or r_val == LogicValue.NEITHER: result_value = LogicValue.NEITHER
-                else: result_value = LogicValue.BOTH
+            if op == "&":
+                if l_val == LogicValue.FALSE or r_val == LogicValue.FALSE:
+                    result_value = LogicValue.FALSE
+                elif l_val == LogicValue.TRUE:
+                    result_value = r_val
+                elif r_val == LogicValue.TRUE:
+                    result_value = l_val
+                elif l_val == LogicValue.NEITHER or r_val == LogicValue.NEITHER:
+                    result_value = LogicValue.NEITHER
+                else:
+                    result_value = LogicValue.BOTH
                 return (result_value, remaining_context)
 
-            if op == '|':
-                if l_val == LogicValue.TRUE or r_val == LogicValue.TRUE: result_value = LogicValue.TRUE
-                elif l_val == LogicValue.FALSE: result_value = r_val
-                elif r_val == LogicValue.FALSE: result_value = l_val
-                elif l_val == LogicValue.BOTH or r_val == LogicValue.BOTH: result_value = LogicValue.BOTH
-                else: result_value = LogicValue.NEITHER
+            if op == "|":
+                if l_val == LogicValue.TRUE or r_val == LogicValue.TRUE:
+                    result_value = LogicValue.TRUE
+                elif l_val == LogicValue.FALSE:
+                    result_value = r_val
+                elif r_val == LogicValue.FALSE:
+                    result_value = l_val
+                elif l_val == LogicValue.BOTH or r_val == LogicValue.BOTH:
+                    result_value = LogicValue.BOTH
+                else:
+                    result_value = LogicValue.NEITHER
                 return (result_value, remaining_context)
 
         # Hypothetical operator (-o)
-        if op == '-o':
+        if op == "-o":
             # As per the guidance, implication is predicated on the consistency of the hypothesis.
             # 1. Check if the hypothesis 'A' (the left node) is consistent.
             # We evaluate '∘(A)' using the current context.
-            consistency_ast = ('unary_op', '∘', left)
-            consistency_value, rem_context_after_check = self._evaluate(consistency_ast, context)
+            consistency_ast = ("unary_op", "∘", left)
+            consistency_value, rem_context_after_check = self._evaluate(
+                consistency_ast, context
+            )
 
             if consistency_value != LogicValue.TRUE:
                 # The hypothesis is not consistent, so the implication is vacuously false
@@ -186,17 +214,22 @@ def create_context_from_string(s):
     if not s:
         return context
 
-    parts = [part.strip() for part in s.split(',')]
+    parts = [part.strip() for part in s.split(",")]
     for part in parts:
-        name, value_char = part.split(':')
+        name, value_char = part.split(":")
         atom_counts[name] += 1
 
-        value_map = {'T': LogicValue.TRUE, 'F': LogicValue.FALSE, 'B': LogicValue.BOTH, 'N': LogicValue.NEITHER}
+        value_map = {
+            "T": LogicValue.TRUE,
+            "F": LogicValue.FALSE,
+            "B": LogicValue.BOTH,
+            "N": LogicValue.NEITHER,
+        }
         logic_value = value_map[value_char]
 
         # The _evaluate function needs to know the value, so we pass it in the atom node
         # The context just needs to know that the unique atom exists.
-        atom_tuple = (logic_value, atom_counts[name]) # e.g. (LogicValue.TRUE, 1)
+        atom_tuple = (logic_value, atom_counts[name])  # e.g. (LogicValue.TRUE, 1)
         context[(name, atom_counts[name])] = True
     return Counter(context)
 
@@ -207,7 +240,7 @@ def patch_atom_values(node, context_values):
     This is a hack for testing, as the parser doesn't know about logic values.
     """
     node_type = node[0]
-    if node_type == 'atom':
+    if node_type == "atom":
         atom_name = node[1]
         # Find the first available atom of this name in the context
         for (name, id), _ in context_values.items():
@@ -215,14 +248,23 @@ def patch_atom_values(node, context_values):
                 # To prevent reuse in the patcher
                 del context_values[(name, id)]
                 # Get the logic value from the original atom tuple
-                logic_value = [k[0] for k in interpreter.pda_parser_context if k[1] == name and k[2] == id][0]
-                return ('atom', (logic_value, id))
+                logic_value = [
+                    k[0]
+                    for k in interpreter.pda_parser_context
+                    if k[1] == name and k[2] == id
+                ][0]
+                return ("atom", (logic_value, id))
         raise ValueError(f"Atom {atom_name} not found in patch context")
 
-    elif node_type == 'unary_op':
+    elif node_type == "unary_op":
         op, child = node[1], node[2]
         return (node_type, op, patch_atom_values(child, context_values))
-    elif node_type == 'binary_op':
+    elif node_type == "binary_op":
         op, left, right = node[1], node[2], node[3]
-        return (node_type, op, patch_atom_values(left, context_values), patch_atom_values(right, context_values))
+        return (
+            node_type,
+            op,
+            patch_atom_values(left, context_values),
+            patch_atom_values(right, context_values),
+        )
     return node

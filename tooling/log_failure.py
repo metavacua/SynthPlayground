@@ -16,6 +16,7 @@ By using the standard `Logger` class, it ensures that the failure log entry
 conforms to the established `LOGGING_SCHEMA.md`, making it processable by
 auditing and analysis tools.
 """
+
 import sys
 import os
 

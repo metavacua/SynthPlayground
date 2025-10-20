@@ -23,6 +23,7 @@ This centralized builder provides several advantages:
   configuration file.
 - **Discoverability:** The script can list all available targets and groups.
 """
+
 import os
 import json
 import argparse
@@ -51,10 +52,10 @@ def execute_compiler_target(target_name, target_config):
     if "sources" in target_config:
         for source in target_config["sources"]:
             # Check if it's a directory or a file
-            if source.endswith('/'):
+            if source.endswith("/"):
                 command.extend(["--source-dir", os.path.join(ROOT_DIR, source)])
             else:
-                 command.extend(["--source-file", os.path.join(ROOT_DIR, source)])
+                command.extend(["--source-file", os.path.join(ROOT_DIR, source)])
 
     # Handle output
     if "output" in target_config:
@@ -65,10 +66,10 @@ def execute_compiler_target(target_name, target_config):
     if "options" in target_config:
         for option, value in target_config["options"].items():
             # For options that are paths, join with ROOT_DIR
-            if isinstance(value, str) and ('file' in option or 'dir' in option):
-                 command.extend([option, os.path.join(ROOT_DIR, value)])
+            if isinstance(value, str) and ("file" in option or "dir" in option):
+                command.extend([option, os.path.join(ROOT_DIR, value)])
             else:
-                 command.extend([option, str(value)])
+                command.extend([option, str(value)])
 
     return command, " ".join(command)
 
@@ -99,9 +100,11 @@ def execute_build(target_name, config):
         command, command_str = execute_compiler_target(target_name, target_config)
     elif target_type == "command":
         command, command_str = execute_command_target(target_name, target_config)
-        shell = True # Shell commands run with shell=True
+        shell = True  # Shell commands run with shell=True
     else:
-        raise ValueError(f"Unknown target type '{target_type}' for target '{target_name}'")
+        raise ValueError(
+            f"Unknown target type '{target_type}' for target '{target_name}'"
+        )
 
     print(f"  - Command:  {command_str}")
 
