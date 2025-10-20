@@ -9533,6 +9533,51 @@
     },
     {
       "_type": "tag",
+      "name": "AgentState",
+      "path": "./protocols/chc_protocols/bootstrap/proof.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "class",
+      "docstring": "A simplified representation of the agent's state for this proof."
+    },
+    {
+      "_type": "tag",
+      "name": "bootstrap",
+      "path": "./protocols/chc_protocols/bootstrap/proof.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": "This function is the constructive proof of the AGENT-BOOTSTRAP-001 proposition.\n\nIt takes an agent in an Un-contextualizedAgentState and returns an agent\nin a ContextualizedAgentState, adhering to the protocol's invariants."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./protocols/chc_protocols/bootstrap/proof.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_hash_workspace",
+      "path": "./protocols/chc_protocols/bootstrap/proof.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "function",
+      "docstring": "Calculates a hash of the current workspace."
+    },
+    {
+      "_type": "tag",
+      "name": "check_proof",
+      "path": "./protocols/chc_protocols/bootstrap/check.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "This function is the proof checker for the AGENT-BOOTSTRAP-001 proposition.\n\nIt verifies that the `bootstrap` function in `proof.py` is a valid\nconstructive proof of the proposition defined in `README.md`."
+    },
+    {
+      "_type": "tag",
       "name": "find_files",
       "path": "./protocols/compliance/build.py",
       "language": "Python",
