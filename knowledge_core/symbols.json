@@ -2315,6 +2315,42 @@
     },
     {
       "_type": "tag",
+      "name": "find_files",
+      "path": "./tooling/build_utils.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": "Finds files matching a pattern in a directory."
+    },
+    {
+      "_type": "tag",
+      "name": "load_schema",
+      "path": "./tooling/build_utils.py",
+      "language": "Python",
+      "line": 23,
+      "kind": "function",
+      "docstring": "Loads the JSON schema from a file."
+    },
+    {
+      "_type": "tag",
+      "name": "sanitize_markdown",
+      "path": "./tooling/build_utils.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": "Removes potentially unsafe constructs from Markdown."
+    },
+    {
+      "_type": "tag",
+      "name": "execute_code",
+      "path": "./tooling/build_utils.py",
+      "language": "Python",
+      "line": 42,
+      "kind": "function",
+      "docstring": "Executes a block of Python code in a controlled environment."
+    },
+    {
+      "_type": "tag",
       "name": "TestContextAwarenessScanner",
       "path": "./tooling/test_context_awareness_scanner.py",
       "language": "Python",
@@ -9353,73 +9389,19 @@
     },
     {
       "_type": "tag",
-      "name": "find_files",
-      "path": "./protocols/build.py",
-      "language": "Python",
-      "line": 27,
-      "kind": "function",
-      "docstring": "Finds files matching a pattern in a directory."
-    },
-    {
-      "_type": "tag",
-      "name": "load_schema",
-      "path": "./protocols/build.py",
-      "language": "Python",
-      "line": 43,
-      "kind": "function",
-      "docstring": "Loads the JSON schema from a file."
-    },
-    {
-      "_type": "tag",
-      "name": "sanitize_markdown",
-      "path": "./protocols/build.py",
-      "language": "Python",
-      "line": 55,
-      "kind": "function",
-      "docstring": "Removes potentially unsafe constructs from Markdown."
-    },
-    {
-      "_type": "tag",
       "name": "compile_module",
       "path": "./protocols/build.py",
       "language": "Python",
-      "line": 64,
+      "line": 26,
       "kind": "function",
       "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
     },
     {
       "_type": "tag",
-      "name": "find_files",
-      "path": "./protocols/experimental/build.py",
-      "language": "Python",
-      "line": 27,
-      "kind": "function",
-      "docstring": "Finds files matching a pattern in a directory."
-    },
-    {
-      "_type": "tag",
-      "name": "load_schema",
-      "path": "./protocols/experimental/build.py",
-      "language": "Python",
-      "line": 43,
-      "kind": "function",
-      "docstring": "Loads the JSON schema from a file."
-    },
-    {
-      "_type": "tag",
-      "name": "sanitize_markdown",
-      "path": "./protocols/experimental/build.py",
-      "language": "Python",
-      "line": 55,
-      "kind": "function",
-      "docstring": "Removes potentially unsafe constructs from Markdown."
-    },
-    {
-      "_type": "tag",
       "name": "compile_module",
       "path": "./protocols/experimental/build.py",
       "language": "Python",
-      "line": 64,
+      "line": 26,
       "kind": "function",
       "docstring": "Compiles the protocol files in this directory into a single AGENTS.md."
     },
