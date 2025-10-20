@@ -1325,6 +1325,69 @@
     },
     {
       "_type": "tag",
+      "name": "TestPlanning",
+      "path": "./test_planning.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./test_planning.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_setup_simple_domain",
+      "path": "./test_planning.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": "Helper to create a simple AAL domain for testing."
+    },
+    {
+      "_type": "tag",
+      "name": "test_find_plan_simple",
+      "path": "./test_planning.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_find_plan_goal_already_satisfied",
+      "path": "./test_planning.py",
+      "language": "Python",
+      "line": 42,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_find_plan_no_plan_exists",
+      "path": "./test_planning.py",
+      "language": "Python",
+      "line": 48,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_find_plan_longer_plan",
+      "path": "./test_planning.py",
+      "language": "Python",
+      "line": 54,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "main",
       "path": "./demonstrate_lfi_halting.py",
       "language": "Python",
@@ -1529,6 +1592,51 @@
       "line": 74,
       "kind": "function",
       "docstring": "Returns the names of the fluents in the current state."
+    },
+    {
+      "_type": "tag",
+      "name": "Node",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 79,
+      "kind": "class",
+      "docstring": "A node in a search tree for planning."
+    },
+    {
+      "_type": "tag",
+      "name": "find_plan",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 93,
+      "kind": "function",
+      "docstring": "Finds a sequence of actions to achieve a goal using Breadth-First Search."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 81,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__eq__",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 86,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__hash__",
+      "path": "./planning.py",
+      "language": "Python",
+      "line": 89,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -4253,7 +4361,7 @@
       "name": "main",
       "path": "./tooling/aura_executor.py",
       "language": "Python",
-      "line": 90,
+      "line": 103,
       "kind": "function",
       "docstring": "Main entry point for the Aura script executor."
     },
@@ -4262,7 +4370,7 @@
       "name": "builtin_print",
       "path": "./tooling/aura_executor.py",
       "language": "Python",
-      "line": 116,
+      "line": 129,
       "kind": "function",
       "docstring": "A wrapper for the built-in print function that handles Aura objects."
     },
