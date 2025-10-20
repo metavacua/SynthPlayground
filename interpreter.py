@@ -25,6 +25,7 @@ from planning import (
     apply_action,
     is_goal,
     get_current_state,
+    find_plan,
 )
 from parser import parse
 
@@ -58,9 +59,10 @@ def _appl_list_to_python_list(appl_list):
         appl_list = appl_list.tail
     return py_list
 
+from appl_ast import TString
 def _python_list_to_appl_list(py_list: list) -> Term:
     """Converts a Python list of strings to an APPL list of strings."""
-    result = Nil()
+    result = Nil(TString())
     for item in reversed(py_list):
         result = Cons(String(item), result)
     return result
@@ -191,6 +193,7 @@ def interpret(term: Term, env: dict = None) -> Term:
         'apply_action': Primitive(apply_action, 1),
         'is_goal': Primitive(lambda l: Bool(is_goal(l)), 1),
         'get_current_state': Primitive(lambda: _python_list_to_appl_list(get_current_state()), 0),
+        'find_plan': Primitive(lambda l: _python_list_to_appl_list(find_plan(l) or []), 1),
         'parse': Primitive(lambda s: AST(parse(s)), 1),
         'unparse': Primitive(lambda t: String(_unparse(t)), 1),
         'eval': Primitive(lambda t: interpret(t.term, env), 1),
