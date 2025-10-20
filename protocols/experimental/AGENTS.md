@@ -17,3 +17,47 @@ This protocol is a test case for the decentralized build system. If you are read
 The agent should, when encountering an experimental protocol, announce that it is operating in a "test mode." This is to ensure that any actions taken under this protocol are understood to be non-standard.
 
 ---
+
+```json
+{
+  "protocol_id": "experimental-prologue-001",
+  "description": "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.",
+  "rules": [
+    {
+      "rule_id": "create-prologue-file",
+      "description": "Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols.",
+      "enforcement": "This is a procedural rule. The agent must verify the existence of 'prologue.txt' before using 'create_file_with_block' or similar tools for other files."
+    }
+  ],
+  "associated_tools": [
+    "create_file_with_block"
+  ]
+}
+```
+
+
+---
+
+#### Executable Code for Rule: `print-hello-world`
+
+```python
+print('Hello from an executable protocol!')
+```
+
+```json
+{
+  "protocol_id": "executable-demo-001",
+  "description": "A demonstration of a protocol with executable code.",
+  "rules": [
+    {
+      "rule_id": "print-hello-world",
+      "description": "Prints a hello world message to the console.",
+      "enforcement": "This rule is enforced by the build script.",
+      "executable_code": "print('Hello from an executable protocol!')"
+    }
+  ]
+}
+```
+
+
+---

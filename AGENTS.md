@@ -8,10 +8,18 @@ This is a Python-based project with a sophisticated, self-correcting agent archi
 
 ## Build & Commands
 
-Here are the essential commands for working with this repository.
+This repository uses a hierarchical, decentralized protocol system. Each of the following directories contains a self-contained set of protocols and is compiled by its own local build script.
+- [Compliance](protocols/compliance/AGENTS.md)
+- [Core](protocols/core/AGENTS.md)
+- [Critic](protocols/critic/AGENTS.md)
+- [Experimental](protocols/experimental/AGENTS.md)
+- [Security](protocols/security/AGENTS.md)
+- [Self-improvement](protocols/self_improvement/AGENTS.md)
+- [Testing](protocols/testing/AGENTS.md)
 
 ### Dependency Installation
 
+General protocols are defined in the [root protocol module](./protocols/AGENTS.md).
 To install all required Python packages, run:
 ```bash
 make install

@@ -8,7 +8,7 @@ class TestSelfImprovementProtocol(unittest.TestCase):
         """
         Load the self-improvement protocol from the JSON file.
         """
-        protocol_path = "protocols/self_improvement/01_self_improvement.protocol.json"
+        protocol_path = "protocols/self-improvement/self-improvement.protocol.json"
         with open(protocol_path, "r") as f:
             self.protocol = json.load(f)
 
@@ -22,7 +22,7 @@ class TestSelfImprovementProtocol(unittest.TestCase):
         """
         Test that the protocol has the expected number of rules.
         """
-        self.assertEqual(len(self.protocol["rules"]), 3)
+        self.assertEqual(len(self.protocol["rules"]), 5)
 
     def test_associated_tool_exists(self):
         """

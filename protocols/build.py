@@ -1,8 +1,8 @@
 import os
 import sys
 import json
-import re
 import jsonschema
+from tooling.build_utils import find_files, load_schema, sanitize_markdown, execute_code
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -22,45 +22,7 @@ DISCLAIMER_TEMPLATE = """\
 # ---
 """
 
-# --- Utility Functions (adapted from root compiler) ---
-
-def find_files(pattern, base_dir=".", recursive=True):
-    """Finds files matching a pattern in a directory."""
-    if recursive:
-        return [
-            os.path.join(dp, f)
-            for dp, dn, filenames in os.walk(base_dir)
-            for f in filenames
-            if f.endswith(pattern)
-        ]
-    else:
-        return [
-            f
-            for f in os.listdir(base_dir)
-            if os.path.isfile(os.path.join(base_dir, f)) and f.endswith(pattern)
-        ]
-
-def load_schema(schema_file):
-    """Loads the JSON schema from a file."""
-    try:
-        with open(schema_file, "r") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        print(f"Error: Schema file not found at {schema_file}", file=sys.stderr)
-        sys.exit(1)
-    except json.JSONDecodeError:
-        print(f"Error: Could not decode JSON from schema file at {schema_file}", file=sys.stderr)
-        sys.exit(1)
-
-def sanitize_markdown(content):
-    """Removes potentially unsafe constructs from Markdown."""
-    content = re.sub(r"<script.*?>.*?</script>", "", content, flags=re.IGNORECASE | re.DOTALL)
-    content = re.sub(r" on\w+=\".*?\"", "", content, flags=re.IGNORECASE)
-    content = re.sub(r"<<<SENSITIVE_INSTRUCTIONS>>>.*<<<SENSITIVE_INSTRUCTIONS>>>", "", content, flags=re.DOTALL)
-    return content
-
 # --- Core Compilation Logic ---
-
 def compile_module():
     """Compiles the protocol files in this directory into a single AGENTS.md."""
     print(f"--- Starting Protocol Compilation for Root Protocols Module ---")
@@ -92,6 +54,16 @@ def compile_module():
             with open(file_path, "r") as f:
                 protocol_data = json.load(f)
             jsonschema.validate(instance=protocol_data, schema=schema)
+
+            # --- Handle Executable Code ---
+            if "rules" in protocol_data:
+                for rule in protocol_data["rules"]:
+                    if "executable_code" in rule and rule["executable_code"]:
+                        execute_code(rule["executable_code"], protocol_data.get("protocol_id", "N/A"), rule.get("rule_id", "N/A"))
+                        # Embed the code in the markdown output
+                        code_md = f"#### Executable Code for Rule: `{rule.get('rule_id', 'N/A')}`\n\n```python\n{rule['executable_code']}\n```\n"
+                        final_content.append(code_md)
+
             json_string = json.dumps(protocol_data, indent=2)
             md_json_block = f"```json\n{json_string}\n```\n"
             final_content.append(md_json_block)
