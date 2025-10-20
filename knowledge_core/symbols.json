@@ -2252,6 +2252,42 @@
     },
     {
       "_type": "tag",
+      "name": "GeminiApiClient",
+      "path": "./utils/gemini_api/client.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "class",
+      "docstring": "A client for interacting with the Gemini API."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./utils/gemini_api/client.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": "Initializes the Gemini API client.\nArgs:\n    api_key: The API key for the Gemini API. If not provided, it will be\n        read from the GEMINI_API_KEY environment variable."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_text",
+      "path": "./utils/gemini_api/client.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": "Generates text using the Gemini API.\nArgs:\n    prompt: The prompt to use for text generation.\nReturns:\n    The generated text."
+    },
+    {
+      "_type": "tag",
+      "name": "process_document",
+      "path": "./utils/gemini_api/client.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": "Processes a document using the Gemini API.\nArgs:\n    document_path: The path to the document to process.\n    prompt: The prompt to use for document processing.\nReturns:\n    The processed document content."
+    },
+    {
+      "_type": "tag",
       "name": "main",
       "path": "./tooling/message_user.py",
       "language": "Python",
@@ -2309,7 +2345,7 @@
       "name": "scan_documents",
       "path": "./tooling/document_scanner.py",
       "language": "Python",
-      "line": 29,
+      "line": 28,
       "kind": "function",
       "docstring": "Scans a directory for PDF, Markdown, and text files and extracts their content."
     },
@@ -2885,7 +2921,7 @@
       "name": "TestDocumentScanner",
       "path": "./tooling/test_document_scanner.py",
       "language": "Python",
-      "line": 8,
+      "line": 7,
       "kind": "class",
       "docstring": null
     },
@@ -2894,7 +2930,7 @@
       "name": "setUp",
       "path": "./tooling/test_document_scanner.py",
       "language": "Python",
-      "line": 10,
+      "line": 9,
       "kind": "function",
       "docstring": null
     },
@@ -2903,7 +2939,7 @@
       "name": "tearDown",
       "path": "./tooling/test_document_scanner.py",
       "language": "Python",
-      "line": 25,
+      "line": 24,
       "kind": "function",
       "docstring": null
     },
@@ -2930,7 +2966,7 @@
       "name": "test_read_error_handling",
       "path": "./tooling/test_document_scanner.py",
       "language": "Python",
-      "line": 50,
+      "line": 49,
       "kind": "function",
       "docstring": "Tests that the scanner handles file read errors gracefully."
     },
@@ -3680,6 +3716,24 @@
       "line": 87,
       "kind": "function",
       "docstring": "Test the main run_knowledge_integration function."
+    },
+    {
+      "_type": "tag",
+      "name": "TestGeminiComputerUse",
+      "path": "./tooling/test_gemini_computer_use.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_main",
+      "path": "./tooling/test_gemini_computer_use.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": "Tests the main function of the gemini_computer_use tool."
     },
     {
       "_type": "tag",
@@ -5849,6 +5903,51 @@
       "line": 123,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "denormalize_x",
+      "path": "./tooling/gemini_computer_use.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": "Convert normalized x coordinate (0-1000) to actual pixel coordinate."
+    },
+    {
+      "_type": "tag",
+      "name": "denormalize_y",
+      "path": "./tooling/gemini_computer_use.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": "Convert normalized y coordinate (0-1000) to actual pixel coordinate."
+    },
+    {
+      "_type": "tag",
+      "name": "execute_function_calls",
+      "path": "./tooling/gemini_computer_use.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "get_function_responses",
+      "path": "./tooling/gemini_computer_use.py",
+      "language": "Python",
+      "line": 76,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/gemini_computer_use.py",
+      "language": "Python",
+      "line": 96,
+      "kind": "function",
+      "docstring": "The main entry point for the GeminiComputerUse tool."
     },
     {
       "_type": "tag",

@@ -96,6 +96,11 @@
       "type": "python-external"
     },
     {
+      "id": "google-generativeai",
+      "path": null,
+      "type": "python-external"
+    },
+    {
       "id": "watchdog",
       "path": null,
       "type": "python-external"
@@ -199,6 +204,10 @@
     {
       "source": "root-python-project",
       "target": "pypdf"
+    },
+    {
+      "source": "root-python-project",
+      "target": "google-generativeai"
     },
     {
       "source": "root-python-project",
