@@ -2,10 +2,11 @@ import os
 import sys
 import json
 import jsonschema
-from tooling.build_utils import find_files, load_schema, sanitize_markdown, execute_code
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.append(ROOT_DIR)
+from tooling.build_utils import find_files, load_schema, sanitize_markdown, execute_code
 SOURCE_DIR = os.path.dirname(__file__)
 TARGET_FILE = os.path.join(SOURCE_DIR, "AGENTS.md")
 SCHEMA_FILE = os.path.join(ROOT_DIR, "protocols", "protocol.schema.json")
