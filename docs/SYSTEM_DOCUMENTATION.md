@@ -1676,6 +1676,19 @@ and keyboard inputs.
   > The main entry point for the GeminiComputerUse tool.
 
 
+### `/app/tooling/goal_generator.py`
+
+This module provides a simple way to select a plan for the agent.
+
+
+**Public Functions:**
+
+
+- #### `def find_best_plan(task_description)`
+
+  > Returns the path to the best plan for the given task description.
+
+
 ### `/app/tooling/guardian.py`
 
 _No module-level docstring found._
@@ -2812,6 +2825,11 @@ actionable lessons from `knowledge_core/lessons.jsonl` and uses the
 **Public Functions:**
 
 
+- #### `def apply_merge_diff(filepath, merge_diff)`
+
+  > Applies a git-style merge diff to a file.
+
+
 - #### `def load_lessons()`
 
   > Loads all lessons from the JSONL file.
@@ -2869,6 +2887,24 @@ When executed, this tool will:
   > Main function to run the self-improvement proposal generator.
 
 
+### `/app/tooling/session_manager.py`
+
+This module provides a simple way to save and load the agent's session.
+
+
+**Public Functions:**
+
+
+- #### `def load_session()`
+
+  > Loads the agent's session from a file.
+
+
+- #### `def save_session(agent_state)`
+
+  > Saves the agent's session to a file.
+
+
 ### `/app/tooling/state.py`
 
 Defines the core data structures for managing the agent's state.
@@ -2922,7 +2958,9 @@ execution that is the hallmark of the CFDC.
 
   **Methods:**
 
-  - ##### `def to_json(self)`
+  - ##### `def from_dict(cls, data)`
+
+  - ##### `def to_dict(self)`
 
 
 - #### `class PlanContext`
