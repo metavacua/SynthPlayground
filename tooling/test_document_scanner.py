@@ -3,7 +3,7 @@ import os
 import shutil
 from unittest.mock import patch, MagicMock
 from tooling.document_scanner import scan_documents
-import pypdf
+
 
 class TestDocumentScanner(unittest.TestCase):
 
@@ -33,7 +33,7 @@ class TestDocumentScanner(unittest.TestCase):
         self.assertIn(self.txt_file, scanned_data)
         self.assertEqual(scanned_data[self.txt_file], "Text Content")
 
-    @patch('tooling.document_scanner.PdfReader')
+    @patch("tooling.document_scanner.PdfReader")
     def test_scan_pdf_file(self, mock_pdf_reader):
         """Tests that the scanner correctly reads .pdf files."""
         # Mock the PdfReader to return a dummy page with text
@@ -46,12 +46,13 @@ class TestDocumentScanner(unittest.TestCase):
         self.assertIn(self.pdf_file, scanned_data)
         self.assertEqual(scanned_data[self.pdf_file], "PDF Content")
 
-    @patch('builtins.open', side_effect=IOError("Read error"))
+    @patch("builtins.open", side_effect=IOError("Read error"))
     def test_read_error_handling(self, mock_open):
         """Tests that the scanner handles file read errors gracefully."""
         scanned_data = scan_documents(self.test_dir)
         # The scanner should still return a result, but with an error message
         self.assertTrue(any("Error reading file" in v for v in scanned_data.values()))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -3,9 +3,10 @@ This script performs a simulated research task in the background.
 It takes a task ID as a command-line argument and writes its findings
 to a temporary file that the main agent can poll.
 """
+
 import time
 import sys
-import os
+
 
 def perform_research(task_id: str):
     """Simulates a research task and writes the result to a file."""
@@ -17,6 +18,7 @@ def perform_research(task_id: str):
     with open(result_path, "w") as f:
         f.write(result_content)
     print(f"[BackgroundResearcher] Research complete. Result written to {result_path}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

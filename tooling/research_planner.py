@@ -3,7 +3,7 @@ This module is responsible for generating a formal, FSM-compliant research plan
 for a given topic. The output is a string that can be executed by the agent's
 master controller.
 """
-import re
+
 
 def plan_deep_research(topic: str, research_id: str) -> str:
     """
@@ -29,7 +29,7 @@ def plan_deep_research(topic: str, research_id: str) -> str:
     plan_content = plan_content.replace("[RESEARCH_ID]", research_id)
     plan_content = plan_content.replace(
         "A clear, one-sentence statement of what this research aims to achieve.",
-        f"To produce a comprehensive research report on the topic of '{topic}'."
+        f"To produce a comprehensive research report on the topic of '{topic}'.",
     )
 
     # 3. Load the report template
@@ -39,7 +39,6 @@ def plan_deep_research(topic: str, research_id: str) -> str:
     # 4. Populate the report template
     report_content = report_template.replace("[Topic]", topic)
     report_content = report_content.replace("[RESEARCH_ID]", research_id)
-
 
     plan = f"""
 # FSM: tooling/research_fsm.json

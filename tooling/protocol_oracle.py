@@ -3,14 +3,17 @@ import json
 import sys
 import os
 import importlib.util
-from rdflib import Graph, Namespace, URIRef, Literal
+from rdflib import Graph, Namespace
 from rdflib.plugins.sparql import prepareQuery
 
 # Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 PROTOCOL = Namespace("https://www.aida.org/protocol#")
-DEFAULT_KG_FILE = os.path.join(os.path.dirname(__file__), "..", "knowledge_core", "protocols.ttl")
+DEFAULT_KG_FILE = os.path.join(
+    os.path.dirname(__file__), "..", "knowledge_core", "protocols.ttl"
+)
+
 
 def get_applicable_protocols(graph, context):
     """
@@ -25,7 +28,13 @@ def get_applicable_protocols(graph, context):
         ?protocol protocol:hasApplicabilityCondition ?conditionPath .
     }
     """
-    q = prepareQuery(query_str, initNs={"protocol": PROTOCOL, "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"})
+    q = prepareQuery(
+        query_str,
+        initNs={
+            "protocol": PROTOCOL,
+            "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        },
+    )
 
     applicable_protocols = []
 
@@ -35,14 +44,19 @@ def get_applicable_protocols(graph, context):
 
         try:
             # Dynamically load the module and run the applicability check
-            spec = importlib.util.spec_from_file_location("protocol_module", condition_path)
+            spec = importlib.util.spec_from_file_location(
+                "protocol_module", condition_path
+            )
             module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(module)
 
             if module.is_applicable(context):
                 applicable_protocols.append(str(protocol_uri))
         except Exception as e:
-            print(f"Error evaluating applicability for {protocol_uri} from {condition_path}: {e}", file=sys.stderr)
+            print(
+                f"Error evaluating applicability for {protocol_uri} from {condition_path}: {e}",
+                file=sys.stderr,
+            )
 
     # Also, include all protocols that *don't* have a specific applicability condition (i.e., they are always applicable)
     query_static_str = """
@@ -51,12 +65,19 @@ def get_applicable_protocols(graph, context):
         FILTER NOT EXISTS { ?protocol protocol:hasApplicabilityCondition ?cond . }
     }
     """
-    q_static = prepareQuery(query_static_str, initNs={"protocol": PROTOCOL, "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"})
+    q_static = prepareQuery(
+        query_static_str,
+        initNs={
+            "protocol": PROTOCOL,
+            "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+        },
+    )
 
     for row in graph.query(q_static):
         applicable_protocols.append(str(row.protocol))
 
     return applicable_protocols
+
 
 def get_rules_for_protocols(graph, protocol_uris):
     """
@@ -78,26 +99,44 @@ def get_rules_for_protocols(graph, protocol_uris):
     }}
     """
 
-    q = prepareQuery(query_str, initNs={"protocol": PROTOCOL, "rdfs": "http://www.w3.org/2000/01/rdf-schema#"})
+    q = prepareQuery(
+        query_str,
+        initNs={"protocol": PROTOCOL, "rdfs": "http://www.w3.org/2000/01/rdf-schema#"},
+    )
 
     rules = []
     for row in graph.query(q):
-        rules.append({
-            "rule_id": str(row.rule_id),
-            "description": str(row.description),
-            "enforcement": str(row.enforcement),
-        })
+        rules.append(
+            {
+                "rule_id": str(row.rule_id),
+                "description": str(row.description),
+                "enforcement": str(row.enforcement),
+            }
+        )
     return rules
 
+
 def main():
-    parser = argparse.ArgumentParser(description="Protocol Oracle: Queries the knowledge graph for applicable agent protocols.")
-    parser.add_argument("--context", required=True, help="A JSON string representing the agent's current context (e.g., task, target files).")
-    parser.add_argument("--kg-file", default=DEFAULT_KG_FILE, help="Path to the protocol knowledge graph file.")
+    parser = argparse.ArgumentParser(
+        description="Protocol Oracle: Queries the knowledge graph for applicable agent protocols."
+    )
+    parser.add_argument(
+        "--context",
+        required=True,
+        help="A JSON string representing the agent's current context (e.g., task, target files).",
+    )
+    parser.add_argument(
+        "--kg-file",
+        default=DEFAULT_KG_FILE,
+        help="Path to the protocol knowledge graph file.",
+    )
 
     args = parser.parse_args()
 
     if not os.path.exists(args.kg_file):
-        print(f"Error: Knowledge graph file not found at {args.kg_file}", file=sys.stderr)
+        print(
+            f"Error: Knowledge graph file not found at {args.kg_file}", file=sys.stderr
+        )
         sys.exit(1)
 
     try:
@@ -114,6 +153,7 @@ def main():
 
     # Output the rules as a JSON object for easy parsing by the agent
     print(json.dumps(rules, indent=2))
+
 
 if __name__ == "__main__":
     main()

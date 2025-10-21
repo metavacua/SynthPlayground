@@ -1,7 +1,12 @@
 import unittest
 import os
 import shutil
-from tooling.self_improvement_cli import create_proposal, PROPOSALS_DIR, PROPOSAL_TEMPLATE
+from tooling.self_improvement_cli import (
+    create_proposal,
+    PROPOSALS_DIR,
+    PROPOSAL_TEMPLATE,
+)
+
 
 class TestNewSelfImprovementCLI(unittest.TestCase):
 
@@ -67,6 +72,7 @@ class TestNewSelfImprovementCLI(unittest.TestCase):
         # Check that both files exist
         self.assertTrue(os.path.exists(proposal_path_1))
         self.assertTrue(os.path.exists(proposal_path_2))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,12 +1,13 @@
 import unittest
-from aura_lang import ast, lexer, parser, interpreter
+from aura_lang import lexer, parser, interpreter
+
 
 class TestAuraInterpreter(unittest.TestCase):
 
     def _eval(self, code):
         """Helper function to parse and evaluate Aura code."""
-        l = lexer.Lexer(code)
-        p = parser.Parser(l)
+        lex = lexer.Lexer(code)
+        p = parser.Parser(lex)
         program = p.parse_program()
         self.assertFalse(p.errors, f"Parser errors: {p.errors}")
         env = interpreter.Environment()
@@ -39,7 +40,7 @@ class TestAuraInterpreter(unittest.TestCase):
         for code, expected in test_cases:
             with self.subTest(code=code):
                 result = self._eval(f"{code};")
-                value = result.value if hasattr(result, 'value') else result
+                value = result.value if hasattr(result, "value") else result
                 self.assertEqual(value, expected)
 
     def test_if_statements(self):
@@ -87,5 +88,6 @@ class TestAuraInterpreter(unittest.TestCase):
         self.assertIsInstance(result, interpreter.Integer)
         self.assertEqual(result.value, 0)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

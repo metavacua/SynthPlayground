@@ -24,13 +24,12 @@ and understand the structure of the repository without having to read every file
 
 import os
 import json
-import glob
 import subprocess
 import ast
 import sys
 
 # Add the root directory to the Python path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.file_system_utils import find_files
 
 

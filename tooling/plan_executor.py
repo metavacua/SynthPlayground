@@ -6,9 +6,11 @@ simplified, simulated environment. It supports a limited set of tools
 (`message_user` and `run_in_bash_session`) to provide a basic demonstration
 of how an agent would execute a plan.
 """
+
 import subprocess
 import sys
 from tooling.plan_parser import parse_plan
+
 
 def execute_plan(filepath: str):
     """
@@ -18,10 +20,8 @@ def execute_plan(filepath: str):
         filepath: The path to the plan file.
     """
     try:
-        with open(filepath, 'r') as f:
+        with open(filepath, "r") as f:
             plan_content = f.read()
-
-        from tooling.plan_parser import Command
 
         commands = parse_plan(plan_content)
 
@@ -39,7 +39,7 @@ def execute_plan(filepath: str):
                     shell=True,
                     capture_output=True,
                     text=True,
-                    encoding='utf-8'
+                    encoding="utf-8",
                 )
                 if result.stdout:
                     print(result.stdout.strip())
@@ -55,6 +55,7 @@ def execute_plan(filepath: str):
         print(f"An unexpected error occurred: {str(e)}")
         sys.exit(1)
 
+
 def main():
     """
     Main function to run the plan executor from the command line.
@@ -65,6 +66,7 @@ def main():
 
     plan_filepath = sys.argv[1]
     execute_plan(plan_filepath)
+
 
 if __name__ == "__main__":
     main()

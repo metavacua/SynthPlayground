@@ -14,11 +14,11 @@ agent's underlying Python-based toolset. The executor is responsible for:
 This makes it a key component for enabling more expressive and complex
 automation scripts for the agent.
 """
+
 import argparse
 import sys
 from pathlib import Path
 import subprocess
-import importlib
 
 # Add the parent directory to the path to allow imports from aura_lang
 sys.path.append(str(Path(__file__).resolve().parent.parent))
@@ -26,6 +26,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from aura_lang.lexer import Lexer
 from aura_lang.parser import Parser
 from aura_lang.interpreter import evaluate, Environment, Object, Builtin
+
 
 def dynamic_agent_call_tool(tool_name_obj: Object, *args: Object) -> Object:
     """
@@ -45,12 +46,14 @@ def dynamic_agent_call_tool(tool_name_obj: Object, *args: Object) -> Object:
     try:
         tool_name = tool_name_obj.value
         # Sanitize the tool_name to prevent directory traversal vulnerabilities.
-        if '..' in tool_name or '/' in tool_name:
+        if ".." in tool_name or "/" in tool_name:
             raise ValueError("Invalid tool name format.")
 
         tool_module_path = Path(__file__).resolve().parent / f"{tool_name}.py"
         if not tool_module_path.exists():
-            raise ModuleNotFoundError(f"Tool '{tool_name}' not found at '{tool_module_path}'")
+            raise ModuleNotFoundError(
+                f"Tool '{tool_name}' not found at '{tool_module_path}'"
+            )
 
         unwrapped_args = [str(arg.value) for arg in args]
         command = [sys.executable, str(tool_module_path)] + unwrapped_args
@@ -92,15 +95,15 @@ def main():
     args = parser.parse_args()
 
     try:
-        with open(args.filepath, 'r') as f:
+        with open(args.filepath, "r") as f:
             source_code = f.read()
     except FileNotFoundError:
         print(f"Error: File not found at {args.filepath}", file=sys.stderr)
         sys.exit(1)
 
     print(f"Executing Aura script: {args.filepath}")
-    l = Lexer(source_code)
-    p = Parser(l)
+    lex = Lexer(source_code)
+    p = Parser(lex)
     program = p.parse_program()
 
     if p.errors:
@@ -126,7 +129,6 @@ def main():
     # Print the final result of the script, if any
     if result:
         print(result.inspect())
-
 
     # HACK: The Aura interpreter is not fully wired up to produce output.
     # For the purpose of unblocking the test suite, we will print the

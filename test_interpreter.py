@@ -22,7 +22,6 @@ from appl_ast import (
     TString,
 )
 from interpreter import interpret, InterpError, Closure
-from planning import PlanningError
 
 
 class TestInterpreter(unittest.TestCase):
@@ -47,21 +46,21 @@ class TestInterpreter(unittest.TestCase):
         self.assertEqual(interpret(Unit()), Unit())
 
     def test_var(self):
-        env = {'x': Int(1)}
-        self.assertEqual(interpret(Var('x'), env), Int(1))
+        env = {"x": Int(1)}
+        self.assertEqual(interpret(Var("x"), env), Int(1))
 
     def test_var_not_found(self):
         with self.assertRaises(InterpError):
-            interpret(Var('x'))
+            interpret(Var("x"))
 
     def test_fun(self):
         # Test that a function evaluates to a closure
-        id_fun = Fun('x', TInt(), Var('x'))
+        id_fun = Fun("x", TInt(), Var("x"))
         self.assertIsInstance(interpret(id_fun), Closure)
 
     def test_app(self):
         # Test a simple function application
-        id_fun = Fun('x', TInt(), Var('x'))
+        id_fun = Fun("x", TInt(), Var("x"))
         app = App(id_fun, Int(1))
         self.assertEqual(interpret(app), Int(1))
 
@@ -76,22 +75,24 @@ class TestInterpreter(unittest.TestCase):
         self.assertEqual(interpret(pair), Pair(Int(1), String("hello")))
 
     def test_let_pair(self):
-        let_pair = LetPair('x', 'y', Pair(Int(1), String("hello")), Var('x'))
+        let_pair = LetPair("x", "y", Pair(Int(1), String("hello")), Var("x"))
         self.assertEqual(interpret(let_pair), Int(1))
 
     def test_inl_inr(self):
         self.assertEqual(interpret(Inl(Int(1), TString())), Inl(Int(1), TString()))
-        self.assertEqual(interpret(Inr(String("hello"), TInt())), Inr(String("hello"), TInt()))
+        self.assertEqual(
+            interpret(Inr(String("hello"), TInt())), Inr(String("hello"), TInt())
+        )
 
     def test_case(self):
-        case_exp = Case(Inl(Int(1), TString()), 'x', Var('x'), 'y', Int(2))
+        case_exp = Case(Inl(Int(1), TString()), "x", Var("x"), "y", Int(2))
         self.assertEqual(interpret(case_exp), Int(1))
 
     def test_promote(self):
         self.assertEqual(interpret(Promote(Int(1))), Int(1))
 
     def test_let_bang(self):
-        let_bang = LetBang('x', Promote(Int(1)), Var('x'))
+        let_bang = LetBang("x", Promote(Int(1)), Var("x"))
         self.assertEqual(interpret(let_bang), Int(1))
 
     def test_list(self):
@@ -101,14 +102,17 @@ class TestInterpreter(unittest.TestCase):
     def test_aal_integration(self):
         # This test now verifies the AAL integration.
         program = Let(
-            "!domain", App(Var("load_domain"), String(self.aal_filepath)),
+            "!domain",
+            App(Var("load_domain"), String(self.aal_filepath)),
             Let(
-                "!state1", App(Var("create_state"), Cons(String("at_A"), Nil(TString()))),
+                "!state1",
+                App(Var("create_state"), Cons(String("at_A"), Nil(TString()))),
                 Let(
-                    "!state2", App(Var("apply_action"), String("move")),
-                    App(Var("is_goal"), Cons(String("at_B"), Nil(TString())))
-                )
-            )
+                    "!state2",
+                    App(Var("apply_action"), String("move")),
+                    App(Var("is_goal"), Cons(String("at_B"), Nil(TString()))),
+                ),
+            ),
         )
         result = interpret(program)
         self.assertEqual(result, Bool(True))
@@ -117,5 +121,6 @@ class TestInterpreter(unittest.TestCase):
         program = App(Var("eval"), App(Var("parse"), String('"hello"')))
         self.assertEqual(interpret(program), String("hello"))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

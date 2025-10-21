@@ -2,8 +2,10 @@
 
 import hashlib
 
+
 class ProcessA:
     """The Innovator"""
+
     def __init__(self, system_state):
         self.system_state = system_state
 
@@ -11,19 +13,25 @@ class ProcessA:
         """Generates a new element using diagonalization."""
         return diagonalization(self.system_state)
 
+
 class ProcessB:
     """The Stabilizer"""
+
     def __init__(self, system_state):
         self.system_state = system_state
         # Initialize with the quality of the initial state.
-        self.current_best_quality = self._count_leading_zeros(diagonalization(system_state))
+        self.current_best_quality = self._count_leading_zeros(
+            diagonalization(system_state)
+        )
 
     def run(self, new_element):
         """Analyzes and integrates the new element."""
         if self.is_beneficial(new_element):
             self.system_state.add(new_element)
             # Update the best quality score.
-            self.current_best_quality = self._count_leading_zeros(diagonalization(self.system_state))
+            self.current_best_quality = self._count_leading_zeros(
+                diagonalization(self.system_state)
+            )
             return True
         return False
 
@@ -31,7 +39,7 @@ class ProcessB:
         """Counts the number of leading '0' characters in a hex string."""
         count = 0
         for char in hex_string:
-            if char == '0':
+            if char == "0":
                 count += 1
             else:
                 break
@@ -55,6 +63,7 @@ class ProcessB:
         # The new element is beneficial if it leads to a state with a better hash.
         return next_quality > self.current_best_quality
 
+
 def diagonalization(input_set):
     """
     A simple diagonalization function.
@@ -62,6 +71,7 @@ def diagonalization(input_set):
     """
     concatenated_elements = "".join(sorted(list(input_set)))
     return hashlib.sha256(concatenated_elements.encode()).hexdigest()
+
 
 def main():
     """The main loop for the self-improvement process."""
@@ -76,11 +86,12 @@ def main():
         print(f"  Process A generated: {new_element[:10]}...")
 
         if process_b.run(new_element):
-            print(f"  Process B integrated the new element.")
+            print("  Process B integrated the new element.")
         else:
-            print(f"  Process B rejected the new element.")
+            print("  Process B rejected the new element.")
         print(f"  System state after B: {system_state}")
         print("-" * 20)
+
 
 if __name__ == "__main__":
     main()

@@ -1,6 +1,6 @@
 # check.py
-import os
 from proof import bootstrap, AgentState
+
 
 def check_proof():
     """
@@ -36,6 +36,7 @@ def check_proof():
 
     print("Proof is valid.")
     return True
+
 
 if __name__ == "__main__":
     if check_proof():

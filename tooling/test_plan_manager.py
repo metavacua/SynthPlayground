@@ -1,9 +1,15 @@
 import unittest
 import os
-import json
 import shutil
-from unittest.mock import patch, mock_open
-from tooling.plan_manager import get_registry, save_registry, register_plan, deregister_plan, list_plans
+from unittest.mock import patch
+from tooling.plan_manager import (
+    get_registry,
+    save_registry,
+    register_plan,
+    deregister_plan,
+    list_plans,
+)
+
 
 class TestPlanManager(unittest.TestCase):
 
@@ -16,7 +22,7 @@ class TestPlanManager(unittest.TestCase):
             f.write("This is a test plan.")
 
         # Patch the REGISTRY_PATH to use our temporary file
-        patcher = patch('tooling.plan_manager.REGISTRY_PATH', self.registry_path)
+        patcher = patch("tooling.plan_manager.REGISTRY_PATH", self.registry_path)
         patcher.start()
         self.addCleanup(patcher.stop)
 
@@ -25,7 +31,7 @@ class TestPlanManager(unittest.TestCase):
 
     def test_get_and_save_registry(self):
         """Tests that the registry can be read from and saved to a file."""
-        self.assertEqual(get_registry(), {}) # Should be empty initially
+        self.assertEqual(get_registry(), {})  # Should be empty initially
 
         test_data = {"plan-a": "path/to/a"}
         save_registry(test_data)
@@ -34,7 +40,7 @@ class TestPlanManager(unittest.TestCase):
 
     def test_register_plan(self):
         """Tests registering a new plan."""
-        with patch('sys.exit') as mock_exit:
+        with patch("sys.exit") as mock_exit:
             register_plan("my-plan", self.plan_file_path)
             mock_exit.assert_not_called()
 
@@ -59,7 +65,7 @@ class TestPlanManager(unittest.TestCase):
         register_plan("my-plan", self.plan_file_path)
         self.assertIn("my-plan", get_registry())
 
-        with patch('sys.exit') as mock_exit:
+        with patch("sys.exit") as mock_exit:
             deregister_plan("my-plan")
             mock_exit.assert_not_called()
 
@@ -70,7 +76,7 @@ class TestPlanManager(unittest.TestCase):
         with self.assertRaises(SystemExit):
             deregister_plan("non-existent-plan")
 
-    @patch('builtins.print')
+    @patch("builtins.print")
     def test_list_plans(self, mock_print):
         """Tests that listing plans prints the correct information."""
         # Create dummy files for the plans

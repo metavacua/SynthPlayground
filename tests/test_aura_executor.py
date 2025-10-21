@@ -3,13 +3,16 @@ import sys
 import subprocess
 from pathlib import Path
 
+
 class TestAuraExecutor(unittest.TestCase):
 
     def test_integration_demo_end_to_end_subprocess(self):
         # Get the path to the python executable
         python_executable = sys.executable
         # Get the path to the aura_executor.py script
-        executor_path = Path(__file__).resolve().parent.parent / "tooling" / "aura_executor.py"
+        executor_path = (
+            Path(__file__).resolve().parent.parent / "tooling" / "aura_executor.py"
+        )
         # Get the path to the integration_demo.aura script
         script_path = Path(__file__).resolve().parent.parent / "integration_demo.aura"
 
@@ -17,7 +20,7 @@ class TestAuraExecutor(unittest.TestCase):
         result = subprocess.run(
             [python_executable, str(executor_path), str(script_path)],
             capture_output=True,
-            text=True
+            text=True,
         )
 
         # Check the output
@@ -26,5 +29,6 @@ class TestAuraExecutor(unittest.TestCase):
         self.assertIn("Sequent is provable!", output)
         self.assertIn("[Message User]: Integration demo complete!", output)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

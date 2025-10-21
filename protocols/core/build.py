@@ -25,6 +25,7 @@ DISCLAIMER_TEMPLATE = """\
 
 # --- Utility Functions (adapted from root compiler) ---
 
+
 def find_files(pattern, base_dir=".", recursive=True):
     """Finds files matching a pattern in a directory."""
     if recursive:
@@ -41,6 +42,7 @@ def find_files(pattern, base_dir=".", recursive=True):
             if os.path.isfile(os.path.join(base_dir, f)) and f.endswith(pattern)
         ]
 
+
 def load_schema(schema_file):
     """Loads the JSON schema from a file."""
     try:
@@ -50,21 +52,34 @@ def load_schema(schema_file):
         print(f"Error: Schema file not found at {schema_file}", file=sys.stderr)
         sys.exit(1)
     except json.JSONDecodeError:
-        print(f"Error: Could not decode JSON from schema file at {schema_file}", file=sys.stderr)
+        print(
+            f"Error: Could not decode JSON from schema file at {schema_file}",
+            file=sys.stderr,
+        )
         sys.exit(1)
+
 
 def sanitize_markdown(content):
     """Removes potentially unsafe constructs from Markdown."""
-    content = re.sub(r"<script.*?>.*?</script>", "", content, flags=re.IGNORECASE | re.DOTALL)
+    content = re.sub(
+        r"<script.*?>.*?</script>", "", content, flags=re.IGNORECASE | re.DOTALL
+    )
     content = re.sub(r" on\w+=\".*?\"", "", content, flags=re.IGNORECASE)
-    content = re.sub(r"<<<SENSITIVE_INSTRUCTIONS>>>.*<<<SENSITIVE_INSTRUCTIONS>>>", "", content, flags=re.DOTALL)
+    content = re.sub(
+        r"<<<SENSITIVE_INSTRUCTIONS>>>.*<<<SENSITIVE_INSTRUCTIONS>>>",
+        "",
+        content,
+        flags=re.DOTALL,
+    )
     return content
+
 
 # --- Core Compilation Logic ---
 
+
 def compile_module():
     """Compiles the protocol files in this directory into a single AGENTS.md."""
-    print(f"--- Starting Protocol Compilation for Core Module ---")
+    print("--- Starting Protocol Compilation for Core Module ---")
     print(f"Source directory: {SOURCE_DIR}")
     print(f"Target file: {TARGET_FILE}")
 
@@ -73,10 +88,22 @@ def compile_module():
         return
 
     # Find all protocol source files in the current directory (non-recursive)
-    all_md_files = sorted([os.path.join(SOURCE_DIR, f) for f in find_files(".protocol.md", base_dir=SOURCE_DIR, recursive=False)])
-    all_json_files = sorted([os.path.join(SOURCE_DIR, f) for f in find_files(".protocol.json", base_dir=SOURCE_DIR, recursive=False)])
+    all_md_files = sorted(
+        [
+            os.path.join(SOURCE_DIR, f)
+            for f in find_files(".protocol.md", base_dir=SOURCE_DIR, recursive=False)
+        ]
+    )
+    all_json_files = sorted(
+        [
+            os.path.join(SOURCE_DIR, f)
+            for f in find_files(".protocol.json", base_dir=SOURCE_DIR, recursive=False)
+        ]
+    )
 
-    disclaimer = DISCLAIMER_TEMPLATE.format(source_dir_name=os.path.basename(SOURCE_DIR))
+    disclaimer = DISCLAIMER_TEMPLATE.format(
+        source_dir_name=os.path.basename(SOURCE_DIR)
+    )
     final_content = [disclaimer]
 
     # Process markdown files
@@ -100,8 +127,10 @@ def compile_module():
         except json.JSONDecodeError:
             print(f"Warning: Could not decode JSON from {file_path}", file=sys.stderr)
         except jsonschema.ValidationError as e:
-            print(f"Warning: Schema validation failed for {file_path}: {e.message}", file=sys.stderr)
-
+            print(
+                f"Warning: Schema validation failed for {file_path}: {e.message}",
+                file=sys.stderr,
+            )
 
     # Write the final output
     final_output_string = "\n".join(final_content)
@@ -110,6 +139,7 @@ def compile_module():
         f.write(final_output_string)
     os.rename(temp_target_file, TARGET_FILE)
     print(f"Successfully compiled AGENTS.md for core module at {TARGET_FILE}")
+
 
 if __name__ == "__main__":
     compile_module()

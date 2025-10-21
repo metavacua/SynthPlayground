@@ -3,11 +3,12 @@
 import re
 from tooling.aal.domain import Domain, Fluent, Action, CausalLaw
 
+
 def parse_aal(aal_string: str) -> Domain:
     """Parses an AAL string and returns a Domain object."""
     domain = Domain()
     # Correctly split by newline characters.
-    lines = aal_string.strip().split('\n')
+    lines = aal_string.strip().split("\n")
 
     # Correctly match whitespace.
     fluent_pattern = re.compile(r"fluent\s+(\w+)")
@@ -43,10 +44,12 @@ def parse_aal(aal_string: str) -> Domain:
 
             conditions = frozenset()
             if conditions_str:
-                condition_names = [c.strip() for c in conditions_str.split(',')]
+                condition_names = [c.strip() for c in conditions_str.split(",")]
                 conditions = frozenset(Fluent(name=name) for name in condition_names)
 
-            domain.causal_laws.add(CausalLaw(action=action, effect=effect, conditions=conditions))
+            domain.causal_laws.add(
+                CausalLaw(action=action, effect=effect, conditions=conditions)
+            )
             continue
 
     return domain

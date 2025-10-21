@@ -2,7 +2,12 @@ import unittest
 import os
 import requests
 from unittest.mock import patch, MagicMock
-from tooling.environmental_probe import probe_filesystem, probe_network, probe_environment_variables
+from tooling.environmental_probe import (
+    probe_filesystem,
+    probe_network,
+    probe_environment_variables,
+)
+
 
 class TestEnvironmentalProbe(unittest.TestCase):
 
@@ -21,7 +26,7 @@ class TestEnvironmentalProbe(unittest.TestCase):
         self.assertEqual(status, "PASS")
         self.assertIn("successful", msg)
 
-    @patch('tooling.environmental_probe.requests.head')
+    @patch("tooling.environmental_probe.requests.head")
     def test_probe_network_success(self, mock_head):
         """Tests the network probe with a successful connection."""
         mock_head.return_value = MagicMock(status_code=200)
@@ -29,7 +34,10 @@ class TestEnvironmentalProbe(unittest.TestCase):
         self.assertEqual(status, "PASS")
         self.assertIn("Successfully connected", msg)
 
-    @patch('tooling.environmental_probe.requests.head', side_effect=requests.exceptions.Timeout)
+    @patch(
+        "tooling.environmental_probe.requests.head",
+        side_effect=requests.exceptions.Timeout,
+    )
     def test_probe_network_timeout(self, mock_head):
         """Tests the network probe with a timeout."""
         status, msg, latency = probe_network()

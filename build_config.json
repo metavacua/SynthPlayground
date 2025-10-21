@@ -1,0 +1,30 @@
+{
+  "targets": {
+    "lint": {
+      "type": "command",
+      "command": "python3 -m flake8 .",
+      "description": "Run the flake8 linter."
+    },
+    "format": {
+      "type": "command",
+      "command": "python3 -m black .",
+      "description": "Format the code with black."
+    },
+    "test": {
+      "type": "command",
+      "command": "python3 -m pytest",
+      "description": "Run the pytest test suite."
+    },
+    "compile_protocols": {
+      "type": "compiler",
+      "compiler": "tooling/protocol_compiler.py",
+      "sources": ["protocols/"],
+      "output": "AGENTS.md",
+      "description": "Compile the protocol source files into AGENTS.md files."
+    }
+  },
+  "build_groups": {
+    "all": ["compile_protocols", "lint", "format", "test"],
+    "quality": ["lint", "format"]
+  }
+}

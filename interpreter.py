@@ -58,6 +58,7 @@ def _appl_list_to_python_list(appl_list):
         appl_list = appl_list.tail
     return py_list
 
+
 def _python_list_to_appl_list(py_list: list) -> Term:
     """Converts a Python list of strings to an APPL list of strings."""
     result = Nil()
@@ -100,7 +101,7 @@ class Interpreter:
             fun_val = self.interpret(term.f)
             # Handle arity 0 functions
             if isinstance(fun_val, Primitive) and fun_val.arity == 0:
-                 return fun_val.fun()
+                return fun_val.fun()
 
             arg_val = self.interpret(term.arg)
 
@@ -173,7 +174,9 @@ class Interpreter:
         elif isinstance(term, AST):
             return term
         else:
-            raise NotImplementedError(f"Interpretation not implemented for {type(term).__name__}")
+            raise NotImplementedError(
+                f"Interpretation not implemented for {type(term).__name__}"
+            )
 
 
 def _unparse(term: Term) -> str:
@@ -186,14 +189,16 @@ def interpret(term: Term, env: dict = None) -> Term:
     Interprets the given term in the provided environment.
     """
     default_env = {
-        'load_domain': Primitive(load_domain, 1),
-        'create_state': Primitive(create_state, 1),
-        'apply_action': Primitive(apply_action, 1),
-        'is_goal': Primitive(lambda l: Bool(is_goal(l)), 1),
-        'get_current_state': Primitive(lambda: _python_list_to_appl_list(get_current_state()), 0),
-        'parse': Primitive(lambda s: AST(parse(s)), 1),
-        'unparse': Primitive(lambda t: String(_unparse(t)), 1),
-        'eval': Primitive(lambda t: interpret(t.term, env), 1),
+        "load_domain": Primitive(load_domain, 1),
+        "create_state": Primitive(create_state, 1),
+        "apply_action": Primitive(apply_action, 1),
+        "is_goal": Primitive(lambda appl_list: Bool(is_goal(appl_list)), 1),
+        "get_current_state": Primitive(
+            lambda: _python_list_to_appl_list(get_current_state()), 0
+        ),
+        "parse": Primitive(lambda s: AST(parse(s)), 1),
+        "unparse": Primitive(lambda t: String(_unparse(t)), 1),
+        "eval": Primitive(lambda t: interpret(t.term, env), 1),
     }
     if env:
         default_env.update(env)

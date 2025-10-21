@@ -24,6 +24,7 @@ from tooling.state import AgentState
 from utils.logger import Logger
 from tooling.udc_orchestrator import UDCOrchestrator
 
+
 def load_tools_from_manifest(manifest_path="tooling/tool_manifest.json"):
     """Loads tools from the tool manifest."""
     tools = {}
@@ -37,7 +38,9 @@ def load_tools_from_manifest(manifest_path="tooling/tool_manifest.json"):
     for tool_def in manifest.get("tools", []):
         tool_name = tool_def.get("name")
         module_path = tool_def.get("path")
-        function_name = tool_def.get("function_name", tool_name) # Assume function name is tool name if not specified
+        function_name = tool_def.get(
+            "function_name", tool_name
+        )  # Assume function name is tool name if not specified
 
         if not all([tool_name, module_path, function_name]):
             print(f"Skipping invalid tool definition: {tool_def}")
@@ -57,6 +60,7 @@ def load_tools_from_manifest(manifest_path="tooling/tool_manifest.json"):
 
     return tools
 
+
 def find_fsm_transition(fsm, source_state, trigger):
     """Finds the destination state for a given source and trigger."""
     for transition in fsm["transitions"]:
@@ -67,7 +71,10 @@ def find_fsm_transition(fsm, source_state, trigger):
 
 import argparse
 
-def run_agent_loop(task_description: str, tools: dict, model: str = None, plan_content: str = None):
+
+def run_agent_loop(
+    task_description: str, tools: dict, model: str = None, plan_content: str = None
+):
     """
     The main loop that drives the agent's lifecycle via the FSM.
     """
@@ -78,7 +85,6 @@ def run_agent_loop(task_description: str, tools: dict, model: str = None, plan_c
     schema_path = os.path.join(os.path.dirname(__file__), "..", "LOGGING_SCHEMA.md")
     logger = Logger(schema_path=schema_path)
     mcg = MasterControlGraph()
-    planning_attempts = 0
 
     print(f"--- Starting Agent Task: {task_description} ({task_id}) ---")
     if model:
@@ -109,9 +115,13 @@ def run_agent_loop(task_description: str, tools: dict, model: str = None, plan_c
                         plan_content = f.read()
 
                     # Validate the plan against the specified model
-                    is_valid, error_message = mcg.validate_plan_for_model(plan_content, model)
+                    is_valid, error_message = mcg.validate_plan_for_model(
+                        plan_content, model
+                    )
                     if not is_valid:
-                        agent_state.error = f"Plan validation failed for model {model}: {error_message}"
+                        agent_state.error = (
+                            f"Plan validation failed for model {model}: {error_message}"
+                        )
                         mcg.current_state = "ERROR"
                         continue
 
@@ -163,7 +173,9 @@ The research findings have been integrated.
                             step_result = tool_function(tool_args)
                         else:
                             step_result = tool_function()
-                        trigger = mcg.do_execution(agent_state, str(step_result) if step_result else "", logger)
+                        trigger = mcg.do_execution(
+                            agent_state, str(step_result) if step_result else "", logger
+                        )
                     except Exception as e:
                         agent_state.error = f"Error executing tool '{tool_name}': {e}"
                         mcg.current_state = "ERROR"
@@ -187,7 +199,6 @@ The research findings have been integrated.
                 f"Unknown state encountered in AgentShell: {current_state}"
             )
             mcg.current_state = "ERROR"
-
 
         # Transition the FSM to the next state
         next_state = find_fsm_transition(mcg.fsm, current_state, trigger)
@@ -260,7 +271,9 @@ def main():
     # Otherwise, proceed with the normal agent loop.
     task_description = "Perform a basic self-check and greet the user."
     if args.model:
-        task_description = f"Execute a self-improvement task under CSDC Model {args.model}."
+        task_description = (
+            f"Execute a self-improvement task under CSDC Model {args.model}."
+        )
 
     tools = load_tools_from_manifest()
     run_agent_loop(task_description, tools, model=args.model)

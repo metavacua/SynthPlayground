@@ -27,7 +27,7 @@ class TestParser(unittest.TestCase):
     def test_literals(self):
         self.assertEqual(parse("1"), Int(1))
         self.assertEqual(parse("true"), Bool(True))
-        self.assertEqual(parse("\"hello\""), String("hello"))
+        self.assertEqual(parse('"hello"'), String("hello"))
 
     def test_var(self):
         self.assertEqual(parse("x"), Var("x"))
@@ -44,20 +44,28 @@ class TestParser(unittest.TestCase):
         self.assertEqual(parse("(1, 2)"), Pair(Int(1), Int(2)))
 
     def test_let_pair(self):
-        self.assertEqual(parse("let (x, y) = (1, 2) in x"), LetPair("x", "y", Pair(Int(1), Int(2)), Var("x")))
+        self.assertEqual(
+            parse("let (x, y) = (1, 2) in x"),
+            LetPair("x", "y", Pair(Int(1), Int(2)), Var("x")),
+        )
 
     def test_inl_inr(self):
         self.assertEqual(parse("inl(1, String)"), Inl(Int(1), TString()))
         self.assertEqual(parse("inr(true, Int)"), Inr(Bool(True), TInt()))
 
     def test_case(self):
-        self.assertEqual(parse("case inl(1, String) of inl x => x | inr y => 2"), Case(Inl(Int(1), TString()), "x", Var("x"), "y", Int(2)))
+        self.assertEqual(
+            parse("case inl(1, String) of inl x => x | inr y => 2"),
+            Case(Inl(Int(1), TString()), "x", Var("x"), "y", Int(2)),
+        )
 
     def test_promote(self):
         self.assertEqual(parse("!x"), Promote(Var("x")))
 
     def test_let_bang(self):
-        self.assertEqual(parse("let !x = !y in x"), LetBang("x", Promote(Var("y")), Var("x")))
+        self.assertEqual(
+            parse("let !x = !y in x"), LetBang("x", Promote(Var("y")), Var("x"))
+        )
 
     def test_complex_expression(self):
         code = """
@@ -67,20 +75,26 @@ class TestParser(unittest.TestCase):
           | inr y => g 2
         """
         expected = LetPair(
-            "f", "g",
+            "f",
+            "g",
             Pair(Fun("x", TInt(), Var("x")), Fun("y", TInt(), Var("y"))),
             Case(
                 Inl(App(Var("f"), Int(1)), TInt()),
-                "x", Var("x"),
-                "y", App(Var("g"), Int(2))
-            )
+                "x",
+                Var("x"),
+                "y",
+                App(Var("g"), Int(2)),
+            ),
         )
         # A bit of a hack, because parse() has a side effect of tokenizing the code
         # We need to make sure the code is parsed correctly
         self.assertEqual(parse(code), expected)
 
     def test_parse_error(self):
-        with self.assertRaisesRegex(ValueError, r"Expected 'in' but got 'let' at position 12. Remaining tokens: \['let', 'z', '=', 'x', 'in', 'z'\]"):
+        with self.assertRaisesRegex(
+            ValueError,
+            r"Expected 'in' but got 'let' at position 12. Remaining tokens: \['let', 'z', '=', 'x', 'in', 'z'\]",
+        ):
             parse("let (x, y) = (1, 2) let z = x in z")
 
     def test_unit(self):
@@ -90,8 +104,10 @@ class TestParser(unittest.TestCase):
         self.assertEqual(parse("Nil(Int)"), Nil(TInt()))
 
     def test_cons(self):
-        self.assertEqual(parse("1 :: 2 :: Nil(Int)"), Cons(Int(1), Cons(Int(2), Nil(TInt()))))
+        self.assertEqual(
+            parse("1 :: 2 :: Nil(Int)"), Cons(Int(1), Cons(Int(2), Nil(TInt())))
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

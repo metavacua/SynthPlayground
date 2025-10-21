@@ -1,8 +1,41 @@
-from appl_ast import *
-from planning import *
+from appl_ast import (
+    AST,
+    App,
+    Bool,
+    Case,
+    Cons,
+    Fun,
+    Inl,
+    Inr,
+    Int,
+    Let,
+    LetBang,
+    LetPair,
+    Nil,
+    Pair,
+    Promote,
+    String,
+    TBool,
+    TExponential,
+    TFun,
+    TInt,
+    TList,
+    TProd,
+    TState,
+    TString,
+    TSum,
+    TTerm,
+    TUnit,
+    Term,
+    Type,
+    Unit,
+    Var,
+)
+
 
 class TypeCheckError(Exception):
     pass
+
 
 class TypeChecker:
     def __init__(self):
@@ -46,7 +79,9 @@ class TypeChecker:
                 raise TypeCheckError(f"Cannot apply a non-function type: {fun_type}")
 
             if fun_type.t1 != arg_type:
-                raise TypeCheckError(f"Type mismatch in function application. Expected {fun_type.t1}, got {arg_type}")
+                raise TypeCheckError(
+                    f"Type mismatch in function application. Expected {fun_type.t1}, got {arg_type}"
+                )
 
             return fun_type.t2
         elif isinstance(term, Pair):
@@ -86,7 +121,9 @@ class TypeChecker:
             t2 = self.type_check(term.e2)
 
             if t1 != t2:
-                raise TypeCheckError(f"Type mismatch in case branches. Got {t1} and {t2}")
+                raise TypeCheckError(
+                    f"Type mismatch in case branches. Got {t1} and {t2}"
+                )
 
             return t1
         elif isinstance(term, Promote):
@@ -96,7 +133,9 @@ class TypeChecker:
             self.linear_context = {}
             t = self.type_check(term.e)
             if self.linear_context:
-                raise TypeCheckError("Cannot promote an expression that uses linear variables.")
+                raise TypeCheckError(
+                    "Cannot promote an expression that uses linear variables."
+                )
             self.linear_context = original_linear_context
             return TExponential(t)
         elif isinstance(term, LetBang):
@@ -116,26 +155,33 @@ class TypeChecker:
             if not isinstance(tail_type, TList):
                 raise TypeCheckError("Tail of a cons must be a list.")
             if head_type != tail_type.t:
-                raise TypeCheckError(f"Type mismatch in cons. Head is {head_type}, but tail is {tail_type}")
+                raise TypeCheckError(
+                    f"Type mismatch in cons. Head is {head_type}, but tail is {tail_type}"
+                )
             return TList(head_type)
         else:
-            raise NotImplementedError(f"Type checking not implemented for {type(term).__name__}")
+            raise NotImplementedError(
+                f"Type checking not implemented for {type(term).__name__}"
+            )
 
-def type_check(term: Term, unrestricted_context: dict = None, linear_context: dict = None) -> Type:
+
+def type_check(
+    term: Term, unrestricted_context: dict = None, linear_context: dict = None
+) -> Type:
     """
     Type-checks the given term in the provided contexts.
     """
     checker = TypeChecker()
 
     default_unrestricted_context = {
-        'load_domain': TFun(TString(), TExponential(TUnit())),
-        'create_state': TFun(TList(TString()), TExponential(TState())),
-        'apply_action': TFun(TString(), TExponential(TState())),
-        'is_goal': TFun(TList(TString()), TBool()),
-        'get_current_state': TFun(TUnit(), TList(TString())),
-        'parse': TFun(TString(), TTerm()),
-        'unparse': TFun(TTerm(), TString()),
-        'eval': TFun(TTerm(), TTerm()), # This is a simplification
+        "load_domain": TFun(TString(), TExponential(TUnit())),
+        "create_state": TFun(TList(TString()), TExponential(TState())),
+        "apply_action": TFun(TString(), TExponential(TState())),
+        "is_goal": TFun(TList(TString()), TBool()),
+        "get_current_state": TFun(TUnit(), TList(TString())),
+        "parse": TFun(TString(), TTerm()),
+        "unparse": TFun(TTerm(), TString()),
+        "eval": TFun(TTerm(), TTerm()),  # This is a simplification
     }
 
     if unrestricted_context:
@@ -147,5 +193,7 @@ def type_check(term: Term, unrestricted_context: dict = None, linear_context: di
 
     result = checker.type_check(term)
     if checker.linear_context:
-        raise TypeCheckError(f"Unused linear variables: {', '.join(checker.linear_context.keys())}")
+        raise TypeCheckError(
+            f"Unused linear variables: {', '.join(checker.linear_context.keys())}"
+        )
     return result

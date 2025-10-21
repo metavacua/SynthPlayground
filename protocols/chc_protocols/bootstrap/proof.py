@@ -2,8 +2,10 @@
 import os
 import hashlib
 
+
 class AgentState:
     """A simplified representation of the agent's state for this proof."""
+
     def __init__(self):
         self.state = "initial"
         self.protocols = {}
@@ -17,6 +19,7 @@ class AgentState:
         if os.path.exists("AGENTS.md"):
             return hashlib.sha256(b"AGENTS.md exists").hexdigest()
         return hashlib.sha256(b"AGENTS.md does not exist").hexdigest()
+
 
 def bootstrap(agent_state: AgentState) -> AgentState:
     """
@@ -44,6 +47,7 @@ def bootstrap(agent_state: AgentState) -> AgentState:
 
     # Verify postconditions (implicitly by the state changes)
     return agent_state
+
 
 if __name__ == "__main__":
     # This is a simple demonstration of the proof.

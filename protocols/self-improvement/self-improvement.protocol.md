@@ -1,19 +1,11 @@
-# Self-Improvement Protocol
+# Protocol: Self-Improvement
 
-This protocol governs the process by which the agent can identify, propose, and implement improvements to its own operational framework. It provides a structured workflow for evolving the repository's protocols, tools, and overall architecture.
+This protocol governs the agent's ability to modify its own core protocols and tools. It is a meta-protocol that ensures all self-modification is done in a structured, auditable, and safe manner.
 
-## Core Objective
+## Rules
 
-The primary goal of this protocol is to enable a safe, transparent, and effective feedback loop where the agent can contribute to its own evolution. By formalizing the self-improvement process, we ensure that changes are well-documented, validated, and integrated correctly into the existing system.
-
-## Workflow
-
-The self-improvement process follows these steps:
-
-1.  **Identification:** The agent identifies a potential area for improvement, such as an inefficient workflow, a bug in a tool, or a gap in the existing protocols.
-2.  **Proposal:** The agent uses the `self_improvement_cli.py` tool to generate a formal proposal. This proposal includes a clear problem statement, a detailed solution, the criteria for success, and an analysis of potential impacts.
-3.  **Implementation:** The agent implements the proposed changes in a dedicated branch. This may involve modifying protocol source files, updating tools, or adjusting configuration.
-4.  **Validation:** The agent runs the `protocol_compiler.py` script to ensure that any changes to the protocols are valid and correctly integrated. It also executes relevant tests to verify the success of the improvement.
-5.  **Submission:** Once the changes are implemented and validated, the agent submits the work for review, following standard repository procedures.
-
-This structured approach ensures that all self-initiated changes are deliberate, well-reasoned, and contribute positively to the long-term health and capability of the system.
+- **SIP-001: Formal Proposal Process:** All self-improvement initiatives must begin with a formal proposal created using the `self_improvement_cli.py` tool. This ensures that every proposed change is documented and tracked.
+- **SIP-002: Structured Proposals:** Proposals must follow a strict template, including a problem statement, a detailed solution, success criteria, and an analysis of potential impacts. This enforces clarity and rigor in the planning process.
+- **SIP-003: Source-Only Modification:** Changes must be made to the protocol source files (e.g., `.protocol.md` or `.protocol.json` files), not the compiled `AGENTS.md` files. This maintains the integrity of the build system.
+- **SIP-004: Mandatory Re-compilation:** After any change to a protocol source, the `protocol_compiler.py` must be run to ensure the changes are valid and to propagate them to the rest of the system.
+- **SIP-005: Verification Requirement:** The success of any improvement must be empirically verified through testing. The proposal must specify how the improvement will be tested and validated.

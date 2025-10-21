@@ -50,6 +50,7 @@ security, and other agent protocols.)*
 ...
 """
 
+
 def create_proposal():
     """
     Creates a new, structured proposal for self-improvement.
@@ -81,7 +82,7 @@ def main():
     )
     # This tool is simple and doesn't need arguments for now, but the
     # parser is here for future extensibility.
-    args = parser.parse_args()
+    parser.parse_args()
 
     create_proposal()
 
