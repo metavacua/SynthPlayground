@@ -99,7 +99,10 @@ class AgentState:
                 {
                     "plan_path": ctx.plan_path,
                     "current_step": ctx.current_step,
-                    "plan_length": len(ctx.commands),
+                    "commands": [
+                        {"tool_name": cmd.tool_name, "args_text": cmd.args_text}
+                        for cmd in ctx.commands
+                    ],
                 }
                 for ctx in self.plan_stack
             ],

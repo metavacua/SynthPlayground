@@ -34,7 +34,8 @@ class TestState(unittest.TestCase):
         self.assertEqual(len(json_state["plan_stack"]), 1)
         self.assertEqual(json_state["plan_stack"][0]["plan_path"], "plan_a")
         self.assertEqual(json_state["plan_stack"][0]["current_step"], 0)
-        self.assertEqual(json_state["plan_stack"][0]["plan_length"], 1)
+        self.assertEqual(len(json_state["plan_stack"][0]["commands"]), 1)
+        self.assertEqual(json_state["plan_stack"][0]["commands"][0]["tool_name"], "A")
         self.assertEqual(len(json_state["messages"]), 1)
         self.assertEqual(json_state["messages"][0]["content"], "Hello")
 

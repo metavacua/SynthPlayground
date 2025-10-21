@@ -38,7 +38,6 @@ from tooling.research import execute_research_protocol
 from tooling.plan_parser import parse_plan, Command
 from tooling.document_scanner import scan_documents
 from tooling.lba_validator import LBAValidator
-from tooling.goal_generator import find_best_plan
 from utils.logger import Logger
 
 MAX_RECURSION_DEPTH = 10
@@ -226,19 +225,6 @@ class MasterControlGraph:
             "SUCCESS",
             context=_get_log_context(agent_state),
         )
-
-        # If the plan_content is not a file path, it's a natural language objective.
-        if not os.path.exists(plan_content):
-            agent_state.current_thought = "Natural language objective received. Finding best plan."
-            plan_path = find_best_plan(plan_content)
-            agent_state.current_thought = f"Best plan found: {plan_path}. Reading plan content."
-            with open(plan_path, "r") as f:
-                plan_content = f.read()
-            agent_state.plan_path = plan_path
-        else:
-            agent_state.plan_path = plan_content
-            with open(plan_content, "r") as f:
-                plan_content = f.read()
 
         is_valid, error_message = self._validate_plan_with_cli(plan_content)
 
