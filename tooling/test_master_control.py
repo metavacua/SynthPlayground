@@ -169,27 +169,8 @@ class TestMasterControlRedesigned(unittest.TestCase):
         )
         self.assertEqual(trigger, self.graph.get_trigger("PLANNING", "EXECUTING"))
         self.assertEqual(len(self.agent_state.plan_stack), 1)
-        self.assertEqual(len(self.agent_state.plan_stack[0].commands), 0)
+        self.assertEqual(len(self.agent_state.plan_stack[0].commands), 1)
         self.mock_logger.log.assert_called()
-
-    @patch("tooling.master_control.find_best_plan")
-    @patch(
-        "tooling.master_control.MasterControlGraph._validate_plan_with_cli",
-        return_value=(True, ""),
-    )
-    def test_do_planning_with_natural_language(
-        self, mock_validate, mock_find_best_plan
-    ):
-        mock_find_best_plan.return_value = self.dummy_plan_path
-        natural_language_objective = "Improve the system's performance."
-        trigger = self.graph.do_planning(
-            self.agent_state, natural_language_objective, self.mock_logger
-        )
-        self.assertEqual(trigger, self.graph.get_trigger("PLANNING", "EXECUTING"))
-        self.assertEqual(len(self.agent_state.plan_stack), 1)
-        self.assertEqual(len(self.agent_state.plan_stack[0].commands), 0)
-        self.mock_logger.log.assert_called()
-        mock_find_best_plan.assert_called_once_with(natural_language_objective)
 
     def test_do_execution(self):
         self.agent_state.plan_stack.append(

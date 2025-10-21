@@ -15,6 +15,7 @@ import os
 import sys
 import json
 import importlib.util
+import atexit
 
 # Add the root directory to the path to allow for absolute imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -23,6 +24,8 @@ from tooling.master_control import MasterControlGraph
 from tooling.state import AgentState
 from utils.logger import Logger
 from tooling.udc_orchestrator import UDCOrchestrator
+from tooling.session_manager import load_session, save_session
+from tooling.goal_generator import find_best_plan
 
 
 def load_tools_from_manifest(manifest_path="tooling/tool_manifest.json"):
@@ -79,15 +82,19 @@ def run_agent_loop(
     The main loop that drives the agent's lifecycle via the FSM.
     """
     # 1. Initialize State and Logger
-    task_id = f"task-{uuid.uuid4()}"
-    agent_state = AgentState(task=task_id, task_description=task_description)
+    agent_state = load_session()
+    if agent_state.task is None:
+        agent_state.task = f"task-{uuid.uuid4()}"
+    agent_state.task_description = task_description
+    atexit.register(save_session, agent_state)
+
     # Ensure the schema path is correct relative to the repo root
     schema_path = os.path.join(os.path.dirname(__file__), "..", "LOGGING_SCHEMA.md")
     logger = Logger(schema_path=schema_path)
     mcg = MasterControlGraph()
     planning_attempts = 0
 
-    print(f"--- Starting Agent Task: {task_description} ({task_id}) ---")
+    print(f"--- Starting Agent Task: {task_description} ({agent_state.task}) ---")
     if model:
         print(f"--- Running under CSDC Model: {model} ---")
 
@@ -145,12 +152,23 @@ message_user
 The research findings have been integrated.
 """
                 trigger = mcg.do_planning(agent_state, plan_content, logger)
-            # Otherwise, create a plan to do research first.
+            # If no plan is provided, and we haven't just finished research, find the best plan.
             else:
-                print("[AgentShell] No research found. Planning to do research first.")
-                # This is a meta-command, so we transition directly.
-                mcg.current_state = "RESEARCHING"
-                continue
+                print(
+                    "[AgentShell] No explicit plan provided. Finding the best plan for the task."
+                )
+                plan_path = find_best_plan(agent_state.task_description)
+                print(f"[AgentShell] Best plan found: {plan_path}")
+                try:
+                    with open(plan_path, "r") as f:
+                        plan_content_from_file = f.read()
+                    trigger = mcg.do_planning(
+                        agent_state, plan_content_from_file, logger
+                    )
+                except FileNotFoundError:
+                    agent_state.error = f"Plan file not found: {plan_path}"
+                    mcg.current_state = "ERROR"
+                    continue
 
         elif current_state == "RESEARCHING":
             trigger = mcg.do_researching(agent_state, logger)
