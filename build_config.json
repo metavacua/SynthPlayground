@@ -52,12 +52,13 @@
     },
     "agents-md": {
       "type": "compiler",
-      "compiler": "tooling/generate_agents_md.py",
+      "compiler": "tooling/protocol_compiler.py",
       "output": "AGENTS.md",
-      "sources": [
-        "AGENTS.standard.md"
-      ],
-      "description": "Generate the self-executing AGENTS.md file."
+      "options": {
+        "--human-readable-file": "AGENTS.standard.md",
+        "--machine-readable-file": "protocols/agent_protocol.jsonld"
+      },
+      "description": "Compile the AGENTS.md file from human- and machine-readable sources."
     },
     "install": {
       "type": "command",

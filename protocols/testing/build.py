@@ -1,7 +1,6 @@
 import os
 import sys
 import json
-import re
 import jsonschema
 
 # --- Configuration ---
@@ -26,9 +25,10 @@ DISCLAIMER_TEMPLATE = """\
 # ---
 """
 
+
 def compile_module():
     """Compiles the protocol files in this directory into a single AGENTS.md."""
-    print(f"--- Starting Protocol Compilation for Testing Module ---")
+    print("--- Starting Protocol Compilation for Testing Module ---")
     print(f"Source directory: {SOURCE_DIR}")
     print(f"Target file: {TARGET_FILE}")
 
@@ -36,10 +36,22 @@ def compile_module():
     if not schema:
         return
 
-    all_md_files = sorted([os.path.join(SOURCE_DIR, f) for f in find_files(".protocol.md", base_dir=SOURCE_DIR, recursive=False)])
-    all_json_files = sorted([os.path.join(SOURCE_DIR, f) for f in find_files(".protocol.json", base_dir=SOURCE_DIR, recursive=False)])
+    all_md_files = sorted(
+        [
+            os.path.join(SOURCE_DIR, f)
+            for f in find_files(".protocol.md", base_dir=SOURCE_DIR, recursive=False)
+        ]
+    )
+    all_json_files = sorted(
+        [
+            os.path.join(SOURCE_DIR, f)
+            for f in find_files(".protocol.json", base_dir=SOURCE_DIR, recursive=False)
+        ]
+    )
 
-    disclaimer = DISCLAIMER_TEMPLATE.format(source_dir_name=os.path.basename(SOURCE_DIR))
+    disclaimer = DISCLAIMER_TEMPLATE.format(
+        source_dir_name=os.path.basename(SOURCE_DIR)
+    )
     final_content = [disclaimer]
 
     for file_path in all_md_files:
@@ -61,7 +73,10 @@ def compile_module():
         except json.JSONDecodeError:
             print(f"Warning: Could not decode JSON from {file_path}", file=sys.stderr)
         except jsonschema.ValidationError as e:
-            print(f"Warning: Schema validation failed for {file_path}: {e.message}", file=sys.stderr)
+            print(
+                f"Warning: Schema validation failed for {file_path}: {e.message}",
+                file=sys.stderr,
+            )
 
     final_output_string = "\n".join(final_content)
     temp_target_file = TARGET_FILE + ".tmp"
@@ -69,6 +84,7 @@ def compile_module():
         f.write(final_output_string)
     os.rename(temp_target_file, TARGET_FILE)
     print(f"Successfully compiled AGENTS.md for testing module at {TARGET_FILE}")
+
 
 if __name__ == "__main__":
     compile_module()

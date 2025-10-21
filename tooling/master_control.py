@@ -30,13 +30,10 @@ import json
 import os
 import datetime
 import subprocess
-import tempfile
 import time
 
 from tooling.state import AgentState, PlanContext
-from tooling.research import execute_research_protocol
 from tooling.plan_parser import parse_plan, Command
-from tooling.document_scanner import scan_documents
 from tooling.lba_validator import LBAValidator
 from utils.logger import Logger
 

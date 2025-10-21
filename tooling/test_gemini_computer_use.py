@@ -6,14 +6,12 @@ from tooling.gemini_computer_use import main
 class TestGeminiComputerUse(unittest.TestCase):
 
     @patch("tooling.gemini_computer_use.sync_playwright")
-    @patch("tooling.gemini_computer_use.GeminiApiClient")
     @patch("tooling.gemini_computer_use.genai.GenerativeModel")
     def test_main(
-        self, mock_generative_model, mock_gemini_api_client, mock_sync_playwright
+        self, mock_generative_model, mock_sync_playwright
     ):
         """Tests the main function of the gemini_computer_use tool."""
         # Mock the Gemini API client and model
-        mock_gemini_api_client.return_value = MagicMock()
         mock_model = MagicMock()
         mock_generative_model.return_value = mock_model
 

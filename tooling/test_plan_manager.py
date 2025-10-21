@@ -1,8 +1,7 @@
 import unittest
 import os
-import json
 import shutil
-from unittest.mock import patch, mock_open
+from unittest.mock import patch
 from tooling.plan_manager import (
     get_registry,
     save_registry,

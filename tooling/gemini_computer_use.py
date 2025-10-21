@@ -16,7 +16,6 @@ import google.generativeai as genai
 
 # Add the root directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from utils.gemini_api.client import GeminiApiClient
 
 
 def denormalize_x(x, screen_width):
@@ -123,7 +122,6 @@ def main():
     page = context.new_page()
     page.goto("https://www.google.com")
 
-    client = GeminiApiClient()
     model = genai.GenerativeModel("gemini-2.5-computer-use-preview-10-2025")
 
     initial_screenshot = page.screenshot(type="png")

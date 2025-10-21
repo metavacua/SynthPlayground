@@ -24,7 +24,6 @@ and understand the structure of the repository without having to read every file
 
 import os
 import json
-import glob
 import subprocess
 import ast
 import sys

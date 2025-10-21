@@ -4,8 +4,6 @@ for a given topic. The output is a string that can be executed by the agent's
 master controller.
 """
 
-import re
-
 
 def plan_deep_research(topic: str, research_id: str) -> str:
     """

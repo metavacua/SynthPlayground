@@ -1,10 +1,10 @@
 # AGENTS.md
 
-This file provides instructions for AI coding agents to interact with this project. It is generated from the project's `Makefile` to ensure it is always up-to-date.
+This file provides instructions for AI coding agents to interact with this project.
 
 ## Project Overview
 
-This is a Python-based project with a sophisticated, self-correcting agent architecture. The agent's core protocols are managed programmatically. For detailed, machine-readable protocols, refer to the primary `AGENTS.md` file. This `AGENTS.standard.md` file provides a simplified summary for external tools.
+This is a Python-based project with a sophisticated, self-correcting agent architecture. The agent's core protocols are managed programmatically. For detailed, machine-readable protocols, please see the JSON block at the end of this file.
 
 ## Build & Commands
 
@@ -14,32 +14,64 @@ Here are the essential commands for working with this repository.
 
 To install all required Python packages, run:
 ```bash
-$(BUILDER) --target install
+make install
 ```
 
 ### Running Tests
 
 To run the full suite of unit tests, use the following command:
 ```bash
-$(BUILDER) --target test
+make test
 ```
 
-## Code Style
+### Code Style
 
 This project uses standard Python code quality tools.
 
-### Linting
-
 To check the code for style issues, run the linter:
 ```bash
-$(BUILDER) --target lint
+make lint
 ```
-
-### Formatting
 
 To automatically format the code, run:
 ```bash
-$(BUILDER) --target format
+make format
+```
+
+### Documentation
+
+To build the project documentation, run:
+```bash
+make docs
+```
+
+To generate the README, run:
+```bash
+make readme
+```
+
+### Auditing and Security
+
+To run the security scanner, use:
+```bash
+make security
+```
+
+To run a full audit of the project, use:
+```bash
+make audit
+```
+
+To audit the documentation, use:
+```bash
+make audit-docs
+```
+
+### Cleaning
+
+To remove all build artifacts and clean the project directory, run:
+```bash
+make clean
 ```
 
 ## Project Structure
@@ -47,5 +79,3 @@ $(BUILDER) --target format
 - `protocols/`: Source files for the agent's governing protocols.
 - `tooling/`: Scripts for compilation, validation, and other development tasks.
 - `knowledge_core/`: Compiled knowledge artifacts used by the agent.
-
-For more detailed information, please consult the `README.md`.

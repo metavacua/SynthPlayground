@@ -1,7 +1,7 @@
 import unittest
 import os
 import json
-from unittest.mock import patch, mock_open
+from unittest.mock import patch
 from tooling.auditor import run_protocol_audit, run_plan_registry_audit, run_doc_audit
 
 

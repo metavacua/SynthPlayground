@@ -18,6 +18,7 @@ Core Features:
 
 import os
 import fnmatch
+import sys
 
 # --- Constants ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -40,8 +41,8 @@ def get_ignore_patterns(base_dir):
                 line = line.strip()
                 if not line or line.startswith("#"):
                     continue
-                if line.endswith('/'):
-                    dir_patterns.add(line.rstrip('/'))
+                if line.endswith("/"):
+                    dir_patterns.add(line.rstrip("/"))
                 else:
                     file_patterns.add(line)
     except (IOError, OSError) as e:
@@ -60,7 +61,11 @@ def find_files(pattern, base_dir=ROOT_DIR, recursive=True):
         if recursive:
             for root, dirnames, filenames in os.walk(base_dir, topdown=True):
                 # Exclude ignored directories from traversal
-                dirnames[:] = [d for d in dirnames if not any(fnmatch.fnmatch(d, p) for p in dir_patterns)]
+                dirnames[:] = [
+                    d
+                    for d in dirnames
+                    if not any(fnmatch.fnmatch(d, p) for p in dir_patterns)
+                ]
 
                 for filename in filenames:
                     if any(fnmatch.fnmatch(filename, p) for p in file_patterns):
@@ -103,6 +108,6 @@ def get_protocol_dir_name(dir_path):
     If it's the root protocols directory, it returns 'root'.
     Otherwise, it returns the directory's base name.
     """
-    if os.path.basename(dir_path) == 'protocols':
-        return 'root'
+    if os.path.basename(dir_path) == "protocols":
+        return "root"
     return os.path.basename(dir_path)

@@ -2,7 +2,7 @@ import unittest
 import os
 import json
 import shutil
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch, call
 from tooling.builder import main as builder_main, execute_build
 
 

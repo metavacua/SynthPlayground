@@ -3,6 +3,7 @@ import os
 import subprocess
 import shutil
 
+
 class TestGuardian(unittest.TestCase):
     def setUp(self):
         os.makedirs("reviews", exist_ok=True)
@@ -17,7 +18,7 @@ class TestGuardian(unittest.TestCase):
         result = subprocess.run(
             ["python3", "tooling/guardian.py", "reviews/test.md"],
             capture_output=True,
-            text=True
+            text=True,
         )
         self.assertEqual(result.returncode, 0)
         self.assertIn("Review document is valid.", result.stdout)
@@ -28,10 +29,12 @@ class TestGuardian(unittest.TestCase):
         result = subprocess.run(
             ["python3", "tooling/guardian.py", "reviews/test.md"],
             capture_output=True,
-            text=True
+            text=True,
         )
         self.assertEqual(result.returncode, 1)
-        self.assertIn("Error: Missing required section 'Verification Plan'", result.stdout)
+        self.assertIn(
+            "Error: Missing required section 'Verification Plan'", result.stdout
+        )
 
     def test_wrong_file_type(self):
         with open("reviews/test.txt", "w") as f:
@@ -39,7 +42,7 @@ class TestGuardian(unittest.TestCase):
         result = subprocess.run(
             ["python3", "tooling/guardian.py", "reviews/test.txt"],
             capture_output=True,
-            text=True
+            text=True,
         )
         self.assertEqual(result.returncode, 1)
         self.assertIn("Error: Review document must be a markdown file.", result.stdout)

@@ -2,6 +2,7 @@ import argparse
 import os
 import re
 
+
 def main():
     """
     Validates a review document to ensure it complies with the Guardian Protocol.
@@ -29,11 +30,12 @@ def main():
 
     required_sections = ["Summary", "Impact Analysis", "Verification Plan"]
     for section in required_sections:
-        if not re.search(fr"^\s*#+\s*{section}", content, re.MULTILINE | re.IGNORECASE):
+        if not re.search(rf"^\s*#+\s*{section}", content, re.MULTILINE | re.IGNORECASE):
             print(f"Error: Missing required section '{section}' in review document.")
             exit(1)
 
     print("Review document is valid.")
+
 
 if __name__ == "__main__":
     main()

@@ -6,7 +6,6 @@ to a temporary file that the main agent can poll.
 
 import time
 import sys
-import os
 
 
 def perform_research(task_id: str):

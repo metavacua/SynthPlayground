@@ -1,7 +1,7 @@
 import unittest
 import os
 import shutil
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from tooling.csdc_cli import main as csdc_main
 
 

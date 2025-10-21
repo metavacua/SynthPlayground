@@ -1,6 +1,7 @@
 from typing import List, Optional
 from .sequents import Sequent
 
+
 class Rule:
     def __init__(self, name: str):
         self.name = name
@@ -8,8 +9,14 @@ class Rule:
     def __repr__(self):
         return self.name
 
+
 class ProofTree:
-    def __init__(self, conclusion: Sequent, rule: Rule, premises: Optional[List['ProofTree']] = None):
+    def __init__(
+        self,
+        conclusion: Sequent,
+        rule: Rule,
+        premises: Optional[List["ProofTree"]] = None,
+    ):
         self.conclusion = conclusion
         self.rule = rule
         self.premises = premises if premises is not None else []
@@ -26,5 +33,5 @@ class ProofTree:
         return {
             "conclusion": str(self.conclusion),
             "rule": self.rule.name,
-            "premises": [premise.to_dict() for premise in self.premises]
+            "premises": [premise.to_dict() for premise in self.premises],
         }

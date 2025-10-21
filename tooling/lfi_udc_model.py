@@ -135,7 +135,6 @@ class LFIInstruction:
         # In this simplified model, we only care about comparing with the halted state.
         # We'll compare a register (arg0) to the special value 'HALTED' (arg1).
         if self.args[1].upper() == "HALTED":
-            reg_name = self.args[0].upper()
             # The result of the comparison is stored in a special register 'CMP'.
             executor.registers["CMP"] = executor.halted
 

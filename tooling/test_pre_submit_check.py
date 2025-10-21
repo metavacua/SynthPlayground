@@ -1,6 +1,6 @@
 import unittest
 import subprocess
-from unittest.mock import patch, call
+from unittest.mock import patch
 from tooling.pre_submit_check import main as pre_submit_check_main, run_command
 
 

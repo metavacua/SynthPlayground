@@ -85,7 +85,6 @@ def run_agent_loop(
     schema_path = os.path.join(os.path.dirname(__file__), "..", "LOGGING_SCHEMA.md")
     logger = Logger(schema_path=schema_path)
     mcg = MasterControlGraph()
-    planning_attempts = 0
 
     print(f"--- Starting Agent Task: {task_description} ({task_id}) ---")
     if model:

@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from tooling.master_control_cli import main as master_control_main
 from tooling.state import AgentState
 

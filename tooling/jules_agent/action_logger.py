@@ -1,6 +1,5 @@
 import os
 import re
-from datetime import datetime
 
 
 def get_agents_md_path(cwd):

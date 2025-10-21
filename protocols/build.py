@@ -4,7 +4,7 @@ import json
 import jsonschema
 
 # Add the root directory to the Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from tooling.build_utils import find_files, load_schema, sanitize_markdown, execute_code
 
@@ -27,14 +27,18 @@ DISCLAIMER_TEMPLATE = """\
 # ---
 """
 
+
 # --- Tool Manifest Logic ---
 def load_tool_manifest():
     """Loads the tool manifest from the specified file."""
     if not os.path.exists(TOOL_MANIFEST_FILE):
-        print(f"Warning: Tool manifest not found at {TOOL_MANIFEST_FILE}", file=sys.stderr)
+        print(
+            f"Warning: Tool manifest not found at {TOOL_MANIFEST_FILE}", file=sys.stderr
+        )
         return {}
     with open(TOOL_MANIFEST_FILE, "r") as f:
         return json.load(f)
+
 
 def validate_protocol_tools(protocol_data, tool_manifest):
     """Validates the tools used in a protocol against the tool manifest."""
@@ -44,13 +48,19 @@ def validate_protocol_tools(protocol_data, tool_manifest):
     for rule in protocol_data["rules"]:
         if "tool" in rule:
             tool_name = rule["tool"]
-            if tool_name not in [tool["name"] for tool in tool_manifest.get("tools", [])]:
-                print(f"Warning: Tool '{tool_name}' in protocol '{protocol_data.get('protocol_id', 'N/A')}' not found in tool manifest.", file=sys.stderr)
+            if tool_name not in [
+                tool["name"] for tool in tool_manifest.get("tools", [])
+            ]:
+                print(
+                    f"Warning: Tool '{tool_name}' in protocol '{protocol_data.get('protocol_id', 'N/A')}' not found in tool manifest.",
+                    file=sys.stderr,
+                )
+
 
 # --- Core Compilation Logic ---
 def compile_module():
     """Compiles the protocol files in this directory into a single AGENTS.md."""
-    print(f"--- Starting Protocol Compilation for Root Protocols Module ---")
+    print("--- Starting Protocol Compilation for Root Protocols Module ---")
     print(f"Source directory: {SOURCE_DIR}")
     print(f"Target file: {TARGET_FILE}")
 
@@ -61,10 +71,22 @@ def compile_module():
     tool_manifest = load_tool_manifest()
 
     # Find all protocol source files in the current directory (non-recursive)
-    all_md_files = sorted([os.path.join(SOURCE_DIR, f) for f in find_files(".protocol.md", base_dir=SOURCE_DIR, recursive=False)])
-    all_json_files = sorted([os.path.join(SOURCE_DIR, f) for f in find_files(".protocol.json", base_dir=SOURCE_DIR, recursive=False)])
+    all_md_files = sorted(
+        [
+            os.path.join(SOURCE_DIR, f)
+            for f in find_files(".protocol.md", base_dir=SOURCE_DIR, recursive=False)
+        ]
+    )
+    all_json_files = sorted(
+        [
+            os.path.join(SOURCE_DIR, f)
+            for f in find_files(".protocol.json", base_dir=SOURCE_DIR, recursive=False)
+        ]
+    )
 
-    disclaimer = DISCLAIMER_TEMPLATE.format(source_dir_name=os.path.basename(SOURCE_DIR))
+    disclaimer = DISCLAIMER_TEMPLATE.format(
+        source_dir_name=os.path.basename(SOURCE_DIR)
+    )
     final_content = [disclaimer]
 
     # Process markdown files
@@ -87,7 +109,11 @@ def compile_module():
             if "rules" in protocol_data:
                 for rule in protocol_data["rules"]:
                     if "executable_code" in rule and rule["executable_code"]:
-                        execute_code(rule["executable_code"], protocol_data.get("protocol_id", "N/A"), rule.get("rule_id", "N/A"))
+                        execute_code(
+                            rule["executable_code"],
+                            protocol_data.get("protocol_id", "N/A"),
+                            rule.get("rule_id", "N/A"),
+                        )
                         # Embed the code in the markdown output
                         code_md = f"#### Executable Code for Rule: `{rule.get('rule_id', 'N/A')}`\n\n```python\n{rule['executable_code']}\n```\n"
                         final_content.append(code_md)
@@ -99,8 +125,10 @@ def compile_module():
         except json.JSONDecodeError:
             print(f"Warning: Could not decode JSON from {file_path}", file=sys.stderr)
         except jsonschema.ValidationError as e:
-            print(f"Warning: Schema validation failed for {file_path}: {e.message}", file=sys.stderr)
-
+            print(
+                f"Warning: Schema validation failed for {file_path}: {e.message}",
+                file=sys.stderr,
+            )
 
     # Write the final output
     final_output_string = "\n".join(final_content)
@@ -109,6 +137,7 @@ def compile_module():
         f.write(final_output_string)
     os.rename(temp_target_file, TARGET_FILE)
     print(f"Successfully compiled AGENTS.md for root protocols module at {TARGET_FILE}")
+
 
 if __name__ == "__main__":
     compile_module()

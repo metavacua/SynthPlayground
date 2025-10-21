@@ -1,32 +1,34 @@
 from collections import defaultdict
 
+
 class Grammar:
     """
     A class to represent a formal grammar. It parses a grammar file
     and provides helpers for analyzing its properties.
     """
+
     def __init__(self, filepath):
         self.filepath = filepath
-        self.productions = [] # Store rules as (LHS_tuple, RHS_tuple)
+        self.productions = []  # Store rules as (LHS_tuple, RHS_tuple)
         self.start_symbol = None
         self._parse_file()
 
     def _parse_file(self):
         """Parses the grammar file provided at initialization."""
-        with open(self.filepath, 'r') as f:
+        with open(self.filepath, "r") as f:
             for line in f:
-                line = line.split('#', 1)[0].strip()
-                if not line or '->' not in line:
+                line = line.split("#", 1)[0].strip()
+                if not line or "->" not in line:
                     continue
 
-                lhs_str, rhs_str = line.split('->', 1)
+                lhs_str, rhs_str = line.split("->", 1)
                 lhs = tuple(lhs_str.strip().split())
 
                 if self.start_symbol is None:
                     self.start_symbol = lhs[0]
 
                 # Handle multiple RHS productions separated by |
-                for rhs_part in rhs_str.split('|'):
+                for rhs_part in rhs_str.split("|"):
                     rhs = tuple(rhs_part.strip().split())
                     self.productions.append((lhs, rhs))
 
@@ -61,4 +63,6 @@ class Grammar:
         return terminals
 
     def __str__(self):
-        return f"Grammar(start={self.start_symbol}, productions={len(self.productions)})"
+        return (
+            f"Grammar(start={self.start_symbol}, productions={len(self.productions)})"
+        )

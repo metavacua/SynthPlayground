@@ -59,7 +59,7 @@ def main():
     )
 
     # Test command
-    test_parser = subparsers.add_parser("test", help="Run the protocol tests.")
+    subparsers.add_parser("test", help="Run the protocol tests.")
 
     # Version command
     version_parser = subparsers.add_parser(

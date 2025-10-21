@@ -2,7 +2,7 @@ import unittest
 import os
 import json
 import shutil
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from tooling.fdc_cli import main as fdc_main
 
 

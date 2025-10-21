@@ -2,6 +2,7 @@ import unittest
 import json
 import os
 
+
 class TestSelfImprovementProtocol(unittest.TestCase):
 
     def setUp(self):
@@ -30,6 +31,7 @@ class TestSelfImprovementProtocol(unittest.TestCase):
         """
         tool_path = self.protocol["associated_tools"][0]
         self.assertTrue(os.path.exists(tool_path), f"Tool not found at {tool_path}")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -20,7 +20,6 @@ about the potential impact of its changes.
 
 import os
 import json
-import glob
 import re
 import sys
 

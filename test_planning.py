@@ -1,7 +1,7 @@
 import unittest
 import planning
 from tooling.aal.domain import Domain, Fluent, Action, CausalLaw
-from typing import FrozenSet
+
 
 class TestPlanning(unittest.TestCase):
     def setUp(self):
@@ -25,9 +25,7 @@ class TestPlanning(unittest.TestCase):
 
         # Define causal law: move_to_b causes at_b if at_a is true
         law = CausalLaw(
-            action=move_to_b_action,
-            effect=at_b,
-            conditions=frozenset([at_a])
+            action=move_to_b_action, effect=at_b, conditions=frozenset([at_a])
         )
         test_domain.causal_laws.add(law)
 
@@ -75,5 +73,6 @@ class TestPlanning(unittest.TestCase):
         plan = planning.find_plan(["c"])
         self.assertEqual(plan, ["a_to_b", "b_to_c"])
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

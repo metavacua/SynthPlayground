@@ -1,6 +1,7 @@
 import os
 import google.generativeai as genai
 
+
 class GeminiApiClient:
     """A client for interacting with the Gemini API."""
 
@@ -15,7 +16,9 @@ class GeminiApiClient:
         if not api_key:
             raise ValueError("Gemini API key not provided.")
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-pro-vision') # Use a vision-capable model
+        self.model = genai.GenerativeModel(
+            "gemini-pro-vision"
+        )  # Use a vision-capable model
 
     def generate_text(self, prompt):
         """Generates text using the Gemini API.
@@ -27,7 +30,9 @@ class GeminiApiClient:
         response = self.model.generate_content(prompt)
         return response.text
 
-    def process_document(self, document_path, prompt="Extract the text from this document."):
+    def process_document(
+        self, document_path, prompt="Extract the text from this document."
+    ):
         """Processes a document using the Gemini API.
         Args:
             document_path: The path to the document to process.
@@ -40,8 +45,7 @@ class GeminiApiClient:
                 document_bytes = f.read()
 
             document_part = genai.types.Part.from_binary(
-                data=document_bytes,
-                mime_type='application/pdf'
+                data=document_bytes, mime_type="application/pdf"
             )
 
             response = self.model.generate_content([prompt, document_part])

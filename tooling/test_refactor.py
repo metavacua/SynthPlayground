@@ -68,7 +68,7 @@ class TestRefactor(unittest.TestCase):
                 refactor_main()
                 self.assertEqual(
                     mock_stderr.getvalue(),
-                    f"Error: Symbol 'non_existent' not found in {self.file_with_symbol}\n"
+                    f"Error: Symbol 'non_existent' not found in {self.file_with_symbol}\n",
                 )
 
 

@@ -89,7 +89,6 @@ def create_proposal():
     with open(review_file_path, "w") as f:
         f.write(review_template)
 
-
     print(f"Successfully created new proposal at: {proposal_file_path}")
     print(f"Successfully created new review document at: {review_file_path}")
     return proposal_file_path
@@ -104,7 +103,7 @@ def main():
     )
     # This tool is simple and doesn't need arguments for now, but the
     # parser is here for future extensibility.
-    args = parser.parse_args()
+    parser.parse_args()
 
     create_proposal()
 
