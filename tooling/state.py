@@ -91,9 +91,10 @@ class AgentState:
     background_processes: Dict[str, Any] = field(default_factory=dict)
     current_thought: Optional[str] = None
 
-    def to_json(self):
+    def to_dict(self):
         return {
             "task": self.task,
+            "task_description": self.task_description,
             "plan_path": self.plan_path,
             "plan_stack": [
                 {
@@ -103,6 +104,7 @@ class AgentState:
                         {"tool_name": cmd.tool_name, "args_text": cmd.args_text}
                         for cmd in ctx.commands
                     ],
+                    "plan_content": ctx.plan_content,
                 }
                 for ctx in self.plan_stack
             ],
@@ -113,4 +115,36 @@ class AgentState:
             "draft_postmortem_path": self.draft_postmortem_path,
             "final_report": self.final_report,
             "error": self.error,
+            "background_processes": self.background_processes,
+            "current_thought": self.current_thought,
         }
+
+    @classmethod
+    def from_dict(cls, data):
+        plan_stack = [
+            PlanContext(
+                plan_path=ctx["plan_path"],
+                current_step=ctx["current_step"],
+                commands=[
+                    Command(tool_name=cmd["tool_name"], args_text=cmd["args_text"])
+                    for cmd in ctx["commands"]
+                ],
+                plan_content=ctx.get("plan_content", []),
+            )
+            for ctx in data.get("plan_stack", [])
+        ]
+        return cls(
+            task=data.get("task"),
+            task_description=data.get("task_description", ""),
+            plan_path=data.get("plan_path"),
+            plan_stack=plan_stack,
+            messages=data.get("messages", []),
+            orientation_complete=data.get("orientation_complete", False),
+            vm_capability_report=data.get("vm_capability_report"),
+            research_findings=data.get("research_findings", {}),
+            draft_postmortem_path=data.get("draft_postmortem_path"),
+            final_report=data.get("final_report"),
+            error=data.get("error"),
+            background_processes=data.get("background_processes", {}),
+            current_thought=data.get("current_thought"),
+        )

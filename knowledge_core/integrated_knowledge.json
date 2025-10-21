@@ -1,99 +1,512 @@
 [
   {
-    "@id": "http://example.org/rule/aorp-versioning",
+    "@id": "http://example.org/rule/create-prologue-file",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "The official protocol version is tracked in the VERSION file in the repository root, following Semantic Versioning (SemVer)."
+        "@value": "Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols."
       }
     ]
   },
   {
-    "@id": "http://example.org/lesson/43c1d5b3-bfa0-4c07-ad41-ccb234d301d9",
+    "@id": "http://example.org/rule/sip-001",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Proposals for self-improvement must be initiated via the `self_improvement_cli.py` tool."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/self-correction-protocol-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/structured-lessons"
+      },
+      {
+        "@id": "http://example.org/rule/programmatic-updates"
+      },
+      {
+        "@id": "http://example.org/rule/automated-orchestration"
+      },
+      {
+        "@id": "http://example.org/rule/programmatic-rule-refinement"
+      },
+      {
+        "@id": "http://example.org/rule/autonomous-code-suggestion"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Defines the automated, closed-loop workflow for protocol self-correction."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/lesson/5e1c5a54-660d-4d3c-af03-66e79a984e03",
     "@type": [
       "http://example.org/ontology#Lesson"
     ],
     "http://example.org/ontology#action": [
       {
-        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"I will continue to prioritize the creation of comprehensive, end-to-end integration tests for any FSM or protocol change. The iterative process of fixing the test plan and the implementation in this task was proof of its value.\"}}"
+        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**The Toolchain is a Meta-Cognitive Tool:** The FDC toolchain is more than just an enforcement mechanism. It is a tool for thought. By forcing me to structure my plans in a way that is verifiable, it compels me to think more clearly and logically about the task at hand. The errors it catches are not just bugs; they are flaws in my own reasoning that I am then forced to confront and correct. This is the core of the self-improvement loop we are building.\"}}"
       }
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "Test-driven development is the most effective way to validate complex, multi-state workflows."
+        "@value": "A corrective action was proposed: **The Toolchain is a Meta-Cognitive Tool:** The FDC toolchain is more than just an enforcement mechanism. It is a tool for thought. By forcing me to structure my plans in a way that is verifiable, it compels me to think more clearly and logically about the task at hand. The errors it catches are not just bugs; they are flaws in my own reasoning that I am then forced to confront and correct. This is the core of the self-improvement loop we are building."
       }
     ]
   },
   {
-    "@id": "http://example.org/rule/rag-mandate",
+    "@id": "http://example.org/lesson/c3894fcb-2ebb-4e53-8269-bd2ca8dfddd3",
+    "@type": [
+      "http://example.org/ontology#Lesson"
+    ],
+    "http://example.org/ontology#action": [
+      {
+        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**\\\"Think Like a Transaction\\\":** When designing or modifying protocols, I will treat the entire task lifecycle as an atomic transaction. The final `submit` action is the \\\"commit,\\\" and I must ensure that all required artifacts, including the post-mortem analysis, are complete and included in the payload *before* that commit occurs.\"}}"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A corrective action was proposed: **\"Think Like a Transaction\":** When designing or modifying protocols, I will treat the entire task lifecycle as an atomic transaction. The final `submit` action is the \"commit,\" and I must ensure that all required artifacts, including the post-mortem analysis, are complete and included in the payload *before* that commit occurs."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/cfdc-protocol-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/hierarchical-planning-via-call-plan"
+      },
+      {
+        "@id": "http://example.org/rule/max-recursion-depth"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/standardized-interaction-client",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "For any task involving external technologies, Just-In-Time External RAG is REQUIRED to verify current best practices. Do not trust internal knowledge."
+        "@value": "A standardized client for interacting with external agent APIs MUST be implemented in 'tooling/external_api_client.py'."
       }
     ]
   },
   {
-    "@id": "http://example.org/rule/idle-state-trigger",
+    "@id": "http://example.org/rule/sip-003",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "The agent may only initiate a speculative task when it has no active, user-assigned tasks."
+        "@value": "Any proposed changes to protocols must be implemented in the relevant source files within the `protocols/` subdirectories, not directly in the generated AGENTS.md files."
       }
     ]
   },
   {
-    "@id": "http://example.org/rule/update-index-before-submit",
+    "@id": "http://example.org/rule/bootstrap-load-agents-md",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem."
+        "@value": "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins."
       }
     ]
   },
   {
-    "@id": "http://example.org/rule/shell-is-primary-entry-point",
+    "@id": "http://example.org/rule/non-compliance-test-procedure",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation."
+        "@value": "Requires adherence to all documented testing procedures before submitting changes."
       }
     ]
   },
   {
-    "@id": "http://example.org/rule/mandatory-fdc-start",
+    "@id": "http://example.org/rule/fsm-adherence",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "Upon receiving a new task, the agent's first action MUST be to programmatically execute the FDC 'start' command to formally initiate the task and run the AORP orientation cascade."
+        "@value": "All plans must be valid strings in the language defined by the tooling/fdc_fsm.json Finite State Machine."
       }
     ]
   },
   {
-    "@id": "http://example.org/rule/gdn-002",
+    "@id": "http://example.org/lesson/81bef0aa-0bf6-48be-b851-ad95aa36ff13",
+    "@type": [
+      "http://example.org/ontology#Lesson"
+    ],
+    "http://example.org/ontology#action": [
+      {
+        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**Regression Testing is Non-Negotiable:** After every significant fix (like the initial file state scan or the FSM refinement), the decision to re-run the *entire* test suite was critical. It's the only way to ensure a fix in one area does not cause an unexpected break in another. This must be a standard procedure for all future bug fixes.\"}}"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A corrective action was proposed: **Regression Testing is Non-Negotiable:** After every significant fix (like the initial file state scan or the FSM refinement), the decision to re-run the *entire* test suite was critical. It's the only way to ensure a fix in one area does not cause an unexpected break in another. This must be a standard procedure for all future bug fixes."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/no-public-disclosure",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "The review document must be a markdown file located in the `reviews/` directory, named after the proposal or task."
+        "@value": "Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed."
       }
     ]
   },
   {
-    "@id": "http://example.org/lesson/2eb86b43-fe7e-42f2-aa57-51b4aae9d7a5",
+    "@id": "http://example.org/rule/print-hello-world",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Prints a hello world message to the console."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/resource-constraints",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Speculative tasks must operate under defined resource limits."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/communication-tool-access",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/sip-005",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The success of an improvement must be verified by running relevant tests or a new, specific verification script."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/model-b-constraints",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/non-compliance-direct-editing",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Prohibits the direct editing of build artifacts like AGENTS.md or README.md. Changes must be made to source files, followed by a rebuild."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/agent-bootstrap-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/bootstrap-load-agents-md"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A foundational protocol that dictates the agent's initial actions upon starting any task."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/invoke-browser-control",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "When this rule is invoked, the agent must use the `gemini_computer_use` tool to perform a web-based task."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/aorp-mandate",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "All Finite Development Cycles (FDCs) MUST be initiated using the FDC toolchain's 'start' command. This is non-negotiable."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/toolchain-audit-on-schema-change",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/gemini-api-integration-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/gemini-api-access"
+      },
+      {
+        "@id": "http://example.org/rule/gemini-api-key-security"
+      },
+      {
+        "@id": "http://example.org/rule/gemini-computer-use-protocol"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol for integrating with the Google Gemini API."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/deep-research-cycle-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/structured-research-phases"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A standardized, callable plan for conducting in-depth research on a complex topic."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/phase3-execution",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Phase 3 (Execution & Structured Logging): The agent must execute the validated plan and log every action according to the `LOGGING_SCHEMA.md`."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/sip-002",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Improvement proposals must be formally structured, including sections for 'Problem Statement', 'Proposed Solution', 'Success Criteria', and 'Impact Analysis'."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/dependency-install-on-start",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/functional-change-definition",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A change is considered 'functional' if it correctly modifies the agent's operational rules or capabilities, as defined by the combination of Python source code and the protocol source files in `protocols/`."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/reset-all-prohibition-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/no-reset-all"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A high-priority protocol that unconditionally forbids the use of the `reset_all` tool."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/lesson/c4d66390-ae8e-4518-bd33-a71cfe7b5ac4",
+    "@type": [
+      "http://example.org/ontology#Lesson"
+    ],
+    "http://example.org/ontology#action": [
+      {
+        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**Embrace the Debugging Loop as the Primary Workflow:** The most successful parts of this task were not the moments when code worked on the first try, but the moments when the system caught a flaw. The \\\"test-fail-analyze-fix-retest\\\" cycle is the engine of progress in this paradigm. I must continue to trust this process and design plans that explicitly account for it.\"}}"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A corrective action was proposed: **Embrace the Debugging Loop as the Primary Workflow:** The most successful parts of this task were not the moments when code worked on the first try, but the moments when the system caught a flaw. The \"test-fail-analyze-fix-retest\" cycle is the engine of progress in this paradigm. I must continue to trust this process and design plans that explicitly account for it."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/standing-orders-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/aorp-mandate"
+      },
+      {
+        "@id": "http://example.org/rule/rag-mandate"
+      },
+      {
+        "@id": "http://example.org/rule/fdc-toolchain-mandate"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/non-compliance-protocol-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/non-compliance-definition"
+      },
+      {
+        "@id": "http://example.org/rule/non-compliance-direct-editing"
+      },
+      {
+        "@id": "http://example.org/rule/non-compliance-test-procedure"
+      },
+      {
+        "@id": "http://example.org/rule/non-compliance-architectural-deviation"
+      },
+      {
+        "@id": "http://example.org/rule/non-compliance-self-awareness-failure"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol that defines non-compliance with AGENTS.md and specifies corrective actions."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/security-header",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Defines the identity and purpose of the Security Protocol document."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/research-fdc-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/specialized-fsm"
+      },
+      {
+        "@id": "http://example.org/rule/executable-plans"
+      },
+      {
+        "@id": "http://example.org/rule/l4-invocation"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Defines the formal Finite Development Cycle (FDC) for conducting deep research."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/automated-orchestration",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The self-correction cycle must be managed by the `tooling/self_correction_orchestrator.py` script, which processes pending lessons and triggers the necessary updates."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/lesson/40f9e1eb-efb4-413f-815d-868e3ee08141",
     "@type": [
       "http://example.org/ontology#Lesson"
     ],
@@ -109,94 +522,35 @@
     ]
   },
   {
-    "@id": "http://example.org/rule/user-review-gate",
+    "@id": "http://example.org/rule/verify-after-write",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly."
+        "@value": "After every file creation or modification action (`create_file_with_block`, `overwrite_file_with_block`, `replace_with_git_merge_diff`), the agent MUST use a subsequent read-only tool (`read_file`, `list_files`, `grep`) to verify that the action was executed successfully and had the intended effect. A plan step should only be marked as complete after this verification."
       }
     ]
   },
   {
-    "@id": "http://example.org/rule/programmatic-rule-refinement",
+    "@id": "http://example.org/rule/structured-lessons",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "The self-correction system can modify the description of existing protocol rules via the `update-rule` command in `tooling/protocol_updater.py`, allowing it to refine its own logic."
+        "@value": "Lessons learned from post-mortem analysis must be generated as structured, machine-readable JSON objects in `knowledge_core/lessons.jsonl`."
       }
     ]
   },
   {
-    "@id": "http://example.org/lesson/e88e8901-19a0-4823-b3e8-420e2dfc21a1",
-    "@type": [
-      "http://example.org/ontology#Lesson"
-    ],
-    "http://example.org/ontology#action": [
-      {
-        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"When designing or modifying FSMs, I will first define the *purpose* and *requirements* of each state (e.g., \\\"Awaiting Analysis\\\" means a draft file exists and I am actively analyzing it). The implementation will then be built to enforce those requirements.\"}}"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol's state must represent a meaningful condition of the system, not just a point in a script."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/planning-tool-access",
+    "@id": "http://example.org/rule/programmatic-updates",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/lesson/da72055f-8f6c-4773-8894-716b750920f4",
-    "@type": [
-      "http://example.org/ontology#Lesson"
-    ],
-    "http://example.org/ontology#action": [
-      {
-        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**Formal Models Must Be Precise:** The failure of the `invalid_plan.txt` test demonstrated that a formal model is only as good as its precision. A generic, permissive FSM is almost as bad as no FSM at all. The model must be strict enough to reject all invalid states, which is what the final, corrected FSM now does.\"}}"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A corrective action was proposed: **Formal Models Must Be Precise:** The failure of the `invalid_plan.txt` test demonstrated that a formal model is only as good as its precision. A generic, permissive FSM is almost as bad as no FSM at all. The model must be strict enough to reject all invalid states, which is what the final, corrected FSM now does."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/prove-sequent",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/lesson/7a17567d-e2e5-4005-a60b-df7504f5d499",
-    "@type": [
-      "http://example.org/ontology#Lesson"
-    ],
-    "http://example.org/ontology#action": [
-      {
-        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**The Toolchain is a Meta-Cognitive Tool:** The FDC toolchain is more than just an enforcement mechanism. It is a tool for thought. By forcing me to structure my plans in a way that is verifiable, it compels me to think more clearly and logically about the task at hand. The errors it catches are not just bugs; they are flaws in my own reasoning that I am then forced to confront and correct. This is the core of the self-improvement loop we are building.\"}}"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A corrective action was proposed: **The Toolchain is a Meta-Cognitive Tool:** The FDC toolchain is more than just an enforcement mechanism. It is a tool for thought. By forcing me to structure my plans in a way that is verifiable, it compels me to think more clearly and logically about the task at hand. The errors it catches are not just bugs; they are flaws in my own reasoning that I am then forced to confront and correct. This is the core of the self-improvement loop we are building."
+        "@value": "All modifications to protocol source files must be performed programmatically via the `tooling/protocol_updater.py` tool to ensure consistency and prevent manual errors."
       }
     ]
   },
@@ -217,45 +571,165 @@
     ]
   },
   {
-    "@id": "http://example.org/protocol/research-protocol-001",
+    "@id": "http://example.org/lesson/cfaeab40-2965-4da2-88d0-dbfd00c0f2fc",
+    "@type": [
+      "http://example.org/ontology#Lesson"
+    ],
+    "http://example.org/ontology#action": [
+      {
+        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"My plans for creating new tools will now always include two distinct, sequential steps: 1) Implement the tool and its dedicated unit test. 2) Integrate the validated tool into the main system.\"}}"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "For any new, independent component with clear inputs and outputs (like a parser), a dedicated unit test should always be created and validated *before* integrating it into a larger, more complex workflow."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/aura-execution-001",
     "@type": [
       "http://example.org/ontology#Protocol"
     ],
     "http://example.org/ontology#hasRule": [
       {
-        "@id": "http://example.org/rule/mandate-research-tools"
+        "@id": "http://example.org/rule/execute-aura-script"
       }
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "A protocol for conducting systematic research using the integrated research toolchain."
+        "@value": "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent."
       }
     ]
   },
   {
-    "@id": "http://example.org/protocol/plllu-execution-001",
+    "@id": "http://example.org/protocol/pre-commit-protocol-001",
     "@type": [
       "http://example.org/ontology#Protocol"
     ],
     "http://example.org/ontology#hasRule": [
       {
-        "@id": "http://example.org/rule/execute-plllu-script"
+        "@id": "http://example.org/rule/pre-commit-instructions-mandate"
       }
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent."
+        "@value": "Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission."
       }
     ]
   },
   {
-    "@id": "http://example.org/rule/external-api-registry",
+    "@id": "http://example.org/protocol/decidability-constraints-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/non-turing-completeness"
+      },
+      {
+        "@id": "http://example.org/rule/bounded-recursion"
+      },
+      {
+        "@id": "http://example.org/rule/fsm-adherence"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Ensures all development processes are formally decidable and computationally tractable."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/aorp-identity",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "A central registry of all approved external agent APIs MUST be maintained at 'knowledge_core/external_api_registry.json'."
+        "@value": "The governing protocol set is identified as the Advanced Orientation and Research Protocol (AORP)."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/test-driven-development-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/tdd-writing-new-code"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol to enforce Test-Driven Development (TDD) practices."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/planning-tool-access",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/rag-mandate",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "For any task involving external technologies, Just-In-Time External RAG is REQUIRED to verify current best practices. Do not trust internal knowledge."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/registry-first-resolution",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The 'call_plan <argument>' directive MUST first attempt to resolve '<argument>' as a logical name in the plan registry. If resolution fails, it MUST fall back to treating '<argument>' as a direct file path for backward compatibility."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/tdd-writing-new-code",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "When writing any new function or class, a corresponding test must be written first. The test should fail before the new code is implemented, and pass after."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/non-compliance-definition",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Defines non-compliance as a violation of any rule, convention, or procedure in AGENTS.md or its source protocols."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/protocol-as-source-code",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The `protocols/` directory and all its contents (`.md`, `.json` files) MUST be treated as functional source code. Changes to these files directly alter the agent's operational capabilities and governing rules."
       }
     ]
   },
@@ -288,146 +762,171 @@
     ]
   },
   {
-    "@id": "http://example.org/rule/phase4-post-mortem",
+    "@id": "http://example.org/rule/authorize-tooling-modification",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "Phase 4 (Pre-Submission Post-Mortem): The agent must formally close the task using the `close` command and complete the generated post-mortem report."
+        "@value": "The agent is authorized to use the 'modify_tooling' action within the self_correction_orchestrator.py to apply patches to its own source code or other tools in the tooling/ directory. This action must be triggered by a structured lesson in knowledge_core/lessons.jsonl."
       }
     ]
   },
   {
-    "@id": "http://example.org/protocol/capability-verification-001",
+    "@id": "http://example.org/protocol/external-api-integration-001",
     "@type": [
       "http://example.org/ontology#Protocol"
     ],
     "http://example.org/ontology#hasRule": [
       {
-        "@id": "http://example.org/rule/verify-capability-acquisition"
+        "@id": "http://example.org/rule/external-api-registry"
+      },
+      {
+        "@id": "http://example.org/rule/secure-api-key-management"
+      },
+      {
+        "@id": "http://example.org/rule/standardized-interaction-client"
       }
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement."
+        "@value": "A protocol for standardized interaction with external agent APIs."
       }
     ]
   },
   {
-    "@id": "http://example.org/rule/registry-management-tool",
+    "@id": "http://example.org/rule/phase1-deconstruction",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "A dedicated tool (`tooling/plan_manager.py`) MUST be provided for managing the plan registry, with functions to register, deregister, and list plans."
+        "@value": "Phase 1 (Deconstruction & Contextualization): The agent must ingest the task, query historical logs, identify entities using the symbol map, and analyze impact using the dependency graph."
       }
     ]
   },
   {
-    "@id": "http://example.org/lesson/e64ef5e8-8a6e-4032-97d6-0e3744f389a0",
+    "@id": "http://example.org/rule/model-a-constraints",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/hierarchical-planning-via-call-plan",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Plans may execute other plans as sub-routines using the 'call_plan <path_to_plan>' directive. This enables a modular, hierarchical workflow."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/unified-auditor-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/run-all-audits"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/aorp-versioning",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The official protocol version is tracked in the VERSION file in the repository root, following Semantic Versioning (SemVer)."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/lesson/b5efe47a-3630-4570-97b7-8bb541b40a16",
     "@type": [
       "http://example.org/ontology#Lesson"
     ],
     "http://example.org/ontology#action": [
       {
-        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**Regression Testing is Non-Negotiable:** After every significant fix (like the initial file state scan or the FSM refinement), the decision to re-run the *entire* test suite was critical. It's the only way to ensure a fix in one area does not cause an unexpected break in another. This must be a standard procedure for all future bug fixes.\"}}"
+        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"When writing integration tests that simulate my cognitive input (like analyzing a file), I will ensure the test modifies the file in the same way I would (e.g., editing/overwriting a draft, not just appending to it).\"}}"
       }
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "A corrective action was proposed: **Regression Testing is Non-Negotiable:** After every significant fix (like the initial file state scan or the FSM refinement), the decision to re-run the *entire* test suite was critical. It's the only way to ensure a fix in one area does not cause an unexpected break in another. This must be a standard procedure for all future bug fixes."
+        "@value": "Test simulations of my own interactive steps must be as faithful as possible to the real action."
       }
     ]
   },
   {
-    "@id": "http://example.org/protocol/pre-commit-protocol-001",
+    "@id": "http://example.org/rule/gdn-002",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The review document must be a markdown file located in the `reviews/` directory, named after the proposal or task."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/prove-sequent",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/fdc-state-transitions",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The FDC is a Finite State Machine (FSM) formally defined in `tooling/fdc_fsm.json`. Plans must be valid strings in the language defined by this FSM."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/best-practices-001",
     "@type": [
       "http://example.org/ontology#Protocol"
     ],
     "http://example.org/ontology#hasRule": [
       {
-        "@id": "http://example.org/rule/pre-commit-instructions-mandate"
+        "@id": "http://example.org/rule/verify-after-write"
       }
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission."
+        "@value": "A set of best practices derived from observing successful, data-driven workflow patterns."
       }
     ]
   },
   {
-    "@id": "http://example.org/rule/speculative-logging",
+    "@id": "http://example.org/rule/programmatic-rule-refinement",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "All logs and artifacts generated during a speculative task must be tagged as 'speculative'."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/non-compliance-test-procedure",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Requires adherence to all documented testing procedures before submitting changes."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/formal-proposal-required",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/l4-deep-research-cycle",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Level 4 (Deep Research Cycle): To investigate 'unknown unknowns', the agent must initiate a formal, self-contained Finite Development Cycle (FDC) of the 'Analysis Modality'."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/cfdc-protocol-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/hierarchical-planning-via-call-plan"
-      },
-      {
-        "@id": "http://example.org/rule/max-recursion-depth"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/dependency-install-on-start",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed."
+        "@value": "The self-correction system can modify the description of existing protocol rules via the `update-rule` command in `tooling/protocol_updater.py`, allowing it to refine its own logic."
       }
     ]
   },
@@ -443,24 +942,110 @@
     ]
   },
   {
-    "@id": "http://example.org/protocol/decidability-constraints-001",
+    "@id": "http://example.org/protocol/agent-shell-001",
     "@type": [
       "http://example.org/ontology#Protocol"
     ],
     "http://example.org/ontology#hasRule": [
       {
-        "@id": "http://example.org/rule/non-turing-completeness"
-      },
-      {
-        "@id": "http://example.org/rule/bounded-recursion"
-      },
-      {
-        "@id": "http://example.org/rule/fsm-adherence"
+        "@id": "http://example.org/rule/shell-is-primary-entry-point"
       }
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "Ensures all development processes are formally decidable and computationally tractable."
+        "@value": "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/vuln-reporting-channel",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "All suspected security vulnerabilities MUST be reported privately to the designated security contact."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/experimental-prologue-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/create-prologue-file"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/plllu-execution-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/execute-plllu-script"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/mandatory-fdc-start",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Upon receiving a new task, the agent's first action MUST be to programmatically execute the FDC 'start' command to formally initiate the task and run the AORP orientation cascade."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/secure-api-key-management",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "API keys for external services MUST be managed securely via environment variables."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/critic-reset-prohibition-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/critic-no-reset"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/external-api-registry",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A central registry of all approved external agent APIs MUST be maintained at 'knowledge_core/external_api_registry.json'."
       }
     ]
   },
@@ -476,13 +1061,403 @@
     ]
   },
   {
-    "@id": "http://example.org/rule/gemini-computer-use-protocol",
+    "@id": "http://example.org/rule/built-in-tools-are-valid",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "The agent must adhere to a strict sub-protocol when using the Gemini API's 'Computer Use' feature."
+        "@value": "The agent's execution environment provides a set of built-in tools (e.g., `read_file`, `delete_file`, `pre_commit_instructions`). The implementation of these tools does not reside within the repository. A protocol change that adds a built-in tool to the `associated_tools` list is a valid and complete functional change."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/l4-invocation",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The L4 Deep Research Cycle is the designated mechanism for resolving complex 'unknown unknowns'. It is invoked by the main orchestrator when a task requires knowledge that cannot be obtained through simple L1-L3 orientation probes."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/mandate-research-tools",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "For all complex research tasks, the `plan_deep_research` tool MUST be used to generate a plan, and the `execute_research_protocol` tool MUST be used for data gathering. This ensures a systematic and auditable research process."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/autonomous-code-suggestion",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The self-correction system can generate and apply code changes to its own tooling. This is achieved through a `PROPOSE_CODE_CHANGE` action, which is processed by `tooling/code_suggester.py` to create an executable plan."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/aorp-header",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/aorp-identity"
+      },
+      {
+        "@id": "http://example.org/rule/aorp-versioning"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP)."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/execute-plllu-script",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The `plllu_runner.py` tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/plan-registry-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/registry-definition"
+      },
+      {
+        "@id": "http://example.org/rule/registry-first-resolution"
+      },
+      {
+        "@id": "http://example.org/rule/registry-management-tool"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Defines a central registry for discovering and executing hierarchical plans by a logical name."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/csdc-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/use-csdc-cli"
+      },
+      {
+        "@id": "http://example.org/rule/model-a-constraints"
+      },
+      {
+        "@id": "http://example.org/rule/model-b-constraints"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/execute-aura-script",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/meta-mutation-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/authorize-tooling-modification"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol that empowers the agent to modify its own core tooling, enabling a recursive self-improvement cycle."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/registry-management-tool",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A dedicated tool (`tooling/plan_manager.py`) MUST be provided for managing the plan registry, with functions to register, deregister, and list plans."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/self-improvement-protocol-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/sip-001"
+      },
+      {
+        "@id": "http://example.org/rule/sip-002"
+      },
+      {
+        "@id": "http://example.org/rule/sip-003"
+      },
+      {
+        "@id": "http://example.org/rule/sip-004"
+      },
+      {
+        "@id": "http://example.org/rule/sip-005"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A formal protocol for the agent to propose, validate, and implement improvements to its own operational protocols and tools."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/hdl-proving-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/prove-sequent"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/fdc-entry-point",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The AORP cascade is the mandatory entry point to every FDC."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/executable-demo-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/print-hello-world"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A demonstration of a protocol with executable code."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/specialized-fsm",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The Research FDC must be governed by its own dedicated Finite State Machine, defined in `tooling/research_fsm.json`. This FSM is tailored for a research workflow, with states for gathering, synthesis, and reporting."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/gemini-api-access",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The agent is authorized to use the Gemini API for advanced tasks."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/speculative-logging",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "All logs and artifacts generated during a speculative task must be tagged as 'speculative'."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/verify-capability-acquisition",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/core-directive-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/mandatory-fdc-start"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC)."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/update-index-before-submit",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/registry-definition",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A central plan registry MUST exist at 'knowledge_core/plan_registry.json'. It maps logical plan names to their file paths."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/lesson/e31403c3-e462-42aa-b42d-321355db15ae",
+    "@type": [
+      "http://example.org/ontology#Lesson"
+    ],
+    "http://example.org/ontology#action": [
+      {
+        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"For any future task requiring my own analysis or input, I will explicitly model it in the FSM with a dedicated \\\"AWAITING_AGENT\\\" state and a corresponding signal file (e.g., `_complete.txt`). This makes the handoff between automated execution and my cognitive work clear and testable.\"}}"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Interactive, cognitive steps require dedicated states and explicit signals."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/agent-interaction-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/planning-tool-access"
+      },
+      {
+        "@id": "http://example.org/rule/communication-tool-access"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol governing the agent's core interaction and planning tools."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/non-turing-completeness",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The agent's planning and execution language is, by design, not Turing-complete. This is a fundamental constraint to guarantee that all processes will terminate."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/pre-commit-instructions-mandate",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Before submitting changes, the agent MUST execute the `pre_commit_instructions` tool to receive the required sequence of validation steps (e.g., running tests, requesting code review)."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/security-vuln-reporting-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/vuln-reporting-channel"
+      },
+      {
+        "@id": "http://example.org/rule/no-public-disclosure"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Defines the official policy and procedure for reporting security vulnerabilities."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/meta-protocol-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/agents-md-self-awareness"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A meta-protocol governing the agent's awareness and maintenance of its own core protocol files."
       }
     ]
   },
@@ -499,6 +1474,251 @@
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
         "@value": "A protocol for controlling a web browser using the GeminiComputerUse tool."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/user-review-gate",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/structured-research-phases",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The deep research plan MUST follow a structured four-phase process: Scoping, Broad Gathering, Targeted Extraction, and Synthesis."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/research-protocol-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/mandate-research-tools"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol for conducting systematic research using the integrated research toolchain."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/phase2-planning",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Phase 2 (Planning & Self-Correction): The agent must generate a granular plan, lint it using the FDC toolchain, cite evidence for its steps, and perform a critical review."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/non-compliance-self-awareness-failure",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Requires the agent to maintain an up-to-date understanding of protocols by recompiling AGENTS.md when necessary."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/lesson/ddd58e1d-8a5a-4035-a082-3b52822eae44",
+    "@type": [
+      "http://example.org/ontology#Lesson"
+    ],
+    "http://example.org/ontology#action": [
+      {
+        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**Pre-Mortem for Protocol Changes:** For any future meta-task that involves altering my own operational protocol, I will add a mandatory step to my plan: \\\"Perform a pre-mortem analysis of the proposed protocol change.\\\" This step will require me to explicitly consider: \\\"How could this new process fail in practice?\\\" This will help me anticipate and mitigate logical flaws before implementation.\"}}"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A corrective action was proposed: **Pre-Mortem for Protocol Changes:** For any future meta-task that involves altering my own operational protocol, I will add a mandatory step to my plan: \"Perform a pre-mortem analysis of the proposed protocol change.\" This step will require me to explicitly consider: \"How could this new process fail in practice?\" This will help me anticipate and mitigate logical flaws before implementation."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/unified-doc-builder-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/use-doc-builder-for-all-docs"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/sip-004",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "After protocol source files are modified, the `protocol_compiler.py` must be executed to re-compile the protocols and validate the changes."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/l2-repository-sync",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Level 2 (Repository Sync): The agent must understand the current state of the local repository by loading primary artifacts from the `knowledge_core/` directory."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/executable-plans",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Research plans must be generated by `tooling/research_planner.py` as valid, executable plans that conform to the `research_fsm.json` definition. They are not just templates but formal, verifiable artifacts."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/idle-state-trigger",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The agent may only initiate a speculative task when it has no active, user-assigned tasks."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/l1-self-awareness",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Level 1 (Self-Awareness): The agent must first establish its own identity and inherent limitations by reading the `knowledge_core/agent_meta.json` artifact."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/use-doc-builder-for-all-docs",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The `doc_builder.py` script is the single entry point for generating all user-facing documentation, including system-level docs, README files, and GitHub Pages. It should be called with the appropriate '--format' argument."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/use-csdc-cli",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP)."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/file-indexing-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/update-index-before-submit"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol for maintaining an up-to-date file index to accelerate tool performance."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/critic-meta-protocol-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/protocol-as-source-code"
+      },
+      {
+        "@id": "http://example.org/rule/built-in-tools-are-valid"
+      },
+      {
+        "@id": "http://example.org/rule/functional-change-definition"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/lesson/05106ce0-348b-4395-9d21-f801f6054c7e",
+    "@type": [
+      "http://example.org/ontology#Lesson"
+    ],
+    "http://example.org/ontology#action": [
+      {
+        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**Formal Models Must Be Precise:** The failure of the `invalid_plan.txt` test demonstrated that a formal model is only as good as its precision. A generic, permissive FSM is almost as bad as no FSM at all. The model must be strict enough to reject all invalid states, which is what the final, corrected FSM now does.\"}}"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A corrective action was proposed: **Formal Models Must Be Precise:** The failure of the `invalid_plan.txt` test demonstrated that a formal model is only as good as its precision. A generic, permissive FSM is almost as bad as no FSM at all. The model must be strict enough to reject all invalid states, which is what the final, corrected FSM now does."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/l4-deep-research-cycle",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Level 4 (Deep Research Cycle): To investigate 'unknown unknowns', the agent must initiate a formal, self-contained Finite Development Cycle (FDC) of the 'Analysis Modality'."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/gdn-001",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "All self-improvement and speculative execution tasks must generate a formal review document."
       }
     ]
   },
@@ -528,176 +1748,13 @@
     ]
   },
   {
-    "@id": "http://example.org/rule/structured-research-phases",
+    "@id": "http://example.org/rule/greet-the-world",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "The deep research plan MUST follow a structured four-phase process: Scoping, Broad Gathering, Targeted Extraction, and Synthesis."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/print-hello-world",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Prints a hello world message to the console."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/secure-api-key-management",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "API keys for external services MUST be managed securely via environment variables."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/sip-005",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The success of an improvement must be verified by running relevant tests or a new, specific verification script."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/fsm-adherence",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "All plans must be valid strings in the language defined by the tooling/fdc_fsm.json Finite State Machine."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/gdn-001",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "All self-improvement and speculative execution tasks must generate a formal review document."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/reset-all-prohibition-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/no-reset-all"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A high-priority protocol that unconditionally forbids the use of the `reset_all` tool."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/pre-commit-instructions-mandate",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Before submitting changes, the agent MUST execute the `pre_commit_instructions` tool to receive the required sequence of validation steps (e.g., running tests, requesting code review)."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/phase3-execution",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Phase 3 (Execution & Structured Logging): The agent must execute the validated plan and log every action according to the `LOGGING_SCHEMA.md`."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/no-public-disclosure",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/sip-004",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "After protocol source files are modified, the `protocol_compiler.py` must be executed to re-compile the protocols and validate the changes."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/lesson/fd86eefd-e6b6-42c0-b591-78334575c5c5",
-    "@type": [
-      "http://example.org/ontology#Lesson"
-    ],
-    "http://example.org/ontology#action": [
-      {
-        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**Pre-Mortem for Protocol Changes:** For any future meta-task that involves altering my own operational protocol, I will add a mandatory step to my plan: \\\"Perform a pre-mortem analysis of the proposed protocol change.\\\" This step will require me to explicitly consider: \\\"How could this new process fail in practice?\\\" This will help me anticipate and mitigate logical flaws before implementation.\"}}"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A corrective action was proposed: **Pre-Mortem for Protocol Changes:** For any future meta-task that involves altering my own operational protocol, I will add a mandatory step to my plan: \"Perform a pre-mortem analysis of the proposed protocol change.\" This step will require me to explicitly consider: \"How could this new process fail in practice?\" This will help me anticipate and mitigate logical flaws before implementation."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/hdl-proving-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/prove-sequent"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/meta-protocol-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/agents-md-self-awareness"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A meta-protocol governing the agent's awareness and maintenance of its own core protocol files."
+        "@value": "When this rule is invoked, the agent must use the `hello_world` tool to print the message \"Hello, World!\"."
       }
     ]
   },
@@ -733,505 +1790,24 @@
     ]
   },
   {
-    "@id": "http://example.org/protocol/test-driven-development-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/tdd-writing-new-code"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol to enforce Test-Driven Development (TDD) practices."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/mandate-research-tools",
+    "@id": "http://example.org/rule/gemini-computer-use-protocol",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "For all complex research tasks, the `plan_deep_research` tool MUST be used to generate a plan, and the `execute_research_protocol` tool MUST be used for data gathering. This ensures a systematic and auditable research process."
+        "@value": "The agent must adhere to a strict sub-protocol when using the Gemini API's 'Computer Use' feature."
       }
     ]
   },
   {
-    "@id": "http://example.org/rule/phase1-deconstruction",
+    "@id": "http://example.org/rule/phase4-post-mortem",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "Phase 1 (Deconstruction & Contextualization): The agent must ingest the task, query historical logs, identify entities using the symbol map, and analyze impact using the dependency graph."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/functional-change-definition",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A change is considered 'functional' if it correctly modifies the agent's operational rules or capabilities, as defined by the combination of Python source code and the protocol source files in `protocols/`."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/gdn-003",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The review document must contain sections for 'Summary', 'Impact Analysis', and 'Verification Plan'."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/lesson/3fa493c4-fc6e-4ba6-bce4-ee286d82f3e7",
-    "@type": [
-      "http://example.org/ontology#Lesson"
-    ],
-    "http://example.org/ontology#action": [
-      {
-        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**Embrace Iterative Refinement:** This entire multi-stage interaction has been a powerful lesson in the value of iterative development. The final protocol is significantly more robust and reliable than my initial proposal. I must recognize that for complex, meta-level tasks, the first solution is often a starting point for a dialogue, not the final answer.\"}}"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A corrective action was proposed: **Embrace Iterative Refinement:** This entire multi-stage interaction has been a powerful lesson in the value of iterative development. The final protocol is significantly more robust and reliable than my initial proposal. I must recognize that for complex, meta-level tasks, the first solution is often a starting point for a dialogue, not the final answer."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/external-api-integration-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/external-api-registry"
-      },
-      {
-        "@id": "http://example.org/rule/secure-api-key-management"
-      },
-      {
-        "@id": "http://example.org/rule/standardized-interaction-client"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol for standardized interaction with external agent APIs."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/hierarchical-planning-via-call-plan",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Plans may execute other plans as sub-routines using the 'call_plan <path_to_plan>' directive. This enables a modular, hierarchical workflow."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/security-header",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Defines the identity and purpose of the Security Protocol document."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/sip-002",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Improvement proposals must be formally structured, including sections for 'Problem Statement', 'Proposed Solution', 'Success Criteria', and 'Impact Analysis'."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/critic-reset-prohibition-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/critic-no-reset"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/lesson/d7cfc459-c342-404b-8f4f-7aa6cd8209fc",
-    "@type": [
-      "http://example.org/ontology#Lesson"
-    ],
-    "http://example.org/ontology#action": [
-      {
-        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**\\\"Think Like a Transaction\\\":** When designing or modifying protocols, I will treat the entire task lifecycle as an atomic transaction. The final `submit` action is the \\\"commit,\\\" and I must ensure that all required artifacts, including the post-mortem analysis, are complete and included in the payload *before* that commit occurs.\"}}"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A corrective action was proposed: **\"Think Like a Transaction\":** When designing or modifying protocols, I will treat the entire task lifecycle as an atomic transaction. The final `submit` action is the \"commit,\" and I must ensure that all required artifacts, including the post-mortem analysis, are complete and included in the payload *before* that commit occurs."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/l2-repository-sync",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Level 2 (Repository Sync): The agent must understand the current state of the local repository by loading primary artifacts from the `knowledge_core/` directory."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/toolchain-review-on-schema-change-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/toolchain-audit-on-schema-change"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/toolchain-audit-on-schema-change",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/verify-capability-acquisition",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/gemini-api-access",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The agent is authorized to use the Gemini API for advanced tasks."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/standardized-interaction-client",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A standardized client for interacting with external agent APIs MUST be implemented in 'tooling/external_api_client.py'."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/gemini-api-integration-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/gemini-api-access"
-      },
-      {
-        "@id": "http://example.org/rule/gemini-api-key-security"
-      },
-      {
-        "@id": "http://example.org/rule/gemini-computer-use-protocol"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol for integrating with the Google Gemini API."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/structured-lessons",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Lessons learned from post-mortem analysis must be generated as structured, machine-readable JSON objects in `knowledge_core/lessons.jsonl`."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/autonomous-code-suggestion",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The self-correction system can generate and apply code changes to its own tooling. This is achieved through a `PROPOSE_CODE_CHANGE` action, which is processed by `tooling/code_suggester.py` to create an executable plan."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/use-doc-builder-for-all-docs",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The `doc_builder.py` script is the single entry point for generating all user-facing documentation, including system-level docs, README files, and GitHub Pages. It should be called with the appropriate '--format' argument."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/agent-bootstrap-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/bootstrap-load-agents-md"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A foundational protocol that dictates the agent's initial actions upon starting any task."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/aura-execution-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/execute-aura-script"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/max-recursion-depth",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "To ensure decidability, the plan execution stack must not exceed a system-wide constant, MAX_RECURSION_DEPTH. This prevents infinite recursion and guarantees all processes will terminate."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/csdc-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/use-csdc-cli"
-      },
-      {
-        "@id": "http://example.org/rule/model-a-constraints"
-      },
-      {
-        "@id": "http://example.org/rule/model-b-constraints"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/aorp-header",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/aorp-identity"
-      },
-      {
-        "@id": "http://example.org/rule/aorp-versioning"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP)."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/research/post_mortem_adequacy_report.md",
-    "@type": [
-      "http://example.org/ontology#Research"
-    ],
-    "http://example.org/ontology#content": [
-      {
-        "@value": "# Post-Mortem Tooling: Adequacy and Improvement Report\n\n**Date:** 2025-10-15\n**Author:** Jules\n**Status:** Complete\n\n## 1. Introduction\n\nThis report assesses the adequacy of the post-mortem tooling and processes within this repository. The evaluation is based on a synthesized theory of modern, blameless post-mortems derived from established industry best practices (see `language_theory/post_mortem_theory.md`). The goal of this analysis is to identify strengths, weaknesses, and actionable opportunities for improvement.\n\n## 2. Summary of Post-Mortem Theory\n\nAn effective post-mortem system is a cornerstone of a resilient engineering culture. It is not a tool for assigning blame, but a process for learning from failure. The core principles are:\n\n-   **Blamelessness:** Focus on systems and processes, not individuals.\n-   **Deep Analysis:** Go beyond immediate triggers to uncover true root causes.\n-   **Actionable Outcomes:** Produce concrete, trackable actions to prevent recurrence.\n-   **Knowledge Sharing:** Ensure lessons are disseminated effectively throughout the organization.\n\nA mature post-mortem process transforms incidents from liabilities into investments in organizational knowledge and system robustness.\n\n## 3. Analysis of Existing Tooling\n\nThe repository contains a mix of post-mortem artifacts that represent different levels of maturity.\n\n### 3.1. `postmortem.md` (Basic Template)\n\n-   **Description:** A simple, markdown-based template for basic incident reporting.\n-   **Strengths:**\n    -   Easy to use and understand.\n    -   Covers the bare essentials (summary, what went well/wrong, lessons).\n-   **Weaknesses:**\n    -   Lacks structure for deep analysis.\n    -   \"Lessons Learned\" are free-form text, making them difficult to track or automate.\n    -   Does not enforce a blameless or root-cause-oriented approach.\n-   **Adequacy:** **Low.** This template is suitable only for the most minor incidents or for organizations just beginning to adopt a post-mortem culture.\n\n### 3.2. `postmortem_catastrophic_failure.md` (Example Report)\n\n-   **Description:** A detailed, well-written report analyzing a severe process failure.\n-   **Strengths:**\n    -   Excellent example of a blameless, in-depth root cause analysis.\n    -   Clearly separates timeline, root causes, and lessons.\n    -   Proposes specific, actionable changes to protocols and tooling.\n-   **Weaknesses:**\n    -   It is a one-off report, not a reusable template. Its quality is dependent on the diligence of the author.\n-   **Adequacy:** **High (as an example).** This report serves as an excellent model for what a good post-mortem should be.\n\n### 3.3. `postmortems/structured_postmortem.md` (Advanced Template)\n\n-   **Description:** A sophisticated, data-driven template for structured analysis and lesson generation.\n-   **Strengths:**\n    -   **Highly Structured:** Enforces a rigorous analytical process (Objective vs. Outcome, Causal Analysis).\n    -   **Data-Driven:** Demands log evidence to support claims.\n    -   **Machine-Readable Lessons:** The core innovation. It generates lessons as JSON objects with categories, severity, and specific, actionable changes. This is a critical step toward automating the self-improvement loop.\n-   **Weaknesses:**\n    -   The JSON lesson format, while powerful, could be complex for users to fill out correctly.\n    -   It is currently located in a subdirectory and not established as the default, likely leading to inconsistent adoption.\n-   **Adequacy:** **High.** This template represents a state-of-the-art approach to post-mortems, aligning perfectly with the goal of turning analysis into automated, systemic improvement.\n\n## 4. Recommendations\n\nThe repository has excellent but fragmented tooling. The primary goal should be to standardize on the most advanced template and deprecate the simpler one.\n\n1.  **Standardize on the Structured Template:** The `postmortems/structured_postmortem.md` should be moved to the root of the repository and renamed `postmortem.md`. The original, simpler `postmortem.md` should be archived or deleted. This makes the best-practice template the default and easiest path for all users.\n2.  **Incorporate Best Practices from the Catastrophic Failure Report:** The `structured_postmortem.md` template should be enhanced to include an explicit \"Impact Assessment\" section and a more detailed \"Timeline of Events\" section, as demonstrated in the `postmortem_catastrophic_failure.md` report. This combines the structured, machine-readable format with the narrative clarity needed for human readers.\n3.  **Develop a \"Lesson Consumer\" Tool:** The existence of a structured lesson format implies the need for a tool that consumes these lessons. A follow-up project should be created to build a `lesson_consumer.py` script that can parse the JSON output from post-mortems and, where possible, automatically apply the proposed changes (e.g., updating protocol files).\n\nBy implementing these changes, the repository can move from a passive documentation culture to an active, automated self-improvement ecosystem, maximizing the value gained from every operational incident."
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Research findings from post_mortem_adequacy_report.md"
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/greet-the-world",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "When this rule is invoked, the agent must use the `hello_world` tool to print the message \"Hello, World!\"."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/research-fdc-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/specialized-fsm"
-      },
-      {
-        "@id": "http://example.org/rule/executable-plans"
-      },
-      {
-        "@id": "http://example.org/rule/l4-invocation"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Defines the formal Finite Development Cycle (FDC) for conducting deep research."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/dependency-management-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/dependency-install-on-start"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol for ensuring a reliable execution environment through formal dependency management."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/agents-md-self-awareness",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/programmatic-updates",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "All modifications to protocol source files must be performed programmatically via the `tooling/protocol_updater.py` tool to ensure consistency and prevent manual errors."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/unified-auditor-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/run-all-audits"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/l1-self-awareness",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Level 1 (Self-Awareness): The agent must first establish its own identity and inherent limitations by reading the `knowledge_core/agent_meta.json` artifact."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/unified-doc-builder-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/use-doc-builder-for-all-docs"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth."
+        "@value": "Phase 4 (Pre-Submission Post-Mortem): The agent must formally close the task using the `close` command and complete the generated post-mortem report."
       }
     ]
   },
@@ -1252,18 +1828,110 @@
     ]
   },
   {
-    "@id": "http://example.org/lesson/068b8e47-3e26-4ef9-a6f3-c7bd7a85359e",
+    "@id": "http://example.org/rule/run-all-audits",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/lesson/ac850950-7b8c-433a-a23b-371b82f171b7",
     "@type": [
       "http://example.org/ontology#Lesson"
     ],
     "http://example.org/ontology#action": [
       {
-        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"My plans for creating new tools will now always include two distinct, sequential steps: 1) Implement the tool and its dedicated unit test. 2) Integrate the validated tool into the main system.\"}}"
+        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**Formalism Requires Precision:** The most critical lesson from this entire multi-task arc is that building a formal, verifiable system requires an extremely high degree of precision at every step. This applies not only to the code but also to the protocol documentation, the test data, and the execution of the process itself. There is no room for ambiguity.\"}}"
       }
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "For any new, independent component with clear inputs and outputs (like a parser), a dedicated unit test should always be created and validated *before* integrating it into a larger, more complex workflow."
+        "@value": "A corrective action was proposed: **Formalism Requires Precision:** The most critical lesson from this entire multi-task arc is that building a formal, verifiable system requires an extremely high degree of precision at every step. This applies not only to the code but also to the protocol documentation, the test data, and the execution of the process itself. There is no room for ambiguity."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/lesson/86bfd885-ff1b-47b2-91ea-eb7b4b5793a3",
+    "@type": [
+      "http://example.org/ontology#Lesson"
+    ],
+    "http://example.org/ontology#action": [
+      {
+        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"I will continue to prioritize the creation of comprehensive, end-to-end integration tests for any FSM or protocol change. The iterative process of fixing the test plan and the implementation in this task was proof of its value.\"}}"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Test-driven development is the most effective way to validate complex, multi-state workflows."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/max-recursion-depth",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "To ensure decidability, the plan execution stack must not exceed a system-wide constant, MAX_RECURSION_DEPTH. This prevents infinite recursion and guarantees all processes will terminate."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/agents-md-self-awareness",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/capability-verification-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/verify-capability-acquisition"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/shell-is-primary-entry-point",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/dependency-management-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/dependency-install-on-start"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol for ensuring a reliable execution environment through formal dependency management."
       }
     ]
   },
@@ -1279,13 +1947,121 @@
     ]
   },
   {
-    "@id": "http://example.org/rule/bootstrap-load-agents-md",
+    "@id": "http://example.org/lesson/358f66e6-a6bd-4aac-a520-fb1f5cb6249b",
+    "@type": [
+      "http://example.org/ontology#Lesson"
+    ],
+    "http://example.org/ontology#action": [
+      {
+        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"When designing or modifying FSMs, I will first define the *purpose* and *requirements* of each state (e.g., \\\"Awaiting Analysis\\\" means a draft file exists and I am actively analyzing it). The implementation will then be built to enforce those requirements.\"}}"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A protocol's state must represent a meaningful condition of the system, not just a point in a script."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/protocol/toolchain-review-on-schema-change-001",
+    "@type": [
+      "http://example.org/ontology#Protocol"
+    ],
+    "http://example.org/ontology#hasRule": [
+      {
+        "@id": "http://example.org/rule/toolchain-audit-on-schema-change"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/gemini-api-key-security",
     "@type": [
       "http://example.org/ontology#Rule"
     ],
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
-        "@value": "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins."
+        "@value": "The agent must handle the Gemini API key securely."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/l3-environmental-probing",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Level 3 (Environmental Probing & Targeted RAG): The agent must discover the rules and constraints of its operational environment by executing a probe script and using targeted RAG to resolve 'known unknowns'."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/research/post_mortem_adequacy_report.md",
+    "@type": [
+      "http://example.org/ontology#Research"
+    ],
+    "http://example.org/ontology#content": [
+      {
+        "@value": "# Post-Mortem Tooling: Adequacy and Improvement Report\n\n**Date:** 2025-10-15\n**Author:** Jules\n**Status:** Complete\n\n## 1. Introduction\n\nThis report assesses the adequacy of the post-mortem tooling and processes within this repository. The evaluation is based on a synthesized theory of modern, blameless post-mortems derived from established industry best practices (see `language_theory/post_mortem_theory.md`). The goal of this analysis is to identify strengths, weaknesses, and actionable opportunities for improvement.\n\n## 2. Summary of Post-Mortem Theory\n\nAn effective post-mortem system is a cornerstone of a resilient engineering culture. It is not a tool for assigning blame, but a process for learning from failure. The core principles are:\n\n-   **Blamelessness:** Focus on systems and processes, not individuals.\n-   **Deep Analysis:** Go beyond immediate triggers to uncover true root causes.\n-   **Actionable Outcomes:** Produce concrete, trackable actions to prevent recurrence.\n-   **Knowledge Sharing:** Ensure lessons are disseminated effectively throughout the organization.\n\nA mature post-mortem process transforms incidents from liabilities into investments in organizational knowledge and system robustness.\n\n## 3. Analysis of Existing Tooling\n\nThe repository contains a mix of post-mortem artifacts that represent different levels of maturity.\n\n### 3.1. `postmortem.md` (Basic Template)\n\n-   **Description:** A simple, markdown-based template for basic incident reporting.\n-   **Strengths:**\n    -   Easy to use and understand.\n    -   Covers the bare essentials (summary, what went well/wrong, lessons).\n-   **Weaknesses:**\n    -   Lacks structure for deep analysis.\n    -   \"Lessons Learned\" are free-form text, making them difficult to track or automate.\n    -   Does not enforce a blameless or root-cause-oriented approach.\n-   **Adequacy:** **Low.** This template is suitable only for the most minor incidents or for organizations just beginning to adopt a post-mortem culture.\n\n### 3.2. `postmortem_catastrophic_failure.md` (Example Report)\n\n-   **Description:** A detailed, well-written report analyzing a severe process failure.\n-   **Strengths:**\n    -   Excellent example of a blameless, in-depth root cause analysis.\n    -   Clearly separates timeline, root causes, and lessons.\n    -   Proposes specific, actionable changes to protocols and tooling.\n-   **Weaknesses:**\n    -   It is a one-off report, not a reusable template. Its quality is dependent on the diligence of the author.\n-   **Adequacy:** **High (as an example).** This report serves as an excellent model for what a good post-mortem should be.\n\n### 3.3. `postmortems/structured_postmortem.md` (Advanced Template)\n\n-   **Description:** A sophisticated, data-driven template for structured analysis and lesson generation.\n-   **Strengths:**\n    -   **Highly Structured:** Enforces a rigorous analytical process (Objective vs. Outcome, Causal Analysis).\n    -   **Data-Driven:** Demands log evidence to support claims.\n    -   **Machine-Readable Lessons:** The core innovation. It generates lessons as JSON objects with categories, severity, and specific, actionable changes. This is a critical step toward automating the self-improvement loop.\n-   **Weaknesses:**\n    -   The JSON lesson format, while powerful, could be complex for users to fill out correctly.\n    -   It is currently located in a subdirectory and not established as the default, likely leading to inconsistent adoption.\n-   **Adequacy:** **High.** This template represents a state-of-the-art approach to post-mortems, aligning perfectly with the goal of turning analysis into automated, systemic improvement.\n\n## 4. Recommendations\n\nThe repository has excellent but fragmented tooling. The primary goal should be to standardize on the most advanced template and deprecate the simpler one.\n\n1.  **Standardize on the Structured Template:** The `postmortems/structured_postmortem.md` should be moved to the root of the repository and renamed `postmortem.md`. The original, simpler `postmortem.md` should be archived or deleted. This makes the best-practice template the default and easiest path for all users.\n2.  **Incorporate Best Practices from the Catastrophic Failure Report:** The `structured_postmortem.md` template should be enhanced to include an explicit \"Impact Assessment\" section and a more detailed \"Timeline of Events\" section, as demonstrated in the `postmortem_catastrophic_failure.md` report. This combines the structured, machine-readable format with the narrative clarity needed for human readers.\n3.  **Develop a \"Lesson Consumer\" Tool:** The existence of a structured lesson format implies the need for a tool that consumes these lessons. A follow-up project should be created to build a `lesson_consumer.py` script that can parse the JSON output from post-mortems and, where possible, automatically apply the proposed changes (e.g., updating protocol files).\n\nBy implementing these changes, the repository can move from a passive documentation culture to an active, automated self-improvement ecosystem, maximizing the value gained from every operational incident."
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Research findings from post_mortem_adequacy_report.md"
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/non-compliance-architectural-deviation",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "Forbids changes that contradict documented architectural patterns or coding conventions."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/lesson/11159da4-5fb5-4afe-bea9-f3d6f4719eb2",
+    "@type": [
+      "http://example.org/ontology#Lesson"
+    ],
+    "http://example.org/ontology#action": [
+      {
+        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**Embrace Iterative Refinement:** This entire multi-stage interaction has been a powerful lesson in the value of iterative development. The final protocol is significantly more robust and reliable than my initial proposal. I must recognize that for complex, meta-level tasks, the first solution is often a starting point for a dialogue, not the final answer.\"}}"
+      }
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A corrective action was proposed: **Embrace Iterative Refinement:** This entire multi-stage interaction has been a powerful lesson in the value of iterative development. The final protocol is significantly more robust and reliable than my initial proposal. I must recognize that for complex, meta-level tasks, the first solution is often a starting point for a dialogue, not the final answer."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/gdn-003",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "The review document must contain sections for 'Summary', 'Impact Analysis', and 'Verification Plan'."
+      }
+    ]
+  },
+  {
+    "@id": "http://example.org/rule/formal-proposal-required",
+    "@type": [
+      "http://example.org/ontology#Rule"
+    ],
+    "http://www.w3.org/2000/01/rdf-schema#label": [
+      {
+        "@value": "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan."
       }
     ]
   },
@@ -1312,400 +2088,6 @@
     ]
   },
   {
-    "@id": "http://example.org/rule/non-compliance-definition",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Defines non-compliance as a violation of any rule, convention, or procedure in AGENTS.md or its source protocols."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/vuln-reporting-channel",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "All suspected security vulnerabilities MUST be reported privately to the designated security contact."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/agent-interaction-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/planning-tool-access"
-      },
-      {
-        "@id": "http://example.org/rule/communication-tool-access"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol governing the agent's core interaction and planning tools."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/non-compliance-architectural-deviation",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Forbids changes that contradict documented architectural patterns or coding conventions."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/non-turing-completeness",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The agent's planning and execution language is, by design, not Turing-complete. This is a fundamental constraint to guarantee that all processes will terminate."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/self-improvement-protocol-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/sip-001"
-      },
-      {
-        "@id": "http://example.org/rule/sip-002"
-      },
-      {
-        "@id": "http://example.org/rule/sip-003"
-      },
-      {
-        "@id": "http://example.org/rule/sip-004"
-      },
-      {
-        "@id": "http://example.org/rule/sip-005"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A formal protocol for the agent to propose, validate, and implement improvements to its own operational protocols and tools."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/security-vuln-reporting-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/vuln-reporting-channel"
-      },
-      {
-        "@id": "http://example.org/rule/no-public-disclosure"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Defines the official policy and procedure for reporting security vulnerabilities."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/specialized-fsm",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The Research FDC must be governed by its own dedicated Finite State Machine, defined in `tooling/research_fsm.json`. This FSM is tailored for a research workflow, with states for gathering, synthesis, and reporting."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/sip-003",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Any proposed changes to protocols must be implemented in the relevant source files within the `protocols/` subdirectories, not directly in the generated AGENTS.md files."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/fdc-entry-point",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The AORP cascade is the mandatory entry point to every FDC."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/lesson/a342d7be-e4c1-4552-baad-33fe9948c860",
-    "@type": [
-      "http://example.org/ontology#Lesson"
-    ],
-    "http://example.org/ontology#action": [
-      {
-        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**Embrace the Debugging Loop as the Primary Workflow:** The most successful parts of this task were not the moments when code worked on the first try, but the moments when the system caught a flaw. The \\\"test-fail-analyze-fix-retest\\\" cycle is the engine of progress in this paradigm. I must continue to trust this process and design plans that explicitly account for it.\"}}"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A corrective action was proposed: **Embrace the Debugging Loop as the Primary Workflow:** The most successful parts of this task were not the moments when code worked on the first try, but the moments when the system caught a flaw. The \"test-fail-analyze-fix-retest\" cycle is the engine of progress in this paradigm. I must continue to trust this process and design plans that explicitly account for it."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/gemini-api-key-security",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The agent must handle the Gemini API key securely."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/lesson/38398606-f35a-4e05-9673-2a07fadd0a6d",
-    "@type": [
-      "http://example.org/ontology#Lesson"
-    ],
-    "http://example.org/ontology#action": [
-      {
-        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"When writing integration tests that simulate my cognitive input (like analyzing a file), I will ensure the test modifies the file in the same way I would (e.g., editing/overwriting a draft, not just appending to it).\"}}"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Test simulations of my own interactive steps must be as faithful as possible to the real action."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/deep-research-cycle-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/structured-research-phases"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A standardized, callable plan for conducting in-depth research on a complex topic."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/file-indexing-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/update-index-before-submit"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol for maintaining an up-to-date file index to accelerate tool performance."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/protocol-as-source-code",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The `protocols/` directory and all its contents (`.md`, `.json` files) MUST be treated as functional source code. Changes to these files directly alter the agent's operational capabilities and governing rules."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/registry-definition",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A central plan registry MUST exist at 'knowledge_core/plan_registry.json'. It maps logical plan names to their file paths."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/experimental-prologue-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/create-prologue-file"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/execute-plllu-script",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The `plllu_runner.py` tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/execute-aura-script",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/self-correction-protocol-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/structured-lessons"
-      },
-      {
-        "@id": "http://example.org/rule/programmatic-updates"
-      },
-      {
-        "@id": "http://example.org/rule/automated-orchestration"
-      },
-      {
-        "@id": "http://example.org/rule/programmatic-rule-refinement"
-      },
-      {
-        "@id": "http://example.org/rule/autonomous-code-suggestion"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Defines the automated, closed-loop workflow for protocol self-correction."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/sip-001",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Proposals for self-improvement must be initiated via the `self_improvement_cli.py` tool."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/create-prologue-file",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/communication-tool-access",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/built-in-tools-are-valid",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The agent's execution environment provides a set of built-in tools (e.g., `read_file`, `delete_file`, `pre_commit_instructions`). The implementation of these tools does not reside within the repository. A protocol change that adds a built-in tool to the `associated_tools` list is a valid and complete functional change."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/invoke-browser-control",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "When this rule is invoked, the agent must use the `gemini_computer_use` tool to perform a web-based task."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/run-all-audits",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/aorp-identity",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The governing protocol set is identified as the Advanced Orientation and Research Protocol (AORP)."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/phase2-planning",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Phase 2 (Planning & Self-Correction): The agent must generate a granular plan, lint it using the FDC toolchain, cite evidence for its steps, and perform a critical review."
-      }
-    ]
-  },
-  {
     "@id": "http://example.org/rule/no-reset-all",
     "@type": [
       "http://example.org/ontology#Rule"
@@ -1713,361 +2095,6 @@
     "http://www.w3.org/2000/01/rdf-schema#label": [
       {
         "@value": "The `reset_all` tool is strictly forbidden under all circumstances. It is a legacy tool that has been superseded by more granular and safer methods of workspace management. Its use is considered a critical failure."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/agent-shell-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/shell-is-primary-entry-point"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/model-b-constraints",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/registry-first-resolution",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The 'call_plan <argument>' directive MUST first attempt to resolve '<argument>' as a logical name in the plan registry. If resolution fails, it MUST fall back to treating '<argument>' as a direct file path for backward compatibility."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/model-a-constraints",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/non-compliance-self-awareness-failure",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Requires the agent to maintain an up-to-date understanding of protocols by recompiling AGENTS.md when necessary."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/non-compliance-protocol-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/non-compliance-definition"
-      },
-      {
-        "@id": "http://example.org/rule/non-compliance-direct-editing"
-      },
-      {
-        "@id": "http://example.org/rule/non-compliance-test-procedure"
-      },
-      {
-        "@id": "http://example.org/rule/non-compliance-architectural-deviation"
-      },
-      {
-        "@id": "http://example.org/rule/non-compliance-self-awareness-failure"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A protocol that defines non-compliance with AGENTS.md and specifies corrective actions."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/aorp-mandate",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "All Finite Development Cycles (FDCs) MUST be initiated using the FDC toolchain's 'start' command. This is non-negotiable."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/executable-plans",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Research plans must be generated by `tooling/research_planner.py` as valid, executable plans that conform to the `research_fsm.json` definition. They are not just templates but formal, verifiable artifacts."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/non-compliance-direct-editing",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Prohibits the direct editing of build artifacts like AGENTS.md or README.md. Changes must be made to source files, followed by a rebuild."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/l4-invocation",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The L4 Deep Research Cycle is the designated mechanism for resolving complex 'unknown unknowns'. It is invoked by the main orchestrator when a task requires knowledge that cannot be obtained through simple L1-L3 orientation probes."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/fdc-state-transitions",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The FDC is a Finite State Machine (FSM) formally defined in `tooling/fdc_fsm.json`. Plans must be valid strings in the language defined by this FSM."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/standing-orders-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/aorp-mandate"
-      },
-      {
-        "@id": "http://example.org/rule/rag-mandate"
-      },
-      {
-        "@id": "http://example.org/rule/fdc-toolchain-mandate"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/lesson/9702732b-82e9-458a-8981-c80796330358",
-    "@type": [
-      "http://example.org/ontology#Lesson"
-    ],
-    "http://example.org/ontology#action": [
-      {
-        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"For any future task requiring my own analysis or input, I will explicitly model it in the FSM with a dedicated \\\"AWAITING_AGENT\\\" state and a corresponding signal file (e.g., `_complete.txt`). This makes the handoff between automated execution and my cognitive work clear and testable.\"}}"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Interactive, cognitive steps require dedicated states and explicit signals."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/automated-orchestration",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The self-correction cycle must be managed by the `tooling/self_correction_orchestrator.py` script, which processes pending lessons and triggers the necessary updates."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/core-directive-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/mandatory-fdc-start"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC)."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/lesson/ef4785fe-007a-403b-a1f2-215338916c32",
-    "@type": [
-      "http://example.org/ontology#Lesson"
-    ],
-    "http://example.org/ontology#action": [
-      {
-        "@value": "{\"type\": \"UPDATE_PROTOCOL\", \"command\": \"placeholder\", \"parameters\": {\"description\": \"**Formalism Requires Precision:** The most critical lesson from this entire multi-task arc is that building a formal, verifiable system requires an extremely high degree of precision at every step. This applies not only to the code but also to the protocol documentation, the test data, and the execution of the process itself. There is no room for ambiguity.\"}}"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A corrective action was proposed: **Formalism Requires Precision:** The most critical lesson from this entire multi-task arc is that building a formal, verifiable system requires an extremely high degree of precision at every step. This applies not only to the code but also to the protocol documentation, the test data, and the execution of the process itself. There is no room for ambiguity."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/executable-demo-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/print-hello-world"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A demonstration of a protocol with executable code."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/best-practices-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/verify-after-write"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A set of best practices derived from observing successful, data-driven workflow patterns."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/plan-registry-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/registry-definition"
-      },
-      {
-        "@id": "http://example.org/rule/registry-first-resolution"
-      },
-      {
-        "@id": "http://example.org/rule/registry-management-tool"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Defines a central registry for discovering and executing hierarchical plans by a logical name."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/use-csdc-cli",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP)."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/protocol/critic-meta-protocol-001",
-    "@type": [
-      "http://example.org/ontology#Protocol"
-    ],
-    "http://example.org/ontology#hasRule": [
-      {
-        "@id": "http://example.org/rule/protocol-as-source-code"
-      },
-      {
-        "@id": "http://example.org/rule/built-in-tools-are-valid"
-      },
-      {
-        "@id": "http://example.org/rule/functional-change-definition"
-      }
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/tdd-writing-new-code",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "When writing any new function or class, a corresponding test must be written first. The test should fail before the new code is implemented, and pass after."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/l3-environmental-probing",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Level 3 (Environmental Probing & Targeted RAG): The agent must discover the rules and constraints of its operational environment by executing a probe script and using targeted RAG to resolve 'known unknowns'."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/verify-after-write",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "After every file creation or modification action (`create_file_with_block`, `overwrite_file_with_block`, `replace_with_git_merge_diff`), the agent MUST use a subsequent read-only tool (`read_file`, `list_files`, `grep`) to verify that the action was executed successfully and had the intended effect. A plan step should only be marked as complete after this verification."
-      }
-    ]
-  },
-  {
-    "@id": "http://example.org/rule/resource-constraints",
-    "@type": [
-      "http://example.org/ontology#Rule"
-    ],
-    "http://www.w3.org/2000/01/rdf-schema#label": [
-      {
-        "@value": "Speculative tasks must operate under defined resource limits."
       }
     ]
   }
