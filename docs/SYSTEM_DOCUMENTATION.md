@@ -3293,11 +3293,6 @@ _No module-level docstring found._
 **Public Functions:**
 
 
-- #### `def get_agents_md_path(cwd)`
-
-  > Finds the AGENTS.md file in the given directory.
-
-
 - #### `def log_action(action_text, cwd)`
 
   > Logs an action to the AGENTS.md file.
@@ -3309,11 +3304,6 @@ _No module-level docstring found._
 
 
 **Public Functions:**
-
-
-- #### `def get_agents_md_path(cwd)`
-
-  > Finds the AGENTS.md file in the given directory.
 
 
 - #### `def inject_plan(plan_text, cwd)`
@@ -3411,6 +3401,11 @@ Core Features:
 
   > Finds all directories within the root_dir that contain at least one
   > `.protocol.json` or `.protocol.md` file, indicating they are protocol modules.
+
+
+- #### `def get_agents_md_path(cwd)`
+
+  > Finds the AGENTS.md file in the given directory.
 
 
 - #### `def get_ignore_patterns(base_dir)`

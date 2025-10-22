@@ -32,54 +32,77 @@ def extract_lessons_from_postmortem(postmortem_content: str) -> list:
     Parses a post-mortem report to extract lessons learned.
     Handles multiple possible section headers and formats.
     """
+    # Look for the primary "Lessons Learned" section first
     lessons_section_match = re.search(
         r"## (?:3\.\s+Corrective Actions & Lessons Learned|5\.\s+Proposed Corrective Actions)\n(.+?)(?:\n---|\Z)",
         postmortem_content,
         re.DOTALL,
     )
-    if not lessons_section_match:
-        return []
 
-    lessons_section = lessons_section_match.group(1)
+    if lessons_section_match:
+        lessons_section = lessons_section_match.group(1)
+        # Pattern to capture each numbered list item
+        item_pattern = re.compile(
+            r"^\d\.\s+(.*?)(?=\n^\d\.\s+|\Z)", re.DOTALL | re.MULTILINE
+        )
+        items = item_pattern.findall(lessons_section)
 
-    # Pattern to capture each numbered list item
-    item_pattern = re.compile(
-        r"^\d\.\s+(.*?)(?=\n^\d\.\s+|\Z)", re.DOTALL | re.MULTILINE
+        cleaned_lessons = []
+        for item in items:
+            lesson = ""
+            action = ""
+
+            action_match = re.search(r"\*\*Action:\*\*(.*)", item, re.DOTALL)
+
+            if action_match:
+                action = action_match.group(1).strip()
+                # The lesson is whatever comes before "**Action:**"
+                lesson = item[: action_match.start()].strip()
+                # If there's an explicit **Lesson:**, prefer that.
+                lesson_explicit_match = re.search(r"\*\*Lesson:\*\*(.*)", lesson, re.DOTALL)
+                if lesson_explicit_match:
+                    lesson = lesson_explicit_match.group(1).strip()
+            else:
+                # No "**Action:**" found, so the whole item is the action.
+                action = item.strip()
+
+            # If we failed to find a lesson text, generate one.
+            if not lesson:
+                lesson = f"A corrective action was proposed: {action}"
+
+            if lesson or action:
+                cleaned_lessons.append(
+                    {
+                        "lesson": lesson.replace("\n", " "),
+                        "action": action.replace("\n", " "),
+                    }
+                )
+        return cleaned_lessons
+
+    # If the primary section is not found, look for the "Agent Analysis" section
+    analysis_section_match = re.search(
+        r"## Agent Analysis\n(.+?)(?:\n---|\Z)",
+        postmortem_content,
+        re.DOTALL,
     )
-    items = item_pattern.findall(lessons_section)
+    if analysis_section_match:
+        analysis_section = analysis_section_match.group(1).strip()
+        placeholder_text = "The task was a test run to verify the new logging and artifact generation. It completed successfully."
+        if analysis_section == placeholder_text:
+            return []  # Ignore placeholder lessons
 
-    cleaned_lessons = []
-    for item in items:
-        lesson = ""
-        action = ""
+        action_text = "No specific action was proposed."
+        if analysis_section == placeholder_text or action_text == "No specific action was proposed.":
+            return []
 
-        action_match = re.search(r"\*\*Action:\*\*(.*)", item, re.DOTALL)
+        return [
+            {
+                "lesson": analysis_section,
+                "action": action_text,
+            }
+        ]
 
-        if action_match:
-            action = action_match.group(1).strip()
-            # The lesson is whatever comes before "**Action:**"
-            lesson = item[: action_match.start()].strip()
-            # If there's an explicit **Lesson:**, prefer that.
-            lesson_explicit_match = re.search(r"\*\*Lesson:\*\*(.*)", lesson, re.DOTALL)
-            if lesson_explicit_match:
-                lesson = lesson_explicit_match.group(1).strip()
-        else:
-            # No "**Action:**" found, so the whole item is the action.
-            action = item.strip()
-
-        # If we failed to find a lesson text, generate one.
-        if not lesson:
-            lesson = f"A corrective action was proposed: {action}"
-
-        if lesson or action:
-            cleaned_lessons.append(
-                {
-                    "lesson": lesson.replace("\n", " "),
-                    "action": action.replace("\n", " "),
-                }
-            )
-
-    return cleaned_lessons
+    return []
 
 
 def extract_metadata_from_postmortem(postmortem_content: str) -> dict:
@@ -211,28 +234,41 @@ def main():
         print(f"Error: Source directory not found at '{args.source_dir}'")
         return
 
-    all_lessons = []
+    existing_lessons = set()
+    if os.path.exists(KNOWLEDGE_CORE_PATH):
+        with open(KNOWLEDGE_CORE_PATH, "r") as f:
+            for line in f:
+                try:
+                    lesson = json.loads(line)
+                    existing_lessons.add(lesson['lesson'])
+                except json.JSONDecodeError:
+                    continue
+
+    new_lessons_added = 0
     for filename in os.listdir(args.source_dir):
         if filename.endswith(".md"):
             filepath = os.path.join(args.source_dir, filename)
             lessons = process_postmortem_file(filepath)
             if lessons:
-                print(f"Found {len(lessons)} new lesson(s) in '{filepath}'.")
-                all_lessons.extend(lessons)
+                unique_lessons = []
+                for lesson in lessons:
+                    if lesson['lesson'] not in existing_lessons:
+                        unique_lessons.append(lesson)
+                        existing_lessons.add(lesson['lesson'])
 
-    if not all_lessons:
-        print("No new lessons found in any post-mortem files.")
-        return
+                if unique_lessons:
+                    print(f"Found {len(unique_lessons)} new, unique lesson(s) in '{filepath}'.")
+                    with open(KNOWLEDGE_CORE_PATH, "a") as f:
+                        for entry in unique_lessons:
+                            f.write(json.dumps(entry) + "\n")
+                    new_lessons_added += len(unique_lessons)
 
-    # To prevent duplicates, we can load existing lessons and check IDs.
-    # For simplicity here, we just append. A more robust system might check for existing lesson_ids.
-    with open(KNOWLEDGE_CORE_PATH, "a") as f:
-        for entry in all_lessons:
-            f.write(json.dumps(entry) + "\n")
-
-    print(
-        f"Successfully compiled a total of {len(all_lessons)} lesson(s) into '{KNOWLEDGE_CORE_PATH}'."
-    )
+    if new_lessons_added > 0:
+        print(
+            f"Successfully compiled a total of {new_lessons_added} new lesson(s) into '{KNOWLEDGE_CORE_PATH}'."
+        )
+    else:
+        print("No new lessons found to compile.")
 
 
 if __name__ == "__main__":

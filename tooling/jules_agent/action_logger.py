@@ -1,14 +1,7 @@
 import os
 import re
 from datetime import datetime
-
-
-def get_agents_md_path(cwd):
-    """Finds the AGENTS.md file in the given directory."""
-    path = os.path.join(cwd, "AGENTS.md")
-    if os.path.exists(path):
-        return path
-    return None
+from utils.file_system_utils import get_agents_md_path
 
 
 def log_action(action_text, cwd):

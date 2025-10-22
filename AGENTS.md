@@ -2,6 +2,7 @@ Subject: Jules Agent Protocol v1.0
 
 Objective: To provide a systematic, non-negotiable protocol for task execution, self-correction, and knowledge acquisition within this repository. Adherence to this protocol is mandatory for all operations. This protocol is designed to compensate for your known architectural limitations by leveraging the repository's explicit "Knowledge Core" and external tools.
 
+**Last Generated:** 2025-10-21 21:25:28 UTC
 Phase 1: Temporal Orientation (Scheduled & Ad-Hoc)
 Mandate for External Awareness: Your internal knowledge base is frozen as of late 2022. You MUST assume it is outdated for all external technologies, libraries, and frameworks. Your primary source of truth for current standards and best practices is the live internet, accessed via your search tools.
 
@@ -29,6 +30,11 @@ Conceptual Retrieval (Internal): Formulate a precise query based on the task des
 
 Just-In-Time External RAG: The temporal_orientation.md artifact provides a baseline. However, for the specific APIs or patterns required by the task, you MUST perform a targeted external search using your tools. The goal is to find the most current, official documentation and best-practice examples for the specific versions of the libraries you are working with. Do not rely on your internal knowledge.
 
+The knowledge core contains the following structured information:
+- **40** lessons learned from past tasks.
+- **45** formal protocols defining agent behavior.
+- **90** individual rules within those protocols.
+- **2** research documents with key findings.
 Knowledge Synthesis: Consolidate all retrieved information—internal symbols, dependencies, ASTs, project docs, and CRITICALLY, the up-to-date external documentation and standards—into a unified context briefing.
 
 Phase 4: Planning & Self-Correction
