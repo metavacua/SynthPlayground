@@ -61,6 +61,14 @@ def main():
 
     graph = Graph()
 
+    # Load the existing graph if it exists
+    if os.path.exists(args.output_file):
+        try:
+            graph.parse(args.output_file, format="json-ld")
+            print(f"Loaded existing knowledge base from {args.output_file}")
+        except Exception as e:
+            print(f"Warning: Could not parse existing knowledge base. A new one will be created. Error: {e}")
+
     integrate_lessons(graph, os.path.join(ROOT_DIR, "knowledge_core/lessons.jsonl"))
     integrate_protocols(graph, os.path.join(ROOT_DIR, "protocols"))
     integrate_research(graph, os.path.join(ROOT_DIR, "research"))
