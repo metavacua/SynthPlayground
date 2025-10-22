@@ -136,6 +136,11 @@
       "type": "python-external"
     },
     {
+      "id": "SPARQLWrapper",
+      "path": null,
+      "type": "python-external"
+    },
+    {
       "id": "google.generativeai",
       "path": null,
       "type": "python-external"
@@ -241,6 +246,10 @@
     {
       "source": "root-python-project",
       "target": "pytest"
+    },
+    {
+      "source": "root-python-project",
+      "target": "SPARQLWrapper"
     },
     {
       "source": "tooling",

@@ -1325,6 +1325,15 @@
     },
     {
       "_type": "tag",
+      "name": "get_abstract",
+      "path": "./dbpedia_client.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Fetches the abstract for a given DBPedia resource."
+    },
+    {
+      "_type": "tag",
       "name": "PlanningError",
       "path": "./planning.py",
       "language": "Python",
