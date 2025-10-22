@@ -3362,18 +3362,18 @@
       "name": "save_session",
       "path": "./tooling/session_manager.py",
       "language": "Python",
-      "line": 12,
+      "line": 11,
       "kind": "function",
-      "docstring": "Saves the agent's state to a JSON file.\n\nArgs:\n    agent_state: The AgentState object to save."
+      "docstring": "Saves the agent's session to a file."
     },
     {
       "_type": "tag",
       "name": "load_session",
       "path": "./tooling/session_manager.py",
       "language": "Python",
-      "line": 22,
+      "line": 18,
       "kind": "function",
-      "docstring": "Loads the agent's state from a JSON file.\n\nIf no session file is found, a new AgentState is returned.\n\nReturns:\n    The loaded or new AgentState object."
+      "docstring": "Loads the agent's session from a file."
     },
     {
       "_type": "tag",
@@ -4298,7 +4298,7 @@
       "name": "TestSessionManager",
       "path": "./tooling/test_session_manager.py",
       "language": "Python",
-      "line": 13,
+      "line": 11,
       "kind": "class",
       "docstring": null
     },
@@ -4307,7 +4307,7 @@
       "name": "setUp",
       "path": "./tooling/test_session_manager.py",
       "language": "Python",
-      "line": 15,
+      "line": 12,
       "kind": "function",
       "docstring": null
     },
@@ -4316,7 +4316,7 @@
       "name": "tearDown",
       "path": "./tooling/test_session_manager.py",
       "language": "Python",
-      "line": 22,
+      "line": 17,
       "kind": "function",
       "docstring": null
     },
@@ -4325,18 +4325,18 @@
       "name": "test_save_and_load_session",
       "path": "./tooling/test_session_manager.py",
       "language": "Python",
-      "line": 25,
+      "line": 21,
       "kind": "function",
-      "docstring": "Tests that a session can be saved and then loaded correctly."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_load_no_session",
+      "name": "test_load_session_no_file",
       "path": "./tooling/test_session_manager.py",
       "language": "Python",
-      "line": 72,
+      "line": 39,
       "kind": "function",
-      "docstring": "Tests that a new session is created if no session file exists."
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -4817,10 +4817,19 @@
     },
     {
       "_type": "tag",
-      "name": "to_json",
+      "name": "to_dict",
       "path": "./tooling/state.py",
       "language": "Python",
       "line": 94,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "from_dict",
+      "path": "./tooling/state.py",
+      "language": "Python",
+      "line": 123,
       "kind": "function",
       "docstring": null
     },
@@ -5279,9 +5288,9 @@
       "name": "find_best_plan",
       "path": "./tooling/goal_generator.py",
       "language": "Python",
-      "line": 8,
+      "line": 5,
       "kind": "function",
-      "docstring": "Finds the best plan to execute based on a natural language objective.\n\nArgs:\n    natural_language_objective: The user's objective in natural language.\n\nReturns:\n    The path to the best plan file."
+      "docstring": "Returns the path to the best plan for the given task description."
     },
     {
       "_type": "tag",
