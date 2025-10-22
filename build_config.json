@@ -23,7 +23,7 @@
     },
     "knowledge-compile": {
       "type": "command",
-      "command": "rm -f knowledge_core/lessons.jsonl && python3 tooling/knowledge_compiler.py --source-dir postmortems/",
+      "command": "python3 tooling/knowledge_compiler.py --source-dir postmortems/",
       "description": "Compile lessons from post-mortems."
     },
     "knowledge-integrate": {

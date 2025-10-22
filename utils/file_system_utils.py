@@ -106,3 +106,10 @@ def get_protocol_dir_name(dir_path):
     if os.path.basename(dir_path) == 'protocols':
         return 'root'
     return os.path.basename(dir_path)
+
+def get_agents_md_path(cwd):
+    """Finds the AGENTS.md file in the given directory."""
+    path = os.path.join(cwd, "AGENTS.md")
+    if os.path.exists(path):
+        return path
+    return None
