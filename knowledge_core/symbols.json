@@ -2162,6 +2162,15 @@
     },
     {
       "_type": "tag",
+      "name": "get_agents_md_path",
+      "path": "./utils/file_system_utils.py",
+      "language": "Python",
+      "line": 110,
+      "kind": "function",
+      "docstring": "Finds the AGENTS.md file in the given directory."
+    },
+    {
+      "_type": "tag",
       "name": "TestLogger",
       "path": "./utils/test_logger.py",
       "language": "Python",
@@ -3731,7 +3740,7 @@
       "name": "extract_metadata_from_postmortem",
       "path": "./tooling/knowledge_compiler.py",
       "language": "Python",
-      "line": 85,
+      "line": 108,
       "kind": "function",
       "docstring": "Parses a post-mortem report to extract metadata like Task ID and Date."
     },
@@ -3740,7 +3749,7 @@
       "name": "parse_action_to_command",
       "path": "./tooling/knowledge_compiler.py",
       "language": "Python",
-      "line": 97,
+      "line": 120,
       "kind": "function",
       "docstring": "Parses a natural language action string into a machine-executable command.\n\nThis is the core of translating insights into automated actions. It uses\npattern matching to identify specific, supported commands."
     },
@@ -3749,7 +3758,7 @@
       "name": "format_lesson_entry",
       "path": "./tooling/knowledge_compiler.py",
       "language": "Python",
-      "line": 162,
+      "line": 185,
       "kind": "function",
       "docstring": "Formats an extracted lesson into a structured JSON object."
     },
@@ -3758,7 +3767,7 @@
       "name": "process_postmortem_file",
       "path": "./tooling/knowledge_compiler.py",
       "language": "Python",
-      "line": 178,
+      "line": 201,
       "kind": "function",
       "docstring": "Reads a single post-mortem file and returns its lessons."
     },
@@ -3767,7 +3776,7 @@
       "name": "main",
       "path": "./tooling/knowledge_compiler.py",
       "language": "Python",
-      "line": 199,
+      "line": 222,
       "kind": "function",
       "docstring": null
     },
@@ -7562,37 +7571,19 @@
     },
     {
       "_type": "tag",
-      "name": "get_agents_md_path",
-      "path": "./tooling/jules_agent/action_logger.py",
-      "language": "Python",
-      "line": 6,
-      "kind": "function",
-      "docstring": "Finds the AGENTS.md file in the given directory."
-    },
-    {
-      "_type": "tag",
       "name": "log_action",
       "path": "./tooling/jules_agent/action_logger.py",
       "language": "Python",
-      "line": 14,
+      "line": 7,
       "kind": "function",
       "docstring": "Logs an action to the AGENTS.md file."
-    },
-    {
-      "_type": "tag",
-      "name": "get_agents_md_path",
-      "path": "./tooling/jules_agent/plan_manager.py",
-      "language": "Python",
-      "line": 5,
-      "kind": "function",
-      "docstring": "Finds the AGENTS.md file in the given directory."
     },
     {
       "_type": "tag",
       "name": "inject_plan",
       "path": "./tooling/jules_agent/plan_manager.py",
       "language": "Python",
-      "line": 13,
+      "line": 6,
       "kind": "function",
       "docstring": "Injects or updates the plan in the AGENTS.md file."
     },
