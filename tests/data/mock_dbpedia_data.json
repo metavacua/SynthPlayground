@@ -1,0 +1,18 @@
+[
+    {
+        "entry": "Albert_Einstein",
+        "abstract": "Albert Einstein was a German-born theoretical physicist."
+    },
+    {
+        "entry": "Isaac_Newton",
+        "abstract": "Sir Isaac Newton was an English mathematician, physicist, astronomer, theologian, and author."
+    },
+    {
+        "entry": "SPARQL",
+        "abstract": "SPARQL is an RDF query language—that is, a semantic query language for databases."
+    },
+    {
+        "entry": "NonExistentEntry",
+        "abstract": null
+    }
+]

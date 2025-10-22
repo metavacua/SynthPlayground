@@ -3,5 +3,9 @@
     "endpoint": "https://jules.googleapis.com/v1alpha",
     "auth_method": "api_key",
     "api_key_env_var": "JULES_API_KEY"
+  },
+  "dbpedia_client": {
+    "type": "command_line",
+    "command": "python3 dbpedia_client.py"
   }
 }
