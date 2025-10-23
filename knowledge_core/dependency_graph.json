@@ -141,6 +141,11 @@
       "type": "python-external"
     },
     {
+      "id": "ddt",
+      "path": null,
+      "type": "python-external"
+    },
+    {
       "id": "google.generativeai",
       "path": null,
       "type": "python-external"
@@ -250,6 +255,14 @@
     {
       "source": "root-python-project",
       "target": "SPARQLWrapper"
+    },
+    {
+      "source": "root-python-project",
+      "target": "requests"
+    },
+    {
+      "source": "root-python-project",
+      "target": "ddt"
     },
     {
       "source": "tooling",

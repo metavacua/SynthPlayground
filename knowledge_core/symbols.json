@@ -1328,9 +1328,18 @@
       "name": "get_abstract",
       "path": "./dbpedia_client.py",
       "language": "Python",
-      "line": 4,
+      "line": 7,
       "kind": "function",
-      "docstring": "Fetches the abstract for a given DBPedia resource."
+      "docstring": "Fetches the abstract for a given DBPedia resource in the specified language."
+    },
+    {
+      "_type": "tag",
+      "name": "search_resources",
+      "path": "./dbpedia_client.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "function",
+      "docstring": "Searches for DBPedia resources with labels matching the keyword, with an optional type filter."
     },
     {
       "_type": "tag",
@@ -2795,7 +2804,7 @@
       "name": "ExternalApiClient",
       "path": "./tooling/external_api_client.py",
       "language": "Python",
-      "line": 10,
+      "line": 11,
       "kind": "class",
       "docstring": null
     },
@@ -2804,25 +2813,25 @@
       "name": "__init__",
       "path": "./tooling/external_api_client.py",
       "language": "Python",
-      "line": 11,
+      "line": 12,
       "kind": "function",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "_get_base_url",
+      "name": "_load_registry",
       "path": "./tooling/external_api_client.py",
       "language": "Python",
-      "line": 16,
+      "line": 27,
       "kind": "function",
-      "docstring": "Retrieves the base URL for the API from the external API registry."
+      "docstring": "Loads the external API registry and gets the config for this API."
     },
     {
       "_type": "tag",
       "name": "post",
       "path": "./tooling/external_api_client.py",
       "language": "Python",
-      "line": 30,
+      "line": 41,
       "kind": "function",
       "docstring": "Sends a POST request to the specified endpoint."
     },
@@ -2831,9 +2840,18 @@
       "name": "get",
       "path": "./tooling/external_api_client.py",
       "language": "Python",
-      "line": 40,
+      "line": 59,
       "kind": "function",
       "docstring": "Sends a GET request to the specified endpoint."
+    },
+    {
+      "_type": "tag",
+      "name": "execute",
+      "path": "./tooling/external_api_client.py",
+      "language": "Python",
+      "line": 77,
+      "kind": "function",
+      "docstring": "Executes a command-line tool with the given arguments."
     },
     {
       "_type": "tag",
@@ -10151,6 +10169,33 @@
       "line": 28,
       "kind": "function",
       "docstring": "Verify that all files and directories are listed correctly."
+    },
+    {
+      "_type": "tag",
+      "name": "TestDbpediaClient",
+      "path": "./tests/test_top_100_dbpedia.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/test_top_100_dbpedia.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_get_abstract",
+      "path": "./tests/test_top_100_dbpedia.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": "Tests that the DBPedia client can fetch abstracts for various entries."
     },
     {
       "_type": "tag",
