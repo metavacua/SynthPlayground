@@ -258,6 +258,22 @@
     },
     {
       "source": "root-python-project",
+      "target": "rdflib"
+    },
+    {
+      "source": "root-python-project",
+      "target": "google-generativeai"
+    },
+    {
+      "source": "root-python-project",
+      "target": "jsonschema"
+    },
+    {
+      "source": "root-python-project",
+      "target": "ply"
+    },
+    {
+      "source": "root-python-project",
       "target": "requests"
     },
     {

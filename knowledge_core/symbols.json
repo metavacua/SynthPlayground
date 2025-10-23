@@ -2675,64 +2675,10 @@
     },
     {
       "_type": "tag",
-      "name": "TestNewSelfImprovementCLI",
-      "path": "./tooling/test_new_self_improvement_cli.py",
-      "language": "Python",
-      "line": 11,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "setUp",
-      "path": "./tooling/test_new_self_improvement_cli.py",
-      "language": "Python",
-      "line": 13,
-      "kind": "function",
-      "docstring": "Set up a clean proposals directory for each test."
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_new_self_improvement_cli.py",
-      "language": "Python",
-      "line": 20,
-      "kind": "function",
-      "docstring": "Clean up the proposals directory after each test."
-    },
-    {
-      "_type": "tag",
-      "name": "test_create_proposal_creates_directory_and_file",
-      "path": "./tooling/test_new_self_improvement_cli.py",
-      "language": "Python",
-      "line": 25,
-      "kind": "function",
-      "docstring": "Tests that `create_proposal` successfully creates a directory and a\nproposal.md file inside it."
-    },
-    {
-      "_type": "tag",
-      "name": "test_create_proposal_file_contains_template",
-      "path": "./tooling/test_new_self_improvement_cli.py",
-      "language": "Python",
-      "line": 45,
-      "kind": "function",
-      "docstring": "Tests that the generated proposal.md file contains the correct\ntemplate content."
-    },
-    {
-      "_type": "tag",
-      "name": "test_create_proposal_is_idempotent",
-      "path": "./tooling/test_new_self_improvement_cli.py",
-      "language": "Python",
-      "line": 60,
-      "kind": "function",
-      "docstring": "Tests that calling create_proposal multiple times results in multiple,\nunique proposal directories."
-    },
-    {
-      "_type": "tag",
       "name": "find_all_agents_md_files",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 49,
+      "line": 52,
       "kind": "function",
       "docstring": null
     },
@@ -2741,7 +2687,7 @@
       "name": "get_used_tools_from_log",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 53,
+      "line": 56,
       "kind": "function",
       "docstring": null
     },
@@ -2750,7 +2696,7 @@
       "name": "get_protocol_tools_from_agents_md",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 83,
+      "line": 86,
       "kind": "function",
       "docstring": null
     },
@@ -2759,7 +2705,7 @@
       "name": "run_protocol_audit",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 103,
+      "line": 106,
       "kind": "function",
       "docstring": null
     },
@@ -2768,7 +2714,7 @@
       "name": "run_plan_registry_audit",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 178,
+      "line": 181,
       "kind": "function",
       "docstring": null
     },
@@ -2777,16 +2723,25 @@
       "name": "run_doc_audit",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 212,
+      "line": 215,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "run_health_audit",
+      "path": "./tooling/auditor.py",
+      "language": "Python",
+      "line": 248,
+      "kind": "function",
+      "docstring": "Performs a system health audit, checking for \"absence of evidence\" anomalies."
     },
     {
       "_type": "tag",
       "name": "main",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 245,
+      "line": 398,
       "kind": "function",
       "docstring": null
     },
@@ -3092,7 +3047,16 @@
       "name": "TestUnifiedAuditor",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 8,
+      "line": 14,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestHealthAuditor",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 102,
       "kind": "class",
       "docstring": null
     },
@@ -3101,7 +3065,7 @@
       "name": "setUp",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 10,
+      "line": 16,
       "kind": "function",
       "docstring": null
     },
@@ -3110,7 +3074,7 @@
       "name": "tearDown",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 28,
+      "line": 34,
       "kind": "function",
       "docstring": null
     },
@@ -3119,7 +3083,7 @@
       "name": "test_protocol_audit",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 40,
+      "line": 46,
       "kind": "function",
       "docstring": null
     },
@@ -3128,7 +3092,7 @@
       "name": "test_plan_registry_audit",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 63,
+      "line": 69,
       "kind": "function",
       "docstring": null
     },
@@ -3137,7 +3101,61 @@
       "name": "test_doc_audit",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 80,
+      "line": 86,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 103,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 116,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_log_staleness",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 130,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_success_only_tasks",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 155,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_incomplete_post_mortems",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 183,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_no_issues",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 213,
       "kind": "function",
       "docstring": null
     },
@@ -4496,7 +4514,7 @@
       "name": "do_planning",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 212,
+      "line": 258,
       "kind": "function",
       "docstring": "Validates a given plan, parses it, and initializes the plan stack."
     },
@@ -4505,7 +4523,7 @@
       "name": "_validate_plan_with_cli",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 281,
+      "line": 327,
       "kind": "function",
       "docstring": "Validates a plan by writing it to a temporary file and using the fdc_cli.py script."
     },
@@ -4514,7 +4532,7 @@
       "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 362,
+      "line": 408,
       "kind": "function",
       "docstring": "Validates a plan against a specific CSDC model using the LBAValidator."
     },
@@ -4523,7 +4541,7 @@
       "name": "do_researching",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 379,
+      "line": 425,
       "kind": "function",
       "docstring": "Launches the background research process."
     },
@@ -4532,7 +4550,7 @@
       "name": "do_awaiting_result",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 433,
+      "line": 479,
       "kind": "function",
       "docstring": "Checks for the result of the background research process."
     },
@@ -4541,7 +4559,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 500,
+      "line": 546,
       "kind": "function",
       "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
     },
@@ -4550,7 +4568,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 511,
+      "line": 557,
       "kind": "function",
       "docstring": "Processes the result of a step and advances the execution state."
     },
@@ -4559,7 +4577,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 565,
+      "line": 611,
       "kind": "function",
       "docstring": "Handles the code generation state."
     },
@@ -4568,7 +4586,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 580,
+      "line": 626,
       "kind": "function",
       "docstring": "Handles the test execution state."
     },
@@ -4577,7 +4595,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 596,
+      "line": 642,
       "kind": "function",
       "docstring": "Handles the debugging state."
     },
@@ -4586,7 +4604,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 611,
+      "line": 657,
       "kind": "function",
       "docstring": "Handles the finalization of the task, guiding the agent through\nthe structured post-mortem process."
     },
@@ -4856,7 +4874,7 @@
       "name": "to_dict",
       "path": "./tooling/state.py",
       "language": "Python",
-      "line": 94,
+      "line": 97,
       "kind": "function",
       "docstring": null
     },
@@ -4865,7 +4883,7 @@
       "name": "from_dict",
       "path": "./tooling/state.py",
       "language": "Python",
-      "line": 123,
+      "line": 126,
       "kind": "function",
       "docstring": null
     },
@@ -4974,6 +4992,60 @@
       "path": "./tooling/test_guardian.py",
       "language": "Python",
       "line": 36,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestSelfImprovementCli",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_analyze_planning_efficiency",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_analyze_error_rates",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_analyze_protocol_violations",
+      "path": "./tooling/test_self_improvement_cli.py",
+      "language": "Python",
+      "line": 34,
       "kind": "function",
       "docstring": null
     },
@@ -6185,21 +6257,39 @@
     },
     {
       "_type": "tag",
-      "name": "create_proposal",
+      "name": "analyze_planning_efficiency",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
-      "line": 54,
+      "line": 30,
       "kind": "function",
-      "docstring": "Creates a new, structured proposal for self-improvement."
+      "docstring": "Analyzes the log file to find tasks with multiple plan revisions.\n\nArgs:\n    log_file (str): Path to the activity log file.\n\nReturns:\n    dict: A dictionary mapping task IDs to the number of plan updates."
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_error_rates",
+      "path": "./tooling/self_improvement_cli.py",
+      "language": "Python",
+      "line": 62,
+      "kind": "function",
+      "docstring": "Analyzes the log file to calculate action success/failure rates.\n\nArgs:\n    log_file (str): Path to the activity log file.\n\nReturns:\n    dict: A dictionary containing total counts, success/failure counts,\n          and a breakdown of failures by action type."
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_protocol_violations",
+      "path": "./tooling/self_improvement_cli.py",
+      "language": "Python",
+      "line": 102,
+      "kind": "function",
+      "docstring": "Scans the log file for critical protocol violations, such as the\nunauthorized use of `reset_all`.\n\nThis function checks for two conditions:\n1. A `SYSTEM_FAILURE` log explicitly blaming `reset_all`.\n2. A `TOOL_EXEC` log where the command contains \"reset_all\".\n\nArgs:\n    log_file (str): Path to the activity log file.\n\nReturns:\n    list: A list of unique task IDs where `reset_all` was used."
     },
     {
       "_type": "tag",
       "name": "main",
       "path": "./tooling/self_improvement_cli.py",
       "language": "Python",
-      "line": 98,
+      "line": 155,
       "kind": "function",
-      "docstring": "Main function to run the self-improvement proposal generator."
+      "docstring": "Main function to run the self-improvement analysis CLI."
     },
     {
       "_type": "tag",
@@ -6980,7 +7070,7 @@
       "name": "test_do_planning_with_file_path",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 166,
+      "line": 167,
       "kind": "function",
       "docstring": null
     },
@@ -6989,7 +7079,7 @@
       "name": "test_do_execution",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 175,
+      "line": 176,
       "kind": "function",
       "docstring": null
     },
@@ -6998,7 +7088,7 @@
       "name": "test_do_execution_to_generate_code",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 190,
+      "line": 191,
       "kind": "function",
       "docstring": null
     },
@@ -7007,7 +7097,7 @@
       "name": "test_validate_plan_with_invalid_transition",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 204,
+      "line": 205,
       "kind": "function",
       "docstring": null
     },
@@ -7016,7 +7106,25 @@
       "name": "test_do_finalizing",
       "path": "./tooling/test_master_control.py",
       "language": "Python",
-      "line": 212,
+      "line": 213,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_do_finalizing_with_missing_postmortem",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 251,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_do_finalizing_with_no_logs",
+      "path": "./tooling/test_master_control.py",
+      "language": "Python",
+      "line": 275,
       "kind": "function",
       "docstring": null
     },
@@ -7352,6 +7460,15 @@
       "line": 113,
       "kind": "function",
       "docstring": "Main function to run the plan management CLI."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/temporal_orienter.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
