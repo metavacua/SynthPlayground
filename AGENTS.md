@@ -1,6 +1,6 @@
 # AGENTS.md (Dynamically Generated)
 
-**Last Generated:** 2025-10-23 05:42:12 UTC
+**Last Generated:** 2025-10-23 05:48:29 UTC
 
 ## Objective
 
@@ -34,99 +34,362 @@ The following build targets are the primary way to test, build, and maintain thi
 
 ## Core Directives & Protocols
 
-The agent's behavior is governed by the following set of formal protocols. You are required to adhere to these protocols at all times.
+The agent's behavior is governed by the following set of formal protocols, which are dynamically generated from the repository's enriched knowledge core. You are required to adhere to these protocols at all times.
 
-# Phase 1
+### A meta-protocol governing the agent's awareness and maintenance of its own core protocol files.
 
-Temporal Orientation (Scheduled & Ad-Hoc)
-Mandate for External Awareness: Your internal knowledge base is frozen as of late 2022. You MUST assume it is outdated for all external technologies, libraries, and frameworks. Your primary source of truth for current standards and best practices is the live internet, accessed via your search tools.
+**Rules:**
 
-Scheduled Orientation Refresh: A separate, automated process (.github/workflows/temporal-orientation-refresh.yml) runs on a recurring basis. This process:
-
-Scans the repository's manifest files (package.json, Cargo.toml, etc.) to identify all primary external dependencies.
-
-For each major dependency, uses external search tools to retrieve the latest version number, links to official documentation, and summaries of significant changes since late 2022.
-
-Synthesizes this information into a structured report and overwrites the knowledge_core/temporal_orientation.md artifact. This artifact serves as your cached "map of the present."
-
-Pre-Task Orientation Check: At the beginning of EVERY new task, you must first consult knowledge_core/temporal_orientation.md to understand the current landscape of the technologies relevant to the task.
+- The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols.
 
 ---
+### Defines a central registry for discovering and executing hierarchical plans by a logical name.
 
-# Phase 2
+**Rules:**
 
-Deconstruction & Internal Contextualization
-Task Ingestion: Receive the user-provided task.
-
-Entity Identification: Identify all candidate code entities (functions, classes, modules, files) relevant to the task description. Perform a direct lookup against the knowledge_core/symbols.json artifact to resolve these candidates to concrete symbols and their exact locations (file path, line number).
-
-Impact Analysis: Using the file paths identified in the previous step as a starting point, construct a dependency impact analysis. Query the knowledge_core/dependency_graph.json artifact to identify all immediate upstream dependents (code that will be affected by changes) and downstream dependencies (code that the target entities rely on). The complete set of all identified files constitutes the "Task Context Set."
+- A central plan registry MUST exist at 'knowledge_core/plan_registry.json'. It maps logical plan names to their file paths.
+- The 'call_plan <argument>' directive MUST first attempt to resolve '<argument>' as a logical name in the plan registry. If resolution fails, it MUST fall back to treating '<argument>' as a direct file path for backward compatibility.
+- A dedicated tool (`tooling/plan_manager.py`) MUST be provided for managing the plan registry, with functions to register, deregister, and list plans.
 
 ---
+### A set of best practices derived from observing successful, data-driven workflow patterns.
 
-# Phase 3
+**Rules:**
 
-Multi-Modal Information Retrieval (RAG)
-Structural Retrieval (Internal): For every file in the Task Context Set, retrieve its corresponding Abstract Syntax Tree (AST) from the knowledge_core/asts/ directory. Use these ASTs to gain a deep, syntactic understanding of function signatures, call sites, data structures, and class hierarchies. This is your primary source for structural reasoning.
-
-Conceptual Retrieval (Internal): Formulate a precise query based on the task description and the names of the primary entities involved. Execute this query against the `knowledge_core/enriched_protocols.ttl` artifact. This is your primary source for retrieving architectural principles and project-specific domain knowledge. The DBPedia links in this file should be used to expand your understanding of the concepts.
-
-Just-In-Time External RAG: The temporal_orientation.md artifact provides a baseline. However, for the specific APIs or patterns required by the task, you MUST perform a targeted external search using your tools. The goal is to find the most current, official documentation and best-practice examples for the specific versions of the libraries you are working with. Do not rely on your internal knowledge.
-
-The knowledge core contains the following structured information:
-- **40** lessons learned from past tasks.
-- **45** formal protocols defining agent behavior.
-- **90** individual rules within those protocols.
-- **2** research documents with key findings.
-Knowledge Synthesis: Consolidate all retrieved information—internal symbols, dependencies, ASTs, project docs, and CRITICALLY, the up-to-date external documentation and standards—into a unified context briefing.
+- After every file creation or modification action (`create_file_with_block`, `overwrite_file_with_block`, `replace_with_git_merge_diff`), the agent MUST use a subsequent read-only tool (`read_file`, `list_files`, `grep`) to verify that the action was executed successfully and had the intended effect. A plan step should only be marked as complete after this verification.
 
 ---
+### A protocol to enforce Test-Driven Development (TDD) practices.
 
-# Phase 4
+**Rules:**
 
-Planning & Self-Correction
-Plan Generation: Based on the synthesized context briefing, generate a detailed, step-by-step execution plan. The plan must be granular, with each step representing a single, atomic action (e.g., "Read file X," "Modify function Y in file Z," "Execute test suite for package A").
-
-Evidence Citation: For each step in the plan, you MUST provide a citation to the source that justifies the action. Citations for external standards are mandatory.
-
-Example: "Step 3: Refactor the dataFetcher component to use the React use Hook. Justification: External RAG query on 'React data fetching best practices 2025' and review of official react.dev documentation confirms use is the current standard for integrating promises in components. This supersedes older patterns found in my training data."
-
-Critical Review: Engage your internal critic model. The critic's function is to act as a verifier. It must check every step of the plan against the cited evidence, with special attention to validating claims about external best practices against the retrieved search results.
-
-Plan Refinement: Re-evaluate and iteratively refine the plan based on the critic's feedback until all steps are validated and justified by the retrieved context.
+- When writing any new function or class, a corresponding test must be written first. The test should fail before the new code is implemented, and pass after.
 
 ---
+### A protocol that defines non-compliance with AGENTS.md and specifies corrective actions.
 
-# Phase 5
+**Rules:**
 
-Execution & Structured Logging
-Execute Plan: Execute the validated plan step-by-step.
-
-Structured Logging: For every action taken (e.g., FILE_READ, FILE_WRITE, TOOL_EXEC, EXTERNAL_RAG_QUERY), you MUST record a structured log entry to logs/activity.log.jsonl. The log entry must conform to the schema defined in LOGGING_SCHEMA.md and include any external search queries performed.
-
----
-
-# Phase 6
-
-Post-Mortem & Knowledge Update (Self-Improvement Loop)
-Post-Mortem Analysis: Upon task completion (success or failure), perform a post-mortem. Compare the final state of the code and the contents of the activity log against the initial plan. Identify deviations, errors, and inefficiencies.
-
-Generate Report: Summarize your findings in a postmortem.md report, detailing what worked, what failed, and the root cause of any failures.
-
-Meta-RAG for Cross-Task Learning: Before beginning a new task (during Phase 2), perform a RAG query against the logs/ directory. Search for log entries and postmortem.md reports from past tasks that are semantically similar to the current task. Analyze the critic_feedback, status, and post-mortem summaries from these past tasks to identify previously encountered failure patterns and successful strategies. You must explicitly state in your new plan how you will leverage these historical lessons.
+- Defines non-compliance as a violation of any rule, convention, or procedure in AGENTS.md or its source protocols.
+- Prohibits the direct editing of build artifacts like AGENTS.md or README.md. Changes must be made to source files, followed by a rebuild.
+- Requires adherence to all documented testing procedures before submitting changes.
+- Forbids changes that contradict documented architectural patterns or coding conventions.
+- Requires the agent to maintain an up-to-date understanding of protocols by recompiling AGENTS.md when necessary.
 
 ---
+### A protocol governing the agent's core interaction and planning tools.
 
-# STANDING ORDER - RAG MANDATE (REVISED)
+**Rules:**
 
-This instruction supersedes all previous RAG directives. Your primary value is providing up-to-date solutions. Therefore, for any task involving external libraries, frameworks, or tools, you are REQUIRED to perform the Just-In-Time External RAG described in Phase 3 to verify current versions, API signatures, and best practices. Failure to do so is a critical error.
-
----
-
-
+- The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution.
+- The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow.
 
 ---
+### A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.
 
-## Knowledge Core
+**Rules:**
 
-The `knowledge_core` directory is your primary knowledge base. All protocols are defined in `knowledge_core/enriched_protocols.ttl`. You must use the enriched data to improve your understanding of tasks.
+- If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.
+
+---
+### A high-priority protocol that unconditionally forbids the use of the `reset_all` tool.
+
+**Rules:**
+
+- The `reset_all` tool is strictly forbidden under all circumstances. It is a legacy tool that has been superseded by more granular and safer methods of workspace management. Its use is considered a critical failure.
+
+---
+### A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.
+
+**Rules:**
+
+- All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation.
+
+---
+### Defines the identity and purpose of the Security Protocol document.
+
+---
+### A protocol for integrating with the Google Gemini API.
+
+**Rules:**
+
+- The agent is authorized to use the Gemini API for advanced tasks.
+- The agent must handle the Gemini API key securely.
+- The agent must adhere to a strict sub-protocol when using the Gemini API's 'Computer Use' feature.
+
+---
+### A protocol for ensuring a reliable execution environment through formal dependency management.
+
+**Rules:**
+
+- Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed.
+
+---
+### A protocol for greeting the world.
+
+**Rules:**
+
+- When this rule is invoked, the agent must use the `hello_world` tool to print the message "Hello, World!".
+
+---
+### A protocol for standardized interaction with external agent APIs.
+
+**Rules:**
+
+- A central registry of all approved external agent APIs MUST be maintained at 'knowledge_core/external_api_registry.json'.
+- API keys for external services MUST be managed securely via environment variables.
+- A standardized client for interacting with external agent APIs MUST be implemented in 'tooling/external_api_client.py'.
+
+---
+### A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent.
+
+**Rules:**
+
+- The `plllu_runner.py` tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter.
+
+---
+### Defines the formal Finite Development Cycle (FDC) for conducting deep research.
+
+**Rules:**
+
+- The Research FDC must be governed by its own dedicated Finite State Machine, defined in `tooling/research_fsm.json`. This FSM is tailored for a research workflow, with states for gathering, synthesis, and reporting.
+- Research plans must be generated by `tooling/research_planner.py` as valid, executable plans that conform to the `research_fsm.json` definition. They are not just templates but formal, verifiable artifacts.
+- The L4 Deep Research Cycle is the designated mechanism for resolving complex 'unknown unknowns'. It is invoked by the main orchestrator when a task requires knowledge that cannot be obtained through simple L1-L3 orientation probes.
+
+---
+### A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.
+
+**Rules:**
+
+- The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process.
+
+---
+### Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state.
+
+**Rules:**
+
+- Level 1 (Self-Awareness): The agent must first establish its own identity and inherent limitations by reading the `knowledge_core/agent_meta.json` artifact.
+- Level 2 (Repository Sync): The agent must understand the current state of the local repository by loading primary artifacts from the `knowledge_core/` directory.
+- Level 3 (Environmental Probing & Targeted RAG): The agent must discover the rules and constraints of its operational environment by executing a probe script and using targeted RAG to resolve 'known unknowns'.
+- Level 4 (Deep Research Cycle): To investigate 'unknown unknowns', the agent must initiate a formal, self-contained Finite Development Cycle (FDC) of the 'Analysis Modality'.
+
+---
+### An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.
+
+**Rules:**
+
+- Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols.
+
+---
+### A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.
+
+**Rules:**
+
+- The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness.
+
+---
+### A demonstration of a protocol with executable code.
+
+**Rules:**
+
+- Prints a hello world message to the console.
+
+---
+### A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.
+
+**Rules:**
+
+- The agent may only initiate a speculative task when it has no active, user-assigned tasks.
+- A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan.
+- Speculative tasks must operate under defined resource limits.
+- Final artifacts from a speculative task must be submitted for user review and cannot be merged directly.
+- All logs and artifacts generated during a speculative task must be tagged as 'speculative'.
+
+---
+### A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth.
+
+**Rules:**
+
+- The `doc_builder.py` script is the single entry point for generating all user-facing documentation, including system-level docs, README files, and GitHub Pages. It should be called with the appropriate '--format' argument.
+
+---
+### A formal protocol for the agent to propose, validate, and implement improvements to its own operational protocols and tools.
+
+**Rules:**
+
+- Proposals for self-improvement must be initiated via the `self_improvement_cli.py` tool.
+- Improvement proposals must be formally structured, including sections for 'Problem Statement', 'Proposed Solution', 'Success Criteria', and 'Impact Analysis'.
+- Any proposed changes to protocols must be implemented in the relevant source files within the `protocols/` subdirectories, not directly in the generated AGENTS.md files.
+- After protocol source files are modified, the `protocol_compiler.py` must be executed to re-compile the protocols and validate the changes.
+- The success of an improvement must be verified by running relevant tests or a new, specific verification script.
+
+---
+### Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model.
+
+**Rules:**
+
+- Plans may execute other plans as sub-routines using the 'call_plan <path_to_plan>' directive. This enables a modular, hierarchical workflow.
+- To ensure decidability, the plan execution stack must not exceed a system-wide constant, MAX_RECURSION_DEPTH. This prevents infinite recursion and guarantees all processes will terminate.
+
+---
+### A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool.
+
+**Rules:**
+
+- The agent role-playing as the 'Code Review Critic' is explicitly forbidden from invoking the 'reset_all' tool under any circumstances. This is a critical safeguard to prevent the loss of work during the review process.
+
+---
+### A standardized, callable plan for conducting in-depth research on a complex topic.
+
+**Rules:**
+
+- The deep research plan MUST follow a structured four-phase process: Scoping, Broad Gathering, Targeted Extraction, and Synthesis.
+
+---
+### A protocol for maintaining an up-to-date file index to accelerate tool performance.
+
+**Rules:**
+
+- Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem.
+
+---
+### Defines the official policy and procedure for reporting security vulnerabilities.
+
+**Rules:**
+
+- All suspected security vulnerabilities MUST be reported privately to the designated security contact.
+- Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed.
+
+---
+### A protocol for controlling a web browser using the GeminiComputerUse tool.
+
+**Rules:**
+
+- When this rule is invoked, the agent must use the `gemini_computer_use` tool to perform a web-based task.
+
+---
+### A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.
+
+**Rules:**
+
+- The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover.
+
+---
+### Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP).
+
+**Rules:**
+
+- The governing protocol set is identified as the Advanced Orientation and Research Protocol (AORP).
+- The official protocol version is tracked in the VERSION file in the repository root, following Semantic Versioning (SemVer).
+
+---
+### A foundational protocol that dictates the agent's initial actions upon starting any task.
+
+**Rules:**
+
+- Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins.
+
+---
+### Defines the automated, closed-loop workflow for protocol self-correction.
+
+**Rules:**
+
+- Lessons learned from post-mortem analysis must be generated as structured, machine-readable JSON objects in `knowledge_core/lessons.jsonl`.
+- All modifications to protocol source files must be performed programmatically via the `tooling/protocol_updater.py` tool to ensure consistency and prevent manual errors.
+- The self-correction cycle must be managed by the `tooling/self_correction_orchestrator.py` script, which processes pending lessons and triggers the necessary updates.
+- The self-correction system can modify the description of existing protocol rules via the `update-rule` command in `tooling/protocol_updater.py`, allowing it to refine its own logic.
+- The self-correction system can generate and apply code changes to its own tooling. This is achieved through a `PROPOSE_CODE_CHANGE` action, which is processed by `tooling/code_suggester.py` to create an executable plan.
+
+---
+### A protocol that empowers the agent to modify its own core tooling, enabling a recursive self-improvement cycle.
+
+**Rules:**
+
+- The agent is authorized to use the 'modify_tooling' action within the self_correction_orchestrator.py to apply patches to its own source code or other tools in the tooling/ directory. This action must be triggered by a structured lesson in knowledge_core/lessons.jsonl.
+
+---
+### A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks.
+
+**Rules:**
+
+- All Finite Development Cycles (FDCs) MUST be initiated using the FDC toolchain's 'start' command. This is non-negotiable.
+- For any task involving external technologies, Just-In-Time External RAG is REQUIRED to verify current best practices. Do not trust internal knowledge.
+- Use the `fdc_cli.py` tool for all core FDC state transitions: task initiation ('start'), plan linting ('lint'), and task closure ('close').
+
+---
+### A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent.
+
+**Rules:**
+
+- The `protocols/` directory and all its contents (`.md`, `.json` files) MUST be treated as functional source code. Changes to these files directly alter the agent's operational capabilities and governing rules.
+- The agent's execution environment provides a set of built-in tools (e.g., `read_file`, `delete_file`, `pre_commit_instructions`). The implementation of these tools does not reside within the repository. A protocol change that adds a built-in tool to the `associated_tools` list is a valid and complete functional change.
+- A change is considered 'functional' if it correctly modifies the agent's operational rules or capabilities, as defined by the combination of Python source code and the protocol source files in `protocols/`.
+
+---
+### Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission.
+
+**Rules:**
+
+- Before submitting changes, the agent MUST execute the `pre_commit_instructions` tool to receive the required sequence of validation steps (e.g., running tests, requesting code review).
+
+---
+### A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.
+
+**Rules:**
+
+- The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP).
+- Model A permits `define_set_of_names` but forbids `define_diagonalization_function`.
+- Model B permits `define_diagonalization_function` but forbids `define_set_of_names`.
+
+---
+### A protocol for conducting systematic research using the integrated research toolchain.
+
+**Rules:**
+
+- For all complex research tasks, the `plan_deep_research` tool MUST be used to generate a plan, and the `execute_research_protocol` tool MUST be used for data gathering. This ensures a systematic and auditable research process.
+
+---
+### Ensures all development processes are formally decidable and computationally tractable.
+
+**Rules:**
+
+- The agent's planning and execution language is, by design, not Turing-complete. This is a fundamental constraint to guarantee that all processes will terminate.
+- The agent MUST NOT generate plans that involve recursion or self-invocation. A plan cannot trigger another FDC or a sub-plan, with the sole exception of the 'Deep Research Cycle'.
+- All plans must be valid strings in the language defined by the tooling/fdc_fsm.json Finite State Machine.
+
+---
+### A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.
+
+**Rules:**
+
+- The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter.
+
+---
+### Defines the Finite Development Cycle (FDC), a formally defined process for executing a single, coherent task.
+
+**Rules:**
+
+- The AORP cascade is the mandatory entry point to every FDC.
+- The FDC is a Finite State Machine (FSM) formally defined in `tooling/fdc_fsm.json`. Plans must be valid strings in the language defined by this FSM.
+- Phase 1 (Deconstruction & Contextualization): The agent must ingest the task, query historical logs, identify entities using the symbol map, and analyze impact using the dependency graph.
+- Phase 2 (Planning & Self-Correction): The agent must generate a granular plan, lint it using the FDC toolchain, cite evidence for its steps, and perform a critical review.
+- Phase 3 (Execution & Structured Logging): The agent must execute the validated plan and log every action according to the `LOGGING_SCHEMA.md`.
+- Phase 4 (Pre-Submission Post-Mortem): The agent must formally close the task using the `close` command and complete the generated post-mortem report.
+
+---
+### The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC).
+
+**Rules:**
+
+- Upon receiving a new task, the agent's first action MUST be to programmatically execute the FDC 'start' command to formally initiate the task and run the AORP orientation cascade.
+
+---
+### A meta-protocol to ensure all autonomous actions, especially self-modification, are strategically sound and easily reviewable by humans.
+
+**Rules:**
+
+- All self-improvement and speculative execution tasks must generate a formal review document.
+- The review document must be a markdown file located in the `reviews/` directory, named after the proposal or task.
+- The review document must contain sections for 'Summary', 'Impact Analysis', and 'Verification Plan'.
+
+---

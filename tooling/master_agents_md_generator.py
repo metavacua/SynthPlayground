@@ -1,16 +1,15 @@
 """
 Generates the master AGENTS.md file by synthesizing information from the
-migrated manual protocols and the build configuration.
+integrated knowledge core and the build configuration.
 
-This script creates an instruction-focused AGENTS.md file that provides a
-direct, actionable set of protocols for an AI agent to follow, in line with
-the best practices from agents.md.
+This script creates an instruction-focused AGENTS.md file that is a direct
+reflection of the repository's enriched knowledge, providing a dynamic and
+intelligent set of protocols for an AI agent.
 """
 
 import argparse
 import json
 import os
-import re
 from datetime import datetime
 
 # --- Template for the master AGENTS.md ---
@@ -35,15 +34,9 @@ The following build targets are the primary way to test, build, and maintain thi
 
 ## Core Directives & Protocols
 
-The agent's behavior is governed by the following set of formal protocols. You are required to adhere to these protocols at all times.
+The agent's behavior is governed by the following set of formal protocols, which are dynamically generated from the repository's enriched knowledge core. You are required to adhere to these protocols at all times.
 
-{migrated_protocols}
-
----
-
-## Knowledge Core
-
-The `knowledge_core` directory is your primary knowledge base. All protocols are defined in `knowledge_core/enriched_protocols.ttl`. You must use the enriched data to improve your understanding of tasks.
+{enriched_protocols}
 """
 
 
@@ -70,25 +63,51 @@ def summarize_build_commands(config_path: str) -> str:
     return "\n".join(summary_parts)
 
 
-def load_migrated_protocols(protocols_dir: str) -> str:
+def generate_enriched_protocols(knowledge_path: str) -> str:
     """
-    Reads all protocol markdown files from the manual_protocol directory
-    and concatenates them into a single string.
+    Parses the integrated knowledge graph and generates a formatted string
+    of protocols, rules, and DBPedia links.
     """
-    if not os.path.isdir(protocols_dir):
-        return "_No migrated protocols found._"
+    if not os.path.exists(knowledge_path):
+        return "_Enriched knowledge core not found._"
 
+    with open(knowledge_path, "r") as f:
+        graph = json.load(f)
+
+    protocols = {}
+    rules = {}
+
+    # First pass: identify all protocols and rules
+    for node in graph:
+        node_type = node.get("@type", [""])[0]
+        if "Protocol" in node_type:
+            protocols[node["@id"]] = {
+                "label": node.get("http://www.w3.org/2000/01/rdf-schema#label", [{"@value": ""}])[0]["@value"],
+                "rules": []
+            }
+        elif "Rule" in node_type:
+            rules[node["@id"]] = node.get("http://www.w3.org/2000/01/rdf-schema#label", [{"@value": ""}])[0]["@value"]
+
+    # Second pass: associate rules with protocols
+    for node in graph:
+        if "Protocol" in node.get("@type", [""])[0]:
+            protocol_id = node["@id"]
+            for rule_ref in node.get("http://example.org/ontology#hasRule", []):
+                rule_id = rule_ref["@id"]
+                if rule_id in rules:
+                    protocols[protocol_id]["rules"].append(rules[rule_id])
+
+    # Generate the formatted output
     protocol_contents = []
-    # Sort files to ensure a consistent order
-    for filename in sorted(os.listdir(protocols_dir)):
-        if filename.endswith(".md"):
-            filepath = os.path.join(protocols_dir, filename)
-            with open(filepath, "r") as f:
-                # Add a horizontal rule to separate protocols
-                protocol_contents.append(f.read())
-                protocol_contents.append("\n\n---\n\n")
+    for _, protocol in protocols.items():
+        protocol_contents.append(f"### {protocol['label']}")
+        if protocol['rules']:
+            protocol_contents.append("\n**Rules:**\n")
+            for rule in protocol['rules']:
+                protocol_contents.append(f"- {rule}")
+        protocol_contents.append("\n---")
 
-    return "".join(protocol_contents)
+    return "\n".join(protocol_contents)
 
 
 def main():
@@ -101,26 +120,26 @@ def main():
         help="Path to the build_config.json file.",
     )
     parser.add_argument(
+        "--knowledge-file",
+        required=True,
+        help="Path to the integrated_knowledge.json file.",
+    )
+    parser.add_argument(
         "--output-file",
         required=True,
         help="Path to the output AGENTS.md file.",
-    )
-    parser.add_argument(
-        "--protocols-dir",
-        default="protocols/manual_protocol",
-        help="Path to the directory with migrated protocols.",
     )
     args = parser.parse_args()
 
     # --- Generate Content ---
     build_summary = summarize_build_commands(args.build_config)
-    migrated_protocols = load_migrated_protocols(args.protocols_dir)
+    enriched_protocols = generate_enriched_protocols(args.knowledge_file)
 
     # --- Populate Template ---
     final_content = AGENTS_MD_TEMPLATE.format(
         generation_date=datetime.now().strftime("%Y-%m-%d %H:%M:%S UTC"),
         build_commands_summary=build_summary,
-        migrated_protocols=migrated_protocols,
+        enriched_protocols=enriched_protocols,
     )
 
     # --- Write Output ---
