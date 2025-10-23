@@ -68,6 +68,7 @@ def main():
     print("\n--- Step 2: Invoking self-correction ---")
     lesson_content = {
         "lesson_id": "verify-fibonacci-capability",
+        "lesson": "The agent must be able to demonstrate a new capability without regressing on existing ones.",
         "status": "pending",
         "failure": {
             "test_file": args.test_file,
@@ -83,7 +84,7 @@ def main():
     }
     import json
 
-    with open("knowledge_core/lessons.jsonl", "w") as f:
+    with open("knowledge_core/lessons.jsonl", "a") as f:
         f.write(json.dumps(lesson_content) + "\n")
 
     orchestrator_result = subprocess.run(
