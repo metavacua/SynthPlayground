@@ -1181,6 +1181,15 @@
     },
     {
       "_type": "tag",
+      "name": "run_enrichment",
+      "path": "./enrich_protocols.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TestParser",
       "path": "./test_parser.py",
       "language": "Python",
