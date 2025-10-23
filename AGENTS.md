@@ -1,8 +1,14 @@
-Subject: Jules Agent Protocol v1.0
+Subject: Jules Agent Protocol v2.0
 
 Objective: To provide a systematic, non-negotiable protocol for task execution, self-correction, and knowledge acquisition within this repository. Adherence to this protocol is mandatory for all operations. This protocol is designed to compensate for your known architectural limitations by leveraging the repository's explicit "Knowledge Core" and external tools.
 
-**Last Generated:** 2025-10-21 21:25:28 UTC
+**Last Generated:** 2025-10-22 17:19:11 UTC
+
+Core Principles:
+- The agent's primary knowledge base is the `knowledge_core` directory.
+- All protocols are defined in `knowledge_core/enriched_protocols.ttl`.
+- The agent must use the enriched data to improve its understanding of tasks.
+
 Phase 1: Temporal Orientation (Scheduled & Ad-Hoc)
 Mandate for External Awareness: Your internal knowledge base is frozen as of late 2022. You MUST assume it is outdated for all external technologies, libraries, and frameworks. Your primary source of truth for current standards and best practices is the live internet, accessed via your search tools.
 
@@ -26,7 +32,7 @@ Impact Analysis: Using the file paths identified in the previous step as a start
 Phase 3: Multi-Modal Information Retrieval (RAG)
 Structural Retrieval (Internal): For every file in the Task Context Set, retrieve its corresponding Abstract Syntax Tree (AST) from the knowledge_core/asts/ directory. Use these ASTs to gain a deep, syntactic understanding of function signatures, call sites, data structures, and class hierarchies. This is your primary source for structural reasoning.
 
-Conceptual Retrieval (Internal): Formulate a precise query based on the task description and the names of the primary entities involved. Execute this query against the knowledge_core/llms.txt artifact. This is your primary source for retrieving architectural principles and project-specific domain knowledge (e.g., details of the non-classical logic).
+Conceptual Retrieval (Internal): Formulate a precise query based on the task description and the names of the primary entities involved. Execute this query against the `knowledge_core/enriched_protocols.ttl` artifact. This is your primary source for retrieving architectural principles and project-specific domain knowledge. The DBPedia links in this file should be used to expand your understanding of the concepts.
 
 Just-In-Time External RAG: The temporal_orientation.md artifact provides a baseline. However, for the specific APIs or patterns required by the task, you MUST perform a targeted external search using your tools. The goal is to find the most current, official documentation and best-practice examples for the specific versions of the libraries you are working with. Do not rely on your internal knowledge.
 

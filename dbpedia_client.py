@@ -44,6 +44,7 @@ def search_resources(keyword, resource_type=None):
     if resource_type:
         type_filter = f"?resource a dbo:{resource_type} ."
 
+    safe_keyword = "".join(e for e in keyword if e.isalnum() or e.isspace())
     sparql.setQuery(f"""
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         PREFIX dbo: <http://dbpedia.org/ontology/>
@@ -51,7 +52,7 @@ def search_resources(keyword, resource_type=None):
         SELECT DISTINCT ?resource
         WHERE {{
             ?resource rdfs:label ?label .
-            ?label bif:contains "'{keyword}'" .
+            ?label bif:contains "'{safe_keyword}'" .
             {type_filter}
             FILTER(langMatches(lang(?label), "EN")) .
             FILTER (!regex(str(?resource), "^http://dbpedia.org/resource/Category:"))
