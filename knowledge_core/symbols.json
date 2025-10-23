@@ -3047,7 +3047,7 @@
       "name": "main",
       "path": "./tooling/capability_verifier.py",
       "language": "Python",
-      "line": 31,
+      "line": 32,
       "kind": "function",
       "docstring": "A tool to verify that the agent can monotonically improve its capabilities.\n\nThis tool works by:\n1. Running a target test file that is known to fail, confirming the agent lacks a capability.\n2. Invoking the agent's self-correction mechanism to learn the new capability.\n3. Running the target test again to confirm it now passes.\n4. Running the full test suite to ensure no existing capabilities were lost."
     },
@@ -3311,6 +3311,15 @@
       "line": 57,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/protocol_migration_tool.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": "Main function to run the protocol migration."
     },
     {
       "_type": "tag",
@@ -5663,37 +5672,28 @@
     },
     {
       "_type": "tag",
-      "name": "summarize_system_documentation",
-      "path": "./tooling/master_agents_md_generator.py",
-      "language": "Python",
-      "line": 82,
-      "kind": "function",
-      "docstring": "Reads the full system documentation and creates a high-level summary."
-    },
-    {
-      "_type": "tag",
-      "name": "summarize_knowledge_core",
-      "path": "./tooling/master_agents_md_generator.py",
-      "language": "Python",
-      "line": 106,
-      "kind": "function",
-      "docstring": "Reads the integrated knowledge graph and creates a high-level summary."
-    },
-    {
-      "_type": "tag",
       "name": "summarize_build_commands",
       "path": "./tooling/master_agents_md_generator.py",
       "language": "Python",
-      "line": 144,
+      "line": 43,
       "kind": "function",
       "docstring": "Reads the build configuration and creates a summary of available commands."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_enriched_protocols",
+      "path": "./tooling/master_agents_md_generator.py",
+      "language": "Python",
+      "line": 66,
+      "kind": "function",
+      "docstring": "Parses the integrated knowledge graph and generates a formatted string\nof protocols, rules, and DBPedia links."
     },
     {
       "_type": "tag",
       "name": "main",
       "path": "./tooling/master_agents_md_generator.py",
       "language": "Python",
-      "line": 168,
+      "line": 113,
       "kind": "function",
       "docstring": null
     },
@@ -6350,7 +6350,7 @@
       "name": "test_unexpected_initial_pass",
       "path": "./tooling/test_capability_verifier.py",
       "language": "Python",
-      "line": 45,
+      "line": 46,
       "kind": "function",
       "docstring": "Tests that the verifier exits if the initial test passes."
     },
@@ -6359,7 +6359,7 @@
       "name": "test_orchestrator_failure",
       "path": "./tooling/test_capability_verifier.py",
       "language": "Python",
-      "line": 53,
+      "line": 54,
       "kind": "function",
       "docstring": "Tests that the verifier exits if the orchestrator fails."
     },
@@ -6368,7 +6368,7 @@
       "name": "test_final_test_failure",
       "path": "./tooling/test_capability_verifier.py",
       "language": "Python",
-      "line": 63,
+      "line": 64,
       "kind": "function",
       "docstring": "Tests that the verifier exits if the final test still fails."
     },
@@ -6377,7 +6377,7 @@
       "name": "test_regression_failure",
       "path": "./tooling/test_capability_verifier.py",
       "language": "Python",
-      "line": 74,
+      "line": 75,
       "kind": "function",
       "docstring": "Tests that the verifier exits if regression tests fail."
     },
@@ -6857,15 +6857,6 @@
       "line": 7,
       "kind": "class",
       "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_main_runs_lint",
-      "path": "./tooling/test_pre_submit_check.py",
-      "language": "Python",
-      "line": 10,
-      "kind": "function",
-      "docstring": "Tests that the main function runs the lint command."
     },
     {
       "_type": "tag",
