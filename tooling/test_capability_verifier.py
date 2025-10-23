@@ -33,14 +33,15 @@ class TestCapabilityVerifier(unittest.TestCase):
         """Tests the full successful workflow of the capability verifier."""
         mock_subprocess_run.side_effect = [
             MagicMock(returncode=1, stderr="Initial failure"),  # Step 1
-            MagicMock(returncode=0, stdout="Orchestrator success"),  # Step 2
+            MagicMock(returncode=0, stdout="Knowledge compiler success"), # Step 2a
+            MagicMock(returncode=0, stdout="Orchestrator success"),  # Step 2b
             MagicMock(returncode=0, stdout="Final success"),  # Step 3
             MagicMock(returncode=0, stdout="Regression success"),  # Step 4
         ]
 
         capability_verifier_main()
 
-        self.assertEqual(mock_subprocess_run.call_count, 4)
+        self.assertEqual(mock_subprocess_run.call_count, 5)
 
     def test_unexpected_initial_pass(self):
         """Tests that the verifier exits if the initial test passes."""
