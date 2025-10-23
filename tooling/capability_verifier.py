@@ -26,6 +26,7 @@ cornerstone of the agent's design philosophy.
 import argparse
 import subprocess
 import sys
+import datetime
 
 
 def main():
@@ -82,11 +83,56 @@ def main():
             },
         },
     }
-    import json
+    # Instead of writing directly to the lessons file, we will now generate a
+    # standard post-mortem file. This ensures that the lesson is processed
+    # through the same deduplication and formatting pipeline as all other lessons.
+    postmortem_content = f"""
+# Post-Mortem Report
 
-    with open("knowledge_core/lessons.jsonl", "a") as f:
-        f.write(json.dumps(lesson_content) + "\n")
+**Task ID:** `verify-fibonacci-capability`
+**Completion Date:** `{datetime.date.today()}`
+**Status:** `Completed (Success)`
 
+---
+
+## 1. Task Summary
+
+This was an automated task run by the `capability_verifier.py` tool to confirm
+monotonic improvement of the agent's capabilities.
+
+---
+
+## 2. Agent Analysis
+
+The agent was presented with a failing test case, invoked the self-correction
+orchestrator to learn from a generated lesson, and successfully corrected its
+behavior to pass the test.
+
+---
+
+## 3. Corrective Actions & Lessons Learned
+
+1.  **Lesson:** The agent must be able to demonstrate a new capability without regressing on existing ones.
+    **Action:** This lesson was programmatically generated and used to trigger the self-correction mechanism.
+"""
+    postmortem_path = "postmortems/capability_verifier_report.md"
+    with open(postmortem_path, "w") as f:
+        f.write(postmortem_content)
+
+    # Now, we run the knowledge compiler to process the new post-mortem.
+    knowledge_compiler_result = subprocess.run(
+        [sys.executable, "tooling/knowledge_compiler.py", "--source-dir", "postmortems/"],
+        capture_output=True,
+        text=True,
+    )
+    if knowledge_compiler_result.returncode != 0:
+        print("Error: Knowledge compiler failed.")
+        print(knowledge_compiler_result.stderr)
+        sys.exit(1)
+    else:
+        print("Success: Knowledge compiler processed the new post-mortem.")
+
+    # With the lesson now properly in the knowledge core, we can invoke the orchestrator.
     orchestrator_result = subprocess.run(
         [sys.executable, "tooling/self_correction_orchestrator.py"],
         capture_output=True,

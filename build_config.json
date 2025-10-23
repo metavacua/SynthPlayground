@@ -42,8 +42,6 @@
       "compiler": "tooling/master_agents_md_generator.py",
       "output": "AGENTS.md",
       "options": {
-        "--doc-file": "docs/SYSTEM_DOCUMENTATION.md",
-        "--knowledge-file": "knowledge_core/integrated_knowledge.json",
         "--build-config": "build_config.json"
       },
       "description": "Generate the master AGENTS.md file."

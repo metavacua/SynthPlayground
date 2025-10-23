@@ -895,6 +895,11 @@ audits or all of them, generating a consolidated `audit_report.md` file.
 - #### `def run_doc_audit()`
 
 
+- #### `def run_health_audit(session_start_time_iso)`
+
+  > Performs a system health audit, checking for "absence of evidence" anomalies.
+
+
 - #### `def run_plan_registry_audit()`
 
 
@@ -1555,7 +1560,11 @@ A standardized client for interacting with external agent APIs.
 
   **Methods:**
 
-  - ##### `def __init__(self, api_name, api_key_env_var)`
+  - ##### `def __init__(self, api_name)`
+
+  - ##### `def execute(self, args)`
+
+    > Executes a command-line tool with the given arguments.
 
   - ##### `def get(self, endpoint, params=None)`
 
@@ -2552,10 +2561,25 @@ defined in a given pLLLU source file and print the result.
 
 ### `/app/tooling/pre_submit_check.py`
 
-_No module-level docstring found._
+A pre-submission script that runs a series of checks to ensure code quality
+and adherence to repository protocols before a commit is made.
+
+This script currently includes the following checks:
+1.  **Code Linting:** Runs `make lint` to check for style issues (currently disabled).
+2.  **Docstring Enforcement:** Ensures all Python files in key directories have
+    module-level docstrings.
+3.  **Guardian Protocol Validation:** Validates any staged review documents
+    against the Guardian Protocol.
+
+The script is designed to be easily extensible with additional checks.
 
 
 **Public Functions:**
+
+
+- #### `def check_docstrings()`
+
+  > Checks that all Python files in tooling/ and utils/ have a module-level docstring.
 
 
 - #### `def main()`
@@ -2598,6 +2622,36 @@ protocol lifecycle.
 - #### `def update_version(protocol_id, new_version)`
 
   > Updates the version of a protocol.
+
+
+### `/app/tooling/protocol_migration_tool.py`
+
+A tool to migrate protocols from the old, manual AGENTS.md format to the new,
+structured, and compiler-friendly format.
+
+This script is designed to be a one-time migration utility that helps to
+transition the valuable, detailed protocols from the original AGENTS.md file
+into a format that can be processed by the new, dynamic build system.
+
+The tool works by:
+1.  Reading the `AGENTS.md.bak` file, which is a backup of the original.
+2.  Parsing the file to identify the distinct protocol sections (Phase 1-6 and
+    the "STANDING ORDER").
+3.  Creating a new `protocols/manual_protocol/` directory to house the
+    migrated protocols.
+4.  Writing each extracted protocol into its own formatted Markdown file within
+    the new directory.
+
+This ensures that the protocols are preserved and integrated into the new
+system without requiring manual copying and pasting.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Main function to run the protocol migration.
 
 
 ### `/app/tooling/protocol_oracle.py`
@@ -2858,33 +2912,74 @@ actionable lessons from `knowledge_core/lessons.jsonl` and uses the
 
 ### `/app/tooling/self_improvement_cli.py`
 
-A command-line tool for initiating a new self-improvement proposal.
+Analyzes agent activity logs to identify opportunities for self-improvement.
 
-This script is the entry point for the Self-Improvement Protocol (SIP). It
-automates the boilerplate process of creating a new proposal, ensuring that all
-proposals are structured correctly and stored in a consistent location.
+This script is a command-line tool that serves as a key part of the agent's
+meta-cognitive loop. It parses the structured activity log
+(`logs/activity.log.jsonl`) to identify patterns that may indicate
+inefficiencies or errors in the agent's workflow.
 
-When executed, this tool will:
-1.  Create a new, timestamped directory within the `proposals/` directory to
-    house the new proposal.
-2.  Generate a `proposal.md` file within that new directory.
-3.  Populate the `proposal.md` with a standard template that includes all the
-    required sections as defined in the Self-Improvement Protocol (rule sip-002).
-4.  Print the path to the newly created proposal file, so the agent can
-    immediately begin editing it.
+The primary analysis currently implemented is:
+- **Planning Efficiency Analysis:** It scans the logs for tasks that required
+  multiple `set_plan` actions. A high number of plan revisions for a single
+  task can suggest that the initial planning phase was insufficient, the task
+  was poorly understood, or the agent struggled to adapt to unforeseen
+  challenges.
+
+By flagging these tasks, the script provides a starting point for a deeper
+post-mortem analysis, helping the agent (or its developers) to understand the
+root causes of the planning churn and to develop strategies for more effective
+upfront planning in the future.
+
+The tool is designed to be extensible, with future analyses (such as error
+rate tracking or tool usage anti-patterns) to be added as the system evolves.
 
 
 **Public Functions:**
 
 
-- #### `def create_proposal()`
+- #### `def analyze_error_rates(log_file)`
 
-  > Creates a new, structured proposal for self-improvement.
+  > Analyzes the log file to calculate action success/failure rates.
+  >
+  > Args:
+  >     log_file (str): Path to the activity log file.
+  >
+  > Returns:
+  >     dict: A dictionary containing total counts, success/failure counts,
+  >           and a breakdown of failures by action type.
+
+
+- #### `def analyze_planning_efficiency(log_file)`
+
+  > Analyzes the log file to find tasks with multiple plan revisions.
+  >
+  > Args:
+  >     log_file (str): Path to the activity log file.
+  >
+  > Returns:
+  >     dict: A dictionary mapping task IDs to the number of plan updates.
+
+
+- #### `def analyze_protocol_violations(log_file)`
+
+  > Scans the log file for critical protocol violations, such as the
+  > unauthorized use of `reset_all`.
+  >
+  > This function checks for two conditions:
+  > 1. A `SYSTEM_FAILURE` log explicitly blaming `reset_all`.
+  > 2. A `TOOL_EXEC` log where the command contains "reset_all".
+  >
+  > Args:
+  >     log_file (str): Path to the activity log file.
+  >
+  > Returns:
+  >     list: A list of unique task IDs where `reset_all` was used.
 
 
 - #### `def main()`
 
-  > Main function to run the self-improvement proposal generator.
+  > Main function to run the self-improvement analysis CLI.
 
 
 ### `/app/tooling/session_manager.py`
@@ -3018,6 +3113,17 @@ and understand the structure of the repository without having to read every file
 - #### `def main()`
 
   > Main function to generate and save the symbol map.
+
+
+### `/app/tooling/temporal_orienter.py`
+
+A tool for performing temporal orientation by fetching a summary of a concept from DBPedia.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
 
 
 ### `/app/tooling/udc_orchestrator.py`
@@ -3155,11 +3261,32 @@ _No module-level docstring found._
 
 ### `/app/tooling/agent_smith/__init__.py`
 
-_No module-level docstring found._
+This package, named 'Agent Smith', is a toolset designed for metamorphic
+testing of the agent's core protocol compilation system.
+
+It works by creating isolated sandbox environments, introducing mutations
+(e.g., deleting a protocol file), running the protocol compiler, and verifying
+that the resulting `AGENTS.md` artifact reflects the mutation as expected.
+This allows for robust testing of the hierarchical compiler's resilience and
+correctness.
 
 ### `/app/tooling/agent_smith/generate_and_test.py`
 
-_No module-level docstring found._
+A command-line tool for orchestrating the metamorphic testing of the
+hierarchical protocol compiler.
+
+This script automates the following workflow:
+1.  Creates a clean, isolated sandbox environment.
+2.  Copies the necessary protocol source files and the compiler tooling into
+    the sandbox.
+3.  Installs required Python dependencies within the sandbox.
+4.  Applies a specified mutation to the protocol sources (e.g., deleting a file).
+5.  Runs the `hierarchical_compiler.py` within the sandbox to generate a
+    variant `AGENTS.md` file.
+6.  Verifies that the generated artifact correctly reflects the mutation.
+
+This allows for automated, repeatable testing of the compiler's behavior
+under various source conditions.
 
 
 **Public Functions:**
@@ -3367,7 +3494,14 @@ verifies their success, and handles failures.
 
 ### `/app/utils/__init__.py`
 
-_No module-level docstring found._
+This package contains a collection of utility modules that provide common,
+reusable functionality across the agent's toolchain.
+
+Modules include:
+- `file_system_utils`: High-level abstractions for file system operations.
+- `logger`: A standardized logger for creating structured, JSON-based log
+  entries that conform to the repository's logging schema.
+- `gemini_api`: A client for interacting with the Google Gemini API.
 
 ### `/app/utils/file_system_utils.py`
 
