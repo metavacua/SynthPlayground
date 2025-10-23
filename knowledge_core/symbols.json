@@ -3839,16 +3839,25 @@
       "name": "run_command",
       "path": "./tooling/pre_submit_check.py",
       "language": "Python",
-      "line": 5,
+      "line": 20,
       "kind": "function",
       "docstring": "Runs a command and exits if it fails."
+    },
+    {
+      "_type": "tag",
+      "name": "check_docstrings",
+      "path": "./tooling/pre_submit_check.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function",
+      "docstring": "Checks that all Python files in tooling/ and utils/ have a module-level docstring."
     },
     {
       "_type": "tag",
       "name": "main",
       "path": "./tooling/pre_submit_check.py",
       "language": "Python",
-      "line": 18,
+      "line": 61,
       "kind": "function",
       "docstring": "Main function to run pre-submission checks."
     },
@@ -7565,7 +7574,7 @@
       "name": "get_repo_root",
       "path": "./tooling/agent_smith/generate_and_test.py",
       "language": "Python",
-      "line": 14,
+      "line": 31,
       "kind": "function",
       "docstring": "Gets the absolute path of the repository root."
     },
@@ -7574,7 +7583,7 @@
       "name": "log_step",
       "path": "./tooling/agent_smith/generate_and_test.py",
       "language": "Python",
-      "line": 19,
+      "line": 36,
       "kind": "function",
       "docstring": "Prints a formatted step message."
     },
@@ -7583,7 +7592,7 @@
       "name": "run_command",
       "path": "./tooling/agent_smith/generate_and_test.py",
       "language": "Python",
-      "line": 24,
+      "line": 41,
       "kind": "function",
       "docstring": "Runs a command in a subprocess and handles errors."
     },
@@ -7592,7 +7601,7 @@
       "name": "create_sandbox",
       "path": "./tooling/agent_smith/generate_and_test.py",
       "language": "Python",
-      "line": 42,
+      "line": 59,
       "kind": "function",
       "docstring": "Creates a clean sandbox directory."
     },
@@ -7601,7 +7610,7 @@
       "name": "copy_sources",
       "path": "./tooling/agent_smith/generate_and_test.py",
       "language": "Python",
-      "line": 52,
+      "line": 69,
       "kind": "function",
       "docstring": "Copies the necessary source files and compiler into the sandbox."
     },
@@ -7610,7 +7619,7 @@
       "name": "install_dependencies",
       "path": "./tooling/agent_smith/generate_and_test.py",
       "language": "Python",
-      "line": 81,
+      "line": 98,
       "kind": "function",
       "docstring": "Installs dependencies from requirements.txt into the sandbox."
     },
@@ -7619,7 +7628,7 @@
       "name": "apply_mutation",
       "path": "./tooling/agent_smith/generate_and_test.py",
       "language": "Python",
-      "line": 104,
+      "line": 121,
       "kind": "function",
       "docstring": "Applies the specified mutation to the sandboxed sources."
     },
@@ -7628,7 +7637,7 @@
       "name": "compile_variant",
       "path": "./tooling/agent_smith/generate_and_test.py",
       "language": "Python",
-      "line": 122,
+      "line": 139,
       "kind": "function",
       "docstring": "Runs the hierarchical compiler inside the sandbox."
     },
@@ -7637,7 +7646,7 @@
       "name": "verify_variant",
       "path": "./tooling/agent_smith/generate_and_test.py",
       "language": "Python",
-      "line": 165,
+      "line": 182,
       "kind": "function",
       "docstring": "Performs a basic verification to check the variant was created correctly."
     },
@@ -7646,7 +7655,7 @@
       "name": "cleanup_sandbox",
       "path": "./tooling/agent_smith/generate_and_test.py",
       "language": "Python",
-      "line": 187,
+      "line": 204,
       "kind": "function",
       "docstring": "Deletes the sandbox directory."
     },
@@ -7655,7 +7664,7 @@
       "name": "main",
       "path": "./tooling/agent_smith/generate_and_test.py",
       "language": "Python",
-      "line": 197,
+      "line": 214,
       "kind": "function",
       "docstring": "Main function to orchestrate the generation and testing process."
     },
