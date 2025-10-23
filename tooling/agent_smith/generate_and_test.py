@@ -1,3 +1,20 @@
+"""
+A command-line tool for orchestrating the metamorphic testing of the
+hierarchical protocol compiler.
+
+This script automates the following workflow:
+1.  Creates a clean, isolated sandbox environment.
+2.  Copies the necessary protocol source files and the compiler tooling into
+    the sandbox.
+3.  Installs required Python dependencies within the sandbox.
+4.  Applies a specified mutation to the protocol sources (e.g., deleting a file).
+5.  Runs the `hierarchical_compiler.py` within the sandbox to generate a
+    variant `AGENTS.md` file.
+6.  Verifies that the generated artifact correctly reflects the mutation.
+
+This allows for automated, repeatable testing of the compiler's behavior
+under various source conditions.
+"""
 import os
 import shutil
 import subprocess
