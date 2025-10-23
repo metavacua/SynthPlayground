@@ -24,3 +24,7 @@ flake8
 PyYAML==6.0.3
 pytest
 SPARQLWrapper
+rdflib
+google-generativeai
+jsonschema
+ply

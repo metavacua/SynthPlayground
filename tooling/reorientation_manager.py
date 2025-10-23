@@ -61,7 +61,7 @@ def run_temporal_orientation(concept):
             word.capitalize() for word in concept.replace("_", " ").split()
         )
         result = subprocess.run(
-            ["python3", "tooling/temporal_orienter.py", formatted_concept],
+            ["python", "tooling/temporal_orienter.py", formatted_concept],
             capture_output=True,
             text=True,
             check=True,

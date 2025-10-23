@@ -28,7 +28,7 @@ class TestState(unittest.TestCase):
         )
         state.messages.append({"role": "user", "content": "Hello"})
 
-        json_state = state.to_json()
+        json_state = state.to_dict()
 
         self.assertEqual(json_state["task"], "test_task")
         self.assertEqual(len(json_state["plan_stack"]), 1)

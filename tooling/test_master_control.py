@@ -148,13 +148,14 @@ class TestMasterControlRedesigned(unittest.TestCase):
         mock_subprocess.return_value = subprocess.CompletedProcess(
             args=[], returncode=0, stdout="mocked output", stderr=""
         )
-        tools = {
-            "read_file": MagicMock(),
-            "list_files": MagicMock(),
-            "google_search": MagicMock(),
-            "view_text_website": MagicMock(),
-        }
-        trigger = self.graph.do_orientation(self.agent_state, self.mock_logger, tools)
+        with patch("builtins.open", unittest.mock.mock_open(read_data="No issues found")) as mock_file:
+            tools = {
+                "read_file": MagicMock(),
+                "list_files": MagicMock(),
+                "google_search": MagicMock(),
+                "view_text_website": MagicMock(),
+            }
+            trigger = self.graph.do_orientation(self.agent_state, self.mock_logger, tools)
         # In the new system, do_orientation directly returns the next state, not a trigger.
         self.assertEqual(trigger, self.graph.get_trigger("ORIENTING", "PLANNING"))
         self.mock_logger.log.assert_called()
@@ -211,14 +212,22 @@ class TestMasterControlRedesigned(unittest.TestCase):
     @patch("tooling.master_control.datetime")
     def test_do_finalizing(self, mock_datetime):
         mock_datetime.date.today.return_value = datetime.date(2025, 10, 13)
+        mock_datetime.fromisoformat.side_effect = datetime.datetime.fromisoformat
+        self.agent_state.session_start_time = datetime.datetime(2025, 10, 12).isoformat()
         analysis_content = "The task was completed successfully."
+
+        self.mock_logger.get_logs.return_value = [
+            {"action": {"type": "TOOL_EXEC", "details": {"tool_name": "test", "args_text": ""}}, "timestamp": datetime.datetime(2025, 10, 14).isoformat(), "outcome": {"status": "SUCCESS"}}
+        ]
 
         with patch(
             "builtins.open", unittest.mock.mock_open(read_data="[TASK_ID]")
         ) as mock_file:
-            trigger = self.graph.do_finalizing(
-                self.agent_state, analysis_content, self.mock_logger
-            )
+            with patch("os.path.getsize", return_value=1):
+                with patch("os.path.exists", return_value=True):
+                    trigger = self.graph.do_finalizing(
+                        self.agent_state, analysis_content, self.mock_logger
+                    )
 
         self.assertEqual(
             trigger, self.graph.get_trigger("FINALIZING", "AWAITING_SUBMISSION")
@@ -232,10 +241,56 @@ class TestMasterControlRedesigned(unittest.TestCase):
             "Phase 5",
             self.task_id,
             -1,
-            "POST_MORTEM",
-            unittest.mock.ANY,
+            "SESSION_END",
+            {"state": "FINALIZING"},
             "SUCCESS",
             context=unittest.mock.ANY,
+        )
+
+    @patch("tooling.master_control.datetime")
+    def test_do_finalizing_with_missing_postmortem(self, mock_datetime):
+        mock_datetime.date.today.return_value = datetime.date(2025, 10, 13)
+        mock_datetime.fromisoformat.return_value = datetime.datetime(2025, 10, 13)
+        self.agent_state.session_start_time = datetime.datetime(2025, 10, 12).isoformat()
+        analysis_content = "The task was completed successfully."
+
+        self.mock_logger.get_logs.return_value = [
+            {"action": {"type": "TOOL_EXEC", "details": {"tool_name": "test", "args_text": ""}}, "timestamp": datetime.datetime(2025, 10, 14).isoformat(), "outcome": {"status": "SUCCESS"}}
+        ]
+
+        with patch(
+            "builtins.open", unittest.mock.mock_open(read_data="[TASK_ID]")
+        ) as mock_file:
+            with patch("os.path.getsize", return_value=0):
+                with patch("os.path.exists", return_value=True):
+                    trigger = self.graph.do_finalizing(
+                        self.agent_state, analysis_content, self.mock_logger
+                    )
+
+        self.assertEqual(
+            trigger, self.graph.get_trigger("FINALIZING", "ERROR")
+        )
+
+    @patch("tooling.master_control.datetime")
+    def test_do_finalizing_with_no_logs(self, mock_datetime):
+        mock_datetime.date.today.return_value = datetime.date(2025, 10, 13)
+        mock_datetime.fromisoformat.return_value = datetime.datetime(2025, 10, 13)
+        self.agent_state.session_start_time = datetime.datetime(2025, 10, 12).isoformat()
+        analysis_content = "The task was completed successfully."
+
+        self.mock_logger.get_logs.return_value = []
+
+        with patch(
+            "builtins.open", unittest.mock.mock_open(read_data="[TASK_ID]")
+        ) as mock_file:
+            with patch("os.path.getsize", return_value=1):
+                with patch("os.path.exists", return_value=True):
+                    trigger = self.graph.do_finalizing(
+                        self.agent_state, analysis_content, self.mock_logger
+                    )
+
+        self.assertEqual(
+            trigger, self.graph.get_trigger("FINALIZING", "ERROR")
         )
 
 

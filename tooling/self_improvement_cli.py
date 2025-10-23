@@ -1,112 +1,203 @@
 """
-A command-line tool for initiating a new self-improvement proposal.
+Analyzes agent activity logs to identify opportunities for self-improvement.
 
-This script is the entry point for the Self-Improvement Protocol (SIP). It
-automates the boilerplate process of creating a new proposal, ensuring that all
-proposals are structured correctly and stored in a consistent location.
+This script is a command-line tool that serves as a key part of the agent's
+meta-cognitive loop. It parses the structured activity log
+(`logs/activity.log.jsonl`) to identify patterns that may indicate
+inefficiencies or errors in the agent's workflow.
 
-When executed, this tool will:
-1.  Create a new, timestamped directory within the `proposals/` directory to
-    house the new proposal.
-2.  Generate a `proposal.md` file within that new directory.
-3.  Populate the `proposal.md` with a standard template that includes all the
-    required sections as defined in the Self-Improvement Protocol (rule sip-002).
-4.  Print the path to the newly created proposal file, so the agent can
-    immediately begin editing it.
+The primary analysis currently implemented is:
+- **Planning Efficiency Analysis:** It scans the logs for tasks that required
+  multiple `set_plan` actions. A high number of plan revisions for a single
+  task can suggest that the initial planning phase was insufficient, the task
+  was poorly understood, or the agent struggled to adapt to unforeseen
+  challenges.
+
+By flagging these tasks, the script provides a starting point for a deeper
+post-mortem analysis, helping the agent (or its developers) to understand the
+root causes of the planning churn and to develop strategies for more effective
+upfront planning in the future.
+
+The tool is designed to be extensible, with future analyses (such as error
+rate tracking or tool usage anti-patterns) to be added as the system evolves.
 """
 
 import argparse
-import os
-import datetime
-
-# --- Configuration ---
-PROPOSALS_DIR = "proposals"
-PROPOSAL_TEMPLATE = """\
-# Self-Improvement Proposal
-
-## 1. Problem Statement
-*(Describe the problem, inefficiency, or bug that this proposal aims to address.
-Provide evidence, such as links to log entries or test failures.)*
-
-...
-
-## 2. Proposed Solution
-*(Provide a detailed description of the proposed change. This should include
-any modifications to code, protocols, or documentation.)*
-
-...
-
-## 3. Success Criteria
-*(How will we know if this change is successful? Define specific, measurable
-outcomes. This must include references to specific tests or verification
-scripts that will be used to validate the change.)*
-
-...
-
-## 4. Impact Analysis
-*(What is the potential impact of this change? Consider effects on performance,
-security, and other agent protocols.)*
-
-...
-"""
+import json
+from collections import defaultdict
 
 
-def create_proposal():
+def analyze_planning_efficiency(log_file: str) -> dict:
     """
-    Creates a new, structured proposal for self-improvement.
+    Analyzes the log file to find tasks with multiple plan revisions.
+
+    Args:
+        log_file (str): Path to the activity log file.
+
+    Returns:
+        dict: A dictionary mapping task IDs to the number of plan updates.
     """
-    # Create the base proposals directory if it doesn't exist
-    os.makedirs(PROPOSALS_DIR, exist_ok=True)
-    os.makedirs("reviews", exist_ok=True)
+    plan_updates = defaultdict(int)
+    try:
+        with open(log_file, "r") as f:
+            for line in f:
+                try:
+                    log_entry = json.loads(line)
+                    if log_entry.get("action", {}).get("type") == "PLAN_UPDATE":
+                        task_id = log_entry.get("task_id")
+                        if task_id:
+                            plan_updates[task_id] += 1
+                except json.JSONDecodeError:
+                    continue
+    except FileNotFoundError:
+        pass  # It's okay if the log file doesn't exist yet
 
-    # Generate a unique directory name for the new proposal
-    timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S-%f")
-    proposal_dir_name = f"sip-{timestamp}"
-    proposal_dir_path = os.path.join(PROPOSALS_DIR, proposal_dir_name)
-    os.makedirs(proposal_dir_path)
-
-    # Create and populate the proposal.md file
-    proposal_file_path = os.path.join(proposal_dir_path, "proposal.md")
-    with open(proposal_file_path, "w") as f:
-        f.write(PROPOSAL_TEMPLATE)
-
-    review_file_path = os.path.join("reviews", f"{proposal_dir_name}.md")
-    review_template = """\
-# Guardian Protocol Review
-
-## Summary
-
-...
-
-## Impact Analysis
-
-...
-
-## Verification Plan
-
-...
-"""
-    with open(review_file_path, "w") as f:
-        f.write(review_template)
+    # Filter for tasks with more than one plan update
+    inefficient_tasks = {
+        task_id: count for task_id, count in plan_updates.items() if count > 1
+    }
+    return inefficient_tasks
 
 
-    print(f"Successfully created new proposal at: {proposal_file_path}")
-    print(f"Successfully created new review document at: {review_file_path}")
-    return proposal_file_path
+def analyze_error_rates(log_file: str) -> dict:
+    """
+    Analyzes the log file to calculate action success/failure rates.
+
+    Args:
+        log_file (str): Path to the activity log file.
+
+    Returns:
+        dict: A dictionary containing total counts, success/failure counts,
+              and a breakdown of failures by action type.
+    """
+    total_actions = 0
+    failures = 0
+    failures_by_type = defaultdict(int)
+
+    try:
+        with open(log_file, "r") as f:
+            for line in f:
+                try:
+                    log_entry = json.loads(line)
+                    if log_entry.get("action"):
+                        total_actions += 1
+                        if log_entry.get("outcome", {}).get("status") == "FAILURE":
+                            failures += 1
+                            action_type = log_entry["action"].get("type")
+                            if action_type:
+                                failures_by_type[action_type] += 1
+                except json.JSONDecodeError:
+                    continue
+    except FileNotFoundError:
+        pass
+
+    return {
+        "total_actions": total_actions,
+        "total_failures": failures,
+        "failure_rate": (failures / total_actions) if total_actions > 0 else 0,
+        "failures_by_action_type": dict(failures_by_type),
+    }
+
+
+def analyze_protocol_violations(log_file: str) -> list:
+    """
+    Scans the log file for critical protocol violations, such as the
+    unauthorized use of `reset_all`.
+
+    This function checks for two conditions:
+    1. A `SYSTEM_FAILURE` log explicitly blaming `reset_all`.
+    2. A `TOOL_EXEC` log where the command contains "reset_all".
+
+    Args:
+        log_file (str): Path to the activity log file.
+
+    Returns:
+        list: A list of unique task IDs where `reset_all` was used.
+    """
+    violating_tasks = set()
+    try:
+        with open(log_file, "r") as f:
+            for line in f:
+                try:
+                    log_entry = json.loads(line)
+                    task_id = log_entry.get("task_id")
+                    if not task_id:
+                        continue
+
+                    action_type = log_entry.get("action", {}).get("type")
+                    outcome_message = log_entry.get("outcome", {}).get("message", "")
+
+                    # Condition 1: System failure explicitly blames reset_all
+                    if (
+                        action_type == "SYSTEM_FAILURE"
+                        and "reset_all" in outcome_message
+                    ):
+                        violating_tasks.add(task_id)
+
+                    # Condition 2: A tool execution log contains reset_all
+                    if action_type == "TOOL_EXEC":
+                        tool_name = (
+                            log_entry.get("action", {})
+                            .get("details", {})
+                            .get("tool_name", "")
+                        )
+                        if "reset_all" in tool_name:
+                            violating_tasks.add(task_id)
+
+                except json.JSONDecodeError:
+                    continue
+    except FileNotFoundError:
+        pass
+
+    return sorted(list(violating_tasks))
 
 
 def main():
     """
-    Main function to run the self-improvement proposal generator.
+    Main function to run the self-improvement analysis CLI.
     """
     parser = argparse.ArgumentParser(
-        description="Initiates a new self-improvement proposal."
+        description="Analyzes agent activity logs for self-improvement opportunities."
     )
-    # This tool is simple and doesn't need arguments for now, but the
-    # parser is here for future extensibility.
+    parser.add_argument(
+        "--log-file",
+        default="logs/activity.log.jsonl",
+        help="Path to the activity log file.",
+    )
     args = parser.parse_args()
 
-    create_proposal()
+    print("--- Running Self-Improvement Analysis ---")
+
+    # 1. Analyze Planning Efficiency
+    inefficient_tasks = analyze_planning_efficiency(args.log_file)
+    if inefficient_tasks:
+        print("\n[Analysis] Found tasks with multiple plan revisions (potential inefficiency):")
+        for task_id, count in inefficient_tasks.items():
+            print(f"  - Task: {task_id}, Plan Updates: {count}")
+    else:
+        print("\n[Analysis] No tasks with significant planning inefficiency found.")
+
+    # 2. Analyze Error Rates
+    error_data = analyze_error_rates(args.log_file)
+    print("\n[Analysis] Action Success/Failure Rates:")
+    print(f"  - Total Actions: {error_data['total_actions']}")
+    print(f"  - Total Failures: {error_data['total_failures']}")
+    print(f"  - Failure Rate: {error_data['failure_rate']:.2%}")
+    if error_data["failures_by_action_type"]:
+        print("  - Failures by Action Type:")
+        for action_type, count in error_data["failures_by_action_type"].items():
+            print(f"    - {action_type}: {count}")
+
+    # 3. Analyze Protocol Violations
+    violations = analyze_protocol_violations(args.log_file)
+    if violations:
+        print("\n[Analysis] CRITICAL: Found tasks with protocol violations (use of `reset_all`):")
+        for task_id in violations:
+            print(f"  - Task: {task_id}")
+    else:
+        print("\n[Analysis] No critical protocol violations found.")
+
+    print("\n--- Analysis Complete ---")
 
 
 if __name__ == "__main__":

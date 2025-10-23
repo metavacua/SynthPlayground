@@ -30,6 +30,7 @@ import re
 import argparse
 from collections import Counter
 from datetime import datetime
+import subprocess
 
 # Add the root directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -40,8 +41,10 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 LOG_FILE = os.path.join(ROOT_DIR, "logs", "activity.log.jsonl")
 PLAN_REGISTRY_PATH = os.path.join(ROOT_DIR, "knowledge_core", "plan_registry.json")
 SYSTEM_DOCS_PATH = os.path.join(ROOT_DIR, "knowledge_core", "SYSTEM_DOCUMENTATION.md")
+POSTMORTEM_DIR = os.path.join(ROOT_DIR, "postmortems")
 AGENTS_MD_FILENAME = "AGENTS.md"
 SPECIAL_DIRS = ["protocols/security"]  # from protocol_auditor.py
+
 
 # --- Protocol Audit Logic ---
 
@@ -239,6 +242,156 @@ def run_doc_audit():
     return report
 
 
+# --- System Health Audit Logic ---
+
+
+def run_health_audit(session_start_time_iso: str) -> str:
+    """
+    Performs a system health audit, checking for "absence of evidence" anomalies.
+    """
+    report_parts = []
+    issues_found = False
+
+    try:
+        session_start_time = datetime.fromisoformat(session_start_time_iso)
+    except ValueError:
+        report_parts.append(
+            f"❌ **Invalid Session Start Time:** Could not parse '{session_start_time_iso}'."
+        )
+        return "\n".join(report_parts)
+
+    # 1. Log Staleness Check
+    if not os.path.exists(LOG_FILE):
+        report_parts.append(
+            "❌ **Log Staleness Detected:** Log file not found. The agent's logging system may be broken."
+        )
+        issues_found = True
+    else:
+        try:
+            with open(LOG_FILE, "r") as f:
+                lines = f.readlines()
+            if not lines:
+                report_parts.append("⚠️ **Log Staleness Detected:** Log file is empty.")
+                issues_found = True
+            else:
+                last_log = json.loads(lines[-1])
+                last_timestamp_str = last_log.get("timestamp")
+                if not last_timestamp_str:
+                    raise KeyError("Timestamp not found in last log entry")
+
+                # Make timestamps timezone-aware for comparison if they aren't already
+                last_timestamp = datetime.fromisoformat(last_timestamp_str)
+                if last_timestamp.tzinfo is None:
+                    last_timestamp = last_timestamp.replace(tzinfo=datetime.timezone.utc)
+                if session_start_time.tzinfo is None:
+                    session_start_time = session_start_time.replace(
+                        tzinfo=datetime.timezone.utc
+                    )
+
+                if last_timestamp < session_start_time:
+                    report_parts.append(
+                        f"❌ **Log Staleness Detected:** The last log entry was at {last_timestamp.isoformat()}, which is before the current session started at {session_start_time_iso}. The logging system may be broken or stalled."
+                    )
+                    issues_found = True
+        except (IndexError, json.JSONDecodeError, KeyError) as e:
+            report_parts.append(
+                f"❌ **Log Staleness Detected:** Could not parse the last log entry. The log file may be corrupted. Error: {e}"
+            )
+            issues_found = True
+
+    # 2. Success-Only Task Check
+    tasks = {}
+    if os.path.exists(LOG_FILE):
+        with open(LOG_FILE, "r") as f:
+            for line in f:
+                try:
+                    log_entry = json.loads(line)
+                    log_time_str = log_entry.get("timestamp")
+                    if not log_time_str:
+                        continue
+
+                    log_time = datetime.fromisoformat(log_time_str)
+                    if log_time.tzinfo is None:
+                        log_time = log_time.replace(tzinfo=datetime.timezone.utc)
+
+                    # Only consider logs from the current session
+                    if log_time < session_start_time:
+                        continue
+
+                    task_id = log_entry.get("task_id", "unknown_task")
+                    if task_id not in tasks:
+                        tasks[task_id] = {"actions": 0, "failures": 0}
+                    tasks[task_id]["actions"] += 1
+                    if log_entry.get("outcome", {}).get("status") == "FAILURE":
+                        tasks[task_id]["failures"] += 1
+                except (json.JSONDecodeError, KeyError, ValueError):
+                    continue
+
+    suspicious_tasks = []
+    ACTION_THRESHOLD = 5
+    for task_id, data in tasks.items():
+        if data["actions"] > ACTION_THRESHOLD and data["failures"] == 0:
+            suspicious_tasks.append(task_id)
+
+    if suspicious_tasks:
+        report_parts.append(
+            "⚠️ **Success-Only Task Logs:** The following tasks had a high number of actions but no failures since the session started, which may indicate that failures were not logged:"
+        )
+        for task_id in suspicious_tasks:
+            report_parts.append(f"  - `{task_id}`")
+        issues_found = True
+
+    # 3. Incomplete Post-Mortem Check
+    recent_failures = []
+    if os.path.exists(LOG_FILE):
+        with open(LOG_FILE, "r") as f:
+            for line in f:
+                try:
+                    log_entry = json.loads(line)
+                    log_time_str = log_entry.get("timestamp")
+                    if not log_time_str:
+                        continue
+
+                    log_time = datetime.fromisoformat(log_time_str)
+                    if log_time.tzinfo is None:
+                        log_time = log_time.replace(tzinfo=datetime.timezone.utc)
+
+                    if (
+                        log_time >= session_start_time
+                        and log_entry.get("outcome", {}).get("status") == "FAILURE"
+                        and log_entry.get("task_id")
+                    ):
+                        recent_failures.append(log_entry["task_id"])
+                except (json.JSONDecodeError, KeyError, ValueError):
+                    continue
+
+    incomplete_postmortems = []
+    for task_id in set(recent_failures):
+        found_pm = False
+        if os.path.exists(POSTMORTEM_DIR):
+            for filename in os.listdir(POSTMORTEM_DIR):
+                if task_id in filename and filename.endswith(".md"):
+                    filepath = os.path.join(POSTMORTEM_DIR, filename)
+                    if os.path.getsize(filepath) > 0:
+                        found_pm = True
+                        break
+        if not found_pm:
+            incomplete_postmortems.append(task_id)
+
+    if incomplete_postmortems:
+        report_parts.append(
+            "❌ **Incomplete Post-Mortems Detected:** The following tasks failed during this session but do not have a corresponding, non-empty post-mortem report:"
+        )
+        for task_id in incomplete_postmortems:
+            report_parts.append(f"  - `{task_id}`")
+        issues_found = True
+
+    if not issues_found:
+        report_parts.append("✅ **No new critical or warning level issues found.**")
+
+    return "\n".join(report_parts)
+
+
 # --- Main ---
 
 
@@ -251,13 +404,15 @@ def main():
         "audit_type",
         nargs="?",
         default="all",
-        choices=["all", "protocol", "plans", "docs"],
+        choices=["all", "protocol", "plans", "docs", "health"],
         help="The type of audit to run.\n"
         " - all: Run all audits.\n"
         " - protocol: Audit protocols, tool usage, and AGENTS.md freshness.\n"
         " - plans: Audit the plan registry for dead links.\n"
-        " - docs: Audit for missing Python module docstrings.",
+        " - docs: Audit for missing Python module docstrings.\n"
+        " - health: Audit system health for 'absence of evidence' anomalies.",
     )
+    parser.add_argument("--session-start-time", help="The start time of the current session.", default=datetime.now().isoformat())
     args = parser.parse_args()
 
     print(
@@ -273,6 +428,9 @@ def main():
         report_parts.extend(run_plan_registry_audit())
     if args.audit_type in ["all", "docs"]:
         report_parts.extend(run_doc_audit())
+    if args.audit_type in ["all", "health"]:
+        report_parts.append("## 4. System Health Audit")
+        report_parts.append(run_health_audit(args.session_start_time))
 
     report_content = "\n\n".join(report_parts)
     report_path = os.path.join(ROOT_DIR, "audit_report.md")
