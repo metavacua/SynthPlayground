@@ -69,7 +69,7 @@ class AgentState:
             enters an error state, providing a clear reason for the failure.
     """
 
-    task: str
+    task: str = None
     task_description: str = ""
     plan_path: Optional[str] = None
     plan_stack: List[PlanContext] = field(default_factory=list)
@@ -90,6 +90,9 @@ class AgentState:
     error: Optional[str] = None
     background_processes: Dict[str, Any] = field(default_factory=dict)
     current_thought: Optional[str] = None
+    symbols: Optional[dict] = None
+    dependency_graph: Optional[dict] = None
+    session_start_time: Optional[str] = None
 
     def to_dict(self):
         return {

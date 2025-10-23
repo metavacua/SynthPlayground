@@ -15,7 +15,7 @@ class TestMasterControlCli(unittest.TestCase):
 
         master_control_main()
 
-        mock_run_agent_loop.assert_called_once_with(task_description="Test task")
+        mock_run_agent_loop.assert_called_once_with(task_description="Test task", tools=unittest.mock.ANY)
 
 
 if __name__ == "__main__":

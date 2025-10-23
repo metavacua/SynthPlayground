@@ -28,7 +28,7 @@ This module is designed as a library to be controlled by an external shell
 
 import json
 import os
-import datetime
+from datetime import datetime
 import subprocess
 import tempfile
 import time
@@ -109,16 +109,33 @@ class MasterControlGraph:
         Executes orientation, including analyzing the last post-mortem and scanning the filesystem.
         """
         agent_state.current_thought = "Starting orientation. Will review previous task outcomes and scan filesystem."
+        agent_state.session_start_time = datetime.now().isoformat()
         logger.log(
             "Phase 1",
             agent_state.task,
             -1,
-            "INFO",
+            "SESSION_START",
             {"state": "ORIENTING"},
             "SUCCESS",
             context=_get_log_context(agent_state),
         )
         try:
+            # Run the system health audit
+            audit_report_path = "audit_report.md"
+            subprocess.run(["python", "tooling/auditor.py", "health", f"--session-start-time={agent_state.session_start_time}"], check=True)
+            with open(audit_report_path, "r") as f:
+                audit_report = f.read()
+
+            if "❌" in audit_report or "⚠️" in audit_report:
+                agent_state.messages.append(
+                    {
+                        "role": "system",
+                        "content": f"CRITICAL: System health audit failed. Halting current task to address the following issues:\n{audit_report}",
+                    }
+                )
+                agent_state.current_thought = "System health audit failed. Must address issues before proceeding."
+                return self.get_trigger("ORIENTING", "ERROR")
+
             # Use the provided list_files tool to scan the directory
             list_files_tool = tools.get("list_files")
             if list_files_tool:
@@ -149,6 +166,35 @@ class MasterControlGraph:
                     {"summary": "`list_files` tool not provided to orientation."},
                     "SUCCESS",
                 )
+
+            # Consult knowledge core artifacts
+            knowledge_core_path = "knowledge_core"
+            symbols_path = os.path.join(knowledge_core_path, "symbols.json")
+            dependency_graph_path = os.path.join(knowledge_core_path, "dependency_graph.json")
+
+            if os.path.exists(symbols_path):
+                with open(symbols_path, "r") as f:
+                    symbols = json.load(f)
+                agent_state.messages.append(
+                    {
+                        "role": "system",
+                        "content": f"Loaded symbols from {symbols_path}",
+                    }
+                )
+                agent_state.current_thought = "Loaded symbols from knowledge core."
+                agent_state.symbols = symbols
+
+            if os.path.exists(dependency_graph_path):
+                with open(dependency_graph_path, "r") as f:
+                    dependency_graph = json.load(f)
+                agent_state.messages.append(
+                    {
+                        "role": "system",
+                        "content": f"Loaded dependency graph from {dependency_graph_path}",
+                    }
+                )
+                agent_state.current_thought = "Loaded dependency graph from knowledge core."
+                agent_state.dependency_graph = dependency_graph
 
             # Analyze the most recent post-mortem report
             postmortem_dir = "postmortems/"
@@ -727,6 +773,34 @@ class MasterControlGraph:
                         context=_get_log_context(agent_state),
                     )
 
+            # Pre-Submission "Clock-Out" Verification
+            post_mortem_exists = os.path.exists(final_path) and os.path.getsize(final_path) > 0
+
+            logs = logger.get_logs()
+            tool_exec_after_session_start = any(
+                log.get("action", {}).get("type") == "TOOL_EXEC" and
+                datetime.fromisoformat(log["timestamp"]) > datetime.fromisoformat(agent_state.session_start_time)
+                for log in logs
+            )
+
+            if not post_mortem_exists:
+                agent_state.error = "Data Loss Detected: Post-mortem report not found or is empty. Submission aborted."
+                return self.get_trigger("FINALIZING", "ERROR")
+
+            if not tool_exec_after_session_start:
+                agent_state.error = "Data Loss Detected: No logs recorded for this session. Submission aborted."
+                return self.get_trigger("FINALIZING", "ERROR")
+
+            logger.log(
+                "Phase 5",
+                task_id,
+                -1,
+                "SESSION_END",
+                {"state": "FINALIZING"},
+                "SUCCESS",
+                context=_get_log_context(agent_state),
+            )
+
             return self.get_trigger("FINALIZING", "AWAITING_SUBMISSION")
         except Exception as e:
             agent_state.error = f"An unexpected error occurred during finalization: {e}"
@@ -741,4 +815,4 @@ class MasterControlGraph:
                 str(e),
                 context=_get_log_context(agent_state),
             )
-            return self.get_trigger("FINALIZING", "finalization_failed")
+            return self.get_trigger("FINALIZING", "ERROR")

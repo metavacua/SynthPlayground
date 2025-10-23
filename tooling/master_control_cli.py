@@ -12,7 +12,7 @@ import sys
 
 # Ensure the tooling directory is in the Python path
 sys.path.insert(0, ".")
-from tooling.agent_shell import run_agent_loop
+from tooling.agent_shell import run_agent_loop, load_tools_from_manifest
 
 
 def main():
@@ -31,12 +31,14 @@ def main():
     )
     args = parser.parse_args()
 
+    tools = load_tools_from_manifest()
+
     print("--- Invoking Agent Shell ---")
-    final_state = run_agent_loop(task_description=args.task)
+    final_state = run_agent_loop(task_description=args.task, tools=tools)
 
     # 3. Print the final report
     print("\n--- Final State ---")
-    print(json.dumps(final_state.to_json(), indent=2))
+    print(json.dumps(final_state.to_dict(), indent=2))
     print("--- Workflow Complete ---")
 
 
