@@ -1,0 +1,40 @@
+{
+  "components": [
+    {
+      "name": "Finite Development Cycle (FDC)",
+      "classification": "Regular",
+      "justification": "The FDC is defined by a Finite State Machine (FSM) in `tooling/fdc_fsm.json`. The FSM has a finite number of states and a well-defined alphabet of operations, making it a regular language.",
+      "decomposition": {
+        "strategy": "N/A"
+      }
+    },
+    {
+      "name": "Aura Language",
+      "classification": "Context-Free",
+      "justification": "The Aura language supports nested structures, such as nested function calls, which cannot be recognized by a regular language. This is formally demonstrated by the pumping lemma for regular languages. The language is, however, context-free, and is parsed by a Pratt parser.",
+      "decomposition": {
+        "strategy": "Separation of lexical and syntactical analysis.",
+        "components": [
+          "aura_lang/lexer.py (Regular)",
+          "aura_lang/parser.py (Context-Free)"
+        ]
+      }
+    },
+    {
+        "name": "LFI ILL Language",
+        "classification": "Context-Free",
+        "justification": "The LFI ILL language is defined by a BNF grammar in `lfi_ill/grammar.bnf`, which specifies production rules with a single non-terminal on the left-hand side. This is the definition of a context-free grammar.",
+        "decomposition": {
+            "strategy": "N/A"
+        }
+    },
+    {
+      "name": "Python Orchestration Scripts",
+      "classification": "Context-Sensitive",
+      "justification": "The Python scripts in the `tooling/` directory are context-sensitive because their behavior is dependent on runtime conditions, such as the state of the file system, environment variables, and the outputs of other programs.",
+      "decomposition": {
+        "strategy": "N/A"
+      }
+    }
+  ]
+}
