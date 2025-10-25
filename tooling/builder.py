@@ -25,65 +25,18 @@ This centralized builder provides several advantages:
 """
 
 import os
-import json
 import argparse
 import subprocess
 from datetime import datetime
+from tooling.build_logic import (
+    load_config,
+    generate_compiler_command,
+    generate_command,
+)
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CONFIG_FILE = os.path.join(ROOT_DIR, "build_config.json")
-
-
-def load_config():
-    """Loads the build configuration file."""
-    if not os.path.exists(CONFIG_FILE):
-        raise FileNotFoundError(f"Build config file not found: {CONFIG_FILE}")
-    with open(CONFIG_FILE, "r") as f:
-        return json.load(f)
-
-
-def execute_compiler_target(target_name, target_config):
-    """Executes a 'compiler' type build target."""
-    compiler_path = os.path.join(ROOT_DIR, target_config["compiler"])
-    command = ["python3", compiler_path]
-
-    # Handle sources
-    if "sources" in target_config:
-        for source in target_config["sources"]:
-            # Check if it's a directory or a file
-            if source.endswith("/"):
-                command.extend(["--source-dir", os.path.join(ROOT_DIR, source)])
-            else:
-                command.extend(["--source-file", os.path.join(ROOT_DIR, source)])
-
-    # Handle output
-    if "output" in target_config:
-        output_path = os.path.join(ROOT_DIR, target_config["output"])
-        command.extend(["--output-file", output_path])
-
-    # Handle options
-    if "options" in target_config:
-        for option, value in target_config["options"].items():
-            if isinstance(value, list):
-                for item in value:
-                    if isinstance(item, str) and ("file" in option or "dir" in option):
-                        command.extend([option, os.path.join(ROOT_DIR, item)])
-                    else:
-                        command.extend([option, str(item)])
-            else:
-                if isinstance(value, str) and ("file" in option or "dir" in option):
-                    command.extend([option, os.path.join(ROOT_DIR, value)])
-                else:
-                    command.extend([option, str(value)])
-
-    return command, " ".join(command)
-
-
-def execute_command_target(target_name, target_config):
-    """Executes a 'command' type build target."""
-    command_str = target_config["command"]
-    return command_str, command_str
 
 
 def execute_build(target_name, config):
@@ -103,9 +56,11 @@ def execute_build(target_name, config):
     shell = False
 
     if target_type == "compiler":
-        command, command_str = execute_compiler_target(target_name, target_config)
+        command, command_str = generate_compiler_command(
+            target_name, target_config, ROOT_DIR
+        )
     elif target_type == "command":
-        command, command_str = execute_command_target(target_name, target_config)
+        command, command_str = generate_command(target_name, target_config)
         shell = True  # Shell commands run with shell=True
     else:
         raise ValueError(
@@ -163,7 +118,7 @@ def main():
     )
 
     args = parser.parse_args()
-    config = load_config()
+    config = load_config(CONFIG_FILE)
 
     if args.list:
         print("--- Available Build Targets ---")

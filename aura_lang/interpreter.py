@@ -9,6 +9,8 @@ class Object:
         self.value = value
     def __repr__(self):
         return f"Object(value={self.value})"
+    def inspect(self):
+        return str(self.value)
 
 class Integer(Object): pass
 class String(Object): pass

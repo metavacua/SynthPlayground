@@ -21,6 +21,7 @@ without altering the core orchestration process.
 import argparse
 import os
 import tempfile
+from tooling.code_suggester_logic import generate_suggestion_plan_content
 
 
 def generate_suggestion_plan(filepath: str, diff_content: str) -> str:
@@ -34,11 +35,7 @@ def generate_suggestion_plan(filepath: str, diff_content: str) -> str:
     Returns:
         The path to the generated temporary plan file.
     """
-    plan_content = f"""\
-replace_with_git_merge_diff
-{filepath}
-{diff_content}
-"""
+    plan_content = generate_suggestion_plan_content(filepath, diff_content)
     # Create a temporary file to store the plan
     fd, plan_path = tempfile.mkstemp(suffix=".plan.txt", text=True)
     with os.fdopen(fd, "w") as tmp:

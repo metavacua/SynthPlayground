@@ -8,6 +8,7 @@ and provides detailed error reporting if the execution fails.
 
 import subprocess
 import sys
+from tooling.appl_logic import generate_appl_command
 
 
 def run_appl_file(filepath: str) -> str:
@@ -21,7 +22,7 @@ def run_appl_file(filepath: str) -> str:
         The output from the APPL interpreter.
     """
     try:
-        command = [sys.executable, "run.py", filepath]
+        command = generate_appl_command(filepath)
         result = subprocess.run(
             command, capture_output=True, text=True, check=True, encoding="utf-8"
         )

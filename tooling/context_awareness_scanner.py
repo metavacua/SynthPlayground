@@ -23,7 +23,6 @@ which can be used as a foundational artifact for automated planning or human rev
 """
 
 import argparse
-import ast
 import json
 import os
 import sys
@@ -31,49 +30,7 @@ import sys
 # Add the root directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.file_system_utils import find_files
-
-
-def get_defined_symbols(filepath):
-    """Parses a Python file to find all defined functions and classes."""
-    with open(filepath, "r") as f:
-        content = f.read()
-
-    tree = ast.parse(content)
-    symbols = []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.FunctionDef):
-            symbols.append(
-                {"type": "function", "name": node.name, "lineno": node.lineno}
-            )
-        elif isinstance(node, ast.ClassDef):
-            symbols.append({"type": "class", "name": node.name, "lineno": node.lineno})
-    return symbols
-
-
-def get_imported_symbols(filepath):
-    """Parses a Python file to find all imported modules and symbols."""
-    with open(filepath, "r") as f:
-        content = f.read()
-
-    tree = ast.parse(content)
-    imports = []
-    for node in ast.walk(tree):
-        if isinstance(node, ast.Import):
-            for alias in node.names:
-                imports.append(
-                    {"type": "module", "name": alias.name, "lineno": node.lineno}
-                )
-        elif isinstance(node, ast.ImportFrom):
-            module = node.module or "."
-            for alias in node.names:
-                imports.append(
-                    {
-                        "type": "symbol",
-                        "name": f"{module}.{alias.name}",
-                        "lineno": node.lineno,
-                    }
-                )
-    return imports
+from tooling.context_awareness_scanner_logic import analyze_python_file, generate_report
 
 
 def find_references(symbol_name, search_path):
@@ -116,22 +73,17 @@ def main():
     with open(target_file, "r") as f:
         content = f.read()
 
-    # 2. Get defined symbols
-    defined_symbols = get_defined_symbols(target_file)
+    # 2. Analyze the file
+    defined_symbols, imported_symbols = analyze_python_file(content)
 
-    # 3. Get imported symbols
-    imported_symbols = get_imported_symbols(target_file)
-
-    # 4. Find references to the defined symbols
+    # 3. Find references to the defined symbols
     for symbol in defined_symbols:
         symbol["references"] = find_references(symbol["name"], search_path)
 
-    report = {
-        "file_path": target_file,
-        "content": content,
-        "defined_symbols": defined_symbols,
-        "imported_symbols": imported_symbols,
-    }
+    # 4. Generate the report
+    report = generate_report(
+        target_file, content, defined_symbols, imported_symbols
+    )
 
     output_filename = f"{os.path.basename(target_file)}.json"
     with open(output_filename, "w") as f:

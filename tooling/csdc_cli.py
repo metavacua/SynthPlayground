@@ -26,6 +26,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from tooling.fdc_cli import analyze_plan
+from tooling.csdc_logic import validate_plan
 from tooling.master_control import MasterControlGraph
 
 
@@ -50,20 +51,6 @@ def main():
     args = parser.parse_args()
 
     print(f"--- CSDC: Analyzing plan '{args.plan_file}' ---")
-    analysis_results = analyze_plan(args.plan_file, return_results=True)
-
-    if analysis_results["complexity_class"] != args.complexity:
-        print(
-            f"Error: Plan complexity mismatch. Expected '{args.complexity}', but found '{analysis_results['complexity_class']}'.",
-            file=sys.stderr,
-        )
-        sys.exit(1)
-
-    print(
-        f"Complexity check passed: Plan is in class {analysis_results['complexity_class']}."
-    )
-
-    print(f"\n--- CSDC: Validating plan against Model {args.model} ---")
 
     try:
         with open(args.plan_file, "r") as f:
@@ -72,9 +59,10 @@ def main():
         print(f"Error: Plan file not found at {args.plan_file}", file=sys.stderr)
         sys.exit(1)
 
-    validator = MasterControlGraph()
-    is_valid, error_message = validator.validate_plan_for_model(
-        plan_content, args.model
+    analysis_results = analyze_plan(args.plan_file, return_results=True)
+
+    is_valid, error_message = validate_plan(
+        plan_content, args.model, args.complexity, analysis_results
     )
 
     if is_valid:

@@ -26,6 +26,7 @@ from utils.logger import Logger
 from tooling.udc_orchestrator import UDCOrchestrator
 from tooling.session_manager import load_session, save_session
 from tooling.goal_generator import find_best_plan
+from tooling.agent_logic import find_fsm_transition
 
 
 def load_tools_from_manifest(manifest_path="tooling/tool_manifest.json"):
@@ -62,14 +63,6 @@ def load_tools_from_manifest(manifest_path="tooling/tool_manifest.json"):
             print(f"Error loading tool '{tool_name}' from '{module_path}': {e}")
 
     return tools
-
-
-def find_fsm_transition(fsm, source_state, trigger):
-    """Finds the destination state for a given source and trigger."""
-    for transition in fsm["transitions"]:
-        if transition["source"] == source_state and transition["trigger"] == trigger:
-            return transition["dest"]
-    return None
 
 
 import argparse

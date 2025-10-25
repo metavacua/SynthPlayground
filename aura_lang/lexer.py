@@ -103,6 +103,10 @@ class Lexer:
             if self.current_char == '"':
                 return self.string()
 
+            if self.current_char == "'":
+                self.advance()
+                return self.get_next_token()
+
             # Single-character tokens
             try:
                 token_type = TOKEN_MAP[self.current_char]

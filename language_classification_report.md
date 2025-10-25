@@ -1,41 +1,66 @@
 # Language Classification Report
 
-This report categorizes the various programs and language implementations within the repository into the Chomsky hierarchy: regular, context-free, and context-sensitive.
+## 1. Definition of a "Program"
 
-## 1. Regular Language Programs
+For the purposes of this analysis, a "program" is defined as a self-contained, executable unit of logic that can be classified according to the Chomsky hierarchy. This includes:
 
-### Finite Development Cycle (FDC)
+- **Language Implementations:** Interpreters, parsers, and lexers for any domain-specific language (DSL) or programming language defined within the repository.
+- **Executable Scripts and Core Tooling:** Standalone scripts and tools that perform specific tasks, such as build automation, testing, or data processing.
+- **Finite State Machines (FSMs):** Files that explicitly define a Finite State Machine, which are inherently regular programs.
 
-The Finite Development Cycle, defined in `tooling/fdc_fsm.json`, is a **regular language**. The FSM specifies a finite number of states, a well-defined alphabet of operations, and a set of transitions. This ensures that the development process is computationally tractable and decidable.
+## 2. Program Classifications
 
-## 2. Context-Free Language Programs
+### 2.1. Regular Programs
 
-### Aura Language
+- **Finite Development Cycle (FDC) FSM:**
+    - **Files:** `tooling/fdc_fsm.json`
+    - **Justification:** This file defines a Finite State Machine, which is a model of computation for regular languages. The FSM has a finite number of states and transitions, and it accepts or rejects strings based on a predefined set of rules.
+    - **DBpedia:** [https://dbpedia.org/page/Finite-state_machine](https://dbpedia.org/page/Finite-state_machine)
 
-The `aura_lang/` implementation is a **context-free language**. The parser (`aura_lang/parser.py`) is a Pratt parser that handles nested structures, operator precedence, and function definitions without requiring contextual information.
+- **Research FSM:**
+    - **Files:** `tooling/research_fsm.json`
+    - **Justification:** Similar to the FDC FSM, this file defines a Finite State Machine for the research process.
+    - **DBpedia:** [https://dbpedia.org/page/Finite-state_machine](https://dbpedia.org/page/Finite-state_machine)
 
-#### Formal Analysis
+### 2.2. Context-Free Programs
 
-To demonstrate that `aura_lang` is not a regular language, we can use the **pumping lemma for regular languages**. The pumping lemma states that for any regular language, there is a pumping length `p` such that any string `s` in the language with length at least `p` can be divided into three parts, `s = xyz`, satisfying the following conditions:
+- **Aura Language:**
+    - **Files:** `aura_lang/`
+    - **Justification:** The Aura language supports nested structures, which are characteristic of context-free languages. The language is parsed by a Pratt parser, which is a top-down operator-precedence parser, a common technique for parsing context-free grammars.
+    - **Curry-Howard Correspondence:** The type system of the Aura language is simple and corresponds to a propositional logic.
+    - **DBpedia:** [https://dbpedia.org/page/Context-free_grammar](https://dbpedia.org/page/Context-free_grammar)
 
-1.  `|y| > 0`
-2.  `|xy| <= p`
-3.  For any `i >= 0`, the string `xy^iz` is also in the language.
+- **LFI ILL Language:**
+    - **Files:** `lfi_ill/`
+    - **Justification:** The LFI ILL language is defined by a BNF grammar, a formal notation for describing context-free grammars.
+    - **Curry-Howard Correspondence:** The LFI ILL language is a linear logic, which corresponds to a resource-sensitive lambda calculus.
+    - **DBpedia:** [https://dbpedia.org/page/Linear_logic](https://dbpedia.org/page/Linear_logic)
 
-Consider the `aura_lang` language's ability to handle nested function calls. A string like `f(f(f(...f(x)...)))` with `n` nested calls is a valid Aura program. Let's represent this as `f^n(x)`.
+- **AAL (Agent Abstraction Language):**
+    - **Files:** `tooling/aal/`
+    - **Justification:** The AAL language is designed to represent agent interactions, which can involve nested and recursive structures. This is a characteristic of context-free languages.
+    - **Curry-Howard Correspondence:** The AAL language corresponds to a simple action logic.
+    - **DBpedia:** [https://dbpedia.org/page/Action_logic](https://dbpedia.org/page/Action_logic)
 
-If `aura_lang` were regular, the pumping lemma would hold. Let `p` be the pumping length. Consider the string `s = f^p(x)`, which is in `aura_lang`. According to the lemma, we can split `s` into `xyz`. Since `|xy| <= p`, `xy` must be a part of the `f^p` prefix. This means `y` must be a sequence of one or more `f`'s.
+- **pLLLU Language:**
+    - **Files:** `tooling/plllu_interpreter.py`
+    - **Justification:** The pLLLU language is a planning and automation language that supports nested and recursive structures, which are characteristic of context-free languages.
+    - **Curry-Howard Correspondence:** The pLLLU language is a paraconsistent linear logic, which corresponds to a resource-sensitive lambda calculus that can handle contradictions.
+    - **DBpedia:** [https://dbpedia.org/page/Paraconsistent_logic](https://dbpedia.org/page/Paraconsistent_logic)
 
-If we pump `y` (e.g., `i = 2`), we get a string with more `f`'s than closing parentheses. This would result in a syntax error, as the parentheses would be unbalanced. Therefore, the pumped string is not in `aura_lang`, which contradicts the pumping lemma. This proves that `aura_lang` is not a regular language.
+### 2.3. Context-Sensitive Programs
 
-The language is, however, context-free. A context-free grammar can easily handle this kind of nested structure with a production rule like `Expr -> ID '(' Expr ')'`, which is recursive.
+- **HDL Prover:**
+    - **Files:** `tooling/hdl_prover.py`
+    - **Justification:** The HDL prover interacts with an external Lisp-based prover and its behavior is dependent on the state of the external process. This makes it context-sensitive.
+    - **DBpedia:** [https://dbpedia.org/page/Context-sensitive_grammar](https://dbpedia.org/page/Context-sensitive_grammar)
 
-### LFI ILL Language
+- **Python Orchestration Scripts:**
+    - **Files:** `tooling/`
+    - **Justification:** The Python scripts in the `tooling/` directory are context-sensitive because their behavior is dependent on runtime conditions, such as the state of the file system, environment variables, and the outputs of other programs.
+    - **DBpedia:** [https://dbpedia.org/page/Context-sensitive_grammar](https://dbpedia.org/page/Context-sensitive_grammar)
 
-The `lfi_ill/` language, defined by `lfi_ill/grammar.bnf`, is a **context-free language**. The BNF grammar specifies production rules with a single non-terminal on the left-hand side, which is the definition of a context-free grammar.
-
-## 3. Context-Sensitive Language Programs
-
-### Python Orchestration Scripts
-
-The Python scripts in the `tooling/` directory are **context-sensitive programs**. Their behavior is dependent on runtime conditions, such as the state of the file system, environment variables, and the outputs of other programs.
+- **Gemini App Canvas Agent:**
+    - **Files:** `GeminiAppCanvasAgent.jsx`
+    - **Justification:** This is a React application that interacts with the user, the file system (via IndexedDB), and external services (the Gemini API).
+    - **DBpedia:** [https://dbpedia.org/page/Context-sensitive_grammar](https://dbpedia.org/page/Context-sensitive_grammar)

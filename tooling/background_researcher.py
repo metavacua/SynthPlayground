@@ -7,6 +7,7 @@ to a temporary file that the main agent can poll.
 import time
 import sys
 import os
+from tooling.background_researcher_logic import generate_research_result
 
 
 def perform_research(task_id: str):
@@ -14,7 +15,7 @@ def perform_research(task_id: str):
     print(f"[BackgroundResearcher] Starting research for task: {task_id}")
     # Simulate a long-running research task
     time.sleep(5)
-    result_content = f"This is the research result for task {task_id}."
+    result_content = generate_research_result(task_id)
     result_path = f"/tmp/{task_id}.result"
     with open(result_path, "w") as f:
         f.write(result_content)
