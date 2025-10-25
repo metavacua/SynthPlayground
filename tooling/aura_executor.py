@@ -15,14 +15,21 @@ This makes it a key component for enabling more expressive and complex
 automation scripts for the agent.
 """
 
-import argparse
+# --- Path Correction ---
+# To ensure that imports from sibling directories (like aura_lang) and
+# modules within the tooling package work correctly, we need to add the
+# project's root directory to the Python path. This is especially important
+# when the script is executed directly.
 import sys
-import subprocess
 from pathlib import Path
+# Add the project root directory (the parent of 'tooling') to the path
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+# --- End Path Correction ---
+
+import argparse
+import subprocess
 from tooling.aura_logic import dynamic_agent_call_tool
 
-# Add the parent directory to the path to allow imports from aura_lang
-sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from aura_lang.lexer import Lexer
 from aura_lang.parser import Parser
