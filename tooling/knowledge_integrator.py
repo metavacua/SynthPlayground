@@ -5,76 +5,90 @@ A tool for integrating knowledge from various sources across the repository into
 import os
 import json
 import argparse
+import sys
+
+# Add the root directory to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from rdflib import Graph, Literal, URIRef
 from rdflib.namespace import RDF, RDFS, FOAF
+import dbpedia_client
 
-# --- Configuration ---
-ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
-def integrate_lessons(graph, lessons_file):
-    """Integrates lessons from a JSONL file into the knowledge graph."""
-    if not os.path.exists(lessons_file):
-        print(f"Warning: Lessons file not found at {lessons_file}")
-        return
+def enrich_with_dbpedia(graph):
+    """Enriches the graph with DBPedia abstracts for known entities."""
+    # Find all entities that have a label
+    for s, p, o in graph.triples((None, RDFS.label, None)):
+        if isinstance(o, Literal):
+            label = str(o)
+            try:
+                abstract = dbpedia_client.get_abstract(label)
+                if abstract:
+                    graph.add(
+                        (
+                            s,
+                            URIRef("http://dbpedia.org/ontology/abstract"),
+                            Literal(abstract),
+                        )
+                    )
+            except Exception as e:
+                print(f"Could not fetch abstract for {label}: {e}")
+    return graph
 
-    with open(lessons_file, "r") as f:
-        for line in f:
-            lesson = json.loads(line)
-            lesson_uri = URIRef(f"http://example.org/lesson/{lesson['lesson_id']}")
-            graph.add((lesson_uri, RDF.type, URIRef("http://example.org/ontology#Lesson")))
-            graph.add((lesson_uri, RDFS.label, Literal(lesson['lesson'])))
-            graph.add((lesson_uri, URIRef("http://example.org/ontology#action"), Literal(json.dumps(lesson['action']))))
-
-def integrate_protocols(graph, protocols_dir):
-    """Integrates protocol definitions into the knowledge graph."""
-    for root, _, files in os.walk(protocols_dir):
-        for file in files:
-            if file.endswith(".protocol.json"):
-                with open(os.path.join(root, file), "r") as f:
-                    protocol = json.load(f)
-                    protocol_uri = URIRef(f"http://example.org/protocol/{protocol['protocol_id']}")
-                    graph.add((protocol_uri, RDF.type, URIRef("http://example.org/ontology#Protocol")))
-                    graph.add((protocol_uri, RDFS.label, Literal(protocol['description'])))
-                    for rule in protocol.get("rules", []):
-                        rule_uri = URIRef(f"http://example.org/rule/{rule['rule_id']}")
-                        graph.add((rule_uri, RDF.type, URIRef("http://example.org/ontology#Rule")))
-                        graph.add((rule_uri, RDFS.label, Literal(rule['description'])))
-                        graph.add((protocol_uri, URIRef("http://example.org/ontology#hasRule"), rule_uri))
-
-def integrate_research(graph, research_dir):
-    """Integrates research findings into the knowledge graph."""
-    for root, _, files in os.walk(research_dir):
-        for file in files:
-            if file.endswith(".md"):
-                with open(os.path.join(root, file), "r") as f:
-                    content = f.read()
-                    # This is a simple example; a more sophisticated system would use NLP to extract key findings.
-                    research_uri = URIRef(f"http://example.org/research/{file}")
-                    graph.add((research_uri, RDF.type, URIRef("http://example.org/ontology#Research")))
-                    graph.add((research_uri, RDFS.label, Literal(f"Research findings from {file}")))
-                    graph.add((research_uri, URIRef("http://example.org/ontology#content"), Literal(content)))
 
 def main():
-    parser = argparse.ArgumentParser(description="Integrates knowledge from various sources into a single knowledge base.")
-    parser.add_argument("--output-file", required=True, help="The path to the output knowledge base file.")
+    parser = argparse.ArgumentParser(
+        description="Integrates and enriches a knowledge graph."
+    )
+    parser.add_argument(
+        "--input", required=True, help="The path to the input JSON knowledge graph."
+    )
+    parser.add_argument(
+        "--output",
+        default="knowledge_core/knowledge_graph.jsonld",
+        help="The path to the output JSON-LD file.",
+    )
     args = parser.parse_args()
+
+    with open(args.input, "r") as f:
+        knowledge_graph_data = json.load(f)
 
     graph = Graph()
 
-    # Load the existing graph if it exists
-    if os.path.exists(args.output_file):
-        try:
-            graph.parse(args.output_file, format="json-ld")
-            print(f"Loaded existing knowledge base from {args.output_file}")
-        except Exception as e:
-            print(f"Warning: Could not parse existing knowledge base. A new one will be created. Error: {e}")
+    # Integrate dependencies
+    for node in knowledge_graph_data["dependencies"]["nodes"]:
+        node_uri = URIRef(f"http://example.org/dependency/{node['id']}")
+        graph.add((node_uri, RDF.type, URIRef("http://example.org/ontology#Dependency")))
+        graph.add((node_uri, RDFS.label, Literal(node["id"])))
+        if node["path"]:
+            graph.add(
+                (
+                    node_uri,
+                    URIRef("http://example.org/ontology#path"),
+                    Literal(node["path"]),
+                )
+            )
 
-    integrate_lessons(graph, os.path.join(ROOT_DIR, "knowledge_core/lessons.jsonl"))
-    integrate_protocols(graph, os.path.join(ROOT_DIR, "protocols"))
-    integrate_research(graph, os.path.join(ROOT_DIR, "research"))
+    # Integrate symbols
+    for symbol in knowledge_graph_data["symbols"]["symbols"]:
+        symbol_uri = URIRef(
+            f"http://example.org/symbol/{symbol['path']}/{symbol['name']}"
+        )
+        graph.add((symbol_uri, RDF.type, URIRef("http://example.org/ontology#Symbol")))
+        graph.add((symbol_uri, RDFS.label, Literal(symbol["name"])))
+        graph.add(
+            (
+                symbol_uri,
+                URIRef("http://example.org/ontology#path"),
+                Literal(symbol["path"]),
+            )
+        )
 
-    graph.serialize(destination=args.output_file, format="json-ld")
-    print(f"Successfully integrated knowledge into {args.output_file}")
+    # Enrich with DBPedia data
+    graph = enrich_with_dbpedia(graph)
+
+    graph.serialize(destination=args.output, format="json-ld")
+    print(f"Successfully enriched knowledge graph and saved to {args.output}")
+
 
 if __name__ == "__main__":
     main()

@@ -686,6 +686,15 @@
     },
     {
       "_type": "tag",
+      "name": "high_complexity_function",
+      "path": "./high_complexity_test.py",
+      "language": "Python",
+      "line": 1,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TypeCheckError",
       "path": "./type_checker.py",
       "language": "Python",
@@ -6752,6 +6761,15 @@
     },
     {
       "_type": "tag",
+      "name": "main",
+      "path": "./tooling/py_to_udc.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TestCapabilityVerifier",
       "path": "./tooling/test_capability_verifier.py",
       "language": "Python",
@@ -7943,7 +7961,7 @@
       "name": "find_dependency_files",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 35,
+      "line": 36,
       "kind": "function",
       "docstring": "Finds all package.json and requirements.txt files, excluding node_modules."
     },
@@ -7952,7 +7970,7 @@
       "name": "generate_dependency_graph",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 43,
+      "line": 44,
       "kind": "function",
       "docstring": "Generates a dependency graph for all supported dependency files found."
     },
@@ -7961,7 +7979,7 @@
       "name": "main",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 69,
+      "line": 70,
       "kind": "function",
       "docstring": "Main function to generate and save the dependency graph."
     },
@@ -8348,7 +8366,7 @@
       "name": "main",
       "path": "./tooling/context_manager.py",
       "language": "Python",
-      "line": 10,
+      "line": 11,
       "kind": "function",
       "docstring": null
     },
@@ -8807,7 +8825,7 @@
       "name": "load_tools_from_manifest",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 32,
+      "line": 33,
       "kind": "function",
       "docstring": "Loads tools from the tool manifest."
     },
@@ -8816,7 +8834,7 @@
       "name": "run_agent_loop",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 71,
+      "line": 72,
       "kind": "function",
       "docstring": "The main loop that drives the agent's lifecycle via the FSM."
     },
@@ -8825,7 +8843,7 @@
       "name": "main",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 235,
+      "line": 236,
       "kind": "function",
       "docstring": "Main entry point for the agent shell."
     },
@@ -8871,6 +8889,33 @@
       "path": "./tooling/test_agent_shell.py",
       "language": "Python",
       "line": 31,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "FuelTransformer",
+      "path": "./tooling/refactor_add_fuel.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/refactor_add_fuel.py",
+      "language": "Python",
+      "line": 51,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "visit_While",
+      "path": "./tooling/refactor_add_fuel.py",
+      "language": "Python",
+      "line": 11,
       "kind": "function",
       "docstring": null
     },
@@ -9101,37 +9146,19 @@
     },
     {
       "_type": "tag",
-      "name": "integrate_lessons",
+      "name": "enrich_with_dbpedia",
       "path": "./tooling/knowledge_integrator.py",
       "language": "Python",
-      "line": 14,
+      "line": 17,
       "kind": "function",
-      "docstring": "Integrates lessons from a JSONL file into the knowledge graph."
-    },
-    {
-      "_type": "tag",
-      "name": "integrate_protocols",
-      "path": "./tooling/knowledge_integrator.py",
-      "language": "Python",
-      "line": 28,
-      "kind": "function",
-      "docstring": "Integrates protocol definitions into the knowledge graph."
-    },
-    {
-      "_type": "tag",
-      "name": "integrate_research",
-      "path": "./tooling/knowledge_integrator.py",
-      "language": "Python",
-      "line": 44,
-      "kind": "function",
-      "docstring": "Integrates research findings into the knowledge graph."
+      "docstring": "Enriches the graph with DBPedia abstracts for known entities."
     },
     {
       "_type": "tag",
       "name": "main",
       "path": "./tooling/knowledge_integrator.py",
       "language": "Python",
-      "line": 57,
+      "line": 38,
       "kind": "function",
       "docstring": null
     },
@@ -10598,7 +10625,7 @@
       "name": "has_ctags",
       "path": "./tooling/symbol_map_generator.py",
       "language": "Python",
-      "line": 37,
+      "line": 38,
       "kind": "function",
       "docstring": "Check if Universal Ctags is installed and available in the PATH."
     },
@@ -10607,7 +10634,7 @@
       "name": "generate_symbols_with_ctags",
       "path": "./tooling/symbol_map_generator.py",
       "language": "Python",
-      "line": 46,
+      "line": 47,
       "kind": "function",
       "docstring": "Generates a symbol map using Universal Ctags."
     },
@@ -10727,6 +10754,15 @@
       "line": 103,
       "kind": "function",
       "docstring": "Main function to parse arguments and drive the build process."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/complexity_manager.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
