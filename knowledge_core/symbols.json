@@ -7259,9 +7259,9 @@
       "name": "convert_json_to_yaml_ld",
       "path": "./tooling/json_to_yaml_ld.py",
       "language": "Python",
-      "line": 5,
+      "line": 6,
       "kind": "function",
-      "docstring": "Converts a JSON file to YAML-LD."
+      "docstring": "Converts all JSON files in a directory to YAML-LD."
     },
     {
       "_type": "tag",
@@ -7424,6 +7424,42 @@
       "line": 159,
       "kind": "function",
       "docstring": "Verify the compiler can handle different section headers and parse\nthe 'deprecate-tool' command."
+    },
+    {
+      "_type": "tag",
+      "name": "TestJsonToYamlLd",
+      "path": "./tooling/test_json_to_yaml_ld.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_json_to_yaml_ld.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_json_to_yaml_ld.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_convert_json_to_yaml_ld",
+      "path": "./tooling/test_json_to_yaml_ld.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
