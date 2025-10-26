@@ -56,8 +56,8 @@ def execute_function_calls(candidate, page, screen_width, screen_height):
                 press_enter = args.get("press_enter", False)
 
                 page.mouse.click(actual_x, actual_y)
-                # Simple clear (Command+A, Backspace for Mac)
-                page.keyboard.press("Meta+A")
+                # Improved clear (Control+A, Backspace for cross-platform)
+                page.keyboard.press("Control+A")
                 page.keyboard.press("Backspace")
                 page.keyboard.type(text)
                 if press_enter:
@@ -124,7 +124,7 @@ def main():
     page.goto("https://www.google.com")
 
     client = GeminiApiClient()
-    model = genai.GenerativeModel("gemini-2.5-computer-use-preview-10-2025")
+    model = genai.GenerativeModel("gemini-2.0-pro")
 
     initial_screenshot = page.screenshot(type="png")
     contents = [
