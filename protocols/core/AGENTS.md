@@ -251,31 +251,6 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 ---
 
 ```yaml
-'@context':
-  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
-  rdfs: http://www.w3.org/2000/01/rdf-schema#
-  xsd: http://www.w3.org/2001/XMLSchema#
-  schema: https://schema.org/
-  dct: http://purl.org/dc/terms/
-  proto: https://factory.ai/ns/protocol/
-  protocol_id: '@id'
-  name: schema:name
-  description: schema:description
-  version: schema:version
-  scope: proto:scope
-  agents: proto:agents
-  files: proto:files
-  rules: proto:hasRule
-  rule_id: '@id'
-  enforcement: proto:enforcement
-  implementation: proto:implementation
-  type: '@type'
-  patterns: proto:hasPattern
-  flags: proto:flags
-  details: rdfs:comment
-  associated_tools:
-    '@id': proto:associatedTool
-    '@type': '@id'
 protocol_id: agent-shell-001
 description: A protocol governing the use of the interactive agent shell as the primary
   entry point for all tasks.
@@ -292,13 +267,6 @@ rules:
 associated_tools:
 - tooling/agent_shell.py
 version: 1.0.0
-
-```
-
-
----
-
-```yaml
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -324,6 +292,13 @@ version: 1.0.0
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
+
+```
+
+
+---
+
+```yaml
 protocol_id: toolchain-review-on-schema-change-001
 description: A meta-protocol to ensure the agent's toolchain remains synchronized
   with the architecture of its governing protocols.
@@ -342,13 +317,6 @@ associated_tools:
 - tooling/auditor.py
 - tooling/protocol_compiler.py
 version: 1.0.0
-
-```
-
-
----
-
-```yaml
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -374,6 +342,13 @@ version: 1.0.0
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
+
+```
+
+
+---
+
+```yaml
 protocol_id: unified-auditor-001
 description: A protocol for the unified repository auditing tool, which combines multiple
   health and compliance checks into a single interface.
@@ -389,13 +364,6 @@ rules:
 associated_tools:
 - tooling/auditor.py
 version: 1.0.0
-
-```
-
-
----
-
-```yaml
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -421,6 +389,13 @@ version: 1.0.0
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
+
+```
+
+
+---
+
+```yaml
 protocol_id: aura-execution-001
 description: A protocol for executing Aura scripts, enabling a more expressive and
   powerful planning and automation language for the agent.
@@ -436,13 +411,6 @@ rules:
 associated_tools:
 - tooling/aura_executor.py
 version: 1.0.0
-
-```
-
-
----
-
-```yaml
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -468,6 +436,13 @@ version: 1.0.0
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
+
+```
+
+
+---
+
+```yaml
 protocol_id: capability-verification-001
 description: A protocol for using the capability verifier tool to empirically test
   the agent's monotonic improvement.
@@ -483,13 +458,6 @@ rules:
 associated_tools:
 - tooling/capability_verifier.py
 version: 1.0.0
-
-```
-
-
----
-
-```yaml
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -515,6 +483,13 @@ version: 1.0.0
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
+
+```
+
+
+---
+
+```yaml
 protocol_id: csdc-001
 description: A protocol for the Context-Sensitive Development Cycle (CSDC), which
   introduces development models based on logical constraints.
@@ -540,13 +515,6 @@ rules:
 associated_tools:
 - tooling/chomsky/cli.py
 version: 1.0.0
-
-```
-
-
----
-
-```yaml
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -572,6 +540,13 @@ version: 1.0.0
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
+
+```
+
+
+---
+
+```yaml
 protocol_id: unified-doc-builder-001
 description: A protocol for the unified documentation builder, which generates various
   documentation artifacts from the repository's sources of truth.
@@ -587,13 +562,6 @@ rules:
 associated_tools:
 - tooling/doc_builder.py
 version: 1.0.0
-
-```
-
-
----
-
-```yaml
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -619,6 +587,13 @@ version: 1.0.0
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
+
+```
+
+
+---
+
+```yaml
 protocol_id: file-indexing-001
 description: A protocol for maintaining an up-to-date file index to accelerate tool
   performance.
@@ -634,13 +609,6 @@ rules:
   - core
 associated_tools: []
 version: 1.0.0
-
-```
-
-
----
-
-```yaml
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -666,6 +634,13 @@ version: 1.0.0
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
+
+```
+
+
+---
+
+```yaml
 protocol_id: hdl-proving-001
 description: A protocol for interacting with the Hypersequent-calculus-based logic
   engine, allowing the agent to perform formal logical proofs.
@@ -680,13 +655,6 @@ rules:
 associated_tools:
 - tooling/hdl_prover.py
 version: 1.0.0
-
-```
-
-
----
-
-```yaml
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -712,6 +680,13 @@ version: 1.0.0
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
+
+```
+
+
+---
+
+```yaml
 protocol_id: agent-interaction-001
 description: A protocol governing the agent's core interaction and planning tools.
 rules:
@@ -734,13 +709,6 @@ associated_tools:
 - set_plan
 - message_user
 version: 1.0.0
-
-```
-
-
----
-
-```yaml
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -766,6 +734,13 @@ version: 1.0.0
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
+
+```
+
+
+---
+
+```yaml
 protocol_id: plllu-execution-001
 description: A protocol for executing pLLLU scripts, enabling a more expressive and
   powerful planning and automation language for the agent.
@@ -781,13 +756,6 @@ rules:
 associated_tools:
 - tooling/plllu_runner.py
 version: 1.0.0
-
-```
-
-
----
-
-```yaml
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -813,6 +781,13 @@ version: 1.0.0
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
+
+```
+
+
+---
+
+```yaml
 protocol_id: speculative-execution-001
 description: A protocol that governs the agent's ability to initiate and execute self-generated,
   creative, or exploratory tasks during idle periods.
@@ -856,6 +831,31 @@ associated_tools:
 - create_file_with_block
 - request_user_input
 version: 1.0.0
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
 
 ```
 

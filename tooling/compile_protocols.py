@@ -2,6 +2,7 @@
 import os
 import sys
 import yaml
+import json
 from build_utils import find_files, load_schema, execute_code
 from compile_protocols_logic import generate_agents_md_content
 
@@ -10,6 +11,7 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT_DIR)
 PROTOCOLS_DIR = os.path.join(ROOT_DIR, "protocols")
 SCHEMA_FILE = os.path.join(PROTOCOLS_DIR, "protocol.schema.json")
+CONTEXT_FILE = os.path.join(PROTOCOLS_DIR, "context.jsonld")
 
 
 def compile_module(module_dir):
@@ -24,6 +26,16 @@ def compile_module(module_dir):
     if not schema:
         return
 
+    try:
+        with open(CONTEXT_FILE, "r") as f:
+            context_data = json.load(f).get("@context")
+        if not context_data:
+            print(f"Warning: Could not find '@context' in {CONTEXT_FILE}", file=sys.stderr)
+            context_data = {}
+    except (IOError, json.JSONDecodeError) as e:
+        print(f"Warning: Could not load context from {CONTEXT_FILE}: {e}", file=sys.stderr)
+        context_data = {}
+
     all_md_files = sorted([os.path.join(module_dir, f) for f in find_files(".protocol.md", base_dir=module_dir, recursive=False)])
     all_yaml_files = sorted([os.path.join(module_dir, f) for f in find_files(".protocol.yaml", base_dir=module_dir, recursive=False)])
 
@@ -37,6 +49,7 @@ def compile_module(module_dir):
         try:
             with open(file_path, "r") as f:
                 protocol_data = yaml.safe_load(f)
+                protocol_data['@context'] = context_data
                 for rule in protocol_data.get("rules", []):
                     if "executable_code" in rule:
                         execute_code(rule["executable_code"], protocol_data["protocol_id"], rule["rule_id"])

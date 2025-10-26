@@ -16,31 +16,6 @@ This protocol governs the agent's use of the Google Gemini API, a powerful tool 
 ---
 
 ```yaml
-'@context':
-  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
-  rdfs: http://www.w3.org/2000/01/rdf-schema#
-  xsd: http://www.w3.org/2001/XMLSchema#
-  schema: https://schema.org/
-  dct: http://purl.org/dc/terms/
-  proto: https://factory.ai/ns/protocol/
-  protocol_id: '@id'
-  name: schema:name
-  description: schema:description
-  version: schema:version
-  scope: proto:scope
-  agents: proto:agents
-  files: proto:files
-  rules: proto:hasRule
-  rule_id: '@id'
-  enforcement: proto:enforcement
-  implementation: proto:implementation
-  type: '@type'
-  patterns: proto:hasPattern
-  flags: proto:flags
-  details: rdfs:comment
-  associated_tools:
-    '@id': proto:associatedTool
-    '@type': '@id'
 protocol_id: gemini-api-integration-001
 description: A protocol for integrating with the Google Gemini API.
 rules:
@@ -66,6 +41,31 @@ associated_tools:
 - google_search
 - view_text_website
 version: 1.0.0
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
 
 ```
 

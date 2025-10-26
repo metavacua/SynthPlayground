@@ -143,31 +143,6 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
 ---
 
 ```yaml
-'@context':
-  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
-  rdfs: http://www.w3.org/2000/01/rdf-schema#
-  xsd: http://www.w3.org/2001/XMLSchema#
-  schema: https://schema.org/
-  dct: http://purl.org/dc/terms/
-  proto: https://factory.ai/ns/protocol/
-  protocol_id: '@id'
-  name: schema:name
-  description: schema:description
-  version: schema:version
-  scope: proto:scope
-  agents: proto:agents
-  files: proto:files
-  rules: proto:hasRule
-  rule_id: '@id'
-  enforcement: proto:enforcement
-  implementation: proto:implementation
-  type: '@type'
-  patterns: proto:hasPattern
-  flags: proto:flags
-  details: rdfs:comment
-  associated_tools:
-    '@id': proto:associatedTool
-    '@type': '@id'
 protocol_id: agent-bootstrap-001
 description: A foundational protocol that dictates the agent's initial actions upon
   starting any task.
@@ -184,13 +159,6 @@ rules:
 associated_tools:
 - read_file
 version: 1.0.0
-
-```
-
-
----
-
-```yaml
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -216,6 +184,13 @@ version: 1.0.0
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
+
+```
+
+
+---
+
+```yaml
 protocol_id: dependency-management-001
 description: A protocol for ensuring a reliable execution environment through formal
   dependency management.
@@ -231,13 +206,6 @@ rules:
 associated_tools:
 - run_in_bash_session
 version: 1.0.0
-
-```
-
-
----
-
-```yaml
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -263,6 +231,13 @@ version: 1.0.0
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
+
+```
+
+
+---
+
+```yaml
 protocol_id: experimental-prologue-001
 description: An experimental protocol to test dynamic rule-following. It mandates
   a prologue action before file creation.
@@ -279,6 +254,31 @@ rules:
 associated_tools:
 - create_file_with_block
 version: 1.0.0
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
 
 ```
 
