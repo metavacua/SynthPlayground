@@ -12,6 +12,7 @@ def run_enrichment(start, end):
     # Load the existing protocols file
     g = rdflib.Graph()
     g.parse("knowledge_core/protocols.ttl", format="turtle")
+    g.parse("knowledge_core/filesystem_data.ttl", format="turtle")
 
     # Bind namespaces for cleaner output
     g.bind("protocol", PROTOCOL)
