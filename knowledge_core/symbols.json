@@ -2315,79 +2315,16 @@
     },
     {
       "_type": "tag",
+      "name": "counter",
+      "path": "./language_theory/unbounded_recursion.py",
+      "language": "Python",
+      "line": 2,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "recognize_right_linear",
-      "path": "./language_theory/toolchain/recognizer.py",
-      "language": "Python",
-      "line": 6,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "reverse_grammar",
-      "path": "./language_theory/toolchain/recognizer.py",
-      "language": "Python",
-      "line": 27,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "print_path",
-      "path": "./language_theory/toolchain/recognizer.py",
-      "language": "Python",
-      "line": 35,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "EarleyItem",
-      "path": "./language_theory/toolchain/recognizer.py",
-      "language": "Python",
-      "line": 41,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "recognize_earley",
-      "path": "./language_theory/toolchain/recognizer.py",
-      "language": "Python",
-      "line": 54,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "get_parse_count",
-      "path": "./language_theory/toolchain/recognizer.py",
-      "language": "Python",
-      "line": 90,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "count_parses",
-      "path": "./language_theory/toolchain/recognizer.py",
-      "language": "Python",
-      "line": 95,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./language_theory/toolchain/recognizer.py",
-      "language": "Python",
-      "line": 106,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "_search",
       "path": "./language_theory/toolchain/recognizer.py",
       "language": "Python",
       "line": 8,
@@ -2396,10 +2333,82 @@
     },
     {
       "_type": "tag",
+      "name": "reverse_grammar",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "print_path",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 37,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "EarleyItem",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "recognize_earley",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 56,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "get_parse_count",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 92,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "count_parses",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 97,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 108,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_search",
+      "path": "./language_theory/toolchain/recognizer.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "__init__",
       "path": "./language_theory/toolchain/recognizer.py",
       "language": "Python",
-      "line": 42,
+      "line": 44,
       "kind": "function",
       "docstring": null
     },
@@ -2408,7 +2417,7 @@
       "name": "__eq__",
       "path": "./language_theory/toolchain/recognizer.py",
       "language": "Python",
-      "line": 47,
+      "line": 49,
       "kind": "function",
       "docstring": null
     },
@@ -2417,7 +2426,7 @@
       "name": "__hash__",
       "path": "./language_theory/toolchain/recognizer.py",
       "language": "Python",
-      "line": 49,
+      "line": 51,
       "kind": "function",
       "docstring": null
     },
@@ -2426,7 +2435,196 @@
       "name": "__repr__",
       "path": "./language_theory/toolchain/recognizer.py",
       "language": "Python",
-      "line": 51,
+      "line": 53,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "LBASimulator",
+      "path": "./language_theory/toolchain/lba.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "class",
+      "docstring": "A simulator for a Linear Bounded Automaton, designed to recognize\nlanguages generated by non-contracting Context-Sensitive Grammars."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./language_theory/toolchain/lba.py",
+      "language": "Python",
+      "line": 63,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./language_theory/toolchain/lba.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "recognize",
+      "path": "./language_theory/toolchain/lba.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function",
+      "docstring": "Attempts to recognize the input_string by generating all possible\nderivations from the start symbol in a breadth-first manner."
+    },
+    {
+      "_type": "tag",
+      "name": "Classifier",
+      "path": "./language_theory/toolchain/classifier.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "class",
+      "docstring": "Analyzes a Grammar object to determine its classification within the Chomsky Hierarchy."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./language_theory/toolchain/classifier.py",
+      "language": "Python",
+      "line": 112,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./language_theory/toolchain/classifier.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "classify",
+      "path": "./language_theory/toolchain/classifier.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": "Determines the most specific classification for the grammar.\nFollows the hierarchy from Type-3 up to Type-0."
+    },
+    {
+      "_type": "tag",
+      "name": "_check_type_0",
+      "path": "./language_theory/toolchain/classifier.py",
+      "language": "Python",
+      "line": 44,
+      "kind": "function",
+      "docstring": "Checks for unrestricted grammar properties.\n- is_unrestricted: True if any LHS has more than one symbol.\n- is_contracting: True if any rule is contracting (|LHS| > |RHS|)."
+    },
+    {
+      "_type": "tag",
+      "name": "_check_type_1",
+      "path": "./language_theory/toolchain/classifier.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function",
+      "docstring": "Checks if the grammar is context-sensitive.\nA grammar is context-sensitive if it's unrestricted but not contracting."
+    },
+    {
+      "_type": "tag",
+      "name": "_check_type_2",
+      "path": "./language_theory/toolchain/classifier.py",
+      "language": "Python",
+      "line": 71,
+      "kind": "function",
+      "docstring": "Checks if the grammar is context-free.\n- is_cfg: True if all LHS have exactly one non-terminal.\n- has_empty: True if any rule produces an empty string."
+    },
+    {
+      "_type": "tag",
+      "name": "_check_type_3",
+      "path": "./language_theory/toolchain/classifier.py",
+      "language": "Python",
+      "line": 86,
+      "kind": "function",
+      "docstring": "Checks if the grammar is regular (left or right linear).\n- is_left_reg: True if all rules are of the form A -> Ba or A -> a.\n- is_right_reg: True if all rules are of the form A -> aB or A -> a."
+    },
+    {
+      "_type": "tag",
+      "name": "check_equivalence",
+      "path": "./language_theory/toolchain/equivalence.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": "Checks for bounded extensional equivalence between two functions.\n\nArgs:\n    original_func: The original Python function.\n    controller_func: The refactored controller function.\n    input_ranges: A dictionary mapping argument names to iterables of test values.\n    fuel_factor: A multiplier for determining the fuel needed.\n\nReturns:\n    A tuple (is_equivalent, mismatches), where mismatches is a list of\n    inputs that caused a failure."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./language_theory/toolchain/equivalence.py",
+      "language": "Python",
+      "line": 71,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "DecidabilityRefactorer",
+      "path": "./language_theory/toolchain/refactor.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "class",
+      "docstring": "Transforms a Python function with unbounded recursion (while loops)\ninto a total function with a 'fuel' parameter and a control program."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_control_program",
+      "path": "./language_theory/toolchain/refactor.py",
+      "language": "Python",
+      "line": 107,
+      "kind": "function",
+      "docstring": "Generates the code for the control program."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./language_theory/toolchain/refactor.py",
+      "language": "Python",
+      "line": 128,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./language_theory/toolchain/refactor.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "visit_FunctionDef",
+      "path": "./language_theory/toolchain/refactor.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_create_total_function",
+      "path": "./language_theory/toolchain/refactor.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "visit_While",
+      "path": "./language_theory/toolchain/refactor.py",
+      "language": "Python",
+      "line": 53,
       "kind": "function",
       "docstring": null
     },
@@ -2490,6 +2688,60 @@
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
       "line": 63,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./language_theory/toolchain/__main__.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Main entry point for the Language Theory Toolchain.\nThis script dispatches commands to the various tools in the toolchain."
+    },
+    {
+      "_type": "tag",
+      "name": "run_classify",
+      "path": "./language_theory/toolchain/__main__.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "run_recognize",
+      "path": "./language_theory/toolchain/__main__.py",
+      "language": "Python",
+      "line": 32,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "run_complexity",
+      "path": "./language_theory/toolchain/__main__.py",
+      "language": "Python",
+      "line": 37,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "run_refactor",
+      "path": "./language_theory/toolchain/__main__.py",
+      "language": "Python",
+      "line": 42,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "run_equivalence",
+      "path": "./language_theory/toolchain/__main__.py",
+      "language": "Python",
+      "line": 47,
       "kind": "function",
       "docstring": null
     },
