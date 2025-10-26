@@ -1,6 +1,6 @@
 # AGENTS.md (Dynamically Generated)
 
-**Last Generated:** 2025-10-26 00:07:24 UTC
+**Last Generated:** 2025-10-25 20:58:31 UTC
 
 ## Objective
 
@@ -35,6 +35,17 @@ The following build targets are the primary way to test, build, and maintain thi
 ## Core Directives & Protocols
 
 The agent's behavior is governed by the following set of formal protocols, which are dynamically generated from the repository's enriched knowledge core. You are required to adhere to these protocols at all times.
+
+### Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state.
+
+**Rules:**
+
+- Level 1 (Self-Awareness): The agent must first establish its own identity and inherent limitations by reading the `knowledge_core/agent_meta.json` artifact.
+- Level 2 (Repository Sync): The agent must understand the current state of the local repository by loading primary artifacts from the `knowledge_core/` directory.
+- Level 3 (Orientation Cascade Protocol): To reliably locate a target entity (file, directory, code symbol), the agent must follow a mandatory, escalating search cascade.
+- Level 4 (Deep Research Cycle): To investigate 'unknown unknowns', the agent must initiate a formal, self-contained Finite Development Cycle (FDC) of the 'Analysis Modality'.
+
+---
 
 ### A meta-protocol governing the agent's awareness and maintenance of its own core protocol files.
 
@@ -162,16 +173,6 @@ The agent's behavior is governed by the following set of formal protocols, which
 **Rules:**
 
 - The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process.
-
----
-### Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state.
-
-**Rules:**
-
-- Level 1 (Self-Awareness): The agent must first establish its own identity and inherent limitations by reading the `knowledge_core/agent_meta.json` artifact.
-- Level 2 (Repository Sync): The agent must understand the current state of the local repository by loading primary artifacts from the `knowledge_core/` directory.
-- Level 3 (Environmental Probing & Targeted RAG): The agent must discover the rules and constraints of its operational environment by executing a probe script and using targeted RAG to resolve 'known unknowns'.
-- Level 4 (Deep Research Cycle): To investigate 'unknown unknowns', the agent must initiate a formal, self-contained Finite Development Cycle (FDC) of the 'Analysis Modality'.
 
 ---
 ### An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.
