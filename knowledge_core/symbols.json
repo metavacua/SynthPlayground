@@ -3512,24 +3512,6 @@
     },
     {
       "_type": "tag",
-      "name": "is_lexer_like",
-      "path": "./tooling/refactor_cf_to_r.py",
-      "language": "Python",
-      "line": 10,
-      "kind": "function",
-      "docstring": "Determines if a function definition node is lexer-like.\nA function is considered lexer-like if it iterates over a string and\nyields tokens."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/refactor_cf_to_r.py",
-      "language": "Python",
-      "line": 29,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
       "name": "TestLogFailure",
       "path": "./tooling/test_log_failure.py",
       "language": "Python",
@@ -3689,15 +3671,6 @@
       "line": 61,
       "kind": "function",
       "docstring": "Tests that the executor exits on a parser error."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/csdc_cli.py",
-      "language": "Python",
-      "line": 33,
-      "kind": "function",
-      "docstring": null
     },
     {
       "_type": "tag",
@@ -4488,24 +4461,6 @@
       "path": "./tooling/doc_builder.py",
       "language": "Python",
       "line": 135,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "is_pure",
-      "path": "./tooling/refactor_cs_to_cf.py",
-      "language": "Python",
-      "line": 10,
-      "kind": "function",
-      "docstring": "Determines if a function definition node is pure.\nA function is considered pure if it does not perform any side effects."
-    },
-    {
-      "_type": "tag",
-      "name": "main",
-      "path": "./tooling/refactor_cs_to_cf.py",
-      "language": "Python",
-      "line": 25,
       "kind": "function",
       "docstring": null
     },
@@ -5339,24 +5294,6 @@
     },
     {
       "_type": "tag",
-      "name": "LBAValidator",
-      "path": "./tooling/lba_validator.py",
-      "language": "Python",
-      "line": 19,
-      "kind": "class",
-      "docstring": "A validator that uses LBA principles to enforce CSDC rules."
-    },
-    {
-      "_type": "tag",
-      "name": "validate",
-      "path": "./tooling/lba_validator.py",
-      "language": "Python",
-      "line": 24,
-      "kind": "function",
-      "docstring": "Validates a plan against a given CSDC model.\n\nArgs:\n    plan_content: The string content of the plan.\n    model: The CSDC model to validate against ('A' or 'B').\n\nReturns:\n    A tuple containing a boolean indicating validity and a string with an error message."
-    },
-    {
-      "_type": "tag",
       "name": "TestGuardian",
       "path": "./tooling/test_guardian.py",
       "language": "Python",
@@ -5657,7 +5594,7 @@
       "name": "execute_build",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 42,
+      "line": 47,
       "kind": "function",
       "docstring": "Executes the build process for a specific target."
     },
@@ -5666,7 +5603,7 @@
       "name": "main",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 103,
+      "line": 108,
       "kind": "function",
       "docstring": "Main function to parse arguments and drive the build process."
     },
@@ -8048,15 +7985,6 @@
     },
     {
       "_type": "tag",
-      "name": "validate_plan",
-      "path": "./tooling/csdc_logic.py",
-      "language": "Python",
-      "line": 4,
-      "kind": "function",
-      "docstring": "Validates a plan against a given CSDC model and complexity."
-    },
-    {
-      "_type": "tag",
       "name": "TestFdcCli",
       "path": "./tooling/test_fdc_cli.py",
       "language": "Python",
@@ -8396,6 +8324,321 @@
       "line": 7,
       "kind": "function",
       "docstring": "Parses an AAL string and returns a Domain object."
+    },
+    {
+      "_type": "tag",
+      "name": "is_lexer_like",
+      "path": "./tooling/chomsky/refactor_cf_to_r.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": "Determines if a function definition node is lexer-like.\nA function is considered lexer-like if it iterates over a string and\nyields tokens."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/chomsky/refactor_cf_to_r.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestCli",
+      "path": "./tooling/chomsky/test_cli.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/chomsky/test_cli.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/chomsky/test_cli.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_validate_plan_success",
+      "path": "./tooling/chomsky/test_cli.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_refactor_orchestration_cs_to_cf",
+      "path": "./tooling/chomsky/test_cli.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_refactor_orchestration_cf_to_r",
+      "path": "./tooling/chomsky/test_cli.py",
+      "language": "Python",
+      "line": 54,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestCodeAnalyzer",
+      "path": "./tooling/chomsky/test_analyzer.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/chomsky/test_analyzer.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_analyze",
+      "path": "./tooling/chomsky/test_analyzer.py",
+      "language": "Python",
+      "line": 32,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_file",
+      "path": "./tooling/chomsky/cli.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": "Analyzes a Python file and prints the results."
+    },
+    {
+      "_type": "tag",
+      "name": "refactor_file",
+      "path": "./tooling/chomsky/cli.py",
+      "language": "Python",
+      "line": 38,
+      "kind": "function",
+      "docstring": "Refactors a Python file using a specified strategy."
+    },
+    {
+      "_type": "tag",
+      "name": "validate_plan_file",
+      "path": "./tooling/chomsky/cli.py",
+      "language": "Python",
+      "line": 56,
+      "kind": "function",
+      "docstring": "Validates a plan file against a CSDC model and complexity."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/chomsky/cli.py",
+      "language": "Python",
+      "line": 78,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "is_pure",
+      "path": "./tooling/chomsky/refactor_cs_to_cf.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": "Determines if a function definition node is pure.\nA function is considered pure if it does not perform any side effects."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/chomsky/refactor_cs_to_cf.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "CodeAnalyzer",
+      "path": "./tooling/chomsky/analyzer.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "class",
+      "docstring": "A class to analyze a Python AST and classify its components."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/chomsky/analyzer.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "analyze",
+      "path": "./tooling/chomsky/analyzer.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function",
+      "docstring": "Performs a full analysis of the source code."
+    },
+    {
+      "_type": "tag",
+      "name": "_analyze_function",
+      "path": "./tooling/chomsky/analyzer.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": "Analyzes a single function to determine its complexity characteristics."
+    },
+    {
+      "_type": "tag",
+      "name": "_check_recursion",
+      "path": "./tooling/chomsky/analyzer.py",
+      "language": "Python",
+      "line": 63,
+      "kind": "function",
+      "docstring": "Checks a function for recursion and classifies it."
+    },
+    {
+      "_type": "tag",
+      "name": "_is_primitive_recursive_call",
+      "path": "./tooling/chomsky/analyzer.py",
+      "language": "Python",
+      "line": 84,
+      "kind": "function",
+      "docstring": "Checks if a specific recursive call site appears to be a valid\nprimitive recursive call.\n\nA call is considered primitive recursive if:\n1. None of its arguments are nested recursive calls.\n2. At least one argument is structurally smaller (e.g., n - 1)."
+    },
+    {
+      "_type": "tag",
+      "name": "LBAValidator",
+      "path": "./tooling/chomsky/lba_validator.py",
+      "language": "Python",
+      "line": 19,
+      "kind": "class",
+      "docstring": "A validator that uses LBA principles to enforce CSDC rules."
+    },
+    {
+      "_type": "tag",
+      "name": "validate",
+      "path": "./tooling/chomsky/lba_validator.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": "Validates a plan against a given CSDC model.\n\nArgs:\n    plan_content: The string content of the plan.\n    model: The CSDC model to validate against ('A' or 'B').\n\nReturns:\n    A tuple containing a boolean indicating validity and a string with an error message."
+    },
+    {
+      "_type": "tag",
+      "name": "TestCodeRefactorer",
+      "path": "./tooling/chomsky/test_refactor.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/chomsky/test_refactor.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_refactor_to_decidable",
+      "path": "./tooling/chomsky/test_refactor.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "GeneralToPrimitiveTransformer",
+      "path": "./tooling/chomsky/refactor.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "class",
+      "docstring": "An AST transformer that converts a general recursive function to a\nprimitive recursive one by adding a 'fuel' parameter."
+    },
+    {
+      "_type": "tag",
+      "name": "CodeRefactorer",
+      "path": "./tooling/chomsky/refactor.py",
+      "language": "Python",
+      "line": 58,
+      "kind": "class",
+      "docstring": "A class to perform AST-based refactorings on Python code."
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/chomsky/refactor.py",
+      "language": "Python",
+      "line": 19,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "visit_FunctionDef",
+      "path": "./tooling/chomsky/refactor.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "visit_Call",
+      "path": "./tooling/chomsky/refactor.py",
+      "language": "Python",
+      "line": 43,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/chomsky/refactor.py",
+      "language": "Python",
+      "line": 63,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "refactor_to_decidable",
+      "path": "./tooling/chomsky/refactor.py",
+      "language": "Python",
+      "line": 67,
+      "kind": "function",
+      "docstring": "Refactors all general recursive functions in the code to be decidable."
     },
     {
       "_type": "tag",
