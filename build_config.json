@@ -1,0 +1,84 @@
+{
+  "build_groups": {
+    "all": [
+      "protocols",
+      "docs",
+      "knowledge-compile",
+      "knowledge-integrate",
+      "agents-md"
+    ],
+    "knowledge": [
+      "knowledge-compile",
+      "knowledge-integrate"
+    ]
+  },
+  "targets": {
+    "agents-md": {
+      "compiler": "tooling/master_agents_md_generator.py",
+      "description": "Generate the master AGENTS.md file.",
+      "options": {
+        "--build-config": "build_config.yaml",
+        "--knowledge-file": "knowledge_core/integrated_knowledge.yaml"
+      },
+      "output": "AGENTS.md",
+      "type": "compiler"
+    },
+    "docs": {
+      "compiler": "tooling/doc_builder.py",
+      "description": "Generate system documentation.",
+      "options": {
+        "--format": "system",
+        "--source-dir": [
+          "tooling/",
+          "utils/",
+          "research/",
+          "language_theory/",
+          "logic_system/"
+        ]
+      },
+      "output": "docs/SYSTEM_DOCUMENTATION.md",
+      "type": "compiler"
+    },
+    "format": {
+      "command": "python3 -m black tooling/",
+      "description": "Format the code using black.",
+      "type": "command"
+    },
+    "guardian-protocol": {
+      "command": "python3 protocols/guardian/build.py",
+      "description": "Compile the guardian protocol.",
+      "type": "command"
+    },
+    "install": {
+      "command": "pip install -r requirements.txt",
+      "description": "Install Python dependencies.",
+      "type": "command"
+    },
+    "knowledge-compile": {
+      "command": "python3 tooling/knowledge_compiler.py --source-dir postmortems/",
+      "description": "Compile lessons from post-mortems.",
+      "type": "command"
+    },
+    "knowledge-integrate": {
+      "compiler": "tooling/knowledge_integrator.py",
+      "description": "Integrate knowledge from various sources.",
+      "output": "knowledge_core/integrated_knowledge.yaml",
+      "type": "compiler"
+    },
+    "lint": {
+      "command": "python3 -m flake8 .",
+      "description": "Lint the code using flake8.",
+      "type": "command"
+    },
+    "protocols": {
+      "command": "python3 tooling/compile_protocols.py",
+      "description": "Compile all protocols.",
+      "type": "command"
+    },
+    "test": {
+      "command": "python3 -m pytest",
+      "description": "Run the test suite using pytest.",
+      "type": "command"
+    }
+  }
+}

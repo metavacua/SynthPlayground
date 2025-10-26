@@ -19,6 +19,16 @@ The agent should, when encountering an experimental protocol, announce that it i
 ---
 
 ```yaml
+protocol_id: executable-demo-001
+description: A demonstration of a protocol with executable code.
+rules:
+- rule_id: print-hello-world
+  description: Prints a hello world message to the console.
+  enforcement: This rule is enforced by the build script.
+  executable_code: print('Hello from an executable protocol!')
+  tags:
+  - experimental
+version: 1.0.0
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -44,16 +54,6 @@ The agent should, when encountering an experimental protocol, announce that it i
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
-protocol_id: executable-demo-001
-description: A demonstration of a protocol with executable code.
-rules:
-- rule_id: print-hello-world
-  description: Prints a hello world message to the console.
-  enforcement: This rule is enforced by the build script.
-  executable_code: print('Hello from an executable protocol!')
-  tags:
-  - experimental
-version: 1.0.0
 
 ```
 

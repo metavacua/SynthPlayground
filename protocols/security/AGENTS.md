@@ -15,6 +15,10 @@ This document outlines the security policies and procedures for this project. It
 ---
 
 ```yaml
+version: 1.0.0
+protocol_id: security-header
+description: Defines the identity and purpose of the Security Protocol document.
+rules: []
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -40,10 +44,6 @@ This document outlines the security policies and procedures for this project. It
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
-version: 1.0.0
-protocol_id: security-header
-description: Defines the identity and purpose of the Security Protocol document.
-rules: []
 
 ```
 
@@ -51,6 +51,24 @@ rules: []
 ---
 
 ```yaml
+description: Defines the official policy and procedure for reporting security vulnerabilities.
+protocol_id: security-vuln-reporting-001
+rules:
+- description: All suspected security vulnerabilities MUST be reported privately to
+    the designated security contact.
+  enforcement: This is a procedural rule. The designated contact is specified in the
+    project's main SECURITY.md file.
+  rule_id: vuln-reporting-channel
+  tags:
+  - security
+- description: Vulnerabilities MUST NOT be disclosed publicly until a patch is available
+    and has been distributed.
+  enforcement: Violation of this rule may result in being banned from the project
+    community.
+  rule_id: no-public-disclosure
+  tags:
+  - security
+version: 1.0.0
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -76,24 +94,6 @@ rules: []
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
-version: 1.0.0
-protocol_id: security-vuln-reporting-001
-description: Defines the official policy and procedure for reporting security vulnerabilities.
-rules:
-- rule_id: vuln-reporting-channel
-  description: All suspected security vulnerabilities MUST be reported privately to
-    the designated security contact.
-  enforcement: This is a procedural rule. The designated contact is specified in the
-    project's main SECURITY.md file.
-  tags:
-  - security
-- rule_id: no-public-disclosure
-  description: Vulnerabilities MUST NOT be disclosed publicly until a patch is available
-    and has been distributed.
-  enforcement: Violation of this rule may result in being banned from the project
-    community.
-  tags:
-  - security
 
 ```
 

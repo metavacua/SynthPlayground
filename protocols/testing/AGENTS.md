@@ -33,6 +33,21 @@ This ensures that:
 ---
 
 ```yaml
+protocol_id: test-driven-development-001
+description: A protocol to enforce Test-Driven Development (TDD) practices.
+rules:
+- rule_id: tdd-writing-new-code
+  description: When writing any new function or class, a corresponding test must be
+    written first. The test should fail before the new code is implemented, and pass
+    after.
+  enforcement: This is a procedural rule. The agent should verify that a failing test
+    is committed before the implementation is committed.
+  validation_command: python3 tooling/validate_tdd.py
+  tags:
+  - testing
+associated_tools:
+- tooling/test_runner.py
+version: 1.0.0
 '@context':
   rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
   rdfs: http://www.w3.org/2000/01/rdf-schema#
@@ -58,21 +73,6 @@ This ensures that:
   associated_tools:
     '@id': proto:associatedTool
     '@type': '@id'
-protocol_id: test-driven-development-001
-description: A protocol to enforce Test-Driven Development (TDD) practices.
-rules:
-- rule_id: tdd-writing-new-code
-  description: When writing any new function or class, a corresponding test must be
-    written first. The test should fail before the new code is implemented, and pass
-    after.
-  enforcement: This is a procedural rule. The agent should verify that a failing test
-    is committed before the implementation is committed.
-  validation_command: python3 tooling/validate_tdd.py
-  tags:
-  - testing
-associated_tools:
-- tooling/test_runner.py
-version: 1.0.0
 
 ```
 
