@@ -129,7 +129,9 @@ class TestLogger(unittest.TestCase):
                 outcome_status="SUCCESS",
             )
 
-        self.assertFalse(os.path.exists(self.log_path))
+        # The new behavior is to create an empty file, so we check for size 0.
+        self.assertTrue(os.path.exists(self.log_path))
+        self.assertEqual(os.path.getsize(self.log_path), 0)
 
 
 if __name__ == "__main__":

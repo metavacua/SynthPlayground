@@ -54,6 +54,12 @@ class Logger:
         # Ensure the log directory exists
         os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
 
+        # Create an empty log file if it does not exist, to prevent the auditor
+        # from flagging a fresh environment as a broken system.
+        if not os.path.exists(self.log_path):
+            with open(self.log_path, "a") as f:
+                pass
+
     def _load_schema(self, schema_path):
         """
         Loads the JSON schema from the specified Markdown file.
