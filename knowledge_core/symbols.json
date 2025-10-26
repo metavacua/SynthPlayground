@@ -2687,7 +2687,7 @@
       "name": "find_all_agents_md_files",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 52,
+      "line": 57,
       "kind": "function",
       "docstring": null
     },
@@ -2696,7 +2696,7 @@
       "name": "get_used_tools_from_log",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 56,
+      "line": 61,
       "kind": "function",
       "docstring": null
     },
@@ -2705,7 +2705,7 @@
       "name": "get_protocol_tools_from_agents_md",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 86,
+      "line": 91,
       "kind": "function",
       "docstring": null
     },
@@ -2714,7 +2714,7 @@
       "name": "run_protocol_audit",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 106,
+      "line": 111,
       "kind": "function",
       "docstring": null
     },
@@ -2723,7 +2723,7 @@
       "name": "run_plan_registry_audit",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 181,
+      "line": 186,
       "kind": "function",
       "docstring": null
     },
@@ -2732,7 +2732,7 @@
       "name": "run_doc_audit",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 215,
+      "line": 217,
       "kind": "function",
       "docstring": null
     },
@@ -2750,7 +2750,7 @@
       "name": "main",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 398,
+      "line": 266,
       "kind": "function",
       "docstring": null
     },
@@ -2822,72 +2822,18 @@
       "name": "TestDocBuilder",
       "path": "./tooling/test_doc_builder.py",
       "language": "Python",
-      "line": 8,
+      "line": 12,
       "kind": "class",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "setUp",
+      "name": "test_parse_file_for_docs",
       "path": "./tooling/test_doc_builder.py",
       "language": "Python",
-      "line": 10,
+      "line": 13,
       "kind": "function",
       "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_doc_builder.py",
-      "language": "Python",
-      "line": 35,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_generate_system_docs",
-      "path": "./tooling/test_doc_builder.py",
-      "language": "Python",
-      "line": 38,
-      "kind": "function",
-      "docstring": "Tests the generation of system documentation from Python files."
-    },
-    {
-      "_type": "tag",
-      "name": "test_generate_readme",
-      "path": "./tooling/test_doc_builder.py",
-      "language": "Python",
-      "line": 55,
-      "kind": "function",
-      "docstring": "Tests the generation of a README.md from an AGENTS.md file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_generate_pages",
-      "path": "./tooling/test_doc_builder.py",
-      "language": "Python",
-      "line": 71,
-      "kind": "function",
-      "docstring": "Tests the generation of a GitHub Pages index.html file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_generate_readme_missing_agents_md",
-      "path": "./tooling/test_doc_builder.py",
-      "language": "Python",
-      "line": 90,
-      "kind": "function",
-      "docstring": "Tests that README generation handles a missing AGENTS.md file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_system_docs_no_docstring",
-      "path": "./tooling/test_doc_builder.py",
-      "language": "Python",
-      "line": 103,
-      "kind": "function",
-      "docstring": "Tests that system docs correctly report missing docstrings."
     },
     {
       "_type": "tag",
@@ -3044,6 +2990,24 @@
     },
     {
       "_type": "tag",
+      "name": "analyze_python_file",
+      "path": "./tooling/context_awareness_scanner_logic.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "Analyzes the content of a Python file to find defined and imported symbols."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_report",
+      "path": "./tooling/context_awareness_scanner_logic.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function",
+      "docstring": "Generates the report for the context awareness scanner."
+    },
+    {
+      "_type": "tag",
       "name": "main",
       "path": "./tooling/capability_verifier.py",
       "language": "Python",
@@ -3170,6 +3134,24 @@
     },
     {
       "_type": "tag",
+      "name": "is_lexer_like",
+      "path": "./tooling/refactor_cf_to_r.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": "Determines if a function definition node is lexer-like.\nA function is considered lexer-like if it iterates over a string and\nyields tokens."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/refactor_cf_to_r.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TestLogFailure",
       "path": "./tooling/test_log_failure.py",
       "language": "Python",
@@ -3212,6 +3194,69 @@
       "line": 17,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "ApplToLfiIllCompiler",
+      "path": "./tooling/appl_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/appl_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile",
+      "path": "./tooling/appl_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": "Recursively walks the APPL AST and translates it to an LFI ILL AST."
+    },
+    {
+      "_type": "tag",
+      "name": "compile_type",
+      "path": "./tooling/appl_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 82,
+      "kind": "function",
+      "docstring": "Translates APPL types to LFI ILL types."
+    },
+    {
+      "_type": "tag",
+      "name": "load_config",
+      "path": "./tooling/build_logic.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "Loads the build configuration file."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_compiler_command",
+      "path": "./tooling/build_logic.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "function",
+      "docstring": "Generates the command for a 'compiler' type build target."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_command",
+      "path": "./tooling/build_logic.py",
+      "language": "Python",
+      "line": 50,
+      "kind": "function",
+      "docstring": "Generates the command for a 'command' type build target."
     },
     {
       "_type": "tag",
@@ -3272,7 +3317,43 @@
       "name": "main",
       "path": "./tooling/csdc_cli.py",
       "language": "Python",
-      "line": 32,
+      "line": 33,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestRefactorCfToR",
+      "path": "./tooling/test_refactor_cf_to_r.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_refactor_cf_to_r.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_refactor_cf_to_r.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_refactor",
+      "path": "./tooling/test_refactor_cf_to_r.py",
+      "language": "Python",
+      "line": 42,
       "kind": "function",
       "docstring": null
     },
@@ -3314,6 +3395,33 @@
     },
     {
       "_type": "tag",
+      "name": "t_ATOM",
+      "path": "./tooling/plllu_lexer.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": "[A-Z][A-Z0-9]*"
+    },
+    {
+      "_type": "tag",
+      "name": "t_newline",
+      "path": "./tooling/plllu_lexer.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": "\\n+"
+    },
+    {
+      "_type": "tag",
+      "name": "t_error",
+      "path": "./tooling/plllu_lexer.py",
+      "language": "Python",
+      "line": 44,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "main",
       "path": "./tooling/protocol_migration_tool.py",
       "language": "Python",
@@ -3323,75 +3431,39 @@
     },
     {
       "_type": "tag",
-      "name": "TestHdlProver",
+      "name": "TestHDLProver",
       "path": "./tooling/test_hdl_prover.py",
       "language": "Python",
-      "line": 14,
+      "line": 7,
       "kind": "class",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_parse_formula",
+      "name": "test_prove_sequent_axiom",
       "path": "./tooling/test_hdl_prover.py",
       "language": "Python",
-      "line": 16,
+      "line": 8,
       "kind": "function",
-      "docstring": "Tests the formula parser."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_parse_sequent",
+      "name": "test_prove_sequent_implication",
       "path": "./tooling/test_hdl_prover.py",
       "language": "Python",
-      "line": 26,
+      "line": 13,
       "kind": "function",
-      "docstring": "Tests the sequent parser."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_prove_provable_sequent",
+      "name": "test_prove_sequent_fail",
       "path": "./tooling/test_hdl_prover.py",
       "language": "Python",
-      "line": 35,
+      "line": 18,
       "kind": "function",
-      "docstring": "Tests a known provable sequent."
-    },
-    {
-      "_type": "tag",
-      "name": "test_prove_unprovable_sequent",
-      "path": "./tooling/test_hdl_prover.py",
-      "language": "Python",
-      "line": 40,
-      "kind": "function",
-      "docstring": "Tests a known unprovable sequent."
-    },
-    {
-      "_type": "tag",
-      "name": "test_main_provable",
-      "path": "./tooling/test_hdl_prover.py",
-      "language": "Python",
-      "line": 46,
-      "kind": "function",
-      "docstring": "Tests the main function with a provable sequent."
-    },
-    {
-      "_type": "tag",
-      "name": "test_main_unprovable",
-      "path": "./tooling/test_hdl_prover.py",
-      "language": "Python",
-      "line": 51,
-      "kind": "function",
-      "docstring": "Tests the main function with an unprovable sequent."
-    },
-    {
-      "_type": "tag",
-      "name": "test_main_invalid_sequent",
-      "path": "./tooling/test_hdl_prover.py",
-      "language": "Python",
-      "line": 56,
-      "kind": "function",
-      "docstring": "Tests that the main function exits on a parsing error."
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -3872,6 +3944,15 @@
     },
     {
       "_type": "tag",
+      "name": "generate_research_result",
+      "path": "./tooling/background_researcher_logic.py",
+      "language": "Python",
+      "line": 1,
+      "kind": "function",
+      "docstring": "Generates the research result for a given task ID."
+    },
+    {
+      "_type": "tag",
       "name": "LogicValue",
       "path": "./tooling/plllu_interpreter.py",
       "language": "Python",
@@ -3962,174 +4043,21 @@
     },
     {
       "_type": "tag",
-      "name": "AuraToLfiIllCompiler",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 51,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
       "name": "main",
       "path": "./tooling/aura_to_lfi_ill.py",
       "language": "Python",
-      "line": 134,
+      "line": 20,
       "kind": "function",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/aura_to_lfi_ill.py",
+      "name": "generate_agents_md_content",
+      "path": "./tooling/compile_protocols_logic.py",
       "language": "Python",
-      "line": 52,
+      "line": 17,
       "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 55,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "generic_compiler",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 60,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_Program",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 63,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_LetStatement",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 70,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_ExpressionStatement",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 78,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_IntegerLiteral",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 81,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_StringLiteral",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 84,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_Identifier",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 87,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_InfixExpression",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 90,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_CallExpression",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 95,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_PrintStatement",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 103,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_IfStatement",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 107,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_BlockStatement",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 113,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_ForStatement",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 120,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_ReturnStatement",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 125,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile_FunctionDefinition",
-      "path": "./tooling/aura_to_lfi_ill.py",
-      "language": "Python",
-      "line": 128,
-      "kind": "function",
-      "docstring": null
+      "docstring": "Generates the content for an AGENTS.md file."
     },
     {
       "_type": "tag",
@@ -4142,100 +4070,10 @@
     },
     {
       "_type": "tag",
-      "name": "get_module_docstring",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 25,
-      "kind": "function",
-      "docstring": "Parses a Python file and extracts its module-level docstring."
-    },
-    {
-      "_type": "tag",
-      "name": "get_protocol_summary",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 37,
-      "kind": "function",
-      "docstring": "Parses an AGENTS.md file and extracts a list of protocol summaries."
-    },
-    {
-      "_type": "tag",
-      "name": "FunctionDoc",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 64,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "ClassDoc",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 71,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "ModuleDoc",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 78,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "_format_default_value",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 92,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "format_args",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 100,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "DocVisitor",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 133,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "parse_file_for_docs",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 165,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "generate_documentation_for_module",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 184,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
       "name": "find_python_files",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 214,
+      "line": 29,
       "kind": "function",
       "docstring": null
     },
@@ -4244,7 +4082,7 @@
       "name": "generate_system_docs",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 224,
+      "line": 39,
       "kind": "function",
       "docstring": "Generates the detailed SYSTEM_DOCUMENTATION.md."
     },
@@ -4253,7 +4091,7 @@
       "name": "generate_readme",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 250,
+      "line": 59,
       "kind": "function",
       "docstring": "Generates the high-level README.md for a module."
     },
@@ -4262,7 +4100,7 @@
       "name": "generate_pages",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 287,
+      "line": 81,
       "kind": "function",
       "docstring": "Generates the index.html for GitHub Pages."
     },
@@ -4271,7 +4109,7 @@
       "name": "generate_tool_readme",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 321,
+      "line": 101,
       "kind": "function",
       "docstring": "Generates a README.md for a single tool from its docstring."
     },
@@ -4280,7 +4118,7 @@
       "name": "generate_tooling_readme",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 341,
+      "line": 121,
       "kind": "function",
       "docstring": "Generates a single README.md for the tooling directory."
     },
@@ -4289,70 +4127,43 @@
       "name": "main",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 359,
+      "line": 135,
       "kind": "function",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/doc_builder.py",
+      "name": "is_pure",
+      "path": "./tooling/refactor_cs_to_cf.py",
       "language": "Python",
-      "line": 65,
+      "line": 10,
+      "kind": "function",
+      "docstring": "Determines if a function definition node is pure.\nA function is considered pure if it does not perform any side effects."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/refactor_cs_to_cf.py",
+      "language": "Python",
+      "line": 25,
       "kind": "function",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/doc_builder.py",
+      "name": "generate_appl_command",
+      "path": "./tooling/appl_logic.py",
       "language": "Python",
-      "line": 72,
+      "line": 4,
       "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 79,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 134,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "visit_FunctionDef",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 139,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "visit_ClassDef",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 151,
-      "kind": "function",
-      "docstring": null
+      "docstring": "Generates the command to execute an APPL file.\n\nArgs:\n    filepath: The path to the .appl file to execute.\n\nReturns:\n    A list of strings representing the command to be executed."
     },
     {
       "_type": "tag",
       "name": "generate_suggestion_plan",
       "path": "./tooling/code_suggester.py",
       "language": "Python",
-      "line": 26,
+      "line": 27,
       "kind": "function",
       "docstring": "Generates a temporary, single-step plan file to apply a code change.\n\nArgs:\n    filepath: The path to the file that needs to be modified.\n    diff_content: The git-style merge diff block to be applied.\n\nReturns:\n    The path to the generated temporary plan file."
     },
@@ -4361,7 +4172,7 @@
       "name": "main",
       "path": "./tooling/code_suggester.py",
       "language": "Python",
-      "line": 50,
+      "line": 47,
       "kind": "function",
       "docstring": "Main entry point for the code suggester tool.\nParses arguments, generates a plan, and prints the plan's path to stdout."
     },
@@ -4421,6 +4232,177 @@
     },
     {
       "_type": "tag",
+      "name": "FunctionDoc",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "ClassDoc",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "ModuleDoc",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 23,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_format_default_value",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 37,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "format_args",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 45,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "DocVisitor",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 78,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_file_for_docs",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 110,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_documentation_for_module",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 127,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_system_docs_content",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 157,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_readme_content",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 172,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_pages_content",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 194,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_tool_readme_content",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 213,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_tooling_readme_content",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 217,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 79,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "visit_FunctionDef",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 84,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "visit_ClassDef",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 96,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "has_ctags",
       "path": "./tooling/symbol_map_generator.py",
       "language": "Python",
@@ -4463,6 +4445,51 @@
       "line": 4,
       "kind": "function",
       "docstring": "Runs the given bash command in the sandbox."
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_protocol_completeness",
+      "path": "./tooling/auditor_logic.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": "Analyzes the completeness of the protocols by comparing used tools to protocol tools."
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_tool_centrality",
+      "path": "./tooling/auditor_logic.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": "Analyzes the centrality of tools by counting their usage."
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_plan_registry",
+      "path": "./tooling/auditor_logic.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": "Analyzes the plan registry for dead links."
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_documentation",
+      "path": "./tooling/auditor_logic.py",
+      "language": "Python",
+      "line": 37,
+      "kind": "function",
+      "docstring": "Analyzes the system documentation for missing docstrings."
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_system_health",
+      "path": "./tooling/auditor_logic.py",
+      "language": "Python",
+      "line": 45,
+      "kind": "function",
+      "docstring": "Analyzes the system health for \"absence of evidence\" anomalies."
     },
     {
       "_type": "tag",
@@ -4640,7 +4667,7 @@
       "name": "compile_module",
       "path": "./tooling/compile_protocols.py",
       "language": "Python",
-      "line": 27,
+      "line": 15,
       "kind": "function",
       "docstring": "Compiles the protocol files in a directory into a single AGENTS.md."
     },
@@ -4649,7 +4676,7 @@
       "name": "main",
       "path": "./tooling/compile_protocols.py",
       "language": "Python",
-      "line": 76,
+      "line": 54,
       "kind": "function",
       "docstring": "Main function to find and compile all protocol modules."
     },
@@ -4811,7 +4838,7 @@
       "name": "AutonomousAgent",
       "path": "./tooling/autonomous_agent.py",
       "language": "Python",
-      "line": 10,
+      "line": 11,
       "kind": "class",
       "docstring": null
     },
@@ -4820,7 +4847,7 @@
       "name": "main",
       "path": "./tooling/autonomous_agent.py",
       "language": "Python",
-      "line": 80,
+      "line": 64,
       "kind": "function",
       "docstring": null
     },
@@ -4829,7 +4856,7 @@
       "name": "__init__",
       "path": "./tooling/autonomous_agent.py",
       "language": "Python",
-      "line": 11,
+      "line": 12,
       "kind": "function",
       "docstring": null
     },
@@ -4838,7 +4865,7 @@
       "name": "generate_plan",
       "path": "./tooling/autonomous_agent.py",
       "language": "Python",
-      "line": 15,
+      "line": 16,
       "kind": "function",
       "docstring": "Generates a plan to accomplish the task."
     },
@@ -4847,7 +4874,7 @@
       "name": "execute_plan",
       "path": "./tooling/autonomous_agent.py",
       "language": "Python",
-      "line": 19,
+      "line": 20,
       "kind": "function",
       "docstring": "Executes the generated plan."
     },
@@ -4856,7 +4883,7 @@
       "name": "run",
       "path": "./tooling/autonomous_agent.py",
       "language": "Python",
-      "line": 73,
+      "line": 57,
       "kind": "function",
       "docstring": "Runs the agent's main loop."
     },
@@ -4865,7 +4892,7 @@
       "name": "run_appl_file",
       "path": "./tooling/appl_runner.py",
       "language": "Python",
-      "line": 13,
+      "line": 14,
       "kind": "function",
       "docstring": "Executes an APPL file using the run.py interpreter.\n\nArgs:\n    filepath: The path to the .appl file to execute.\n\nReturns:\n    The output from the APPL interpreter."
     },
@@ -4874,7 +4901,7 @@
       "name": "main",
       "path": "./tooling/appl_runner.py",
       "language": "Python",
-      "line": 45,
+      "line": 46,
       "kind": "function",
       "docstring": "Main function to run the APPL runner from the command line."
     },
@@ -5024,6 +5051,168 @@
     },
     {
       "_type": "tag",
+      "name": "AuraToLfiIllCompiler",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 39,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generic_compiler",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 44,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_Program",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 47,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_LetStatement",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 54,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_ExpressionStatement",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 62,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_IntegerLiteral",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_StringLiteral",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 68,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_Identifier",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 71,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_InfixExpression",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 74,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_CallExpression",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 79,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_PrintStatement",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 87,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_IfStatement",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 91,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_BlockStatement",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 97,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_ForStatement",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 104,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_ReturnStatement",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 109,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "compile_FunctionDefinition",
+      "path": "./tooling/aura_to_lfi_ill_logic.py",
+      "language": "Python",
+      "line": 112,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TestSelfImprovementCli",
       "path": "./tooling/test_self_improvement_cli.py",
       "language": "Python",
@@ -5078,6 +5267,15 @@
     },
     {
       "_type": "tag",
+      "name": "dynamic_agent_call_tool",
+      "path": "./tooling/aura_logic.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": "Dynamically imports and calls a tool from the 'tooling' directory and wraps the result.\n\nThis function provides the bridge between the Aura scripting environment and the\nPython-based agent tools. It takes the tool's module name and arguments,\nruns the tool in a subprocess, and wraps the captured output in an Aura `Object`.\n\nArgs:\n    tool_name_obj: An Aura Object containing the tool's module name (e.g., 'hdl_prover').\n    *args: A variable number of Aura Objects to be passed as string arguments to the tool.\n\nReturns:\n    An Aura `Object` containing the tool's stdout as a string, or an error message."
+    },
+    {
+      "_type": "tag",
       "name": "find_agent_that_produces",
       "path": "./tooling/plan_generator.py",
       "language": "Python",
@@ -5096,37 +5294,10 @@
     },
     {
       "_type": "tag",
-      "name": "load_config",
-      "path": "./tooling/builder.py",
-      "language": "Python",
-      "line": 38,
-      "kind": "function",
-      "docstring": "Loads the build configuration file."
-    },
-    {
-      "_type": "tag",
-      "name": "execute_compiler_target",
-      "path": "./tooling/builder.py",
-      "language": "Python",
-      "line": 46,
-      "kind": "function",
-      "docstring": "Executes a 'compiler' type build target."
-    },
-    {
-      "_type": "tag",
-      "name": "execute_command_target",
-      "path": "./tooling/builder.py",
-      "language": "Python",
-      "line": 83,
-      "kind": "function",
-      "docstring": "Executes a 'command' type build target."
-    },
-    {
-      "_type": "tag",
       "name": "execute_build",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 89,
+      "line": 42,
       "kind": "function",
       "docstring": "Executes the build process for a specific target."
     },
@@ -5135,7 +5306,7 @@
       "name": "main",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 148,
+      "line": 103,
       "kind": "function",
       "docstring": "Main function to parse arguments and drive the build process."
     },
@@ -5252,34 +5423,16 @@
       "name": "find_dependency_files",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 32,
+      "line": 35,
       "kind": "function",
       "docstring": "Finds all package.json and requirements.txt files, excluding node_modules."
-    },
-    {
-      "_type": "tag",
-      "name": "parse_package_json",
-      "path": "./tooling/dependency_graph_generator.py",
-      "language": "Python",
-      "line": 43,
-      "kind": "function",
-      "docstring": "Parses a single package.json file to extract its name and dependencies."
-    },
-    {
-      "_type": "tag",
-      "name": "parse_requirements_txt",
-      "path": "./tooling/dependency_graph_generator.py",
-      "language": "Python",
-      "line": 66,
-      "kind": "function",
-      "docstring": "Parses a requirements.txt file to extract its dependencies."
     },
     {
       "_type": "tag",
       "name": "generate_dependency_graph",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 104,
+      "line": 43,
       "kind": "function",
       "docstring": "Generates a dependency graph for all supported dependency files found."
     },
@@ -5288,9 +5441,18 @@
       "name": "main",
       "path": "./tooling/dependency_graph_generator.py",
       "language": "Python",
-      "line": 163,
+      "line": 69,
       "kind": "function",
       "docstring": "Main function to generate and save the dependency graph."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_suggestion_plan_content",
+      "path": "./tooling/code_suggester_logic.py",
+      "language": "Python",
+      "line": 1,
+      "kind": "function",
+      "docstring": "Generates the content for a temporary, single-step plan file to apply a code change.\n\nArgs:\n    filepath: The path to the file that needs to be modified.\n    diff_content: The git-style merge diff block to be applied.\n\nReturns:\n    The content of the generated plan file."
     },
     {
       "_type": "tag",
@@ -5384,28 +5546,37 @@
     },
     {
       "_type": "tag",
-      "name": "get_defined_symbols",
-      "path": "./tooling/context_awareness_scanner.py",
+      "name": "parse_package_json_content",
+      "path": "./tooling/dependency_graph_generator_logic.py",
       "language": "Python",
-      "line": 36,
+      "line": 6,
       "kind": "function",
-      "docstring": "Parses a Python file to find all defined functions and classes."
+      "docstring": "Parses the content of a package.json file to extract its name and dependencies."
     },
     {
       "_type": "tag",
-      "name": "get_imported_symbols",
-      "path": "./tooling/context_awareness_scanner.py",
+      "name": "parse_requirements_txt_content",
+      "path": "./tooling/dependency_graph_generator_logic.py",
       "language": "Python",
-      "line": 53,
+      "line": 29,
       "kind": "function",
-      "docstring": "Parses a Python file to find all imported modules and symbols."
+      "docstring": "Parses the content of a requirements.txt file to extract its dependencies."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_dependency_graph_from_projects",
+      "path": "./tooling/dependency_graph_generator_logic.py",
+      "language": "Python",
+      "line": 60,
+      "kind": "function",
+      "docstring": "Generates a dependency graph from a list of projects."
     },
     {
       "_type": "tag",
       "name": "find_references",
       "path": "./tooling/context_awareness_scanner.py",
       "language": "Python",
-      "line": 79,
+      "line": 36,
       "kind": "function",
       "docstring": "Finds all files in a directory that reference a given symbol."
     },
@@ -5414,7 +5585,7 @@
       "name": "main",
       "path": "./tooling/context_awareness_scanner.py",
       "language": "Python",
-      "line": 94,
+      "line": 51,
       "kind": "function",
       "docstring": null
     },
@@ -5558,63 +5729,18 @@
       "name": "TestContextAwarenessScanner",
       "path": "./tooling/test_context_awareness_scanner.py",
       "language": "Python",
-      "line": 14,
+      "line": 5,
       "kind": "class",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "setUp",
+      "name": "test_analyze_python_file",
       "path": "./tooling/test_context_awareness_scanner.py",
       "language": "Python",
-      "line": 16,
+      "line": 6,
       "kind": "function",
       "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "tearDown",
-      "path": "./tooling/test_context_awareness_scanner.py",
-      "language": "Python",
-      "line": 30,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_get_defined_symbols",
-      "path": "./tooling/test_context_awareness_scanner.py",
-      "language": "Python",
-      "line": 36,
-      "kind": "function",
-      "docstring": "Tests the extraction of defined functions and classes."
-    },
-    {
-      "_type": "tag",
-      "name": "test_get_imported_symbols",
-      "path": "./tooling/test_context_awareness_scanner.py",
-      "language": "Python",
-      "line": 43,
-      "kind": "function",
-      "docstring": "Tests the extraction of imported symbols."
-    },
-    {
-      "_type": "tag",
-      "name": "test_find_references",
-      "path": "./tooling/test_context_awareness_scanner.py",
-      "language": "Python",
-      "line": 50,
-      "kind": "function",
-      "docstring": "Tests finding references to a symbol."
-    },
-    {
-      "_type": "tag",
-      "name": "test_main_report_generation",
-      "path": "./tooling/test_context_awareness_scanner.py",
-      "language": "Python",
-      "line": 66,
-      "kind": "function",
-      "docstring": "Tests that the main function generates a correct JSON report."
     },
     {
       "_type": "tag",
@@ -5696,6 +5822,42 @@
       "line": 113,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_lesson_content",
+      "path": "./tooling/capability_verifier_logic.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Generates the lesson content for the capability verifier."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_postmortem_content",
+      "path": "./tooling/capability_verifier_logic.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": "Generates the post-mortem content for the capability verifier."
+    },
+    {
+      "_type": "tag",
+      "name": "parse_formula",
+      "path": "./tooling/hdl_parser.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": "A very basic parser for formulas."
+    },
+    {
+      "_type": "tag",
+      "name": "parse_sequent",
+      "path": "./tooling/hdl_parser.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function",
+      "docstring": "A very basic parser for sequents."
     },
     {
       "_type": "tag",
@@ -6158,28 +6320,10 @@
     },
     {
       "_type": "tag",
-      "name": "parse_formula",
-      "path": "./tooling/hdl_prover.py",
-      "language": "Python",
-      "line": 36,
-      "kind": "function",
-      "docstring": "A very basic parser for formulas."
-    },
-    {
-      "_type": "tag",
-      "name": "parse_sequent",
-      "path": "./tooling/hdl_prover.py",
-      "language": "Python",
-      "line": 48,
-      "kind": "function",
-      "docstring": "A very basic parser for sequents."
-    },
-    {
-      "_type": "tag",
       "name": "prove_sequent",
       "path": "./tooling/hdl_prover.py",
       "language": "Python",
-      "line": 56,
+      "line": 37,
       "kind": "function",
       "docstring": "A very simple proof search algorithm.\nThis is a placeholder for a more sophisticated prover."
     },
@@ -6188,7 +6332,7 @@
       "name": "main",
       "path": "./tooling/hdl_prover.py",
       "language": "Python",
-      "line": 79,
+      "line": 60,
       "kind": "function",
       "docstring": null
     },
@@ -6311,6 +6455,42 @@
     },
     {
       "_type": "tag",
+      "name": "TestRefactorCsToCf",
+      "path": "./tooling/test_refactor_cs_to_cf.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_refactor_cs_to_cf.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_refactor_cs_to_cf.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_refactor",
+      "path": "./tooling/test_refactor_cs_to_cf.py",
+      "language": "Python",
+      "line": 31,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TestCapabilityVerifier",
       "path": "./tooling/test_capability_verifier.py",
       "language": "Python",
@@ -6386,25 +6566,16 @@
       "name": "_log_event",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 61,
+      "line": 45,
       "kind": "function",
       "docstring": "Appends a new log entry to the activity log, ensuring it's on a new line."
-    },
-    {
-      "_type": "tag",
-      "name": "_create_log_entry",
-      "path": "./tooling/fdc_cli.py",
-      "language": "Python",
-      "line": 75,
-      "kind": "function",
-      "docstring": "Creates a structured log entry dictionary."
     },
     {
       "_type": "tag",
       "name": "close_task",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 91,
+      "line": 59,
       "kind": "function",
       "docstring": "Automates the closing of a Finite Development Cycle."
     },
@@ -6413,7 +6584,7 @@
       "name": "_validate_action",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 125,
+      "line": 93,
       "kind": "function",
       "docstring": "Validates a single, non-loop action."
     },
@@ -6422,7 +6593,7 @@
       "name": "_validate_plan_recursive",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 182,
+      "line": 150,
       "kind": "function",
       "docstring": "Recursively validates a block of a plan."
     },
@@ -6431,7 +6602,7 @@
       "name": "validate_plan",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 243,
+      "line": 211,
       "kind": "function",
       "docstring": null
     },
@@ -6440,7 +6611,7 @@
       "name": "analyze_plan",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 271,
+      "line": 239,
       "kind": "function",
       "docstring": "Analyzes a plan file to determine its complexity class and modality."
     },
@@ -6449,7 +6620,7 @@
       "name": "start_task",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 318,
+      "line": 258,
       "kind": "function",
       "docstring": "Initiates the AORP cascade for a new task."
     },
@@ -6458,7 +6629,7 @@
       "name": "main",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 385,
+      "line": 325,
       "kind": "function",
       "docstring": null
     },
@@ -6530,25 +6701,16 @@
       "name": "load_tools_from_manifest",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 31,
+      "line": 32,
       "kind": "function",
       "docstring": "Loads tools from the tool manifest."
-    },
-    {
-      "_type": "tag",
-      "name": "find_fsm_transition",
-      "path": "./tooling/agent_shell.py",
-      "language": "Python",
-      "line": 67,
-      "kind": "function",
-      "docstring": "Finds the destination state for a given source and trigger."
     },
     {
       "_type": "tag",
       "name": "run_agent_loop",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 78,
+      "line": 71,
       "kind": "function",
       "docstring": "The main loop that drives the agent's lifecycle via the FSM."
     },
@@ -6557,7 +6719,7 @@
       "name": "main",
       "path": "./tooling/agent_shell.py",
       "language": "Python",
-      "line": 242,
+      "line": 235,
       "kind": "function",
       "docstring": "Main entry point for the agent shell."
     },
@@ -6605,6 +6767,15 @@
       "line": 56,
       "kind": "function",
       "docstring": "Executes a block of Python code in a controlled environment."
+    },
+    {
+      "_type": "tag",
+      "name": "find_fsm_transition",
+      "path": "./tooling/agent_logic.py",
+      "language": "Python",
+      "line": 1,
+      "kind": "function",
+      "docstring": "Finds the destination state for a given source and trigger."
     },
     {
       "_type": "tag",
@@ -6701,117 +6872,9 @@
       "name": "perform_research",
       "path": "./tooling/background_researcher.py",
       "language": "Python",
-      "line": 12,
+      "line": 13,
       "kind": "function",
       "docstring": "Simulates a research task and writes the result to a file."
-    },
-    {
-      "_type": "tag",
-      "name": "AtomNode",
-      "path": "./tooling/pda_parser.py",
-      "language": "Python",
-      "line": 23,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "UnaryOpNode",
-      "path": "./tooling/pda_parser.py",
-      "language": "Python",
-      "line": 27,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "BinaryOpNode",
-      "path": "./tooling/pda_parser.py",
-      "language": "Python",
-      "line": 31,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "t_ATOM",
-      "path": "./tooling/pda_parser.py",
-      "language": "Python",
-      "line": 64,
-      "kind": "function",
-      "docstring": "[A-Z][A-Z0-9]*"
-    },
-    {
-      "_type": "tag",
-      "name": "t_newline",
-      "path": "./tooling/pda_parser.py",
-      "language": "Python",
-      "line": 73,
-      "kind": "function",
-      "docstring": "\\n+"
-    },
-    {
-      "_type": "tag",
-      "name": "t_error",
-      "path": "./tooling/pda_parser.py",
-      "language": "Python",
-      "line": 78,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "p_formula_binary",
-      "path": "./tooling/pda_parser.py",
-      "language": "Python",
-      "line": 97,
-      "kind": "function",
-      "docstring": "formula : formula IMPLIES formula\n        | formula WITH formula\n        | formula PLUS formula"
-    },
-    {
-      "_type": "tag",
-      "name": "p_formula_unary",
-      "path": "./tooling/pda_parser.py",
-      "language": "Python",
-      "line": 106,
-      "kind": "function",
-      "docstring": "formula : NOT formula\n        | BANG formula\n        | CONSISTENCY formula\n        | SECTION formula\n        | WHYNOT formula"
-    },
-    {
-      "_type": "tag",
-      "name": "p_formula_group",
-      "path": "./tooling/pda_parser.py",
-      "language": "Python",
-      "line": 117,
-      "kind": "function",
-      "docstring": "formula : LPAREN formula RPAREN"
-    },
-    {
-      "_type": "tag",
-      "name": "p_formula_atom",
-      "path": "./tooling/pda_parser.py",
-      "language": "Python",
-      "line": 124,
-      "kind": "function",
-      "docstring": "formula : ATOM"
-    },
-    {
-      "_type": "tag",
-      "name": "p_error",
-      "path": "./tooling/pda_parser.py",
-      "language": "Python",
-      "line": 131,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "parse_formula",
-      "path": "./tooling/pda_parser.py",
-      "language": "Python",
-      "line": 144,
-      "kind": "function",
-      "docstring": "Parses a pLLLU formula string into an AST."
     },
     {
       "_type": "tag",
@@ -6872,63 +6935,36 @@
       "name": "TestDependencyGraphGenerator",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 28,
+      "line": 9,
       "kind": "class",
       "docstring": null
     },
     {
       "_type": "tag",
-      "name": "setUp",
+      "name": "test_parse_package_json_content",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 30,
+      "line": 10,
       "kind": "function",
-      "docstring": "Set up a temporary directory structure for testing."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "tearDown",
+      "name": "test_parse_requirements_txt_content",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 63,
+      "line": 23,
       "kind": "function",
-      "docstring": "Clean up the temporary directory."
+      "docstring": null
     },
     {
       "_type": "tag",
-      "name": "test_find_files",
+      "name": "test_generate_dependency_graph_from_projects",
       "path": "./tooling/test_dependency_graph_generator.py",
       "language": "Python",
-      "line": 68,
+      "line": 32,
       "kind": "function",
-      "docstring": "Test finding both package.json and requirements.txt files."
-    },
-    {
-      "_type": "tag",
-      "name": "test_parse_package_json",
-      "path": "./tooling/test_dependency_graph_generator.py",
-      "language": "Python",
-      "line": 78,
-      "kind": "function",
-      "docstring": "Test parsing a single package.json file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_parse_requirements_txt",
-      "path": "./tooling/test_dependency_graph_generator.py",
-      "language": "Python",
-      "line": 87,
-      "kind": "function",
-      "docstring": "Test parsing a single requirements.txt file."
-    },
-    {
-      "_type": "tag",
-      "name": "test_generate_dependency_graph",
-      "path": "./tooling/test_dependency_graph_generator.py",
-      "language": "Python",
-      "line": 101,
-      "kind": "function",
-      "docstring": "Test the full graph generation logic with mixed project types."
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -7004,19 +7040,10 @@
     },
     {
       "_type": "tag",
-      "name": "dynamic_agent_call_tool",
-      "path": "./tooling/aura_executor.py",
-      "language": "Python",
-      "line": 32,
-      "kind": "function",
-      "docstring": "Dynamically imports and calls a tool from the 'tooling' directory and wraps the result.\n\nThis function provides the bridge between the Aura scripting environment and the\nPython-based agent tools. It takes the tool's module name and arguments,\nruns the tool in a subprocess, and wraps the captured output in an Aura `Object`.\n\nArgs:\n    tool_name_obj: An Aura Object containing the tool's module name (e.g., 'hdl_prover').\n    *args: A variable number of Aura Objects to be passed as string arguments to the tool.\n\nReturns:\n    An Aura `Object` containing the tool's stdout as a string, or an error message."
-    },
-    {
-      "_type": "tag",
       "name": "main",
       "path": "./tooling/aura_executor.py",
       "language": "Python",
-      "line": 103,
+      "line": 39,
       "kind": "function",
       "docstring": "Main entry point for the Aura script executor."
     },
@@ -7025,7 +7052,7 @@
       "name": "builtin_print",
       "path": "./tooling/aura_executor.py",
       "language": "Python",
-      "line": 129,
+      "line": 65,
       "kind": "function",
       "docstring": "A wrapper for the built-in print function that handles Aura objects."
     },
@@ -7037,6 +7064,141 @@
       "line": 1,
       "kind": "function",
       "docstring": "Reads the content of the specified file."
+    },
+    {
+      "_type": "tag",
+      "name": "create_log_entry",
+      "path": "./tooling/fdc_cli_logic.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": "Creates a structured log entry dictionary."
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_plan_content",
+      "path": "./tooling/fdc_cli_logic.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function",
+      "docstring": "Analyzes the content of a plan file to determine its complexity class and modality."
+    },
+    {
+      "_type": "tag",
+      "name": "TestHDLParser",
+      "path": "./tooling/test_hdl_parser.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_parse_sequent_simple",
+      "path": "./tooling/test_hdl_parser.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_parse_sequent_with_implication",
+      "path": "./tooling/test_hdl_parser.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_parse_sequent_with_tensor",
+      "path": "./tooling/test_hdl_parser.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "AtomNode",
+      "path": "./tooling/plllu_parser.py",
+      "language": "Python",
+      "line": 23,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "UnaryOpNode",
+      "path": "./tooling/plllu_parser.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "BinaryOpNode",
+      "path": "./tooling/plllu_parser.py",
+      "language": "Python",
+      "line": 31,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "p_formula_binary",
+      "path": "./tooling/plllu_parser.py",
+      "language": "Python",
+      "line": 46,
+      "kind": "function",
+      "docstring": "formula : formula IMPLIES formula\n        | formula WITH formula\n        | formula PLUS formula"
+    },
+    {
+      "_type": "tag",
+      "name": "p_formula_unary",
+      "path": "./tooling/plllu_parser.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function",
+      "docstring": "formula : NOT formula\n        | BANG formula\n        | CONSISTENCY formula\n        | SECTION formula\n        | WHYNOT formula"
+    },
+    {
+      "_type": "tag",
+      "name": "p_formula_group",
+      "path": "./tooling/plllu_parser.py",
+      "language": "Python",
+      "line": 66,
+      "kind": "function",
+      "docstring": "formula : LPAREN formula RPAREN"
+    },
+    {
+      "_type": "tag",
+      "name": "p_formula_atom",
+      "path": "./tooling/plllu_parser.py",
+      "language": "Python",
+      "line": 73,
+      "kind": "function",
+      "docstring": "formula : ATOM"
+    },
+    {
+      "_type": "tag",
+      "name": "p_error",
+      "path": "./tooling/plllu_parser.py",
+      "language": "Python",
+      "line": 80,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "parse_formula",
+      "path": "./tooling/plllu_parser.py",
+      "language": "Python",
+      "line": 93,
+      "kind": "function",
+      "docstring": "Parses a pLLLU formula string into an AST."
     },
     {
       "_type": "tag",
@@ -7355,48 +7517,12 @@
     },
     {
       "_type": "tag",
-      "name": "ApplToLfiIllCompiler",
-      "path": "./tooling/appl_to_lfi_ill.py",
-      "language": "Python",
-      "line": 19,
-      "kind": "class",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
       "name": "main",
       "path": "./tooling/appl_to_lfi_ill.py",
       "language": "Python",
-      "line": 103,
+      "line": 18,
       "kind": "function",
       "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./tooling/appl_to_lfi_ill.py",
-      "language": "Python",
-      "line": 20,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "compile",
-      "path": "./tooling/appl_to_lfi_ill.py",
-      "language": "Python",
-      "line": 23,
-      "kind": "function",
-      "docstring": "Recursively walks the APPL AST and translates it to an LFI ILL AST."
-    },
-    {
-      "_type": "tag",
-      "name": "compile_type",
-      "path": "./tooling/appl_to_lfi_ill.py",
-      "language": "Python",
-      "line": 96,
-      "kind": "function",
-      "docstring": "Translates APPL types to LFI ILL types."
     },
     {
       "_type": "tag",
@@ -7481,6 +7607,15 @@
     },
     {
       "_type": "tag",
+      "name": "validate_plan",
+      "path": "./tooling/csdc_logic.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Validates a plan against a given CSDC model and complexity."
+    },
+    {
+      "_type": "tag",
       "name": "TestFdcCli",
       "path": "./tooling/test_fdc_cli.py",
       "language": "Python",
@@ -7550,6 +7685,15 @@
       "line": 66,
       "kind": "function",
       "docstring": "Tests that the CLI exits when required args are missing."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_command_from_plan_step",
+      "path": "./tooling/autonomous_agent_logic.py",
+      "language": "Python",
+      "line": 1,
+      "kind": "function",
+      "docstring": "Generates a command to be executed from a plan step."
     },
     {
       "_type": "tag",
@@ -10472,7 +10616,7 @@
       "name": "Integer",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 13,
+      "line": 21,
       "kind": "class",
       "docstring": null
     },
@@ -10481,7 +10625,7 @@
       "name": "String",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 14,
+      "line": 22,
       "kind": "class",
       "docstring": null
     },
@@ -10490,7 +10634,7 @@
       "name": "ReturnValue",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 15,
+      "line": 23,
       "kind": "class",
       "docstring": null
     },
@@ -10499,7 +10643,7 @@
       "name": "Function",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 17,
+      "line": 25,
       "kind": "class",
       "docstring": null
     },
@@ -10508,7 +10652,7 @@
       "name": "Builtin",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 21,
+      "line": 29,
       "kind": "class",
       "docstring": null
     },
@@ -10517,7 +10661,7 @@
       "name": "Environment",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 25,
+      "line": 33,
       "kind": "class",
       "docstring": null
     },
@@ -10526,7 +10670,7 @@
       "name": "_placeholder_agent_call_tool",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 39,
+      "line": 47,
       "kind": "function",
       "docstring": "Placeholder for calling the agent's real tools.\nThis will be replaced by a real implementation provided by the executor."
     },
@@ -10535,7 +10679,7 @@
       "name": "evaluate",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 57,
+      "line": 65,
       "kind": "function",
       "docstring": null
     },
@@ -10544,7 +10688,7 @@
       "name": "eval_program",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 91,
+      "line": 99,
       "kind": "function",
       "docstring": null
     },
@@ -10553,7 +10697,7 @@
       "name": "eval_block_statement",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 97,
+      "line": 106,
       "kind": "function",
       "docstring": null
     },
@@ -10562,7 +10706,7 @@
       "name": "eval_if_statement",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 103,
+      "line": 113,
       "kind": "function",
       "docstring": null
     },
@@ -10571,7 +10715,7 @@
       "name": "eval_for_statement",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 124,
+      "line": 134,
       "kind": "function",
       "docstring": null
     },
@@ -10580,7 +10724,7 @@
       "name": "eval_print_statement",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 131,
+      "line": 141,
       "kind": "function",
       "docstring": null
     },
@@ -10658,19 +10802,10 @@
     },
     {
       "_type": "tag",
-      "name": "__init__",
+      "name": "inspect",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 18,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "__init__",
-      "path": "./aura_lang/interpreter.py",
-      "language": "Python",
-      "line": 22,
+      "line": 12,
       "kind": "function",
       "docstring": null
     },
@@ -10685,10 +10820,28 @@
     },
     {
       "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./aura_lang/interpreter.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "get",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 28,
+      "line": 36,
       "kind": "function",
       "docstring": null
     },
@@ -10697,7 +10850,7 @@
       "name": "set",
       "path": "./aura_lang/interpreter.py",
       "language": "Python",
-      "line": 31,
+      "line": 39,
       "kind": "function",
       "docstring": null
     },
@@ -10832,7 +10985,7 @@
       "name": "error",
       "path": "./aura_lang/lexer.py",
       "language": "Python",
-      "line": 117,
+      "line": 121,
       "kind": "function",
       "docstring": null
     },
