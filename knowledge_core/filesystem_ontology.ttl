@@ -1,0 +1,41 @@
+@prefix fs: <https://w3id.org/jules/filesystem/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+fs:FileSystemEntity a owl:Class ;
+    rdfs:label "File System Entity" ;
+    rdfs:comment "A base class for files and directories." .
+
+fs:Directory a owl:Class ;
+    rdfs:label "Directory" ;
+    rdfs:subClassOf fs:FileSystemEntity ;
+    rdfs:comment "Represents a directory in the file system." .
+
+fs:File a owl:Class ;
+    rdfs:label "File" ;
+    rdfs:subClassOf fs:FileSystemEntity ;
+    rdfs:comment "Represents a file in the file system." .
+
+fs:hasSubDirectory a owl:ObjectProperty ;
+    rdfs:label "has sub-directory" ;
+    rdfs:domain fs:Directory ;
+    rdfs:range fs:Directory ;
+    rdfs:comment "Relates a directory to one of its sub-directories." .
+
+fs:hasFile a owl:ObjectProperty ;
+    rdfs:label "has file" ;
+    rdfs:domain fs:Directory ;
+    rdfs:range fs:File ;
+    rdfs:comment "Relates a directory to one of its files." .
+
+fs:hasParentDirectory a owl:ObjectProperty ;
+    rdfs:label "has parent directory" ;
+    rdfs:domain fs:FileSystemEntity ;
+    rdfs:range fs:Directory ;
+    rdfs:comment "Relates a file or directory to its parent directory." .
+
+fs:filePath a owl:DatatypeProperty ;
+    rdfs:label "file path" ;
+    rdfs:domain fs:FileSystemEntity ;
+    rdfs:range rdfs:Literal ;
+    rdfs:comment "The path of the file or directory." .
