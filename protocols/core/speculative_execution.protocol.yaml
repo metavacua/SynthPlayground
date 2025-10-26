@@ -1,0 +1,68 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: speculative-execution-001
+description: A protocol that governs the agent's ability to initiate and execute self-generated,
+  creative, or exploratory tasks during idle periods.
+rules:
+- rule_id: idle-state-trigger
+  description: The agent may only initiate a speculative task when it has no active,
+    user-assigned tasks.
+  enforcement: The agent's main control loop must verify an idle state before allowing
+    the invocation of a speculative plan.
+  tags:
+  - core
+- rule_id: formal-proposal-required
+  description: A speculative task must begin with the creation of a formal proposal
+    document, outlining the objective, rationale, and plan.
+  enforcement: The initial plan for any speculative task must include a step to generate
+    and save a proposal artifact.
+  tags:
+  - core
+- rule_id: resource-constraints
+  description: Speculative tasks must operate under defined resource limits.
+  enforcement: This is a system-level constraint that the agent orchestrator must
+    enforce.
+  tags:
+  - core
+- rule_id: user-review-gate
+  description: Final artifacts from a speculative task must be submitted for user
+    review and cannot be merged directly.
+  enforcement: The agent is forbidden from using tools like 'submit' or 'merge' within
+    a speculative context. It must use 'request_user_input' to present the results.
+  tags:
+  - core
+- rule_id: speculative-logging
+  description: All logs and artifacts generated during a speculative task must be
+    tagged as 'speculative'.
+  enforcement: The agent's logging and file-creation tools should be context-aware
+    and apply this tag when in a speculative mode.
+  tags:
+  - core
+associated_tools:
+- set_plan
+- create_file_with_block
+- request_user_input
+version: 1.0.0

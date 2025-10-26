@@ -1,0 +1,62 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: non-compliance-protocol-001
+description: A protocol that defines non-compliance with AGENTS.md and specifies corrective
+  actions.
+rules:
+- rule_id: non-compliance-definition
+  description: Defines non-compliance as a violation of any rule, convention, or procedure
+    in AGENTS.md or its source protocols.
+  enforcement: This is a definitional rule. Enforcement is achieved through the agent's
+    adherence to the specific non-compliance rules that follow.
+- rule_id: non-compliance-direct-editing
+  description: Prohibits the direct editing of build artifacts like AGENTS.md or README.md.
+    Changes must be made to source files, followed by a rebuild.
+  enforcement: Agent must revert direct edits and modify source files, then run the
+    appropriate build command.
+  associated_tools:
+  - restore_file
+  - run_in_bash_session
+- rule_id: non-compliance-test-procedure
+  description: Requires adherence to all documented testing procedures before submitting
+    changes.
+  enforcement: Agent must halt execution and run the required tests, debugging any
+    failures before proceeding.
+  associated_tools:
+  - run_in_bash_session
+- rule_id: non-compliance-architectural-deviation
+  description: Forbids changes that contradict documented architectural patterns or
+    coding conventions.
+  enforcement: Agent must revert non-compliant changes and re-implement them according
+    to standards.
+- rule_id: non-compliance-self-awareness-failure
+  description: Requires the agent to maintain an up-to-date understanding of protocols
+    by recompiling AGENTS.md when necessary.
+  enforcement: Agent should run 'make AGENTS.md' to refresh its protocol knowledge
+    and re-evaluate its plan.
+  associated_tools:
+  - run_in_bash_session
+version: 1.0.0

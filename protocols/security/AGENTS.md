@@ -5,7 +5,7 @@
 # located in the `security/` directory.
 #
 # This file contains the compiled protocols in a human-readable Markdown format,
-# with machine-readable JSON definitions embedded.
+# with machine-readable YAML definitions embedded.
 # ---
 
 # Security Protocol
@@ -14,42 +14,87 @@ This document outlines the security policies and procedures for this project. It
 
 ---
 
-```json
-{
-  "version": "1.0.0",
-  "protocol_id": "security-header",
-  "description": "Defines the identity and purpose of the Security Protocol document.",
-  "rules": []
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+version: 1.0.0
+protocol_id: security-header
+description: Defines the identity and purpose of the Security Protocol document.
+rules: []
+
 ```
 
 
 ---
 
-```json
-{
-  "version": "1.0.0",
-  "protocol_id": "security-vuln-reporting-001",
-  "description": "Defines the official policy and procedure for reporting security vulnerabilities.",
-  "rules": [
-    {
-      "rule_id": "vuln-reporting-channel",
-      "description": "All suspected security vulnerabilities MUST be reported privately to the designated security contact.",
-      "enforcement": "This is a procedural rule. The designated contact is specified in the project's main SECURITY.md file.",
-      "tags": [
-        "security"
-      ]
-    },
-    {
-      "rule_id": "no-public-disclosure",
-      "description": "Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed.",
-      "enforcement": "Violation of this rule may result in being banned from the project community.",
-      "tags": [
-        "security"
-      ]
-    }
-  ]
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+version: 1.0.0
+protocol_id: security-vuln-reporting-001
+description: Defines the official policy and procedure for reporting security vulnerabilities.
+rules:
+- rule_id: vuln-reporting-channel
+  description: All suspected security vulnerabilities MUST be reported privately to
+    the designated security contact.
+  enforcement: This is a procedural rule. The designated contact is specified in the
+    project's main SECURITY.md file.
+  tags:
+  - security
+- rule_id: no-public-disclosure
+  description: Vulnerabilities MUST NOT be disclosed publicly until a patch is available
+    and has been distributed.
+  enforcement: Violation of this rule may result in being banned from the project
+    community.
+  tags:
+  - security
+
 ```
 
 

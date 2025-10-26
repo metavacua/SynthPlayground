@@ -1,0 +1,49 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: plan-registry-001
+description: Defines a central registry for discovering and executing hierarchical
+  plans by a logical name.
+rules:
+- rule_id: registry-definition
+  description: A central plan registry MUST exist at 'knowledge_core/plan_registry.json'.
+    It maps logical plan names to their file paths.
+  enforcement: The file's existence and format can be checked by the validation toolchain.
+- rule_id: registry-first-resolution
+  description: The 'call_plan <argument>' directive MUST first attempt to resolve
+    '<argument>' as a logical name in the plan registry. If resolution fails, it MUST
+    fall back to treating '<argument>' as a direct file path for backward compatibility.
+  enforcement: This logic must be implemented in both the plan validator (`fdc_cli.py`)
+    and the execution engine (`master_control.py`).
+- rule_id: registry-management-tool
+  description: A dedicated tool (`tooling/plan_manager.py`) MUST be provided for managing
+    the plan registry, with functions to register, deregister, and list plans.
+  enforcement: The tool's existence and functionality can be verified via integration
+    tests.
+associated_tools:
+- tooling/plan_manager.py
+- tooling/master_control.py
+- tooling/fdc_cli.py
+version: 1.0.0

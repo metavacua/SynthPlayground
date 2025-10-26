@@ -1,0 +1,41 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: agent-shell-001
+description: A protocol governing the use of the interactive agent shell as the primary
+  entry point for all tasks.
+rules:
+- rule_id: shell-is-primary-entry-point
+  description: All agent tasks must be initiated through the `agent_shell.py` script.
+    This script is the designated, API-driven entry point that ensures proper initialization
+    of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle
+    management. Direct execution of other tools or scripts is forbidden for task initiation.
+  enforcement: This is a procedural rule. The agent's operational framework should
+    only expose the agent_shell.py as the means of starting a new task.
+  tags:
+  - core
+associated_tools:
+- tooling/agent_shell.py
+version: 1.0.0

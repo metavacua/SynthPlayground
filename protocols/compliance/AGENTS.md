@@ -5,7 +5,7 @@
 # located in the `compliance/` directory.
 #
 # This file contains the compiled protocols in a human-readable Markdown format,
-# with machine-readable JSON definitions embedded.
+# with machine-readable YAML definitions embedded.
 # ---
 
 # Protocol: Agent Bootstrap
@@ -142,73 +142,144 @@ The `reset_all` tool has been the cause of multiple catastrophic failures, leadi
 
 ---
 
-```json
-{
-  "protocol_id": "agent-bootstrap-001",
-  "description": "A foundational protocol that dictates the agent's initial actions upon starting any task.",
-  "rules": [
-    {
-      "rule_id": "bootstrap-load-agents-md",
-      "description": "Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins.",
-      "enforcement": "This rule is enforced by the agent's core startup logic. The agent must verify the load of AGENTS.md before proceeding to the planning phase.",
-      "tags": [
-        "compliance"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "read_file"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: agent-bootstrap-001
+description: A foundational protocol that dictates the agent's initial actions upon
+  starting any task.
+rules:
+- rule_id: bootstrap-load-agents-md
+  description: Upon initialization for any task, the agent's first and highest-priority
+    action must be to locate, read, and parse the AGENTS.md file in the repository
+    root. This ensures the agent is properly contextualized before any planning or
+    execution begins.
+  enforcement: This rule is enforced by the agent's core startup logic. The agent
+    must verify the load of AGENTS.md before proceeding to the planning phase.
+  tags:
+  - compliance
+associated_tools:
+- read_file
+version: 1.0.0
+
 ```
 
 
 ---
 
-```json
-{
-  "protocol_id": "dependency-management-001",
-  "description": "A protocol for ensuring a reliable execution environment through formal dependency management.",
-  "rules": [
-    {
-      "rule_id": "dependency-install-on-start",
-      "description": "Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the `requirements.txt` file. This ensures the environment is correctly configured before any other tools are executed.",
-      "enforcement": "The agent's core startup logic should be designed to execute `pip install -r requirements.txt` as one of its initial actions.",
-      "tags": [
-        "compliance"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "run_in_bash_session"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: dependency-management-001
+description: A protocol for ensuring a reliable execution environment through formal
+  dependency management.
+rules:
+- rule_id: dependency-install-on-start
+  description: Upon starting a task, after loading AGENTS.md, the agent MUST install
+    all required Python packages listed in the `requirements.txt` file. This ensures
+    the environment is correctly configured before any other tools are executed.
+  enforcement: The agent's core startup logic should be designed to execute `pip install
+    -r requirements.txt` as one of its initial actions.
+  tags:
+  - compliance
+associated_tools:
+- run_in_bash_session
+version: 1.0.0
+
 ```
 
 
 ---
 
-```json
-{
-  "protocol_id": "experimental-prologue-001",
-  "description": "An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.",
-  "rules": [
-    {
-      "rule_id": "create-prologue-file",
-      "description": "Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols.",
-      "enforcement": "This is a procedural rule. The agent must verify the existence of 'prologue.txt' before using 'create_file_with_block' or similar tools for other files.",
-      "tags": [
-        "compliance"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "create_file_with_block"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: experimental-prologue-001
+description: An experimental protocol to test dynamic rule-following. It mandates
+  a prologue action before file creation.
+rules:
+- rule_id: create-prologue-file
+  description: Before creating any new file as part of a task, the agent MUST first
+    create a file named 'prologue.txt' with the content 'This is a prologue file.'
+    This rule serves as a test of the agent's ability to adapt its behavior to new,
+    dynamically loaded protocols.
+  enforcement: This is a procedural rule. The agent must verify the existence of 'prologue.txt'
+    before using 'create_file_with_block' or similar tools for other files.
+  tags:
+  - compliance
+associated_tools:
+- create_file_with_block
+version: 1.0.0
+
 ```
 
 

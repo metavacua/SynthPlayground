@@ -5,7 +5,7 @@
 # located in the `core/` directory.
 #
 # This file contains the compiled protocols in a human-readable Markdown format,
-# with machine-readable JSON definitions embedded.
+# with machine-readable YAML definitions embedded.
 # ---
 
 # Protocol: Agent Shell Entry Point
@@ -250,369 +250,613 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ---
 
-```json
-{
-  "protocol_id": "agent-shell-001",
-  "description": "A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.",
-  "rules": [
-    {
-      "rule_id": "shell-is-primary-entry-point",
-      "description": "All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation.",
-      "enforcement": "This is a procedural rule. The agent's operational framework should only expose the agent_shell.py as the means of starting a new task.",
-      "tags": [
-        "core"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "tooling/agent_shell.py"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: agent-shell-001
+description: A protocol governing the use of the interactive agent shell as the primary
+  entry point for all tasks.
+rules:
+- rule_id: shell-is-primary-entry-point
+  description: All agent tasks must be initiated through the `agent_shell.py` script.
+    This script is the designated, API-driven entry point that ensures proper initialization
+    of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle
+    management. Direct execution of other tools or scripts is forbidden for task initiation.
+  enforcement: This is a procedural rule. The agent's operational framework should
+    only expose the agent_shell.py as the means of starting a new task.
+  tags:
+  - core
+associated_tools:
+- tooling/agent_shell.py
+version: 1.0.0
+
 ```
 
 
 ---
 
-```json
-{
-  "protocol_id": "toolchain-review-on-schema-change-001",
-  "description": "A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.",
-  "rules": [
-    {
-      "rule_id": "toolchain-audit-on-schema-change",
-      "description": "If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that process it (`protocol_compiler.py`), a formal audit of the entire `tooling/` directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.",
-      "enforcement": "This is a procedural rule for any agent developing the protocol system. Adherence can be partially checked by post-commit hooks or review processes that look for a tooling audit in any change that modifies the specified core files.",
-      "tags": [
-        "core"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "tooling/auditor.py",
-    "tooling/protocol_compiler.py"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: toolchain-review-on-schema-change-001
+description: A meta-protocol to ensure the agent's toolchain remains synchronized
+  with the architecture of its governing protocols.
+rules:
+- rule_id: toolchain-audit-on-schema-change
+  description: If a change is made to the core protocol schema (`protocol.schema.json`)
+    or to the compilers that process it (`protocol_compiler.py`), a formal audit of
+    the entire `tooling/` directory MUST be performed as a subsequent step. This audit
+    should verify that all tools are compatible with the new protocol structure.
+  enforcement: This is a procedural rule for any agent developing the protocol system.
+    Adherence can be partially checked by post-commit hooks or review processes that
+    look for a tooling audit in any change that modifies the specified core files.
+  tags:
+  - core
+associated_tools:
+- tooling/auditor.py
+- tooling/protocol_compiler.py
+version: 1.0.0
+
 ```
 
 
 ---
 
-```json
-{
-  "protocol_id": "unified-auditor-001",
-  "description": "A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.",
-  "rules": [
-    {
-      "rule_id": "run-all-audits",
-      "description": "The `auditor.py` script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness.",
-      "enforcement": "The tool is invoked via the command line, typically through the `make audit` target.",
-      "tags": [
-        "core"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "tooling/auditor.py"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: unified-auditor-001
+description: A protocol for the unified repository auditing tool, which combines multiple
+  health and compliance checks into a single interface.
+rules:
+- rule_id: run-all-audits
+  description: The `auditor.py` script should be used to run comprehensive checks
+    on the repository's health. It can be run with 'all' to check protocols, plans,
+    and documentation completeness.
+  enforcement: The tool is invoked via the command line, typically through the `make
+    audit` target.
+  tags:
+  - core
+associated_tools:
+- tooling/auditor.py
+version: 1.0.0
+
 ```
 
 
 ---
 
-```json
-{
-  "protocol_id": "aura-execution-001",
-  "description": "A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.",
-  "rules": [
-    {
-      "rule_id": "execute-aura-script",
-      "description": "The `aura_executor.py` tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter.",
-      "enforcement": "The tool is used by invoking it from the command line with the path to the Aura script as an argument.",
-      "tags": [
-        "core"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "tooling/aura_executor.py"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: aura-execution-001
+description: A protocol for executing Aura scripts, enabling a more expressive and
+  powerful planning and automation language for the agent.
+rules:
+- rule_id: execute-aura-script
+  description: The `aura_executor.py` tool should be used to execute .aura script
+    files. This tool provides the bridge between the agent's master control loop and
+    the Aura language interpreter.
+  enforcement: The tool is used by invoking it from the command line with the path
+    to the Aura script as an argument.
+  tags:
+  - core
+associated_tools:
+- tooling/aura_executor.py
+version: 1.0.0
+
 ```
 
 
 ---
 
-```json
-{
-  "protocol_id": "capability-verification-001",
-  "description": "A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.",
-  "rules": [
-    {
-      "rule_id": "verify-capability-acquisition",
-      "description": "The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process.",
-      "enforcement": "The tool is used by invoking it from the command line with the path to the target test file.",
-      "tags": [
-        "core"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "tooling/capability_verifier.py"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: capability-verification-001
+description: A protocol for using the capability verifier tool to empirically test
+  the agent's monotonic improvement.
+rules:
+- rule_id: verify-capability-acquisition
+  description: The `capability_verifier.py` tool should be used to test the agent's
+    ability to acquire a new capability defined by a failing test file. The tool orchestrates
+    the failure, self-correction, and verification process.
+  enforcement: The tool is used by invoking it from the command line with the path
+    to the target test file.
+  tags:
+  - core
+associated_tools:
+- tooling/capability_verifier.py
+version: 1.0.0
+
 ```
 
 
 ---
 
-```json
-{
-  "protocol_id": "csdc-001",
-  "description": "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.",
-  "rules": [
-    {
-      "rule_id": "use-chomsky-cli-validate",
-      "description": "The `tooling/chomsky/cli.py validate-plan` command must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP).",
-      "enforcement": "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments.",
-      "tags": [
-        "core"
-      ]
-    },
-    {
-      "rule_id": "model-a-constraints",
-      "description": "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`.",
-      "enforcement": "Enforced by the LBAValidator within the Chomsky toolchain.",
-      "tags": [
-        "core"
-      ]
-    },
-    {
-      "rule_id": "model-b-constraints",
-      "description": "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`.",
-      "enforcement": "Enforced by the LBAValidator within the Chomsky toolchain.",
-      "tags": [
-        "core"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "tooling/chomsky/cli.py"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: csdc-001
+description: A protocol for the Context-Sensitive Development Cycle (CSDC), which
+  introduces development models based on logical constraints.
+rules:
+- rule_id: use-chomsky-cli-validate
+  description: The `tooling/chomsky/cli.py validate-plan` command must be used to
+    validate plans under the CSDC. This tool enforces model-specific constraints (A
+    or B) and complexity requirements (P or EXP).
+  enforcement: The tool is used by invoking it from the command line with the plan
+    file, model, and complexity as arguments.
+  tags:
+  - core
+- rule_id: model-a-constraints
+  description: Model A permits `define_set_of_names` but forbids `define_diagonalization_function`.
+  enforcement: Enforced by the LBAValidator within the Chomsky toolchain.
+  tags:
+  - core
+- rule_id: model-b-constraints
+  description: Model B permits `define_diagonalization_function` but forbids `define_set_of_names`.
+  enforcement: Enforced by the LBAValidator within the Chomsky toolchain.
+  tags:
+  - core
+associated_tools:
+- tooling/chomsky/cli.py
+version: 1.0.0
+
 ```
 
 
 ---
 
-```json
-{
-  "protocol_id": "unified-doc-builder-001",
-  "description": "A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth.",
-  "rules": [
-    {
-      "rule_id": "use-doc-builder-for-all-docs",
-      "description": "The `doc_builder.py` script is the single entry point for generating all user-facing documentation, including system-level docs, README files, and GitHub Pages. It should be called with the appropriate '--format' argument.",
-      "enforcement": "The tool is invoked via the command line, typically through the `make docs`, `make readme`, or `make pages` targets.",
-      "tags": [
-        "core"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "tooling/doc_builder.py"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: unified-doc-builder-001
+description: A protocol for the unified documentation builder, which generates various
+  documentation artifacts from the repository's sources of truth.
+rules:
+- rule_id: use-doc-builder-for-all-docs
+  description: The `doc_builder.py` script is the single entry point for generating
+    all user-facing documentation, including system-level docs, README files, and
+    GitHub Pages. It should be called with the appropriate '--format' argument.
+  enforcement: The tool is invoked via the command line, typically through the `make
+    docs`, `make readme`, or `make pages` targets.
+  tags:
+  - core
+associated_tools:
+- tooling/doc_builder.py
+version: 1.0.0
+
 ```
 
 
 ---
 
-```json
-{
-  "protocol_id": "file-indexing-001",
-  "description": "A protocol for maintaining an up-to-date file index to accelerate tool performance.",
-  "rules": [
-    {
-      "rule_id": "update-index-before-submit",
-      "description": "Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem.",
-      "enforcement": "This is a procedural rule. The agent's pre-submission checklist should include a step to run 'python tooling/some_indexer.py build'.",
-      "tags": [
-        "core"
-      ]
-    }
-  ],
-  "associated_tools": [],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: file-indexing-001
+description: A protocol for maintaining an up-to-date file index to accelerate tool
+  performance.
+rules:
+- rule_id: update-index-before-submit
+  description: Before submitting any changes that alter the file structure (create,
+    delete, rename), the agent MUST rebuild the repository's file index. This ensures
+    that tools relying on the index, such as the FDC validator, have an accurate view
+    of the filesystem.
+  enforcement: This is a procedural rule. The agent's pre-submission checklist should
+    include a step to run 'python tooling/some_indexer.py build'.
+  tags:
+  - core
+associated_tools: []
+version: 1.0.0
+
 ```
 
 
 ---
 
-```json
-{
-  "protocol_id": "hdl-proving-001",
-  "description": "A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.",
-  "rules": [
-    {
-      "rule_id": "prove-sequent",
-      "description": "The `hdl_prover.py` tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover.",
-      "enforcement": "The tool is used by invoking it from the command line with the sequent to be proved as an argument.",
-      "tags": [
-        "core"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "tooling/hdl_prover.py"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: hdl-proving-001
+description: A protocol for interacting with the Hypersequent-calculus-based logic
+  engine, allowing the agent to perform formal logical proofs.
+rules:
+- rule_id: prove-sequent
+  description: The `hdl_prover.py` tool should be used to check the provability of
+    a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover.
+  enforcement: The tool is used by invoking it from the command line with the sequent
+    to be proved as an argument.
+  tags:
+  - core
+associated_tools:
+- tooling/hdl_prover.py
+version: 1.0.0
+
 ```
 
 
 ---
 
-```json
-{
-  "@context": {
-    "proto": "https://w3id.org/jules/protocol/",
-    "xsd": "http://www.w3.org/2001/XMLSchema#",
-    "protocol_id": "proto:protocol_id",
-    "description": "proto:description",
-    "rules": {
-      "@id": "proto:rules",
-      "@container": "@list"
-    },
-    "rule_id": "proto:rule_id",
-    "enforcement": "proto:enforcement",
-    "associated_tools": {
-      "@id": "proto:associated_tools",
-      "@container": "@list",
-      "@type": "@id"
-    },
-    "associated_artifacts": {
-      "@id": "proto:associated_artifacts",
-      "@container": "@list",
-      "@type": "@id"
-    }
-  },
-  "protocol_id": "agent-interaction-001",
-  "description": "A protocol governing the agent's core interaction and planning tools.",
-  "rules": [
-    {
-      "rule_id": "planning-tool-access",
-      "description": "The agent is authorized to use the `set_plan` tool to create and update its execution plan. This is a foundational capability for task execution.",
-      "enforcement": "The agent's core logic should be designed to use this tool for all planning activities.",
-      "tags": [
-        "core"
-      ]
-    },
-    {
-      "rule_id": "communication-tool-access",
-      "description": "The agent is authorized to use the `message_user` tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow.",
-      "enforcement": "The agent's core logic should be designed to use this tool for all user-facing communication.",
-      "tags": [
-        "core"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "set_plan",
-    "message_user"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: agent-interaction-001
+description: A protocol governing the agent's core interaction and planning tools.
+rules:
+- rule_id: planning-tool-access
+  description: The agent is authorized to use the `set_plan` tool to create and update
+    its execution plan. This is a foundational capability for task execution.
+  enforcement: The agent's core logic should be designed to use this tool for all
+    planning activities.
+  tags:
+  - core
+- rule_id: communication-tool-access
+  description: The agent is authorized to use the `message_user` tool to communicate
+    with the user, providing updates and asking for clarification. This is essential
+    for a collaborative workflow.
+  enforcement: The agent's core logic should be designed to use this tool for all
+    user-facing communication.
+  tags:
+  - core
+associated_tools:
+- set_plan
+- message_user
+version: 1.0.0
+
 ```
 
 
 ---
 
-```json
-{
-  "protocol_id": "plllu-execution-001",
-  "description": "A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent.",
-  "rules": [
-    {
-      "rule_id": "execute-plllu-script",
-      "description": "The `plllu_runner.py` tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter.",
-      "enforcement": "The tool is used by invoking it from the command line with the path to the pLLLU script as an argument.",
-      "tags": [
-        "core"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "tooling/plllu_runner.py"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: plllu-execution-001
+description: A protocol for executing pLLLU scripts, enabling a more expressive and
+  powerful planning and automation language for the agent.
+rules:
+- rule_id: execute-plllu-script
+  description: The `plllu_runner.py` tool should be used to execute .plllu script
+    files. This tool provides the bridge between the agent's master control loop and
+    the pLLLU language interpreter.
+  enforcement: The tool is used by invoking it from the command line with the path
+    to the pLLLU script as an argument.
+  tags:
+  - core
+associated_tools:
+- tooling/plllu_runner.py
+version: 1.0.0
+
 ```
 
 
 ---
 
-```json
-{
-  "protocol_id": "speculative-execution-001",
-  "description": "A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.",
-  "rules": [
-    {
-      "rule_id": "idle-state-trigger",
-      "description": "The agent may only initiate a speculative task when it has no active, user-assigned tasks.",
-      "enforcement": "The agent's main control loop must verify an idle state before allowing the invocation of a speculative plan.",
-      "tags": [
-        "core"
-      ]
-    },
-    {
-      "rule_id": "formal-proposal-required",
-      "description": "A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan.",
-      "enforcement": "The initial plan for any speculative task must include a step to generate and save a proposal artifact.",
-      "tags": [
-        "core"
-      ]
-    },
-    {
-      "rule_id": "resource-constraints",
-      "description": "Speculative tasks must operate under defined resource limits.",
-      "enforcement": "This is a system-level constraint that the agent orchestrator must enforce.",
-      "tags": [
-        "core"
-      ]
-    },
-    {
-      "rule_id": "user-review-gate",
-      "description": "Final artifacts from a speculative task must be submitted for user review and cannot be merged directly.",
-      "enforcement": "The agent is forbidden from using tools like 'submit' or 'merge' within a speculative context. It must use 'request_user_input' to present the results.",
-      "tags": [
-        "core"
-      ]
-    },
-    {
-      "rule_id": "speculative-logging",
-      "description": "All logs and artifacts generated during a speculative task must be tagged as 'speculative'.",
-      "enforcement": "The agent's logging and file-creation tools should be context-aware and apply this tag when in a speculative mode.",
-      "tags": [
-        "core"
-      ]
-    }
-  ],
-  "associated_tools": [
-    "set_plan",
-    "create_file_with_block",
-    "request_user_input"
-  ],
-  "version": "1.0.0"
-}
+```yaml
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: speculative-execution-001
+description: A protocol that governs the agent's ability to initiate and execute self-generated,
+  creative, or exploratory tasks during idle periods.
+rules:
+- rule_id: idle-state-trigger
+  description: The agent may only initiate a speculative task when it has no active,
+    user-assigned tasks.
+  enforcement: The agent's main control loop must verify an idle state before allowing
+    the invocation of a speculative plan.
+  tags:
+  - core
+- rule_id: formal-proposal-required
+  description: A speculative task must begin with the creation of a formal proposal
+    document, outlining the objective, rationale, and plan.
+  enforcement: The initial plan for any speculative task must include a step to generate
+    and save a proposal artifact.
+  tags:
+  - core
+- rule_id: resource-constraints
+  description: Speculative tasks must operate under defined resource limits.
+  enforcement: This is a system-level constraint that the agent orchestrator must
+    enforce.
+  tags:
+  - core
+- rule_id: user-review-gate
+  description: Final artifacts from a speculative task must be submitted for user
+    review and cannot be merged directly.
+  enforcement: The agent is forbidden from using tools like 'submit' or 'merge' within
+    a speculative context. It must use 'request_user_input' to present the results.
+  tags:
+  - core
+- rule_id: speculative-logging
+  description: All logs and artifacts generated during a speculative task must be
+    tagged as 'speculative'.
+  enforcement: The agent's logging and file-creation tools should be context-aware
+    and apply this tag when in a speculative mode.
+  tags:
+  - core
+associated_tools:
+- set_plan
+- create_file_with_block
+- request_user_input
+version: 1.0.0
+
 ```
 
 

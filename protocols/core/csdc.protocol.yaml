@@ -1,0 +1,50 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: csdc-001
+description: A protocol for the Context-Sensitive Development Cycle (CSDC), which
+  introduces development models based on logical constraints.
+rules:
+- rule_id: use-chomsky-cli-validate
+  description: The `tooling/chomsky/cli.py validate-plan` command must be used to
+    validate plans under the CSDC. This tool enforces model-specific constraints (A
+    or B) and complexity requirements (P or EXP).
+  enforcement: The tool is used by invoking it from the command line with the plan
+    file, model, and complexity as arguments.
+  tags:
+  - core
+- rule_id: model-a-constraints
+  description: Model A permits `define_set_of_names` but forbids `define_diagonalization_function`.
+  enforcement: Enforced by the LBAValidator within the Chomsky toolchain.
+  tags:
+  - core
+- rule_id: model-b-constraints
+  description: Model B permits `define_diagonalization_function` but forbids `define_set_of_names`.
+  enforcement: Enforced by the LBAValidator within the Chomsky toolchain.
+  tags:
+  - core
+associated_tools:
+- tooling/chomsky/cli.py
+version: 1.0.0

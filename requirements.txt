@@ -30,3 +30,4 @@ jsonschema
 ply
 requests
 ddt
+yaml-ld

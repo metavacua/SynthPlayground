@@ -1,0 +1,50 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: critic-meta-protocol-001
+description: A meta-protocol that governs the behavior and evaluation criteria of
+  the Code Review Critic agent.
+rules:
+- rule_id: protocol-as-source-code
+  description: The `protocols/` directory and all its contents (`.md`, `.json` files)
+    MUST be treated as functional source code. Changes to these files directly alter
+    the agent's operational capabilities and governing rules.
+  enforcement: The Code Review Critic must analyze changes in this directory with
+    the same rigor as changes to `.py` files.
+- rule_id: built-in-tools-are-valid
+  description: The agent's execution environment provides a set of built-in tools
+    (e.g., `read_file`, `delete_file`, `pre_commit_instructions`). The implementation
+    of these tools does not reside within the repository. A protocol change that adds
+    a built-in tool to the `associated_tools` list is a valid and complete functional
+    change.
+  enforcement: The Code Review Critic must not flag a change as 'incomplete' or 'non-functional'
+    solely because the implementation of a built-in tool is not present in the repository.
+- rule_id: functional-change-definition
+  description: A change is considered 'functional' if it correctly modifies the agent's
+    operational rules or capabilities, as defined by the combination of Python source
+    code and the protocol source files in `protocols/`.
+  enforcement: The Code Review Critic's evaluation of 'functionality' must encompass
+    both traditional code and protocol definitions.
+version: 1.0.0

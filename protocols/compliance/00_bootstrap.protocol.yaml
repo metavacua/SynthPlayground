@@ -1,0 +1,41 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: agent-bootstrap-001
+description: A foundational protocol that dictates the agent's initial actions upon
+  starting any task.
+rules:
+- rule_id: bootstrap-load-agents-md
+  description: Upon initialization for any task, the agent's first and highest-priority
+    action must be to locate, read, and parse the AGENTS.md file in the repository
+    root. This ensures the agent is properly contextualized before any planning or
+    execution begins.
+  enforcement: This rule is enforced by the agent's core startup logic. The agent
+    must verify the load of AGENTS.md before proceeding to the planning phase.
+  tags:
+  - compliance
+associated_tools:
+- read_file
+version: 1.0.0

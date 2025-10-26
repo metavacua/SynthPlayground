@@ -1,0 +1,39 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: pre-commit-protocol-001
+description: Defines the mandatory pre-commit checks to ensure code quality, correctness,
+  and readiness for submission.
+rules:
+- rule_id: pre-commit-instructions-mandate
+  description: Before submitting changes, the agent MUST execute the `pre_commit_instructions`
+    tool to receive the required sequence of validation steps (e.g., running tests,
+    requesting code review).
+  enforcement: The agent's core logic should invoke this tool as the entry point to
+    the pre-submission phase.
+associated_tools:
+- pre_commit_instructions
+- code_linter
+version: 1.0.0

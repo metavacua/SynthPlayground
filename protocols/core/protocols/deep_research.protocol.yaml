@@ -1,0 +1,39 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: deep-research-cycle-001
+description: A standardized, callable plan for conducting in-depth research on a complex
+  topic.
+rules:
+- rule_id: structured-research-phases
+  description: 'The deep research plan MUST follow a structured four-phase process:
+    Scoping, Broad Gathering, Targeted Extraction, and Synthesis.'
+  enforcement: The plan's structure itself enforces this rule. The `lint` command
+    can be extended to validate the structure of registered research plans.
+associated_tools:
+- google_search
+- view_text_website
+- create_file_with_block
+version: 1.0.0
