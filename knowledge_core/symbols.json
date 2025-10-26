@@ -3967,7 +3967,7 @@
       "language": "Python",
       "line": 176,
       "kind": "function",
-      "docstring": null
+      "docstring": "Generates the content for an AGENTS.md file."
     },
     {
       "_type": "tag",
@@ -3994,7 +3994,7 @@
       "language": "Python",
       "line": 8,
       "kind": "function",
-      "docstring": null
+      "docstring": "Generates the detailed SYSTEM_DOCUMENTATION.md."
     },
     {
       "_type": "tag",
@@ -4003,7 +4003,7 @@
       "language": "Python",
       "line": 10,
       "kind": "function",
-      "docstring": null
+      "docstring": "Generates the high-level README.md for a module."
     },
     {
       "_type": "tag",
@@ -4012,7 +4012,7 @@
       "language": "Python",
       "line": 12,
       "kind": "function",
-      "docstring": null
+      "docstring": "Generates the index.html for GitHub Pages."
     },
     {
       "_type": "tag",
@@ -4021,7 +4021,7 @@
       "language": "Python",
       "line": 26,
       "kind": "function",
-      "docstring": null
+      "docstring": "Generates a README.md for a single tool from its docstring."
     },
     {
       "_type": "tag",
@@ -4030,7 +4030,7 @@
       "language": "Python",
       "line": 30,
       "kind": "function",
-      "docstring": null
+      "docstring": "Generates a single README.md for the tooling directory."
     },
     {
       "_type": "tag",
@@ -4048,7 +4048,7 @@
       "language": "Python",
       "line": 36,
       "kind": "function",
-      "docstring": null
+      "docstring": "Determines if a function definition node is pure.\nA function is considered pure if it does not perform any side effects."
     },
     {
       "_type": "tag",
@@ -4066,7 +4066,7 @@
       "language": "Python",
       "line": 187,
       "kind": "function",
-      "docstring": null
+      "docstring": "Generates the command to execute an APPL file.\n\nArgs:\n    filepath: The path to the .appl file to execute.\n\nReturns:\n    A list of strings representing the command to be executed."
     },
     {
       "_type": "tag",

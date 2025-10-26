@@ -2,6 +2,8 @@ import argparse
 import sys
 from collections import defaultdict
 from .grammar import Grammar
+from .classifier import Classifier
+from .lba import LBASimulator
 
 def recognize_right_linear(grammar_productions, start_symbol, input_string):
     memo = {}
@@ -113,32 +115,35 @@ def main():
         grammar = Grammar(args.grammar_file)
         start_symbol = args.start_symbol if args.start_symbol else grammar.start_symbol
         print(f"Grammar loaded from {args.grammar_file}. Start symbol: {start_symbol}")
-        productions_dict = grammar.get_productions_dict()
-        is_contracting = any(len(lhs) > len(rhs) for lhs, rhs in grammar.productions)
-        is_csg = any(len(lhs) > 1 for lhs, _ in grammar.productions) and not is_contracting
-        is_right_reg = all(len(rhs) <= 2 and (len(rhs) < 2 or rhs[1].isupper()) for _, rhs in grammar.productions) and not is_csg and not is_contracting
-        is_left_reg = all(len(rhs) <= 2 and (len(rhs) < 2 or rhs[0].isupper()) for _, rhs in grammar.productions) and not is_csg and not is_contracting
 
-        if is_contracting:
-            print("Heuristic: UNRESTRICTED (TYPE-0).")
-            print("\nWARNING: This grammar contains contracting rules, membership is undecidable.")
-        elif is_csg:
-            print("Heuristic: CONTEXT-SENSITIVE. Recognition not implemented.")
-        elif is_right_reg and not is_left_reg:
-            print("Heuristic: RIGHT-LINEAR REGULAR.")
+        classifier = Classifier(grammar)
+        classification = classifier.classify()
+        print(f"Classification: {classification}")
+
+        productions_dict = grammar.get_productions_dict()
+
+        if "UNRESTRICTED" in classification:
+            print("\nWARNING: This grammar may be undecidable. Recognition is not attempted.")
+        elif "CONTEXT-SENSITIVE" in classification:
+            print("Using LBA simulator for CONTEXT-SENSITIVE grammar.")
+            simulator = LBASimulator(grammar)
+            if simulator.recognize(args.input_string):
+                print(f"\nSUCCESS: String '{args.input_string}' is recognized by the LBA.")
+            else:
+                print(f"\nFAILURE: String '{args.input_string}' is NOT recognized by the LBA.")
+        elif "RIGHT-LINEAR REGULAR" in classification:
             if recognize_right_linear(productions_dict, start_symbol, args.input_string):
                 print(f"\nSUCCESS: String '{args.input_string}' is recognized.")
             else:
                 print(f"\nFAILURE: String '{args.input_string}' is not recognized.")
-        elif is_left_reg and not is_right_reg:
-            print("Heuristic: LEFT-LINEAR REGULAR.")
-            reversed_grammar = reverse_grammar(productions_dict)
-            if recognize_right_linear(reversed_grammar, start_symbol, args.input_string[::-1]):
+        elif "LEFT-LINEAR REGULAR" in classification:
+            reversed_prods = reverse_grammar(productions_dict)
+            if recognize_right_linear(reversed_prods, start_symbol, args.input_string[::-1]):
                 print(f"\nSUCCESS: String '{args.input_string}' is recognized.")
             else:
                 print(f"\nFAILURE: String '{args.input_string}' is not recognized.")
-        else:
-            print("Heuristic: CONTEXT-FREE. Using Earley parser.")
+        elif "CONTEXT-FREE" in classification:
+            print("Using Earley parser for CONTEXT-FREE grammar.")
             input_tokens = list(args.input_string) if ' ' not in args.input_string else args.input_string.split()
             chart = recognize_earley(productions_dict, start_symbol, input_tokens)
             parse_count = get_parse_count(chart, start_symbol)
@@ -149,6 +154,9 @@ def main():
                  else: print("Grammar is UNAMBIGUOUS for this input.")
             else:
                  print(f"\nFAILURE: String '{args.input_string}' is not recognized.")
+        else:
+            print("\nCould not determine a suitable recognition strategy for this grammar.")
+
     except FileNotFoundError:
         print(f"Error: Grammar file not found at {args.grammar_file}", file=sys.stderr)
         sys.exit(1)
