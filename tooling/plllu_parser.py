@@ -1,7 +1,7 @@
 """
 A parser for pLLLU (paraconsistent Linear Logic with Undeterminedness) formulas.
 
-This script uses the PLY (Python Lex-Yacc) library to define a lexer and a
+This script uses the PLY (Python Lex-Yacc) library to define a
 parser for a simple, string-based representation of pLLLU formulas. It can
 handle basic atomic formulas, unary operators (like negation and consistency),
 and binary operators (like implication and conjunction).
@@ -12,8 +12,8 @@ The main function `parse_formula` takes a string and returns a simple AST
 
 import sys
 import os
-import ply.lex as lex
 import ply.yacc as yacc
+from tooling.plllu_lexer import tokens, lexer
 
 # Ensure the project root is in the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -30,57 +30,6 @@ def UnaryOpNode(op, child):
 
 def BinaryOpNode(op, left, right):
     return ("binary_op", op, left, right)
-
-
-# --- Lexer Definition ---
-
-tokens = (
-    "ATOM",
-    "IMPLIES",
-    "WITH",
-    "PLUS",
-    "NOT",  # LFU undeterminedness operator '~'
-    "BANG",
-    "CONSISTENCY",  # LFI consistency operator '∘'
-    "SECTION",
-    "WHYNOT",
-    "LPAREN",
-    "RPAREN",
-)
-
-# Regex for tokens
-t_IMPLIES = r"-o"
-t_WITH = r"&"
-t_PLUS = r"\|"
-t_NOT = r"~"
-t_BANG = r"!"
-t_CONSISTENCY = r"∘"
-t_SECTION = r"§"
-t_WHYNOT = r"\?"
-t_LPAREN = r"\("
-t_RPAREN = r"\)"
-
-
-def t_ATOM(t):
-    r"[A-Z][A-Z0-9]*"
-    return t
-
-
-# Ignored characters (spaces and tabs)
-t_ignore = " \t"
-
-
-def t_newline(t):
-    r"\n+"
-    t.lexer.lineno += len(t.value)
-
-
-def t_error(t):
-    raise SyntaxError(f"Illegal character '{t.value[0]}' at line {t.lexer.lineno}")
-
-
-# Build the lexer
-lexer = lex.lex()
 
 
 # --- Parser Definition ---

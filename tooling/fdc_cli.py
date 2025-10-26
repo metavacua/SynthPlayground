@@ -29,6 +29,7 @@ import uuid
 # Add the root directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.file_system_utils import find_files
+from tooling.fdc_cli_logic import create_log_entry, analyze_plan_content
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -37,23 +38,6 @@ POSTMORTEMS_DIR = os.path.join(ROOT_DIR, "postmortems")
 LOG_FILE_PATH = os.path.join(ROOT_DIR, "logs", "activity.log.jsonl")
 FSM_DEF_PATH = os.path.join(ROOT_DIR, "tooling", "fdc_fsm.json")
 
-ACTION_TYPE_MAP = {
-    "set_plan": "plan_op",
-    "plan_step_complete": "step_op",
-    "submit": "submit_op",
-    "create_file_with_block": "write_op",
-    "overwrite_file_with_block": "write_op",
-    "replace_with_git_merge_diff": "write_op",
-    "read_file": "read_op",
-    "list_files": "read_op",
-    "grep": "read_op",
-    "delete_file": "delete_op",
-    "rename_file": "move_op",
-    "run_in_bash_session": "tool_exec",
-    "for_each_file": "loop_op",
-    "define_set_of_names": "define_names_op",
-    "define_diagonalization_function": "define_diag_op",
-}
 
 # --- CLI Subcommands & Helpers ---
 
@@ -70,22 +54,6 @@ def _log_event(log_entry):
             if f.read(1) != "\n":
                 f.write("\n")
         f.write(content_to_write)
-
-
-def _create_log_entry(task_id, action_type, details):
-    """Creates a structured log entry dictionary."""
-    return {
-        "log_id": str(uuid.uuid4()),
-        "session_id": os.getenv("JULES_SESSION_ID", "unknown"),
-        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-        "phase": "Phase 6",
-        "task": {"id": task_id, "plan_step": -1},
-        "action": {"type": action_type, "details": details},
-        "outcome": {
-            "status": "SUCCESS",
-            "message": f"FDC CLI: {action_type} for task {task_id}.",
-        },
-    }
 
 
 def close_task(task_id):
@@ -105,14 +73,14 @@ def close_task(task_id):
         sys.exit(1)
 
     _log_event(
-        _create_log_entry(
+        create_log_entry(
             task_id,
             "POST_MORTEM",
             {"summary": f"Post-mortem initiated for '{task_id}'."},
         )
     )
     _log_event(
-        _create_log_entry(
+        create_log_entry(
             task_id,
             "TASK_END",
             {"summary": f"Development phase for FDC task '{task_id}' formally closed."},
@@ -273,46 +241,18 @@ def analyze_plan(plan_filepath, return_results=False):
     try:
         with open(plan_filepath, "r") as f:
             plan_lines_with_indent = f.readlines()
-        plan_lines = [line.strip() for line in plan_lines_with_indent if line.strip()]
     except FileNotFoundError:
         print(f"Error: Plan file not found at {plan_filepath}", file=sys.stderr)
         sys.exit(1)
 
-    # --- Complexity Analysis ---
-    loop_indents = []
-    for line in plan_lines_with_indent:
-        if line.strip().startswith("for_each_file"):
-            indent = len(line) - len(line.lstrip(" "))
-            loop_indents.append(indent)
-
-    if not loop_indents:
-        complexity_class = "P"
-        complexity_string = "Constant (O(1))"
-    elif max(loop_indents) > min(loop_indents):
-        complexity_class = "EXP"
-        complexity_string = "Exponential (EXPTIME-Class)"
-    else:
-        complexity_class = "P"
-        complexity_string = "Polynomial (P-Class)"
-
-    # --- Modality Analysis ---
-    has_write_op = False
-    write_ops = {"write_op", "delete_op", "move_op"}
-    for line in plan_lines:
-        command = line.split()[0]
-        action_type = ACTION_TYPE_MAP.get(command)
-        if action_type in write_ops:
-            has_write_op = True
-            break
-
-    modality = "Construction (Read-Write)" if has_write_op else "Analysis (Read-Only)"
+    analysis_results = analyze_plan_content(plan_lines_with_indent)
 
     if return_results:
-        return {"complexity_class": complexity_class, "modality": modality}
+        return analysis_results
 
     print("Plan Analysis Results:")
-    print(f"  - Complexity: {complexity_string}")
-    print(f"  - Modality:   {modality}")
+    print(f"  - Complexity: {analysis_results['complexity_string']}")
+    print(f"  - Modality:   {analysis_results['modality']}")
 
 
 def start_task(task_id):
@@ -373,7 +313,7 @@ def start_task(task_id):
 
     # --- Logging ---
     _log_event(
-        _create_log_entry(
+        create_log_entry(
             task_id,
             "TASK_START",
             {"summary": f"AORP cascade completed for FDC task '{task_id}'."},

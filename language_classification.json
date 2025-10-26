@@ -1,9 +1,19 @@
 {
   "components": [
     {
-      "name": "Finite Development Cycle (FDC)",
+      "name": "Finite Development Cycle (FDC) FSM",
       "classification": "Regular",
       "justification": "The FDC is defined by a Finite State Machine (FSM) in `tooling/fdc_fsm.json`. The FSM has a finite number of states and a well-defined alphabet of operations, making it a regular language.",
+      "files": ["tooling/fdc_fsm.json"],
+      "decomposition": {
+        "strategy": "N/A"
+      }
+    },
+    {
+      "name": "Research FSM",
+      "classification": "Regular",
+      "justification": "Similar to the FDC FSM, this file defines a Finite State Machine for the research process.",
+      "files": ["tooling/research_fsm.json"],
       "decomposition": {
         "strategy": "N/A"
       }
@@ -12,11 +22,14 @@
       "name": "Aura Language",
       "classification": "Context-Free",
       "justification": "The Aura language supports nested structures, such as nested function calls, which cannot be recognized by a regular language. This is formally demonstrated by the pumping lemma for regular languages. The language is, however, context-free, and is parsed by a Pratt parser.",
+      "files": ["aura_lang/"],
       "decomposition": {
-        "strategy": "Separation of lexical and syntactical analysis.",
+        "strategy": "Separation of lexical, syntactical, and semantic analysis.",
         "components": [
           "aura_lang/lexer.py (Regular)",
-          "aura_lang/parser.py (Context-Free)"
+          "aura_lang/parser.py (Context-Free)",
+          "aura_lang/ast.py (Data Structure)",
+          "aura_lang/interpreter.py (Context-Free)"
         ]
       }
     },
@@ -24,16 +37,109 @@
         "name": "LFI ILL Language",
         "classification": "Context-Free",
         "justification": "The LFI ILL language is defined by a BNF grammar in `lfi_ill/grammar.bnf`, which specifies production rules with a single non-terminal on the left-hand side. This is the definition of a context-free grammar.",
+        "files": ["lfi_ill/"],
+        "decomposition": {
+            "strategy": "Separation of lexical, syntactical, and semantic analysis.",
+            "components": [
+                "lfi_ill/lexer.py (Regular)",
+                "lfi_ill/parser.py (Context-Free)",
+                "lfi_ill/ast.py (Data Structure)",
+                "lfi_ill/interpreter.py (Context-Free)"
+            ]
+        }
+    },
+    {
+        "name": "AAL (Agent Abstraction Language)",
+        "classification": "Regular",
+        "justification": "The AAL language is parsed using regular expressions, which is a characteristic of regular languages.",
+        "files": ["tooling/aal/"],
         "decomposition": {
             "strategy": "N/A"
         }
     },
     {
+        "name": "pLLLU Language",
+        "classification": "Context-Free",
+        "justification": "The pLLLU language is a planning and automation language that supports nested and recursive structures, which are characteristic of context-free languages.",
+        "files": ["tooling/plllu_interpreter.py", "tooling/plllu_parser.py", "tooling/plllu_lexer.py"],
+        "decomposition": {
+            "strategy": "Separation of lexical, syntactical, and semantic analysis.",
+            "components": [
+                "tooling/plllu_lexer.py (Regular)",
+                "tooling/plllu_parser.py (Context-Free)",
+                "tooling/plllu_interpreter.py (Context-Free)"
+            ]
+        }
+    },
+    {
+      "name": "HDL Prover",
+      "classification": "Context-Sensitive",
+      "justification": "The HDL prover interacts with an external Lisp-based prover and its behavior is dependent on the state of the external process. This makes it context-sensitive.",
+      "files": ["tooling/hdl_prover.py", "tooling/hdl_parser.py"],
+      "decomposition": {
+        "strategy": "Separation of parsing and proving.",
+        "components": [
+            "tooling/hdl_parser.py (Context-Free)",
+            "tooling/hdl_prover.py (Context-Sensitive)"
+        ]
+      }
+    },
+    {
       "name": "Python Orchestration Scripts",
       "classification": "Context-Sensitive",
       "justification": "The Python scripts in the `tooling/` directory are context-sensitive because their behavior is dependent on runtime conditions, such as the state of the file system, environment variables, and the outputs of other programs.",
+      "files": ["tooling/"],
       "decomposition": {
-        "strategy": "N/A"
+        "strategy": "Separation of pure logic from context-sensitive I/O.",
+        "components": [
+            "tooling/agent_logic.py (Context-Free)",
+            "tooling/agent_shell.py (Context-Sensitive)",
+            "tooling/appl_logic.py (Context-Free)",
+            "tooling/appl_runner.py (Context-Sensitive)",
+            "tooling/appl_to_lfi_ill_logic.py (Context-Free)",
+            "tooling/appl_to_lfi_ill.py (Context-Sensitive)",
+            "tooling/auditor_logic.py (Context-Free)",
+            "tooling/auditor.py (Context-Sensitive)",
+            "tooling/aura_logic.py (Context-Free)",
+            "tooling/aura_executor.py (Context-Sensitive)",
+            "tooling/aura_to_lfi_ill_logic.py (Context-Free)",
+            "tooling/aura_to_lfi_ill.py (Context-Sensitive)",
+            "tooling/autonomous_agent_logic.py (Context-Free)",
+            "tooling/autonomous_agent.py (Context-Sensitive)",
+            "tooling/background_researcher_logic.py (Context-Free)",
+            "tooling/background_researcher.py (Context-Sensitive)",
+            "tooling/build_logic.py (Context-Free)",
+            "tooling/builder.py (Context-Sensitive)",
+            "tooling/capability_verifier_logic.py (Context-Free)",
+            "tooling/capability_verifier.py (Context-Sensitive)",
+            "tooling/code_suggester_logic.py (Context-Free)",
+            "tooling/code_suggester.py (Context-Sensitive)",
+            "tooling/compile_protocols_logic.py (Context-Free)",
+            "tooling/compile_protocols.py (Context-Sensitive)",
+            "tooling/context_awareness_scanner_logic.py (Context-Free)",
+            "tooling/context_awareness_scanner.py (Context-Sensitive)",
+            "tooling/csdc_logic.py (Context-Free)",
+            "tooling/csdc_cli.py (Context-Sensitive)",
+            "tooling/dependency_graph_generator_logic.py (Context-Free)",
+            "tooling/dependency_graph_generator.py (Context-Sensitive)",
+            "tooling/doc_builder_logic.py (Context-Free)",
+            "tooling/doc_builder.py (Context-Sensitive)",
+            "tooling/fdc_cli_logic.py (Context-Free)",
+            "tooling/fdc_cli.py (Context-Sensitive)"
+        ]
+      }
+    },
+    {
+      "name": "Gemini App Canvas Agent",
+      "classification": "Context-Sensitive",
+      "justification": "This is a React application that interacts with the user, the file system (via IndexedDB), and external services (the Gemini API).",
+      "files": ["GeminiAppCanvasAgent.jsx", "gemini_logic.js"],
+      "decomposition": {
+        "strategy": "Separation of pure logic from context-sensitive I/O.",
+        "components": [
+          "gemini_logic.js (Context-Free)",
+          "GeminiAppCanvasAgent.jsx (Context-Sensitive)"
+        ]
       }
     }
   ]

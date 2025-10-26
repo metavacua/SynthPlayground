@@ -7,7 +7,7 @@ then attempts to prove it using a rudimentary proof search algorithm.
 
 The primary purpose of this tool is to allow the agent to perform formal
 reasoning and verification tasks by checking the validity of logical entailments.
-For example, it can be used to verify that a certain conclusion follows from a
+For example, it can be a used to verify that a certain conclusion follows from a
 set of premises according to the rules of linear logic.
 
 The current implementation uses a very basic parser and proof algorithm,
@@ -31,26 +31,7 @@ from logic_system.src.ill import (
 )
 from logic_system.src.formulas import Formula, Prop, LinImplies, Tensor
 from logic_system.src.sequents import Sequent
-
-
-def parse_formula(s: str):
-    """A very basic parser for formulas."""
-    s = s.strip()
-    if "->" in s:
-        parts = s.split("->", 1)
-        return LinImplies(parse_formula(parts[0]), parse_formula(parts[1]))
-    if "*" in s:
-        parts = s.split("*", 1)
-        return Tensor(parse_formula(parts[0]), parse_formula(parts[1]))
-    return Prop(s)
-
-
-def parse_sequent(s: str):
-    """A very basic parser for sequents."""
-    parts = s.split("|-")
-    antecedent = {parse_formula(f) for f in parts[0].split(",")}
-    succedent = parse_formula(parts[1])
-    return Sequent(antecedent, {succedent})
+from tooling.hdl_parser import parse_sequent
 
 
 def prove_sequent(sequent: Sequent):

@@ -6,6 +6,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from tooling.plan_parser import parse_plan
 from tooling.plan_generator import generate_plan
+from tooling.autonomous_agent_logic import generate_command_from_plan_step
 
 class AutonomousAgent:
     def __init__(self, task):
@@ -26,27 +27,10 @@ class AutonomousAgent:
         outputs = {}
 
         for cmd in commands:
-            tool_name = cmd.tool_name
-            arguments = cmd.args_text
+            command_to_run = generate_command_from_plan_step(cmd, outputs)
 
-            # Substitute outputs from previous steps.
-            for key, value in outputs.items():
-                arguments = arguments.replace(f"<{key}>", value)
-
-            if tool_name == "run_in_bash_session":
-                command_to_run = arguments
-            elif tool_name == "refactor":
-                command_to_run = f"python3 tooling/refactor.py {arguments}"
-            elif tool_name == "create_file":
-                command_to_run = f"python3 tooling/custom_tools/create_file.py {arguments}"
-            elif tool_name == "read_file":
-                command_to_run = f"python3 tooling/custom_tools/read_file.py {arguments}"
-            elif tool_name == "fetch_data":
-                command_to_run = f"python3 tooling/custom_tools/fetch_data.py {arguments}"
-            elif tool_name == "analyze_data":
-                command_to_run = f"python3 tooling/custom_tools/analyze_data.py {arguments}"
-            else:
-                print(f"Unknown tool: {tool_name}")
+            if not command_to_run:
+                print(f"Unknown tool: {cmd.tool_name}")
                 continue
 
             print(f"$ {command_to_run}")

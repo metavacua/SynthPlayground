@@ -9,6 +9,14 @@ class Object:
         self.value = value
     def __repr__(self):
         return f"Object(value={self.value})"
+    def inspect(self):
+        if self.value is None:
+            return "null"
+        if isinstance(self.value, bool):
+            return "true" if self.value else "false"
+        if isinstance(self.value, str):
+            return self.value
+        return str(self.value)
 
 class Integer(Object): pass
 class String(Object): pass
@@ -89,12 +97,14 @@ def evaluate(node, env):
     return None
 
 def eval_program(program, env):
+    result = None
     for statement in program.statements:
         result = evaluate(statement, env)
         if isinstance(result, ReturnValue): return result.value
     return result
 
 def eval_block_statement(block, env):
+    result = None
     for statement in block.statements:
         result = evaluate(statement, env)
         if isinstance(result, ReturnValue): return result
@@ -130,18 +140,8 @@ def eval_for_statement(node, env):
 
 def eval_print_statement(node, env):
     evaluated_obj = evaluate(node.value, env)
-    value_to_print = None
-
-    if hasattr(evaluated_obj, 'value'):
-        value_to_print = evaluated_obj.value
-    else:
-        # This handles cases where a raw value might be returned (e.g. from 'in' operator)
-        value_to_print = evaluated_obj
-
-    if isinstance(value_to_print, dict):
-        print(json.dumps(value_to_print, indent=2))
-    else:
-        print(value_to_print)
+    if evaluated_obj:
+        print(evaluated_obj.inspect())
 
 def eval_infix_expression(op, left, right):
     """Handles infix operations like +, -, ==, etc."""
