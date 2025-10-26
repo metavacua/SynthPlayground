@@ -1352,6 +1352,15 @@
     },
     {
       "_type": "tag",
+      "name": "get_resource_type",
+      "path": "./dbpedia_client.py",
+      "language": "Python",
+      "line": 76,
+      "kind": "function",
+      "docstring": "Fetches the rdf:type for a given DBPedia resource."
+    },
+    {
+      "_type": "tag",
       "name": "PlanningError",
       "path": "./planning.py",
       "language": "Python",
@@ -2321,6 +2330,105 @@
       "line": 2,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TaskExecutionEngine",
+      "path": "./language_theory/execution_engine.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./language_theory/execution_engine.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "function",
+      "docstring": "Initializes the engine with protocols and repository analysis."
+    },
+    {
+      "_type": "tag",
+      "name": "_load_protocols",
+      "path": "./language_theory/execution_engine.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": "Loads the operating protocols from the YAML file."
+    },
+    {
+      "_type": "tag",
+      "name": "_enrich_with_domain_context",
+      "path": "./language_theory/execution_engine.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": "Uses the dbpedia_client to fetch context for keywords in the task description."
+    },
+    {
+      "_type": "tag",
+      "name": "get_applicable_protocols",
+      "path": "./language_theory/execution_engine.py",
+      "language": "Python",
+      "line": 65,
+      "kind": "function",
+      "docstring": "Determines which protocols are applicable based on the repository context\nand task description."
+    },
+    {
+      "_type": "tag",
+      "name": "execute_task",
+      "path": "./language_theory/execution_engine.py",
+      "language": "Python",
+      "line": 102,
+      "kind": "function",
+      "docstring": "Simulates the execution of a task, applying the relevant protocols."
+    },
+    {
+      "_type": "tag",
+      "name": "list_all_files",
+      "path": "./language_theory/identify_methodology.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": "Lists all files and directories recursively, ignoring .git."
+    },
+    {
+      "_type": "tag",
+      "name": "identify_ddd",
+      "path": "./language_theory/identify_methodology.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": "Identifies evidence of Domain-Driven Design."
+    },
+    {
+      "_type": "tag",
+      "name": "identify_tdd_xp",
+      "path": "./language_theory/identify_methodology.py",
+      "language": "Python",
+      "line": 56,
+      "kind": "function",
+      "docstring": "Identifies evidence of Test-Driven Development or Extreme Programming."
+    },
+    {
+      "_type": "tag",
+      "name": "identify_devops",
+      "path": "./language_theory/identify_methodology.py",
+      "language": "Python",
+      "line": 108,
+      "kind": "function",
+      "docstring": "Identifies evidence of DevOps practices."
+    },
+    {
+      "_type": "tag",
+      "name": "analyze_repository",
+      "path": "./language_theory/identify_methodology.py",
+      "language": "Python",
+      "line": 124,
+      "kind": "function",
+      "docstring": "Analyzes the repository to identify methodologies."
     },
     {
       "_type": "tag",
@@ -10694,10 +10802,118 @@
     },
     {
       "_type": "tag",
-      "name": "TestDbpediaClient",
+      "name": "TestMethodologyIdentification",
+      "path": "./tests/test_language_theory_modules.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestTaskExecutionEngine",
+      "path": "./tests/test_language_theory_modules.py",
+      "language": "Python",
+      "line": 61,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_identify_ddd_with_bounded_contexts",
+      "path": "./tests/test_language_theory_modules.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function",
+      "docstring": "Should detect a Bounded Context with domain and application layers."
+    },
+    {
+      "_type": "tag",
+      "name": "test_identify_ddd_with_ubiquitous_language_doc",
+      "path": "./tests/test_language_theory_modules.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_identify_tdd_with_high_test_ratio",
+      "path": "./tests/test_language_theory_modules.py",
+      "language": "Python",
+      "line": 40,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_identify_devops_with_ci_cd",
+      "path": "./tests/test_language_theory_modules.py",
+      "language": "Python",
+      "line": 45,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_identify_devops_with_dockerfile",
+      "path": "./tests/test_language_theory_modules.py",
+      "language": "Python",
+      "line": 50,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_identify_devops_with_terraform",
+      "path": "./tests/test_language_theory_modules.py",
+      "language": "Python",
+      "line": 55,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_ddd_warning",
+      "path": "./tests/test_language_theory_modules.py",
+      "language": "Python",
+      "line": 76,
+      "kind": "function",
+      "docstring": "Engine should issue a critical warning for tasks in a DDD core domain."
+    },
+    {
+      "_type": "tag",
+      "name": "test_tdd_protocol_application",
+      "path": "./tests/test_language_theory_modules.py",
+      "language": "Python",
+      "line": 96,
+      "kind": "function",
+      "docstring": "Engine should apply TDD protocol for a new feature."
+    },
+    {
+      "_type": "tag",
+      "name": "test_dbpedia_integration",
+      "path": "./tests/test_language_theory_modules.py",
+      "language": "Python",
+      "line": 108,
+      "kind": "function",
+      "docstring": "Engine should call the dbpedia client with keywords from the task."
+    },
+    {
+      "_type": "tag",
+      "name": "TestDbpediaClientDDT",
       "path": "./tests/test_top_100_dbpedia.py",
       "language": "Python",
       "line": 15,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestDbpediaClient",
+      "path": "./tests/test_top_100_dbpedia.py",
+      "language": "Python",
+      "line": 49,
       "kind": "class",
       "docstring": null
     },
@@ -10718,6 +10934,24 @@
       "line": 21,
       "kind": "function",
       "docstring": "Tests that the DBPedia client can fetch abstracts for various entries."
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/test_top_100_dbpedia.py",
+      "language": "Python",
+      "line": 50,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_get_resource_type",
+      "path": "./tests/test_top_100_dbpedia.py",
+      "language": "Python",
+      "line": 54,
+      "kind": "function",
+      "docstring": "Tests that the DBPedia client can fetch the rdf:type for a resource."
     },
     {
       "_type": "tag",
