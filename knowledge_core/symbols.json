@@ -1190,10 +1190,19 @@
     },
     {
       "_type": "tag",
+      "name": "extract_keywords",
+      "path": "./enrich_protocols.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": "Extracts meaningful keywords from a text, focusing on nouns and noun phrases.\nThis is a simple heuristic and could be improved with NLP libraries."
+    },
+    {
+      "_type": "tag",
       "name": "run_enrichment",
       "path": "./enrich_protocols.py",
       "language": "Python",
-      "line": 11,
+      "line": 32,
       "kind": "function",
       "docstring": null
     },
@@ -1357,16 +1366,25 @@
       "language": "Python",
       "line": 36,
       "kind": "function",
-      "docstring": "Searches for DBPedia resources with labels matching the keyword, with an optional type filter."
+      "docstring": "Searches for DBPedia resources with labels matching the keyword, with an optional type filter.\nReturns a list of tuples, where each tuple contains the resource name and its type."
     },
     {
       "_type": "tag",
       "name": "get_resource_type",
       "path": "./dbpedia_client.py",
       "language": "Python",
-      "line": 76,
+      "line": 83,
       "kind": "function",
       "docstring": "Fetches the rdf:type for a given DBPedia resource."
+    },
+    {
+      "_type": "tag",
+      "name": "get_relevant_links",
+      "path": "./dbpedia_client.py",
+      "language": "Python",
+      "line": 112,
+      "kind": "function",
+      "docstring": "Selects the most relevant DBPedia links for a keyword based on the resource type."
     },
     {
       "_type": "tag",
@@ -11198,6 +11216,42 @@
     },
     {
       "_type": "tag",
+      "name": "TestEnrichmentRefined",
+      "path": "./tests/test_enrichment_refined.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/test_enrichment_refined.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tests/test_enrichment_refined.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_refined_enrichment_produces_gold_standard_links",
+      "path": "./tests/test_enrichment_refined.py",
+      "language": "Python",
+      "line": 38,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TestMethodologyIdentification",
       "path": "./tests/test_language_theory_modules.py",
       "language": "Python",
@@ -11300,7 +11354,7 @@
       "name": "TestDbpediaClientDDT",
       "path": "./tests/test_top_100_dbpedia.py",
       "language": "Python",
-      "line": 15,
+      "line": 19,
       "kind": "class",
       "docstring": null
     },
@@ -11309,7 +11363,7 @@
       "name": "TestDbpediaClient",
       "path": "./tests/test_top_100_dbpedia.py",
       "language": "Python",
-      "line": 49,
+      "line": 53,
       "kind": "class",
       "docstring": null
     },
@@ -11318,7 +11372,7 @@
       "name": "setUp",
       "path": "./tests/test_top_100_dbpedia.py",
       "language": "Python",
-      "line": 16,
+      "line": 20,
       "kind": "function",
       "docstring": null
     },
@@ -11327,7 +11381,7 @@
       "name": "test_get_abstract",
       "path": "./tests/test_top_100_dbpedia.py",
       "language": "Python",
-      "line": 21,
+      "line": 25,
       "kind": "function",
       "docstring": "Tests that the DBPedia client can fetch abstracts for various entries."
     },
@@ -11336,7 +11390,7 @@
       "name": "setUp",
       "path": "./tests/test_top_100_dbpedia.py",
       "language": "Python",
-      "line": 50,
+      "line": 54,
       "kind": "function",
       "docstring": null
     },
@@ -11345,7 +11399,7 @@
       "name": "test_get_resource_type",
       "path": "./tests/test_top_100_dbpedia.py",
       "language": "Python",
-      "line": 54,
+      "line": 58,
       "kind": "function",
       "docstring": "Tests that the DBPedia client can fetch the rdf:type for a resource."
     },
