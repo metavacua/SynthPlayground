@@ -12,7 +12,7 @@ with open(mock_data_path, "r") as f:
     mock_data = json.load(f)
 
 @ddt
-class TestDbpediaClient(unittest.TestCase):
+class TestDbpediaClientDDT(unittest.TestCase):
     def setUp(self):
         self.client = ExternalApiClient("dbpedia_client")
 
@@ -45,6 +45,36 @@ class TestDbpediaClient(unittest.TestCase):
             capture_output=True,
             text=True,
         )
+
+class TestDbpediaClient(unittest.TestCase):
+    def setUp(self):
+        self.client = ExternalApiClient("dbpedia_client")
+
+    @patch("tooling.external_api_client.subprocess.run")
+    def test_get_resource_type(self, mock_subprocess_run):
+        """
+        Tests that the DBPedia client can fetch the rdf:type for a resource.
+        """
+        entry = "Software_engineering"
+        expected_type = "owl:Thing"
+
+        # Configure the mock to return the expected type
+        mock_process = unittest.mock.Mock()
+        mock_process.stdout = expected_type
+        mock_process.stderr = ""
+        mock_process.returncode = 0
+        mock_subprocess_run.return_value = mock_process
+
+        result = self.client.execute(["get_type", entry])
+        self.assertEqual(result, expected_type)
+
+        # Verify that the subprocess was called with the correct command
+        mock_subprocess_run.assert_called_with(
+            ["python3", "dbpedia_client.py", "get_type", entry],
+            capture_output=True,
+            text=True,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -8,7 +8,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from identify_methodology import analyze_repository
-from dbpedia_client import search_resources, get_abstract
+from dbpedia_client import search_resources, get_abstract, get_resource_type
 
 class TaskExecutionEngine:
     def __init__(self, protocols_path='language_theory/protocols.yaml', repo_path='.'):
@@ -51,12 +51,14 @@ class TaskExecutionEngine:
             print(f"- No DBpedia resources found for '{keyword}'.")
             return None
 
-        # Get the abstract for the first resource found
+        # Get the abstract and type for the first resource found
         resource_name = resources[0]
         abstract = get_abstract(resource_name)
+        resource_type = get_resource_type(resource_name) # Use the new function
 
         if abstract:
-            print(f"- Context for '{resource_name}': {abstract[:200]}...") # Print a snippet
+            type_info = f"(Type: {resource_type})" if resource_type else ""
+            print(f"- Context for '{resource_name}' {type_info}: {abstract[:200]}...")
             return abstract
         return None
 

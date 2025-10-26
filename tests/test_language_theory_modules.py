@@ -104,17 +104,20 @@ risk_mitigation_framework:
     @patch('execution_engine.open', new_callable=unittest.mock.mock_open, read_data="{}")
     @patch('execution_engine.search_resources')
     @patch('execution_engine.get_abstract')
-    def test_dbpedia_integration(self, mock_get_abstract, mock_search_resources, mock_open, mock_analyze):
+    @patch('execution_engine.get_resource_type')
+    def test_dbpedia_integration(self, mock_get_resource_type, mock_get_abstract, mock_search_resources, mock_open, mock_analyze):
         """Engine should call the dbpedia client with keywords from the task."""
         mock_analyze.return_value = {}
         mock_search_resources.return_value = ["Test_Resource"]
         mock_get_abstract.return_value = "This is a test abstract."
+        mock_get_resource_type.return_value = "owl:Thing"
 
         engine = TaskExecutionEngine()
         engine._enrich_with_domain_context("Implement a new Foobar feature.")
 
         mock_search_resources.assert_called_with("Foobar")
         mock_get_abstract.assert_called_with("Test_Resource")
+        mock_get_resource_type.assert_called_with("Test_Resource")
 
 
 if __name__ == '__main__':
