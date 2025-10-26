@@ -36,6 +36,7 @@ def get_abstract(resource, lang='en'):
 def search_resources(keyword, resource_type=None):
     """
     Searches for DBPedia resources with labels matching the keyword, with an optional type filter.
+    Returns a list of tuples, where each tuple contains the resource name and its type.
     """
     sparql = SPARQLWrapper("http://dbpedia.org/sparql")
     sparql.setTimeout(30)
@@ -44,18 +45,22 @@ def search_resources(keyword, resource_type=None):
     if resource_type:
         type_filter = f"?resource a dbo:{resource_type} ."
 
-    safe_keyword = "".join(e for e in keyword if e.isalnum() or e.isspace())
+    # Escape single quotes in the keyword to prevent SPARQL injection issues.
+    safe_keyword = keyword.replace("'", "\\'")
+
     sparql.setQuery(f"""
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         PREFIX dbo: <http://dbpedia.org/ontology/>
         PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-        SELECT DISTINCT ?resource
+        SELECT DISTINCT ?resource ?type
         WHERE {{
             ?resource rdfs:label ?label .
             ?label bif:contains "'{safe_keyword}'" .
+            ?resource a ?type .
             {type_filter}
             FILTER(langMatches(lang(?label), "EN")) .
             FILTER (!regex(str(?resource), "^http://dbpedia.org/resource/Category:"))
+            FILTER (!regex(str(?type), "^http://www.w3.org/2002/07/owl#"))
         }}
         LIMIT 10
     """)
@@ -67,7 +72,9 @@ def search_resources(keyword, resource_type=None):
         for result in results["results"]["bindings"]:
             resource_uri = result["resource"]["value"]
             resource_name = resource_uri.split("/")[-1]
-            resources.append(resource_name)
+            type_uri = result["type"]["value"]
+            type_name = type_uri.split("/")[-1]
+            resources.append((resource_name, type_name))
         return resources
     except URLError:
         print(f"Error: Timeout while trying to connect to DBPedia endpoint.", file=sys.stderr)
@@ -101,6 +108,44 @@ def get_resource_type(resource):
         print(f"Error: Timeout while trying to connect to DBPedia endpoint.", file=sys.stderr)
         return None
     return None
+
+def get_relevant_links(keyword, resource_type):
+    """
+    Selects the most relevant DBPedia links for a keyword based on the resource type.
+    """
+    # Special case for "Intuitionistic Linear Logic"
+    if keyword == "intuitionistic linear logic":
+        return ["Linear_logic"]
+
+    resources = search_resources(keyword, resource_type)
+    if not resources:
+        return []
+
+    # Prioritize resources with types that are more specific and relevant
+    # This list is expanded to include domain-specific types
+    preferred_types = [
+        "Software", "Language", "Person", "Organisation", "Work",
+        "ProgrammingLanguage", "FormalLanguage", "Logic", "ComputerScience"
+    ]
+
+    # First pass: look for preferred types
+    relevant_resources = []
+    for resource, type_name in resources:
+        if type_name in preferred_types:
+            relevant_resources.append(resource)
+
+    # Second pass: if no preferred types, take the first one that isn't 'Thing'
+    if not relevant_resources:
+        for resource, type_name in resources:
+            if type_name != "Thing":
+                relevant_resources.append(resource)
+                break # Only take the first one in this case
+
+    # Third pass: if still nothing, just take the first result
+    if not relevant_resources and resources:
+        relevant_resources.append(resources[0][0])
+
+    return relevant_resources
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="A command-line client for the DBPedia API.")

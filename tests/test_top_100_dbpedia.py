@@ -1,8 +1,12 @@
 import unittest
 import json
 import os
+import sys
 from unittest.mock import patch
 from ddt import ddt, data
+
+# Add the project root to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from tooling.external_api_client import ExternalApiClient
 
