@@ -3224,6 +3224,15 @@
     },
     {
       "_type": "tag",
+      "name": "generate_filesystem_rdf",
+      "path": "./tooling/generate_filesystem_rdf.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": "Scans the directory structure and generates an RDF graph."
+    },
+    {
+      "_type": "tag",
       "name": "TestKnowledgeIntegrator",
       "path": "./tooling/test_knowledge_integrator.py",
       "language": "Python",
