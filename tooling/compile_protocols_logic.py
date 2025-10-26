@@ -1,6 +1,7 @@
 import json
 import jsonschema
-from tooling.build_utils import sanitize_markdown
+import sys
+from build_utils import sanitize_markdown
 
 DISCLAIMER_TEMPLATE = """\
 # ---
