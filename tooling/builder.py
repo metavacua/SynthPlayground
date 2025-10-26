@@ -6,7 +6,7 @@ as generating documentation, compiling protocols, and running code quality check
 It replaces a traditional Makefile's direct command execution with a more
 structured, maintainable, and introspectable approach.
 
-The core logic is driven by a `build_config.json` file, which defines a series
+The core logic is driven by a `build_config.yaml` file, which defines a series
 of "targets." Each target specifies:
 - The `type` of target: "compiler" or "command".
 - For "compiler" types: `compiler` script, `output`, `sources`, and `options`.
@@ -16,7 +16,7 @@ The configuration also defines "build_groups", which are ordered collections of
 targets (e.g., "all", "quality").
 
 This centralized builder provides several advantages:
-- **Single Source of Truth:** The `build_config.json` file is the definitive
+- **Single Source of Truth:** The `build_config.yaml` file is the definitive
   source for all build logic.
 - **Consistency:** Ensures all build tasks are executed in a uniform way.
 - **Extensibility:** New build targets can be added by simply updating the
@@ -41,7 +41,7 @@ from tooling.build_logic import (
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-CONFIG_FILE = os.path.join(ROOT_DIR, "build_config.json")
+CONFIG_FILE = os.path.join(ROOT_DIR, "build_config.yaml")
 
 
 def execute_build(target_name, config):

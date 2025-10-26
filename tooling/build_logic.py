@@ -1,13 +1,21 @@
 import os
 import json
+import yaml
 
 
 def load_config(config_path):
-    """Loads the build configuration file."""
+    """Loads the build configuration file (JSON or YAML)."""
     if not os.path.exists(config_path):
         raise FileNotFoundError(f"Build config file not found: {config_path}")
+
+    _, ext = os.path.splitext(config_path)
     with open(config_path, "r") as f:
-        return json.load(f)
+        if ext in [".yaml", ".yml"]:
+            return yaml.safe_load(f)
+        elif ext == ".json":
+            return json.load(f)
+        else:
+            raise ValueError(f"Unsupported config file format: {ext}")
 
 
 def generate_compiler_command(target_name, target_config, root_dir):
