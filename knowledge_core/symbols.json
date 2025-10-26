@@ -3710,21 +3710,12 @@
     },
     {
       "_type": "tag",
-      "name": "enrich_with_dbpedia",
-      "path": "./tooling/knowledge_integrator.py",
-      "language": "Python",
-      "line": 17,
-      "kind": "function",
-      "docstring": "Enriches the graph with DBPedia abstracts for known entities."
-    },
-    {
-      "_type": "tag",
       "name": "main",
       "path": "./tooling/knowledge_integrator.py",
       "language": "Python",
-      "line": 38,
+      "line": 8,
       "kind": "function",
-      "docstring": null
+      "docstring": "Integrates knowledge from various YAML-LD sources into a single graph."
     },
     {
       "_type": "tag",
@@ -6170,7 +6161,7 @@
       "name": "summarize_build_commands",
       "path": "./tooling/master_agents_md_generator.py",
       "language": "Python",
-      "line": 43,
+      "line": 36,
       "kind": "function",
       "docstring": "Reads the build configuration and creates a summary of available commands."
     },
@@ -6179,16 +6170,25 @@
       "name": "generate_enriched_protocols",
       "path": "./tooling/master_agents_md_generator.py",
       "language": "Python",
-      "line": 66,
+      "line": 61,
       "kind": "function",
-      "docstring": "Parses the integrated knowledge graph and generates a formatted string\nof protocols, rules, and DBPedia links."
+      "docstring": "Parses the integrated knowledge graph and generates a formatted string\nof protocols and rules."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_yaml_ld_string",
+      "path": "./tooling/master_agents_md_generator.py",
+      "language": "Python",
+      "line": 85,
+      "kind": "function",
+      "docstring": "Converts the JSON-LD knowledge graph to a YAML-LD string."
     },
     {
       "_type": "tag",
       "name": "main",
       "path": "./tooling/master_agents_md_generator.py",
       "language": "Python",
-      "line": 113,
+      "line": 98,
       "kind": "function",
       "docstring": null
     },
@@ -6230,12 +6230,21 @@
     },
     {
       "_type": "tag",
+      "name": "extract_json_from_markdown",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": "Extracts a JSON block from a Markdown file."
+    },
+    {
+      "_type": "tag",
       "name": "main",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 13,
+      "line": 18,
       "kind": "function",
-      "docstring": null
+      "docstring": "Compiles protocol sources into a single YAML-LD file."
     },
     {
       "_type": "tag",
