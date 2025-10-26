@@ -1,16 +1,9 @@
-"""
-Generates the master AGENTS.md file by synthesizing information from the
-integrated knowledge core and the build configuration.
-
-This script creates an instruction-focused AGENTS.md file that is a direct
-reflection of the repository's enriched knowledge, providing a dynamic and
-intelligent set of protocols for an AI agent.
-"""
 
 import argparse
 import json
 import os
 from datetime import datetime
+import yaml
 
 # --- Template for the master AGENTS.md ---
 AGENTS_MD_TEMPLATE = """
@@ -48,12 +41,14 @@ def summarize_build_commands(config_path: str) -> str:
         return "_Build configuration not found._"
 
     with open(config_path, "r") as f:
-        config = json.load(f)
+        config = yaml.safe_load(f)
 
     summary_parts = []
     summary_parts.append("### Build Groups\n")
     for group_name, members in config.get("build_groups", {}).items():
-        summary_parts.append(f"- **`{group_name}`**: Runs the following targets: `{', '.join(members)}`")
+        summary_parts.append(
+            f"- **`{group_name}`**: Runs the following targets: `{', '.join(members)}`"
+        )
 
     summary_parts.append("\n### Individual Targets\n")
     for target_name, details in config.get("targets", {}).items():
@@ -66,48 +61,38 @@ def summarize_build_commands(config_path: str) -> str:
 def generate_enriched_protocols(knowledge_path: str) -> str:
     """
     Parses the integrated knowledge graph and generates a formatted string
-    of protocols, rules, and DBPedia links.
+    of protocols and rules.
     """
     if not os.path.exists(knowledge_path):
         return "_Enriched knowledge core not found._"
 
     with open(knowledge_path, "r") as f:
-        graph = json.load(f)
+        data = json.load(f)
 
-    protocols = {}
-    rules = {}
-
-    # First pass: identify all protocols and rules
-    for node in graph:
-        node_type = node.get("@type", [""])[0]
-        if "Protocol" in node_type:
-            protocols[node["@id"]] = {
-                "label": node.get("http://www.w3.org/2000/01/rdf-schema#label", [{"@value": ""}])[0]["@value"],
-                "rules": []
-            }
-        elif "Rule" in node_type:
-            rules[node["@id"]] = node.get("http://www.w3.org/2000/01/rdf-schema#label", [{"@value": ""}])[0]["@value"]
-
-    # Second pass: associate rules with protocols
-    for node in graph:
-        if "Protocol" in node.get("@type", [""])[0]:
-            protocol_id = node["@id"]
-            for rule_ref in node.get("http://example.org/ontology#hasRule", []):
-                rule_id = rule_ref["@id"]
-                if rule_id in rules:
-                    protocols[protocol_id]["rules"].append(rules[rule_id])
-
-    # Generate the formatted output
     protocol_contents = []
-    for _, protocol in protocols.items():
-        protocol_contents.append(f"### {protocol['label']}")
-        if protocol['rules']:
-            protocol_contents.append("\n**Rules:**\n")
-            for rule in protocol['rules']:
-                protocol_contents.append(f"- {rule}")
-        protocol_contents.append("\n---")
+    if "@graph" in data:
+        for protocol in data["@graph"]:
+            protocol_contents.append(f"### Protocol: `{protocol['protocol_id']}`")
+            protocol_contents.append(f"**Description**: {protocol['description']}\n")
+            if "rules" in protocol and protocol["rules"]:
+                protocol_contents.append("**Rules:**\n")
+                for rule in protocol["rules"]:
+                    protocol_contents.append(f"- **`{rule['rule_id']}`**: {rule['description']}")
+            protocol_contents.append("\n---")
 
     return "\n".join(protocol_contents)
+
+def generate_yaml_ld_string(knowledge_path: str) -> str:
+    """
+    Converts the JSON-LD knowledge graph to a YAML-LD string.
+    """
+    if not os.path.exists(knowledge_path):
+        return ""
+
+    with open(knowledge_path, "r") as f:
+        data = json.load(f)
+
+    return yaml.dump(data)
 
 
 def main():
@@ -117,23 +102,24 @@ def main():
     parser.add_argument(
         "--build-config",
         required=True,
-        help="Path to the build_config.json file.",
+        help="Path to the build_config.yaml file.",
     )
     parser.add_argument(
         "--knowledge-file",
         required=True,
-        help="Path to the integrated_knowledge.json file.",
+        help="Path to the integrated_knowledge.jsonld file.",
     )
     parser.add_argument(
         "--output-file",
         required=True,
-        help="Path to the output AGENTS.md file.",
+        help="Path to the root AGENTS.md file.",
     )
     args = parser.parse_args()
 
     # --- Generate Content ---
     build_summary = summarize_build_commands(args.build_config)
     enriched_protocols = generate_enriched_protocols(args.knowledge_file)
+    yaml_ld_string = generate_yaml_ld_string(args.knowledge_file)
 
     # --- Populate Template ---
     final_content = AGENTS_MD_TEMPLATE.format(
@@ -142,11 +128,17 @@ def main():
         enriched_protocols=enriched_protocols,
     )
 
-    # --- Write Output ---
-    with open(args.output_file, "w") as f:
-        f.write(final_content.strip())
-
-    print(f"Successfully generated master AGENTS.md at '{args.output_file}'")
+    # --- Update all AGENTS.md files ---
+    for root, _, files in os.walk("."):
+        for file in files:
+            if file == "AGENTS.md":
+                filepath = os.path.join(root, file)
+                with open(filepath, "w") as f:
+                    f.write(final_content.strip())
+                    f.write("\n\n```yaml\n")
+                    f.write(yaml_ld_string)
+                    f.write("```\n")
+                print(f"Successfully generated AGENTS.md at '{filepath}'")
 
 
 if __name__ == "__main__":

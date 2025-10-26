@@ -3,12 +3,9 @@
 build_groups:
   all:
     - protocols
-    - docs
-    - knowledge-compile
     - knowledge-integrate
     - agents-md
   knowledge:
-    - knowledge-compile
     - knowledge-integrate
 
 targets:
@@ -17,23 +14,10 @@ targets:
     description: Generate the master AGENTS.md file.
     options:
       "--build-config": "build_config.yaml"
-      "--knowledge-file": "knowledge_core/integrated_knowledge.yaml"
+      "--knowledge-file": "knowledge_core/integrated_knowledge.jsonld"
     output: AGENTS.md
-    sources: []
-    type: compiler
-  docs:
-    compiler: tooling/doc_builder.py
-    description: Generate system documentation.
-    options:
-      "--format": "system"
-      "--source-dir":
-        - "tooling/"
-        - "utils/"
-        - "research/"
-        - "language_theory/"
-        - "logic_system/"
-    output: "docs/SYSTEM_DOCUMENTATION.md"
-    sources: []
+    sources:
+      - "knowledge_core/integrated_knowledge.jsonld"
     type: compiler
   format:
     command: "python3 -m black tooling/"
@@ -47,15 +31,13 @@ targets:
     command: "pip install -r requirements.txt"
     description: Install Python dependencies.
     type: command
-  knowledge-compile:
-    command: "python3 tooling/knowledge_compiler.py --source-dir postmortems/"
-    description: Compile lessons from post-mortems.
-    type: command
   knowledge-integrate:
     compiler: tooling/knowledge_integrator.py
     description: Integrate knowledge from various sources.
-    output: "knowledge_core/integrated_knowledge.yaml"
-    sources: []
+    output: "knowledge_core/integrated_knowledge.jsonld"
+    sources:
+      - "protocols.yaml-ld"
+      # Add other knowledge sources here as they are created
     type: compiler
   lint:
     command: "python3 -m flake8 ."
@@ -63,12 +45,13 @@ targets:
     type: command
   protocols:
     compiler: tooling/protocol_compiler.py
-    description: "Compile all protocol sources to JSON-LD and then to YAML-LD."
-    output: "protocols.aal"
+    description: "Compile all protocol sources to a single YAML-LD file."
+    output: "protocols.yaml-ld"
     sources:
-      - "protocols/core/protocol.schema.json"
-      - "protocols/core/agents.md"
-      - "protocols/core/language.md"
+      - "protocols/AGENTS.md"
+      - "protocols/CHARTER.protocol.md"
+      - "protocols/GIT_WORKFLOW_PROTOCOL.md"
+      # Add other protocol files here
     type: compiler
   test:
     command: "python3 -m pytest"
