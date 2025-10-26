@@ -6935,7 +6935,7 @@
       "name": "_log_event",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 45,
+      "line": 61,
       "kind": "function",
       "docstring": "Appends a new log entry to the activity log, ensuring it's on a new line."
     },
@@ -6944,7 +6944,7 @@
       "name": "close_task",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 59,
+      "line": 75,
       "kind": "function",
       "docstring": "Automates the closing of a Finite Development Cycle."
     },
@@ -6953,7 +6953,7 @@
       "name": "_validate_action",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 93,
+      "line": 109,
       "kind": "function",
       "docstring": "Validates a single, non-loop action."
     },
@@ -6962,7 +6962,7 @@
       "name": "_validate_plan_recursive",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 150,
+      "line": 166,
       "kind": "function",
       "docstring": "Recursively validates a block of a plan."
     },
@@ -6971,7 +6971,7 @@
       "name": "validate_plan",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 211,
+      "line": 227,
       "kind": "function",
       "docstring": null
     },
@@ -6980,7 +6980,7 @@
       "name": "analyze_plan",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 239,
+      "line": 255,
       "kind": "function",
       "docstring": "Analyzes a plan file to determine its complexity class and modality."
     },
@@ -6989,7 +6989,7 @@
       "name": "start_task",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 258,
+      "line": 274,
       "kind": "function",
       "docstring": "Initiates the AORP cascade for a new task."
     },
@@ -6998,7 +6998,7 @@
       "name": "main",
       "path": "./tooling/fdc_cli.py",
       "language": "Python",
-      "line": 325,
+      "line": 341,
       "kind": "function",
       "docstring": null
     },
@@ -7256,12 +7256,12 @@
     },
     {
       "_type": "tag",
-      "name": "main",
+      "name": "convert_json_to_yaml_ld",
       "path": "./tooling/json_to_yaml_ld.py",
       "language": "Python",
-      "line": 11,
+      "line": 5,
       "kind": "function",
-      "docstring": "Converts a JSON protocol file to a YAML-LD file by prepending the standard context.\n\nUsage:\n    python tooling/json_to_yaml_ld.py <input_json_file> <output_yaml_file>"
+      "docstring": "Converts a JSON file to YAML-LD."
     },
     {
       "_type": "tag",

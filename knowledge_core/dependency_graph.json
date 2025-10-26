@@ -149,11 +149,6 @@
       "id": "yaml-ld",
       "path": null,
       "type": "python-external"
-    },
-    {
-      "id": "google.generativeai",
-      "path": null,
-      "type": "python-external"
     }
   ],
   "edges": [
@@ -291,7 +286,43 @@
     },
     {
       "source": "tooling",
+      "target": "attrs"
+    },
+    {
+      "source": "tooling",
+      "target": "certifi"
+    },
+    {
+      "source": "tooling",
+      "target": "charset-normalizer"
+    },
+    {
+      "source": "tooling",
+      "target": "greenlet"
+    },
+    {
+      "source": "tooling",
+      "target": "idna"
+    },
+    {
+      "source": "tooling",
       "target": "jsonschema"
+    },
+    {
+      "source": "tooling",
+      "target": "jsonschema-specifications"
+    },
+    {
+      "source": "tooling",
+      "target": "playwright"
+    },
+    {
+      "source": "tooling",
+      "target": "pyee"
+    },
+    {
+      "source": "tooling",
+      "target": "pyparsing"
     },
     {
       "source": "tooling",
@@ -299,11 +330,7 @@
     },
     {
       "source": "tooling",
-      "target": "markdown"
-    },
-    {
-      "source": "tooling",
-      "target": "pypdf"
+      "target": "referencing"
     },
     {
       "source": "tooling",
@@ -311,7 +338,31 @@
     },
     {
       "source": "tooling",
+      "target": "rpds-py"
+    },
+    {
+      "source": "tooling",
+      "target": "typing_extensions"
+    },
+    {
+      "source": "tooling",
+      "target": "urllib3"
+    },
+    {
+      "source": "tooling",
+      "target": "pypdf"
+    },
+    {
+      "source": "tooling",
+      "target": "google-generativeai"
+    },
+    {
+      "source": "tooling",
       "target": "watchdog"
+    },
+    {
+      "source": "tooling",
+      "target": "markdown"
     },
     {
       "source": "tooling",
@@ -319,7 +370,55 @@
     },
     {
       "source": "tooling",
-      "target": "google.generativeai"
+      "target": "black"
+    },
+    {
+      "source": "tooling",
+      "target": "flake8"
+    },
+    {
+      "source": "tooling",
+      "target": "PyYAML"
+    },
+    {
+      "source": "tooling",
+      "target": "pytest"
+    },
+    {
+      "source": "tooling",
+      "target": "SPARQLWrapper"
+    },
+    {
+      "source": "tooling",
+      "target": "rdflib"
+    },
+    {
+      "source": "tooling",
+      "target": "google-generativeai"
+    },
+    {
+      "source": "tooling",
+      "target": "jsonschema"
+    },
+    {
+      "source": "tooling",
+      "target": "ply"
+    },
+    {
+      "source": "tooling",
+      "target": "requests"
+    },
+    {
+      "source": "tooling",
+      "target": "ddt"
+    },
+    {
+      "source": "tooling",
+      "target": "yaml-ld"
+    },
+    {
+      "source": "tooling",
+      "target": "yaml-ld"
     }
   ]
 }
