@@ -1,4 +1,0 @@
-set_plan
-This is a plan to test the new hello_world tool.
----
-hello_world "This is a test of the new tooling architecture."

@@ -28,6 +28,11 @@ import os
 import argparse
 import subprocess
 from datetime import datetime
+import sys
+
+# Add the project root to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from tooling.build_logic import (
     load_config,
     generate_compiler_command,
