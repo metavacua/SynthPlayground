@@ -1352,10 +1352,19 @@
     },
     {
       "_type": "tag",
+      "name": "summarize_text",
+      "path": "./dbpedia_client.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": "Summarizes the given text using the Gemini API."
+    },
+    {
+      "_type": "tag",
       "name": "get_abstract",
       "path": "./dbpedia_client.py",
       "language": "Python",
-      "line": 7,
+      "line": 20,
       "kind": "function",
       "docstring": "Fetches the abstract for a given DBPedia resource in the specified language."
     },
@@ -1364,7 +1373,7 @@
       "name": "search_resources",
       "path": "./dbpedia_client.py",
       "language": "Python",
-      "line": 36,
+      "line": 55,
       "kind": "function",
       "docstring": "Searches for DBPedia resources with labels matching the keyword, with an optional type filter.\nReturns a list of tuples, where each tuple contains the resource name and its type."
     },
@@ -1373,7 +1382,7 @@
       "name": "get_resource_type",
       "path": "./dbpedia_client.py",
       "language": "Python",
-      "line": 83,
+      "line": 102,
       "kind": "function",
       "docstring": "Fetches the rdf:type for a given DBPedia resource."
     },
@@ -1382,7 +1391,7 @@
       "name": "get_relevant_links",
       "path": "./dbpedia_client.py",
       "language": "Python",
-      "line": 112,
+      "line": 131,
       "kind": "function",
       "docstring": "Selects the most relevant DBPedia links for a keyword based on the resource type."
     },
