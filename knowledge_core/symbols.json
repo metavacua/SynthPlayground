@@ -4982,7 +4982,7 @@
       "name": "compile_module",
       "path": "./tooling/compile_protocols.py",
       "language": "Python",
-      "line": 15,
+      "line": 17,
       "kind": "function",
       "docstring": "Compiles the protocol files in a directory into a single AGENTS.md."
     },
@@ -4991,7 +4991,7 @@
       "name": "main",
       "path": "./tooling/compile_protocols.py",
       "language": "Python",
-      "line": 54,
+      "line": 67,
       "kind": "function",
       "docstring": "Main function to find and compile all protocol modules."
     },
