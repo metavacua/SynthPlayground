@@ -3,15 +3,34 @@ import argparse
 from SPARQLWrapper import SPARQLWrapper, JSON
 from urllib.parse import quote
 from urllib.error import URLError
+import google.generativeai as genai
+import os
+
+def summarize_text(text, api_key=None):
+    """
+    Summarizes the given text using the Gemini API.
+    """
+    if api_key:
+        genai.configure(api_key=api_key)
+    model = genai.GenerativeModel("gemini-pro")
+    prompt = f"Summarize the following text in a clear and concise way:\n\n{text}"
+    response = model.generate_content(prompt)
+    return response.text
 
 def get_abstract(resource, lang='en'):
     """
     Fetches the abstract for a given DBPedia resource in the specified language.
     """
     sparql = SPARQLWrapper("http://dbpedia.org/sparql")
-    sparql.setTimeout(30)  # Set a 30-second timeout
+    sparql.setTimeout(30)
 
-    safe_resource = quote(resource)
+    # First, search for the resource to get the correct URI
+    search_results = search_resources(resource)
+    if not search_results:
+        return None
+
+    # Take the first result as the most likely candidate
+    safe_resource = quote(search_results[0][0])
 
     sparql.setQuery(f"""
         PREFIX dbo: <http://dbpedia.org/ontology/>
@@ -165,6 +184,11 @@ if __name__ == "__main__":
     parser_get_type = subparsers.add_parser("get_type", help="Get the rdf:type for a specific DBPedia resource.")
     parser_get_type.add_argument("resource_name", help="The name of the DBPedia resource (e.g., 'Software_engineering').")
 
+    # 'summarize' command
+    parser_summarize = subparsers.add_parser("summarize", help="Summarize the abstract of a DBPedia resource.")
+    parser_summarize.add_argument("resource_name", help="The name of the DBPedia resource (e.g., 'Python_(programming_language)').")
+    parser_summarize.add_argument("--lang", default="en", help="The language of the abstract.")
+
     args = parser.parse_args()
 
     if args.command == "get":
@@ -188,4 +212,21 @@ if __name__ == "__main__":
             print(resource_type)
         else:
             print(f"No type found for '{args.resource_name}'.", file=sys.stderr)
+            sys.exit(1)
+    elif args.command == "summarize":
+        abstract = get_abstract(args.resource_name, args.lang)
+        if not abstract:
+            print(f"No abstract found for '{args.resource_name}' in language '{args.lang}'.", file=sys.stderr)
+            sys.exit(1)
+
+        api_key = os.environ.get("GEMINI_API_KEY")
+        if not api_key:
+            print("Error: GEMINI_API_KEY environment variable not set.", file=sys.stderr)
+            sys.exit(1)
+
+        try:
+            summary = summarize_text(abstract, api_key)
+            print(summary)
+        except Exception as e:
+            print(f"Error during summarization: {e}", file=sys.stderr)
             sys.exit(1)
