@@ -22,6 +22,7 @@ orientation and planning phases, allowing it to quickly locate relevant code
 and understand the structure of the repository without having to read every file.
 """
 
+import argparse
 import os
 import json
 import glob
@@ -43,10 +44,9 @@ def has_ctags():
         return False
 
 
-def generate_symbols_with_ctags(root_dir="."):
+def generate_symbols_with_ctags(output_path, root_dir="."):
     """Generates a symbol map using Universal Ctags."""
     print("Attempting to generate symbols with Universal Ctags...")
-    output_path = os.path.join("knowledge_core", "symbols.json")
 
     # The command as specified in the documentation
     command = [
@@ -121,15 +121,24 @@ def generate_symbols_with_ast(root_dir="."):
 
 def main():
     """Main function to generate and save the symbol map."""
+    parser = argparse.ArgumentParser(
+        description="Generates a symbol map for the repository."
+    )
+    parser.add_argument(
+        "--output",
+        default="knowledge_core/symbols.json",
+        help="The path to the output JSON file.",
+    )
+    args = parser.parse_args()
+    output_path = args.output
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+
     print("Generating symbol map...")
 
     if has_ctags():
-        generate_symbols_with_ctags()
+        generate_symbols_with_ctags(output_path)
     else:
         symbols_data = generate_symbols_with_ast()
-        output_path = os.path.join("knowledge_core", "symbols.json")
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-
         with open(output_path, "w") as f:
             json.dump(symbols_data, f, indent=2)
 

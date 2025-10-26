@@ -18,6 +18,7 @@ input for the agent's orientation and planning phases, allowing it to reason
 about the potential impact of its changes.
 """
 
+import argparse
 import os
 import json
 import sys
@@ -68,10 +69,20 @@ def generate_dependency_graph(root_dir="."):
 
 def main():
     """Main function to generate and save the dependency graph."""
+    parser = argparse.ArgumentParser(
+        description="Generates a dependency graph for the repository."
+    )
+    parser.add_argument(
+        "--output",
+        default="knowledge_core/dependency_graph.json",
+        help="The path to the output JSON file.",
+    )
+    args = parser.parse_args()
+
     print("Generating dependency graph...")
     graph = generate_dependency_graph()
 
-    output_path = os.path.join("knowledge_core", "dependency_graph.json")
+    output_path = args.output
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     with open(output_path, "w") as f:

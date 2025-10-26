@@ -16,6 +16,7 @@ import sys
 import json
 import importlib.util
 import atexit
+import subprocess
 
 # Add the root directory to the path to allow for absolute imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -253,7 +254,35 @@ def main():
         default=None,
         help="Run the agent with a specific plan file.",
     )
+    parser.add_argument(
+        "--manage-context",
+        action="store_true",
+        help="Run the Context Management Toolchain.",
+    )
+    parser.add_argument(
+        "--manage-complexity",
+        type=str,
+        default=None,
+        help="Run the Complexity Management Toolchain on the specified file.",
+    )
     args = parser.parse_args()
+
+    if args.manage_context:
+        print("--- Running Context Management Toolchain ---")
+        subprocess.run(["python", "tooling/context_manager.py"])
+        return
+
+    if args.manage_complexity:
+        print("--- Running Complexity Management Toolchain ---")
+        subprocess.run(
+            [
+                "python",
+                "tooling/complexity_manager.py",
+                args.manage_complexity,
+                "--refactor",
+            ]
+        )
+        return
 
     # If a UDC plan is specified, run the UDC orchestrator directly.
     if args.udc_plan:
