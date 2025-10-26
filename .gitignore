@@ -125,3 +125,4 @@ agent_smith_sandbox/
 
 # Test artifacts
 test.ttl
+\n# Generated knowledge artifacts\nknowledge_core/context_outputs/\nknowledge_core/knowledge_graph.jsonld

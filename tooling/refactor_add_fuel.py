@@ -1,5 +1,6 @@
 """
 A tool for refactoring a Python function to use a "fuel"-based approach to recursion.
+This tool is designed to be idempotent and handle nested while loops.
 """
 
 import argparse
@@ -8,25 +9,45 @@ import ast
 
 
 class FuelTransformer(ast.NodeTransformer):
+    """
+    An AST transformer that injects a 'fuel' mechanism into functions and while loops.
+    """
+
     def visit_FunctionDef(self, node):
-        # Add 'fuel' as a keyword argument with a default value
+        """
+        Adds a 'fuel' keyword argument to a function definition if it doesn't already exist.
+        """
+        # Check if 'fuel' argument already exists to ensure idempotency.
+        for arg in node.args.kwonlyargs:
+            if arg.arg == "fuel":
+                # If it exists, do nothing to this function's signature.
+                # Still need to visit the body for while loops.
+                self.generic_visit(node)
+                return node
+
+        # If 'fuel' argument is not found, add it.
         node.args.kwonlyargs.append(ast.arg(arg="fuel"))
         node.args.kw_defaults.append(ast.Constant(value=100))
+
+        # Process the rest of the function body.
         self.generic_visit(node)
         return node
 
     def visit_While(self, node):
-        # This is a simplified example that only transforms the first while loop it finds.
-        # A more robust implementation would handle nested loops and other complexities.
+        """
+        Transforms a 'while' loop to include a fuel check and decrement.
+        Recursively transforms nested loops first (bottom-up).
+        """
+        # First, ensure any nested loops within this loop's body are transformed.
+        self.generic_visit(node)
 
-        # Create the fuel check
+        # Create the AST nodes for the fuel mechanism.
         fuel_check = ast.Compare(
             left=ast.Name(id="fuel", ctx=ast.Load()),
             ops=[ast.LtE()],
             comparators=[ast.Constant(value=0)],
         )
 
-        # Create the fuel decrement
         fuel_decrement = ast.Assign(
             targets=[ast.Name(id="fuel", ctx=ast.Store())],
             value=ast.BinOp(
@@ -36,22 +57,26 @@ class FuelTransformer(ast.NodeTransformer):
             ),
         )
 
-        # Create the new loop body
+        # Prepend the fuel decrement to the original loop body.
         new_body = [fuel_decrement] + node.body
 
-        # Create the new while loop
-        new_loop = ast.While(
-            test=ast.BoolOp(
-                op=ast.And(),
-                values=[
-                    ast.UnaryOp(op=ast.Not(), operand=fuel_check),
-                    node.test,
-                ],
-            ),
-            body=new_body,
-            orelse=[],
+        # Combine the fuel check with the original loop condition.
+        new_test = ast.BoolOp(
+            op=ast.And(),
+            values=[
+                ast.UnaryOp(op=ast.Not(), operand=fuel_check),
+                node.test,
+            ],
         )
 
+        # Create the new, fuel-limited while loop.
+        new_loop = ast.While(
+            test=new_test,
+            body=new_body,
+            orelse=node.orelse,  # Preserve the original else block
+        )
+
+        # Copy the original node's location for source mapping.
         return ast.copy_location(new_loop, node)
 
 
@@ -63,7 +88,7 @@ def main():
     args = parser.parse_args()
 
     if not os.path.exists(args.filepath):
-        print(f"Error: File not found at {args.filepath}")
+        print(f"Error: File not found at {args.filepath}", file=sys.stderr)
         return
 
     with open(args.filepath, "r") as f:
