@@ -146,6 +146,11 @@
       "type": "python-external"
     },
     {
+      "id": "yaml-ld",
+      "path": null,
+      "type": "python-external"
+    },
+    {
       "id": "google.generativeai",
       "path": null,
       "type": "python-external"
@@ -279,6 +284,10 @@
     {
       "source": "root-python-project",
       "target": "ddt"
+    },
+    {
+      "source": "root-python-project",
+      "target": "yaml-ld"
     },
     {
       "source": "tooling",

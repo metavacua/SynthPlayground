@@ -3728,15 +3728,6 @@
     },
     {
       "_type": "tag",
-      "name": "main",
-      "path": "./tooling/yaml_ld_to_json_ld.py",
-      "language": "Python",
-      "line": 8,
-      "kind": "function",
-      "docstring": "Converts a YAML-LD file to a JSON-LD file.\n\nUsage:\n    python yaml_ld_to_json_ld.py <input_file> <output_file>"
-    },
-    {
-      "_type": "tag",
       "name": "t_ATOM",
       "path": "./tooling/plllu_lexer.py",
       "language": "Python",
@@ -4988,19 +4979,10 @@
     },
     {
       "_type": "tag",
-      "name": "convert_yaml_ld_to_json_ld",
-      "path": "./tooling/compile_protocols.py",
-      "language": "Python",
-      "line": 17,
-      "kind": "function",
-      "docstring": "Finds and converts all .protocol.yaml files to .protocol.json."
-    },
-    {
-      "_type": "tag",
       "name": "compile_module",
       "path": "./tooling/compile_protocols.py",
       "language": "Python",
-      "line": 42,
+      "line": 15,
       "kind": "function",
       "docstring": "Compiles the protocol files in a directory into a single AGENTS.md."
     },
@@ -5009,7 +4991,7 @@
       "name": "main",
       "path": "./tooling/compile_protocols.py",
       "language": "Python",
-      "line": 84,
+      "line": 54,
       "kind": "function",
       "docstring": "Main function to find and compile all protocol modules."
     },
@@ -7271,6 +7253,15 @@
       "line": 13,
       "kind": "function",
       "docstring": "Simulates a research task and writes the result to a file."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/json_to_yaml_ld.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": "Converts a JSON protocol file to a YAML-LD file by prepending the standard context.\n\nUsage:\n    python tooling/json_to_yaml_ld.py <input_json_file> <output_yaml_file>"
     },
     {
       "_type": "tag",
