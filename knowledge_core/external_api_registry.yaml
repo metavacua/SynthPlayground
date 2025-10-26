@@ -1,0 +1,25 @@
+'@context':
+  associated_artifacts:
+    '@container': '@list'
+    '@id': proto:associated_artifacts
+    '@type': '@id'
+  associated_tools:
+    '@container': '@list'
+    '@id': proto:associated_tools
+    '@type': '@id'
+  description: proto:description
+  enforcement: proto:enforcement
+  proto: https://w3id.org/jules/protocol/
+  protocol_id: proto:protocol_id
+  rule_id: proto:rule_id
+  rules:
+    '@container': '@list'
+    '@id': proto:rules
+  xsd: http://www.w3.org/2001/XMLSchema#
+dbpedia_client:
+  command: python3 dbpedia_client.py
+  type: command_line
+jules_api:
+  api_key_env_var: JULES_API_KEY
+  auth_method: api_key
+  endpoint: https://jules.googleapis.com/v1alpha
