@@ -1,12 +1,33 @@
 import rdflib
-from rdflib.namespace import RDF, RDFS, OWL
-from dbpedia_client import search_resources
+from rdflib.namespace import RDF, RDFS
+from dbpedia_client import get_relevant_links
 import argparse
 import json
+import re
 
 # Define namespaces
 PROTOCOL = rdflib.Namespace("https://www.aida.org/protocol#")
 DBR = rdflib.Namespace("http://dbpedia.org/resource/")
+
+def extract_keywords(text):
+    """
+    Extracts meaningful keywords from a text, focusing on nouns and noun phrases.
+    This is a simple heuristic and could be improved with NLP libraries.
+    """
+    # A curated list of keywords that are relevant to the repository's domain
+    domain_keywords = [
+        "Chomsky Hierarchy",
+        "Intuitionistic Linear Logic",
+        "Sequent Calculus",
+        "Subclassical Logic"
+    ]
+
+    keywords = []
+    for keyword in domain_keywords:
+        if keyword.lower() in text.lower():
+            keywords.append(keyword.lower())
+
+    return keywords
 
 def run_enrichment(start, end):
     # Load the existing protocols file
@@ -17,7 +38,7 @@ def run_enrichment(start, end):
     # Bind namespaces for cleaner output
     g.bind("protocol", PROTOCOL)
     g.bind("dbr", DBR)
-    g.bind("owl", OWL)
+    g.bind("rdfs", RDFS)
 
     # Get all subjects once to have a total count
     subjects = list(g.subjects(None, None))
@@ -31,7 +52,7 @@ def run_enrichment(start, end):
         if label:
             all_keywords.add(str(label))
         if description:
-            keywords = [word for word in str(description).split() if len(word) > 4 and word.isalpha()]
+            keywords = extract_keywords(str(description))
             all_keywords.update(keywords)
 
     # Query DBPedia for a chunk of unique keywords
@@ -51,7 +72,7 @@ def run_enrichment(start, end):
     for i, keyword in enumerate(keyword_chunk):
         print(f"Querying keyword {i+start+1}/{len(all_keywords)}: {keyword}", end='\r')
         if keyword not in resource_map:
-            resources = search_resources(keyword)
+            resources = get_relevant_links(keyword, None)
             if resources:
                 resource_map[keyword] = [str(DBR[r]) for r in resources]
     print("\nDBPedia queries for chunk complete.")
@@ -68,14 +89,14 @@ def run_enrichment(start, end):
 
         if label and str(label) in resource_map:
             for resource_uri in resource_map[str(label)]:
-                g.add((s, OWL.sameAs, rdflib.term.URIRef(resource_uri)))
+                g.add((s, RDFS.seeAlso, rdflib.term.URIRef(resource_uri)))
 
         if description:
-            keywords = [word for word in str(description).split() if len(word) > 4 and word.isalpha()]
+            keywords = extract_keywords(str(description))
             for keyword in keywords:
                 if keyword in resource_map:
                     for resource_uri in resource_map[keyword]:
-                        g.add((s, OWL.sameAs, rdflib.term.URIRef(resource_uri)))
+                        g.add((s, RDFS.seeAlso, rdflib.term.URIRef(resource_uri)))
 
     print("\nEnrichment complete.")
 

@@ -1,0 +1,6 @@
+@prefix protocol: <https://www.aida.org/protocol#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+protocol:language-theory-protocol a protocol:Protocol ;
+    rdfs:label "Language Theory Protocol" ;
+    protocol:description "This protocol defines the formal theory of the agent's language understanding, based on the Chomsky Hierarchy and Intuitionistic Linear Logic." .
