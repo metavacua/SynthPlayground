@@ -79,6 +79,11 @@
       "command": "python3 -m pytest",
       "description": "Run the test suite using pytest.",
       "type": "command"
+    },
+    "json-to-yaml-ld": {
+      "command": "python3 tooling/json_to_yaml_ld.py knowledge_core/ protocol.context.jsonld",
+      "description": "Convert JSON files to YAML-LD.",
+      "type": "command"
     }
   }
 }

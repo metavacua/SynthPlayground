@@ -1,0 +1,20 @@
+'@context':
+  associated_artifacts:
+    '@container': '@list'
+    '@id': proto:associated_artifacts
+    '@type': '@id'
+  associated_tools:
+    '@container': '@list'
+    '@id': proto:associated_tools
+    '@type': '@id'
+  description: proto:description
+  enforcement: proto:enforcement
+  proto: https://w3id.org/jules/protocol/
+  protocol_id: proto:protocol_id
+  rule_id: proto:rule_id
+  rules:
+    '@container': '@list'
+    '@id': proto:rules
+  xsd: http://www.w3.org/2001/XMLSchema#
+knowledge_cutoff: 2022-Q4
+model_name: Jules-v1.3
