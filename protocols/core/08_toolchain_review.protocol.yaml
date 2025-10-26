@@ -1,0 +1,43 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: toolchain-review-on-schema-change-001
+description: A meta-protocol to ensure the agent's toolchain remains synchronized
+  with the architecture of its governing protocols.
+rules:
+- rule_id: toolchain-audit-on-schema-change
+  description: If a change is made to the core protocol schema (`protocol.schema.json`)
+    or to the compilers that process it (`protocol_compiler.py`), a formal audit of
+    the entire `tooling/` directory MUST be performed as a subsequent step. This audit
+    should verify that all tools are compatible with the new protocol structure.
+  enforcement: This is a procedural rule for any agent developing the protocol system.
+    Adherence can be partially checked by post-commit hooks or review processes that
+    look for a tooling audit in any change that modifies the specified core files.
+  tags:
+  - core
+associated_tools:
+- tooling/auditor.py
+- tooling/protocol_compiler.py
+version: 1.0.0

@@ -1,0 +1,45 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: cfdc-protocol-001
+description: Defines the Context-Free Development Cycle (CFDC), a hierarchical planning
+  and execution model.
+rules:
+- rule_id: hierarchical-planning-via-call-plan
+  description: Plans may execute other plans as sub-routines using the 'call_plan
+    <path_to_plan>' directive. This enables a modular, hierarchical workflow.
+  enforcement: The plan validator must be able to parse this directive and recursively
+    validate sub-plans. The execution engine must implement a plan execution stack
+    to manage the context of nested calls.
+- rule_id: max-recursion-depth
+  description: To ensure decidability, the plan execution stack must not exceed a
+    system-wide constant, MAX_RECURSION_DEPTH. This prevents infinite recursion and
+    guarantees all processes will terminate.
+  enforcement: The execution engine must check the stack depth before every 'call_plan'
+    execution and terminate with a fatal error if the limit would be exceeded.
+associated_tools:
+- tooling/master_control.py
+- tooling/fdc_cli.py
+version: 1.0.0

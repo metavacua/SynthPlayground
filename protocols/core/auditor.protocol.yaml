@@ -1,0 +1,40 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: unified-auditor-001
+description: A protocol for the unified repository auditing tool, which combines multiple
+  health and compliance checks into a single interface.
+rules:
+- rule_id: run-all-audits
+  description: The `auditor.py` script should be used to run comprehensive checks
+    on the repository's health. It can be run with 'all' to check protocols, plans,
+    and documentation completeness.
+  enforcement: The tool is invoked via the command line, typically through the `make
+    audit` target.
+  tags:
+  - core
+associated_tools:
+- tooling/auditor.py
+version: 1.0.0

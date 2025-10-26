@@ -1,4 +1,4 @@
-import json
+import yaml
 import jsonschema
 import sys
 from build_utils import sanitize_markdown
@@ -11,11 +11,11 @@ DISCLAIMER_TEMPLATE = """\
 # located in the `{source_dir_name}/` directory.
 #
 # This file contains the compiled protocols in a human-readable Markdown format,
-# with machine-readable JSON definitions embedded.
+# with machine-readable YAML definitions embedded.
 # ---
 """
 
-def generate_agents_md_content(module_name, md_files_content, json_files_content, schema):
+def generate_agents_md_content(module_name, md_files_content, yaml_files_content, schema):
     """
     Generates the content for an AGENTS.md file.
     """
@@ -27,12 +27,12 @@ def generate_agents_md_content(module_name, md_files_content, json_files_content
         final_content.append(sanitized_content)
         final_content.append("\n---\n")
 
-    for protocol_data in json_files_content:
+    for protocol_data in yaml_files_content:
         try:
             jsonschema.validate(instance=protocol_data, schema=schema)
-            json_string = json.dumps(protocol_data, indent=2)
-            md_json_block = f"```json\n{json_string}\n```\n"
-            final_content.append(md_json_block)
+            yaml_string = yaml.dump(protocol_data, indent=2, sort_keys=False, default_flow_style=False)
+            md_yaml_block = f"```yaml\n{yaml_string}\n```\n"
+            final_content.append(md_yaml_block)
             final_content.append("\n---\n")
         except jsonschema.ValidationError as e:
             print(f"Warning: Schema validation failed for a protocol: {e.message}", file=sys.stderr)

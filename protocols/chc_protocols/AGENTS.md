@@ -5,5 +5,5 @@
 # located in the `chc_protocols/` directory.
 #
 # This file contains the compiled protocols in a human-readable Markdown format,
-# with machine-readable JSON definitions embedded.
+# with machine-readable YAML definitions embedded.
 # ---

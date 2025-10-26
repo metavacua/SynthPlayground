@@ -1,0 +1,40 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: reset-all-prohibition-001
+protocol_name: Prohibition of reset_all Tool
+description: A high-priority protocol that unconditionally forbids the use of the
+  `reset_all` tool.
+rules:
+- rule_id: no-reset-all
+  description: The `reset_all` tool is strictly forbidden under all circumstances.
+    It is a legacy tool that has been superseded by more granular and safer methods
+    of workspace management. Its use is considered a critical failure.
+  enforcement: This rule is enforced by the `master_control.py` orchestrator, which
+    will immediately terminate the workflow with an error if an attempt is made to
+    call this tool.
+associated_tools:
+- reset_all
+version: 1.0.0

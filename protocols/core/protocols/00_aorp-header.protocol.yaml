@@ -1,0 +1,39 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: aorp-header
+description: Defines the identity and versioning of the Advanced Orientation and Research
+  Protocol (AORP).
+rules:
+- rule_id: aorp-identity
+  description: The governing protocol set is identified as the Advanced Orientation
+    and Research Protocol (AORP).
+  enforcement: Protocol is identified by its name in documentation and compiled artifacts.
+- rule_id: aorp-versioning
+  description: The official protocol version is tracked in the VERSION file in the
+    repository root, following Semantic Versioning (SemVer).
+  enforcement: Build or validation scripts should verify the presence and format of
+    the VERSION file.
+version: 1.0.0

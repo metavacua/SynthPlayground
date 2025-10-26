@@ -1,0 +1,40 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: capability-verification-001
+description: A protocol for using the capability verifier tool to empirically test
+  the agent's monotonic improvement.
+rules:
+- rule_id: verify-capability-acquisition
+  description: The `capability_verifier.py` tool should be used to test the agent's
+    ability to acquire a new capability defined by a failing test file. The tool orchestrates
+    the failure, self-correction, and verification process.
+  enforcement: The tool is used by invoking it from the command line with the path
+    to the target test file.
+  tags:
+  - core
+associated_tools:
+- tooling/capability_verifier.py
+version: 1.0.0

@@ -1,8 +1,7 @@
 
 import os
 import sys
-import json
-import subprocess
+import yaml
 from build_utils import find_files, load_schema, execute_code
 from compile_protocols_logic import generate_agents_md_content
 
@@ -11,32 +10,6 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT_DIR)
 PROTOCOLS_DIR = os.path.join(ROOT_DIR, "protocols")
 SCHEMA_FILE = os.path.join(PROTOCOLS_DIR, "protocol.schema.json")
-YAML_LD_CONVERTER = os.path.join(ROOT_DIR, "tooling", "yaml_ld_to_json_ld.py")
-
-
-def convert_yaml_ld_to_json_ld(module_dir):
-    """Finds and converts all .protocol.yaml files to .protocol.json."""
-    print("--- Checking for YAML-LD files to convert ---")
-    yaml_files = find_files(".protocol.yaml", base_dir=module_dir, recursive=False)
-    for yaml_file_rel_path in yaml_files:
-        yaml_file_abs_path = os.path.join(module_dir, yaml_file_rel_path)
-        json_file_abs_path = os.path.splitext(yaml_file_abs_path)[0] + ".json"
-
-        print(f"Converting {yaml_file_abs_path} to {json_file_abs_path}")
-
-        try:
-            subprocess.run(
-                ["python3", YAML_LD_CONVERTER, yaml_file_abs_path, json_file_abs_path],
-                check=True,
-                capture_output=True,
-                text=True,
-            )
-        except subprocess.CalledProcessError as e:
-            print(f"Error converting {yaml_file_abs_path}:", file=sys.stderr)
-            print(e.stderr, file=sys.stderr)
-            # Continue to the next file
-            continue
-    print("--- YAML-LD conversion complete ---")
 
 
 def compile_module(module_dir):
@@ -47,34 +20,31 @@ def compile_module(module_dir):
     print(f"Source directory: {module_dir}")
     print(f"Target file: {target_file}")
 
-    # Convert any YAML-LD files to JSON-LD first
-    convert_yaml_ld_to_json_ld(module_dir)
-
     schema = load_schema(SCHEMA_FILE)
     if not schema:
         return
 
     all_md_files = sorted([os.path.join(module_dir, f) for f in find_files(".protocol.md", base_dir=module_dir, recursive=False)])
-    all_json_files = sorted([os.path.join(module_dir, f) for f in find_files(".protocol.json", base_dir=module_dir, recursive=False)])
+    all_yaml_files = sorted([os.path.join(module_dir, f) for f in find_files(".protocol.yaml", base_dir=module_dir, recursive=False)])
 
     md_files_content = []
     for file_path in all_md_files:
         with open(file_path, "r") as f:
             md_files_content.append(f.read())
 
-    json_files_content = []
-    for file_path in all_json_files:
+    yaml_files_content = []
+    for file_path in all_yaml_files:
         try:
             with open(file_path, "r") as f:
-                protocol_data = json.load(f)
+                protocol_data = yaml.safe_load(f)
                 for rule in protocol_data.get("rules", []):
                     if "executable_code" in rule:
                         execute_code(rule["executable_code"], protocol_data["protocol_id"], rule["rule_id"])
-                json_files_content.append(protocol_data)
-        except json.JSONDecodeError:
-            print(f"Warning: Could not decode JSON from {file_path}", file=sys.stderr)
+                yaml_files_content.append(protocol_data)
+        except yaml.YAMLError as e:
+            print(f"Warning: Could not decode YAML from {file_path}: {e}", file=sys.stderr)
 
-    final_output_string = generate_agents_md_content(module_name, md_files_content, json_files_content, schema)
+    final_output_string = generate_agents_md_content(module_name, md_files_content, yaml_files_content, schema)
     temp_target_file = target_file + ".tmp"
     with open(temp_target_file, "w") as f:
         f.write(final_output_string)

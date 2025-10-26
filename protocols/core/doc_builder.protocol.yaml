@@ -1,0 +1,40 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: unified-doc-builder-001
+description: A protocol for the unified documentation builder, which generates various
+  documentation artifacts from the repository's sources of truth.
+rules:
+- rule_id: use-doc-builder-for-all-docs
+  description: The `doc_builder.py` script is the single entry point for generating
+    all user-facing documentation, including system-level docs, README files, and
+    GitHub Pages. It should be called with the appropriate '--format' argument.
+  enforcement: The tool is invoked via the command line, typically through the `make
+    docs`, `make readme`, or `make pages` targets.
+  tags:
+  - core
+associated_tools:
+- tooling/doc_builder.py
+version: 1.0.0

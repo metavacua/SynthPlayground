@@ -1,6 +1,0 @@
-{
-  "version": "1.0.0",
-  "protocol_id": "security-header",
-  "description": "Defines the identity and purpose of the Security Protocol document.",
-  "rules": []
-}

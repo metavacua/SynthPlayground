@@ -1,0 +1,39 @@
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
+protocol_id: critic-reset-prohibition-001
+description: A specific, high-priority protocol that forbids the Code Review Critic
+  agent from using the 'reset_all' tool.
+rules:
+- rule_id: critic-no-reset
+  description: The agent role-playing as the 'Code Review Critic' is explicitly forbidden
+    from invoking the 'reset_all' tool under any circumstances. This is a critical
+    safeguard to prevent the loss of work during the review process.
+  enforcement: This rule is enforced by its inclusion in the compiled AGENTS.md, which
+    serves as the context for the Code Review Critic. The critic must be programmed
+    to parse and adhere to this prohibition.
+associated_tools:
+- reset_all
+version: 1.0.0
