@@ -3596,16 +3596,16 @@
       "name": "load_config",
       "path": "./tooling/build_logic.py",
       "language": "Python",
-      "line": 5,
+      "line": 6,
       "kind": "function",
-      "docstring": "Loads the build configuration file."
+      "docstring": "Loads the build configuration file (JSON or YAML)."
     },
     {
       "_type": "tag",
       "name": "generate_compiler_command",
       "path": "./tooling/build_logic.py",
       "language": "Python",
-      "line": 13,
+      "line": 21,
       "kind": "function",
       "docstring": "Generates the command for a 'compiler' type build target."
     },
@@ -3614,7 +3614,7 @@
       "name": "generate_command",
       "path": "./tooling/build_logic.py",
       "language": "Python",
-      "line": 50,
+      "line": 58,
       "kind": "function",
       "docstring": "Generates the command for a 'command' type build target."
     },
@@ -6227,6 +6227,15 @@
       "line": 18,
       "kind": "function",
       "docstring": "A very basic parser for sequents."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/protocol_compiler.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
