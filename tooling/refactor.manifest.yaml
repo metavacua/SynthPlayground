@@ -1,0 +1,10 @@
+description: A tool for performing automated symbol renaming in Python code.
+name: refactor
+postconditions: []
+preconditions:
+- description: The path to the file where the symbol is defined.
+  name: filepath
+- description: The current name of the symbol to rename.
+  name: old-name
+- description: The new name for the symbol.
+  name: new-name

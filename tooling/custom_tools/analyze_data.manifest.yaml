@@ -1,0 +1,8 @@
+description: A tool for analyzing raw data.
+name: analyze_data
+postconditions:
+- description: The analysis report.
+  name: analysis_report
+preconditions:
+- description: The raw data to analyze.
+  name: raw_data

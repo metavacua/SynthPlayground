@@ -1,0 +1,87 @@
+final_states:
+- AWAITING_SUBMISSION
+- ERROR
+initial_state: START
+states:
+- START
+- ORIENTING
+- PLANNING
+- RESEARCHING
+- AWAITING_RESULT
+- EXECUTING
+- GENERATING_CODE
+- RUNNING_TESTS
+- DEBUGGING
+- FINALIZING
+- AWAITING_SUBMISSION
+- ERROR
+transitions:
+- dest: ORIENTING
+  source: START
+  trigger: begin_task
+- dest: PLANNING
+  source: ORIENTING
+  trigger: orientation_succeeded
+- dest: ERROR
+  source: ORIENTING
+  trigger: orientation_failed
+- dest: EXECUTING
+  source: PLANNING
+  trigger: plan_op
+- dest: ERROR
+  source: PLANNING
+  trigger: planning_failed
+- dest: RESEARCHING
+  source: PLANNING
+  trigger: research_requested
+- dest: AWAITING_RESULT
+  source: RESEARCHING
+  trigger: research_started
+- dest: ERROR
+  source: RESEARCHING
+  trigger: research_failed
+- dest: AWAITING_RESULT
+  source: AWAITING_RESULT
+  trigger: wait
+- dest: PLANNING
+  source: AWAITING_RESULT
+  trigger: result_ready
+- dest: ERROR
+  source: AWAITING_RESULT
+  trigger: result_failed
+- dest: EXECUTING
+  source: EXECUTING
+  trigger: step_op
+- dest: GENERATING_CODE
+  source: EXECUTING
+  trigger: code_generation_requested
+- dest: RUNNING_TESTS
+  source: GENERATING_CODE
+  trigger: code_generation_completed
+- dest: DEBUGGING
+  source: RUNNING_TESTS
+  trigger: tests_failed
+- dest: EXECUTING
+  source: RUNNING_TESTS
+  trigger: tests_passed
+- dest: EXECUTING
+  source: DEBUGGING
+  trigger: debugging_completed
+- dest: FINALIZING
+  source: EXECUTING
+  trigger: all_steps_completed
+- dest: ERROR
+  source: EXECUTING
+  trigger: execution_failed
+- dest: AWAITING_SUBMISSION
+  source: FINALIZING
+  trigger: finalization_succeeded
+- dest: ERROR
+  source: FINALIZING
+  trigger: finalization_failed
+- dest: ERROR
+  source: FINALIZING
+  trigger: finalization_failed
+- dest: ORIENTING
+  source: ERROR
+  trigger: reorient

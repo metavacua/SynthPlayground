@@ -1,0 +1,13 @@
+agents:
+- manifest_path: tooling/refactor.manifest.yaml
+  name: refactor
+- manifest_path: tooling/custom_tools/create_file.manifest.yaml
+  name: create_file
+- manifest_path: tooling/custom_tools/read_file.manifest.yaml
+  name: read_file
+- manifest_path: tooling/custom_tools/fetch_data.manifest.yaml
+  name: fetch_data
+- manifest_path: tooling/custom_tools/analyze_data.manifest.yaml
+  name: analyze_data
+- manifest_path: tooling/custom_tools/create_content.manifest.yaml
+  name: create_content
