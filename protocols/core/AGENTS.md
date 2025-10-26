@@ -377,8 +377,8 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
   "description": "A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.",
   "rules": [
     {
-      "rule_id": "use-csdc-cli",
-      "description": "The `csdc_cli.py` tool must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP).",
+      "rule_id": "use-chomsky-cli-validate",
+      "description": "The `tooling/chomsky/cli.py validate-plan` command must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP).",
       "enforcement": "The tool is used by invoking it from the command line with the plan file, model, and complexity as arguments.",
       "tags": [
         "core"
@@ -387,7 +387,7 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
     {
       "rule_id": "model-a-constraints",
       "description": "Model A permits `define_set_of_names` but forbids `define_diagonalization_function`.",
-      "enforcement": "Enforced by the `fsm_model_a.json` FSM used by the `csdc_cli.py` tool.",
+      "enforcement": "Enforced by the LBAValidator within the Chomsky toolchain.",
       "tags": [
         "core"
       ]
@@ -395,14 +395,14 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
     {
       "rule_id": "model-b-constraints",
       "description": "Model B permits `define_diagonalization_function` but forbids `define_set_of_names`.",
-      "enforcement": "Enforced by the `fsm_model_b.json` FSM used by the `csdc_cli.py` tool.",
+      "enforcement": "Enforced by the LBAValidator within the Chomsky toolchain.",
       "tags": [
         "core"
       ]
     }
   ],
   "associated_tools": [
-    "tooling/csdc_cli.py"
+    "tooling/chomsky/cli.py"
   ],
   "version": "1.0.0"
 }
@@ -483,6 +483,28 @@ The goal is to enable proactive, creative problem-solving and self-improvement, 
 
 ```json
 {
+  "@context": {
+    "proto": "https://w3id.org/jules/protocol/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "protocol_id": "proto:protocol_id",
+    "description": "proto:description",
+    "rules": {
+      "@id": "proto:rules",
+      "@container": "@list"
+    },
+    "rule_id": "proto:rule_id",
+    "enforcement": "proto:enforcement",
+    "associated_tools": {
+      "@id": "proto:associated_tools",
+      "@container": "@list",
+      "@type": "@id"
+    },
+    "associated_artifacts": {
+      "@id": "proto:associated_artifacts",
+      "@container": "@list",
+      "@type": "@id"
+    }
+  },
   "protocol_id": "agent-interaction-001",
   "description": "A protocol governing the agent's core interaction and planning tools.",
   "rules": [

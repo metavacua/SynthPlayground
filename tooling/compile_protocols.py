@@ -2,14 +2,41 @@
 import os
 import sys
 import json
-from tooling.build_utils import find_files, load_schema, execute_code
-from tooling.compile_protocols_logic import generate_agents_md_content
+import subprocess
+from build_utils import find_files, load_schema, execute_code
+from compile_protocols_logic import generate_agents_md_content
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT_DIR)
 PROTOCOLS_DIR = os.path.join(ROOT_DIR, "protocols")
 SCHEMA_FILE = os.path.join(PROTOCOLS_DIR, "protocol.schema.json")
+YAML_LD_CONVERTER = os.path.join(ROOT_DIR, "tooling", "yaml_ld_to_json_ld.py")
+
+
+def convert_yaml_ld_to_json_ld(module_dir):
+    """Finds and converts all .protocol.yaml files to .protocol.json."""
+    print("--- Checking for YAML-LD files to convert ---")
+    yaml_files = find_files(".protocol.yaml", base_dir=module_dir, recursive=False)
+    for yaml_file_rel_path in yaml_files:
+        yaml_file_abs_path = os.path.join(module_dir, yaml_file_rel_path)
+        json_file_abs_path = os.path.splitext(yaml_file_abs_path)[0] + ".json"
+
+        print(f"Converting {yaml_file_abs_path} to {json_file_abs_path}")
+
+        try:
+            subprocess.run(
+                ["python3", YAML_LD_CONVERTER, yaml_file_abs_path, json_file_abs_path],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+        except subprocess.CalledProcessError as e:
+            print(f"Error converting {yaml_file_abs_path}:", file=sys.stderr)
+            print(e.stderr, file=sys.stderr)
+            # Continue to the next file
+            continue
+    print("--- YAML-LD conversion complete ---")
 
 
 def compile_module(module_dir):
@@ -19,6 +46,9 @@ def compile_module(module_dir):
     print(f"--- Starting Protocol Compilation for {module_name} Module ---")
     print(f"Source directory: {module_dir}")
     print(f"Target file: {target_file}")
+
+    # Convert any YAML-LD files to JSON-LD first
+    convert_yaml_ld_to_json_ld(module_dir)
 
     schema = load_schema(SCHEMA_FILE)
     if not schema:
