@@ -1,0 +1,6 @@
+description: A tool for reading the content of a file.
+name: read_file
+postconditions: []
+preconditions:
+- description: The name of the file to read.
+  name: filename

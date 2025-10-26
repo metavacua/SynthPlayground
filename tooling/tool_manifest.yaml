@@ -1,0 +1,30 @@
+tools:
+- arguments:
+  - description: The directory path to list files from. Defaults to the repo root.
+    name: root_dir
+    type: string
+  description: Lists all files and directories under the given directory.
+  function_name: list_all_files_and_dirs
+  name: list_files
+  path: tooling/filesystem_lister.py
+- arguments:
+  - description: The path of the file to read.
+    name: filepath
+    type: string
+  description: Reads the content of the specified file.
+  name: read_file
+  path: tooling/file_reader.py
+- arguments:
+  - description: The bash command to run.
+    name: command
+    type: string
+  description: Runs the given bash command in the sandbox.
+  name: run_in_bash_session
+  path: tooling/bash_runner.py
+- arguments:
+  - description: The message to print.
+    name: message
+    type: string
+  description: Prints a message to the console.
+  name: hello_world
+  path: tooling/custom_tools/hello_world.py

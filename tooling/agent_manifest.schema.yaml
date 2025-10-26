@@ -1,0 +1,46 @@
+$schema: http://json-schema.org/draft-07/schema#
+description: A formal signature for an agent, describing its capabilities.
+properties:
+  description:
+    description: A high-level description of the agent's purpose.
+    type: string
+  name:
+    description: The unique name of the agent.
+    type: string
+  postconditions:
+    description: The resources that the agent produces.
+    items:
+      properties:
+        description:
+          description: A description of the resource.
+          type: string
+        name:
+          description: The name of the resource (e.g., analysis_report).
+          type: string
+      required:
+      - name
+      - description
+      type: object
+    type: array
+  preconditions:
+    description: The resources that the agent consumes.
+    items:
+      properties:
+        description:
+          description: A description of the resource.
+          type: string
+        name:
+          description: The name of the resource (e.g., raw_data).
+          type: string
+      required:
+      - name
+      - description
+      type: object
+    type: array
+required:
+- name
+- description
+- preconditions
+- postconditions
+title: Agent Manifest
+type: object

@@ -1,0 +1,6 @@
+description: A tool for fetching raw data.
+name: fetch_data
+postconditions:
+- description: The raw data that was fetched.
+  name: raw_data
+preconditions: []

@@ -1,0 +1,10 @@
+description: A tool for creating a file with the given content.
+name: create_file
+postconditions:
+- description: The name of the file that was created.
+  name: filename
+preconditions:
+- description: The name of the file to create.
+  name: filename
+- description: The content to write to the file.
+  name: content

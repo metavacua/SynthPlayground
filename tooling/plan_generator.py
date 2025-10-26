@@ -1,17 +1,17 @@
-import json
+import yaml
 import os
 
 AGENT_REPOSITORY_PATH = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), "agent_repository.json")
+    os.path.join(os.path.dirname(__file__), "agent_repository.yaml")
 )
 
 def find_agent_that_produces(resource_name):
     """Finds an agent in the repository that produces the given resource."""
     with open(AGENT_REPOSITORY_PATH, "r") as f:
-        repository = json.load(f)
+        repository = yaml.safe_load(f)
     for agent_info in repository["agents"]:
         with open(agent_info["manifest_path"], "r") as f:
-            manifest = json.load(f)
+            manifest = yaml.safe_load(f)
         for postcondition in manifest["postconditions"]:
             if postcondition["name"] == resource_name:
                 return manifest
@@ -35,6 +35,11 @@ def generate_plan(goal):
 
     while sub_goals:
         current_sub_goal = sub_goals.pop(0)
+
+        # This is a simple cycle detection mechanism to avoid infinite loops
+        # where an agent's precondition is the same as its postcondition.
+        if current_sub_goal == goal:
+            continue
 
         # Find an agent that can produce the current sub-goal.
         sub_goal_agent = find_agent_that_produces(current_sub_goal)

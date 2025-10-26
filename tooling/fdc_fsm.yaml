@@ -1,0 +1,34 @@
+accept_states:
+- DONE
+alphabet:
+- plan_op
+- step_op
+- submit_op
+- read_op
+- write_op
+- delete_op
+- move_op
+- tool_exec
+- close_op
+start_state: IDLE
+states:
+- IDLE
+- PLANNING
+- EXECUTING
+- POST_MORTEM
+- DONE
+transitions:
+  EXECUTING:
+    close_op: POST_MORTEM
+    delete_op: EXECUTING
+    move_op: EXECUTING
+    read_op: EXECUTING
+    step_op: EXECUTING
+    tool_exec: EXECUTING
+    write_op: EXECUTING
+  IDLE:
+    plan_op: PLANNING
+  PLANNING:
+    step_op: EXECUTING
+  POST_MORTEM:
+    submit_op: DONE

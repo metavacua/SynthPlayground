@@ -20,7 +20,7 @@ commands to:
 
 import argparse
 import datetime
-import json
+import yaml
 import os
 import shutil
 import sys
@@ -36,8 +36,24 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 POSTMORTEM_TEMPLATE_PATH = os.path.join(ROOT_DIR, "postmortem.md")
 POSTMORTEMS_DIR = os.path.join(ROOT_DIR, "postmortems")
 LOG_FILE_PATH = os.path.join(ROOT_DIR, "logs", "activity.log.jsonl")
-FSM_DEF_PATH = os.path.join(ROOT_DIR, "tooling", "fdc_fsm.json")
+FSM_DEF_PATH = os.path.join(ROOT_DIR, "tooling", "fdc_fsm.yaml")
 
+ACTION_TYPE_MAP = {
+    "set_plan": "plan_op",
+    "plan_step_complete": "step_op",
+    "submit": "submit_op",
+    "create_file": "write_op",
+    "create_file_with_block": "write_op",
+    "overwrite_file_with_block": "write_op",
+    "replace_with_git_merge_diff": "write_op",
+    "read_file": "read_op",
+    "list_files": "read_op",
+    "grep": "read_op",
+    "delete_file": "delete_op",
+    "rename_file": "move_op",
+    "run_in_bash_session": "tool_exec",
+    "for_each_file": "loop_op",
+}
 
 # --- CLI Subcommands & Helpers ---
 
@@ -211,7 +227,7 @@ def _validate_plan_recursive(
 def validate_plan(plan_filepath):
     try:
         with open(FSM_DEF_PATH, "r") as f:
-            fsm = json.load(f)
+            fsm = yaml.safe_load(f)
         with open(plan_filepath, "r") as f:
             lines = [(i, line.rstrip("\n")) for i, line in enumerate(f) if line.strip()]
     except FileNotFoundError as e:

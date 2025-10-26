@@ -1,0 +1,27 @@
+accept_states:
+- DONE
+alphabet:
+- plan_op
+- step_op
+- read_op
+- write_op
+- tool_exec
+- close_op
+start_state: IDLE
+states:
+- IDLE
+- GATHERING
+- SYNTHESIZING
+- REPORTING
+- DONE
+transitions:
+  GATHERING:
+    read_op: GATHERING
+    step_op: SYNTHESIZING
+    tool_exec: GATHERING
+  IDLE:
+    plan_op: GATHERING
+  REPORTING:
+    close_op: DONE
+  SYNTHESIZING:
+    write_op: REPORTING
