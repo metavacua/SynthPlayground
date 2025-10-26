@@ -2147,7 +2147,7 @@
       "name": "_load_schema",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 57,
+      "line": 63,
       "kind": "function",
       "docstring": "Loads the JSON schema from the specified Markdown file.\n\nIt assumes the schema is in a JSON code block.\n\nArgs:\n    schema_path (str): The path to the Markdown file containing the schema.\n\nReturns:\n    dict: The loaded JSON schema."
     },
@@ -2156,7 +2156,7 @@
       "name": "log",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 83,
+      "line": 89,
       "kind": "function",
       "docstring": "Constructs, validates, and writes a log entry.\n\nArgs:\n    phase (str): The current protocol phase (e.g., \"Phase 7\").\n    task_id (str): The ID of the current task.\n    plan_step (int): The current plan step number.\n    action_type (str): The type of action (e.g., \"TOOL_EXEC\").\n    action_details (dict): Details specific to the action.\n    outcome_status (str): The outcome of the action (\"SUCCESS\", \"FAILURE\").\n    outcome_message (str, optional): A message describing the outcome. Defaults to \"\".\n    error_details (dict, optional): Structured error info if the outcome is a failure. Defaults to None.\n    evidence (str, optional): Citation for the action. Defaults to \"\".\n    context (dict, optional): The agent's internal context. Defaults to None.\n\nRaises:\n    ValidationError: If the generated log entry does not conform to the schema."
     },
@@ -2165,7 +2165,7 @@
       "name": "get_logs",
       "path": "./utils/logger.py",
       "language": "Python",
-      "line": 140,
+      "line": 146,
       "kind": "function",
       "docstring": "Retrieves all log entries for the current session.\n\nReturns:\n    list: A list of log entries for the current session."
     },
