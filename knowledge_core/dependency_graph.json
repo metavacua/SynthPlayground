@@ -189,6 +189,16 @@
       "id": "tree-sitter-rust",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "pyflakes",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "autoflake",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
@@ -355,6 +365,14 @@
     {
       "source": "root-python-project",
       "target": "tree-sitter-rust"
+    },
+    {
+      "source": "root-python-project",
+      "target": "pyflakes"
+    },
+    {
+      "source": "root-python-project",
+      "target": "autoflake"
     },
     {
       "source": "tooling",

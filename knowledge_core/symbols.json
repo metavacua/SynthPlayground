@@ -4547,6 +4547,15 @@
     },
     {
       "_type": "tag",
+      "name": "main",
+      "path": "./tooling/unused_import_remover.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "generate_suggestion_plan",
       "path": "./tooling/code_suggester.py",
       "language": "Python",
@@ -11600,6 +11609,42 @@
       "line": 58,
       "kind": "function",
       "docstring": "Tests that the DBPedia client can fetch the rdf:type for a resource."
+    },
+    {
+      "_type": "tag",
+      "name": "TestUnusedImportRemover",
+      "path": "./tests/test_unused_import_remover.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/test_unused_import_remover.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tests/test_unused_import_remover.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_remove_unused_imports",
+      "path": "./tests/test_unused_import_remover.py",
+      "language": "Python",
+      "line": 24,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
