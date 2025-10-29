@@ -6815,19 +6815,10 @@
     },
     {
       "_type": "tag",
-      "name": "find_symbol_definition",
-      "path": "./tooling/refactor.py",
-      "language": "Python",
-      "line": 17,
-      "kind": "function",
-      "docstring": "Finds the definition of a symbol in a Python file."
-    },
-    {
-      "_type": "tag",
       "name": "find_references",
       "path": "./tooling/refactor.py",
       "language": "Python",
-      "line": 31,
+      "line": 19,
       "kind": "function",
       "docstring": "Finds all files in a directory that reference a given symbol."
     },
@@ -6836,7 +6827,16 @@
       "name": "main",
       "path": "./tooling/refactor.py",
       "language": "Python",
-      "line": 49,
+      "line": 43,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "find_in_ast",
+      "path": "./tooling/refactor.py",
+      "language": "Python",
+      "line": 32,
       "kind": "function",
       "docstring": null
     },
@@ -7574,7 +7574,7 @@
       "name": "get_parser_for_language",
       "path": "./tooling/ast_generator.py",
       "language": "Python",
-      "line": 47,
+      "line": 50,
       "kind": "function",
       "docstring": "Dynamically loads a tree-sitter parser for a given language."
     },
@@ -7583,7 +7583,7 @@
       "name": "generate_asts_for_repo",
       "path": "./tooling/ast_generator.py",
       "language": "Python",
-      "line": 73,
+      "line": 76,
       "kind": "function",
       "docstring": "Traverses a repository, generates ASTs for supported files, and saves them."
     },
@@ -11249,6 +11249,42 @@
       "line": 28,
       "kind": "function",
       "docstring": "Verify that all files and directories are listed correctly."
+    },
+    {
+      "_type": "tag",
+      "name": "TestRefactor",
+      "path": "./tests/test_refactor.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/test_refactor.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tests/test_refactor.py",
+      "language": "Python",
+      "line": 19,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_refactor",
+      "path": "./tests/test_refactor.py",
+      "language": "Python",
+      "line": 22,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
