@@ -1,1 +1,207 @@
-<!DOCTYPE html><html>...</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent Self-Improving Codebase</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            line-height: 1.6;
+            color: #333;
+            max-width: 960px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #f9f9f9;
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #111;
+        }
+        h2 {
+            font-size: 2em;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+            margin-top: 50px;
+        }
+        h3 {
+            font-size: 1.5em;
+            color: #333;
+        }
+        p, li {
+            font-size: 1.1em;
+        }
+        .tagline {
+            font-size: 1.2em;
+            color: #555;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .concept {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            background-color: #f0f0f0;
+            padding: .2em .4em;
+            border-radius: 3px;
+        }
+        pre {
+            background-color: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            font-size: 0.9em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>AI Agent Self-Improving Codebase</h1>
+        <p class="tagline">An experimental environment for a self-correcting AI agent that autonomously manages and evolves its own code and governing protocols.</p>
+    </header>
+
+    <div id="overview" class="section">
+        <h2>Overview</h2>
+        <p>This repository represents a pioneering research effort into the future of AI-driven software development. It serves as a live experiment for an AI agent designed to be self-correcting and self-improving. The primary goal is to create an agent that can autonomously manage, refactor, and enhance its own codebase and the formal protocols that govern its behavior.</p>
+        <p>This is not a conventional software project but a research platform exploring the boundaries of agentic systems and the co-evolution of AI agents and the codebases they inhabit.</p>
+    </div>
+
+    <div id="concepts" class="section">
+        <h2>Core Concepts</h2>
+        <p>The project is built on a foundation of cutting-edge ideas that redefine the relationship between code, documentation, and the agents that interact with them.</p>
+
+        <div class="concept">
+            <h3>The Provable Repository</h3>
+            <p>Instead of being a simple collection of text files, this repository is architected as a formal, mathematical proof. The directory structure and build process are designed to be logically verifiable. In this paradigm:</p>
+            <ul>
+                <li><strong>Documentation is the Specification:</strong> A component's <code>README.md</code> file acts as a formal contract or "type" that specifies what it does.</li>
+                <li><strong>Code is the Proof:</strong> The source code provides the constructive proof that the specification is met.</li>
+                <li><strong>The Build is the Verification:</strong> A successful build is a formal, automated verification that the proof (code) matches the specification (documentation). This makes "documentation drift" impossible by design.</li>
+            </ul>
+        </div>
+
+        <div class="concept">
+            <h3>The Logically-Grounded Agent</h3>
+            <p>To interact with a provable repository, the AI agent's own cognitive architecture is grounded in the same logical principles. Its actions are not based on heuristics alone, but on verifiable transactions. This approach aims to create a more reliable, predictable, and secure agent, architecturally incapable of performing actions that would leave the system in an inconsistent state.</p>
+        </div>
+
+        <div class="concept">
+            <h3>The Semantic Artifact (Future Vision)</h3>
+            <p>The long-term vision is to move beyond a file-based structure entirely. The repository would be pre-compiled into a "Semantic Zip"—a single, monolithic knowledge graph. This artifact would be optimized for machine consumption, allowing the agent to query the project's entire architecture and dependencies instantly, overcoming the cognitive bottlenecks of current AI models.</p>
+        </div>
+    </div>
+
+    <div id="modules" class="section">
+        <h2>Key Modules</h2>
+        <p>The repository is organized into several key modules, each representing a core component of the project's architecture. Here are a few highlights:</p>
+
+        <div class="concept">
+            <h3>Custom Languages: <code>aura_lang/</code> and <code>lfi_ill/</code></h3>
+            <p>A unique feature of this project is its use of custom-designed languages for defining agent behavior and logical proofs:</p>
+            <ul>
+                <li><a href="aura_lang/"><code>aura_lang</code></a>: A simple, C-style scripting language used for writing high-level agent commands and automation scripts.</li>
+                <li><a href="lfi_ill/"><code>lfi_ill</code></a>: An implementation of "Paraconsistent Light Linear Logic," a research-level formal logic for reasoning under uncertainty and resource constraints. This is a cornerstone of the "Provable Repository" concept.</li>
+            </ul>
+        </div>
+
+        <div class="concept">
+            <h3>Agent Tooling: <code>tooling/</code></h3>
+            <p>This is the heart of the agent's capabilities. It contains a vast collection of Python scripts that the agent can invoke to perform its tasks. This includes tools for:</p>
+            <ul>
+                <li>Building and compiling the repository's various artifacts (<code>builder.py</code>).</li>
+                <li>Parsing and interpreting the custom languages (<code>aura_executor.py</code>, <code>plllu_runner.py</code>).</li>
+                <li>Analyzing and refactoring code (<code>refactor.py</code>, <code>symbol_extractor.py</code>).</li>
+                <li>Managing the agent's own self-improvement and self-correction loops (<code>self_correction_orchestrator.py</code>).</li>
+            </ul>
+            <p>You can explore the full extent of the agent's capabilities in the <a href="tooling/"><code>tooling/</code></a> directory.</p>
+        </div>
+
+        <div class="concept">
+            <h3>Formal Logic System: <code>logic_system/</code></h3>
+            <p>This module provides the concrete implementation of the formal logic systems described in the project's research papers. It contains Python classes for representing logical formulas, sequents, and proofs, and it includes interpreters for various logics. This is where the high-level theory of the project is translated into executable code.</p>
+        </div>
+    </div>
+
+    <div id="getting-started" class="section">
+        <h2>Getting Started for Developers</h2>
+        <p>Interacting with this repository requires a different approach than a typical software project. The <code>AGENTS.md</code> file in the root directory serves as the primary entry point and "constitution" for the AI agent.</p>
+        <p>The project uses a unified build system driven by <code>tooling/builder.py</code>. To see available build targets:</p>
+        <pre><code>python3 tooling/builder.py --list</code></pre>
+        <p>To run a specific build target, such as compiling the protocols:</p>
+        <pre><code>python3 tooling/builder.py --target protocols</code></pre>
+        <p>For detailed contribution guidelines and development setup, please refer to the <a href="README.md">README.md</a> and <a href="CONTRIBUTING.md">CONTRIBUTING.md</a> files.</p>
+    </div>
+
+    <div id="research" class="section">
+        <h2>Research Table of Contents</h2>
+        <p>This repository is built on a deep foundation of theoretical and practical research. The following documents provide a comprehensive overview of the project's goals, architecture, and philosophical underpinnings.</p>
+
+        <div class="concept">
+            <h3>Core Concepts & Vision</h3>
+            <ul>
+                <li><a href="AIACHC.md">An Analysis of the Operational Limits of Advanced Coding Assistants on Complex Software Repositories</a>: A deep dive into the theoretical paradigms of Conventional, Provable, and Semantic repositories.</li>
+                <li><a href="architecting-the-symbiont-a-step-by-step-manual-for-an-ai-centric-development-environment.txt">Architecting the Symbiont</a>: A step-by-step manual for an AI-centric development environment.</li>
+                <li><a href="from-files-to-artifacts-analyzing-the-'semantic-zip'-and-the-future-of-agent-driven-software-engineering.txt">From Files to Artifacts</a>: An analysis of the "Semantic Zip" concept and the future of agent-driven software engineering.</li>
+            </ul>
+        </div>
+
+        <div class="concept">
+            <h3>Agent Protocol & Self-Improvement</h3>
+            <ul>
+                <li><a href="agent-protocol-critique-and-improvement.txt">Agent Protocol Critique and Improvement</a>: A critique and improvement plan for the agent protocol.</li>
+                <li><a href="self_improvement_project/architecture.md">Self-Improvement Architecture</a>: The architecture of the self-improvement project.</li>
+                <li><a href="research/synthesis_of_self_improvement_mechanisms.md">Synthesis of Self-Improvement Mechanisms</a>: A synthesis of self-improvement mechanisms.</li>
+            </ul>
+        </div>
+
+        <div class="concept">
+            <h3>Formal Logic & Custom Languages</h3>
+            <ul>
+                <li><a href="agents-build-system-proof-Framework.txt">Agents Build System Proof Framework</a>: A description of the proof-based build system.</li>
+                <li><a href="lfi_ill/lfi-light-linear-logic.md">Paraconsistent Light Linear Logic</a>: The formal definition of the pLLL logic system.</li>
+                <li><a href="lfi_ill/Paradefinite-Light-Linear-Logic.md">Paradefinite Light Linear Logic</a>: The definition of Paradefinite Light Linear Logic.</li>
+            </ul>
+        </div>
+
+        <div class="concept">
+            <h3>Reports & Analyses</h3>
+            <ul>
+                <li><a href="reports/agent_construction_gap_analysis.md">Agent Construction Gap Analysis</a>: A gap analysis of agent construction.</li>
+                <li><a href="reports/ambiguity_in_planning_research_report.md">Ambiguity in Planning Research Report</a>: A research report on ambiguity in planning.</li>
+                <li><a href="research/post_mortem_adequacy_report.md">Post-Mortem Adequacy Report</a>: A report on the adequacy of post-mortems.</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>This GitHub Pages site was designed and developed by an AI agent to provide a comprehensive and representative overview of its own repository.</p>
+    </footer>
+</body>
+</html>
