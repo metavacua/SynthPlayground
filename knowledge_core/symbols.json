@@ -7562,6 +7562,33 @@
     },
     {
       "_type": "tag",
+      "name": "node_to_dict",
+      "path": "./tooling/ast_generator.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function",
+      "docstring": "Recursively convert a tree-sitter Node to a JSON-serializable dictionary."
+    },
+    {
+      "_type": "tag",
+      "name": "get_parser_for_language",
+      "path": "./tooling/ast_generator.py",
+      "language": "Python",
+      "line": 47,
+      "kind": "function",
+      "docstring": "Dynamically loads a tree-sitter parser for a given language."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_asts_for_repo",
+      "path": "./tooling/ast_generator.py",
+      "language": "Python",
+      "line": 73,
+      "kind": "function",
+      "docstring": "Traverses a repository, generates ASTs for supported files, and saves them."
+    },
+    {
+      "_type": "tag",
       "name": "TestHDLParser",
       "path": "./tooling/test_hdl_parser.py",
       "language": "Python",
@@ -11256,6 +11283,42 @@
       "path": "./tests/test_enrichment_refined.py",
       "language": "Python",
       "line": 38,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestAstGenerator",
+      "path": "./tests/test_ast_generator.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/test_ast_generator.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tests/test_ast_generator.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_ast_generation",
+      "path": "./tests/test_ast_generator.py",
+      "language": "Python",
+      "line": 21,
       "kind": "function",
       "docstring": null
     },

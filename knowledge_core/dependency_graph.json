@@ -149,6 +149,46 @@
       "id": "yaml-ld",
       "path": null,
       "type": "python-external"
+    },
+    {
+      "id": "tree-sitter",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "tree-sitter-languages",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "tree-sitter-python",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "tree-sitter-javascript",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "tree-sitter-typescript",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "tree-sitter-ruby",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "tree-sitter-go",
+      "path": null,
+      "type": "python-external"
+    },
+    {
+      "id": "tree-sitter-rust",
+      "path": null,
+      "type": "python-external"
     }
   ],
   "edges": [
@@ -283,6 +323,38 @@
     {
       "source": "root-python-project",
       "target": "yaml-ld"
+    },
+    {
+      "source": "root-python-project",
+      "target": "tree-sitter"
+    },
+    {
+      "source": "root-python-project",
+      "target": "tree-sitter-languages"
+    },
+    {
+      "source": "root-python-project",
+      "target": "tree-sitter-python"
+    },
+    {
+      "source": "root-python-project",
+      "target": "tree-sitter-javascript"
+    },
+    {
+      "source": "root-python-project",
+      "target": "tree-sitter-typescript"
+    },
+    {
+      "source": "root-python-project",
+      "target": "tree-sitter-ruby"
+    },
+    {
+      "source": "root-python-project",
+      "target": "tree-sitter-go"
+    },
+    {
+      "source": "root-python-project",
+      "target": "tree-sitter-rust"
     },
     {
       "source": "tooling",
