@@ -34,7 +34,7 @@ def node_to_dict(node):
     """
     Recursively convert a tree-sitter Node to a JSON-serializable dictionary.
     """
-    return {
+    result = {
         'type': node.type,
         'start_byte': node.start_byte,
         'end_byte': node.end_byte,
@@ -42,6 +42,9 @@ def node_to_dict(node):
         'end_point': node.end_point,
         'children': [node_to_dict(child) for child in node.children]
     }
+    if not node.children:
+        result['text'] = node.text.decode('utf8')
+    return result
 
 
 def get_parser_for_language(language_name):

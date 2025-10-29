@@ -9,51 +9,40 @@ manual errors.
 """
 
 import argparse
-import ast
+import json
 import os
 import sys
 
-
-def find_symbol_definition(filepath, symbol_name):
-    """Finds the definition of a symbol in a Python file."""
-    with open(filepath, "r") as f:
-        content = f.read()
-    tree = ast.parse(content)
-    for node in ast.walk(tree):
-        if (
-            isinstance(node, (ast.FunctionDef, ast.ClassDef))
-            and node.name == symbol_name
-        ):
-            return node
-    return None
+from tooling.ast_generator import get_parser_for_language
 
 
 def find_references(symbol_name, search_path):
     """Finds all files in a directory that reference a given symbol."""
-    references = []
-    for root, _, files in os.walk(search_path):
-        if ".git" in root or "tooling" in root:
-            continue
+    references = {}
+    ast_dir = os.path.join(search_path, 'knowledge_core', 'asts')
+    for root, _, files in os.walk(ast_dir):
         for file in files:
-            if file.endswith(".py"):
+            if file.endswith(".json"):
                 filepath = os.path.join(root, file)
-                try:
-                    with open(filepath, "r", errors="ignore") as f:
-                        if symbol_name in f.read():
-                            references.append(filepath)
-                except Exception:
-                    pass  # Ignore files that can't be read
+                original_filepath = filepath.replace(
+                    ast_dir + '/', '').replace('.json', '')
+                with open(filepath, "r") as f:
+                    ast_data = json.load(f)
+
+                def find_in_ast(node):
+                    if node.get('type') == 'identifier' and node.get('text') == symbol_name:
+                        if original_filepath not in references:
+                            references[original_filepath] = []
+                        references[original_filepath].append(node)
+                    for child in node.get('children', []):
+                        find_in_ast(child)
+                find_in_ast(ast_data)
     return references
 
 
 def main():
     parser = argparse.ArgumentParser(
         description="A simple refactoring tool to rename a symbol in a Python file."
-    )
-    parser.add_argument(
-        "--filepath",
-        required=True,
-        help="The path to the file where the symbol is defined.",
     )
     parser.add_argument(
         "--old-name", required=True, help="The current name of the symbol to rename."
@@ -66,34 +55,33 @@ def main():
         default=".",
         help="The root directory to search for references.",
     )
+    parser.add_argument(
+        "--root-dir",
+        default=".",
+        help="The root directory of the repository.",
+    )
 
     args = parser.parse_args()
 
-    # Find the definition of the symbol
-    definition = find_symbol_definition(args.filepath, args.old_name)
-    if not definition:
-        print(
-            f"Error: Symbol '{args.old_name}' not found in {args.filepath}",
-            file=sys.stderr,
-        )
-        return
-
     # Find all references to the symbol
     reference_files = find_references(args.old_name, args.search_path)
-    if args.filepath not in reference_files:
-        reference_files.append(args.filepath)
 
     # Rename the symbol in all referenced files
-    for ref_file in set(reference_files):
-        with open(ref_file, "r") as f:
+    for ref_file, nodes in reference_files.items():
+        filepath = os.path.join(args.root_dir, ref_file)
+        with open(filepath, "r") as f:
             original_content = f.read()
 
-        if args.old_name not in original_content:
-            continue
+        nodes.sort(key=lambda x: x['start_byte'], reverse=True)
 
-        new_content = original_content.replace(args.old_name, args.new_name)
-        with open(ref_file, "w") as f:
-            f.write(new_content)
+        new_content = list(original_content)
+        for node in nodes:
+            start = node['start_byte']
+            end = node['end_byte']
+            new_content[start:end] = args.new_name
+
+        with open(filepath, "w") as f:
+            f.write("".join(new_content))
 
 
 if __name__ == "__main__":
