@@ -13,7 +13,11 @@ class TestRefactor(unittest.TestCase):
         os.makedirs(self.output_dir, exist_ok=True)
         self.sample_file = os.path.join(self.test_repo_dir, 'sample.py')
         with open(self.sample_file, 'w') as f:
-            f.write('def hello():\\n    print("Hello, World!")\\n\\nhello_world = hello\\n')
+            f.write("""def hello():
+    print("Hello, World!")
+
+hello_world = hello
+""")
         generate_asts_for_repo(root_dir=self.test_repo_dir, output_dir=self.output_dir)
 
     def tearDown(self):
