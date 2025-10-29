@@ -4043,6 +4043,33 @@
     },
     {
       "_type": "tag",
+      "name": "find_definitions_in_ast",
+      "path": "./tooling/symbol_extractor.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "Finds all function and class definitions in an AST."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/symbol_extractor.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "find_in_node",
+      "path": "./tooling/symbol_extractor.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "Instruction",
       "path": "./tooling/udc_orchestrator.py",
       "language": "Python",
@@ -5648,7 +5675,7 @@
       "name": "main",
       "path": "./tooling/builder.py",
       "language": "Python",
-      "line": 108,
+      "line": 110,
       "kind": "function",
       "docstring": "Main function to parse arguments and drive the build process."
     },
@@ -7583,16 +7610,16 @@
       "name": "node_to_dict",
       "path": "./tooling/ast_generator.py",
       "language": "Python",
-      "line": 33,
+      "line": 34,
       "kind": "function",
-      "docstring": "Recursively convert a tree-sitter Node to a JSON-serializable dictionary."
+      "docstring": "Recursively convert a tree-sitter Node to a JSON-serializable dictionary,\nincluding field names for children."
     },
     {
       "_type": "tag",
       "name": "get_parser_for_language",
       "path": "./tooling/ast_generator.py",
       "language": "Python",
-      "line": 50,
+      "line": 62,
       "kind": "function",
       "docstring": "Dynamically loads a tree-sitter parser for a given language."
     },
@@ -7601,9 +7628,18 @@
       "name": "generate_asts_for_repo",
       "path": "./tooling/ast_generator.py",
       "language": "Python",
-      "line": 76,
+      "line": 88,
       "kind": "function",
       "docstring": "Traverses a repository, generates ASTs for supported files, and saves them."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/ast_generator.py",
+      "language": "Python",
+      "line": 138,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -11234,6 +11270,42 @@
     },
     {
       "_type": "tag",
+      "name": "TestSymbolExtractor",
+      "path": "./tests/test_symbol_extractor.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/test_symbol_extractor.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tests/test_symbol_extractor.py",
+      "language": "Python",
+      "line": 25,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_symbol_extraction",
+      "path": "./tests/test_symbol_extractor.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TestFilesystemLister",
       "path": "./tests/test_filesystem_lister.py",
       "language": "Python",
@@ -11291,7 +11363,7 @@
       "name": "tearDown",
       "path": "./tests/test_refactor.py",
       "language": "Python",
-      "line": 19,
+      "line": 23,
       "kind": "function",
       "docstring": null
     },
@@ -11300,7 +11372,7 @@
       "name": "test_refactor",
       "path": "./tests/test_refactor.py",
       "language": "Python",
-      "line": 22,
+      "line": 26,
       "kind": "function",
       "docstring": null
     },
