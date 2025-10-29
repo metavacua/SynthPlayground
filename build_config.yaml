@@ -23,6 +23,10 @@ targets:
     command: "python3 tooling/ast_generator.py"
     description: "Generate ASTs for all supported source files."
     type: command
+  extract-symbols:
+    command: "python3 tooling/symbol_extractor.py"
+    description: "Extract symbols from ASTs to create a symbol map."
+    type: command
   format:
     command: "python3 -m black tooling/"
     description: Format the code using black.

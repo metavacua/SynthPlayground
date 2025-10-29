@@ -44,7 +44,7 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CONFIG_FILE = os.path.join(ROOT_DIR, "build_config.yaml")
 
 
-def execute_build(target_name, config):
+def execute_build(target_name, config, extra_args):
     """Executes the build process for a specific target."""
     if target_name not in config["targets"]:
         raise ValueError(f"Target '{target_name}' not found in build configuration.")
@@ -72,12 +72,14 @@ def execute_build(target_name, config):
             f"Unknown target type '{target_type}' for target '{target_name}'"
         )
 
+    command_str += " " + " ".join(extra_args)
+
     print(f"  - Command:  {command_str}")
 
     try:
         start_time = datetime.now()
         result = subprocess.run(
-            command,
+            command_str,
             check=True,
             capture_output=True,
             text=True,
@@ -122,7 +124,10 @@ def main():
         help="List all available build targets and groups.",
     )
 
-    args = parser.parse_args()
+    args, extra_args = parser.parse_known_args()
+    if extra_args and extra_args[0] == '--':
+        extra_args.pop(0)
+
     config = load_config(CONFIG_FILE)
 
     if args.list:
@@ -141,10 +146,10 @@ def main():
     if target_or_group in config.get("build_groups", {}):
         print(f"--- Executing Build Group: {target_or_group.upper()} ---")
         for target_name in config["build_groups"][target_or_group]:
-            execute_build(target_name, config)
+            execute_build(target_name, config, extra_args)
         print(f"\n--- Group '{target_or_group}' Finished ---")
     elif target_or_group in config["targets"]:
-        execute_build(target_or_group, config)
+        execute_build(target_or_group, config, extra_args)
         print(f"\n--- Target '{target_or_group}' Finished ---")
     else:
         raise ValueError(f"Target or group '{target_or_group}' not found.")

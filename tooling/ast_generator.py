@@ -1,6 +1,7 @@
 import os
 import json
 import importlib
+import argparse
 from tree_sitter import Language, Parser
 
 # Mapping from file extensions to tree-sitter language names
@@ -32,7 +33,8 @@ EXCLUDE_DIRS = {'.git', 'knowledge_core', 'node_modules', '.venv'}
 
 def node_to_dict(node):
     """
-    Recursively convert a tree-sitter Node to a JSON-serializable dictionary.
+    Recursively convert a tree-sitter Node to a JSON-serializable dictionary,
+    including field names for children.
     """
     result = {
         'type': node.type,
@@ -40,8 +42,18 @@ def node_to_dict(node):
         'end_byte': node.end_byte,
         'start_point': node.start_point,
         'end_point': node.end_point,
-        'children': [node_to_dict(child) for child in node.children]
     }
+
+    children = []
+    for i, child_node in enumerate(node.children):
+        child_dict = node_to_dict(child_node)
+        field_name = node.field_name_for_child(i)
+        if field_name:
+            child_dict['field'] = field_name
+        children.append(child_dict)
+
+    result['children'] = children
+
     if not node.children:
         result['text'] = node.text.decode('utf8')
     return result
@@ -123,5 +135,24 @@ def generate_asts_for_repo(root_dir='.', output_dir='knowledge_core/asts'):
     print("AST generation complete.")
 
 
+def main():
+    parser = argparse.ArgumentParser(
+        description="Generates ASTs for all supported source files in a repository."
+    )
+    parser.add_argument(
+        "--root-dir",
+        default=".",
+        help="The root directory of the repository to scan.",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default="knowledge_core/asts",
+        help="The directory to save the generated ASTs.",
+    )
+    args = parser.parse_args()
+
+    generate_asts_for_repo(root_dir=args.root_dir, output_dir=args.output_dir)
+
+
 if __name__ == "__main__":
-    generate_asts_for_repo()
+    main()
