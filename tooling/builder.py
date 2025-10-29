@@ -84,7 +84,7 @@ def execute_build(target_name, config, extra_args):
             capture_output=True,
             text=True,
             cwd=ROOT_DIR,
-            shell=shell,
+            shell=True,
         )
         end_time = datetime.now()
         duration = (end_time - start_time).total_seconds()
