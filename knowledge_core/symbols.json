@@ -1928,6 +1928,24 @@
     },
     {
       "_type": "tag",
+      "name": "extract_json_from_md",
+      "path": "./extract_json.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "function",
+      "docstring": "Extracts the first JSON block from a Markdown string.\n\nArgs:\n    md_content: The string content of the Markdown file.\n\nReturns:\n    The extracted JSON string, or None if no JSON block is found."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./extract_json.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": "Finds all Markdown files in the 'protocols' directory,\nextracts JSON from them, and saves it to new files."
+    },
+    {
+      "_type": "tag",
       "name": "TestPlanning",
       "path": "./test_planning.py",
       "language": "Python",
