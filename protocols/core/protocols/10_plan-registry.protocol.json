@@ -1,0 +1,1 @@
+  {    "logical-name-1": "path/to/plan_1.txt",    "run-all-tests": "plans/common/run_tests.txt"  }
