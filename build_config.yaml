@@ -19,6 +19,10 @@ targets:
     sources:
       - "knowledge_core/integrated_knowledge.jsonld"
     type: compiler
+  ast-generate:
+    command: "python3 tooling/ast_generator.py"
+    description: "Generate ASTs for all supported source files."
+    type: command
   format:
     command: "python3 -m black tooling/"
     description: Format the code using black.

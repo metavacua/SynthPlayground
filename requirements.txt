@@ -31,3 +31,11 @@ ply
 requests
 ddt
 yaml-ld
+tree-sitter
+tree-sitter-languages
+tree-sitter-python
+tree-sitter-javascript
+tree-sitter-typescript
+tree-sitter-ruby
+tree-sitter-go
+tree-sitter-rust
