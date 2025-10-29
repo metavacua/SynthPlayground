@@ -27,6 +27,10 @@ targets:
     command: "python3 tooling/symbol_extractor.py"
     description: "Extract symbols from ASTs to create a symbol map."
     type: command
+  remove-unused-imports:
+    command: "python3 tooling/unused_import_remover.py --fix"
+    description: "Remove unused imports from all Python files."
+    type: command
   format:
     command: "python3 -m black tooling/"
     description: Format the code using black.
