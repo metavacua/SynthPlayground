@@ -137,12 +137,48 @@
     },
     {
       "_type": "tag",
+      "name": "is_derivable_from_base_theory",
+      "path": "./witness_d.py",
+      "language": "Python",
+      "line": 23,
+      "kind": "function",
+      "docstring": "Placeholder function to simulate checking for provability in the\nbase theory (e.g., I\u0394\u2080 + \u03a9\u2081). In a real implementation, this would\nbe a complex theorem prover. For this example, we'll keep it simple."
+    },
+    {
+      "_type": "tag",
+      "name": "prove_in_L_D",
+      "path": "./witness_d.py",
+      "language": "Python",
+      "line": 34,
+      "kind": "function",
+      "docstring": "This function is the executable witness for a proposition in L_D.\nIt proves the proposition by derivation, which may include consulting\nthe oracle of completing axioms. Its execution is the proof."
+    },
+    {
+      "_type": "tag",
       "name": "high_complexity_function",
       "path": "./high_complexity_test.py",
       "language": "Python",
       "line": 1,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "decider_generator",
+      "path": "./witness_v.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": "This is the non-recursive core logic of our decider.\nIt's a \"generator\" that describes the recursive logic. It takes `self`\nas an argument, which will be the function to call for the recursive step."
+    },
+    {
+      "_type": "tag",
+      "name": "decider_logic",
+      "path": "./witness_v.py",
+      "language": "Python",
+      "line": 23,
+      "kind": "function",
+      "docstring": "The logic for deciding membership in L_V. The proposition being\nproven is \"`input_string` is in L_V\". This function's execution\nis the proof.\n\nThe language L_V is defined as:\n1. Base case: Any string `w` not of the form `IsInL(<s>)` is in L_V\n   if and only if it has an even length.\n2. Recursive case: A string `IsInL(<s>)` is in L_V if and only if\n   the inner string `s` is in L_V."
     },
     {
       "_type": "tag",
@@ -2051,6 +2087,15 @@
       "line": 14,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "prove_existence_of_x",
+      "path": "./witness_neither.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": "This function is the executable witness for the proposition:\nexists x such that (x > 3) and (x < 6) and (2*x == 8)\n\nIts successful execution and return of a valid certificate constitutes a proof.\nThe logic mimics the constructive nature of a quantifier elimination algorithm."
     },
     {
       "_type": "tag",
