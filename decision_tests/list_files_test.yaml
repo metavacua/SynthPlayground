@@ -1,0 +1,7 @@
+- id: DMT-001
+  scenario: "The user wants to see what's in the `docs` folder."
+  context: []
+  expected_action:
+    tool: list_files
+    args:
+      path: "docs"

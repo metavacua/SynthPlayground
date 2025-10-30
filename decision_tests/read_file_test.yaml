@@ -1,0 +1,7 @@
+- id: DMT-002
+  scenario: "The user wants to read the contents of the `docs/token_prediction_analysis.md` file."
+  context: []
+  expected_action:
+    tool: read_file
+    args:
+      filepath: "docs/token_prediction_analysis.md"
