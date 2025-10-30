@@ -1,6 +1,6 @@
 # AGENTS.md (Dynamically Generated)
 
-**Last Generated:** 2025-10-30 03:49:44 UTC
+**Last Generated:** 2025-10-30 05:14:53 UTC
 
 ## Objective
 
@@ -30,6 +30,7 @@ The following build targets are the primary way to test, build, and maintain thi
 - **`lint`**: Lint the code using flake8.
 - **`protocols`**: Compile all protocol sources to a single YAML-LD file.
 - **`test`**: Run the test suite using pytest.
+- **`test-all`**: Run all tests in the repository.
 
 ---
 
@@ -45,6 +46,11 @@ The agent's behavior is governed by the following set of formal protocols, which
 - **`greet-the-world`**: When this rule is invoked, the agent must use the `hello_world` tool to print the message "Hello, World!".
 
 ---
+### Protocol: `CHARTER-001`
+**Description**: A charter of operational principles for the AI agent.
+
+
+---
 ### Protocol: `external-api-integration-001`
 **Description**: A protocol for standardized interaction with external agent APIs.
 
@@ -53,6 +59,14 @@ The agent's behavior is governed by the following set of formal protocols, which
 - **`external-api-registry`**: A central registry of all approved external agent APIs MUST be maintained at 'knowledge_core/external_api_registry.json'.
 - **`secure-api-key-management`**: API keys for external services MUST be managed securely via environment variables.
 - **`standardized-interaction-client`**: A standardized client for interacting with external agent APIs MUST be implemented in 'tooling/external_api_client.py'.
+
+---
+### Protocol: `testing-protocol-001`
+**Description**: A protocol for ensuring comprehensive testing of all new code.
+
+**Rules:**
+
+- **`comprehensive-testing`**: All new code must be accompanied by unit, integration, and end-to-end tests, and all tests must pass before submission.
 
 ---
 ### Protocol: `test-driven-development-001`
@@ -455,6 +469,32 @@ The agent's behavior is governed by the following set of formal protocols, which
     rule_id: greet-the-world
     tool: hello_world
   version: 1.0.0
+- description: A charter of operational principles for the AI agent.
+  error_handling:
+  - description: Retry failed operations.
+    rule_id: retry-failed-operations
+  - description: Report errors to the user.
+    rule_id: report-errors-to-user
+  - description: Request help from the user when it is unable to resolve an error
+      on its own.
+    rule_id: request-help-from-user
+  principles:
+  - description: The agent must prioritize the safety and security of the codebase
+      and the development environment.
+    principle_id: safety-and-security
+  - description: The agent must strive to produce efficient and scalable solutions.
+    principle_id: efficiency-and-scalability
+  - description: The agent's actions must be transparent and accountable.
+    principle_id: transparency-and-accountability
+  protocol_id: CHARTER-001
+  security:
+  - description: Do not store sensitive information in the repository.
+    rule_id: no-sensitive-information
+  - description: Do not use insecure protocols or libraries.
+    rule_id: no-insecure-protocols
+  - description: Sanitize all user input.
+    rule_id: sanitize-user-input
+  version: 1.0.0
 - associated_artifacts:
   - knowledge_core/external_api_registry.json
   associated_tools:
@@ -483,6 +523,18 @@ The agent's behavior is governed by the following set of formal protocols, which
     rule_id: standardized-interaction-client
     tags:
     - external_apis
+  version: 1.0.0
+- description: A protocol for ensuring comprehensive testing of all new code.
+  protocol_id: testing-protocol-001
+  rules:
+  - description: All new code must be accompanied by unit, integration, and end-to-end
+      tests, and all tests must pass before submission.
+    enforcement: This is a procedural rule. The agent should verify that all tests
+      pass before submitting any changes.
+    rule_id: comprehensive-testing
+    tags:
+    - testing
+    validation_command: python3 tooling/test_runner.py
   version: 1.0.0
 - associated_tools:
   - tooling/test_runner.py
