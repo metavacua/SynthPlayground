@@ -1256,7 +1256,7 @@
       "name": "extract_keywords",
       "path": "./enrich_protocols.py",
       "language": "Python",
-      "line": 12,
+      "line": 17,
       "kind": "function",
       "docstring": "Extracts meaningful keywords from a text, focusing on nouns and noun phrases.\nThis is a simple heuristic and could be improved with NLP libraries."
     },
@@ -1265,7 +1265,7 @@
       "name": "run_enrichment",
       "path": "./enrich_protocols.py",
       "language": "Python",
-      "line": 32,
+      "line": 37,
       "kind": "function",
       "docstring": null
     },
@@ -7247,6 +7247,24 @@
     },
     {
       "_type": "tag",
+      "name": "find_untested_code",
+      "path": "./tooling/untested_code_detector.py",
+      "language": "Python",
+      "line": 3,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/untested_code_detector.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TestRefactorCsToCf",
       "path": "./tooling/test_refactor_cs_to_cf.py",
       "language": "Python",
@@ -7979,7 +7997,7 @@
       "name": "main",
       "path": "./tooling/ast_generator.py",
       "language": "Python",
-      "line": 138,
+      "line": 139,
       "kind": "function",
       "docstring": null
     },
@@ -11585,8 +11603,8 @@
     },
     {
       "_type": "tag",
-      "name": "TestClassifier",
-      "path": "./tests/test_classifier.py",
+      "name": "TestUntestedCodeDetector",
+      "path": "./tests/test_untested_code_detector.py",
       "language": "Python",
       "line": 7,
       "kind": "class",
@@ -11595,9 +11613,45 @@
     {
       "_type": "tag",
       "name": "setUp",
+      "path": "./tests/test_untested_code_detector.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tests/test_untested_code_detector.py",
+      "language": "Python",
+      "line": 13,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_find_untested_code",
+      "path": "./tests/test_untested_code_detector.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestClassifier",
       "path": "./tests/test_classifier.py",
       "language": "Python",
       "line": 9,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/test_classifier.py",
+      "language": "Python",
+      "line": 11,
       "kind": "function",
       "docstring": "Create mock AST files for testing."
     },
@@ -11606,7 +11660,7 @@
       "name": "tearDown",
       "path": "./tests/test_classifier.py",
       "language": "Python",
-      "line": 48,
+      "line": 49,
       "kind": "function",
       "docstring": "Clean up mock AST files."
     },
@@ -11615,7 +11669,7 @@
       "name": "test_classify_regular",
       "path": "./tests/test_classifier.py",
       "language": "Python",
-      "line": 54,
+      "line": 53,
       "kind": "function",
       "docstring": null
     },
@@ -11624,7 +11678,7 @@
       "name": "test_classify_context_free",
       "path": "./tests/test_classifier.py",
       "language": "Python",
-      "line": 59,
+      "line": 58,
       "kind": "function",
       "docstring": null
     },
@@ -11633,7 +11687,7 @@
       "name": "test_classify_context_sensitive",
       "path": "./tests/test_classifier.py",
       "language": "Python",
-      "line": 64,
+      "line": 63,
       "kind": "function",
       "docstring": null
     },
@@ -11759,7 +11813,7 @@
       "name": "TestSymbolExtractor",
       "path": "./tests/test_symbol_extractor.py",
       "language": "Python",
-      "line": 8,
+      "line": 9,
       "kind": "class",
       "docstring": null
     },
@@ -11768,7 +11822,7 @@
       "name": "setUp",
       "path": "./tests/test_symbol_extractor.py",
       "language": "Python",
-      "line": 10,
+      "line": 11,
       "kind": "function",
       "docstring": null
     },
@@ -11777,7 +11831,7 @@
       "name": "tearDown",
       "path": "./tests/test_symbol_extractor.py",
       "language": "Python",
-      "line": 25,
+      "line": 26,
       "kind": "function",
       "docstring": null
     },
@@ -11786,7 +11840,7 @@
       "name": "test_symbol_extraction",
       "path": "./tests/test_symbol_extractor.py",
       "language": "Python",
-      "line": 28,
+      "line": 29,
       "kind": "function",
       "docstring": null
     },
@@ -11813,7 +11867,7 @@
       "name": "TestFilesystemLister",
       "path": "./tests/test_filesystem_lister.py",
       "language": "Python",
-      "line": 11,
+      "line": 12,
       "kind": "class",
       "docstring": null
     },
@@ -11822,7 +11876,7 @@
       "name": "setUp",
       "path": "./tests/test_filesystem_lister.py",
       "language": "Python",
-      "line": 13,
+      "line": 14,
       "kind": "function",
       "docstring": "Set up a temporary directory structure for testing."
     },
@@ -11831,7 +11885,7 @@
       "name": "tearDown",
       "path": "./tests/test_filesystem_lister.py",
       "language": "Python",
-      "line": 23,
+      "line": 24,
       "kind": "function",
       "docstring": "Clean up the temporary directory."
     },
@@ -11840,7 +11894,7 @@
       "name": "test_lists_all_items",
       "path": "./tests/test_filesystem_lister.py",
       "language": "Python",
-      "line": 28,
+      "line": 29,
       "kind": "function",
       "docstring": "Verify that all files and directories are listed correctly."
     },
@@ -11867,7 +11921,7 @@
       "name": "TestRefactor",
       "path": "./tests/test_refactor.py",
       "language": "Python",
-      "line": 8,
+      "line": 9,
       "kind": "class",
       "docstring": null
     },
@@ -11876,7 +11930,7 @@
       "name": "setUp",
       "path": "./tests/test_refactor.py",
       "language": "Python",
-      "line": 10,
+      "line": 11,
       "kind": "function",
       "docstring": null
     },
@@ -11885,7 +11939,7 @@
       "name": "tearDown",
       "path": "./tests/test_refactor.py",
       "language": "Python",
-      "line": 23,
+      "line": 24,
       "kind": "function",
       "docstring": null
     },
@@ -11894,7 +11948,7 @@
       "name": "test_refactor",
       "path": "./tests/test_refactor.py",
       "language": "Python",
-      "line": 26,
+      "line": 27,
       "kind": "function",
       "docstring": null
     },
@@ -11903,7 +11957,7 @@
       "name": "TestClassifyRepository",
       "path": "./tests/test_classify_repository.py",
       "language": "Python",
-      "line": 6,
+      "line": 8,
       "kind": "class",
       "docstring": null
     },
@@ -11912,7 +11966,7 @@
       "name": "setUp",
       "path": "./tests/test_classify_repository.py",
       "language": "Python",
-      "line": 8,
+      "line": 10,
       "kind": "function",
       "docstring": "Set up a mock environment for testing."
     },
@@ -11921,7 +11975,7 @@
       "name": "tearDown",
       "path": "./tests/test_classify_repository.py",
       "language": "Python",
-      "line": 28,
+      "line": 30,
       "kind": "function",
       "docstring": "Clean up the mock environment."
     },
@@ -11930,7 +11984,7 @@
       "name": "test_classify_repository_script",
       "path": "./tests/test_classify_repository.py",
       "language": "Python",
-      "line": 36,
+      "line": 34,
       "kind": "function",
       "docstring": "Test the end-to-end functionality of the classify_repository.py script."
     },
@@ -11939,7 +11993,7 @@
       "name": "TestEnrichmentRefined",
       "path": "./tests/test_enrichment_refined.py",
       "language": "Python",
-      "line": 9,
+      "line": 10,
       "kind": "class",
       "docstring": null
     },
@@ -11948,22 +12002,13 @@
       "name": "setUp",
       "path": "./tests/test_enrichment_refined.py",
       "language": "Python",
-      "line": 10,
+      "line": 11,
       "kind": "function",
       "docstring": null
     },
     {
       "_type": "tag",
       "name": "tearDown",
-      "path": "./tests/test_enrichment_refined.py",
-      "language": "Python",
-      "line": 35,
-      "kind": "function",
-      "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "test_refined_enrichment_produces_gold_standard_links",
       "path": "./tests/test_enrichment_refined.py",
       "language": "Python",
       "line": 38,
@@ -11972,10 +12017,19 @@
     },
     {
       "_type": "tag",
+      "name": "test_refined_enrichment_produces_gold_standard_links",
+      "path": "./tests/test_enrichment_refined.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TestAstGenerator",
       "path": "./tests/test_ast_generator.py",
       "language": "Python",
-      "line": 7,
+      "line": 8,
       "kind": "class",
       "docstring": null
     },
@@ -11984,7 +12038,7 @@
       "name": "setUp",
       "path": "./tests/test_ast_generator.py",
       "language": "Python",
-      "line": 9,
+      "line": 10,
       "kind": "function",
       "docstring": null
     },
@@ -11993,7 +12047,7 @@
       "name": "tearDown",
       "path": "./tests/test_ast_generator.py",
       "language": "Python",
-      "line": 16,
+      "line": 17,
       "kind": "function",
       "docstring": null
     },
@@ -12002,7 +12056,7 @@
       "name": "test_ast_generation",
       "path": "./tests/test_ast_generator.py",
       "language": "Python",
-      "line": 21,
+      "line": 22,
       "kind": "function",
       "docstring": null
     },
@@ -12200,7 +12254,7 @@
       "name": "TestUnusedImportRemover",
       "path": "./tests/test_unused_import_remover.py",
       "language": "Python",
-      "line": 7,
+      "line": 8,
       "kind": "class",
       "docstring": null
     },
@@ -12209,7 +12263,7 @@
       "name": "setUp",
       "path": "./tests/test_unused_import_remover.py",
       "language": "Python",
-      "line": 9,
+      "line": 10,
       "kind": "function",
       "docstring": null
     },
