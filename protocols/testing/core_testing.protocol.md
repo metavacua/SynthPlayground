@@ -33,6 +33,8 @@ This protocol establishes a common set of standards for all tests in the reposit
 
 **Rule `core-testing-assertions`**: The `self.assert*` methods from the `unittest.TestCase` class should be used for all assertions.
 
+**Rule `core-testing-test-coverage`**: All code must have a minimum of 80% test coverage.
+
 ---
 
 ```yaml
@@ -71,6 +73,13 @@ rules:
   tags:
   - testing
   - assertions
+- rule_id: core-testing-test-coverage
+  description: All code must have a minimum of 80% test coverage.
+  enforcement: The agent must verify that the test coverage is above 80%.
+  validation_command: "python3 tooling/untested_code_detector.py --threshold 80"
+  tags:
+  - testing
+  - coverage
 associated_tools:
 - tooling/run_tests.py
 version: 1.0.0

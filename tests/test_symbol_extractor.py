@@ -2,13 +2,14 @@ import os
 import json
 import unittest
 import shutil
+import tempfile
 from tooling.symbol_extractor import main as symbol_extractor_main
 from tooling.ast_generator import generate_asts_for_repo
 
 class TestSymbolExtractor(unittest.TestCase):
 
     def setUp(self):
-        self.test_repo_dir = 'test_repo'
+        self.test_repo_dir = tempfile.mkdtemp()
         self.asts_dir = os.path.join(self.test_repo_dir, 'knowledge_core', 'asts')
         self.output_file = os.path.join(self.test_repo_dir, 'knowledge_core', 'symbol_map.json')
         os.makedirs(self.asts_dir, exist_ok=True)

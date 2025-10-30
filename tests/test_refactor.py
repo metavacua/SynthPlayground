@@ -2,13 +2,14 @@ import os
 import unittest
 import shutil
 import sys
+import tempfile
 from tooling.refactor import main as refactor_main
 from tooling.ast_generator import generate_asts_for_repo
 
 class TestRefactor(unittest.TestCase):
 
     def setUp(self):
-        self.test_repo_dir = 'test_repo'
+        self.test_repo_dir = tempfile.mkdtemp()
         self.output_dir = os.path.join(self.test_repo_dir, 'knowledge_core', 'asts')
         os.makedirs(self.output_dir, exist_ok=True)
         self.sample_file = os.path.join(self.test_repo_dir, 'sample.py')

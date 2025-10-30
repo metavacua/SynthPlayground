@@ -2,13 +2,13 @@ import os
 import unittest
 import shutil
 import sys
+import tempfile
 from tooling.unused_import_remover import main as unused_import_remover_main
 
 class TestUnusedImportRemover(unittest.TestCase):
 
     def setUp(self):
-        self.test_repo_dir = 'test_repo'
-        os.makedirs(self.test_repo_dir, exist_ok=True)
+        self.test_repo_dir = tempfile.mkdtemp()
         self.sample_file = os.path.join(self.test_repo_dir, 'sample.py')
         with open(self.sample_file, 'w') as f:
             f.write("""import os, sys
