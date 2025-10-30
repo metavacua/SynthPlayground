@@ -13265,6 +13265,22 @@
       "line": 233,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "collatz_total",
+      "path": "./language_theory/witnesses/collatz/collatz_total.txt",
+      "language": "collatz",
+      "kind": "function",
+      "docstring": "A 'total function' witness for the Collatz conjecture."
+    },
+    {
+      "_type": "tag",
+      "name": "collatz_control",
+      "path": "./language_theory/witnesses/collatz/control_program.txt",
+      "language": "collatz",
+      "kind": "program",
+      "docstring": "A witness for the unbounded control logic of the Collatz conjecture."
     }
   ]
 }

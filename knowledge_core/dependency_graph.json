@@ -509,6 +509,10 @@
     {
       "source": "tooling",
       "target": "yaml-ld"
+    },
+    {
+      "source": "language_theory/witnesses/collatz/control_program.txt",
+      "target": "language_theory/witnesses/collatz/collatz_total.txt"
     }
   ]
 }
