@@ -48,7 +48,7 @@ def parse_plan(plan_content: str) -> List[Command]:
             tool_name = "set_plan"
             args_text = "\n".join(lines[1:]).strip()
         else:
-            parts = first_line.split(" ", 1)
+            parts = first_line.split(":", 1)
             tool_name = parts[0]
             args_text = ""
 
