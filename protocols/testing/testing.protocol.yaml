@@ -1,0 +1,10 @@
+protocol_id: "testing-protocol-001"
+version: "1.0.0"
+description: "A protocol for ensuring comprehensive testing of all new code."
+rules:
+  - rule_id: "comprehensive-testing"
+    description: "All new code must be accompanied by unit, integration, and end-to-end tests, and all tests must pass before submission."
+    enforcement: "This is a procedural rule. The agent should verify that all tests pass before submitting any changes."
+    tags:
+      - "testing"
+    validation_command: "python3 tooling/test_runner.py"
