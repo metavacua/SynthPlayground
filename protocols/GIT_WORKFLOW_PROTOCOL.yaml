@@ -1,0 +1,33 @@
+protocol_id: GIT-WORKFLOW-001
+description: A protocol for git workflow.
+rules:
+- rule_id: create-branch
+  description: Create a new branch for isolating work.
+  executable_code: git checkout -b <descriptive-branch-name>
+- rule_id: check-status
+  description: Check the status of your changes.
+  executable_code: git status
+- rule_id: stage-changes
+  description: Stage your changes for submission.
+  executable_code: git add <file>
+- rule_id: pre-submit-check
+  description: Run the automated pre-submission check.
+  executable_code: make pre-submit-check
+- rule_id: submit-changes
+  description: Propose your changes for review.
+  tool: submit
+  arguments:
+  - name: branch_name
+    value: <descriptive-branch-name>
+  - name: commit_message
+    value: <commit-message>
+  - name: title
+    value: <title>
+  - name: description
+    value: <description>
+- rule_id: abandon-changes
+  description: Discard all current changes and delete the feature branch.
+  executable_code: |-
+    git checkout main
+    git branch -D <descriptive-branch-name>
+version: 1.0.0
