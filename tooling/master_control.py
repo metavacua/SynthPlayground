@@ -32,6 +32,7 @@ from datetime import datetime
 import subprocess
 import tempfile
 import time
+import yaml
 
 from tooling.state import AgentState, PlanContext
 from tooling.research import execute_research_protocol
@@ -81,9 +82,9 @@ class MasterControlGraph:
     ensuring that all protocol steps are followed in the correct order.
     """
 
-    def __init__(self, fsm_path: str = "tooling/fsm.json"):
+    def __init__(self, fsm_path: str = "tooling/fsm.yaml"):
         with open(fsm_path, "r") as f:
-            self.fsm = json.load(f)
+            self.fsm = yaml.safe_load(f)
         self.current_state = self.fsm["initial_state"]
 
     def get_trigger(self, source_state: str, dest_state: str) -> str:

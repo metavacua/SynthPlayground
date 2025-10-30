@@ -1,4 +1,8 @@
 {
   "name": "testing",
-  "description": "Protocols for the testing module."
+  "description": "Protocols related to testing and quality assurance.",
+  "protocols": [
+    "test-driven-development.protocol.md",
+    "core_testing.protocol.md"
+  ]
 }
