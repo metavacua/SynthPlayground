@@ -53,10 +53,6 @@ targets:
     compiler: tooling/protocol_compiler.py
     description: "Compile all protocol sources to a single YAML-LD file."
     output: "protocols.yaml-ld"
-    sources:
-      - "protocols/CHARTER.protocol.md"
-      - "protocols/GIT_WORKFLOW_PROTOCOL.md"
-      - "protocols/hello_world.protocol.md"
     type: compiler
   test:
     command: "python3 -m pytest"
