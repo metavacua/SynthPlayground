@@ -3179,6 +3179,15 @@
     },
     {
       "_type": "tag",
+      "name": "run_tests",
+      "path": "./tooling/run_tests.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": "Discovers and runs all tests in the 'tests/' directory."
+    },
+    {
+      "_type": "tag",
       "name": "ExternalApiClient",
       "path": "./tooling/external_api_client.py",
       "language": "Python",
@@ -4910,7 +4919,7 @@
       "name": "_load_plan_registry",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 52,
+      "line": 53,
       "kind": "function",
       "docstring": "Loads the plan registry, returning an empty dict if it doesn't exist or is invalid."
     },
@@ -4919,7 +4928,7 @@
       "name": "_get_log_context",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 63,
+      "line": 64,
       "kind": "function",
       "docstring": "Creates a context dictionary for logging from the agent's state."
     },
@@ -4928,7 +4937,7 @@
       "name": "MasterControlGraph",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 77,
+      "line": 78,
       "kind": "class",
       "docstring": "A Finite State Machine (FSM) that enforces the agent's protocol.\nThis graph reads a state definition and orchestrates the agent's workflow,\nensuring that all protocol steps are followed in the correct order."
     },
@@ -4937,7 +4946,7 @@
       "name": "__init__",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 84,
+      "line": 85,
       "kind": "function",
       "docstring": null
     },
@@ -4946,7 +4955,7 @@
       "name": "get_trigger",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 89,
+      "line": 90,
       "kind": "function",
       "docstring": "Finds a trigger in the FSM definition for a transition from a source\nto a destination state. This is a helper to avoid hardcoding trigger\nstrings in the state handlers."
     },
@@ -4955,7 +4964,7 @@
       "name": "do_orientation",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 105,
+      "line": 106,
       "kind": "function",
       "docstring": "Executes orientation, including analyzing the last post-mortem and scanning the filesystem."
     },
@@ -4964,7 +4973,7 @@
       "name": "do_planning",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 258,
+      "line": 259,
       "kind": "function",
       "docstring": "Validates a given plan, parses it, and initializes the plan stack."
     },
@@ -4973,7 +4982,7 @@
       "name": "_validate_plan_with_cli",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 327,
+      "line": 328,
       "kind": "function",
       "docstring": "Validates a plan by writing it to a temporary file and using the fdc_cli.py script."
     },
@@ -4982,7 +4991,7 @@
       "name": "validate_plan_for_model",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 408,
+      "line": 409,
       "kind": "function",
       "docstring": "Validates a plan against a specific CSDC model using the LBAValidator."
     },
@@ -4991,7 +5000,7 @@
       "name": "do_researching",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 425,
+      "line": 426,
       "kind": "function",
       "docstring": "Launches the background research process."
     },
@@ -5000,7 +5009,7 @@
       "name": "do_awaiting_result",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 479,
+      "line": 480,
       "kind": "function",
       "docstring": "Checks for the result of the background research process."
     },
@@ -5009,7 +5018,7 @@
       "name": "get_current_step",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 546,
+      "line": 547,
       "kind": "function",
       "docstring": "Returns the current command to be executed by the agent, or None if execution is complete."
     },
@@ -5018,7 +5027,7 @@
       "name": "do_execution",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 557,
+      "line": 558,
       "kind": "function",
       "docstring": "Processes the result of a step and advances the execution state."
     },
@@ -5027,7 +5036,7 @@
       "name": "do_generating_code",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 611,
+      "line": 612,
       "kind": "function",
       "docstring": "Handles the code generation state."
     },
@@ -5036,7 +5045,7 @@
       "name": "do_running_tests",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 626,
+      "line": 627,
       "kind": "function",
       "docstring": "Handles the test execution state."
     },
@@ -5045,7 +5054,7 @@
       "name": "do_debugging",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 642,
+      "line": 643,
       "kind": "function",
       "docstring": "Handles the debugging state."
     },
@@ -5054,7 +5063,7 @@
       "name": "do_finalizing",
       "path": "./tooling/master_control.py",
       "language": "Python",
-      "line": 657,
+      "line": 658,
       "kind": "function",
       "docstring": "Handles the finalization of the task, guiding the agent through\nthe structured post-mortem process."
     },
@@ -7647,6 +7656,42 @@
       "path": "./tooling/ast_generator.py",
       "language": "Python",
       "line": 138,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "get_staged_files",
+      "path": "./tooling/validate_tdd.py",
+      "language": "Python",
+      "line": 5,
+      "kind": "function",
+      "docstring": "Returns a dictionary of staged files and their status."
+    },
+    {
+      "_type": "tag",
+      "name": "is_source_file",
+      "path": "./tooling/validate_tdd.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": "Checks if a file is a source file that should be covered by TDD."
+    },
+    {
+      "_type": "tag",
+      "name": "find_corresponding_test_file",
+      "path": "./tooling/validate_tdd.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": "Finds the corresponding test file for a source file."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/validate_tdd.py",
+      "language": "Python",
+      "line": 42,
       "kind": "function",
       "docstring": null
     },
@@ -11315,6 +11360,24 @@
     },
     {
       "_type": "tag",
+      "name": "TestAgentState",
+      "path": "./tests/test_agent_state.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "class",
+      "docstring": "Tests the AgentState class."
+    },
+    {
+      "_type": "tag",
+      "name": "test_initialization",
+      "path": "./tests/test_agent_state.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function",
+      "docstring": "Verify that the AgentState class is initialized correctly."
+    },
+    {
+      "_type": "tag",
       "name": "TestFilesystemLister",
       "path": "./tests/test_filesystem_lister.py",
       "language": "Python",
@@ -11348,6 +11411,24 @@
       "line": 28,
       "kind": "function",
       "docstring": "Verify that all files and directories are listed correctly."
+    },
+    {
+      "_type": "tag",
+      "name": "TestPlanParser",
+      "path": "./tests/test_plan_parser.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "class",
+      "docstring": "Tests the plan_parser.py script."
+    },
+    {
+      "_type": "tag",
+      "name": "test_parse_plan",
+      "path": "./tests/test_plan_parser.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function",
+      "docstring": "Verify that the parse_plan function can correctly parse a simple plan."
     },
     {
       "_type": "tag",
@@ -11645,6 +11726,33 @@
       "line": 24,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestMasterControl",
+      "path": "./tests/test_master_control.py",
+      "language": "Python",
+      "line": 14,
+      "kind": "class",
+      "docstring": "Tests the MasterControlGraph FSM."
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/test_master_control.py",
+      "language": "Python",
+      "line": 19,
+      "kind": "function",
+      "docstring": "Set up common objects for the tests."
+    },
+    {
+      "_type": "tag",
+      "name": "test_fsm_transitions",
+      "path": "./tests/test_master_control.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": "Verify that the FSM transitions are working correctly."
     },
     {
       "_type": "tag",
