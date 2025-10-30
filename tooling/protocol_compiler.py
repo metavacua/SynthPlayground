@@ -1,59 +1,52 @@
-
 import argparse
-import json
+import glob
 import os
-import re
-import jsonschema
 import yaml
 
-def extract_json_from_markdown(filepath):
-    """Extracts a JSON block from a Markdown file."""
-    with open(filepath, "r") as f:
-        content = f.read()
-    match = re.search(r"```json\n(.*?)\n```", content, re.DOTALL)
-    if match:
-        return json.loads(match.group(1))
-    return None
+def compile_protocols(output_file):
+    """
+    Compiles all protocol source files in the 'protocols/' directory into a single
+    YAML-LD file.
+    """
+    all_protocols = {"@graph": []}
+
+    # Use glob to find all protocol YAML files
+    protocol_files = glob.glob("protocols/**/*.protocol.yaml", recursive=True)
+
+    for source_file in protocol_files:
+        with open(source_file, "r") as f:
+            try:
+                protocol_data = yaml.safe_load(f)
+                all_protocols["@graph"].append(protocol_data)
+            except yaml.YAMLError as e:
+                print(f"Error parsing YAML from {source_file}: {e}", file=sys.stderr)
+
+    # Add context from a file
+    context_file = "protocols/protocol.context.jsonld"
+    if os.path.exists(context_file):
+        with open(context_file, "r") as f:
+            # Here we assume the context is a JSON object, so we load it as such
+            import json
+            try:
+                all_protocols["@context"] = json.load(f)
+            except json.JSONDecodeError as e:
+                print(f"Error parsing context JSON from {context_file}: {e}", file=sys.stderr)
+
+
+    with open(output_file, "w") as f:
+        yaml.dump(all_protocols, f, default_flow_style=False)
 
 def main():
-    """Compiles protocol sources into a single YAML-LD file."""
-    parser = argparse.ArgumentParser(description="Compile protocol sources.")
-    parser.add_argument(
-        "--source-file",
-        action="append",
-        dest="source_files",
-        help="Source files to compile.",
+    parser = argparse.ArgumentParser(
+        description="Compile all protocol sources from .protocol.yaml files into a single YAML-LD file."
     )
-    parser.add_argument("--output-file", required=True, help="Output file path.")
+    parser.add_argument(
+        "--output-file",
+        required=True,
+        help="The path to the output YAML-LD file.",
+    )
     args = parser.parse_args()
-
-    # Load the JSON schema
-    with open("protocols/protocol.schema.json", "r") as f:
-        schema = json.load(f)
-
-    # Compile all valid protocols into a single list
-    compiled_protocols = []
-    for source_file in args.source_files:
-        if source_file.endswith(".md"):
-            protocol_data = extract_json_from_markdown(source_file)
-            if protocol_data:
-                try:
-                    jsonschema.validate(instance=protocol_data, schema=schema)
-                    compiled_protocols.append(protocol_data)
-                except jsonschema.exceptions.ValidationError as e:
-                    print(f"Validation error in {source_file}: {e.message}")
-                    continue
-
-    # Create the JSON-LD structure
-    json_ld_data = {
-        "@context": "protocol.context.jsonld",
-        "@graph": compiled_protocols,
-    }
-
-    # Convert JSON-LD to YAML-LD and write to the output file
-    with open(args.output_file, "w") as f:
-        yaml.dump(json_ld_data, f, default_flow_style=False)
-
+    compile_protocols(args.output_file)
     print(f"Successfully compiled protocols to {args.output_file}")
 
 if __name__ == "__main__":
