@@ -30,4 +30,14 @@ rules:
   executable_code: |-
     git checkout main
     git branch -D <descriptive-branch-name>
+- rule_id: rebase-branch
+  description: Rebase your feature branch on top of the main branch.
+  executable_code: |-
+    git checkout main
+    git pull
+    git checkout <descriptive-branch-name>
+    git rebase main
+- rule_id: squash-commits
+  description: Squash commits before submitting a pull request.
+  executable_code: git rebase -i HEAD~<number-of-commits>
 version: 1.0.0

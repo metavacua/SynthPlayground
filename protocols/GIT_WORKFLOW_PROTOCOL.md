@@ -15,7 +15,6 @@ The primary limitations discovered are:
 
 - **Atomic Changes:** Treat every task as a single, atomic set of changes. Do not attempt to build a complex commit history.
 - **Submission via Tooling:** All changes must be proposed using the `submit` tool. Direct `git push` or `git commit` commands are forbidden.
-- **Linear Development:** All work must be performed in a linear fashion. Workflows requiring merges or rebases are not supported.
 - **Branch for Isolation:** Use local branches purely for isolating work-in-progress. This allows for easy cleanup and context switching.
 
 ## 3. Naming Conventions
@@ -67,3 +66,5 @@ After the pre-submission check passes (or if you are intentionally skipping it f
 - **Reverting a File:** If a file modification is incorrect, restore it to its original state using `restore_file <filepath>`.
 - **Abandoning Changes:** To discard all current changes, switch back to the `main` branch and delete your feature branch.
 - **Handling Code Review Feedback:** If you receive feedback on your changes, you can update your branch by checking it out and making the necessary changes. Once you are done, you can submit the updated branch again.
+- **Rebasing:** To update your feature branch with the latest changes from the `main` branch, you can rebase it.
+- **Squashing Commits:** To combine multiple commits into a single commit, you can use interactive rebase.
