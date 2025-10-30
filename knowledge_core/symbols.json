@@ -182,6 +182,24 @@
     },
     {
       "_type": "tag",
+      "name": "TestClassicalLogicWitness",
+      "path": "./test_classical_logic_witness.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_prove_classical_tautology",
+      "path": "./test_classical_logic_witness.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": "Tests the prove_classical_tautology function."
+    },
+    {
+      "_type": "tag",
       "name": "TInt",
       "path": "./appl_ast.py",
       "language": "Python",
@@ -1217,6 +1235,15 @@
     },
     {
       "_type": "tag",
+      "name": "prove_skolem_proposition",
+      "path": "./skolem_arithmetic_witness.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": "This function is the executable witness for the proposition:\nexists x such that x = S(S(0)) where S is the successor function.\n\nIts successful execution and return of a valid certificate constitutes a proof."
+    },
+    {
+      "_type": "tag",
       "name": "main",
       "path": "./demonstrate_lfi_halting.py",
       "language": "Python",
@@ -1388,6 +1415,24 @@
     },
     {
       "_type": "tag",
+      "name": "TestPresburgerArithmeticWitness",
+      "path": "./test_presburger_arithmetic_witness.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_prove_presburger_proposition",
+      "path": "./test_presburger_arithmetic_witness.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": "Tests the prove_presburger_proposition function."
+    },
+    {
+      "_type": "tag",
       "name": "summarize_text",
       "path": "./dbpedia_client.py",
       "language": "Python",
@@ -1430,6 +1475,24 @@
       "line": 131,
       "kind": "function",
       "docstring": "Selects the most relevant DBPedia links for a keyword based on the resource type."
+    },
+    {
+      "_type": "tag",
+      "name": "TestSkolemArithmeticWitness",
+      "path": "./test_skolem_arithmetic_witness.py",
+      "language": "Python",
+      "line": 4,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_prove_skolem_proposition",
+      "path": "./test_skolem_arithmetic_witness.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": "Tests the prove_skolem_proposition function."
     },
     {
       "_type": "tag",
@@ -1547,6 +1610,15 @@
       "line": 95,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "prove_presburger_proposition",
+      "path": "./presburger_arithmetic_witness.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": "This function is the executable witness for the proposition:\nexists x such that (x > 3) and (x < 6) and (2*x == 8)\n\nIts successful execution and return of a valid certificate constitutes a proof.\nThe logic mimics the constructive nature of a quantifier elimination algorithm."
     },
     {
       "_type": "tag",
@@ -1964,6 +2036,15 @@
     },
     {
       "_type": "tag",
+      "name": "prove_classical_tautology",
+      "path": "./classical_logic_witness.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": "This function is the executable witness for the proposition:\nP or not P (Law of Excluded Middle)\n\nIn classical logic, this is a tautology. An executable witness\ndoesn't need to 'find' a value, but simply demonstrates the\ntruth of the proposition."
+    },
+    {
+      "_type": "tag",
       "name": "extract_json_from_md",
       "path": "./extract_json.py",
       "language": "Python",
@@ -2087,15 +2168,6 @@
       "line": 14,
       "kind": "function",
       "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "prove_existence_of_x",
-      "path": "./witness_neither.py",
-      "language": "Python",
-      "line": 9,
-      "kind": "function",
-      "docstring": "This function is the executable witness for the proposition:\nexists x such that (x > 3) and (x < 6) and (2*x == 8)\n\nIts successful execution and return of a valid certificate constitutes a proof.\nThe logic mimics the constructive nature of a quantifier elimination algorithm."
     },
     {
       "_type": "tag",
