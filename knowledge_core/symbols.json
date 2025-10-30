@@ -2849,7 +2849,7 @@
       "name": "DecidabilityRefactorer",
       "path": "./language_theory/toolchain/refactor.py",
       "language": "Python",
-      "line": 5,
+      "line": 6,
       "kind": "class",
       "docstring": "Transforms a Python function with unbounded recursion (while loops)\ninto a total function with a 'fuel' parameter and a control program."
     },
@@ -2858,7 +2858,7 @@
       "name": "generate_control_program",
       "path": "./language_theory/toolchain/refactor.py",
       "language": "Python",
-      "line": 107,
+      "line": 108,
       "kind": "function",
       "docstring": "Generates the code for the control program."
     },
@@ -2867,7 +2867,7 @@
       "name": "main",
       "path": "./language_theory/toolchain/refactor.py",
       "language": "Python",
-      "line": 128,
+      "line": 129,
       "kind": "function",
       "docstring": null
     },
@@ -2876,7 +2876,7 @@
       "name": "__init__",
       "path": "./language_theory/toolchain/refactor.py",
       "language": "Python",
-      "line": 11,
+      "line": 12,
       "kind": "function",
       "docstring": null
     },
@@ -2885,7 +2885,7 @@
       "name": "visit_FunctionDef",
       "path": "./language_theory/toolchain/refactor.py",
       "language": "Python",
-      "line": 16,
+      "line": 17,
       "kind": "function",
       "docstring": null
     },
@@ -2894,7 +2894,7 @@
       "name": "_create_total_function",
       "path": "./language_theory/toolchain/refactor.py",
       "language": "Python",
-      "line": 30,
+      "line": 31,
       "kind": "function",
       "docstring": null
     },
@@ -2903,7 +2903,7 @@
       "name": "visit_While",
       "path": "./language_theory/toolchain/refactor.py",
       "language": "Python",
-      "line": 53,
+      "line": 54,
       "kind": "function",
       "docstring": null
     },
@@ -2912,7 +2912,7 @@
       "name": "Grammar",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 3,
+      "line": 4,
       "kind": "class",
       "docstring": "A class to represent a formal grammar. It parses a grammar file\nand provides helpers for analyzing its properties."
     },
@@ -2921,16 +2921,25 @@
       "name": "__init__",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 8,
+      "line": 9,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_traverse_ast",
+      "path": "./language_theory/toolchain/grammar.py",
+      "language": "Python",
+      "line": 15,
+      "kind": "function",
+      "docstring": "Recursively traverses the AST to extract grammar productions."
     },
     {
       "_type": "tag",
       "name": "_parse_file",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 14,
+      "line": 33,
       "kind": "function",
       "docstring": "Parses the grammar file provided at initialization."
     },
@@ -2939,7 +2948,7 @@
       "name": "get_productions_dict",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 33,
+      "line": 66,
       "kind": "function",
       "docstring": "Returns productions grouped by LHS, for parser use."
     },
@@ -2948,7 +2957,7 @@
       "name": "get_non_terminals",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 41,
+      "line": 74,
       "kind": "function",
       "docstring": "Returns the set of all non-terminal symbols."
     },
@@ -2957,7 +2966,7 @@
       "name": "get_terminals",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 53,
+      "line": 81,
       "kind": "function",
       "docstring": "Returns the set of all terminal symbols."
     },
@@ -2966,7 +2975,7 @@
       "name": "__str__",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 63,
+      "line": 91,
       "kind": "function",
       "docstring": null
     },
@@ -6554,21 +6563,21 @@
     },
     {
       "_type": "tag",
-      "name": "extract_json_from_markdown",
+      "name": "compile_protocols",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 9,
+      "line": 6,
       "kind": "function",
-      "docstring": "Extracts a JSON block from a Markdown file."
+      "docstring": "Compiles all protocol source files in the 'protocols/' directory into a single\nYAML-LD file."
     },
     {
       "_type": "tag",
       "name": "main",
       "path": "./tooling/protocol_compiler.py",
       "language": "Python",
-      "line": 18,
+      "line": 39,
       "kind": "function",
-      "docstring": "Compiles protocol sources into a single YAML-LD file."
+      "docstring": null
     },
     {
       "_type": "tag",
@@ -7343,6 +7352,24 @@
       "line": 341,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "run_command",
+      "path": "./tooling/process_witnesses.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": "Runs a command and prints its output."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/process_witnesses.py",
+      "language": "Python",
+      "line": 16,
+      "kind": "function",
+      "docstring": "Processes a witness file through the language theory and knowledge management toolchains."
     },
     {
       "_type": "tag",
@@ -8522,6 +8549,24 @@
       "line": 1,
       "kind": "function",
       "docstring": "Generates a command to be executed from a plan step."
+    },
+    {
+      "_type": "tag",
+      "name": "classify_ast",
+      "path": "./tooling/classify_repository.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "function",
+      "docstring": "Classifies a single AST file and returns the result."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/classify_repository.py",
+      "language": "Python",
+      "line": 20,
+      "kind": "function",
+      "docstring": "Scans the repository's ASTs, classifies them, and generates a report."
     },
     {
       "_type": "tag",
