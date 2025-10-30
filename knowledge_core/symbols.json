@@ -3101,7 +3101,7 @@
       "name": "find_all_agents_md_files",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 57,
+      "line": 61,
       "kind": "function",
       "docstring": null
     },
@@ -3110,7 +3110,7 @@
       "name": "get_used_tools_from_log",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 61,
+      "line": 65,
       "kind": "function",
       "docstring": null
     },
@@ -3119,7 +3119,7 @@
       "name": "get_protocol_tools_from_agents_md",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 91,
+      "line": 95,
       "kind": "function",
       "docstring": null
     },
@@ -3128,7 +3128,7 @@
       "name": "run_protocol_audit",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 111,
+      "line": 115,
       "kind": "function",
       "docstring": null
     },
@@ -3137,7 +3137,7 @@
       "name": "run_plan_registry_audit",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 186,
+      "line": 190,
       "kind": "function",
       "docstring": null
     },
@@ -3146,7 +3146,16 @@
       "name": "run_doc_audit",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 217,
+      "line": 221,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "run_knowledge_audit",
+      "path": "./tooling/auditor.py",
+      "language": "Python",
+      "line": 252,
       "kind": "function",
       "docstring": null
     },
@@ -3155,7 +3164,7 @@
       "name": "run_health_audit",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 248,
+      "line": 297,
       "kind": "function",
       "docstring": "Performs a system health audit, checking for \"absence of evidence\" anomalies."
     },
@@ -3164,7 +3173,7 @@
       "name": "main",
       "path": "./tooling/auditor.py",
       "language": "Python",
-      "line": 266,
+      "line": 315,
       "kind": "function",
       "docstring": null
     },
@@ -3461,7 +3470,7 @@
       "name": "TestUnifiedAuditor",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 14,
+      "line": 18,
       "kind": "class",
       "docstring": null
     },
@@ -3470,7 +3479,7 @@
       "name": "TestHealthAuditor",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 102,
+      "line": 144,
       "kind": "class",
       "docstring": null
     },
@@ -3479,7 +3488,7 @@
       "name": "setUp",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 16,
+      "line": 20,
       "kind": "function",
       "docstring": null
     },
@@ -3488,7 +3497,7 @@
       "name": "tearDown",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 34,
+      "line": 41,
       "kind": "function",
       "docstring": null
     },
@@ -3497,7 +3506,7 @@
       "name": "test_protocol_audit",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 46,
+      "line": 53,
       "kind": "function",
       "docstring": null
     },
@@ -3506,7 +3515,7 @@
       "name": "test_plan_registry_audit",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 69,
+      "line": 75,
       "kind": "function",
       "docstring": null
     },
@@ -3515,7 +3524,16 @@
       "name": "test_doc_audit",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 86,
+      "line": 91,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_knowledge_audit",
+      "path": "./tooling/test_auditor.py",
+      "language": "Python",
+      "line": 107,
       "kind": "function",
       "docstring": null
     },
@@ -3524,7 +3542,7 @@
       "name": "setUp",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 103,
+      "line": 145,
       "kind": "function",
       "docstring": null
     },
@@ -3533,7 +3551,7 @@
       "name": "tearDown",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 116,
+      "line": 158,
       "kind": "function",
       "docstring": null
     },
@@ -3542,7 +3560,7 @@
       "name": "test_log_staleness",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 130,
+      "line": 172,
       "kind": "function",
       "docstring": null
     },
@@ -3551,7 +3569,7 @@
       "name": "test_success_only_tasks",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 155,
+      "line": 197,
       "kind": "function",
       "docstring": null
     },
@@ -3560,7 +3578,7 @@
       "name": "test_incomplete_post_mortems",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 183,
+      "line": 225,
       "kind": "function",
       "docstring": null
     },
@@ -3569,7 +3587,7 @@
       "name": "test_no_issues",
       "path": "./tooling/test_auditor.py",
       "language": "Python",
-      "line": 213,
+      "line": 255,
       "kind": "function",
       "docstring": null
     },
@@ -3776,9 +3794,9 @@
       "name": "main",
       "path": "./tooling/knowledge_integrator.py",
       "language": "Python",
-      "line": 8,
+      "line": 7,
       "kind": "function",
-      "docstring": "Integrates knowledge from various YAML-LD sources into a single graph."
+      "docstring": "Integrates knowledge from various YAML-LD sources into a single JSON-LD file."
     },
     {
       "_type": "tag",
@@ -4052,19 +4070,73 @@
     },
     {
       "_type": "tag",
-      "name": "find_definitions_in_ast",
+      "name": "SymbolExtractor",
       "path": "./tooling/symbol_extractor.py",
       "language": "Python",
       "line": 5,
-      "kind": "function",
-      "docstring": "Finds all function and class definitions in an AST."
+      "kind": "class",
+      "docstring": null
     },
     {
       "_type": "tag",
       "name": "main",
       "path": "./tooling/symbol_extractor.py",
       "language": "Python",
-      "line": 33,
+      "line": 101,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "__init__",
+      "path": "./tooling/symbol_extractor.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_load_symbol_map",
+      "path": "./tooling/symbol_extractor.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "get_symbols_from_file",
+      "path": "./tooling/symbol_extractor.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "find_all_references",
+      "path": "./tooling/symbol_extractor.py",
+      "language": "Python",
+      "line": 27,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "_find_definitions_in_ast",
+      "path": "./tooling/symbol_extractor.py",
+      "language": "Python",
+      "line": 30,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_symbol_map",
+      "path": "./tooling/symbol_extractor.py",
+      "language": "Python",
+      "line": 57,
       "kind": "function",
       "docstring": null
     },
@@ -4073,7 +4145,7 @@
       "name": "find_in_node",
       "path": "./tooling/symbol_extractor.py",
       "language": "Python",
-      "line": 9,
+      "line": 33,
       "kind": "function",
       "docstring": null
     },
@@ -4487,7 +4559,7 @@
       "name": "find_python_files",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 29,
+      "line": 27,
       "kind": "function",
       "docstring": null
     },
@@ -4496,25 +4568,16 @@
       "name": "generate_system_docs",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 39,
+      "line": 37,
       "kind": "function",
       "docstring": "Generates the detailed SYSTEM_DOCUMENTATION.md."
-    },
-    {
-      "_type": "tag",
-      "name": "generate_readme",
-      "path": "./tooling/doc_builder.py",
-      "language": "Python",
-      "line": 59,
-      "kind": "function",
-      "docstring": "Generates the high-level README.md for a module."
     },
     {
       "_type": "tag",
       "name": "generate_pages",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 81,
+      "line": 57,
       "kind": "function",
       "docstring": "Generates the index.html for GitHub Pages."
     },
@@ -4523,7 +4586,7 @@
       "name": "generate_tool_readme",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 101,
+      "line": 77,
       "kind": "function",
       "docstring": "Generates a README.md for a single tool from its docstring."
     },
@@ -4532,7 +4595,7 @@
       "name": "generate_tooling_readme",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 121,
+      "line": 100,
       "kind": "function",
       "docstring": "Generates a single README.md for the tooling directory."
     },
@@ -4541,7 +4604,7 @@
       "name": "main",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 135,
+      "line": 123,
       "kind": "function",
       "docstring": null
     },
@@ -4632,6 +4695,51 @@
       "path": "./tooling/test_session_manager.py",
       "language": "Python",
       "line": 39,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestSymbolExtractor",
+      "path": "./tooling/test_symbol_extractor.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_symbol_extractor.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_symbol_extractor.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_get_symbols_from_file",
+      "path": "./tooling/test_symbol_extractor.py",
+      "language": "Python",
+      "line": 45,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_find_all_references",
+      "path": "./tooling/test_symbol_extractor.py",
+      "language": "Python",
+      "line": 51,
       "kind": "function",
       "docstring": null
     },
@@ -7475,7 +7583,7 @@
       "name": "TestKnowledgeCompiler",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 18,
+      "line": 21,
       "kind": "class",
       "docstring": null
     },
@@ -7484,7 +7592,7 @@
       "name": "TestKnowledgeCompilerAdvanced",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 110,
+      "line": 113,
       "kind": "class",
       "docstring": null
     },
@@ -7493,7 +7601,7 @@
       "name": "setUp",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 20,
+      "line": 23,
       "kind": "function",
       "docstring": "Set up a temporary directory with mock files."
     },
@@ -7502,7 +7610,7 @@
       "name": "tearDown",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 58,
+      "line": 61,
       "kind": "function",
       "docstring": "Clean up the temporary directory and restore original state."
     },
@@ -7511,7 +7619,7 @@
       "name": "test_knowledge_compiler_end_to_end",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 68,
+      "line": 71,
       "kind": "function",
       "docstring": "Verify that the compiler correctly parses a post-mortem and\ngenerates a structured lessons.jsonl file with both machine-readable\nand placeholder commands."
     },
@@ -7520,7 +7628,7 @@
       "name": "setUp",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 112,
+      "line": 115,
       "kind": "function",
       "docstring": "Set up a temporary directory for advanced parsing tests."
     },
@@ -7529,7 +7637,7 @@
       "name": "tearDown",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 149,
+      "line": 152,
       "kind": "function",
       "docstring": "Clean up the temporary directory and restore original state."
     },
@@ -7538,7 +7646,7 @@
       "name": "test_advanced_parsing_and_deprecate_command",
       "path": "./tooling/test_knowledge_compiler.py",
       "language": "Python",
-      "line": 159,
+      "line": 162,
       "kind": "function",
       "docstring": "Verify the compiler can handle different section headers and parse\nthe 'deprecate-tool' command."
     },
