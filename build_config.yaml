@@ -58,3 +58,7 @@ targets:
     command: "python3 -m pytest"
     description: "Run the test suite using pytest."
     type: command
+  test-all:
+    command: "python3 tooling/test_runner.py"
+    description: "Run all tests in the repository."
+    type: command

@@ -6347,6 +6347,24 @@
     },
     {
       "_type": "tag",
+      "name": "run_tests",
+      "path": "./tooling/test_runner.py",
+      "language": "Python",
+      "line": 10,
+      "kind": "function",
+      "docstring": "Discovers and runs all tests in the specified directory."
+    },
+    {
+      "_type": "tag",
+      "name": "main",
+      "path": "./tooling/test_runner.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TestMessageUser",
       "path": "./tooling/test_message_user.py",
       "language": "Python",
@@ -11675,6 +11693,42 @@
     },
     {
       "_type": "tag",
+      "name": "TestTddProtocol",
+      "path": "./tests/test_tdd_protocol.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/test_tdd_protocol.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tests/test_tdd_protocol.py",
+      "language": "Python",
+      "line": 18,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_tdd_protocol_enforced",
+      "path": "./tests/test_tdd_protocol.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TestProtocolEnforcement",
       "path": "./tests/test_protocol_enforcement.py",
       "language": "Python",
@@ -12104,6 +12158,42 @@
       "line": 58,
       "kind": "function",
       "docstring": "Tests that the DBPedia client can fetch the rdf:type for a resource."
+    },
+    {
+      "_type": "tag",
+      "name": "TestTestRunner",
+      "path": "./tests/test_test_runner.py",
+      "language": "Python",
+      "line": 11,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/test_test_runner.py",
+      "language": "Python",
+      "line": 12,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tests/test_test_runner.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_test_runner_captures_output_and_fails",
+      "path": "./tests/test_test_runner.py",
+      "language": "Python",
+      "line": 29,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
