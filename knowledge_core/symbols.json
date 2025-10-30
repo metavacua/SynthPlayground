@@ -5546,6 +5546,15 @@
     },
     {
       "_type": "tag",
+      "name": "run_test",
+      "path": "./tooling/decision_tester.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "function",
+      "docstring": "Parses a decision-making test file and interactively tests the agent's decision."
+    },
+    {
+      "_type": "tag",
       "name": "PlanContext",
       "path": "./tooling/state.py",
       "language": "Python",
@@ -7064,6 +7073,51 @@
       "line": 30,
       "kind": "function",
       "docstring": "Scans a directory for PDF, Markdown, and text files and extracts their content."
+    },
+    {
+      "_type": "tag",
+      "name": "TestDecisionTester",
+      "path": "./tooling/test_decision_tester.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tooling/test_decision_tester.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tooling/test_decision_tester.py",
+      "language": "Python",
+      "line": 23,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_run_test_pass",
+      "path": "./tooling/test_decision_tester.py",
+      "language": "Python",
+      "line": 26,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_run_test_fail",
+      "path": "./tooling/test_decision_tester.py",
+      "language": "Python",
+      "line": 35,
+      "kind": "function",
+      "docstring": null
     },
     {
       "_type": "tag",
