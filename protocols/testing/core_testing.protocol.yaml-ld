@@ -1,0 +1,63 @@
+protocol_id: core-testing-standards-001
+description: A protocol to establish the core standards for all tests in the repository.
+rules:
+- rule_id: core-testing-file-naming
+  description: All test files must be placed in the `tests/` directory and follow the `test_*.py` naming convention.
+  enforcement: This is a procedural rule. The agent should verify that all new test files adhere to this naming convention.
+  validation_command: "find tests -name 'test_*.py' -print0 | xargs -0 -n1 python3 -m unittest discover"
+  tags:
+  - testing
+  - naming
+- rule_id: core-testing-test-naming
+  description: All test methods must start with the `test_` prefix.
+  enforcement: This is a procedural rule. The agent should verify that all new test methods adhere to this naming convention.
+  validation_command: "grep -r 'def test_' tests/"
+  tags:
+  - testing
+  - naming
+- rule_id: core-testing-test-structure
+  description: All tests must use the `unittest` framework and follow the Arrange-Act-Assert pattern.
+  enforcement: This is a procedural rule. The agent should verify that all new tests adhere to this structure.
+  tags:
+  - testing
+  - structure
+- rule_id: core-testing-mocking
+  description: The `unittest.mock` library should be used for mocking, and mocks should be as specific as possible.
+  enforcement: This is a procedural rule. The agent should verify that all new tests use the `unittest.mock` library for mocking.
+  tags:
+  - testing
+  - mocking
+- rule_id: core-testing-assertions
+  description: The `self.assert*` methods from the `unittest.TestCase` class should be used for all assertions.
+  enforcement: This is a procedural rule. The agent should verify that all new tests use the `self.assert*` methods for assertions.
+  tags:
+  - testing
+  - assertions
+associated_tools:
+- tooling/run_tests.py
+version: 1.0.0
+'@context':
+  rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+  rdfs: http://www.w3.org/2000/01/rdf-schema#
+  xsd: http://www.w3.org/2001/XMLSchema#
+  schema: https://schema.org/
+  dct: http://purl.org/dc/terms/
+  proto: https://factory.ai/ns/protocol/
+  protocol_id: '@id'
+  name: schema:name
+  description: schema:description
+  version: schema:version
+  scope: proto:scope
+  agents: proto:agents
+  files: proto:files
+  rules: proto:hasRule
+  rule_id: '@id'
+  enforcement: proto:enforcement
+  implementation: proto:implementation
+  type: '@type'
+  patterns: proto:hasPattern
+  flags: proto:flags
+  details: rdfs:comment
+  associated_tools:
+    '@id': proto:associatedTool
+    '@type': '@id'
