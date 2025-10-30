@@ -1,34 +1,47 @@
-# AI Agent Self-Improving Codebase
+# Executable Witnesses for Three Classes of Recursive Languages
 
-## Overview
+This project provides Python implementations of "executable witnesses" for three distinct classes of complete, recursive languages, based on the concepts from the "Asymmetric Bifurcation of Formal Systems" thesis. Under the Curry-Howard correspondence, a proof of a proposition is equivalent to a program (a witness) that computes the result.
 
-This repository is an experimental environment for a self-correcting and self-improving AI agent. The agent's primary goal is to autonomously manage, refactor, and enhance its own codebase and governing protocols.
+Each script corresponds to one of the three language classes and demonstrates a different computational nature of proof.
 
-## Getting Started
+---
 
-All instructions for setting up the development environment, running tests, and interacting with the agent are located in the `AGENTS.md` file. This file provides a clear and static set of instructions.
+## 1. `witness_neither.py`
 
-### Build System
+*   **Language Class:** `L_neither` (A complete, recursive language that defines neither V nor D).
+*   **Logical Foundation:** The language of true sentences in Presburger Arithmetic, a decidable theory.
+*   **Witness Description:** The witness is a function that constructively proves a simple proposition of Presburger arithmetic. It mimics the process of **quantifier elimination** by finding a specific value that satisfies the proposition and verifying it. The computation itself is the discovery process.
 
-This project uses a unified, configuration-driven build system. The main entry point is the `tooling/builder.py` script, which reads its configuration from `build_config.json`.
-
-To see a list of all available build targets, run:
+### How to Run
 ```bash
-python3 tooling/builder.py --list
+python witness_neither.py
 ```
+The script will execute the witness function and print a "proof certificate" containing the value found for `x` that proves the existential proposition true.
 
-To run a specific target, use the `--target` flag. For example, to compile all protocols:
+---
+
+## 2. `witness_d.py`
+
+*   **Language Class:** `L_D` (A complete, recursive language that defines D but not V).
+*   **Logical Foundation:** The language of theorems of a complete, decidable extension (`T*`) of an inessentially undecidable theory (like `IΔ₀ + Ω₁`).
+*   **Witness Description:** The witness is a function that proves propositions by consulting a hardcoded Python dictionary, which acts as an **"oracle"** for the completing axioms of `T*`. For complex propositions that were undecidable in the base theory, the proof is not a computation but a direct lookup.
+
+### How to Run
 ```bash
-python3 tooling/builder.py --target protocols
+python witness_d.py
 ```
+The script will prove several propositions, demonstrating both standard derivation (for simple cases) and axiomatic oracle lookup (for the hard cases).
 
-To run all default build steps (including protocol compilation), you can run the "all" build group:
+---
+
+## 3. `witness_v.py`
+
+*   **Language Class:** `L_V` (A complete, recursive language that defines V but not D).
+*   **Logical Foundation:** A self-referential language whose existence is guaranteed by Kleene's Recursion Theorem.
+*   **Witness Description:** The witness for a proposition is the **decider program itself**. This script implements the self-referential decider using a **Z-combinator** (a variant of the Y-combinator for strict languages like Python). The execution trace of this recursive function *is* the constructive proof of whether a string belongs to the language.
+
+### How to Run
 ```bash
-python3 tooling/builder.py --target all
+python witness_v.py
 ```
-
-## How It Works
-
-The core of this project is a set of machine-readable protocols located in the `protocols/` directory. These protocols define the agent's behavior and are compiled into `AGENTS.md` files within each protocol module. The `AGENTS.md` file in the root directory provides a high-level overview and instructions for AI agents.
-
-The long-term vision is for the agent to be able to modify its own protocols, allowing it to evolve its own development processes and capabilities over time.
+The script will run the self-referential decider on several test strings, printing the proof result (True/False) for each proposition.
