@@ -18,8 +18,6 @@ from tooling.doc_builder_logic import (
     generate_pages_content,
     generate_tool_readme_content,
     generate_tooling_readme_content,
-    get_module_docstring,
-    get_protocol_summary,
 )
 
 # --- Configuration ---
@@ -55,28 +53,6 @@ def generate_system_docs(source_dirs: List[str], output_file: str):
     print(f"--> System documentation written to {output_file}")
 
 
-# --- README Generator ---
-def generate_readme(agents_md_path: str, output_file: str):
-    """Generates the high-level README.md for a module."""
-    protocol_summaries = get_protocol_summary(agents_md_path)
-    component_docstrings: Dict[str, str] = {}
-    tooling_dir = os.path.join(os.path.dirname(output_file), "tooling")
-    if os.path.isdir(tooling_dir):
-        key_files = find_files("*.py", base_dir=tooling_dir)
-        key_files = [
-            f for f in key_files if not os.path.basename(f).startswith("test_")
-        ]
-        if key_files:
-            for filename in sorted(key_files):
-                filepath = os.path.join(tooling_dir, filename)
-                component_docstrings[filename] = get_module_docstring(filepath)
-
-    final_content = generate_readme_content(protocol_summaries, component_docstrings)
-    with open(output_file, "w", encoding="utf-8") as f:
-        f.write(final_content)
-    print(f"--> README.md written to {output_file}")
-
-
 # --- GitHub Pages Generator ---
 def generate_pages(readme_path: str, agents_md_path: str, output_file: str):
     """Generates the index.html for GitHub Pages."""
@@ -105,17 +81,20 @@ def generate_tool_readme(source_file: str, output_file: str):
     print(f"Output file: {output_file}")
     original_dir = os.getcwd()
     try:
-        source_dir = os.path.dirname(source_file)
-        os.chdir(source_dir)
-        print(f"Changed directory to: {os.getcwd()}")
-        docstring = get_module_docstring(os.path.basename(source_file))
+        with open(source_file, "r", encoding="utf-8") as f:
+            content = f.read()
+        module_doc = parse_file_for_docs(source_file, content)
+        if module_doc and module_doc.docstring:
+            docstring = module_doc.docstring
+        else:
+            docstring = "No docstring found."
         filename = os.path.basename(source_file)
         final_content = generate_tool_readme_content(filename, docstring)
         with open(output_file, "w", encoding="utf-8") as f:
             f.write(final_content)
-        print(f"--> Tool README written to {os.path.join(os.getcwd(), output_file)}")
-    finally:
-        os.chdir(original_dir)
+        print(f"--> Tool README written to {output_file}")
+    except FileNotFoundError:
+        print(f"Error: Source file not found at {source_file}", file=sys.stderr)
 
 
 def generate_tooling_readme(source_dir: str, output_file: str):
@@ -124,7 +103,16 @@ def generate_tooling_readme(source_dir: str, output_file: str):
     docstrings: Dict[str, str] = {}
     for filepath in py_files:
         filename = os.path.basename(filepath)
-        docstrings[filename] = get_module_docstring(filepath)
+        try:
+            with open(filepath, "r", encoding="utf-8") as f:
+                content = f.read()
+            module_doc = parse_file_for_docs(filepath, content)
+            if module_doc and module_doc.docstring:
+                docstrings[filename] = module_doc.docstring
+            else:
+                docstrings[filename] = "No docstring found."
+        except FileNotFoundError:
+            docstrings[filename] = "File not found."
 
     final_content = generate_tooling_readme_content(docstrings)
     with open(output_file, "w", encoding="utf-8") as f:
@@ -137,7 +125,7 @@ def main():
     parser.add_argument(
         "--format",
         required=True,
-        choices=["system", "readme", "pages", "tooling-readme"],
+        choices=["system", "pages", "tooling-readme"],
     )
     parser.add_argument(
         "--source-file", help="Source file for 'readme' or 'pages' format."
@@ -161,10 +149,6 @@ def main():
             ROOT_DIR, "knowledge_core", "SYSTEM_DOCUMENTATION.md"
         )
         generate_system_docs(source_dirs, output_file)
-    elif args.format == "readme":
-        source_file = args.source_file or os.path.join(ROOT_DIR, "AGENTS.md")
-        output_file = args.output_file or os.path.join(ROOT_DIR, "README.md")
-        generate_readme(source_file, output_file)
     elif args.format == "pages":
         readme_file = args.source_file or os.path.join(ROOT_DIR, "README.md")
         agents_file = os.path.join(os.path.dirname(readme_file), "AGENTS.md")

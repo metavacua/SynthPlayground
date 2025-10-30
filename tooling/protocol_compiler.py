@@ -4,7 +4,7 @@ import json
 import os
 import re
 import jsonschema
-from yaml_ld import to_yaml_ld
+import yaml
 
 def extract_json_from_markdown(filepath):
     """Extracts a JSON block from a Markdown file."""
@@ -51,7 +51,8 @@ def main():
     }
 
     # Convert JSON-LD to YAML-LD and write to the output file
-    to_yaml_ld(json_ld_data, args.output_file)
+    with open(args.output_file, "w") as f:
+        yaml.dump(json_ld_data, f, default_flow_style=False)
 
     print(f"Successfully compiled protocols to {args.output_file}")
 

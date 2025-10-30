@@ -234,6 +234,9 @@ def main():
         print(f"Error: Source directory not found at '{args.source_dir}'")
         return
 
+    # Ensure the knowledge_core directory exists
+    os.makedirs(os.path.dirname(KNOWLEDGE_CORE_PATH), exist_ok=True)
+
     existing_lessons = set()
     if os.path.exists(KNOWLEDGE_CORE_PATH):
         with open(KNOWLEDGE_CORE_PATH, "r") as f:
@@ -245,23 +248,23 @@ def main():
                     continue
 
     new_lessons_added = 0
-    for filename in os.listdir(args.source_dir):
-        if filename.endswith(".md"):
-            filepath = os.path.join(args.source_dir, filename)
-            lessons = process_postmortem_file(filepath)
-            if lessons:
-                unique_lessons = []
-                for lesson in lessons:
-                    if lesson['lesson'] not in existing_lessons:
-                        unique_lessons.append(lesson)
-                        existing_lessons.add(lesson['lesson'])
+    with open(KNOWLEDGE_CORE_PATH, "a") as f:
+        for filename in os.listdir(args.source_dir):
+            if filename.endswith(".md"):
+                filepath = os.path.join(args.source_dir, filename)
+                lessons = process_postmortem_file(filepath)
+                if lessons:
+                    unique_lessons = []
+                    for lesson in lessons:
+                        if lesson['lesson'] not in existing_lessons:
+                            unique_lessons.append(lesson)
+                            existing_lessons.add(lesson['lesson'])
 
-                if unique_lessons:
-                    print(f"Found {len(unique_lessons)} new, unique lesson(s) in '{filepath}'.")
-                    with open(KNOWLEDGE_CORE_PATH, "a") as f:
+                    if unique_lessons:
+                        print(f"Found {len(unique_lessons)} new, unique lesson(s) in '{filepath}'.")
                         for entry in unique_lessons:
                             f.write(json.dumps(entry) + "\n")
-                    new_lessons_added += len(unique_lessons)
+                        new_lessons_added += len(unique_lessons)
 
     if new_lessons_added > 0:
         print(

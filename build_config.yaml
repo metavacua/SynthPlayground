@@ -10,15 +10,9 @@ build_groups:
 
 targets:
   agents-md:
-    compiler: tooling/master_agents_md_generator.py
+    command: "python3 tooling/master_agents_md_generator.py --build-config build_config.yaml --knowledge-file knowledge_core/integrated_knowledge.jsonld --output-file AGENTS.md"
     description: Generate the master AGENTS.md file.
-    options:
-      "--build-config": "build_config.yaml"
-      "--knowledge-file": "knowledge_core/integrated_knowledge.jsonld"
-    output: AGENTS.md
-    sources:
-      - "knowledge_core/integrated_knowledge.jsonld"
-    type: compiler
+    type: command
   ast-generate:
     command: "python3 tooling/ast_generator.py"
     description: "Generate ASTs for all supported source files."
@@ -60,10 +54,9 @@ targets:
     description: "Compile all protocol sources to a single YAML-LD file."
     output: "protocols.yaml-ld"
     sources:
-      - "protocols/AGENTS.md"
       - "protocols/CHARTER.protocol.md"
       - "protocols/GIT_WORKFLOW_PROTOCOL.md"
-      # Add other protocol files here
+      - "protocols/hello_world.protocol.md"
     type: compiler
   test:
     command: "python3 -m pytest"
