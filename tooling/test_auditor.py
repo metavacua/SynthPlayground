@@ -1,12 +1,16 @@
 import unittest
 import os
+import sys
 import json
 from unittest.mock import patch, mock_open
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from tooling.auditor import (
     run_protocol_audit,
     run_plan_registry_audit,
     run_doc_audit,
     run_health_audit,
+    run_knowledge_audit,
 )
 import datetime
 
@@ -27,6 +31,9 @@ class TestUnifiedAuditor(unittest.TestCase):
         )
         self.system_docs = os.path.join(
             self.test_dir, "knowledge_core", "SYSTEM_DOCUMENTATION.md"
+        )
+        self.knowledge_lessons = os.path.join(
+            self.test_dir, "knowledge_core", "lessons.jsonl"
         )
         self.log_file = os.path.join(self.test_dir, "logs", "activity.log.jsonl")
         os.makedirs(os.path.dirname(self.log_file), exist_ok=True)
@@ -58,8 +65,7 @@ class TestUnifiedAuditor(unittest.TestCase):
             )
 
         report = run_protocol_audit()
-        self.assertIn("## 1. Protocol Audit", report)
-        self.assertIn("- ✅ **`AGENTS.md` Source Check:**", report[1])
+        self.assertIn("- ✅ **`AGENTS.md` Source Check:**", report[0])
 
     @patch(
         "tooling.auditor.PLAN_REGISTRY_PATH",
@@ -73,9 +79,8 @@ class TestUnifiedAuditor(unittest.TestCase):
             )
 
         report = run_plan_registry_audit()
-        self.assertIn("## 2. Plan Registry Audit", report)
         self.assertIn(
-            "⚠️ **Dead Links Found:** 1 entries point to non-existent files.", report[1]
+            "⚠️ **Dead Links Found:** 1 entries point to non-existent files.", report[0]
         )
 
     @patch(
@@ -88,11 +93,48 @@ class TestUnifiedAuditor(unittest.TestCase):
             f.write("### `module/missing_doc.py`\n\n_No module-level docstring found._")
 
         report = run_doc_audit()
-        self.assertIn("## 3. Documentation Audit", report)
         self.assertIn(
             "⚠️ **Missing Docstrings:** 1 modules are missing a module-level docstring.",
-            report[1],
+            report[0],
         )
+
+    @patch("tooling.auditor.SymbolExtractor")
+    @patch(
+        "tooling.auditor.KNOWLEDGE_LESSONS_PATH",
+        new_callable=lambda: os.getcwd()
+        + "/test_audit_dir/knowledge_core/lessons.jsonl",
+    )
+    def test_knowledge_audit(self, mock_path, mock_extractor):
+        # Mock the SymbolExtractor to return no references for a specific symbol
+        mock_extractor.return_value.find_all_references.side_effect = (
+            lambda symbol: [] if symbol == "dead_symbol" else ["ref1"]
+        )
+
+        with open(self.knowledge_lessons, "w") as f:
+            lesson_valid = {
+                "lesson_id": "valid-001",
+                "action": {
+                    "command": "update-rule",
+                    "parameters": {"symbol": "valid_symbol"},
+                },
+            }
+            lesson_invalid = {
+                "lesson_id": "invalid-002",
+                "action": {
+                    "command": "update-rule",
+                    "parameters": {"symbol": "dead_symbol"},
+                },
+            }
+            f.write(json.dumps(lesson_valid) + "\n")
+            f.write(json.dumps(lesson_invalid) + "\n")
+
+        report = run_knowledge_audit()
+        self.assertIn(
+            "⚠️ **Dead Links Found:** 1 knowledge entries point to non-existent symbols.",
+            report[0],
+        )
+        self.assertIn("`invalid-002`", report[1])
+        self.assertIn("`dead_symbol`", report[1])
 
 
 if __name__ == "__main__":
@@ -141,7 +183,7 @@ class TestHealthAuditor(unittest.TestCase):
             f.write(json.dumps(log_entry) + "\n")
 
         report = run_health_audit(self.session_start_time.isoformat())
-        self.assertIn("❌ **Log Staleness Detected:**", report)
+        self.assertIn("❌ **Log Staleness Detected:**", report[0])
 
     @patch(
         "tooling.auditor.LOG_FILE",
@@ -169,7 +211,7 @@ class TestHealthAuditor(unittest.TestCase):
                 f.write(json.dumps(log_entry) + "\n")
 
         report = run_health_audit(self.session_start_time.isoformat())
-        self.assertIn("⚠️ **Success-Only Task Logs:**", report)
+        self.assertIn("⚠️ **Success-Only Task Logs:**", report[0])
 
     @patch(
         "tooling.auditor.LOG_FILE",
@@ -199,7 +241,7 @@ class TestHealthAuditor(unittest.TestCase):
             f.write("")  # Empty file
 
         report = run_health_audit(self.session_start_time.isoformat())
-        self.assertIn("❌ **Incomplete Post-Mortems Detected:**", report)
+        self.assertIn("❌ **Incomplete Post-Mortems Detected:**", report[0])
 
     @patch(
         "tooling.auditor.LOG_FILE",
@@ -236,4 +278,4 @@ class TestHealthAuditor(unittest.TestCase):
             f.write("# Post-Mortem\nThis is a complete post-mortem.")
 
         report = run_health_audit(self.session_start_time.isoformat())
-        self.assertIn("✅ **No new critical or warning level issues found.**", report)
+        self.assertIn("✅ **No new critical or warning level issues found.**", report[0])

@@ -1,0 +1,43 @@
+'@context': protocol.context.jsonld
+'@graph':
+- description: The foundational principles governing the agent's operation within
+    this repository.
+  protocol_id: charter-protocol-001
+  rules:
+  - associated_tools: []
+    description: The agent must adhere to the formal, machine-readable protocols defined
+      in the `protocols/` directory and compiled into the `AGENTS.md` file.
+    enforcement: strict
+    rule_id: CP-1
+  - associated_tools:
+    - file_reader
+    description: The agent must prioritize using the artifacts in the `knowledge_core/`
+      directory over attempting to infer information from unstructured source code.
+    enforcement: strict
+    rule_id: CP-2
+  version: 1.0.0
+- description: The standard operating procedure for all git-related activities.
+  protocol_id: git-workflow-protocol-001
+  rules:
+  - associated_tools:
+    - submit
+    description: All changes must be proposed using the `submit` tool. Direct `git
+      push` or `git commit` commands are forbidden.
+    enforcement: strict
+    rule_id: GWP-1
+  - associated_tools:
+    - run_in_bash_session
+    description: Before making any changes, create a new local branch for isolation.
+    enforcement: strict
+    rule_id: GWP-2
+  version: 1.0.0
+- description: A protocol for greeting the world.
+  protocol_id: hello-world-protocol-001
+  rules:
+  - associated_tools:
+    - hello_world
+    description: When this rule is invoked, the agent must use the `hello_world` tool
+      to print the message 'Hello, World!'.
+    enforcement: strict
+    rule_id: greet-the-world
+  version: 1.0.0

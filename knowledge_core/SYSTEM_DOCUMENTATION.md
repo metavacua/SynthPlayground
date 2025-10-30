@@ -6,17 +6,20 @@
 
 ### `/app/tooling/__init__.py`
 
-This module contains the various tools and utilities that support the agent's
-development, testing, and operational workflows.
+_No module-level docstring found._
 
-The tools in this package are the building blocks of the agent's capabilities,
-ranging from code analysis and refactoring to protocol compilation and
-self-correction. Each script is designed to be a self-contained unit of
-functionality that can be invoked either from the command line or programmatically
-by the agent's master control system.
+### `/app/tooling/agent_logic.py`
 
-This __init__.py file marks the 'tooling' directory as a Python package,
-allowing for the organized import of its various modules.
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def find_fsm_transition(fsm, source_state, trigger)`
+
+  > Finds the destination state for a given source and trigger.
+
 
 ### `/app/tooling/agent_shell.py`
 
@@ -34,9 +37,9 @@ programmatic interface to the MasterControlGraph FSM. It is responsible for:
 **Public Functions:**
 
 
-- #### `def find_fsm_transition(fsm, source_state, trigger)`
+- #### `def load_tools_from_manifest(manifest_path='tooling/tool_manifest.json')`
 
-  > Finds the destination state for a given source and trigger.
+  > Loads tools from the tool manifest.
 
 
 - #### `def main()`
@@ -44,9 +47,28 @@ programmatic interface to the MasterControlGraph FSM. It is responsible for:
   > Main entry point for the agent shell.
 
 
-- #### `def run_agent_loop(task_description, tools, model=None)`
+- #### `def run_agent_loop(task_description, tools, model=None, plan_content=None)`
 
   > The main loop that drives the agent's lifecycle via the FSM.
+
+
+### `/app/tooling/appl_logic.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def generate_appl_command(filepath)`
+
+  > Generates the command to execute an APPL file.
+  >
+  > Args:
+  >     filepath: The path to the .appl file to execute.
+  >
+  > Returns:
+  >     A list of strings representing the command to be executed.
 
 
 ### `/app/tooling/appl_runner.py`
@@ -91,6 +113,10 @@ an LFI-ILL AST. The resulting AST is then written to a `.lfi_ill` file.
 - #### `def main()`
 
 
+### `/app/tooling/appl_to_lfi_ill_logic.py`
+
+_No module-level docstring found._
+
 
 **Public Classes:**
 
@@ -109,6 +135,33 @@ an LFI-ILL AST. The resulting AST is then written to a `.lfi_ill` file.
   - ##### `def compile_type(self, type_)`
 
     > Translates APPL types to LFI ILL types.
+
+
+### `/app/tooling/ast_generator.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def generate_asts_for_repo(root_dir='.', output_dir='knowledge_core/asts')`
+
+  > Traverses a repository, generates ASTs for supported files, and saves them.
+
+
+- #### `def get_parser_for_language(language_name)`
+
+  > Dynamically loads a tree-sitter parser for a given language.
+
+
+- #### `def main()`
+
+
+- #### `def node_to_dict(node)`
+
+  > Recursively convert a tree-sitter Node to a JSON-serializable dictionary,
+  > including field names for children.
 
 
 ### `/app/tooling/auditor.py`
@@ -155,10 +208,51 @@ audits or all of them, generating a consolidated `audit_report.md` file.
 - #### `def run_doc_audit()`
 
 
+- #### `def run_health_audit(session_start_time_iso)`
+
+  > Performs a system health audit, checking for "absence of evidence" anomalies.
+
+
+- #### `def run_knowledge_audit()`
+
+
 - #### `def run_plan_registry_audit()`
 
 
 - #### `def run_protocol_audit()`
+
+
+### `/app/tooling/auditor_logic.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def analyze_documentation(system_docs_content)`
+
+  > Analyzes the system documentation for missing docstrings.
+
+
+- #### `def analyze_plan_registry(registry, root_dir)`
+
+  > Analyzes the plan registry for dead links.
+
+
+- #### `def analyze_protocol_completeness(used_tools, protocol_tools)`
+
+  > Analyzes the completeness of the protocols by comparing used tools to protocol tools.
+
+
+- #### `def analyze_system_health(log_content, postmortem_dir, session_start_time_iso)`
+
+  > Analyzes the system health for "absence of evidence" anomalies.
+
+
+- #### `def analyze_tool_centrality(used_tools)`
+
+  > Analyzes the centrality of tools by counting their usage.
 
 
 ### `/app/tooling/aura_executor.py`
@@ -182,6 +276,19 @@ automation scripts for the agent.
 **Public Functions:**
 
 
+- #### `def main()`
+
+  > Main entry point for the Aura script executor.
+
+
+### `/app/tooling/aura_logic.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
 - #### `def dynamic_agent_call_tool(tool_name_obj, *args)`
 
   > Dynamically imports and calls a tool from the 'tooling' directory and wraps the result.
@@ -198,11 +305,6 @@ automation scripts for the agent.
   >     An Aura `Object` containing the tool's stdout as a string, or an error message.
 
 
-- #### `def main()`
-
-  > Main entry point for the Aura script executor.
-
-
 ### `/app/tooling/aura_to_lfi_ill.py`
 
 A compiler that translates AURA code to LFI-ILL.
@@ -216,6 +318,10 @@ AST. The resulting AST is then written to a `.lfi_ill` file.
 
 - #### `def main()`
 
+
+### `/app/tooling/aura_to_lfi_ill_logic.py`
+
+_No module-level docstring found._
 
 
 **Public Classes:**
@@ -261,6 +367,54 @@ AST. The resulting AST is then written to a `.lfi_ill` file.
   - ##### `def generic_compiler(self, node)`
 
 
+### `/app/tooling/autonomous_agent.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+
+**Public Classes:**
+
+
+- #### `class AutonomousAgent`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, task)`
+
+  - ##### `def execute_plan(self)`
+
+    > Executes the generated plan.
+
+  - ##### `def generate_plan(self)`
+
+    > Generates a plan to accomplish the task.
+
+  - ##### `def run(self)`
+
+    > Runs the agent's main loop.
+
+
+### `/app/tooling/autonomous_agent_logic.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def generate_command_from_plan_step(cmd, outputs)`
+
+  > Generates a command to be executed from a plan step.
+
+
 ### `/app/tooling/background_researcher.py`
 
 This script performs a simulated research task in the background.
@@ -276,6 +430,83 @@ to a temporary file that the main agent can poll.
   > Simulates a research task and writes the result to a file.
 
 
+### `/app/tooling/background_researcher_logic.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def generate_research_result(task_id)`
+
+  > Generates the research result for a given task ID.
+
+
+### `/app/tooling/bash_runner.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def run_in_bash_session(command)`
+
+  > Runs the given bash command in the sandbox.
+
+
+### `/app/tooling/build_logic.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def generate_command(target_name, target_config)`
+
+  > Generates the command for a 'command' type build target.
+
+
+- #### `def generate_compiler_command(target_name, target_config, root_dir)`
+
+  > Generates the command for a 'compiler' type build target.
+
+
+- #### `def load_config(config_path)`
+
+  > Loads the build configuration file (JSON or YAML).
+
+
+### `/app/tooling/build_utils.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def execute_code(code, protocol_id, rule_id)`
+
+  > Executes a block of Python code in a controlled environment.
+
+
+- #### `def find_files(pattern, base_dir='.', recursive=True)`
+
+  > Finds files matching a pattern in a directory.
+
+
+- #### `def load_schema(schema_file)`
+
+  > Loads the JSON schema from a file.
+
+
+- #### `def sanitize_markdown(content)`
+
+  > Removes potentially unsafe constructs from Markdown.
+
+
 ### `/app/tooling/builder.py`
 
 A unified, configuration-driven build script for the project.
@@ -285,7 +516,7 @@ as generating documentation, compiling protocols, and running code quality check
 It replaces a traditional Makefile's direct command execution with a more
 structured, maintainable, and introspectable approach.
 
-The core logic is driven by a `build_config.json` file, which defines a series
+The core logic is driven by a `build_config.yaml` file, which defines a series
 of "targets." Each target specifies:
 - The `type` of target: "compiler" or "command".
 - For "compiler" types: `compiler` script, `output`, `sources`, and `options`.
@@ -295,7 +526,7 @@ The configuration also defines "build_groups", which are ordered collections of
 targets (e.g., "all", "quality").
 
 This centralized builder provides several advantages:
-- **Single Source of Truth:** The `build_config.json` file is the definitive
+- **Single Source of Truth:** The `build_config.yaml` file is the definitive
   source for all build logic.
 - **Consistency:** Ensures all build tasks are executed in a uniform way.
 - **Extensibility:** New build targets can be added by simply updating the
@@ -306,24 +537,9 @@ This centralized builder provides several advantages:
 **Public Functions:**
 
 
-- #### `def execute_build(target_name, config)`
+- #### `def execute_build(target_name, config, extra_args)`
 
   > Executes the build process for a specific target.
-
-
-- #### `def execute_command_target(target_name, target_config)`
-
-  > Executes a 'command' type build target.
-
-
-- #### `def execute_compiler_target(target_name, target_config)`
-
-  > Executes a 'compiler' type build target.
-
-
-- #### `def load_config()`
-
-  > Loads the build configuration file.
 
 
 - #### `def main()`
@@ -371,6 +587,24 @@ cornerstone of the agent's design philosophy.
   > 4. Running the full test suite to ensure no existing capabilities were lost.
 
 
+### `/app/tooling/capability_verifier_logic.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def generate_lesson_content(test_file, initial_result)`
+
+  > Generates the lesson content for the capability verifier.
+
+
+- #### `def generate_postmortem_content()`
+
+  > Generates the post-mortem content for the capability verifier.
+
+
 ### `/app/tooling/code_suggester.py`
 
 Handles the generation and application of autonomous code change suggestions.
@@ -413,6 +647,68 @@ without altering the core orchestration process.
   > Parses arguments, generates a plan, and prints the plan's path to stdout.
 
 
+### `/app/tooling/code_suggester_logic.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def generate_suggestion_plan_content(filepath, diff_content)`
+
+  > Generates the content for a temporary, single-step plan file to apply a code change.
+  >
+  > Args:
+  >     filepath: The path to the file that needs to be modified.
+  >     diff_content: The git-style merge diff block to be applied.
+  >
+  > Returns:
+  >     The content of the generated plan file.
+
+
+### `/app/tooling/compile_protocols.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def compile_module(module_dir)`
+
+  > Compiles the protocol files in a directory into a single AGENTS.md.
+
+
+- #### `def main()`
+
+  > Main function to find and compile all protocol modules.
+
+
+### `/app/tooling/compile_protocols_logic.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def generate_agents_md_content(module_name, md_files_content, yaml_files_content, schema)`
+
+  > Generates the content for an AGENTS.md file.
+
+
+### `/app/tooling/complexity_manager.py`
+
+A tool for managing the complexity of the codebase by orchestrating various analysis and refactoring tools.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
 ### `/app/tooling/context_awareness_scanner.py`
 
 A tool for performing static analysis on a Python file to understand its context.
@@ -446,38 +742,30 @@ which can be used as a foundational artifact for automated planning or human rev
   > Finds all files in a directory that reference a given symbol.
 
 
-- #### `def get_defined_symbols(filepath)`
-
-  > Parses a Python file to find all defined functions and classes.
-
-
-- #### `def get_imported_symbols(filepath)`
-
-  > Parses a Python file to find all imported modules and symbols.
-
-
 - #### `def main()`
 
 
-### `/app/tooling/csdc_cli.py`
+### `/app/tooling/context_awareness_scanner_logic.py`
 
-A command-line tool for managing the Context-Sensitive Development Cycle (CSDC).
+_No module-level docstring found._
 
-This script provides an interface to validate a development plan against a specific
-CSDC model (A or B) and a given complexity class (P or EXP). It ensures that a
-plan adheres to the strict logical and computational constraints defined by the
-CSDC protocol before it is executed.
 
-The tool performs two main checks:
-1.  **Complexity Analysis:** It analyzes the plan to determine its computational
-    complexity and verifies that it matches the expected complexity class.
-2.  **Model Validation:** It validates the plan's commands against the rules of
-    the specified CSDC model, ensuring that it does not violate any of the
-    model's constraints (e.g., forbidding certain functions).
+**Public Functions:**
 
-This serves as a critical gateway for ensuring that all development work within
-the CSDC framework is sound, predictable, and compliant with the governing
-meta-mathematical principles.
+
+- #### `def analyze_python_file(content)`
+
+  > Analyzes the content of a Python file to find defined and imported symbols.
+
+
+- #### `def generate_report(target_file, content, defined_symbols, imported_symbols)`
+
+  > Generates the report for the context awareness scanner.
+
+
+### `/app/tooling/context_manager.py`
+
+A tool for managing the agent's contextual awareness by orchestrating various scanning and analysis tools.
 
 
 **Public Functions:**
@@ -525,14 +813,27 @@ about the potential impact of its changes.
   > Main function to generate and save the dependency graph.
 
 
-- #### `def parse_package_json(package_json_path)`
+### `/app/tooling/dependency_graph_generator_logic.py`
 
-  > Parses a single package.json file to extract its name and dependencies.
+_No module-level docstring found._
 
 
-- #### `def parse_requirements_txt(requirements_path, root_dir)`
+**Public Functions:**
 
-  > Parses a requirements.txt file to extract its dependencies.
+
+- #### `def generate_dependency_graph_from_projects(all_projects)`
+
+  > Generates a dependency graph from a list of projects.
+
+
+- #### `def parse_package_json_content(content, path)`
+
+  > Parses the content of a package.json file to extract its name and dependencies.
+
+
+- #### `def parse_requirements_txt_content(content, path, root_dir)`
+
+  > Parses the content of a requirements.txt file to extract its dependencies.
 
 
 ### `/app/tooling/doc_builder.py`
@@ -547,20 +848,9 @@ A unified documentation builder for the project.
 - #### `def find_python_files(directories)`
 
 
-- #### `def format_args(args)`
-
-
-- #### `def generate_documentation_for_module(mod_doc)`
-
-
 - #### `def generate_pages(readme_path, agents_md_path, output_file)`
 
   > Generates the index.html for GitHub Pages.
-
-
-- #### `def generate_readme(agents_md_path, output_file)`
-
-  > Generates the high-level README.md for a module.
 
 
 - #### `def generate_system_docs(source_dirs, output_file)`
@@ -568,20 +858,49 @@ A unified documentation builder for the project.
   > Generates the detailed SYSTEM_DOCUMENTATION.md.
 
 
-- #### `def get_module_docstring(filepath)`
+- #### `def generate_tool_readme(source_file, output_file)`
 
-  > Parses a Python file and extracts its module-level docstring.
+  > Generates a README.md for a single tool from its docstring.
 
 
-- #### `def get_protocol_summary(agents_md_path)`
+- #### `def generate_tooling_readme(source_dir, output_file)`
 
-  > Parses an AGENTS.md file and extracts a list of protocol summaries.
+  > Generates a single README.md for the tooling directory.
 
 
 - #### `def main()`
 
 
-- #### `def parse_file_for_docs(filepath)`
+### `/app/tooling/doc_builder_logic.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def format_args(args)`
+
+
+- #### `def generate_documentation_for_module(mod_doc)`
+
+
+- #### `def generate_pages_content(readme_md, agents_md)`
+
+
+- #### `def generate_readme_content(protocol_summaries, component_docstrings)`
+
+
+- #### `def generate_system_docs_content(all_docs)`
+
+
+- #### `def generate_tool_readme_content(filename, docstring)`
+
+
+- #### `def generate_tooling_readme_content(docstrings)`
+
+
+- #### `def parse_file_for_docs(filepath, content)`
 
 
 
@@ -634,7 +953,7 @@ or semi-structured documents that are not part of the formal codebase, but which
 may contain critical context, requirements, or specifications.
 
 The scanner searches a given directory for files with common document extensions:
-- `.pdf`: Uses the `pypdf` library to extract text from PDF files.
+- `.pdf`: Uses the Gemini API to extract text and understand the content of PDF files.
 - `.md`: Reads Markdown files.
 - `.txt`: Reads plain text files.
 
@@ -698,6 +1017,34 @@ that might impact its ability to complete a task.
   > Tests network connectivity and measures latency to a reliable external endpoint.
 
 
+### `/app/tooling/external_api_client.py`
+
+A standardized client for interacting with external agent APIs.
+
+
+**Public Classes:**
+
+
+- #### `class ExternalApiClient`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, api_name)`
+
+  - ##### `def execute(self, args)`
+
+    > Executes a command-line tool with the given arguments.
+
+  - ##### `def get(self, endpoint, params=None)`
+
+    > Sends a GET request to the specified endpoint.
+
+  - ##### `def post(self, endpoint, data)`
+
+    > Sends a POST request to the specified endpoint.
+
+
 ### `/app/tooling/fdc_cli.py`
 
 This script provides a command-line interface (CLI) for managing the Finite
@@ -743,6 +1090,37 @@ commands to:
 - #### `def validate_plan(plan_filepath)`
 
 
+### `/app/tooling/fdc_cli_logic.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def analyze_plan_content(plan_lines_with_indent)`
+
+  > Analyzes the content of a plan file to determine its complexity class and modality.
+
+
+- #### `def create_log_entry(task_id, action_type, details)`
+
+  > Creates a structured log entry dictionary.
+
+
+### `/app/tooling/file_reader.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def read_file(filepath)`
+
+  > Reads the content of the specified file.
+
+
 ### `/app/tooling/filesystem_lister.py`
 
 A tool for listing files and directories in a repository, with an option to respect .gitignore.
@@ -759,6 +1137,79 @@ A tool for listing files and directories in a repository, with an option to resp
   > Args:
   >     root_dir (str): The root directory to start the walk from.
   >     use_gitignore (bool): If True, respects the patterns in the .gitignore file.
+
+
+### `/app/tooling/gemini_computer_use.py`
+
+A tool for controlling a web browser using the Gemini Computer Use API.
+
+This tool allows the agent to perform tasks like data entry, automated testing,
+and web research by controlling a web browser. It uses the Gemini Computer Use
+API to "see" the screen and "act" by generating UI actions like mouse clicks
+and keyboard inputs.
+
+
+**Public Functions:**
+
+
+- #### `def denormalize_x(x, screen_width)`
+
+  > Convert normalized x coordinate (0-1000) to actual pixel coordinate.
+
+
+- #### `def denormalize_y(y, screen_height)`
+
+  > Convert normalized y coordinate (0-1000) to actual pixel coordinate.
+
+
+- #### `def execute_function_calls(candidate, page, screen_width, screen_height)`
+
+
+- #### `def get_function_responses(page, results)`
+
+
+- #### `def main()`
+
+  > The main entry point for the GeminiComputerUse tool.
+
+
+### `/app/tooling/generate_filesystem_rdf.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def generate_filesystem_rdf(root_dir, output_file)`
+
+  > Scans the directory structure and generates an RDF graph.
+
+
+### `/app/tooling/goal_generator.py`
+
+This module provides a simple way to select a plan for the agent.
+
+
+**Public Functions:**
+
+
+- #### `def find_best_plan(task_description)`
+
+  > Returns the path to the best plan for the given task description.
+
+
+### `/app/tooling/guardian.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Validates a review document to ensure it complies with the Guardian Protocol.
 
 
 ### `/app/tooling/halting_heuristic_analyzer.py`
@@ -813,6 +1264,24 @@ MEDIUM, HIGH) and the specific loops that were identified.
 - #### `class Loop`
 
 
+### `/app/tooling/hdl_parser.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def parse_formula(s)`
+
+  > A very basic parser for formulas.
+
+
+- #### `def parse_sequent(s)`
+
+  > A very basic parser for sequents.
+
+
 ### `/app/tooling/hdl_prover.py`
 
 A command-line tool for proving sequents in Intuitionistic Linear Logic.
@@ -823,7 +1292,7 @@ then attempts to prove it using a rudimentary proof search algorithm.
 
 The primary purpose of this tool is to allow the agent to perform formal
 reasoning and verification tasks by checking the validity of logical entailments.
-For example, it can be used to verify that a certain conclusion follows from a
+For example, it can be a used to verify that a certain conclusion follows from a
 set of premises according to the rules of linear logic.
 
 The current implementation uses a very basic parser and proof algorithm,
@@ -837,23 +1306,13 @@ logic engine.
 - #### `def main()`
 
 
-- #### `def parse_formula(s)`
-
-  > A very basic parser for formulas.
-
-
-- #### `def parse_sequent(s)`
-
-  > A very basic parser for sequents.
-
-
 - #### `def prove_sequent(sequent)`
 
   > A very simple proof search algorithm.
   > This is a placeholder for a more sophisticated prover.
 
 
-### `/app/tooling/hierarchical_compiler.py`
+### `/app/tooling/json_to_yaml_ld.py`
 
 _No module-level docstring found._
 
@@ -861,39 +1320,9 @@ _No module-level docstring found._
 **Public Functions:**
 
 
-- #### `def compile_protocol_directory(path_to_protocol_dir)`
+- #### `def convert_json_to_yaml_ld(directory, context_filepath)`
 
-  > Invokes the protocol compiler for a single directory.
-  > This function is designed to be run in a separate process for each protocol
-  > directory to ensure that compilation is modular and can be parallelized.
-  >
-  > Args:
-  >     path_to_protocol_dir (str): The absolute path to the protocol directory.
-  >
-  > Returns:
-  >     A tuple containing the result of the compilation (True for success,
-  >     False for failure) and the path of the directory that was processed.
-
-
-- #### `def generate_root_agents_md(child_protocol_dirs)`
-
-  > Generates the root AGENTS.md file, which will serve as the main entry point
-  > and index for the hierarchical protocol system.
-  >
-  > This function creates a top-level summary that links to the `AGENTS.md`
-  > files in each of the child protocol directories, making the system more
-  > discoverable and easier to navigate.
-  >
-  > Args:
-  >     child_protocol_dirs (list): A list of paths to the child protocol directories.
-
-
-- #### `def main()`
-
-  > Main function to orchestrate the hierarchical compilation process.
-  >
-  > This function discovers all protocol directories, compiles them in parallel,
-  > and then generates the root `AGENTS.md` to tie them all together.
+  > Converts all JSON files in a directory to YAML-LD.
 
 
 ### `/app/tooling/knowledge_compiler.py`
@@ -946,78 +1375,22 @@ post-mortem file as its primary argument.
   > pattern matching to identify specific, supported commands.
 
 
+- #### `def process_postmortem_file(filepath)`
+
+  > Reads a single post-mortem file and returns its lessons.
+
+
 ### `/app/tooling/knowledge_integrator.py`
 
-Enriches the local knowledge graph with data from external sources like DBPedia.
-
-This script loads the RDF graph generated from the project's protocols,
-identifies key concepts (like tools and rules), queries the DBPedia SPARQL
-endpoint to find related information, and merges the external data into a new,
-enriched knowledge graph.
+_No module-level docstring found._
 
 
 **Public Functions:**
 
 
-- #### `def extract_concepts(graph)`
+- #### `def main()`
 
-  > Extracts key concepts (e.g., tools) from the local graph to query externally.
-  > This version dynamically extracts tool names from the graph.
-
-
-- #### `def load_local_graph(graph_file)`
-
-  > Loads the local RDF graph from a file.
-
-
-- #### `def query_dbpedia(concept)`
-
-  > Queries DBPedia for a given concept and returns a graph of results.
-
-
-- #### `def run_knowledge_integration(input_graph_path, output_graph_path)`
-
-  > The main library function to run the knowledge integration process.
-  > It loads a graph, extracts concepts, queries DBPedia, and saves the
-  > enriched graph.
-
-
-### `/app/tooling/lba_validator.py`
-
-A Linear Bounded Automaton (LBA) for validating Context-Sensitive Development Cycle (CSDC) plans.
-
-This module implements a validator that enforces the context-sensitive rules of the CSDC.
-Unlike a simple FSM, an LBA can inspect the entire input "tape" (the plan) to make
-validation decisions. This is necessary to enforce rules where the validity of one
-command depends on the presence or absence of another command elsewhere in the plan.
-
-The CSDC defines two mutually exclusive models:
-- Model A: Permits `define_set_of_names`, but forbids `define_diagonalization_function`.
-- Model B: Permits `define_diagonalization_function`, but forbids `define_set_of_names`.
-
-This validator checks for these co-occurrence constraints.
-
-
-**Public Classes:**
-
-
-- #### `class LBAValidator`
-
-  > A validator that uses LBA principles to enforce CSDC rules.
-
-
-  **Methods:**
-
-  - ##### `def validate(self, plan_content, model)`
-
-    > Validates a plan against a given CSDC model.
-    >
-    > Args:
-    >     plan_content: The string content of the plan.
-    >     model: The CSDC model to validate against ('A' or 'B').
-    >
-    > Returns:
-    >     A tuple containing a boolean indicating validity and a string with an error message.
+  > Integrates knowledge from various YAML-LD sources into a single graph.
 
 
 ### `/app/tooling/lfi_ill_halting_decider.py`
@@ -1194,6 +1567,33 @@ auditing and analysis tools.
   > Logs the catastrophic failure event.
 
 
+### `/app/tooling/master_agents_md_generator.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def generate_enriched_protocols(knowledge_path)`
+
+  > Parses the integrated knowledge graph and generates a formatted string
+  > of protocols and rules.
+
+
+- #### `def generate_yaml_ld_string(knowledge_path)`
+
+  > Converts the JSON-LD knowledge graph to a YAML-LD string.
+
+
+- #### `def main()`
+
+
+- #### `def summarize_build_commands(config_path)`
+
+  > Reads the build configuration and creates a summary of available commands.
+
+
 ### `/app/tooling/master_control.py`
 
 The master orchestrator for the agent's lifecycle, implementing the Context-Free Development Cycle (CFDC).
@@ -1330,76 +1730,18 @@ subsystem.
   > Prints the first command-line argument to simulate a user message.
 
 
-### `/app/tooling/pda_parser.py`
+### `/app/tooling/migrate_protocols.py`
 
-A parser for pLLLU (paraconsistent Linear Logic with Undeterminedness) formulas.
-
-This script uses the PLY (Python Lex-Yacc) library to define a lexer and a
-parser for a simple, string-based representation of pLLLU formulas. It can
-handle basic atomic formulas, unary operators (like negation and consistency),
-and binary operators (like implication and conjunction).
-
-The main function `parse_formula` takes a string and returns a simple AST
-(Abstract Syntax Tree) represented as nested tuples.
+_No module-level docstring found._
 
 
 **Public Functions:**
 
 
-- #### `def AtomNode(name)`
+- #### `def migrate_protocols(source_dir)`
 
-
-- #### `def BinaryOpNode(op, left, right)`
-
-
-- #### `def UnaryOpNode(op, child)`
-
-
-- #### `def p_error(p)`
-
-
-- #### `def p_formula_atom(p)`
-
-  > formula : ATOM
-
-
-- #### `def p_formula_binary(p)`
-
-  > formula : formula IMPLIES formula
-  >         | formula WITH formula
-  >         | formula PLUS formula
-
-
-- #### `def p_formula_group(p)`
-
-  > formula : LPAREN formula RPAREN
-
-
-- #### `def p_formula_unary(p)`
-
-  > formula : NOT formula
-  >         | BANG formula
-  >         | CONSISTENCY formula
-  >         | SECTION formula
-  >         | WHYNOT formula
-
-
-- #### `def parse_formula(formula_string)`
-
-  > Parses a pLLLU formula string into an AST.
-
-
-- #### `def t_ATOM(t)`
-
-  > [A-Z][A-Z0-9]*
-
-
-- #### `def t_error(t)`
-
-
-- #### `def t_newline(t)`
-
-  > \n+
+  > Parses an old AGENTS.md file and migrates its content to .protocol.json
+  > and .protocol.md files.
 
 
 ### `/app/tooling/plan_executor.py`
@@ -1426,6 +1768,24 @@ of how an agent would execute a plan.
 - #### `def main()`
 
   > Main function to run the plan executor from the command line.
+
+
+### `/app/tooling/plan_generator.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def find_agent_that_produces(resource_name)`
+
+  > Finds an agent in the repository that produces the given resource.
+
+
+- #### `def generate_plan(goal)`
+
+  > Generates a plan to accomplish the given goal using backward-chaining.
 
 
 ### `/app/tooling/plan_manager.py`
@@ -1518,7 +1878,7 @@ allowing for robust and readable plan files.
 A resource-sensitive, four-valued interpreter for pLLLU formulas.
 
 This script implements an interpreter for the pLLLU language. It operates on
-an AST generated by the `pda_parser.py` script. The interpreter is designed
+an AST generated by the `plllu_parser.py` script. The interpreter is designed
 to be resource-sensitive, meaning that each atomic formula in the initial
 context must be consumed exactly once during the evaluation of the proof.
 
@@ -1571,6 +1931,86 @@ available atoms) and returning the resulting logical value.
 - #### `class LogicValue`
 
 
+### `/app/tooling/plllu_lexer.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def t_ATOM(t)`
+
+  > [A-Z][A-Z0-9]*
+
+
+- #### `def t_error(t)`
+
+
+- #### `def t_newline(t)`
+
+  > \n+
+
+
+### `/app/tooling/plllu_parser.py`
+
+A parser for pLLLU (paraconsistent Linear Logic with Undeterminedness) formulas.
+
+This script uses the PLY (Python Lex-Yacc) library to define a
+parser for a simple, string-based representation of pLLLU formulas. It can
+handle basic atomic formulas, unary operators (like negation and consistency),
+and binary operators (like implication and conjunction).
+
+The main function `parse_formula` takes a string and returns a simple AST
+(Abstract Syntax Tree) represented as nested tuples.
+
+
+**Public Functions:**
+
+
+- #### `def AtomNode(name)`
+
+
+- #### `def BinaryOpNode(op, left, right)`
+
+
+- #### `def UnaryOpNode(op, child)`
+
+
+- #### `def p_error(p)`
+
+
+- #### `def p_formula_atom(p)`
+
+  > formula : ATOM
+
+
+- #### `def p_formula_binary(p)`
+
+  > formula : formula IMPLIES formula
+  >         | formula WITH formula
+  >         | formula PLUS formula
+
+
+- #### `def p_formula_group(p)`
+
+  > formula : LPAREN formula RPAREN
+
+
+- #### `def p_formula_unary(p)`
+
+  > formula : NOT formula
+  >         | BANG formula
+  >         | CONSISTENCY formula
+  >         | SECTION formula
+  >         | WHYNOT formula
+
+
+- #### `def parse_formula(formula_string)`
+
+  > Parses a pLLLU formula string into an AST.
+
+
 ### `/app/tooling/plllu_runner.py`
 
 A command-line runner for pLLLU files.
@@ -1592,10 +2032,25 @@ defined in a given pLLLU source file and print the result.
 
 ### `/app/tooling/pre_submit_check.py`
 
-_No module-level docstring found._
+A pre-submission script that runs a series of checks to ensure code quality
+and adherence to repository protocols before a commit is made.
+
+This script currently includes the following checks:
+1.  **Code Linting:** Runs `make lint` to check for style issues (currently disabled).
+2.  **Docstring Enforcement:** Ensures all Python files in key directories have
+    module-level docstrings.
+3.  **Guardian Protocol Validation:** Validates any staged review documents
+    against the Guardian Protocol.
+
+The script is designed to be easily extensible with additional checks.
 
 
 **Public Functions:**
+
+
+- #### `def check_docstrings()`
+
+  > Checks that all Python files in tooling/ and utils/ have a module-level docstring.
 
 
 - #### `def main()`
@@ -1610,36 +2065,105 @@ _No module-level docstring found._
 
 ### `/app/tooling/protocol_compiler.py`
 
-This script now serves as the entry point for the hierarchical protocol compilation.
-It discovers all protocol modules (subdirectories within `protocols/`) and compiles
-each one into its own `AGENTS.md` file. It then generates a root `AGENTS.md`
-that links to all the compiled modules, creating a unified, navigable system.
+_No module-level docstring found._
 
 
 **Public Functions:**
 
 
-- #### `def compile_module_wrapper(path_to_protocol_dir)`
+- #### `def extract_json_from_markdown(filepath)`
+
+  > Extracts a JSON block from a Markdown file.
 
 
-- #### `def compile_single_module(source_dir, target_file, schema_file, knowledge_graph_file=None, autodoc_file=None)`
+- #### `def main()`
+
+  > Compiles protocol sources into a single YAML-LD file.
 
 
-- #### `def generate_root_agents_md(child_protocol_dirs)`
+### `/app/tooling/protocol_manager.py`
+
+A command-line tool for managing agent protocols.
+
+This script provides a set of commands for creating, testing, and versioning
+agent protocols. It is designed to be used by developers to manage the
+protocol lifecycle.
 
 
-- #### `def install_dependencies()`
+**Public Functions:**
 
 
-- #### `def load_schema(schema_file)`
+- #### `def create_protocol(name, directory)`
+
+  > Creates a new protocol from a template.
 
 
-- #### `def main_hierarchical_compiler()`
+- #### `def main()`
 
-  > Main function to run the hierarchical compiler.
+  > Main function for the protocol manager.
 
 
-- #### `def sanitize_markdown(content)`
+- #### `def run_tests()`
+
+  > Runs the protocol tests.
+
+
+- #### `def update_version(protocol_id, new_version)`
+
+  > Updates the version of a protocol.
+
+
+### `/app/tooling/protocol_migration_tool.py`
+
+A tool to migrate protocols from the old, manual AGENTS.md format to the new,
+structured, and compiler-friendly format.
+
+This script is designed to be a one-time migration utility that helps to
+transition the valuable, detailed protocols from the original AGENTS.md file
+into a format that can be processed by the new, dynamic build system.
+
+The tool works by:
+1.  Reading the `AGENTS.md.bak` file, which is a backup of the original.
+2.  Parsing the file to identify the distinct protocol sections (Phase 1-6 and
+    the "STANDING ORDER").
+3.  Creating a new `protocols/manual_protocol/` directory to house the
+    migrated protocols.
+4.  Writing each extracted protocol into its own formatted Markdown file within
+    the new directory.
+
+This ensures that the protocols are preserved and integrated into the new
+system without requiring manual copying and pasting.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+  > Main function to run the protocol migration.
+
+
+### `/app/tooling/protocol_oracle.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def get_applicable_protocols(graph, context)`
+
+  > Queries the graph to find protocols that are applicable to the given context.
+  > This function dynamically loads and executes the `is_applicable` function
+  > from the Python protocol files.
+
+
+- #### `def get_rules_for_protocols(graph, protocol_uris)`
+
+  > Retrieves all rules associated with the given list of protocol URIs.
+
+
+- #### `def main()`
 
 
 ### `/app/tooling/protocol_updater.py`
@@ -1678,6 +2202,31 @@ directory, performing targeted updates based on command-line arguments.
   > Updates the description of a specific rule within a protocol.
 
 
+### `/app/tooling/py_to_udc.py`
+
+A tool for converting Python code to UDC assembly-like code.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+
+**Public Classes:**
+
+
+- #### `class PythonToUdcConverter`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self)`
+
+  - ##### `def visit_While(self, node)`
+
+
 ### `/app/tooling/refactor.py`
 
 A tool for performing automated symbol renaming in Python code.
@@ -1688,22 +2237,6 @@ its textual references throughout the entire repository. This provides a safe
 and automated way to perform a common refactoring task, reducing the risk of
 manual errors.
 
-The tool operates in three main stages:
-1.  **Definition Finding:** It uses Python's Abstract Syntax Tree (AST) module
-    to parse the source file and precisely locate the definition of the target
-    symbol. This ensures that the tool is targeting the correct code construct.
-2.  **Reference Finding:** It performs a text-based search across the specified
-    search path (defaulting to the entire repository) to find all files that
-    mention the symbol's old name.
-3.  **Plan Generation:** Instead of modifying files directly, it generates a
-    refactoring "plan." This plan is a sequence of `replace_with_git_merge_diff`
-    commands, one for each file that needs to be changed. The path to this
-    generated plan file is printed to standard output.
-
-This plan-based approach allows the agent's master controller to execute the
-refactoring in a controlled, verifiable, and atomic way, consistent with its
-standard operational procedures.
-
 
 **Public Functions:**
 
@@ -1713,12 +2246,40 @@ standard operational procedures.
   > Finds all files in a directory that reference a given symbol.
 
 
-- #### `def find_symbol_definition(filepath, symbol_name)`
+- #### `def main()`
 
-  > Finds the definition of a symbol in a Python file.
+
+### `/app/tooling/refactor_add_fuel.py`
+
+A tool for refactoring a Python function to use a "fuel"-based approach to recursion.
+This tool is designed to be idempotent and handle nested while loops.
+
+
+**Public Functions:**
 
 
 - #### `def main()`
+
+
+
+**Public Classes:**
+
+
+- #### `class FuelTransformer`
+
+  > An AST transformer that injects a 'fuel' mechanism into functions and while loops.
+
+
+  **Methods:**
+
+  - ##### `def visit_FunctionDef(self, node)`
+
+    > Adds a 'fuel' keyword argument to a function definition if it doesn't already exist.
+
+  - ##### `def visit_While(self, node)`
+
+    > Transforms a 'while' loop to include a fuel check and decrement.
+    > Recursively transforms nested loops first (bottom-up).
 
 
 ### `/app/tooling/reliable_ls.py`
@@ -1860,6 +2421,11 @@ actionable lessons from `knowledge_core/lessons.jsonl` and uses the
 **Public Functions:**
 
 
+- #### `def apply_merge_diff(filepath, merge_diff)`
+
+  > Applies a git-style merge diff to a file.
+
+
 - #### `def load_lessons()`
 
   > Loads all lessons from the JSONL file.
@@ -1958,49 +2524,22 @@ rate tracking or tool usage anti-patterns) to be added as the system evolves.
   > Main function to run the self-improvement analysis CLI.
 
 
-- #### `def run_self_improvement_task(model)`
+### `/app/tooling/session_manager.py`
 
-  > Invokes the agent_shell.py to run a self-improvement task for a specific model.
-
-
-### `/app/tooling/standard_agents_compiler.py`
-
-A compiler that generates a simplified, standard-compliant `AGENTS.md` file.
-
-This script acts as an "adapter" to make the repository more accessible to
-third-party AI agents that expect a conventional set of instructions. While the
-repository's primary `AGENTS.md` is a complex, hierarchical, and
-machine-readable artifact for its own specialized agent, the `AGENTS.standard.md`
-file produced by this script offers a simple, human-readable summary of the
-most common development commands.
-
-The script works by:
-1.  **Parsing the Makefile:** It dynamically parses the project's `Makefile`,
-    which is the single source of truth for high-level commands. It specifically
-    extracts the exact commands for common targets like `install`, `test`,
-    `lint`, and `format`. This ensures the generated instructions are never
-    stale.
-2.  **Injecting into a Template:** It injects these extracted commands into a
-    pre-defined, user-friendly Markdown template.
-3.  **Generating the Artifact:** The final output is written to
-    `AGENTS.standard.md`, providing a simple, stable, and conventional entry
-    point for external tools, effectively bridging the gap between the complex
-    internal protocol system and the broader agent ecosystem.
+This module provides a simple way to save and load the agent's session.
 
 
 **Public Functions:**
 
 
-- #### `def main()`
+- #### `def load_session()`
 
-  > Generates a standard-compliant AGENTS.md file by parsing commands
-  > from the project's Makefile.
+  > Loads the agent's session from a file.
 
 
-- #### `def parse_makefile_command(target_name, makefile_content)`
+- #### `def save_session(agent_state)`
 
-  > Parses a Makefile to find the main command for a specific target,
-  > skipping any 'echo' lines. This version iterates through lines for robustness.
+  > Saves the agent's session to a file.
 
 
 ### `/app/tooling/state.py`
@@ -2056,7 +2595,9 @@ execution that is the hallmark of the CFDC.
 
   **Methods:**
 
-  - ##### `def to_json(self)`
+  - ##### `def from_dict(cls, data)`
+
+  - ##### `def to_dict(self)`
 
 
 - #### `class PlanContext`
@@ -2066,6 +2607,35 @@ execution that is the hallmark of the CFDC.
   > This class holds the state of a specific plan being executed, including its
   > file path, its content (as a list of parsed Command objects), and a pointer
   > to the current step being executed.
+
+
+### `/app/tooling/symbol_extractor.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+
+**Public Classes:**
+
+
+- #### `class SymbolExtractor`
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, ast_dir='knowledge_core/asts', symbol_map_file='knowledge_core/symbol_map.json')`
+
+  - ##### `def find_all_references(self, symbol_name)`
+
+  - ##### `def generate_symbol_map(self)`
+
+  - ##### `def get_symbols_from_file(self, file_path)`
 
 
 ### `/app/tooling/symbol_map_generator.py`
@@ -2101,7 +2671,7 @@ and understand the structure of the repository without having to read every file
   > Fallback to generate a symbol map for Python files using the AST module.
 
 
-- #### `def generate_symbols_with_ctags(root_dir='.')`
+- #### `def generate_symbols_with_ctags(output_path, root_dir='.')`
 
   > Generates a symbol map using Universal Ctags.
 
@@ -2114,6 +2684,17 @@ and understand the structure of the repository without having to read every file
 - #### `def main()`
 
   > Main function to generate and save the symbol map.
+
+
+### `/app/tooling/temporal_orienter.py`
+
+A tool for performing temporal orientation by fetching a summary of a concept from DBPedia.
+
+
+**Public Functions:**
+
+
+- #### `def main()`
 
 
 ### `/app/tooling/udc_orchestrator.py`
@@ -2165,17 +2746,129 @@ the amount of memory used, and the total wall-clock time.
     > Parses and runs the UDC plan until it halts or a limit is exceeded.
 
 
+### `/app/tooling/unused_import_remover.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+### `/app/tooling/validate_tdd.py`
+
+_No module-level docstring found._
+
+---
+
+## `/app/tooling/aal/` Directory
+
+### `/app/tooling/aal/__init__.py`
+
+_No module-level docstring found._
+
+### `/app/tooling/aal/domain.py`
+
+_No module-level docstring found._
+
+
+**Public Classes:**
+
+
+- #### `class Action`
+
+  > Represents an action that can be performed by an agent.
+
+
+- #### `class CausalLaw`
+
+  > Represents a causal law of the form 'a causes f if p1, ..., pn'.
+
+
+- #### `class Domain`
+
+  > Represents a complete AAL domain description.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self)`
+
+
+- #### `class Fluent`
+
+  > Represents a fluent (a proposition) in the domain.
+
+
+### `/app/tooling/aal/interpreter.py`
+
+_No module-level docstring found._
+
+
+**Public Classes:**
+
+
+- #### `class Interpreter`
+
+  > The AAL interpreter, responsible for state transitions.
+
+
+  **Methods:**
+
+  - ##### `def get_next_state(self, current_state, action, domain)`
+
+    > Calculates the next state based on the current state, an action, and the domain's causal laws.
+    > A fluent is in the next state if there is a causal law 'a causes f if C' where a is the action
+    > and C is a subset of the current state.
+
+
+### `/app/tooling/aal/parser.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def parse_aal(aal_string)`
+
+  > Parses an AAL string and returns a Domain object.
+
+
 ---
 
 ## `/app/tooling/agent_smith/` Directory
 
 ### `/app/tooling/agent_smith/__init__.py`
 
-_No module-level docstring found._
+This package, named 'Agent Smith', is a toolset designed for metamorphic
+testing of the agent's core protocol compilation system.
+
+It works by creating isolated sandbox environments, introducing mutations
+(e.g., deleting a protocol file), running the protocol compiler, and verifying
+that the resulting `AGENTS.md` artifact reflects the mutation as expected.
+This allows for robust testing of the hierarchical compiler's resilience and
+correctness.
 
 ### `/app/tooling/agent_smith/generate_and_test.py`
 
-_No module-level docstring found._
+A command-line tool for orchestrating the metamorphic testing of the
+hierarchical protocol compiler.
+
+This script automates the following workflow:
+1.  Creates a clean, isolated sandbox environment.
+2.  Copies the necessary protocol source files and the compiler tooling into
+    the sandbox.
+3.  Installs required Python dependencies within the sandbox.
+4.  Applies a specified mutation to the protocol sources (e.g., deleting a file).
+5.  Runs the `hierarchical_compiler.py` within the sandbox to generate a
+    variant `AGENTS.md` file.
+6.  Verifies that the generated artifact correctly reflects the mutation.
+
+This allows for automated, repeatable testing of the compiler's behavior
+under various source conditions.
 
 
 **Public Functions:**
@@ -2238,11 +2931,342 @@ _No module-level docstring found._
 
 ---
 
+## `/app/tooling/chomsky/` Directory
+
+### `/app/tooling/chomsky/analyzer.py`
+
+A constructive code analyzer for classifying Python code according to the Chomsky hierarchy.
+
+This module provides the core logic for the "constructive" analysis of Python code.
+It uses the `ast` module to parse Python code into an Abstract Syntax Tree (AST)
+and then traverses the tree to identify key characteristics that determine the
+computational complexity of the code.
+
+The primary goal is to identify "witnesses" of decidability (e.g., primitive
+recursion, bounded loops) and "counter-witnesses" (e.g., general recursion,
+potential non-termination). This analysis provides the foundation for the
+decidable refactoring toolchain.
+
+
+**Public Classes:**
+
+
+- #### `class CodeAnalyzer`
+
+  > A class to analyze a Python AST and classify its components.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, source_code)`
+
+  - ##### `def analyze(self)`
+
+    > Performs a full analysis of the source code.
+
+
+### `/app/tooling/chomsky/cli.py`
+
+A unified command-line interface for the Chomsky toolchain.
+
+This script provides a single entry point for all the tools related to the
+Chomsky hierarchy and decidability. It orchestrates the functionality of the
+various components of the toolchain, such as the code analyzer and the
+refactoring tools, providing a clear and contextually visible interface for
+both human and agentic use.
+
+
+**Public Functions:**
+
+
+- #### `def analyze_file(filepath)`
+
+  > Analyzes a Python file and prints the results.
+
+
+- #### `def main()`
+
+
+- #### `def refactor_file(filepath, strategy)`
+
+  > Refactors a Python file using a specified strategy.
+
+
+- #### `def validate_plan_file(filepath, model, complexity)`
+
+  > Validates a plan file against a CSDC model and complexity.
+
+
+### `/app/tooling/chomsky/lba_validator.py`
+
+A Linear Bounded Automaton (LBA) for validating Context-Sensitive Development Cycle (CSDC) plans.
+
+This module implements a validator that enforces the context-sensitive rules of the CSDC.
+Unlike a simple FSM, an LBA can inspect the entire input "tape" (the plan) to make
+validation decisions. This is necessary to enforce rules where the validity of one
+command depends on the presence or absence of another command elsewhere in the plan.
+
+The CSDC defines two mutually exclusive models:
+- Model A: Permits `define_set_of_names`, but forbids `define_diagonalization_function`.
+- Model B: Permits `define_diagonalization_function`, but forbids `define_set_of_names`.
+
+This validator checks for these co-occurrence constraints.
+
+
+**Public Classes:**
+
+
+- #### `class LBAValidator`
+
+  > A validator that uses LBA principles to enforce CSDC rules.
+
+
+  **Methods:**
+
+  - ##### `def validate(self, plan_content, model)`
+
+    > Validates a plan against a given CSDC model.
+    >
+    > Args:
+    >     plan_content: The string content of the plan.
+    >     model: The CSDC model to validate against ('A' or 'B').
+    >
+    > Returns:
+    >     A tuple containing a boolean indicating validity and a string with an error message.
+
+
+### `/app/tooling/chomsky/refactor.py`
+
+A tool for refactoring Python code to move it down the Chomsky hierarchy.
+
+This module provides the core logic for the "decidable refactoring" tool. It
+uses the `ast` module to perform transformations on the Abstract Syntax Tree
+of a Python file, with the primary goal of converting functions with general
+recursion into provably terminating versions.
+
+
+**Public Classes:**
+
+
+- #### `class CodeRefactorer`
+
+  > A class to perform AST-based refactorings on Python code.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, source_code)`
+
+  - ##### `def refactor_to_decidable(self)`
+
+    > Refactors all general recursive functions in the code to be decidable.
+
+
+- #### `class GeneralToPrimitiveTransformer`
+
+  > An AST transformer that converts a general recursive function to a
+  > primitive recursive one by adding a 'fuel' parameter.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, func_name)`
+
+  - ##### `def visit_Call(self, node)`
+
+  - ##### `def visit_FunctionDef(self, node)`
+
+
+### `/app/tooling/chomsky/refactor_cf_to_r.py`
+
+A tool for refactoring context-free Python code into regular components.
+
+
+**Public Functions:**
+
+
+- #### `def is_lexer_like(node)`
+
+  > Determines if a function definition node is lexer-like.
+  > A function is considered lexer-like if it iterates over a string and
+  > yields tokens.
+
+
+- #### `def main(argv=None)`
+
+
+### `/app/tooling/chomsky/refactor_cs_to_cf.py`
+
+A tool for refactoring context-sensitive Python code into context-free components.
+
+
+**Public Functions:**
+
+
+- #### `def is_pure(node)`
+
+  > Determines if a function definition node is pure.
+  > A function is considered pure if it does not perform any side effects.
+
+
+- #### `def main(argv=None)`
+
+
+---
+
+## `/app/tooling/custom_tools/` Directory
+
+### `/app/tooling/custom_tools/analyze_data.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+### `/app/tooling/custom_tools/create_file.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+### `/app/tooling/custom_tools/fetch_data.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+### `/app/tooling/custom_tools/hello_world.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def hello_world(message)`
+
+  > Prints a message to the console.
+
+
+### `/app/tooling/custom_tools/read_file.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def main()`
+
+
+---
+
+## `/app/tooling/jules_agent/` Directory
+
+### `/app/tooling/jules_agent/action_logger.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def log_action(action_text, cwd)`
+
+  > Logs an action to the AGENTS.md file.
+
+
+### `/app/tooling/jules_agent/plan_manager.py`
+
+_No module-level docstring found._
+
+
+**Public Functions:**
+
+
+- #### `def inject_plan(plan_text, cwd)`
+
+  > Injects or updates the plan in the AGENTS.md file.
+
+
+### `/app/tooling/jules_agent/plan_runner.py`
+
+A self-executing plan runner for Jules, the AI agent.
+
+This script reads a plan file in a specific format, executes the commands,
+verifies their success, and handles failures.
+
+
+**Public Functions:**
+
+
+- #### `def execute_command(command, cwd)`
+
+  > Executes a single command and returns True on success, False on failure.
+
+
+- #### `def main()`
+
+  > Main function to run the plan runner from the command line.
+
+
+- #### `def message_user(message)`
+
+  > Simulates sending a message to the user.
+
+
+- #### `def parse_executable_plan(plan_content)`
+
+  > Parses the raw text of a plan into a list of ExecutableCommand objects.
+
+
+- #### `def run_in_bash_session(command)`
+
+  > Simulates running a command in a bash session.
+
+
+- #### `def run_plan(plan_content, cwd)`
+
+  > Parses and executes a plan.
+
+
+
+**Public Classes:**
+
+
+- #### `class ExecutableCommand`
+
+  > Represents a single, parsed command from a self-executing plan.
+
+
+---
+
 ## `/app/utils/` Directory
 
 ### `/app/utils/__init__.py`
 
-_No module-level docstring found._
+This package contains a collection of utility modules that provide common,
+reusable functionality across the agent's toolchain.
+
+Modules include:
+- `file_system_utils`: High-level abstractions for file system operations.
+- `logger`: A standardized logger for creating structured, JSON-based log
+  entries that conform to the repository's logging schema.
+- `gemini_api`: A client for interacting with the Google Gemini API.
 
 ### `/app/utils/file_system_utils.py`
 
@@ -2276,6 +3300,11 @@ Core Features:
 
   > Finds all directories within the root_dir that contain at least one
   > `.protocol.json` or `.protocol.md` file, indicating they are protocol modules.
+
+
+- #### `def get_agents_md_path(cwd)`
+
+  > Finds the AGENTS.md file in the given directory.
 
 
 - #### `def get_ignore_patterns(base_dir)`
@@ -2338,6 +3367,13 @@ and self-improvement activities.
     >     schema_path (str): The path to the Markdown file containing the logging schema.
     >     log_path (str): The path to the log file to be written.
 
+  - ##### `def get_logs(self)`
+
+    > Retrieves all log entries for the current session.
+    >
+    > Returns:
+    >     list: A list of log entries for the current session.
+
   - ##### `def log(self, phase, task_id, plan_step, action_type, action_details, outcome_status, outcome_message='', error_details=None, evidence='', context=None)`
 
     > Constructs, validates, and writes a log entry.
@@ -2356,3 +3392,47 @@ and self-improvement activities.
     >
     > Raises:
     >     ValidationError: If the generated log entry does not conform to the schema.
+
+
+---
+
+## `/app/utils/gemini_api/` Directory
+
+### `/app/utils/gemini_api/client.py`
+
+_No module-level docstring found._
+
+
+**Public Classes:**
+
+
+- #### `class GeminiApiClient`
+
+  > A client for interacting with the Gemini API.
+
+
+  **Methods:**
+
+  - ##### `def __init__(self, api_key=None)`
+
+    > Initializes the Gemini API client.
+    > Args:
+    >     api_key: The API key for the Gemini API. If not provided, it will be
+    >         read from the GEMINI_API_KEY environment variable.
+
+  - ##### `def generate_text(self, prompt)`
+
+    > Generates text using the Gemini API.
+    > Args:
+    >     prompt: The prompt to use for text generation.
+    > Returns:
+    >     The generated text.
+
+  - ##### `def process_document(self, document_path, prompt='Extract the text from this document.')`
+
+    > Processes a document using the Gemini API.
+    > Args:
+    >     document_path: The path to the document to process.
+    >     prompt: The prompt to use for document processing.
+    > Returns:
+    >     The processed document content.

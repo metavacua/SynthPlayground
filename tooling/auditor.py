@@ -29,6 +29,8 @@ import sys
 import re
 import argparse
 from datetime import datetime
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from tooling.auditor_logic import (
     analyze_protocol_completeness,
     analyze_tool_centrality,
@@ -36,6 +38,7 @@ from tooling.auditor_logic import (
     analyze_documentation,
     analyze_system_health,
 )
+from tooling.symbol_extractor import SymbolExtractor
 
 # Add the root directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -46,6 +49,7 @@ ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 LOG_FILE = os.path.join(ROOT_DIR, "logs", "activity.log.jsonl")
 PLAN_REGISTRY_PATH = os.path.join(ROOT_DIR, "knowledge_core", "plan_registry.json")
 SYSTEM_DOCS_PATH = os.path.join(ROOT_DIR, "knowledge_core", "SYSTEM_DOCUMENTATION.md")
+KNOWLEDGE_LESSONS_PATH = os.path.join(ROOT_DIR, "knowledge_core", "lessons.jsonl")
 POSTMORTEM_DIR = os.path.join(ROOT_DIR, "postmortems")
 AGENTS_MD_FILENAME = "AGENTS.md"
 SPECIAL_DIRS = ["protocols/security"]  # from protocol_auditor.py
@@ -109,7 +113,7 @@ def get_protocol_tools_from_agents_md(agents_md_paths):
 
 
 def run_protocol_audit():
-    report = ["## 1. Protocol Audit"]
+    report = []
     all_agents_files = find_all_agents_md_files(ROOT_DIR)
 
     # Source Check
@@ -184,7 +188,7 @@ def run_protocol_audit():
 
 
 def run_plan_registry_audit():
-    report = ["## 2. Plan Registry Audit"]
+    report = []
     if not os.path.exists(PLAN_REGISTRY_PATH):
         report.append(
             f"- ❌ **Error:** Plan registry not found at `{PLAN_REGISTRY_PATH}`"
@@ -215,7 +219,7 @@ def run_plan_registry_audit():
 
 
 def run_doc_audit():
-    report = ["## 3. Documentation Audit"]
+    report = []
     if not os.path.exists(SYSTEM_DOCS_PATH):
         report.append(
             f"- ❌ **Error:** System documentation not found at `{SYSTEM_DOCS_PATH}`. Run the `docs` build target first."
@@ -245,19 +249,64 @@ def run_doc_audit():
 # --- System Health Audit Logic ---
 
 
-def run_health_audit(session_start_time_iso: str) -> str:
+def run_knowledge_audit():
+    report = []
+    if not os.path.exists(KNOWLEDGE_LESSONS_PATH):
+        report.append(
+            f"- ❌ **Error:** Knowledge base not found at `{KNOWLEDGE_LESSONS_PATH}`"
+        )
+        return report
+
+    extractor = SymbolExtractor()
+    dead_links = []
+    with open(KNOWLEDGE_LESSONS_PATH, "r") as f:
+        for line in f:
+            try:
+                lesson = json.loads(line)
+                action = lesson.get("action", {})
+                if action.get("command") == "placeholder":
+                    continue  # Skip placeholder actions
+
+                # This is a simplified check. A real implementation would
+                # involve more sophisticated symbol analysis.
+                params = action.get("parameters", {})
+                for key, value in params.items():
+                    if "symbol" in key or "file" in key:
+                        references = extractor.find_all_references(value)
+                        if not references:
+                            dead_links.append(
+                                {
+                                    "lesson_id": lesson.get("lesson_id"),
+                                    "symbol": value,
+                                }
+                            )
+            except json.JSONDecodeError:
+                continue
+
+    if not dead_links:
+        report.append("- ✅ **Success:** All knowledge base entries are valid.")
+    else:
+        report.append(
+            f"- ⚠️ **Dead Links Found:** {len(dead_links)} knowledge entries point to non-existent symbols."
+        )
+        for link in dead_links:
+            report.append(f"  - Lesson: `{link['lesson_id']}` -> Symbol: `{link['symbol']}`")
+    return report
+
+
+def run_health_audit(session_start_time_iso: str) -> list[str]:
     """
     Performs a system health audit, checking for "absence of evidence" anomalies.
     """
     if not os.path.exists(LOG_FILE):
-        return "❌ **Log Staleness Detected:** Log file not found. The agent's logging system may be broken."
+        return ["- ❌ **Log Staleness Detected:** Log file not found. The agent's logging system may be broken."]
 
     with open(LOG_FILE, "r") as f:
         log_content = f.readlines()
 
     return analyze_system_health(
         log_content, POSTMORTEM_DIR, session_start_time_iso
-    )
+    ).split('\n')
 
 
 # --- Main ---
@@ -272,13 +321,14 @@ def main():
         "audit_type",
         nargs="?",
         default="all",
-        choices=["all", "protocol", "plans", "docs", "health"],
+        choices=["all", "protocol", "plans", "docs", "health", "knowledge"],
         help="The type of audit to run.\n"
         " - all: Run all audits.\n"
         " - protocol: Audit protocols, tool usage, and AGENTS.md freshness.\n"
         " - plans: Audit the plan registry for dead links.\n"
         " - docs: Audit for missing Python module docstrings.\n"
-        " - health: Audit system health for 'absence of evidence' anomalies.",
+        " - health: Audit system health for 'absence of evidence' anomalies.\n"
+        " - knowledge: Audit the knowledge base for dead links.",
     )
     parser.add_argument("--session-start-time", help="The start time of the current session.", default=datetime.now().isoformat())
     args = parser.parse_args()
@@ -290,15 +340,28 @@ def main():
 
     report_parts = [f"# Unified Audit Report ({datetime.now().isoformat()})"]
 
-    if args.audit_type in ["all", "protocol"]:
-        report_parts.extend(run_protocol_audit())
-    if args.audit_type in ["all", "plans"]:
-        report_parts.extend(run_plan_registry_audit())
-    if args.audit_type in ["all", "docs"]:
-        report_parts.extend(run_doc_audit())
-    if args.audit_type in ["all", "health"]:
-        report_parts.append("## 4. System Health Audit")
-        report_parts.append(run_health_audit(args.session_start_time))
+    audit_map = {
+        "protocol": ("Protocol Audit", run_protocol_audit),
+        "plans": ("Plan Registry Audit", run_plan_registry_audit),
+        "docs": ("Documentation Audit", run_doc_audit),
+        "knowledge": ("Knowledge Base Audit", run_knowledge_audit),
+        "health": ("System Health Audit", lambda: run_health_audit(args.session_start_time)),
+    }
+
+    selected_audits = []
+    if args.audit_type == "all":
+        selected_audits = list(audit_map.keys())
+    else:
+        selected_audits = [args.audit_type]
+
+    section_number = 1
+    for audit_key in selected_audits:
+        title, audit_func = audit_map[audit_key]
+        content = audit_func()
+        if content:
+            report_parts.append(f"## {section_number}. {title}")
+            report_parts.extend(content)
+            section_number += 1
 
     report_content = "\n\n".join(report_parts)
     report_path = os.path.join(ROOT_DIR, "audit_report.md")
