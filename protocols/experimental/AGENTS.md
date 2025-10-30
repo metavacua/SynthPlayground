@@ -1,6 +1,6 @@
 # AGENTS.md (Dynamically Generated)
 
-**Last Generated:** 2025-10-30 03:49:44 UTC
+**Last Generated:** 2025-10-30 20:32:34 UTC
 
 ## Objective
 
@@ -43,6 +43,11 @@ The agent's behavior is governed by the following set of formal protocols, which
 **Rules:**
 
 - **`greet-the-world`**: When this rule is invoked, the agent must use the `hello_world` tool to print the message "Hello, World!".
+
+---
+### Protocol: `CHARTER-001`
+**Description**: A charter of operational principles for the AI agent.
+
 
 ---
 ### Protocol: `external-api-integration-001`
@@ -454,6 +459,32 @@ The agent's behavior is governed by the following set of formal protocols, which
       to print the message "Hello, World!".
     rule_id: greet-the-world
     tool: hello_world
+  version: 1.0.0
+- description: A charter of operational principles for the AI agent.
+  error_handling:
+  - description: Retry failed operations.
+    rule_id: retry-failed-operations
+  - description: Report errors to the user.
+    rule_id: report-errors-to-user
+  - description: Request help from the user when it is unable to resolve an error
+      on its own.
+    rule_id: request-help-from-user
+  principles:
+  - description: The agent must prioritize the safety and security of the codebase
+      and the development environment.
+    principle_id: safety-and-security
+  - description: The agent must strive to produce efficient and scalable solutions.
+    principle_id: efficiency-and-scalability
+  - description: The agent's actions must be transparent and accountable.
+    principle_id: transparency-and-accountability
+  protocol_id: CHARTER-001
+  security:
+  - description: Do not store sensitive information in the repository.
+    rule_id: no-sensitive-information
+  - description: Do not use insecure protocols or libraries.
+    rule_id: no-insecure-protocols
+  - description: Sanitize all user input.
+    rule_id: sanitize-user-input
   version: 1.0.0
 - associated_artifacts:
   - knowledge_core/external_api_registry.json
