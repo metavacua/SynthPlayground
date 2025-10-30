@@ -6,7 +6,7 @@ decidable theory. The executable witness for a proposition is a function
 that computationally demonstrates the proposition's truth.
 """
 
-def prove_existence_of_x():
+def prove_presburger_proposition():
     """
     This function is the executable witness for the proposition:
     exists x such that (x > 3) and (x < 6) and (2*x == 8)
@@ -44,6 +44,6 @@ def prove_existence_of_x():
         return proof_certificate
 
 if __name__ == "__main__":
-    print("--- Constructing Executable Witness for L_neither ---")
-    certificate = prove_existence_of_x()
+    print("--- Constructing Executable Witness for Presburger Arithmetic ---")
+    certificate = prove_presburger_proposition()
     print(certificate)
