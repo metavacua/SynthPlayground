@@ -2,6 +2,24 @@
   "symbols": [
     {
       "_type": "tag",
+      "name": "decider_generator",
+      "path": "./v_theory_decider.py",
+      "language": "Python",
+      "line": 33,
+      "kind": "function",
+      "docstring": "This is the non-recursive core logic of our decider. It is a \"generator\"\nthat describes the recursive logic of the theory. It takes `self` as an\nargument, which represents the function to call for the recursive step.\nThis `self` is the computational analogue of the theory referring to its\nown proof predicate."
+    },
+    {
+      "_type": "tag",
+      "name": "decider_logic",
+      "path": "./v_theory_decider.py",
+      "language": "Python",
+      "line": 41,
+      "kind": "function",
+      "docstring": "The logic for deciding membership in L_V. The execution of this function\nis the proof that \"`input_string` is in L_V\".\n\nThe language L_V (the set of theorems V) is defined as:\n1. Base case (Axioms): Any string `w` not of the form `IsInL(<s>)` is in L_V\n   if and only if it has an even length.\n2. Recursive case (Inference Rule): A string `IsInL(<s>)` is in L_V if and only if\n   the inner string `s` is in L_V. This rule allows the theory to reason\n   about its own theorems."
+    },
+    {
+      "_type": "tag",
       "name": "main",
       "path": "./aura.py",
       "language": "Python",
@@ -161,24 +179,6 @@
       "line": 1,
       "kind": "function",
       "docstring": null
-    },
-    {
-      "_type": "tag",
-      "name": "decider_generator",
-      "path": "./witness_v.py",
-      "language": "Python",
-      "line": 17,
-      "kind": "function",
-      "docstring": "This is the non-recursive core logic of our decider.\nIt's a \"generator\" that describes the recursive logic. It takes `self`\nas an argument, which will be the function to call for the recursive step."
-    },
-    {
-      "_type": "tag",
-      "name": "decider_logic",
-      "path": "./witness_v.py",
-      "language": "Python",
-      "line": 23,
-      "kind": "function",
-      "docstring": "The logic for deciding membership in L_V. The proposition being\nproven is \"`input_string` is in L_V\". This function's execution\nis the proof.\n\nThe language L_V is defined as:\n1. Base case: Any string `w` not of the form `IsInL(<s>)` is in L_V\n   if and only if it has an even length.\n2. Recursive case: A string `IsInL(<s>)` is in L_V if and only if\n   the inner string `s` is in L_V."
     },
     {
       "_type": "tag",
