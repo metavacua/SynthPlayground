@@ -2759,16 +2759,16 @@
       "name": "Classifier",
       "path": "./language_theory/toolchain/classifier.py",
       "language": "Python",
-      "line": 3,
+      "line": 4,
       "kind": "class",
-      "docstring": "Analyzes a Grammar object to determine its classification within the Chomsky Hierarchy."
+      "docstring": "Analyzes a Grammar object to determine its classification within the Chomsky Hierarchy.\nThis version is adapted to work with grammars derived from ASTs, where the\ndistinction between terminals and non-terminals is based on production rules,\nnot on character casing."
     },
     {
       "_type": "tag",
       "name": "main",
       "path": "./language_theory/toolchain/classifier.py",
       "language": "Python",
-      "line": 112,
+      "line": 89,
       "kind": "function",
       "docstring": null
     },
@@ -2777,54 +2777,63 @@
       "name": "__init__",
       "path": "./language_theory/toolchain/classifier.py",
       "language": "Python",
-      "line": 7,
+      "line": 11,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "is_non_terminal",
+      "path": "./language_theory/toolchain/classifier.py",
+      "language": "Python",
+      "line": 17,
+      "kind": "function",
+      "docstring": "Checks if a symbol is a non-terminal."
+    },
+    {
+      "_type": "tag",
+      "name": "is_terminal",
+      "path": "./language_theory/toolchain/classifier.py",
+      "language": "Python",
+      "line": 21,
+      "kind": "function",
+      "docstring": "Checks if a symbol is a terminal."
     },
     {
       "_type": "tag",
       "name": "classify",
       "path": "./language_theory/toolchain/classifier.py",
       "language": "Python",
-      "line": 11,
+      "line": 25,
       "kind": "function",
-      "docstring": "Determines the most specific classification for the grammar.\nFollows the hierarchy from Type-3 up to Type-0."
+      "docstring": "Determines the most specific classification for the grammar."
     },
     {
       "_type": "tag",
-      "name": "_check_type_0",
+      "name": "_is_regular",
       "path": "./language_theory/toolchain/classifier.py",
       "language": "Python",
       "line": 44,
       "kind": "function",
-      "docstring": "Checks for unrestricted grammar properties.\n- is_unrestricted: True if any LHS has more than one symbol.\n- is_contracting: True if any rule is contracting (|LHS| > |RHS|)."
+      "docstring": "Checks if the grammar is regular (right-linear).\nA -> aB or A -> a"
     },
     {
       "_type": "tag",
-      "name": "_check_type_1",
+      "name": "_is_context_free",
       "path": "./language_theory/toolchain/classifier.py",
       "language": "Python",
       "line": 64,
       "kind": "function",
-      "docstring": "Checks if the grammar is context-sensitive.\nA grammar is context-sensitive if it's unrestricted but not contracting."
+      "docstring": "Checks if the grammar is context-free.\nA -> \u03b3 (where \u03b3 is any string of terminals and/or non-terminals)"
     },
     {
       "_type": "tag",
-      "name": "_check_type_2",
+      "name": "_is_context_sensitive",
       "path": "./language_theory/toolchain/classifier.py",
       "language": "Python",
-      "line": 71,
+      "line": 74,
       "kind": "function",
-      "docstring": "Checks if the grammar is context-free.\n- is_cfg: True if all LHS have exactly one non-terminal.\n- has_empty: True if any rule produces an empty string."
-    },
-    {
-      "_type": "tag",
-      "name": "_check_type_3",
-      "path": "./language_theory/toolchain/classifier.py",
-      "language": "Python",
-      "line": 86,
-      "kind": "function",
-      "docstring": "Checks if the grammar is regular (left or right linear).\n- is_left_reg: True if all rules are of the form A -> Ba or A -> a.\n- is_right_reg: True if all rules are of the form A -> aB or A -> a."
+      "docstring": "Checks if the grammar is context-sensitive (non-contracting).\n|LHS| <= |RHS|."
     },
     {
       "_type": "tag",
@@ -2912,16 +2921,16 @@
       "name": "Grammar",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 4,
+      "line": 5,
       "kind": "class",
-      "docstring": "A class to represent a formal grammar. It parses a grammar file\nand provides helpers for analyzing its properties."
+      "docstring": "A class to represent a formal grammar. It can parse a grammar from a\ntraditional text file or from a JSON AST file."
     },
     {
       "_type": "tag",
       "name": "__init__",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 9,
+      "line": 10,
       "kind": "function",
       "docstring": null
     },
@@ -2930,7 +2939,7 @@
       "name": "_traverse_ast",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 15,
+      "line": 18,
       "kind": "function",
       "docstring": "Recursively traverses the AST to extract grammar productions."
     },
@@ -2939,43 +2948,34 @@
       "name": "_parse_file",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 33,
+      "line": 37,
       "kind": "function",
       "docstring": "Parses the grammar file provided at initialization."
-    },
-    {
-      "_type": "tag",
-      "name": "get_productions_dict",
-      "path": "./language_theory/toolchain/grammar.py",
-      "language": "Python",
-      "line": 66,
-      "kind": "function",
-      "docstring": "Returns productions grouped by LHS, for parser use."
     },
     {
       "_type": "tag",
       "name": "get_non_terminals",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 74,
+      "line": 70,
       "kind": "function",
-      "docstring": "Returns the set of all non-terminal symbols."
+      "docstring": "Returns the set of all non-terminal symbols.\nA non-terminal is any symbol that appears on the left-hand side of a production."
     },
     {
       "_type": "tag",
       "name": "get_terminals",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 81,
+      "line": 82,
       "kind": "function",
-      "docstring": "Returns the set of all terminal symbols."
+      "docstring": "Returns the set of all terminal symbols.\nA terminal is any symbol that appears on the right-hand side of a production\nbut never on the left-hand side."
     },
     {
       "_type": "tag",
       "name": "__str__",
       "path": "./language_theory/toolchain/grammar.py",
       "language": "Python",
-      "line": 91,
+      "line": 98,
       "kind": "function",
       "docstring": null
     },
@@ -11513,6 +11513,60 @@
     },
     {
       "_type": "tag",
+      "name": "TestClassifier",
+      "path": "./tests/test_classifier.py",
+      "language": "Python",
+      "line": 7,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/test_classifier.py",
+      "language": "Python",
+      "line": 9,
+      "kind": "function",
+      "docstring": "Create mock AST files for testing."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tests/test_classifier.py",
+      "language": "Python",
+      "line": 48,
+      "kind": "function",
+      "docstring": "Clean up mock AST files."
+    },
+    {
+      "_type": "tag",
+      "name": "test_classify_regular",
+      "path": "./tests/test_classifier.py",
+      "language": "Python",
+      "line": 54,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_classify_context_free",
+      "path": "./tests/test_classifier.py",
+      "language": "Python",
+      "line": 59,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "test_classify_context_sensitive",
+      "path": "./tests/test_classifier.py",
+      "language": "Python",
+      "line": 64,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
       "name": "TestAuraExecutor",
       "path": "./tests/test_aura_executor.py",
       "language": "Python",
@@ -11735,6 +11789,42 @@
       "line": 26,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "TestClassifyRepository",
+      "path": "./tests/test_classify_repository.py",
+      "language": "Python",
+      "line": 6,
+      "kind": "class",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "setUp",
+      "path": "./tests/test_classify_repository.py",
+      "language": "Python",
+      "line": 8,
+      "kind": "function",
+      "docstring": "Set up a mock environment for testing."
+    },
+    {
+      "_type": "tag",
+      "name": "tearDown",
+      "path": "./tests/test_classify_repository.py",
+      "language": "Python",
+      "line": 28,
+      "kind": "function",
+      "docstring": "Clean up the mock environment."
+    },
+    {
+      "_type": "tag",
+      "name": "test_classify_repository_script",
+      "path": "./tests/test_classify_repository.py",
+      "language": "Python",
+      "line": 36,
+      "kind": "function",
+      "docstring": "Test the end-to-end functionality of the classify_repository.py script."
     },
     {
       "_type": "tag",
