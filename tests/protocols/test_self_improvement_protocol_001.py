@@ -1,6 +1,7 @@
 import unittest
 import json
 import os
+import yaml
 
 class TestSelfImprovementProtocol(unittest.TestCase):
 
@@ -8,9 +9,9 @@ class TestSelfImprovementProtocol(unittest.TestCase):
         """
         Load the self-improvement protocol from the JSON file.
         """
-        protocol_path = "protocols/self_improvement/self-improvement.protocol.json"
+        protocol_path = "protocols/self_improvement/self-improvement.protocol.yaml"
         with open(protocol_path, "r") as f:
-            self.protocol = json.load(f)
+            self.protocol = yaml.safe_load(f)
 
     def test_protocol_id(self):
         """

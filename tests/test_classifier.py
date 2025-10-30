@@ -54,7 +54,7 @@ class TestClassifier(unittest.TestCase):
     def test_classify_regular(self):
         grammar = Grammar(self.regular_file)
         classifier = Classifier(grammar)
-        self.assertEqual(classifier.classify(), "REGULAR (TYPE-3)")
+        self.assertEqual(classifier.classify(), "RIGHT-LINEAR REGULAR (TYPE-3)")
 
     def test_classify_context_free(self):
         grammar = Grammar(self.context_free_file)

@@ -1,0 +1,8 @@
+# Context-Free Grammar for the language a^n b^m where n, m > 0
+# This grammar is equivalent to the right-linear and left-linear
+# regular grammars in the /regular/ witnesses directory.
+#
+# It demonstrates that any regular language is also a context-free language.
+S -> A B
+A -> a A | a
+B -> b B | b

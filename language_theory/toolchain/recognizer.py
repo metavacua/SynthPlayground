@@ -132,7 +132,8 @@ def main():
             else:
                 print(f"\nFAILURE: String '{args.input_string}' is NOT recognized by the LBA.")
         elif "RIGHT-LINEAR REGULAR" in classification:
-            if recognize_right_linear(productions_dict, start_symbol, args.input_string):
+            input_tokens = args.input_string.split()
+            if recognize_right_linear(productions_dict, start_symbol, input_tokens):
                 print(f"\nSUCCESS: String '{args.input_string}' is recognized.")
             else:
                 print(f"\nFAILURE: String '{args.input_string}' is not recognized.")

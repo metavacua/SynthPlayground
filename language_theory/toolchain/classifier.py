@@ -30,8 +30,13 @@ class Classifier:
             return "EMPTY"
 
         # Check from the most restrictive (Type-3) to the least (Type-0)
-        if self._is_regular():
+        is_right, is_left = self._is_regular()
+        if is_right and is_left:
             return "REGULAR (TYPE-3)"
+        if is_right:
+            return "RIGHT-LINEAR REGULAR (TYPE-3)"
+        if is_left:
+            return "LEFT-LINEAR REGULAR (TYPE-3)"
 
         if self._is_context_free():
             return "CONTEXT-FREE (TYPE-2)"
@@ -43,23 +48,29 @@ class Classifier:
 
     def _is_regular(self):
         """
-        Checks if the grammar is regular (right-linear).
-        A -> aB or A -> a
+        Checks if the grammar is regular (left-linear or right-linear).
+        Returns a tuple (is_right_linear, is_left_linear).
         """
+        is_right = True
+        is_left = True
+
         for lhs, rhs in self.productions:
             if len(lhs) != 1 or not self.is_non_terminal(lhs[0]):
-                return False
+                return False, False # Not even context-free
 
-            if not rhs: # Empty production
-                continue
+            # Right-linear checks
+            if not (len(rhs) == 1 and self.is_terminal(rhs[0])) and \
+               not (len(rhs) == 2 and self.is_terminal(rhs[0]) and self.is_non_terminal(rhs[1])) and \
+               not (len(rhs) == 0):
+                is_right = False
 
-            if len(rhs) == 1 and not self.is_terminal(rhs[0]):
-                return False
-            if len(rhs) == 2 and not (self.is_terminal(rhs[0]) and self.is_non_terminal(rhs[1])):
-                return False
-            if len(rhs) > 2:
-                return False
-        return True
+            # Left-linear checks
+            if not (len(rhs) == 1 and self.is_terminal(rhs[0])) and \
+               not (len(rhs) == 2 and self.is_non_terminal(rhs[0]) and self.is_terminal(rhs[1])) and \
+               not (len(rhs) == 0):
+                is_left = False
+
+        return is_right, is_left
 
     def _is_context_free(self):
         """

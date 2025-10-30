@@ -43,7 +43,8 @@ targets:
     output: "knowledge_core/integrated_knowledge.jsonld"
     sources:
       - "protocols.yaml-ld"
-      - "knowledge_core/language_theory/witnesses.yaml"
+      - "knowledge_core/language_theory/morphism_demonstration.yaml"
+      # Add other knowledge sources here as they are created
     type: compiler
   lint:
     command: "python3 -m flake8 ."

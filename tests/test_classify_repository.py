@@ -54,7 +54,7 @@ class TestClassifyRepository(unittest.TestCase):
             report = json.load(f)
 
         expected_report = {
-            "regular.py": "REGULAR (TYPE-3)",
+            "regular.py": "RIGHT-LINEAR REGULAR (TYPE-3)",
             "context_free.py": "CONTEXT-FREE (TYPE-2)"
         }
         self.assertEqual(report, expected_report)

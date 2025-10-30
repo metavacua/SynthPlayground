@@ -1,6 +1,6 @@
 # AGENTS.md (Dynamically Generated)
 
-**Last Generated:** 2025-10-30 20:32:34 UTC
+**Last Generated:** 2025-10-30 21:24:56 UTC
 
 ## Objective
 
@@ -423,18 +423,6 @@ The agent's behavior is governed by the following set of formal protocols, which
 
 - **`vuln-reporting-channel`**: All suspected security vulnerabilities MUST be reported privately to the designated security contact.
 - **`no-public-disclosure`**: Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed.
-
----
-### Protocol: `self-improvement-protocol-001`
-**Description**: A formal protocol for the agent to propose, validate, and implement improvements to its own operational protocols and tools.
-
-**Rules:**
-
-- **`sip-001`**: Proposals for self-improvement must be initiated via the `self_improvement_cli.py` tool.
-- **`sip-002`**: Improvement proposals must be formally structured, including sections for 'Problem Statement', 'Proposed Solution', 'Success Criteria', and 'Impact Analysis'.
-- **`sip-003`**: Any proposed changes to protocols must be implemented in the relevant source files within the `protocols/` subdirectories, not directly in the generated AGENTS.md files.
-- **`sip-004`**: After protocol source files are modified, the `protocol_compiler.py` must be executed to re-compile the protocols and validate the changes.
-- **`sip-005`**: The success of an improvement must be verified by running relevant tests or a new, specific verification script.
 
 ---
 ### Protocol: `executable-demo-001`
@@ -1346,52 +1334,6 @@ The agent's behavior is governed by the following set of formal protocols, which
     rule_id: no-public-disclosure
     tags:
     - security
-  version: 1.0.0
-- associated_tools:
-  - tooling/self_improvement_cli.py
-  - tooling/protocol_compiler.py
-  - tooling/pre_submit_check.py
-  description: A formal protocol for the agent to propose, validate, and implement
-    improvements to its own operational protocols and tools.
-  protocol_id: self-improvement-protocol-001
-  rules:
-  - description: Proposals for self-improvement must be initiated via the `self_improvement_cli.py`
-      tool.
-    enforcement: The `self_improvement_cli.py` tool will create a new branch and a
-      proposal markdown file in the `proposals/` directory.
-    rule_id: sip-001
-    tags:
-    - self_improvement
-  - description: Improvement proposals must be formally structured, including sections
-      for 'Problem Statement', 'Proposed Solution', 'Success Criteria', and 'Impact
-      Analysis'.
-    enforcement: The `self_improvement_cli.py` tool will generate a template with
-      these required sections.
-    rule_id: sip-002
-    tags:
-    - self_improvement
-  - description: Any proposed changes to protocols must be implemented in the relevant
-      source files within the `protocols/` subdirectories, not directly in the generated
-      AGENTS.md files.
-    enforcement: Pre-submit checks will fail if generated AGENTS.md files are modified
-      directly.
-    rule_id: sip-003
-    tags:
-    - self_improvement
-  - description: After protocol source files are modified, the `protocol_compiler.py`
-      must be executed to re-compile the protocols and validate the changes.
-    enforcement: A pre-submit git hook will trigger the compiler and block the commit
-      if compilation fails.
-    rule_id: sip-004
-    tags:
-    - self_improvement
-  - description: The success of an improvement must be verified by running relevant
-      tests or a new, specific verification script.
-    enforcement: The improvement proposal must reference the specific tests or scripts
-      used for verification.
-    rule_id: sip-005
-    tags:
-    - self_improvement
   version: 1.0.0
 - description: A demonstration of a protocol with executable code.
   protocol_id: executable-demo-001

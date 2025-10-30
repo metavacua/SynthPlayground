@@ -95,5 +95,12 @@ class Grammar:
             self._terminals = terminals
         return self._terminals
 
+    def get_productions_dict(self):
+        """Returns the productions as a dictionary."""
+        productions_dict = defaultdict(list)
+        for lhs, rhs in self.productions:
+            productions_dict[lhs[0]].append(rhs)
+        return productions_dict
+
     def __str__(self):
         return f"Grammar(start={self.start_symbol}, productions={len(self.productions)})"
