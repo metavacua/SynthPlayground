@@ -1,118 +1,95 @@
+import sys
 from .grammar import Grammar
 
 class Classifier:
     """
     Analyzes a Grammar object to determine its classification within the Chomsky Hierarchy.
+    This version is adapted to work with grammars derived from ASTs, where the
+    distinction between terminals and non-terminals is based on production rules,
+    not on character casing.
     """
     def __init__(self, grammar):
         self.grammar = grammar
         self.productions = grammar.productions
+        self.non_terminals = self.grammar.get_non_terminals()
+        self.terminals = self.grammar.get_terminals()
+
+    def is_non_terminal(self, symbol):
+        """Checks if a symbol is a non-terminal."""
+        return symbol in self.non_terminals
+
+    def is_terminal(self, symbol):
+        """Checks if a symbol is a terminal."""
+        return symbol in self.terminals
 
     def classify(self):
         """
         Determines the most specific classification for the grammar.
-        Follows the hierarchy from Type-3 up to Type-0.
         """
         if not self.productions:
             return "EMPTY"
 
-        is_unrestricted, is_contracting = self._check_type_0()
-        if is_contracting:
-            return "UNRESTRICTED (TYPE-0, Contracting)"
+        # Check from the most restrictive (Type-3) to the least (Type-0)
+        if self._is_regular():
+            return "REGULAR (TYPE-3)"
 
-        is_csg = self._check_type_1(is_unrestricted)
-        if is_csg:
+        if self._is_context_free():
+            return "CONTEXT-FREE (TYPE-2)"
+
+        if self._is_context_sensitive():
             return "CONTEXT-SENSITIVE (TYPE-1)"
 
-        is_cfg, has_empty = self._check_type_2()
-        if not is_cfg:
-            # This case is rare, implies context-sensitive without being unrestricted
-            return "CONTEXT-SENSITIVE (Non-CFG)"
+        return "UNRESTRICTED (TYPE-0)"
 
-        is_left_reg, is_right_reg = self._check_type_3()
-
-        if is_left_reg and is_right_reg:
-            # Both left and right linear rules are present
-            return "CONTEXT-FREE (Mixed Regular)"
-        if is_left_reg:
-            return "LEFT-LINEAR REGULAR (TYPE-3)"
-        if is_right_reg:
-            return "RIGHT-LINEAR REGULAR (TYPE-3)"
-
-        return "CONTEXT-FREE (TYPE-2)"
-
-    def _check_type_0(self):
+    def _is_regular(self):
         """
-        Checks for unrestricted grammar properties.
-        - is_unrestricted: True if any LHS has more than one symbol.
-        - is_contracting: True if any rule is contracting (|LHS| > |RHS|).
+        Checks if the grammar is regular (right-linear).
+        A -> aB or A -> a
         """
-        is_unrestricted = False
-        is_contracting = False
         for lhs, rhs in self.productions:
-            if len(lhs) > 1:
-                is_unrestricted = True
+            if len(lhs) != 1 or not self.is_non_terminal(lhs[0]):
+                return False
+
+            if not rhs: # Empty production
+                continue
+
+            if len(rhs) == 1 and not self.is_terminal(rhs[0]):
+                return False
+            if len(rhs) == 2 and not (self.is_terminal(rhs[0]) and self.is_non_terminal(rhs[1])):
+                return False
+            if len(rhs) > 2:
+                return False
+        return True
+
+    def _is_context_free(self):
+        """
+        Checks if the grammar is context-free.
+        A -> γ (where γ is any string of terminals and/or non-terminals)
+        """
+        for lhs, _ in self.productions:
+            if len(lhs) != 1 or not self.is_non_terminal(lhs[0]):
+                return False
+        return True
+
+    def _is_context_sensitive(self):
+        """
+        Checks if the grammar is context-sensitive (non-contracting).
+        |LHS| <= |RHS|.
+        """
+        for lhs, rhs in self.productions:
             if len(lhs) > len(rhs):
-                # Exception for the rule S -> ε, if S is not on the RHS of any rule.
-                if lhs == (self.grammar.start_symbol,) and not rhs:
+                # Exception for S -> ε, if S is the start symbol and doesn't appear on the RHS.
+                if self.grammar.start_symbol in lhs and not rhs:
                     start_on_rhs = any(self.grammar.start_symbol in r for _, r in self.productions)
                     if not start_on_rhs:
                         continue
-                is_contracting = True
-        return is_unrestricted, is_contracting
-
-    def _check_type_1(self, is_unrestricted):
-        """
-        Checks if the grammar is context-sensitive.
-        A grammar is context-sensitive if it's unrestricted but not contracting.
-        """
-        return is_unrestricted
-
-    def _check_type_2(self):
-        """
-        Checks if the grammar is context-free.
-        - is_cfg: True if all LHS have exactly one non-terminal.
-        - has_empty: True if any rule produces an empty string.
-        """
-        is_cfg = True
-        has_empty = False
-        for lhs, rhs in self.productions:
-            if len(lhs) != 1 or not list(lhs)[0].isupper():
-                is_cfg = False
-            if not rhs:
-                has_empty = True
-        return is_cfg, has_empty
-
-    def _check_type_3(self):
-        """
-        Checks if the grammar is regular (left or right linear).
-        - is_left_reg: True if all rules are of the form A -> Ba or A -> a.
-        - is_right_reg: True if all rules are of the form A -> aB or A -> a.
-        """
-        is_left_reg = True
-        is_right_reg = True
-
-        for lhs, rhs in self.productions:
-            # All regular grammars must be CFG.
-            if len(lhs) != 1 or not list(lhs)[0].isupper():
-                is_left_reg = False
-                is_right_reg = False
-                break
-
-            # Right-linear checks
-            if len(rhs) > 2 or (len(rhs) == 2 and not (rhs[0].islower() and rhs[1].isupper())) or (len(rhs) == 1 and not rhs[0].islower()):
-                is_right_reg = False
-
-            # Left-linear checks
-            if len(rhs) > 2 or (len(rhs) == 2 and not (rhs[0].isupper() and rhs[1].islower())) or (len(rhs) == 1 and not rhs[0].islower()):
-                is_left_reg = False
-
-        return is_left_reg, is_right_reg
+                return False
+        return True
 
 def main():
     import argparse
-    parser = argparse.ArgumentParser(description="A tool to classify a formal grammar.")
-    parser.add_argument("grammar_file", help="Path to the grammar file.")
+    parser = argparse.ArgumentParser(description="A tool to classify a formal grammar from an AST.")
+    parser.add_argument("grammar_file", help="Path to the grammar file (AST JSON).")
     args = parser.parse_args()
     try:
         grammar = Grammar(args.grammar_file)
@@ -121,9 +98,6 @@ def main():
         print(f"--- Grammar Classification for: {args.grammar_file} ---")
         print(f"Result: {classification}")
         print("-----------------------------------------------------")
-    except FileNotFoundError:
-        print(f"Error: Grammar file not found at {args.grammar_file}", file=sys.stderr)
-        sys.exit(1)
     except Exception as e:
         print(f"An error occurred: {e}", file=sys.stderr)
         sys.exit(1)
