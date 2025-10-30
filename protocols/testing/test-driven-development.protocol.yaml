@@ -10,6 +10,15 @@ rules:
   validation_command: python3 tooling/validate_tdd.py
   tags:
   - testing
+- rule_id: tdd-enforcement-tool
+  description: A TDD enforcement tool must be used to ensure that all new code is
+    developed using TDD.
+  enforcement: The agent must verify that a TDD enforcement tool is configured in
+    the repository.
+  validation_command: "ls .claude/tdd-guard/settings.json"
+  tags:
+  - testing
+  - tooling
 associated_tools:
 - tooling/test_runner.py
 version: 1.0.0

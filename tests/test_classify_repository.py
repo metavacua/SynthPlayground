@@ -2,12 +2,14 @@ import unittest
 import os
 import json
 import subprocess
+import tempfile
+import shutil
 
 class TestClassifyRepository(unittest.TestCase):
 
     def setUp(self):
         """Set up a mock environment for testing."""
-        self.test_dir = "tests/temp_repo"
+        self.test_dir = tempfile.mkdtemp()
         self.ast_dir = os.path.join(self.test_dir, "knowledge_core/asts")
         self.output_file = os.path.join(self.test_dir, "report.json")
         os.makedirs(self.ast_dir, exist_ok=True)
@@ -27,11 +29,7 @@ class TestClassifyRepository(unittest.TestCase):
 
     def tearDown(self):
         """Clean up the mock environment."""
-        for root, dirs, files in os.walk(self.test_dir, topdown=False):
-            for name in files:
-                os.remove(os.path.join(root, name))
-            for name in dirs:
-                os.rmdir(os.path.join(root, name))
+        shutil.rmtree(self.test_dir)
 
     def test_classify_repository_script(self):
         """Test the end-to-end functionality of the classify_repository.py script."""

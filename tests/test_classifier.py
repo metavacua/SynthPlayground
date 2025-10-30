@@ -1,6 +1,8 @@
 import unittest
 import json
 import os
+import tempfile
+import shutil
 from language_theory.toolchain.grammar import Grammar
 from language_theory.toolchain.classifier import Classifier
 
@@ -8,8 +10,7 @@ class TestClassifier(unittest.TestCase):
 
     def setUp(self):
         """Create mock AST files for testing."""
-        self.test_dir = "tests/temp_asts"
-        os.makedirs(self.test_dir, exist_ok=True)
+        self.test_dir = tempfile.mkdtemp()
 
         # Mock AST for a Regular Grammar (A -> b C ; C -> d)
         self.regular_ast = {
@@ -36,7 +37,7 @@ class TestClassifier(unittest.TestCase):
             json.dump(self.context_free_ast, f)
 
         # For context-sensitive, we need to create a grammar manually since it's hard to represent as a tree
-        self.context_sensitive_grammar = Grammar("tests/temp_asts/csg.txt")
+        self.context_sensitive_grammar = Grammar(os.path.join(self.test_dir, "csg.txt"))
         self.context_sensitive_grammar.productions = [
              (('A',), ('B',)),          # A -> B (CFG-like)
              (('B',), ('c',)),          # B -> c (CFG-like)
@@ -47,9 +48,7 @@ class TestClassifier(unittest.TestCase):
 
     def tearDown(self):
         """Clean up mock AST files."""
-        for file in os.listdir(self.test_dir):
-            os.remove(os.path.join(self.test_dir, file))
-        os.rmdir(self.test_dir)
+        shutil.rmtree(self.test_dir)
 
     def test_classify_regular(self):
         grammar = Grammar(self.regular_file)

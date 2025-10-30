@@ -2,14 +2,15 @@ import os
 import json
 import unittest
 import shutil
+import tempfile
 from tooling.ast_generator import generate_asts_for_repo
 
 class TestAstGenerator(unittest.TestCase):
 
     def setUp(self):
-        self.test_repo_dir = 'test_repo'
-        self.output_dir = os.path.join('knowledge_core', 'asts')
-        os.makedirs(self.test_repo_dir, exist_ok=True)
+        self.test_repo_dir = tempfile.mkdtemp()
+        self.output_dir = os.path.join(self.test_repo_dir, 'knowledge_core', 'asts')
+        os.makedirs(self.output_dir, exist_ok=True)
         with open(os.path.join(self.test_repo_dir, 'sample.py'), 'w') as f:
             f.write('def hello():\\n    print("Hello, World!")')
 

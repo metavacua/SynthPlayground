@@ -5,10 +5,11 @@ import rdflib
 from rdflib.namespace import RDFS
 import shutil
 import json
+import tempfile
 
 class TestEnrichmentRefined(unittest.TestCase):
     def setUp(self):
-        self.test_dir = "tests/temp_enrichment_test"
+        self.test_dir = tempfile.mkdtemp()
         self.knowledge_core_dir = os.path.join(self.test_dir, "knowledge_core")
         os.makedirs(self.knowledge_core_dir, exist_ok=True)
 
@@ -25,7 +26,9 @@ class TestEnrichmentRefined(unittest.TestCase):
         if os.path.exists(self.resource_map_file):
             os.remove(self.resource_map_file)
 
-        # Create a dummy filesystem_data.ttl
+        # Create dummy files
+        with open(self.protocols_file, "w") as f:
+            f.write("")
         with open(self.filesystem_data_file, "w") as f:
             f.write("# Dummy file for testing")
 
@@ -36,13 +39,14 @@ class TestEnrichmentRefined(unittest.TestCase):
         shutil.rmtree(self.test_dir)
 
     def test_refined_enrichment_produces_gold_standard_links(self):
-        # 1. Run the enrichment script from the test directory
+        # 1. Run the enrichment script from the root directory
         subprocess.run([
             "python3",
-            "../../enrich_protocols.py",
+            "enrich_protocols.py",
             "--start", "0",
-            "--end", "20"
-        ], cwd=self.test_dir, check=True, capture_output=True, text=True)
+            "--end", "20",
+            "--knowledge-core-dir", self.knowledge_core_dir
+        ], check=True, capture_output=True, text=True)
 
         # 2. Load the gold standard links
         with open(self.gold_standard_file, "r") as f:
@@ -64,6 +68,3 @@ class TestEnrichmentRefined(unittest.TestCase):
         print("Expected Links:", json.dumps(expected_links, indent=2))
 
         self.assertCountEqual(generated_links, expected_links, "The generated links do not match the gold standard.")
-
-if __name__ == "__main__":
-    unittest.main()

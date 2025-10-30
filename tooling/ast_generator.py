@@ -90,6 +90,7 @@ def generate_asts_for_repo(root_dir='.', output_dir='knowledge_core/asts'):
     Traverses a repository, generates ASTs for supported files, and saves them.
     """
     print(f"Starting AST generation for repository at '{root_dir}'")
+    os.makedirs(output_dir, exist_ok=True)
 
     for root, dirs, files in os.walk(root_dir, topdown=True):
         # Modify dirs in-place to prune the search

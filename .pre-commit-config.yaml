@@ -11,3 +11,8 @@ repos:
         entry: python3 tooling/validate_tdd.py
         language: system
         types: [python]
+    -   id: detect-untested-code
+        name: Detect untested code
+        entry: python3 tooling/untested_code_detector.py
+        language: system
+        types: [python]

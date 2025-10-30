@@ -2,6 +2,7 @@ import unittest
 import os
 import shutil
 import sys
+import tempfile
 
 # Add root directory for absolute imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -12,7 +13,7 @@ class TestFilesystemLister(unittest.TestCase):
 
     def setUp(self):
         """Set up a temporary directory structure for testing."""
-        self.test_dir = "temp_test_dir_for_lister"
+        self.test_dir = tempfile.mkdtemp()
         os.makedirs(os.path.join(self.test_dir, "empty_subdir"), exist_ok=True)
         os.makedirs(os.path.join(self.test_dir, "subdir_with_file"), exist_ok=True)
         with open(os.path.join(self.test_dir, "subdir_with_file", "a.txt"), "w") as f:

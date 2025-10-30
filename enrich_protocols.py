@@ -4,6 +4,11 @@ from dbpedia_client import get_relevant_links
 import argparse
 import json
 import re
+import sys
+import os
+
+# Add root directory for absolute imports
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Define namespaces
 PROTOCOL = rdflib.Namespace("https://www.aida.org/protocol#")
@@ -29,11 +34,11 @@ def extract_keywords(text):
 
     return keywords
 
-def run_enrichment(start, end):
+def run_enrichment(start, end, knowledge_core_dir):
     # Load the existing protocols file
     g = rdflib.Graph()
-    g.parse("knowledge_core/protocols.ttl", format="turtle")
-    g.parse("knowledge_core/filesystem_data.ttl", format="turtle")
+    g.parse(os.path.join(knowledge_core_dir, "protocols.ttl"), format="turtle")
+    g.parse(os.path.join(knowledge_core_dir, "filesystem_data.ttl"), format="turtle")
 
     # Bind namespaces for cleaner output
     g.bind("protocol", PROTOCOL)
@@ -101,12 +106,13 @@ def run_enrichment(start, end):
     print("\nEnrichment complete.")
 
     # Serialize the enriched graph to a new file
-    g.serialize(destination="knowledge_core/enriched_protocols.ttl", format="turtle")
-    print("Enriched protocols saved to knowledge_core/enriched_protocols.ttl")
+    g.serialize(destination=os.path.join(knowledge_core_dir, "enriched_protocols.ttl"), format="turtle")
+    print(f"Enriched protocols saved to {os.path.join(knowledge_core_dir, 'enriched_protocols.ttl')}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Enrich RDF protocols with DBPedia resources.")
     parser.add_argument("--start", type=int, required=True, help="Start index for keyword processing.")
     parser.add_argument("--end", type=int, required=True, help="End index for keyword processing.")
+    parser.add_argument("--knowledge-core-dir", type=str, default="knowledge_core", help="The directory containing the knowledge core files.")
     args = parser.parse_args()
-    run_enrichment(args.start, args.end)
+    run_enrichment(args.start, args.end, args.knowledge_core_dir)
