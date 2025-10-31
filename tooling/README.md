@@ -6,7 +6,32 @@ This document provides an overview of the tools available in the `tooling/` dire
 
 ## `__init__.py`
 
-_No module-level docstring found._
+This package, named 'Agent Smith', is a toolset designed for metamorphic
+testing of the agent's core protocol compilation system.
+
+It works by creating isolated sandbox environments, introducing mutations
+(e.g., deleting a protocol file), running the protocol compiler, and verifying
+that the resulting `AGENTS.md` artifact reflects the mutation as expected.
+This allows for robust testing of the hierarchical compiler's resilience and
+correctness.
+
+---
+
+## `action_logger.py`
+
+This module provides functionality for...
+
+---
+
+## `add_docstrings.py`
+
+No docstring found.
+
+---
+
+## `agent_logic.py`
+
+This module provides functionality for...
 
 ---
 
@@ -24,15 +49,31 @@ programmatic interface to the MasterControlGraph FSM. It is responsible for:
 
 ---
 
-## `__init__.py`
+## `analyze_data.py`
 
-_No module-level docstring found._
+This module provides functionality for...
 
 ---
 
-## `generate_and_test.py`
+## `analyzer.py`
 
-_No module-level docstring found._
+A constructive code analyzer for classifying Python code according to the Chomsky hierarchy.
+
+This module provides the core logic for the "constructive" analysis of Python code.
+It uses the `ast` module to parse Python code into an Abstract Syntax Tree (AST)
+and then traverses the tree to identify key characteristics that determine the
+computational complexity of the code.
+
+The primary goal is to identify "witnesses" of decidability (e.g., primitive
+recursion, bounded loops) and "counter-witnesses" (e.g., general recursion,
+potential non-termination). This analysis provides the foundation for the
+decidable refactoring toolchain.
+
+---
+
+## `appl_logic.py`
+
+This module provides functionality for...
 
 ---
 
@@ -52,6 +93,18 @@ A compiler that translates APPL (a simple functional language) to LFI-ILL.
 
 This script takes a Python file containing an APPL AST, and compiles it into
 an LFI-ILL AST. The resulting AST is then written to a `.lfi_ill` file.
+
+---
+
+## `appl_to_lfi_ill_logic.py`
+
+This module provides functionality for...
+
+---
+
+## `ast_generator.py`
+
+This module provides functionality for...
 
 ---
 
@@ -82,6 +135,12 @@ audits or all of them, generating a consolidated `audit_report.md` file.
 
 ---
 
+## `auditor_logic.py`
+
+This module provides functionality for...
+
+---
+
 ## `aura_executor.py`
 
 This script serves as the command-line executor for `.aura` files.
@@ -101,6 +160,12 @@ automation scripts for the agent.
 
 ---
 
+## `aura_logic.py`
+
+This module provides functionality for...
+
+---
+
 ## `aura_to_lfi_ill.py`
 
 A compiler that translates AURA code to LFI-ILL.
@@ -110,11 +175,53 @@ AST. The resulting AST is then written to a `.lfi_ill` file.
 
 ---
 
+## `aura_to_lfi_ill_logic.py`
+
+This module provides functionality for...
+
+---
+
+## `autonomous_agent.py`
+
+This module provides functionality for...
+
+---
+
+## `autonomous_agent_logic.py`
+
+This module provides functionality for...
+
+---
+
 ## `background_researcher.py`
 
 This script performs a simulated research task in the background.
 It takes a task ID as a command-line argument and writes its findings
 to a temporary file that the main agent can poll.
+
+---
+
+## `background_researcher_logic.py`
+
+This module provides functionality for...
+
+---
+
+## `bash_runner.py`
+
+This module provides functionality for...
+
+---
+
+## `build_logic.py`
+
+This module provides functionality for...
+
+---
+
+## `build_utils.py`
+
+This module provides functionality for...
 
 ---
 
@@ -127,7 +234,7 @@ as generating documentation, compiling protocols, and running code quality check
 It replaces a traditional Makefile's direct command execution with a more
 structured, maintainable, and introspectable approach.
 
-The core logic is driven by a `build_config.json` file, which defines a series
+The core logic is driven by a `build_config.yaml` file, which defines a series
 of "targets." Each target specifies:
 - The `type` of target: "compiler" or "command".
 - For "compiler" types: `compiler` script, `output`, `sources`, and `options`.
@@ -137,7 +244,7 @@ The configuration also defines "build_groups", which are ordered collections of
 targets (e.g., "all", "quality").
 
 This centralized builder provides several advantages:
-- **Single Source of Truth:** The `build_config.json` file is the definitive
+- **Single Source of Truth:** The `build_config.yaml` file is the definitive
   source for all build logic.
 - **Consistency:** Ensures all build tasks are executed in a uniform way.
 - **Extensibility:** New build targets can be added by simply updating the
@@ -173,6 +280,30 @@ cornerstone of the agent's design philosophy.
 
 ---
 
+## `capability_verifier_logic.py`
+
+This module provides functionality for...
+
+---
+
+## `classify_repository.py`
+
+This module provides functionality for...
+
+---
+
+## `cli.py`
+
+A unified command-line interface for the Chomsky toolchain.
+
+This script provides a single entry point for all the tools related to the
+Chomsky hierarchy and decidability. It orchestrates the functionality of the
+various components of the toolchain, such as the code analyzer and the
+refactoring tools, providing a clear and contextually visible interface for
+both human and agentic use.
+
+---
+
 ## `code_suggester.py`
 
 Handles the generation and application of autonomous code change suggestions.
@@ -192,6 +323,30 @@ decoupling the suggestion logic from the execution logic. Future iterations
 can enhance this tool with more sophisticated code generation capabilities
 (e.g., using an LLM to generate the diff from a natural language description)
 without altering the core orchestration process.
+
+---
+
+## `code_suggester_logic.py`
+
+This module provides functionality for...
+
+---
+
+## `compile_protocols.py`
+
+This module provides functionality for...
+
+---
+
+## `compile_protocols_logic.py`
+
+This module provides functionality for...
+
+---
+
+## `complexity_manager.py`
+
+A tool for managing the complexity of the codebase by orchestrating various analysis and refactoring tools.
 
 ---
 
@@ -221,25 +376,27 @@ which can be used as a foundational artifact for automated planning or human rev
 
 ---
 
-## `csdc_cli.py`
+## `context_awareness_scanner_logic.py`
 
-A command-line tool for managing the Context-Sensitive Development Cycle (CSDC).
+This module provides functionality for...
 
-This script provides an interface to validate a development plan against a specific
-CSDC model (A or B) and a given complexity class (P or EXP). It ensures that a
-plan adheres to the strict logical and computational constraints defined by the
-CSDC protocol before it is executed.
+---
 
-The tool performs two main checks:
-1.  **Complexity Analysis:** It analyzes the plan to determine its computational
-    complexity and verifies that it matches the expected complexity class.
-2.  **Model Validation:** It validates the plan's commands against the rules of
-    the specified CSDC model, ensuring that it does not violate any of the
-    model's constraints (e.g., forbidding certain functions).
+## `context_manager.py`
 
-This serves as a critical gateway for ensuring that all development work within
-the CSDC framework is sound, predictable, and compliant with the governing
-meta-mathematical principles.
+A tool for managing the agent's contextual awareness by orchestrating various scanning and analysis tools.
+
+---
+
+## `create_file.py`
+
+This module provides functionality for...
+
+---
+
+## `decision_tester.py`
+
+This module provides functionality for...
 
 ---
 
@@ -265,10 +422,22 @@ about the potential impact of its changes.
 
 ---
 
+## `dependency_graph_generator_logic.py`
+
+This module provides functionality for...
+
+---
+
 ## `doc_builder.py`
 
 A unified documentation builder for the project.
 ...
+
+---
+
+## `doc_builder_logic.py`
+
+This module provides functionality for...
 
 ---
 
@@ -282,7 +451,7 @@ or semi-structured documents that are not part of the formal codebase, but which
 may contain critical context, requirements, or specifications.
 
 The scanner searches a given directory for files with common document extensions:
-- `.pdf`: Uses the `pypdf` library to extract text from PDF files.
+- `.pdf`: Uses the Gemini API to extract text and understand the content of PDF files.
 - `.md`: Reads Markdown files.
 - `.txt`: Reads plain text files.
 
@@ -291,6 +460,12 @@ documents and the values are their extracted text content. This data can then
 be used by the agent to inform its planning and execution process. This tool
 is essential for bridging the gap between human-written documentation and the
 agent's operational awareness.
+
+---
+
+## `domain.py`
+
+This module provides functionality for...
 
 ---
 
@@ -317,6 +492,12 @@ that might impact its ability to complete a task.
 
 ---
 
+## `external_api_client.py`
+
+A standardized client for interacting with external agent APIs.
+
+---
+
 ## `fdc_cli.py`
 
 This script provides a command-line interface (CLI) for managing the Finite
@@ -339,9 +520,76 @@ commands to:
 
 ---
 
+## `fdc_cli_logic.py`
+
+This module provides functionality for...
+
+---
+
+## `fetch_data.py`
+
+This module provides functionality for...
+
+---
+
+## `file_reader.py`
+
+This module provides functionality for...
+
+---
+
 ## `filesystem_lister.py`
 
 A tool for listing files and directories in a repository, with an option to respect .gitignore.
+
+---
+
+## `gemini_computer_use.py`
+
+A tool for controlling a web browser using the Gemini Computer Use API.
+
+This tool allows the agent to perform tasks like data entry, automated testing,
+and web research by controlling a web browser. It uses the Gemini Computer Use
+API to "see" the screen and "act" by generating UI actions like mouse clicks
+and keyboard inputs.
+
+---
+
+## `generate_and_test.py`
+
+A command-line tool for orchestrating the metamorphic testing of the
+hierarchical protocol compiler.
+
+This script automates the following workflow:
+1.  Creates a clean, isolated sandbox environment.
+2.  Copies the necessary protocol source files and the compiler tooling into
+    the sandbox.
+3.  Installs required Python dependencies within the sandbox.
+4.  Applies a specified mutation to the protocol sources (e.g., deleting a file).
+5.  Runs the `hierarchical_compiler.py` within the sandbox to generate a
+    variant `AGENTS.md` file.
+6.  Verifies that the generated artifact correctly reflects the mutation.
+
+This allows for automated, repeatable testing of the compiler's behavior
+under various source conditions.
+
+---
+
+## `generate_filesystem_rdf.py`
+
+This module provides functionality for...
+
+---
+
+## `goal_generator.py`
+
+This module provides a simple way to select a plan for the agent.
+
+---
+
+## `guardian.py`
+
+This module provides functionality for...
 
 ---
 
@@ -365,6 +613,12 @@ MEDIUM, HIGH) and the specific loops that were identified.
 
 ---
 
+## `hdl_parser.py`
+
+This module provides functionality for...
+
+---
+
 ## `hdl_prover.py`
 
 A command-line tool for proving sequents in Intuitionistic Linear Logic.
@@ -375,7 +629,7 @@ then attempts to prove it using a rudimentary proof search algorithm.
 
 The primary purpose of this tool is to allow the agent to perform formal
 reasoning and verification tasks by checking the validity of logical entailments.
-For example, it can be used to verify that a certain conclusion follows from a
+For example, it can be a used to verify that a certain conclusion follows from a
 set of premises according to the rules of linear logic.
 
 The current implementation uses a very basic parser and proof algorithm,
@@ -384,9 +638,21 @@ logic engine.
 
 ---
 
-## `hierarchical_compiler.py`
+## `hello_world.py`
 
-_No module-level docstring found._
+This module provides functionality for...
+
+---
+
+## `interpreter.py`
+
+This module provides functionality for...
+
+---
+
+## `json_to_yaml_ld.py`
+
+This module provides functionality for...
 
 ---
 
@@ -413,12 +679,7 @@ post-mortem file as its primary argument.
 
 ## `knowledge_integrator.py`
 
-Enriches the local knowledge graph with data from external sources like DBPedia.
-
-This script loads the RDF graph generated from the project's protocols,
-identifies key concepts (like tools and rules), queries the DBPedia SPARQL
-endpoint to find related information, and merges the external data into a new,
-enriched knowledge graph.
+This module provides functionality for...
 
 ---
 
@@ -494,6 +755,12 @@ auditing and analysis tools.
 
 ---
 
+## `master_agents_md_generator.py`
+
+This module provides functionality for...
+
+---
+
 ## `master_control.py`
 
 The master orchestrator for the agent's lifecycle, implementing the Context-Free Development Cycle (CFDC).
@@ -549,17 +816,15 @@ subsystem.
 
 ---
 
-## `pda_parser.py`
+## `migrate_protocols.py`
 
-A parser for pLLLU (paraconsistent Linear Logic with Undeterminedness) formulas.
+This module provides functionality for...
 
-This script uses the PLY (Python Lex-Yacc) library to define a lexer and a
-parser for a simple, string-based representation of pLLLU formulas. It can
-handle basic atomic formulas, unary operators (like negation and consistency),
-and binary operators (like implication and conjunction).
+---
 
-The main function `parse_formula` takes a string and returns a simple AST
-(Abstract Syntax Tree) represented as nested tuples.
+## `parser.py`
+
+This module provides functionality for...
 
 ---
 
@@ -571,6 +836,12 @@ This script reads a plan file, parses it, and executes the commands in a
 simplified, simulated environment. It supports a limited set of tools
 (`message_user` and `run_in_bash_session`) to provide a basic demonstration
 of how an agent would execute a plan.
+
+---
+
+## `plan_generator.py`
+
+This module provides functionality for...
 
 ---
 
@@ -609,12 +880,21 @@ allowing for robust and readable plan files.
 
 ---
 
+## `plan_runner.py`
+
+A self-executing plan runner for Jules, the AI agent.
+
+This script reads a plan file in a specific format, executes the commands,
+verifies their success, and handles failures.
+
+---
+
 ## `plllu_interpreter.py`
 
 A resource-sensitive, four-valued interpreter for pLLLU formulas.
 
 This script implements an interpreter for the pLLLU language. It operates on
-an AST generated by the `pda_parser.py` script. The interpreter is designed
+an AST generated by the `plllu_parser.py` script. The interpreter is designed
 to be resource-sensitive, meaning that each atomic formula in the initial
 context must be consumed exactly once during the evaluation of the proof.
 
@@ -624,6 +904,26 @@ it to reason about paraconsistent and paracomplete states.
 The core of the interpreter is the `FourValuedInterpreter` class, which
 recursively walks the AST, consuming resources from a context (a Counter of
 available atoms) and returning the resulting logical value.
+
+---
+
+## `plllu_lexer.py`
+
+This module provides functionality for...
+
+---
+
+## `plllu_parser.py`
+
+A parser for pLLLU (paraconsistent Linear Logic with Undeterminedness) formulas.
+
+This script uses the PLY (Python Lex-Yacc) library to define a
+parser for a simple, string-based representation of pLLLU formulas. It can
+handle basic atomic formulas, unary operators (like negation and consistency),
+and binary operators (like implication and conjunction).
+
+The main function `parse_formula` takes a string and returns a simple AST
+(Abstract Syntax Tree) represented as nested tuples.
 
 ---
 
@@ -639,16 +939,68 @@ defined in a given pLLLU source file and print the result.
 
 ## `pre_submit_check.py`
 
-_No module-level docstring found._
+A pre-submission script that runs a series of checks to ensure code quality
+and adherence to repository protocols before a commit is made.
+
+This script currently includes the following checks:
+1.  **Code Linting:** Runs `make lint` to check for style issues (currently disabled).
+2.  **Docstring Enforcement:** Ensures all Python files in key directories have
+    module-level docstrings.
+3.  **Guardian Protocol Validation:** Validates any staged review documents
+    against the Guardian Protocol.
+
+The script is designed to be easily extensible with additional checks.
+
+---
+
+## `process_witnesses.py`
+
+This module provides functionality for...
 
 ---
 
 ## `protocol_compiler.py`
 
-This script now serves as the entry point for the hierarchical protocol compilation.
-It discovers all protocol modules (subdirectories within `protocols/`) and compiles
-each one into its own `AGENTS.md` file. It then generates a root `AGENTS.md`
-that links to all the compiled modules, creating a unified, navigable system.
+This module provides functionality for...
+
+---
+
+## `protocol_manager.py`
+
+A command-line tool for managing agent protocols.
+
+This script provides a set of commands for creating, testing, and versioning
+agent protocols. It is designed to be used by developers to manage the
+protocol lifecycle.
+
+---
+
+## `protocol_migration_tool.py`
+
+A tool to migrate protocols from the old, manual AGENTS.md format to the new,
+structured, and compiler-friendly format.
+
+This script is designed to be a one-time migration utility that helps to
+transition the valuable, detailed protocols from the original AGENTS.md file
+into a format that can be processed by the new, dynamic build system.
+
+The tool works by:
+1.  Reading the `AGENTS.md.bak` file, which is a backup of the original.
+2.  Parsing the file to identify the distinct protocol sections (Phase 1-6 and
+    the "STANDING ORDER").
+3.  Creating a new `protocols/manual_protocol/` directory to house the
+    migrated protocols.
+4.  Writing each extracted protocol into its own formatted Markdown file within
+    the new directory.
+
+This ensures that the protocols are preserved and integrated into the new
+system without requiring manual copying and pasting.
+
+---
+
+## `protocol_oracle.py`
+
+This module provides functionality for...
 
 ---
 
@@ -666,6 +1018,18 @@ directory, performing targeted updates based on command-line arguments.
 
 ---
 
+## `py_to_udc.py`
+
+A tool for converting Python code to UDC assembly-like code.
+
+---
+
+## `read_file.py`
+
+This module provides functionality for...
+
+---
+
 ## `refactor.py`
 
 A tool for performing automated symbol renaming in Python code.
@@ -676,21 +1040,24 @@ its textual references throughout the entire repository. This provides a safe
 and automated way to perform a common refactoring task, reducing the risk of
 manual errors.
 
-The tool operates in three main stages:
-1.  **Definition Finding:** It uses Python's Abstract Syntax Tree (AST) module
-    to parse the source file and precisely locate the definition of the target
-    symbol. This ensures that the tool is targeting the correct code construct.
-2.  **Reference Finding:** It performs a text-based search across the specified
-    search path (defaulting to the entire repository) to find all files that
-    mention the symbol's old name.
-3.  **Plan Generation:** Instead of modifying files directly, it generates a
-    refactoring "plan." This plan is a sequence of `replace_with_git_merge_diff`
-    commands, one for each file that needs to be changed. The path to this
-    generated plan file is printed to standard output.
+---
 
-This plan-based approach allows the agent's master controller to execute the
-refactoring in a controlled, verifiable, and atomic way, consistent with its
-standard operational procedures.
+## `refactor_add_fuel.py`
+
+A tool for refactoring a Python function to use a "fuel"-based approach to recursion.
+This tool is designed to be idempotent and handle nested while loops.
+
+---
+
+## `refactor_cf_to_r.py`
+
+A tool for refactoring context-free Python code into regular components.
+
+---
+
+## `refactor_cs_to_cf.py`
+
+A tool for refactoring context-sensitive Python code into context-free components.
 
 ---
 
@@ -751,6 +1118,12 @@ master controller.
 
 ---
 
+## `run_tests.py`
+
+This module provides functionality for...
+
+---
+
 ## `self_correction_orchestrator.py`
 
 Orchestrates the Protocol-Driven Self-Correction (PDSC) workflow.
@@ -787,29 +1160,9 @@ rate tracking or tool usage anti-patterns) to be added as the system evolves.
 
 ---
 
-## `standard_agents_compiler.py`
+## `session_manager.py`
 
-A compiler that generates a simplified, standard-compliant `AGENTS.md` file.
-
-This script acts as an "adapter" to make the repository more accessible to
-third-party AI agents that expect a conventional set of instructions. While the
-repository's primary `AGENTS.md` is a complex, hierarchical, and
-machine-readable artifact for its own specialized agent, the `AGENTS.standard.md`
-file produced by this script offers a simple, human-readable summary of the
-most common development commands.
-
-The script works by:
-1.  **Parsing the Makefile:** It dynamically parses the project's `Makefile`,
-    which is the single source of truth for high-level commands. It specifically
-    extracts the exact commands for common targets like `install`, `test`,
-    `lint`, and `format`. This ensures the generated instructions are never
-    stale.
-2.  **Injecting into a Template:** It injects these extracted commands into a
-    pre-defined, user-friendly Markdown template.
-3.  **Generating the Artifact:** The final output is written to
-    `AGENTS.standard.md`, providing a simple, stable, and conventional entry
-    point for external tools, effectively bridging the gap between the complex
-    internal protocol system and the broader agent ecosystem.
+This module provides a simple way to save and load the agent's session.
 
 ---
 
@@ -830,6 +1183,12 @@ snapshot-able representation of the agent's progress through a task.
 
 Together, these classes enable the hierarchical, stack-based planning and
 execution that is the hallmark of the CFDC.
+
+---
+
+## `symbol_extractor.py`
+
+This module provides functionality for...
 
 ---
 
@@ -859,6 +1218,12 @@ and understand the structure of the repository without having to read every file
 
 ---
 
+## `temporal_orienter.py`
+
+A tool for performing temporal orientation by fetching a summary of a concept from DBPedia.
+
+---
+
 ## `udc_orchestrator.py`
 
 An orchestrator for executing Unrestricted Development Cycle (UDC) plans.
@@ -871,3 +1236,21 @@ registers, and a set of simple instructions.
 To prevent non-termination and other resource-exhaustion issues, the
 orchestrator imposes strict limits on the number of instructions executed,
 the amount of memory used, and the total wall-clock time.
+
+---
+
+## `untested_code_detector.py`
+
+This module provides functionality for...
+
+---
+
+## `unused_import_remover.py`
+
+This module provides functionality for...
+
+---
+
+## `validate_tdd.py`
+
+This module provides functionality for...

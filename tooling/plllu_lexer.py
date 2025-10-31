@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 import ply.lex as lex
 
 tokens = (

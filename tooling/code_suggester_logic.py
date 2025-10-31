@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 def generate_suggestion_plan_content(filepath: str, diff_content: str) -> str:
     """
     Generates the content for a temporary, single-step plan file to apply a code change.

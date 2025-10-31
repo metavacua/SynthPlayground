@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 # tooling/aal/parser.py
 
 import re

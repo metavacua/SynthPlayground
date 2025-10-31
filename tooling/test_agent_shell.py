@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, MagicMock, ANY
+from unittest.mock import patch, ANY
 import sys
 import os
 
@@ -7,7 +7,6 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from tooling.agent_shell import main
-
 
 class TestAgentShell(unittest.TestCase):
 
@@ -34,7 +33,6 @@ class TestAgentShell(unittest.TestCase):
             mock_run_agent_loop.assert_called_once_with(
                 "Perform a basic self-check and greet the user.", ANY, model=None
             )
-
 
 if __name__ == "__main__":
     unittest.main()

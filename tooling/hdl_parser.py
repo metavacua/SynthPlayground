@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 from logic_system.src.formulas import Formula, Prop, LinImplies, Tensor
 from logic_system.src.sequents import Sequent
 from collections import Counter

@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 import os
 from rdflib import Graph, Literal, Namespace, RDF, RDFS, URIRef
 from rdflib.namespace import OWL

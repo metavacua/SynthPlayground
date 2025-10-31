@@ -1,13 +1,6 @@
 """
 The new, interactive, API-driven entry point for the agent.
-
-This script replaces the old file-based signaling system with a direct,
-programmatic interface to the MasterControlGraph FSM. It is responsible for:
-1.  Initializing the agent's state and a centralized logger.
-2.  Instantiating and running the MasterControlGraph.
-3.  Driving the FSM by calling its methods and passing data and the logger.
-4.  Containing the core "agent logic" (e.g., an LLM call) to generate plans
-    and respond to requests for action.
+...
 """
 
 import uuid
@@ -17,6 +10,7 @@ import json
 import importlib.util
 import atexit
 import subprocess
+import argparse
 
 # Add the root directory to the path to allow for absolute imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))

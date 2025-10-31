@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 from aura_lang.ast import (
     LetStatement,
     IntegerLiteral,

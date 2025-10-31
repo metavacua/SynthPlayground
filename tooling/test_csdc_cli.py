@@ -18,7 +18,7 @@ class TestCsdcCli(unittest.TestCase):
         shutil.rmtree(self.test_dir)
 
     @patch("tooling.csdc_cli.analyze_plan")
-    @patch("tooling.csdc_cli.MasterControlGraph.validate_plan_for_model")
+    @patch("tooling.csdc_cli.LBAValidator.validate")
     def test_successful_validation(self, mock_validate, mock_analyze):
         """Tests successful validation for a compliant plan."""
         mock_analyze.return_value = {"complexity_class": "P"}
@@ -59,7 +59,7 @@ class TestCsdcCli(unittest.TestCase):
 
     @patch("tooling.csdc_cli.analyze_plan", return_value={"complexity_class": "P"})
     @patch(
-        "tooling.csdc_cli.MasterControlGraph.validate_plan_for_model",
+        "tooling.csdc_cli.LBAValidator.validate",
         return_value=(False, "Invalid command"),
     )
     def test_model_validation_failure(self, mock_validate, mock_analyze):

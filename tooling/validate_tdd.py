@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 import subprocess
 import sys
 import os

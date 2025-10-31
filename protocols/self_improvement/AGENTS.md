@@ -1,6 +1,6 @@
 # AGENTS.md (Dynamically Generated)
 
-**Last Generated:** 2025-10-30 19:44:57 UTC
+**Last Generated:** 2025-10-31 07:55:34 UTC
 
 ## Objective
 
@@ -75,6 +75,7 @@ The agent's behavior is governed by the following set of formal protocols, which
 **Rules:**
 
 - **`tdd-writing-new-code`**: When writing any new function or class, a corresponding test must be written first. The test should fail before the new code is implemented, and pass after.
+- **`tdd-enforcement-tool`**: A TDD enforcement tool must be used to ensure that all new code is developed using TDD.
 
 ---
 ### Protocol: `guardian-protocol-001`
@@ -153,14 +154,6 @@ The agent's behavior is governed by the following set of formal protocols, which
 **Rules:**
 
 - **`agents-md-self-awareness`**: The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols.
-
----
-### Protocol: `meta-mutation-001`
-**Description**: A protocol that empowers the agent to modify its own core tooling, enabling a recursive self-improvement cycle.
-
-**Rules:**
-
-- **`authorize-tooling-modification`**: The agent is authorized to use the 'modify_tooling' action within the self_correction_orchestrator.py to apply patches to its own source code or other tools in the tooling/ directory. This action must be triggered by a structured lesson in knowledge_core/lessons.jsonl.
 
 ---
 ### Protocol: `critic-reset-prohibition-001`
@@ -446,6 +439,14 @@ The agent's behavior is governed by the following set of formal protocols, which
 - **`sip-005`**: The success of an improvement must be verified by running relevant tests or a new, specific verification script.
 
 ---
+### Protocol: `meta-mutation-001`
+**Description**: A protocol that empowers the agent to modify its own core tooling, enabling a recursive self-improvement cycle.
+
+**Rules:**
+
+- **`authorize-tooling-modification`**: The agent is authorized to use the 'modify_tooling' action within the self_correction_orchestrator.py to apply patches to its own source code or other tools in the tooling/ directory. This action must be triggered by a structured lesson in knowledge_core/lessons.jsonl.
+
+---
 ### Protocol: `executable-demo-001`
 **Description**: A demonstration of a protocol with executable code.
 
@@ -550,6 +551,15 @@ The agent's behavior is governed by the following set of formal protocols, which
     tags:
     - testing
     validation_command: python3 tooling/validate_tdd.py
+  - description: A TDD enforcement tool must be used to ensure that all new code is
+      developed using TDD.
+    enforcement: The agent must verify that a TDD enforcement tool is configured in
+      the repository.
+    rule_id: tdd-enforcement-tool
+    tags:
+    - testing
+    - tooling
+    validation_command: ls .claude/tdd-guard/settings.json
   version: 1.0.0
 - associated_tools:
   - tooling/guardian.py
@@ -724,19 +734,6 @@ The agent's behavior is governed by the following set of formal protocols, which
       occurs.
     rule_id: agents-md-self-awareness
   version: 1.0.0
-- associated_tools:
-  - tooling/self_correction_orchestrator.py
-  description: A protocol that empowers the agent to modify its own core tooling,
-    enabling a recursive self-improvement cycle.
-  protocol_id: meta-mutation-001
-  rules:
-  - description: The agent is authorized to use the 'modify_tooling' action within
-      the self_correction_orchestrator.py to apply patches to its own source code
-      or other tools in the tooling/ directory. This action must be triggered by a
-      structured lesson in knowledge_core/lessons.jsonl.
-    enforcement: The self_correction_orchestrator.py must validate that the 'modify_tooling'
-      action is well-formed and targets a valid file within the tooling/ directory.
-    rule_id: authorize-tooling-modification
 - associated_tools:
   - reset_all
   description: A specific, high-priority protocol that forbids the Code Review Critic
@@ -1414,6 +1411,19 @@ The agent's behavior is governed by the following set of formal protocols, which
     tags:
     - self_improvement
   version: 1.0.0
+- associated_tools:
+  - tooling/self_correction_orchestrator.py
+  description: A protocol that empowers the agent to modify its own core tooling,
+    enabling a recursive self-improvement cycle.
+  protocol_id: meta-mutation-001
+  rules:
+  - description: The agent is authorized to use the 'modify_tooling' action within
+      the self_correction_orchestrator.py to apply patches to its own source code
+      or other tools in the tooling/ directory. This action must be triggered by a
+      structured lesson in knowledge_core/lessons.jsonl.
+    enforcement: The self_correction_orchestrator.py must validate that the 'modify_tooling'
+      action is well-formed and targets a valid file within the tooling/ directory.
+    rule_id: authorize-tooling-modification
 - description: A demonstration of a protocol with executable code.
   protocol_id: executable-demo-001
   rules:

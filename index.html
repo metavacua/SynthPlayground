@@ -1,207 +1,1427 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Agent Self-Improving Codebase</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-            line-height: 1.6;
-            color: #333;
-            max-width: 960px;
-            margin: 40px auto;
-            padding: 0 20px;
-            background-color: #f9f9f9;
-        }
-        header {
-            text-align: center;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 20px;
-            margin-bottom: 40px;
-        }
-        h1 {
-            font-size: 2.5em;
-            color: #111;
-        }
-        h2 {
-            font-size: 2em;
-            border-bottom: 1px solid #e0e0e0;
-            padding-bottom: 10px;
-            margin-top: 50px;
-        }
-        h3 {
-            font-size: 1.5em;
-            color: #333;
-        }
-        p, li {
-            font-size: 1.1em;
-        }
-        .tagline {
-            font-size: 1.2em;
-            color: #555;
-        }
-        .section {
-            margin-bottom: 40px;
-        }
-        .concept {
-            background-color: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        code {
-            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
-            background-color: #f0f0f0;
-            padding: .2em .4em;
-            border-radius: 3px;
-        }
-        pre {
-            background-color: #f0f0f0;
-            padding: 15px;
-            border-radius: 5px;
-            overflow-x: auto;
-        }
-        a {
-            color: #0366d6;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        footer {
-            text-align: center;
-            margin-top: 60px;
-            padding-top: 20px;
-            border-top: 2px solid #e0e0e0;
-            font-size: 0.9em;
-            color: #777;
-        }
-    </style>
+    <title>Project Documentation</title>
+    <style>body { font-family: sans-serif; margin: 2em; }</style>
 </head>
 <body>
-    <header>
-        <h1>AI Agent Self-Improving Codebase</h1>
-        <p class="tagline">An experimental environment for a self-correcting AI agent that autonomously manages and evolves its own code and governing protocols.</p>
-    </header>
+<h1>README</h1>
+<h1>Executable Witnesses for Three Classes of Recursive Languages</h1>
+<p>This project provides Python implementations of "executable witnesses" for three distinct classes of complete, recursive languages, based on the concepts from the "Asymmetric Bifurcation of Formal Systems" thesis. Under the Curry-Howard correspondence, a proof of a proposition is equivalent to a program (a witness) that computes the result.</p>
+<p>Each script corresponds to one of the three language classes and demonstrates a different computational nature of proof.</p>
+<hr />
+<h2>1. <code>witness_neither.py</code></h2>
+<ul>
+<li><strong>Language Class:</strong> <code>L_neither</code> (A complete, recursive language that defines neither V nor D).</li>
+<li><strong>Logical Foundation:</strong> The language of true sentences in Presburger Arithmetic, a decidable theory.</li>
+<li><strong>Witness Description:</strong> The witness is a function that constructively proves a simple proposition of Presburger arithmetic. It mimics the process of <strong>quantifier elimination</strong> by finding a specific value that satisfies the proposition and verifying it. The computation itself is the discovery process.</li>
+</ul>
+<h3>How to Run</h3>
+<pre><code class="language-bash">python witness_neither.py
+</code></pre>
+<p>The script will execute the witness function and print a "proof certificate" containing the value found for <code>x</code> that proves the existential proposition true.</p>
+<hr />
+<h2>2. <code>witness_d.py</code></h2>
+<ul>
+<li><strong>Language Class:</strong> <code>L_D</code> (A complete, recursive language that defines D but not V).</li>
+<li><strong>Logical Foundation:</strong> The language of theorems of a complete, decidable extension (<code>T*</code>) of an inessentially undecidable theory (like <code>IΔ₀ + Ω₁</code>).</li>
+<li><strong>Witness Description:</strong> The witness is a function that proves propositions by consulting a hardcoded Python dictionary, which acts as an <strong>"oracle"</strong> for the completing axioms of <code>T*</code>. For complex propositions that were undecidable in the base theory, the proof is not a computation but a direct lookup.</li>
+</ul>
+<h3>How to Run</h3>
+<pre><code class="language-bash">python witness_d.py
+</code></pre>
+<p>The script will prove several propositions, demonstrating both standard derivation (for simple cases) and axiomatic oracle lookup (for the hard cases).</p>
+<hr />
+<h2>3. <code>witness_v.py</code></h2>
+<ul>
+<li><strong>Language Class:</strong> <code>L_V</code> (A complete, recursive language that defines V but not D).</li>
+<li><strong>Logical Foundation:</strong> A self-referential language whose existence is guaranteed by Kleene's Recursion Theorem.</li>
+<li><strong>Witness Description:</strong> The witness for a proposition is the <strong>decider program itself</strong>. This script implements the self-referential decider using a <strong>Z-combinator</strong> (a variant of the Y-combinator for strict languages like Python). The execution trace of this recursive function <em>is</em> the constructive proof of whether a string belongs to the language.</li>
+</ul>
+<h3>How to Run</h3>
+<pre><code class="language-bash">python witness_v.py
+</code></pre>
+<p>The script will run the self-referential decider on several test strings, printing the proof result (True/False) for each proposition.</p>
+<hr>
 
-    <div id="overview" class="section">
-        <h2>Overview</h2>
-        <p>This repository represents a pioneering research effort into the future of AI-driven software development. It serves as a live experiment for an AI agent designed to be self-correcting and self-improving. The primary goal is to create an agent that can autonomously manage, refactor, and enhance its own codebase and the formal protocols that govern its behavior.</p>
-        <p>This is not a conventional software project but a research platform exploring the boundaries of agentic systems and the co-evolution of AI agents and the codebases they inhabit.</p>
-    </div>
-
-    <div id="concepts" class="section">
-        <h2>Core Concepts</h2>
-        <p>The project is built on a foundation of cutting-edge ideas that redefine the relationship between code, documentation, and the agents that interact with them.</p>
-
-        <div class="concept">
-            <h3>The Provable Repository</h3>
-            <p>Instead of being a simple collection of text files, this repository is architected as a formal, mathematical proof. The directory structure and build process are designed to be logically verifiable. In this paradigm:</p>
-            <ul>
-                <li><strong>Documentation is the Specification:</strong> A component's <code>README.md</code> file acts as a formal contract or "type" that specifies what it does.</li>
-                <li><strong>Code is the Proof:</strong> The source code provides the constructive proof that the specification is met.</li>
-                <li><strong>The Build is the Verification:</strong> A successful build is a formal, automated verification that the proof (code) matches the specification (documentation). This makes "documentation drift" impossible by design.</li>
-            </ul>
-        </div>
-
-        <div class="concept">
-            <h3>The Logically-Grounded Agent</h3>
-            <p>To interact with a provable repository, the AI agent's own cognitive architecture is grounded in the same logical principles. Its actions are not based on heuristics alone, but on verifiable transactions. This approach aims to create a more reliable, predictable, and secure agent, architecturally incapable of performing actions that would leave the system in an inconsistent state.</p>
-        </div>
-
-        <div class="concept">
-            <h3>The Semantic Artifact (Future Vision)</h3>
-            <p>The long-term vision is to move beyond a file-based structure entirely. The repository would be pre-compiled into a "Semantic Zip"—a single, monolithic knowledge graph. This artifact would be optimized for machine consumption, allowing the agent to query the project's entire architecture and dependencies instantly, overcoming the cognitive bottlenecks of current AI models.</p>
-        </div>
-    </div>
-
-    <div id="modules" class="section">
-        <h2>Key Modules</h2>
-        <p>The repository is organized into several key modules, each representing a core component of the project's architecture. Here are a few highlights:</p>
-
-        <div class="concept">
-            <h3>Custom Languages: <code>aura_lang/</code> and <code>lfi_ill/</code></h3>
-            <p>A unique feature of this project is its use of custom-designed languages for defining agent behavior and logical proofs:</p>
-            <ul>
-                <li><a href="aura_lang/"><code>aura_lang</code></a>: A simple, C-style scripting language used for writing high-level agent commands and automation scripts.</li>
-                <li><a href="lfi_ill/"><code>lfi_ill</code></a>: An implementation of "Paraconsistent Light Linear Logic," a research-level formal logic for reasoning under uncertainty and resource constraints. This is a cornerstone of the "Provable Repository" concept.</li>
-            </ul>
-        </div>
-
-        <div class="concept">
-            <h3>Agent Tooling: <code>tooling/</code></h3>
-            <p>This is the heart of the agent's capabilities. It contains a vast collection of Python scripts that the agent can invoke to perform its tasks. This includes tools for:</p>
-            <ul>
-                <li>Building and compiling the repository's various artifacts (<code>builder.py</code>).</li>
-                <li>Parsing and interpreting the custom languages (<code>aura_executor.py</code>, <code>plllu_runner.py</code>).</li>
-                <li>Analyzing and refactoring code (<code>refactor.py</code>, <code>symbol_extractor.py</code>).</li>
-                <li>Managing the agent's own self-improvement and self-correction loops (<code>self_correction_orchestrator.py</code>).</li>
-            </ul>
-            <p>You can explore the full extent of the agent's capabilities in the <a href="tooling/"><code>tooling/</code></a> directory.</p>
-        </div>
-
-        <div class="concept">
-            <h3>Formal Logic System: <code>logic_system/</code></h3>
-            <p>This module provides the concrete implementation of the formal logic systems described in the project's research papers. It contains Python classes for representing logical formulas, sequents, and proofs, and it includes interpreters for various logics. This is where the high-level theory of the project is translated into executable code.</p>
-        </div>
-    </div>
-
-    <div id="getting-started" class="section">
-        <h2>Getting Started for Developers</h2>
-        <p>Interacting with this repository requires a different approach than a typical software project. The <code>AGENTS.md</code> file in the root directory serves as the primary entry point and "constitution" for the AI agent.</p>
-        <p>The project uses a unified build system driven by <code>tooling/builder.py</code>. To see available build targets:</p>
-        <pre><code>python3 tooling/builder.py --list</code></pre>
-        <p>To run a specific build target, such as compiling the protocols:</p>
-        <pre><code>python3 tooling/builder.py --target protocols</code></pre>
-        <p>For detailed contribution guidelines and development setup, please refer to the <a href="README.md">README.md</a> and <a href="CONTRIBUTING.md">CONTRIBUTING.md</a> files.</p>
-    </div>
-
-    <div id="research" class="section">
-        <h2>Research Table of Contents</h2>
-        <p>This repository is built on a deep foundation of theoretical and practical research. The following documents provide a comprehensive overview of the project's goals, architecture, and philosophical underpinnings.</p>
-
-        <div class="concept">
-            <h3>Core Concepts & Vision</h3>
-            <ul>
-                <li><a href="AIACHC.md">An Analysis of the Operational Limits of Advanced Coding Assistants on Complex Software Repositories</a>: A deep dive into the theoretical paradigms of Conventional, Provable, and Semantic repositories.</li>
-                <li><a href="architecting-the-symbiont-a-step-by-step-manual-for-an-ai-centric-development-environment.txt">Architecting the Symbiont</a>: A step-by-step manual for an AI-centric development environment.</li>
-                <li><a href="from-files-to-artifacts-analyzing-the-'semantic-zip'-and-the-future-of-agent-driven-software-engineering.txt">From Files to Artifacts</a>: An analysis of the "Semantic Zip" concept and the future of agent-driven software engineering.</li>
-            </ul>
-        </div>
-
-        <div class="concept">
-            <h3>Agent Protocol & Self-Improvement</h3>
-            <ul>
-                <li><a href="agent-protocol-critique-and-improvement.txt">Agent Protocol Critique and Improvement</a>: A critique and improvement plan for the agent protocol.</li>
-                <li><a href="self_improvement_project/architecture.md">Self-Improvement Architecture</a>: The architecture of the self-improvement project.</li>
-                <li><a href="research/synthesis_of_self_improvement_mechanisms.md">Synthesis of Self-Improvement Mechanisms</a>: A synthesis of self-improvement mechanisms.</li>
-            </ul>
-        </div>
-
-        <div class="concept">
-            <h3>Formal Logic & Custom Languages</h3>
-            <ul>
-                <li><a href="agents-build-system-proof-Framework.txt">Agents Build System Proof Framework</a>: A description of the proof-based build system.</li>
-                <li><a href="lfi_ill/lfi-light-linear-logic.md">Paraconsistent Light Linear Logic</a>: The formal definition of the pLLL logic system.</li>
-                <li><a href="lfi_ill/Paradefinite-Light-Linear-Logic.md">Paradefinite Light Linear Logic</a>: The definition of Paradefinite Light Linear Logic.</li>
-            </ul>
-        </div>
-
-        <div class="concept">
-            <h3>Reports & Analyses</h3>
-            <ul>
-                <li><a href="reports/agent_construction_gap_analysis.md">Agent Construction Gap Analysis</a>: A gap analysis of agent construction.</li>
-                <li><a href="reports/ambiguity_in_planning_research_report.md">Ambiguity in Planning Research Report</a>: A research report on ambiguity in planning.</li>
-                <li><a href="research/post_mortem_adequacy_report.md">Post-Mortem Adequacy Report</a>: A report on the adequacy of post-mortems.</li>
-            </ul>
-        </div>
-    </div>
-
-    <footer>
-        <p>This GitHub Pages site was designed and developed by an AI agent to provide a comprehensive and representative overview of its own repository.</p>
-    </footer>
+<h1>AGENTS.md</h1>
+<h1>AGENTS.md (Dynamically Generated)</h1>
+<p><strong>Last Generated:</strong> 2025-10-31 07:55:34 UTC</p>
+<h2>Objective</h2>
+<p>To provide a systematic, non-negotiable protocol for task execution, self-correction, and knowledge acquisition within this repository. Adherence to this protocol is mandatory for all operations. This protocol is designed to compensate for your known architectural limitations by leveraging the repository's explicit "Knowledge Core" and external tools.</p>
+<hr />
+<h2>Setup &amp; Build Commands</h2>
+<p>The following build targets are the primary way to test, build, and maintain this repository. To run any target, use the command: <code>python3 tooling/builder.py --target &lt;name&gt;</code></p>
+<h3>Build Groups</h3>
+<ul>
+<li><strong><code>all</code></strong>: Runs the following targets: <code>protocols, knowledge-integrate, agents-md</code></li>
+<li><strong><code>knowledge</code></strong>: Runs the following targets: <code>knowledge-integrate</code></li>
+</ul>
+<h3>Individual Targets</h3>
+<ul>
+<li><strong><code>agents-md</code></strong>: Generate the master AGENTS.md file.</li>
+<li><strong><code>ast-generate</code></strong>: Generate ASTs for all supported source files.</li>
+<li><strong><code>extract-symbols</code></strong>: Extract symbols from ASTs to create a symbol map.</li>
+<li><strong><code>remove-unused-imports</code></strong>: Remove unused imports from all Python files.</li>
+<li><strong><code>format</code></strong>: Format the code using black.</li>
+<li><strong><code>guardian-protocol</code></strong>: Compile the guardian protocol.</li>
+<li><strong><code>install</code></strong>: Install Python dependencies.</li>
+<li><strong><code>knowledge-integrate</code></strong>: Integrate knowledge from various sources.</li>
+<li><strong><code>lint</code></strong>: Lint the code using flake8.</li>
+<li><strong><code>protocols</code></strong>: Compile all protocol sources to a single YAML-LD file.</li>
+<li><strong><code>test</code></strong>: Run the test suite using pytest.</li>
+<li><strong><code>test-all</code></strong>: Run all tests in the repository.</li>
+</ul>
+<hr />
+<h2>Core Directives &amp; Protocols</h2>
+<p>The agent's behavior is governed by the following set of formal protocols, which are dynamically generated from the repository's enriched knowledge core. You are required to adhere to these protocols at all times.</p>
+<h3>Protocol: <code>HELLO-WORLD-001</code></h3>
+<p><strong>Description</strong>: A protocol for greeting the world.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>greet-the-world</code></strong>: When this rule is invoked, the agent must use the <code>hello_world</code> tool to print the message "Hello, World!".</li>
+</ul>
+<hr />
+<h3>Protocol: <code>CHARTER-001</code></h3>
+<p><strong>Description</strong>: A charter of operational principles for the AI agent.</p>
+<hr />
+<h3>Protocol: <code>external-api-integration-001</code></h3>
+<p><strong>Description</strong>: A protocol for standardized interaction with external agent APIs.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>external-api-registry</code></strong>: A central registry of all approved external agent APIs MUST be maintained at 'knowledge_core/external_api_registry.json'.</li>
+<li><strong><code>secure-api-key-management</code></strong>: API keys for external services MUST be managed securely via environment variables.</li>
+<li><strong><code>standardized-interaction-client</code></strong>: A standardized client for interacting with external agent APIs MUST be implemented in 'tooling/external_api_client.py'.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>testing-protocol-001</code></h3>
+<p><strong>Description</strong>: A protocol for ensuring comprehensive testing of all new code.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>comprehensive-testing</code></strong>: All new code must be accompanied by unit, integration, and end-to-end tests, and all tests must pass before submission.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>test-driven-development-001</code></h3>
+<p><strong>Description</strong>: A protocol to enforce Test-Driven Development (TDD) practices.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>tdd-writing-new-code</code></strong>: When writing any new function or class, a corresponding test must be written first. The test should fail before the new code is implemented, and pass after.</li>
+<li><strong><code>tdd-enforcement-tool</code></strong>: A TDD enforcement tool must be used to ensure that all new code is developed using TDD.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>guardian-protocol-001</code></h3>
+<p><strong>Description</strong>: A meta-protocol to ensure all autonomous actions, especially self-modification, are strategically sound and easily reviewable by humans.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>gdn-001</code></strong>: All self-improvement and speculative execution tasks must generate a formal review document.</li>
+<li><strong><code>gdn-002</code></strong>: The review document must be a markdown file located in the <code>reviews/</code> directory, named after the proposal or task.</li>
+<li><strong><code>gdn-003</code></strong>: The review document must contain sections for 'Summary', 'Impact Analysis', and 'Verification Plan'.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>dependency-management-001</code></h3>
+<p><strong>Description</strong>: A protocol for ensuring a reliable execution environment through formal dependency management.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>dependency-install-on-start</code></strong>: Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages listed in the <code>requirements.txt</code> file. This ensures the environment is correctly configured before any other tools are executed.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>agent-bootstrap-001</code></h3>
+<p><strong>Description</strong>: A foundational protocol that dictates the agent's initial actions upon starting any task.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>bootstrap-load-agents-md</code></strong>: Upon initialization for any task, the agent's first and highest-priority action must be to locate, read, and parse the AGENTS.md file in the repository root. This ensures the agent is properly contextualized before any planning or execution begins.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>experimental-prologue-001</code></h3>
+<p><strong>Description</strong>: An experimental protocol to test dynamic rule-following. It mandates a prologue action before file creation.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>create-prologue-file</code></strong>: Before creating any new file as part of a task, the agent MUST first create a file named 'prologue.txt' with the content 'This is a prologue file.' This rule serves as a test of the agent's ability to adapt its behavior to new, dynamically loaded protocols.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>non-compliance-protocol-001</code></h3>
+<p><strong>Description</strong>: A protocol that defines non-compliance with AGENTS.md and specifies corrective actions.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>non-compliance-definition</code></strong>: Defines non-compliance as a violation of any rule, convention, or procedure in AGENTS.md or its source protocols.</li>
+<li><strong><code>non-compliance-direct-editing</code></strong>: Prohibits the direct editing of build artifacts like AGENTS.md or README.md. Changes must be made to source files, followed by a rebuild.</li>
+<li><strong><code>non-compliance-test-procedure</code></strong>: Requires adherence to all documented testing procedures before submitting changes.</li>
+<li><strong><code>non-compliance-architectural-deviation</code></strong>: Forbids changes that contradict documented architectural patterns or coding conventions.</li>
+<li><strong><code>non-compliance-self-awareness-failure</code></strong>: Requires the agent to maintain an up-to-date understanding of protocols by recompiling AGENTS.md when necessary.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>pre-commit-protocol-001</code></h3>
+<p><strong>Description</strong>: Defines the mandatory pre-commit checks to ensure code quality, correctness, and readiness for submission.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>pre-commit-instructions-mandate</code></strong>: Before submitting changes, the agent MUST execute the <code>pre_commit_instructions</code> tool to receive the required sequence of validation steps (e.g., running tests, requesting code review).</li>
+</ul>
+<hr />
+<h3>Protocol: <code>best-practices-001</code></h3>
+<p><strong>Description</strong>: A set of best practices derived from observing successful, data-driven workflow patterns.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>verify-after-write</code></strong>: After every file creation or modification action (<code>create_file_with_block</code>, <code>overwrite_file_with_block</code>, <code>replace_with_git_merge_diff</code>), the agent MUST use a subsequent read-only tool (<code>read_file</code>, <code>list_files</code>, <code>grep</code>) to verify that the action was executed successfully and had the intended effect. A plan step should only be marked as complete after this verification.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>reset-all-prohibition-001</code></h3>
+<p><strong>Description</strong>: A high-priority protocol that unconditionally forbids the use of the <code>reset_all</code> tool.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>no-reset-all</code></strong>: The <code>reset_all</code> tool is strictly forbidden under all circumstances. It is a legacy tool that has been superseded by more granular and safer methods of workspace management. Its use is considered a critical failure.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>meta-protocol-001</code></h3>
+<p><strong>Description</strong>: A meta-protocol governing the agent's awareness and maintenance of its own core protocol files.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>agents-md-self-awareness</code></strong>: The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Before relying on AGENTS.md, the agent should ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent is operating with the latest set of protocols.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>critic-reset-prohibition-001</code></h3>
+<p><strong>Description</strong>: A specific, high-priority protocol that forbids the Code Review Critic agent from using the 'reset_all' tool.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>critic-no-reset</code></strong>: The agent role-playing as the 'Code Review Critic' is explicitly forbidden from invoking the 'reset_all' tool under any circumstances. This is a critical safeguard to prevent the loss of work during the review process.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>critic-meta-protocol-001</code></h3>
+<p><strong>Description</strong>: A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>protocol-as-source-code</code></strong>: The <code>protocols/</code> directory and all its contents (<code>.md</code>, <code>.json</code> files) MUST be treated as functional source code. Changes to these files directly alter the agent's operational capabilities and governing rules.</li>
+<li><strong><code>built-in-tools-are-valid</code></strong>: The agent's execution environment provides a set of built-in tools (e.g., <code>read_file</code>, <code>delete_file</code>, <code>pre_commit_instructions</code>). The implementation of these tools does not reside within the repository. A protocol change that adds a built-in tool to the <code>associated_tools</code> list is a valid and complete functional change.</li>
+<li><strong><code>functional-change-definition</code></strong>: A change is considered 'functional' if it correctly modifies the agent's operational rules or capabilities, as defined by the combination of Python source code and the protocol source files in <code>protocols/</code>.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>BROWSER-CONTROL-001</code></h3>
+<p><strong>Description</strong>: A protocol for controlling a web browser using the GeminiComputerUse tool.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>invoke-browser-control</code></strong>: When this rule is invoked, the agent must use the <code>gemini_computer_use</code> tool to perform a web-based task.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>agent-interaction-001</code></h3>
+<p><strong>Description</strong>: A protocol governing the agent's core interaction and planning tools.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>planning-tool-access</code></strong>: The agent is authorized to use the <code>set_plan</code> tool to create and update its execution plan. This is a foundational capability for task execution.</li>
+<li><strong><code>communication-tool-access</code></strong>: The agent is authorized to use the <code>message_user</code> tool to communicate with the user, providing updates and asking for clarification. This is essential for a collaborative workflow.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>agent-shell-001</code></h3>
+<p><strong>Description</strong>: A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>shell-is-primary-entry-point</code></strong>: All agent tasks must be initiated through the <code>agent_shell.py</code> script. This script is the designated, API-driven entry point that ensures proper initialization of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle management. Direct execution of other tools or scripts is forbidden for task initiation.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>unified-auditor-001</code></h3>
+<p><strong>Description</strong>: A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>run-all-audits</code></strong>: The <code>auditor.py</code> script should be used to run comprehensive checks on the repository's health. It can be run with 'all' to check protocols, plans, and documentation completeness.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>speculative-execution-001</code></h3>
+<p><strong>Description</strong>: A protocol that governs the agent's ability to initiate and execute self-generated, creative, or exploratory tasks during idle periods.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>idle-state-trigger</code></strong>: The agent may only initiate a speculative task when it has no active, user-assigned tasks.</li>
+<li><strong><code>formal-proposal-required</code></strong>: A speculative task must begin with the creation of a formal proposal document, outlining the objective, rationale, and plan.</li>
+<li><strong><code>resource-constraints</code></strong>: Speculative tasks must operate under defined resource limits.</li>
+<li><strong><code>user-review-gate</code></strong>: Final artifacts from a speculative task must be submitted for user review and cannot be merged directly.</li>
+<li><strong><code>speculative-logging</code></strong>: All logs and artifacts generated during a speculative task must be tagged as 'speculative'.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>plllu-execution-001</code></h3>
+<p><strong>Description</strong>: A protocol for executing pLLLU scripts, enabling a more expressive and powerful planning and automation language for the agent.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>execute-plllu-script</code></strong>: The <code>plllu_runner.py</code> tool should be used to execute .plllu script files. This tool provides the bridge between the agent's master control loop and the pLLLU language interpreter.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>file-indexing-001</code></h3>
+<p><strong>Description</strong>: A protocol for maintaining an up-to-date file index to accelerate tool performance.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>update-index-before-submit</code></strong>: Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST rebuild the repository's file index. This ensures that tools relying on the index, such as the FDC validator, have an accurate view of the filesystem.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>aura-execution-001</code></h3>
+<p><strong>Description</strong>: A protocol for executing Aura scripts, enabling a more expressive and powerful planning and automation language for the agent.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>execute-aura-script</code></strong>: The <code>aura_executor.py</code> tool should be used to execute .aura script files. This tool provides the bridge between the agent's master control loop and the Aura language interpreter.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>csdc-001</code></h3>
+<p><strong>Description</strong>: A protocol for the Context-Sensitive Development Cycle (CSDC), which introduces development models based on logical constraints.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>use-chomsky-cli-validate</code></strong>: The <code>tooling/chomsky/cli.py validate-plan</code> command must be used to validate plans under the CSDC. This tool enforces model-specific constraints (A or B) and complexity requirements (P or EXP).</li>
+<li><strong><code>model-a-constraints</code></strong>: Model A permits <code>define_set_of_names</code> but forbids <code>define_diagonalization_function</code>.</li>
+<li><strong><code>model-b-constraints</code></strong>: Model B permits <code>define_diagonalization_function</code> but forbids <code>define_set_of_names</code>.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>hdl-proving-001</code></h3>
+<p><strong>Description</strong>: A protocol for interacting with the Hypersequent-calculus-based logic engine, allowing the agent to perform formal logical proofs.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>prove-sequent</code></strong>: The <code>hdl_prover.py</code> tool should be used to check the provability of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based prover.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>toolchain-review-on-schema-change-001</code></h3>
+<p><strong>Description</strong>: A meta-protocol to ensure the agent's toolchain remains synchronized with the architecture of its governing protocols.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>toolchain-audit-on-schema-change</code></strong>: If a change is made to the core protocol schema (<code>protocol.schema.json</code>) or to the compilers that process it (<code>protocol_compiler.py</code>), a formal audit of the entire <code>tooling/</code> directory MUST be performed as a subsequent step. This audit should verify that all tools are compatible with the new protocol structure.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>unified-doc-builder-001</code></h3>
+<p><strong>Description</strong>: A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>use-doc-builder-for-all-docs</code></strong>: The <code>doc_builder.py</code> script is the single entry point for generating all user-facing documentation, including system-level docs, README files, and GitHub Pages. It should be called with the appropriate '--format' argument.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>capability-verification-001</code></h3>
+<p><strong>Description</strong>: A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>verify-capability-acquisition</code></strong>: The <code>capability_verifier.py</code> tool should be used to test the agent's ability to acquire a new capability defined by a failing test file. The tool orchestrates the failure, self-correction, and verification process.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>aorp-header</code></h3>
+<p><strong>Description</strong>: Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP).</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>aorp-identity</code></strong>: The governing protocol set is identified as the Advanced Orientation and Research Protocol (AORP).</li>
+<li><strong><code>aorp-versioning</code></strong>: The official protocol version is tracked in the VERSION file in the repository root, following Semantic Versioning (SemVer).</li>
+</ul>
+<hr />
+<h3>Protocol: <code>cfdc-protocol-001</code></h3>
+<p><strong>Description</strong>: Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>hierarchical-planning-via-call-plan</code></strong>: Plans may execute other plans as sub-routines using the 'call_plan <path_to_plan>' directive. This enables a modular, hierarchical workflow.</li>
+<li><strong><code>max-recursion-depth</code></strong>: To ensure decidability, the plan execution stack must not exceed a system-wide constant, MAX_RECURSION_DEPTH. This prevents infinite recursion and guarantees all processes will terminate.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>research-fdc-001</code></h3>
+<p><strong>Description</strong>: Defines the formal Finite Development Cycle (FDC) for conducting deep research.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>specialized-fsm</code></strong>: The Research FDC must be governed by its own dedicated Finite State Machine, defined in <code>tooling/research_fsm.json</code>. This FSM is tailored for a research workflow, with states for gathering, synthesis, and reporting.</li>
+<li><strong><code>executable-plans</code></strong>: Research plans must be generated by <code>tooling/research_planner.py</code> as valid, executable plans that conform to the <code>research_fsm.json</code> definition. They are not just templates but formal, verifiable artifacts.</li>
+<li><strong><code>l4-invocation</code></strong>: The L4 Deep Research Cycle is the designated mechanism for resolving complex 'unknown unknowns'. It is invoked by the main orchestrator when a task requires knowledge that cannot be obtained through simple L1-L3 orientation probes.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>research-protocol-001</code></h3>
+<p><strong>Description</strong>: A protocol for conducting systematic research using the integrated research toolchain.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>mandate-research-tools</code></strong>: For all complex research tasks, the <code>plan_deep_research</code> tool MUST be used to generate a plan, and the <code>execute_research_protocol</code> tool MUST be used for data gathering. This ensures a systematic and auditable research process.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>self-correction-protocol-001</code></h3>
+<p><strong>Description</strong>: Defines the automated, closed-loop workflow for protocol self-correction.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>structured-lessons</code></strong>: Lessons learned from post-mortem analysis must be generated as structured, machine-readable JSON objects in <code>knowledge_core/lessons.jsonl</code>.</li>
+<li><strong><code>programmatic-updates</code></strong>: All modifications to protocol source files must be performed programmatically via the <code>tooling/protocol_updater.py</code> tool to ensure consistency and prevent manual errors.</li>
+<li><strong><code>automated-orchestration</code></strong>: The self-correction cycle must be managed by the <code>tooling/self_correction_orchestrator.py</code> script, which processes pending lessons and triggers the necessary updates.</li>
+<li><strong><code>programmatic-rule-refinement</code></strong>: The self-correction system can modify the description of existing protocol rules via the <code>update-rule</code> command in <code>tooling/protocol_updater.py</code>, allowing it to refine its own logic.</li>
+<li><strong><code>autonomous-code-suggestion</code></strong>: The self-correction system can generate and apply code changes to its own tooling. This is achieved through a <code>PROPOSE_CODE_CHANGE</code> action, which is processed by <code>tooling/code_suggester.py</code> to create an executable plan.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>decidability-constraints-001</code></h3>
+<p><strong>Description</strong>: Ensures all development processes are formally decidable and computationally tractable.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>non-turing-completeness</code></strong>: The agent's planning and execution language is, by design, not Turing-complete. This is a fundamental constraint to guarantee that all processes will terminate.</li>
+<li><strong><code>bounded-recursion</code></strong>: The agent MUST NOT generate plans that involve recursion or self-invocation. A plan cannot trigger another FDC or a sub-plan, with the sole exception of the 'Deep Research Cycle'.</li>
+<li><strong><code>fsm-adherence</code></strong>: All plans must be valid strings in the language defined by the tooling/fdc_fsm.json Finite State Machine.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>standing-orders-001</code></h3>
+<p><strong>Description</strong>: A set of non-negotiable, high-priority mandates that govern the agent's behavior across all tasks.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>aorp-mandate</code></strong>: All Finite Development Cycles (FDCs) MUST be initiated using the FDC toolchain's 'start' command. This is non-negotiable.</li>
+<li><strong><code>rag-mandate</code></strong>: For any task involving external technologies, Just-In-Time External RAG is REQUIRED to verify current best practices. Do not trust internal knowledge.</li>
+<li><strong><code>fdc-toolchain-mandate</code></strong>: Use the <code>fdc_cli.py</code> tool for all core FDC state transitions: task initiation ('start'), plan linting ('lint'), and task closure ('close').</li>
+</ul>
+<hr />
+<h3>Protocol: <code>orientation-cascade-001</code></h3>
+<p><strong>Description</strong>: Defines the mandatory, four-tiered orientation cascade that must be executed at the start of any task to establish a coherent model of the agent's identity, environment, and the world state.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>l1-self-awareness</code></strong>: Level 1 (Self-Awareness): The agent must first establish its own identity and inherent limitations by reading the <code>knowledge_core/agent_meta.json</code> artifact.</li>
+<li><strong><code>l2-repository-sync</code></strong>: Level 2 (Repository Sync): The agent must understand the current state of the local repository by loading primary artifacts from the <code>knowledge_core/</code> directory.</li>
+<li><strong><code>l3-environmental-probing</code></strong>: Level 3 (Environmental Probing &amp; Targeted RAG): The agent must discover the rules and constraints of its operational environment by executing a probe script and using targeted RAG to resolve 'known unknowns'.</li>
+<li><strong><code>l4-deep-research-cycle</code></strong>: Level 4 (Deep Research Cycle): To investigate 'unknown unknowns', the agent must initiate a formal, self-contained Finite Development Cycle (FDC) of the 'Analysis Modality'.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>plan-registry-001</code></h3>
+<p><strong>Description</strong>: Defines a central registry for discovering and executing hierarchical plans by a logical name.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>registry-definition</code></strong>: A central plan registry MUST exist at 'knowledge_core/plan_registry.json'. It maps logical plan names to their file paths.</li>
+<li><strong><code>registry-first-resolution</code></strong>: The 'call_plan <argument>' directive MUST first attempt to resolve '<argument>' as a logical name in the plan registry. If resolution fails, it MUST fall back to treating '<argument>' as a direct file path for backward compatibility.</li>
+<li><strong><code>registry-management-tool</code></strong>: A dedicated tool (<code>tooling/plan_manager.py</code>) MUST be provided for managing the plan registry, with functions to register, deregister, and list plans.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>fdc-protocol-001</code></h3>
+<p><strong>Description</strong>: Defines the Finite Development Cycle (FDC), a formally defined process for executing a single, coherent task.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>fdc-entry-point</code></strong>: The AORP cascade is the mandatory entry point to every FDC.</li>
+<li><strong><code>fdc-state-transitions</code></strong>: The FDC is a Finite State Machine (FSM) formally defined in <code>tooling/fdc_fsm.json</code>. Plans must be valid strings in the language defined by this FSM.</li>
+<li><strong><code>phase1-deconstruction</code></strong>: Phase 1 (Deconstruction &amp; Contextualization): The agent must ingest the task, query historical logs, identify entities using the symbol map, and analyze impact using the dependency graph.</li>
+<li><strong><code>phase2-planning</code></strong>: Phase 2 (Planning &amp; Self-Correction): The agent must generate a granular plan, lint it using the FDC toolchain, cite evidence for its steps, and perform a critical review.</li>
+<li><strong><code>phase3-execution</code></strong>: Phase 3 (Execution &amp; Structured Logging): The agent must execute the validated plan and log every action according to the <code>LOGGING_SCHEMA.md</code>.</li>
+<li><strong><code>phase4-post-mortem</code></strong>: Phase 4 (Pre-Submission Post-Mortem): The agent must formally close the task using the <code>close</code> command and complete the generated post-mortem report.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>core-directive-001</code></h3>
+<p><strong>Description</strong>: The mandatory first action for any new task, ensuring a formal start to the Finite Development Cycle (FDC).</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>mandatory-fdc-start</code></strong>: Upon receiving a new task, the agent's first action MUST be to programmatically execute the FDC 'start' command to formally initiate the task and run the AORP orientation cascade.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>deep-research-cycle-001</code></h3>
+<p><strong>Description</strong>: A standardized, callable plan for conducting in-depth research on a complex topic.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>structured-research-phases</code></strong>: The deep research plan MUST follow a structured four-phase process: Scoping, Broad Gathering, Targeted Extraction, and Synthesis.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>gemini-api-integration-001</code></h3>
+<p><strong>Description</strong>: A protocol for integrating with the Google Gemini API.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>gemini-api-access</code></strong>: The agent is authorized to use the Gemini API for advanced tasks.</li>
+<li><strong><code>gemini-api-key-security</code></strong>: The agent must handle the Gemini API key securely.</li>
+<li><strong><code>gemini-computer-use-protocol</code></strong>: The agent must adhere to a strict sub-protocol when using the Gemini API's 'Computer Use' feature.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>security-header</code></h3>
+<p><strong>Description</strong>: Defines the identity and purpose of the Security Protocol document.</p>
+<hr />
+<h3>Protocol: <code>security-vuln-reporting-001</code></h3>
+<p><strong>Description</strong>: Defines the official policy and procedure for reporting security vulnerabilities.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>vuln-reporting-channel</code></strong>: All suspected security vulnerabilities MUST be reported privately to the designated security contact.</li>
+<li><strong><code>no-public-disclosure</code></strong>: Vulnerabilities MUST NOT be disclosed publicly until a patch is available and has been distributed.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>self-improvement-protocol-001</code></h3>
+<p><strong>Description</strong>: A formal protocol for the agent to propose, validate, and implement improvements to its own operational protocols and tools.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>sip-001</code></strong>: Proposals for self-improvement must be initiated via the <code>self_improvement_cli.py</code> tool.</li>
+<li><strong><code>sip-002</code></strong>: Improvement proposals must be formally structured, including sections for 'Problem Statement', 'Proposed Solution', 'Success Criteria', and 'Impact Analysis'.</li>
+<li><strong><code>sip-003</code></strong>: Any proposed changes to protocols must be implemented in the relevant source files within the <code>protocols/</code> subdirectories, not directly in the generated AGENTS.md files.</li>
+<li><strong><code>sip-004</code></strong>: After protocol source files are modified, the <code>protocol_compiler.py</code> must be executed to re-compile the protocols and validate the changes.</li>
+<li><strong><code>sip-005</code></strong>: The success of an improvement must be verified by running relevant tests or a new, specific verification script.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>meta-mutation-001</code></h3>
+<p><strong>Description</strong>: A protocol that empowers the agent to modify its own core tooling, enabling a recursive self-improvement cycle.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>authorize-tooling-modification</code></strong>: The agent is authorized to use the 'modify_tooling' action within the self_correction_orchestrator.py to apply patches to its own source code or other tools in the tooling/ directory. This action must be triggered by a structured lesson in knowledge_core/lessons.jsonl.</li>
+</ul>
+<hr />
+<h3>Protocol: <code>executable-demo-001</code></h3>
+<p><strong>Description</strong>: A demonstration of a protocol with executable code.</p>
+<p><strong>Rules:</strong></p>
+<ul>
+<li><strong><code>print-hello-world</code></strong>: Prints a hello world message to the console.</li>
+</ul>
+<hr />
+<pre><code class="language-yaml">'@context': protocols/protocol.context.jsonld
+'@graph':
+- description: A protocol for greeting the world.
+  protocol_id: HELLO-WORLD-001
+  rules:
+  - arguments:
+    - name: message
+      value: Hello, World!
+    description: When this rule is invoked, the agent must use the `hello_world` tool
+      to print the message &quot;Hello, World!&quot;.
+    rule_id: greet-the-world
+    tool: hello_world
+  version: 1.0.0
+- description: A charter of operational principles for the AI agent.
+  error_handling:
+  - description: Retry failed operations.
+    rule_id: retry-failed-operations
+  - description: Report errors to the user.
+    rule_id: report-errors-to-user
+  - description: Request help from the user when it is unable to resolve an error
+      on its own.
+    rule_id: request-help-from-user
+  principles:
+  - description: The agent must prioritize the safety and security of the codebase
+      and the development environment.
+    principle_id: safety-and-security
+  - description: The agent must strive to produce efficient and scalable solutions.
+    principle_id: efficiency-and-scalability
+  - description: The agent's actions must be transparent and accountable.
+    principle_id: transparency-and-accountability
+  protocol_id: CHARTER-001
+  security:
+  - description: Do not store sensitive information in the repository.
+    rule_id: no-sensitive-information
+  - description: Do not use insecure protocols or libraries.
+    rule_id: no-insecure-protocols
+  - description: Sanitize all user input.
+    rule_id: sanitize-user-input
+  version: 1.0.0
+- associated_artifacts:
+  - knowledge_core/external_api_registry.json
+  associated_tools:
+  - tooling/external_api_client.py
+  description: A protocol for standardized interaction with external agent APIs.
+  protocol_id: external-api-integration-001
+  rules:
+  - description: A central registry of all approved external agent APIs MUST be maintained
+      at 'knowledge_core/external_api_registry.json'.
+    enforcement: The agent's core logic MUST consult this registry before making any
+      calls to an external agent API.
+    rule_id: external-api-registry
+    tags:
+    - external_apis
+  - description: API keys for external services MUST be managed securely via environment
+      variables.
+    enforcement: The agent's external API client will be designed to read API keys
+      from environment variables.
+    rule_id: secure-api-key-management
+    tags:
+    - external_apis
+  - description: A standardized client for interacting with external agent APIs MUST
+      be implemented in 'tooling/external_api_client.py'.
+    enforcement: All interactions with external agent APIs MUST be routed through
+      this standardized client.
+    rule_id: standardized-interaction-client
+    tags:
+    - external_apis
+  version: 1.0.0
+- description: A protocol for ensuring comprehensive testing of all new code.
+  protocol_id: testing-protocol-001
+  rules:
+  - description: All new code must be accompanied by unit, integration, and end-to-end
+      tests, and all tests must pass before submission.
+    enforcement: This is a procedural rule. The agent should verify that all tests
+      pass before submitting any changes.
+    rule_id: comprehensive-testing
+    tags:
+    - testing
+    validation_command: python3 tooling/test_runner.py
+  version: 1.0.0
+- associated_tools:
+  - tooling/test_runner.py
+  description: A protocol to enforce Test-Driven Development (TDD) practices.
+  protocol_id: test-driven-development-001
+  rules:
+  - description: When writing any new function or class, a corresponding test must
+      be written first. The test should fail before the new code is implemented, and
+      pass after.
+    enforcement: This is a procedural rule. The agent should verify that a failing
+      test is committed before the implementation is committed.
+    rule_id: tdd-writing-new-code
+    tags:
+    - testing
+    validation_command: python3 tooling/validate_tdd.py
+  - description: A TDD enforcement tool must be used to ensure that all new code is
+      developed using TDD.
+    enforcement: The agent must verify that a TDD enforcement tool is configured in
+      the repository.
+    rule_id: tdd-enforcement-tool
+    tags:
+    - testing
+    - tooling
+    validation_command: ls .claude/tdd-guard/settings.json
+  version: 1.0.0
+- associated_tools:
+  - tooling/guardian.py
+  - tooling/self_improvement_cli.py
+  - tooling/pre_submit_check.py
+  description: A meta-protocol to ensure all autonomous actions, especially self-modification,
+    are strategically sound and easily reviewable by humans.
+  protocol_id: guardian-protocol-001
+  rules:
+  - description: All self-improvement and speculative execution tasks must generate
+      a formal review document.
+    enforcement: The `guardian.py` tool will verify the existence and validity of
+      the review document during pre-submit checks.
+    rule_id: gdn-001
+  - description: The review document must be a markdown file located in the `reviews/`
+      directory, named after the proposal or task.
+    enforcement: The `guardian.py` tool will check for the file in the correct location.
+    rule_id: gdn-002
+  - description: The review document must contain sections for 'Summary', 'Impact
+      Analysis', and 'Verification Plan'.
+    enforcement: The `guardian.py` tool will parse the markdown and verify the presence
+      of these sections.
+    rule_id: gdn-003
+- associated_tools:
+  - run_in_bash_session
+  description: A protocol for ensuring a reliable execution environment through formal
+    dependency management.
+  protocol_id: dependency-management-001
+  rules:
+  - description: Upon starting a task, after loading AGENTS.md, the agent MUST install
+      all required Python packages listed in the `requirements.txt` file. This ensures
+      the environment is correctly configured before any other tools are executed.
+    enforcement: The agent's core startup logic should be designed to execute `pip
+      install -r requirements.txt` as one of its initial actions.
+    rule_id: dependency-install-on-start
+    tags:
+    - compliance
+  version: 1.0.0
+- associated_tools:
+  - read_file
+  description: A foundational protocol that dictates the agent's initial actions upon
+    starting any task.
+  protocol_id: agent-bootstrap-001
+  rules:
+  - description: Upon initialization for any task, the agent's first and highest-priority
+      action must be to locate, read, and parse the AGENTS.md file in the repository
+      root. This ensures the agent is properly contextualized before any planning
+      or execution begins.
+    enforcement: This rule is enforced by the agent's core startup logic. The agent
+      must verify the load of AGENTS.md before proceeding to the planning phase.
+    rule_id: bootstrap-load-agents-md
+    tags:
+    - compliance
+  version: 1.0.0
+- associated_tools:
+  - create_file_with_block
+  description: An experimental protocol to test dynamic rule-following. It mandates
+    a prologue action before file creation.
+  protocol_id: experimental-prologue-001
+  rules:
+  - description: Before creating any new file as part of a task, the agent MUST first
+      create a file named 'prologue.txt' with the content 'This is a prologue file.'
+      This rule serves as a test of the agent's ability to adapt its behavior to new,
+      dynamically loaded protocols.
+    enforcement: This is a procedural rule. The agent must verify the existence of
+      'prologue.txt' before using 'create_file_with_block' or similar tools for other
+      files.
+    rule_id: create-prologue-file
+    tags:
+    - compliance
+  version: 1.0.0
+- description: A protocol that defines non-compliance with AGENTS.md and specifies
+    corrective actions.
+  protocol_id: non-compliance-protocol-001
+  rules:
+  - description: Defines non-compliance as a violation of any rule, convention, or
+      procedure in AGENTS.md or its source protocols.
+    enforcement: This is a definitional rule. Enforcement is achieved through the
+      agent's adherence to the specific non-compliance rules that follow.
+    rule_id: non-compliance-definition
+  - associated_tools:
+    - restore_file
+    - run_in_bash_session
+    description: Prohibits the direct editing of build artifacts like AGENTS.md or
+      README.md. Changes must be made to source files, followed by a rebuild.
+    enforcement: Agent must revert direct edits and modify source files, then run
+      the appropriate build command.
+    rule_id: non-compliance-direct-editing
+  - associated_tools:
+    - run_in_bash_session
+    description: Requires adherence to all documented testing procedures before submitting
+      changes.
+    enforcement: Agent must halt execution and run the required tests, debugging any
+      failures before proceeding.
+    rule_id: non-compliance-test-procedure
+  - description: Forbids changes that contradict documented architectural patterns
+      or coding conventions.
+    enforcement: Agent must revert non-compliant changes and re-implement them according
+      to standards.
+    rule_id: non-compliance-architectural-deviation
+  - associated_tools:
+    - run_in_bash_session
+    description: Requires the agent to maintain an up-to-date understanding of protocols
+      by recompiling AGENTS.md when necessary.
+    enforcement: Agent should run 'make AGENTS.md' to refresh its protocol knowledge
+      and re-evaluate its plan.
+    rule_id: non-compliance-self-awareness-failure
+  version: 1.0.0
+- associated_tools:
+  - pre_commit_instructions
+  - code_linter
+  description: Defines the mandatory pre-commit checks to ensure code quality, correctness,
+    and readiness for submission.
+  protocol_id: pre-commit-protocol-001
+  rules:
+  - description: Before submitting changes, the agent MUST execute the `pre_commit_instructions`
+      tool to receive the required sequence of validation steps (e.g., running tests,
+      requesting code review).
+    enforcement: The agent's core logic should invoke this tool as the entry point
+      to the pre-submission phase.
+    rule_id: pre-commit-instructions-mandate
+  version: 1.0.0
+- associated_tools:
+  - create_file_with_block
+  - overwrite_file_with_block
+  - replace_with_git_merge_diff
+  - delete_file
+  - read_file
+  - list_files
+  - grep
+  description: A set of best practices derived from observing successful, data-driven
+    workflow patterns.
+  protocol_id: best-practices-001
+  rules:
+  - description: After every file creation or modification action (`create_file_with_block`,
+      `overwrite_file_with_block`, `replace_with_git_merge_diff`), the agent MUST
+      use a subsequent read-only tool (`read_file`, `list_files`, `grep`) to verify
+      that the action was executed successfully and had the intended effect. A plan
+      step should only be marked as complete after this verification.
+    enforcement: This is a core operational discipline. Future tooling, such as a
+      trace validator, could enforce this by analyzing the execution log against this
+      protocol.
+    rule_id: verify-after-write
+  version: 1.0.0
+- associated_tools:
+  - reset_all
+  description: A high-priority protocol that unconditionally forbids the use of the
+    `reset_all` tool.
+  protocol_id: reset-all-prohibition-001
+  protocol_name: Prohibition of reset_all Tool
+  rules:
+  - description: The `reset_all` tool is strictly forbidden under all circumstances.
+      It is a legacy tool that has been superseded by more granular and safer methods
+      of workspace management. Its use is considered a critical failure.
+    enforcement: This rule is enforced by the `master_control.py` orchestrator, which
+      will immediately terminate the workflow with an error if an attempt is made
+      to call this tool.
+    rule_id: no-reset-all
+  version: 1.0.0
+- associated_tools:
+  - run_in_bash_session
+  description: A meta-protocol governing the agent's awareness and maintenance of
+    its own core protocol files.
+  protocol_id: meta-protocol-001
+  rules:
+  - description: The AGENTS.md file is a build artifact generated from source files
+      in the 'protocols/' directory. Before relying on AGENTS.md, the agent should
+      ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent
+      is operating with the latest set of protocols.
+    enforcement: The agent should incorporate this check into its standard operating
+      procedure, particularly at the beginning of a task or when unexpected behavior
+      occurs.
+    rule_id: agents-md-self-awareness
+  version: 1.0.0
+- associated_tools:
+  - reset_all
+  description: A specific, high-priority protocol that forbids the Code Review Critic
+    agent from using the 'reset_all' tool.
+  protocol_id: critic-reset-prohibition-001
+  rules:
+  - description: The agent role-playing as the 'Code Review Critic' is explicitly
+      forbidden from invoking the 'reset_all' tool under any circumstances. This is
+      a critical safeguard to prevent the loss of work during the review process.
+    enforcement: This rule is enforced by its inclusion in the compiled AGENTS.md,
+      which serves as the context for the Code Review Critic. The critic must be programmed
+      to parse and adhere to this prohibition.
+    rule_id: critic-no-reset
+  version: 1.0.0
+- description: A meta-protocol that governs the behavior and evaluation criteria of
+    the Code Review Critic agent.
+  protocol_id: critic-meta-protocol-001
+  rules:
+  - description: The `protocols/` directory and all its contents (`.md`, `.json` files)
+      MUST be treated as functional source code. Changes to these files directly alter
+      the agent's operational capabilities and governing rules.
+    enforcement: The Code Review Critic must analyze changes in this directory with
+      the same rigor as changes to `.py` files.
+    rule_id: protocol-as-source-code
+  - description: The agent's execution environment provides a set of built-in tools
+      (e.g., `read_file`, `delete_file`, `pre_commit_instructions`). The implementation
+      of these tools does not reside within the repository. A protocol change that
+      adds a built-in tool to the `associated_tools` list is a valid and complete
+      functional change.
+    enforcement: The Code Review Critic must not flag a change as 'incomplete' or
+      'non-functional' solely because the implementation of a built-in tool is not
+      present in the repository.
+    rule_id: built-in-tools-are-valid
+  - description: A change is considered 'functional' if it correctly modifies the
+      agent's operational rules or capabilities, as defined by the combination of
+      Python source code and the protocol source files in `protocols/`.
+    enforcement: The Code Review Critic's evaluation of 'functionality' must encompass
+      both traditional code and protocol definitions.
+    rule_id: functional-change-definition
+  version: 1.0.0
+- description: A protocol for controlling a web browser using the GeminiComputerUse
+    tool.
+  protocol_id: BROWSER-CONTROL-001
+  rules:
+  - arguments:
+    - description: The task to perform, e.g., 'fill out the form on example.com'
+      name: task
+    description: When this rule is invoked, the agent must use the `gemini_computer_use`
+      tool to perform a web-based task.
+    rule_id: invoke-browser-control
+    tags:
+    - browser_control
+    tool: gemini_computer_use
+  safety_guidelines:
+  - The agent must not perform any actions that could result in financial loss or
+    the exposure of sensitive information.
+  - The agent must not attempt to bypass any security measures, such as CAPTCHAs.
+  - The agent must always operate in a sandboxed environment to prevent any potential
+    damage to the host system.
+  version: 1.0.0
+- associated_tools:
+  - set_plan
+  - message_user
+  description: A protocol governing the agent's core interaction and planning tools.
+  protocol_id: agent-interaction-001
+  rules:
+  - description: The agent is authorized to use the `set_plan` tool to create and
+      update its execution plan. This is a foundational capability for task execution.
+    enforcement: The agent's core logic should be designed to use this tool for all
+      planning activities.
+    rule_id: planning-tool-access
+    tags:
+    - core
+  - description: The agent is authorized to use the `message_user` tool to communicate
+      with the user, providing updates and asking for clarification. This is essential
+      for a collaborative workflow.
+    enforcement: The agent's core logic should be designed to use this tool for all
+      user-facing communication.
+    rule_id: communication-tool-access
+    tags:
+    - core
+  version: 1.0.0
+- associated_tools:
+  - tooling/agent_shell.py
+  description: A protocol governing the use of the interactive agent shell as the
+    primary entry point for all tasks.
+  protocol_id: agent-shell-001
+  rules:
+  - description: All agent tasks must be initiated through the `agent_shell.py` script.
+      This script is the designated, API-driven entry point that ensures proper initialization
+      of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle
+      management. Direct execution of other tools or scripts is forbidden for task
+      initiation.
+    enforcement: This is a procedural rule. The agent's operational framework should
+      only expose the agent_shell.py as the means of starting a new task.
+    rule_id: shell-is-primary-entry-point
+    tags:
+    - core
+  version: 1.0.0
+- associated_tools:
+  - tooling/auditor.py
+  description: A protocol for the unified repository auditing tool, which combines
+    multiple health and compliance checks into a single interface.
+  protocol_id: unified-auditor-001
+  rules:
+  - description: The `auditor.py` script should be used to run comprehensive checks
+      on the repository's health. It can be run with 'all' to check protocols, plans,
+      and documentation completeness.
+    enforcement: The tool is invoked via the command line, typically through the `make
+      audit` target.
+    rule_id: run-all-audits
+    tags:
+    - core
+  version: 1.0.0
+- associated_tools:
+  - set_plan
+  - create_file_with_block
+  - request_user_input
+  description: A protocol that governs the agent's ability to initiate and execute
+    self-generated, creative, or exploratory tasks during idle periods.
+  protocol_id: speculative-execution-001
+  rules:
+  - description: The agent may only initiate a speculative task when it has no active,
+      user-assigned tasks.
+    enforcement: The agent's main control loop must verify an idle state before allowing
+      the invocation of a speculative plan.
+    rule_id: idle-state-trigger
+    tags:
+    - core
+  - description: A speculative task must begin with the creation of a formal proposal
+      document, outlining the objective, rationale, and plan.
+    enforcement: The initial plan for any speculative task must include a step to
+      generate and save a proposal artifact.
+    rule_id: formal-proposal-required
+    tags:
+    - core
+  - description: Speculative tasks must operate under defined resource limits.
+    enforcement: This is a system-level constraint that the agent orchestrator must
+      enforce.
+    rule_id: resource-constraints
+    tags:
+    - core
+  - description: Final artifacts from a speculative task must be submitted for user
+      review and cannot be merged directly.
+    enforcement: The agent is forbidden from using tools like 'submit' or 'merge'
+      within a speculative context. It must use 'request_user_input' to present the
+      results.
+    rule_id: user-review-gate
+    tags:
+    - core
+  - description: All logs and artifacts generated during a speculative task must be
+      tagged as 'speculative'.
+    enforcement: The agent's logging and file-creation tools should be context-aware
+      and apply this tag when in a speculative mode.
+    rule_id: speculative-logging
+    tags:
+    - core
+  version: 1.0.0
+- associated_tools:
+  - tooling/plllu_runner.py
+  description: A protocol for executing pLLLU scripts, enabling a more expressive
+    and powerful planning and automation language for the agent.
+  protocol_id: plllu-execution-001
+  rules:
+  - description: The `plllu_runner.py` tool should be used to execute .plllu script
+      files. This tool provides the bridge between the agent's master control loop
+      and the pLLLU language interpreter.
+    enforcement: The tool is used by invoking it from the command line with the path
+      to the pLLLU script as an argument.
+    rule_id: execute-plllu-script
+    tags:
+    - core
+  version: 1.0.0
+- associated_tools: []
+  description: A protocol for maintaining an up-to-date file index to accelerate tool
+    performance.
+  protocol_id: file-indexing-001
+  rules:
+  - description: Before submitting any changes that alter the file structure (create,
+      delete, rename), the agent MUST rebuild the repository's file index. This ensures
+      that tools relying on the index, such as the FDC validator, have an accurate
+      view of the filesystem.
+    enforcement: This is a procedural rule. The agent's pre-submission checklist should
+      include a step to run 'python tooling/some_indexer.py build'.
+    rule_id: update-index-before-submit
+    tags:
+    - core
+  version: 1.0.0
+- associated_tools:
+  - tooling/aura_executor.py
+  description: A protocol for executing Aura scripts, enabling a more expressive and
+    powerful planning and automation language for the agent.
+  protocol_id: aura-execution-001
+  rules:
+  - description: The `aura_executor.py` tool should be used to execute .aura script
+      files. This tool provides the bridge between the agent's master control loop
+      and the Aura language interpreter.
+    enforcement: The tool is used by invoking it from the command line with the path
+      to the Aura script as an argument.
+    rule_id: execute-aura-script
+    tags:
+    - core
+  version: 1.0.0
+- associated_tools:
+  - tooling/chomsky/cli.py
+  description: A protocol for the Context-Sensitive Development Cycle (CSDC), which
+    introduces development models based on logical constraints.
+  protocol_id: csdc-001
+  rules:
+  - description: The `tooling/chomsky/cli.py validate-plan` command must be used to
+      validate plans under the CSDC. This tool enforces model-specific constraints
+      (A or B) and complexity requirements (P or EXP).
+    enforcement: The tool is used by invoking it from the command line with the plan
+      file, model, and complexity as arguments.
+    rule_id: use-chomsky-cli-validate
+    tags:
+    - core
+  - description: Model A permits `define_set_of_names` but forbids `define_diagonalization_function`.
+    enforcement: Enforced by the LBAValidator within the Chomsky toolchain.
+    rule_id: model-a-constraints
+    tags:
+    - core
+  - description: Model B permits `define_diagonalization_function` but forbids `define_set_of_names`.
+    enforcement: Enforced by the LBAValidator within the Chomsky toolchain.
+    rule_id: model-b-constraints
+    tags:
+    - core
+  version: 1.0.0
+- associated_tools:
+  - tooling/hdl_prover.py
+  description: A protocol for interacting with the Hypersequent-calculus-based logic
+    engine, allowing the agent to perform formal logical proofs.
+  protocol_id: hdl-proving-001
+  rules:
+  - description: The `hdl_prover.py` tool should be used to check the provability
+      of a logical sequent. This tool acts as a wrapper for the underlying Lisp-based
+      prover.
+    enforcement: The tool is used by invoking it from the command line with the sequent
+      to be proved as an argument.
+    rule_id: prove-sequent
+    tags:
+    - core
+  version: 1.0.0
+- associated_tools:
+  - tooling/auditor.py
+  - tooling/protocol_compiler.py
+  description: A meta-protocol to ensure the agent's toolchain remains synchronized
+    with the architecture of its governing protocols.
+  protocol_id: toolchain-review-on-schema-change-001
+  rules:
+  - description: If a change is made to the core protocol schema (`protocol.schema.json`)
+      or to the compilers that process it (`protocol_compiler.py`), a formal audit
+      of the entire `tooling/` directory MUST be performed as a subsequent step. This
+      audit should verify that all tools are compatible with the new protocol structure.
+    enforcement: This is a procedural rule for any agent developing the protocol system.
+      Adherence can be partially checked by post-commit hooks or review processes
+      that look for a tooling audit in any change that modifies the specified core
+      files.
+    rule_id: toolchain-audit-on-schema-change
+    tags:
+    - core
+  version: 1.0.0
+- associated_tools:
+  - tooling/doc_builder.py
+  description: A protocol for the unified documentation builder, which generates various
+    documentation artifacts from the repository's sources of truth.
+  protocol_id: unified-doc-builder-001
+  rules:
+  - description: The `doc_builder.py` script is the single entry point for generating
+      all user-facing documentation, including system-level docs, README files, and
+      GitHub Pages. It should be called with the appropriate '--format' argument.
+    enforcement: The tool is invoked via the command line, typically through the `make
+      docs`, `make readme`, or `make pages` targets.
+    rule_id: use-doc-builder-for-all-docs
+    tags:
+    - core
+  version: 1.0.0
+- associated_tools:
+  - tooling/capability_verifier.py
+  description: A protocol for using the capability verifier tool to empirically test
+    the agent's monotonic improvement.
+  protocol_id: capability-verification-001
+  rules:
+  - description: The `capability_verifier.py` tool should be used to test the agent's
+      ability to acquire a new capability defined by a failing test file. The tool
+      orchestrates the failure, self-correction, and verification process.
+    enforcement: The tool is used by invoking it from the command line with the path
+      to the target test file.
+    rule_id: verify-capability-acquisition
+    tags:
+    - core
+  version: 1.0.0
+- description: Defines the identity and versioning of the Advanced Orientation and
+    Research Protocol (AORP).
+  protocol_id: aorp-header
+  rules:
+  - description: The governing protocol set is identified as the Advanced Orientation
+      and Research Protocol (AORP).
+    enforcement: Protocol is identified by its name in documentation and compiled
+      artifacts.
+    rule_id: aorp-identity
+  - description: The official protocol version is tracked in the VERSION file in the
+      repository root, following Semantic Versioning (SemVer).
+    enforcement: Build or validation scripts should verify the presence and format
+      of the VERSION file.
+    rule_id: aorp-versioning
+  version: 1.0.0
+- associated_tools:
+  - tooling/master_control.py
+  - tooling/fdc_cli.py
+  description: Defines the Context-Free Development Cycle (CFDC), a hierarchical planning
+    and execution model.
+  protocol_id: cfdc-protocol-001
+  rules:
+  - description: Plans may execute other plans as sub-routines using the 'call_plan
+      &lt;path_to_plan&gt;' directive. This enables a modular, hierarchical workflow.
+    enforcement: The plan validator must be able to parse this directive and recursively
+      validate sub-plans. The execution engine must implement a plan execution stack
+      to manage the context of nested calls.
+    rule_id: hierarchical-planning-via-call-plan
+  - description: To ensure decidability, the plan execution stack must not exceed
+      a system-wide constant, MAX_RECURSION_DEPTH. This prevents infinite recursion
+      and guarantees all processes will terminate.
+    enforcement: The execution engine must check the stack depth before every 'call_plan'
+      execution and terminate with a fatal error if the limit would be exceeded.
+    rule_id: max-recursion-depth
+  version: 1.0.0
+- associated_tools:
+  - tooling/master_control.py
+  - tooling/research_planner.py
+  - tooling/research.py
+  - tooling/fdc_cli.py
+  description: Defines the formal Finite Development Cycle (FDC) for conducting deep
+    research.
+  protocol_id: research-fdc-001
+  rules:
+  - description: The Research FDC must be governed by its own dedicated Finite State
+      Machine, defined in `tooling/research_fsm.json`. This FSM is tailored for a
+      research workflow, with states for gathering, synthesis, and reporting.
+    enforcement: The `master_control.py` orchestrator must load and execute plans
+      against this specific FSM when initiating an L4 Deep Research Cycle.
+    rule_id: specialized-fsm
+  - description: Research plans must be generated by `tooling/research_planner.py`
+      as valid, executable plans that conform to the `research_fsm.json` definition.
+      They are not just templates but formal, verifiable artifacts.
+    enforcement: The output of the research planner must be linted and validated by
+      the `fdc_cli.py` tool using the `research_fsm.json`.
+    rule_id: executable-plans
+  - description: The L4 Deep Research Cycle is the designated mechanism for resolving
+      complex 'unknown unknowns'. It is invoked by the main orchestrator when a task
+      requires knowledge that cannot be obtained through simple L1-L3 orientation
+      probes.
+    enforcement: The `master_control.py` orchestrator is responsible for triggering
+      the L4 cycle.
+    rule_id: l4-invocation
+  version: 1.0.0
+- associated_tools:
+  - tooling.research_planner.plan_deep_research
+  - tooling.research.execute_research_protocol
+  description: A protocol for conducting systematic research using the integrated
+    research toolchain.
+  protocol_id: research-protocol-001
+  rules:
+  - description: For all complex research tasks, the `plan_deep_research` tool MUST
+      be used to generate a plan, and the `execute_research_protocol` tool MUST be
+      used for data gathering. This ensures a systematic and auditable research process.
+    enforcement: Adherence is monitored by the Code Review Critic and through post-mortem
+      analysis of the activity log.
+    rule_id: mandate-research-tools
+  version: 1.0.0
+- associated_artifacts:
+  - knowledge_core/lessons.jsonl
+  associated_tools:
+  - tooling/knowledge_compiler.py
+  - tooling/protocol_updater.py
+  - tooling/self_correction_orchestrator.py
+  - tooling/code_suggester.py
+  - initiate_memory_recording
+  description: Defines the automated, closed-loop workflow for protocol self-correction.
+  protocol_id: self-correction-protocol-001
+  rules:
+  - description: Lessons learned from post-mortem analysis must be generated as structured,
+      machine-readable JSON objects in `knowledge_core/lessons.jsonl`.
+    enforcement: The `tooling/knowledge_compiler.py` script is responsible for generating
+      lessons in the correct format.
+    rule_id: structured-lessons
+  - description: All modifications to protocol source files must be performed programmatically
+      via the `tooling/protocol_updater.py` tool to ensure consistency and prevent
+      manual errors.
+    enforcement: Agent's core logic should be designed to use this tool for all protocol
+      modifications.
+    rule_id: programmatic-updates
+  - description: The self-correction cycle must be managed by the `tooling/self_correction_orchestrator.py`
+      script, which processes pending lessons and triggers the necessary updates.
+    enforcement: This script is the designated engine for the PDSC workflow.
+    rule_id: automated-orchestration
+  - description: The self-correction system can modify the description of existing
+      protocol rules via the `update-rule` command in `tooling/protocol_updater.py`,
+      allowing it to refine its own logic.
+    enforcement: The `tooling/knowledge_compiler.py` can generate `update-rule` actions,
+      and the `tooling/self_correction_orchestrator.py` executes them.
+    rule_id: programmatic-rule-refinement
+  - description: The self-correction system can generate and apply code changes to
+      its own tooling. This is achieved through a `PROPOSE_CODE_CHANGE` action, which
+      is processed by `tooling/code_suggester.py` to create an executable plan.
+    enforcement: The `tooling/self_correction_orchestrator.py` invokes the code suggester
+      when it processes a lesson of this type.
+    rule_id: autonomous-code-suggestion
+  version: 1.0.0
+- associated_tools:
+  - tooling/fdc_cli.py
+  - tooling/fdc_fsm.json
+  description: Ensures all development processes are formally decidable and computationally
+    tractable.
+  protocol_id: decidability-constraints-001
+  rules:
+  - description: The agent's planning and execution language is, by design, not Turing-complete.
+      This is a fundamental constraint to guarantee that all processes will terminate.
+    enforcement: Enforced by the design of the plan runner and validated by the `lint`
+      command in the FDC toolchain.
+    rule_id: non-turing-completeness
+  - description: The agent MUST NOT generate plans that involve recursion or self-invocation.
+      A plan cannot trigger another FDC or a sub-plan, with the sole exception of
+      the 'Deep Research Cycle'.
+    enforcement: The `lint` command in `tooling/fdc_cli.py` scans plans for disallowed
+      recursive calls.
+    rule_id: bounded-recursion
+  - description: All plans must be valid strings in the language defined by the tooling/fdc_fsm.json
+      Finite State Machine.
+    enforcement: The `lint` command in `tooling/fdc_cli.py` validates the plan against
+      the FSM definition.
+    rule_id: fsm-adherence
+  version: 1.0.0
+- associated_tools:
+  - tooling/fdc_cli.py
+  - google_search
+  - view_text_website
+  description: A set of non-negotiable, high-priority mandates that govern the agent's
+    behavior across all tasks.
+  protocol_id: standing-orders-001
+  rules:
+  - description: All Finite Development Cycles (FDCs) MUST be initiated using the
+      FDC toolchain's 'start' command. This is non-negotiable.
+    enforcement: Enforced by the agent's core operational loop and the `start` command
+      in `tooling/fdc_cli.py`.
+    rule_id: aorp-mandate
+  - description: For any task involving external technologies, Just-In-Time External
+      RAG is REQUIRED to verify current best practices. Do not trust internal knowledge.
+    enforcement: This is a core principle of the L3 orientation phase, utilizing tools
+      like `google_search`.
+    rule_id: rag-mandate
+  - description: 'Use the `fdc_cli.py` tool for all core FDC state transitions: task
+      initiation (''start''), plan linting (''lint''), and task closure (''close'').'
+    enforcement: The agent's internal logic is designed to prefer these specific tool
+      commands for FDC state transitions.
+    rule_id: fdc-toolchain-mandate
+  version: 1.0.0
+- associated_tools:
+  - tooling/environmental_probe.py
+  - google_search
+  - view_text_website
+  description: Defines the mandatory, four-tiered orientation cascade that must be
+    executed at the start of any task to establish a coherent model of the agent's
+    identity, environment, and the world state.
+  protocol_id: orientation-cascade-001
+  rules:
+  - description: 'Level 1 (Self-Awareness): The agent must first establish its own
+      identity and inherent limitations by reading the `knowledge_core/agent_meta.json`
+      artifact.'
+    enforcement: The `start` command of the FDC toolchain executes this step and fails
+      if the artifact is missing or invalid.
+    rule_id: l1-self-awareness
+  - description: 'Level 2 (Repository Sync): The agent must understand the current
+      state of the local repository by loading primary artifacts from the `knowledge_core/`
+      directory.'
+    enforcement: The `start` command of the FDC toolchain executes this step.
+    rule_id: l2-repository-sync
+  - description: 'Level 3 (Environmental Probing &amp; Targeted RAG): The agent must discover
+      the rules and constraints of its operational environment by executing a probe
+      script and using targeted RAG to resolve ''known unknowns''.'
+    enforcement: The `start` command of the FDC toolchain executes this step, utilizing
+      tools like `google_search` and `view_text_website`.
+    rule_id: l3-environmental-probing
+  - description: 'Level 4 (Deep Research Cycle): To investigate ''unknown unknowns'',
+      the agent must initiate a formal, self-contained Finite Development Cycle (FDC)
+      of the ''Analysis Modality''.'
+    enforcement: This is a special case of recursion, explicitly allowed and managed
+      by the FDC toolchain.
+    rule_id: l4-deep-research-cycle
+  version: 1.0.0
+- associated_tools:
+  - tooling/plan_manager.py
+  - tooling/master_control.py
+  - tooling/fdc_cli.py
+  description: Defines a central registry for discovering and executing hierarchical
+    plans by a logical name.
+  protocol_id: plan-registry-001
+  rules:
+  - description: A central plan registry MUST exist at 'knowledge_core/plan_registry.json'.
+      It maps logical plan names to their file paths.
+    enforcement: The file's existence and format can be checked by the validation
+      toolchain.
+    rule_id: registry-definition
+  - description: The 'call_plan &lt;argument&gt;' directive MUST first attempt to resolve
+      '&lt;argument&gt;' as a logical name in the plan registry. If resolution fails, it
+      MUST fall back to treating '&lt;argument&gt;' as a direct file path for backward compatibility.
+    enforcement: This logic must be implemented in both the plan validator (`fdc_cli.py`)
+      and the execution engine (`master_control.py`).
+    rule_id: registry-first-resolution
+  - description: A dedicated tool (`tooling/plan_manager.py`) MUST be provided for
+      managing the plan registry, with functions to register, deregister, and list
+      plans.
+    enforcement: The tool's existence and functionality can be verified via integration
+      tests.
+    rule_id: registry-management-tool
+  version: 1.0.0
+- associated_tools:
+  - tooling/fdc_cli.py
+  - tooling/fdc_fsm.json
+  - knowledge_core/symbols.json
+  - knowledge_core/dependency_graph.json
+  - LOGGING_SCHEMA.md
+  - set_plan
+  - message_user
+  description: Defines the Finite Development Cycle (FDC), a formally defined process
+    for executing a single, coherent task.
+  protocol_id: fdc-protocol-001
+  rules:
+  - description: The AORP cascade is the mandatory entry point to every FDC.
+    enforcement: Enforced by the `start` command in `tooling/fdc_cli.py`.
+    rule_id: fdc-entry-point
+  - description: The FDC is a Finite State Machine (FSM) formally defined in `tooling/fdc_fsm.json`.
+      Plans must be valid strings in the language defined by this FSM.
+    enforcement: Validated by the `lint` command in `tooling/fdc_cli.py`.
+    rule_id: fdc-state-transitions
+  - description: 'Phase 1 (Deconstruction &amp; Contextualization): The agent must ingest
+      the task, query historical logs, identify entities using the symbol map, and
+      analyze impact using the dependency graph.'
+    enforcement: Procedural step guided by the agent's core logic, using artifacts
+      in `logs/` and `knowledge_core/`.
+    rule_id: phase1-deconstruction
+  - description: 'Phase 2 (Planning &amp; Self-Correction): The agent must generate a
+      granular plan, lint it using the FDC toolchain, cite evidence for its steps,
+      and perform a critical review.'
+    enforcement: The `lint` command in `tooling/fdc_cli.py` is a mandatory pre-flight
+      check.
+    rule_id: phase2-planning
+  - description: 'Phase 3 (Execution &amp; Structured Logging): The agent must execute
+      the validated plan and log every action according to the `LOGGING_SCHEMA.md`.'
+    enforcement: Logging is performed by the agent's action execution wrapper.
+    rule_id: phase3-execution
+  - description: 'Phase 4 (Pre-Submission Post-Mortem): The agent must formally close
+      the task using the `close` command and complete the generated post-mortem report.'
+    enforcement: The `close` command in `tooling/fdc_cli.py` initiates this phase.
+    rule_id: phase4-post-mortem
+  version: 1.0.0
+- associated_tools:
+  - tooling/fdc_cli.py
+  description: The mandatory first action for any new task, ensuring a formal start
+    to the Finite Development Cycle (FDC).
+  protocol_id: core-directive-001
+  rules:
+  - description: Upon receiving a new task, the agent's first action MUST be to programmatically
+      execute the FDC 'start' command to formally initiate the task and run the AORP
+      orientation cascade.
+    enforcement: This is a hard-coded behavior in the agent's core operational loop
+      and is verified by the FDC toolchain.
+    rule_id: mandatory-fdc-start
+  version: 1.0.0
+- associated_tools:
+  - google_search
+  - view_text_website
+  - create_file_with_block
+  description: A standardized, callable plan for conducting in-depth research on a
+    complex topic.
+  protocol_id: deep-research-cycle-001
+  rules:
+  - description: 'The deep research plan MUST follow a structured four-phase process:
+      Scoping, Broad Gathering, Targeted Extraction, and Synthesis.'
+    enforcement: The plan's structure itself enforces this rule. The `lint` command
+      can be extended to validate the structure of registered research plans.
+    rule_id: structured-research-phases
+  version: 1.0.0
+- associated_tools:
+  - google_search
+  - view_text_website
+  description: A protocol for integrating with the Google Gemini API.
+  protocol_id: gemini-api-integration-001
+  rules:
+  - description: The agent is authorized to use the Gemini API for advanced tasks.
+    enforcement: The agent's core logic will be updated to include a 'Gemini API'
+      tool.
+    rule_id: gemini-api-access
+    tags:
+    - gemini
+  - description: The agent must handle the Gemini API key securely.
+    enforcement: The agent will access the Gemini API key via a secure, environment-variable-based
+      mechanism.
+    rule_id: gemini-api-key-security
+    tags:
+    - gemini
+  - description: The agent must adhere to a strict sub-protocol when using the Gemini
+      API's 'Computer Use' feature.
+    enforcement: The 'Gemini API' tool will include a dedicated 'computer_use' module
+      that implements these safeguards.
+    rule_id: gemini-computer-use-protocol
+    tags:
+    - gemini
+  version: 1.0.0
+- description: Defines the identity and purpose of the Security Protocol document.
+  protocol_id: security-header
+  rules: []
+  version: 1.0.0
+- description: Defines the official policy and procedure for reporting security vulnerabilities.
+  protocol_id: security-vuln-reporting-001
+  rules:
+  - description: All suspected security vulnerabilities MUST be reported privately
+      to the designated security contact.
+    enforcement: This is a procedural rule. The designated contact is specified in
+      the project's main SECURITY.md file.
+    rule_id: vuln-reporting-channel
+    tags:
+    - security
+  - description: Vulnerabilities MUST NOT be disclosed publicly until a patch is available
+      and has been distributed.
+    enforcement: Violation of this rule may result in being banned from the project
+      community.
+    rule_id: no-public-disclosure
+    tags:
+    - security
+  version: 1.0.0
+- associated_tools:
+  - tooling/self_improvement_cli.py
+  - tooling/protocol_compiler.py
+  - tooling/pre_submit_check.py
+  description: A formal protocol for the agent to propose, validate, and implement
+    improvements to its own operational protocols and tools.
+  protocol_id: self-improvement-protocol-001
+  rules:
+  - description: Proposals for self-improvement must be initiated via the `self_improvement_cli.py`
+      tool.
+    enforcement: The `self_improvement_cli.py` tool will create a new branch and a
+      proposal markdown file in the `proposals/` directory.
+    rule_id: sip-001
+    tags:
+    - self_improvement
+  - description: Improvement proposals must be formally structured, including sections
+      for 'Problem Statement', 'Proposed Solution', 'Success Criteria', and 'Impact
+      Analysis'.
+    enforcement: The `self_improvement_cli.py` tool will generate a template with
+      these required sections.
+    rule_id: sip-002
+    tags:
+    - self_improvement
+  - description: Any proposed changes to protocols must be implemented in the relevant
+      source files within the `protocols/` subdirectories, not directly in the generated
+      AGENTS.md files.
+    enforcement: Pre-submit checks will fail if generated AGENTS.md files are modified
+      directly.
+    rule_id: sip-003
+    tags:
+    - self_improvement
+  - description: After protocol source files are modified, the `protocol_compiler.py`
+      must be executed to re-compile the protocols and validate the changes.
+    enforcement: A pre-submit git hook will trigger the compiler and block the commit
+      if compilation fails.
+    rule_id: sip-004
+    tags:
+    - self_improvement
+  - description: The success of an improvement must be verified by running relevant
+      tests or a new, specific verification script.
+    enforcement: The improvement proposal must reference the specific tests or scripts
+      used for verification.
+    rule_id: sip-005
+    tags:
+    - self_improvement
+  version: 1.0.0
+- associated_tools:
+  - tooling/self_correction_orchestrator.py
+  description: A protocol that empowers the agent to modify its own core tooling,
+    enabling a recursive self-improvement cycle.
+  protocol_id: meta-mutation-001
+  rules:
+  - description: The agent is authorized to use the 'modify_tooling' action within
+      the self_correction_orchestrator.py to apply patches to its own source code
+      or other tools in the tooling/ directory. This action must be triggered by a
+      structured lesson in knowledge_core/lessons.jsonl.
+    enforcement: The self_correction_orchestrator.py must validate that the 'modify_tooling'
+      action is well-formed and targets a valid file within the tooling/ directory.
+    rule_id: authorize-tooling-modification
+- description: A demonstration of a protocol with executable code.
+  protocol_id: executable-demo-001
+  rules:
+  - description: Prints a hello world message to the console.
+    enforcement: This rule is enforced by the build script.
+    executable_code: print('Hello from an executable protocol!')
+    rule_id: print-hello-world
+    tags:
+    - experimental
+  version: 1.0.0
+</code></pre>
 </body>
 </html>

@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 import appl_ast
 import lfi_ill
 

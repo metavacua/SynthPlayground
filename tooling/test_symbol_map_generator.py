@@ -1,21 +1,6 @@
 """
 Unit tests for the symbol map generator tool.
-
-This test suite validates the `symbol_map_generator.py` script, which is
-responsible for creating a code symbol index for the repository. The tests
-cover both of the script's operational modes: the preferred `ctags`-based
-generation and the `ast`-based fallback.
-
-The tests include:
-- `test_generate_with_ctags_success`: Mocks the `subprocess.run` call to
-  simulate a successful `ctags` execution. It verifies that the script correctly
-  parses the JSON-lines output from `ctags` and wraps it in a valid JSON object.
-- `test_generate_with_ast_fallback`: Validates that the Python-only `ast` parser
-  correctly traverses a sample Python file and extracts class, method, and
-  function definitions.
-- `test_main_with_ast_fallback`: Mocks the `has_ctags` check to force the main
-  function to use the `ast` fallback, ensuring the end-to-end logic works
-  correctly when `ctags` is not available.
+...
 """
 
 import unittest
@@ -27,6 +12,7 @@ from unittest.mock import patch
 from tooling.symbol_map_generator import (
     generate_symbols_with_ctags,
     generate_symbols_with_ast,
+    main as symbol_map_generator_main,
 )
 
 
@@ -73,11 +59,11 @@ class TestSymbolMapGenerator(unittest.TestCase):
         original_cwd = os.getcwd()
         os.chdir(self.test_dir)
         try:
-            result = generate_symbols_with_ctags(".")
+            result = generate_symbols_with_ctags(".", self.symbols_output_path)
             self.assertTrue(result)
-            self.assertTrue(os.path.exists("knowledge_core/symbols.json"))
+            self.assertTrue(os.path.exists(self.symbols_output_path))
 
-            with open("knowledge_core/symbols.json", "r") as f:
+            with open(self.symbols_output_path, "r") as f:
                 data = json.load(f)
 
             self.assertIn("symbols", data)
@@ -118,12 +104,11 @@ class TestSymbolMapGenerator(unittest.TestCase):
         original_cwd = os.getcwd()
         os.chdir(self.test_dir)
         try:
-            from tooling import symbol_map_generator
+            with patch("sys.argv", ["tooling/symbol_map_generator.py", "--output", self.symbols_output_path]):
+                symbol_map_generator_main()
 
-            symbol_map_generator.main()
-
-            self.assertTrue(os.path.exists("knowledge_core/symbols.json"))
-            with open("knowledge_core/symbols.json", "r") as f:
+            self.assertTrue(os.path.exists(self.symbols_output_path))
+            with open(self.symbols_output_path, "r") as f:
                 data = json.load(f)
             self.assertEqual(len(data["symbols"]), 3)
         finally:

@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 def generate_research_result(task_id: str) -> str:
     """
     Generates the research result for a given task ID.

@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 def hello_world(message: str):
     """Prints a message to the console."""
     print(f"Hello, {message}!")

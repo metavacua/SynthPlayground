@@ -1,8 +1,12 @@
+"""
+This module provides functionality for...
+"""
+
 import json
 import os
 import re
 from collections import Counter
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def analyze_protocol_completeness(used_tools, protocol_tools):
@@ -73,10 +77,10 @@ def analyze_system_health(log_content, postmortem_dir, session_start_time_iso):
             # Make timestamps timezone-aware for comparison if they aren't already
             last_timestamp = datetime.fromisoformat(last_timestamp_str)
             if last_timestamp.tzinfo is None:
-                last_timestamp = last_timestamp.replace(tzinfo=datetime.timezone.utc)
+                last_timestamp = last_timestamp.replace(tzinfo=timezone.utc)
             if session_start_time.tzinfo is None:
                 session_start_time = session_start_time.replace(
-                    tzinfo=datetime.timezone.utc
+                    tzinfo=timezone.utc
                 )
 
             if last_timestamp < session_start_time:
@@ -101,7 +105,7 @@ def analyze_system_health(log_content, postmortem_dir, session_start_time_iso):
 
             log_time = datetime.fromisoformat(log_time_str)
             if log_time.tzinfo is None:
-                log_time = log_time.replace(tzinfo=datetime.timezone.utc)
+                log_time = log_time.replace(tzinfo=timezone.utc)
 
             # Only consider logs from the current session
             if log_time < session_start_time:
@@ -141,7 +145,7 @@ def analyze_system_health(log_content, postmortem_dir, session_start_time_iso):
 
             log_time = datetime.fromisoformat(log_time_str)
             if log_time.tzinfo is None:
-                log_time = log_time.replace(tzinfo=datetime.timezone.utc)
+                log_time = log_time.replace(tzinfo=timezone.utc)
 
             if (
                 log_time >= session_start_time

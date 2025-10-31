@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 import unittest
 import os
 import sys

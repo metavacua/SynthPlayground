@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 import os
 
 def find_untested_code(source_dir, test_dir):

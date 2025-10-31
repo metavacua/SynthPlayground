@@ -133,7 +133,7 @@ def main():
     parser.add_argument("--output-file", help="Output file for any format.")
     parser.add_argument(
         "--source-dir",
-        action="append",
+        nargs='+',
         help="Source directory for 'system' or 'tooling-readme' format. Can be specified multiple times.",
     )
     args = parser.parse_args()
@@ -143,7 +143,7 @@ def main():
         source_dirs = (
             args.source_dir
             if args.source_dir
-            else [os.path.join(ROOT_DIR, "tooling/"), os.path.join(ROOT_DIR, "utils/")]
+            else [os.path.join(ROOT_DIR, "tooling/"), os.path.join(ROOT_DIR, "utils/"), os.path.join(ROOT_DIR, "tooling")]
         )
         output_file = args.output_file or os.path.join(
             ROOT_DIR, "knowledge_core", "SYSTEM_DOCUMENTATION.md"
@@ -157,8 +157,11 @@ def main():
     elif args.format == "tooling-readme":
         if not args.source_dir:
             parser.error("--source-dir is required for 'tooling-readme' format.")
-        output_file = args.output_file or os.path.join(args.source_dir, "README.md")
-        generate_tooling_readme(args.source_dir, output_file)
+        if len(args.source_dir) > 1:
+            parser.error("--source-dir can only be specified once for 'tooling-readme' format.")
+        source_dir = args.source_dir[0]
+        output_file = args.output_file or os.path.join(source_dir, "README.md")
+        generate_tooling_readme(source_dir, output_file)
     print("--- Documentation Builder Finished ---")
 
 

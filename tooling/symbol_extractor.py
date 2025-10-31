@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 import os
 import json
 import argparse

@@ -1,21 +1,7 @@
 """
 This script provides a command-line interface (CLI) for managing the Finite
 Development Cycle (FDC).
-
-The FDC is a structured workflow for agent-driven software development. This CLI
-is the primary human interface for interacting with that cycle, providing
-commands to:
-- **start:** Initiates a new development task, triggering the "Advanced
-  Orientation and Research Protocol" (AORP) to ensure the agent is fully
-  contextualized.
-- **close:** Formally concludes a task, creating a post-mortem template for
-  analysis and lesson-learning.
-- **validate:** Checks a given plan file for both syntactic and semantic
-  correctness against the FDC's governing Finite State Machine (FSM). This
-  ensures that a plan is executable and will not violate protocol.
-- **analyze:** Examines a plan to determine its computational complexity (e.g.,
-  Constant, Polynomial, Exponential) and its modality (Read-Only vs.
-  Read-Write), providing insight into the plan's potential impact.
+...
 """
 
 import argparse
@@ -24,18 +10,18 @@ import yaml
 import os
 import shutil
 import sys
-import uuid
+import json
 
 # Add the root directory to the Python path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from utils.file_system_utils import find_files
-from tooling.fdc_cli_logic import create_log_entry, analyze_plan_content
+from tooling.fdc_cli_logic import analyze_plan_content
+from tooling.logger import log_event, create_log_entry
 
 # --- Configuration ---
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 POSTMORTEM_TEMPLATE_PATH = os.path.join(ROOT_DIR, "postmortem.md")
 POSTMORTEMS_DIR = os.path.join(ROOT_DIR, "postmortems")
-LOG_FILE_PATH = os.path.join(ROOT_DIR, "logs", "activity.log.jsonl")
 FSM_DEF_PATH = os.path.join(ROOT_DIR, "tooling", "fdc_fsm.yaml")
 
 ACTION_TYPE_MAP = {
@@ -57,21 +43,6 @@ ACTION_TYPE_MAP = {
 
 # --- CLI Subcommands & Helpers ---
 
-
-def _log_event(log_entry):
-    """Appends a new log entry to the activity log, ensuring it's on a new line."""
-    content_to_write = json.dumps(log_entry) + "\n"
-    with open(LOG_FILE_PATH, "a+") as f:
-        # Check if the file is not empty
-        f.seek(0, os.SEEK_END)
-        if f.tell() > 0:
-            # Check if the last character is a newline
-            f.seek(f.tell() - 1)
-            if f.read(1) != "\n":
-                f.write("\n")
-        f.write(content_to_write)
-
-
 def close_task(task_id):
     """Automates the closing of a Finite Development Cycle."""
     if not task_id:
@@ -88,14 +59,14 @@ def close_task(task_id):
         print(f"Error creating post-mortem file: {e}", file=sys.stderr)
         sys.exit(1)
 
-    _log_event(
+    log_event(
         create_log_entry(
             task_id,
             "POST_MORTEM",
             {"summary": f"Post-mortem initiated for '{task_id}'."},
         )
     )
-    _log_event(
+    log_event(
         create_log_entry(
             task_id,
             "TASK_END",
@@ -328,7 +299,7 @@ def start_task(task_id):
     os.system(f"python3 {probe_script_path}")
 
     # --- Logging ---
-    _log_event(
+    log_event(
         create_log_entry(
             task_id,
             "TASK_START",

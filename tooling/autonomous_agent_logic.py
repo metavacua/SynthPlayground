@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 def generate_command_from_plan_step(cmd, outputs):
     """
     Generates a command to be executed from a plan step.

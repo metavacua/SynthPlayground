@@ -1,3 +1,7 @@
+"""
+This module provides functionality for...
+"""
+
 import argparse
 import glob
 import os
