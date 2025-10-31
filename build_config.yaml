@@ -5,6 +5,7 @@ build_groups:
     - protocols
     - knowledge-integrate
     - agents-md
+    - readme
   knowledge:
     - knowledge-integrate
 
@@ -61,4 +62,8 @@ targets:
   test-all:
     command: "python3 tooling/test_runner.py"
     description: "Run all tests in the repository."
+    type: command
+  readme:
+    command: "python3 tooling/doc_builder.py --format main-readme --witness-file classical_logic_witness.py --witness-file presburger_arithmetic_witness.py --witness-file skolem_arithmetic_witness.py --witness-file witness_d.py"
+    description: "Generate the main README.md file."
     type: command
