@@ -15,18 +15,8 @@ def generate_agents_md():
     """
     logging.info("Starting AGENTS.md generation.")
 
-    # Start with the content of the legacy AGENTS.md file to ensure backward compatibility
-    # during the migration period.
-    try:
-        with open("protocols/core/AGENTS.md", "r") as f:
-            agents_md_content = f.read()
-    except FileNotFoundError:
-        logging.error("Legacy AGENTS.md file not found at 'protocols/core/AGENTS.md'. Starting with an empty file.")
-        agents_md_content = "# Agent Protocol and Knowledge Core\\n\\n"
-
-    agents_md_content += "\\n\\n---\\n"
-    agents_md_content += "## CHC-Verified Protocols\\n\\n"
-    agents_md_content += "The following protocols have been migrated to the new, verifiable CHC framework.\\n\\n"
+    agents_md_content = "# Agent Protocol and Knowledge Core\\n\\n"
+    agents_md_content += "This file is the central entry point for the agent's operational protocols and knowledge. It is dynamically generated from the verifiable CHC protocol modules.\\n\\n"
 
     protocol_dir = "protocols/chc"
     if not os.path.isdir(protocol_dir):
