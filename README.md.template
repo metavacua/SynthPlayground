@@ -1,0 +1,7 @@
+# Executable Witnesses for Three Classes of Recursive Languages
+
+This project provides Python implementations of 'executable witnesses' for three distinct classes of complete, recursive languages, based on the concepts from the 'Asymmetric Bifurcation of Formal Systems' thesis. Under the Curry-Howard correspondence, a proof of a proposition is equivalent to a program (a witness) that computes the result.
+
+Each script corresponds to one of the three language classes and demonstrates a different computational nature of proof.
+
+{witness_docs}
