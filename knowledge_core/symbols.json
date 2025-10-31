@@ -4685,7 +4685,7 @@
       "name": "find_python_files",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 27,
+      "line": 28,
       "kind": "function",
       "docstring": null
     },
@@ -4694,7 +4694,7 @@
       "name": "generate_system_docs",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 37,
+      "line": 38,
       "kind": "function",
       "docstring": "Generates the detailed SYSTEM_DOCUMENTATION.md."
     },
@@ -4703,7 +4703,7 @@
       "name": "generate_pages",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 57,
+      "line": 58,
       "kind": "function",
       "docstring": "Generates the index.html for GitHub Pages."
     },
@@ -4712,7 +4712,7 @@
       "name": "generate_tool_readme",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 77,
+      "line": 78,
       "kind": "function",
       "docstring": "Generates a README.md for a single tool from its docstring."
     },
@@ -4721,16 +4721,25 @@
       "name": "generate_tooling_readme",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 100,
+      "line": 101,
       "kind": "function",
       "docstring": "Generates a single README.md for the tooling directory."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_main_readme",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 124,
+      "kind": "function",
+      "docstring": "Generates the main README.md file."
     },
     {
       "_type": "tag",
       "name": "main",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 123,
+      "line": 150,
       "kind": "function",
       "docstring": null
     },
@@ -4985,6 +4994,15 @@
       "line": 217,
       "kind": "function",
       "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_main_readme_content",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 230,
+      "kind": "function",
+      "docstring": "Generates the content for the main README.md file."
     },
     {
       "_type": "tag",
