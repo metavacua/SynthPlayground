@@ -131,3 +131,6 @@ knowledge_core/context_outputs/
 knowledge_core/knowledge_graph.jsonld
 knowledge_core/asts/
 knowledge_core/symbol_map.json
+
+# Generated AGENTS.md
+AGENTS.md
