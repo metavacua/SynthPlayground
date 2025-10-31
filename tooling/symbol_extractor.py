@@ -35,7 +35,7 @@ class SymbolExtractor:
             if node_type in ('function_definition', 'class_definition'):
                 name_node = None
                 for child in node.get('children', []):
-                    if child.get('field') == 'name':
+                    if child.get('type') == 'identifier':
                         name_node = child
                         break
 

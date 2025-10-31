@@ -30,7 +30,7 @@ def find_references(symbol_name, search_path):
                     ast_data = json.load(f)
 
                 def find_in_ast(node):
-                    if node.get('type') == 'identifier' and node.get('text') == symbol_name:
+                    if (node.get('type') == 'identifier' or node.get('type') == 'string_literal') and node.get('text') == symbol_name:
                         if original_filepath not in references:
                             references[original_filepath] = []
                         references[original_filepath].append(node)
