@@ -14,10 +14,11 @@ class Expression(AST):
     pass
 
 class FunctionDefinition(Statement):
-    def __init__(self, name, params, body):
+    def __init__(self, name, params, body, return_type=None):
         self.name = name  # An Identifier node
         self.params = params  # A list of Identifier nodes
         self.body = body  # A BlockStatement node
+        self.return_type = return_type # An Identifier node or None
 
 class BlockStatement(Statement):
     def __init__(self, statements):
@@ -63,6 +64,11 @@ class PrintStatement(Statement):
 class Identifier(Expression):
     def __init__(self, value):
         self.value = value
+
+class TypedIdentifier(Identifier):
+    def __init__(self, value, type_name):
+        super().__init__(value)
+        self.type_name = type_name
 
 class IntegerLiteral(Expression):
     def __init__(self, value):

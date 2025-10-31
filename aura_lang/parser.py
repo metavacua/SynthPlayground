@@ -4,7 +4,7 @@ from aura_lang.ast import (
     ExpressionStatement, Identifier, IntegerLiteral, StringLiteral,
     InfixExpression, CallExpression, FunctionDefinition, BlockStatement,
     IfStatement, ForStatement, ListLiteral, MemberAccess, UseStatement,
-    PrintStatement
+    PrintStatement, TypedIdentifier
 )
 
 # Operator precedence levels
@@ -74,13 +74,13 @@ class Parser:
         self.expect_peek('ASSIGN')
         self.next_token()
         value = self.parse_expression(LOWEST)
-        if self.peek_token.type == 'SEMICOLON': self.next_token()
+        self.expect_peek('SEMICOLON')
         return LetStatement(name=name, value=value)
 
     def parse_return_statement(self):
         self.next_token()
         value = self.parse_expression(LOWEST)
-        if self.peek_token.type == 'SEMICOLON': self.next_token()
+        self.expect_peek('SEMICOLON')
         return ReturnStatement(value=value)
 
     def parse_print_statement(self):
@@ -90,7 +90,7 @@ class Parser:
 
     def parse_expression_statement(self):
         stmt = ExpressionStatement(expression=self.parse_expression(LOWEST))
-        if self.peek_token.type == 'SEMICOLON': self.next_token()
+        self.expect_peek('SEMICOLON')
         return stmt
 
     def parse_expression(self, precedence):
@@ -130,10 +130,16 @@ class Parser:
         if not self.expect_peek('LPAREN'):
             return None
         params = self.parse_function_parameters()
+        return_type = None
+        if self.peek_token.type == 'ARROW':
+            self.next_token()
+            if not self.expect_peek('ID'):
+                return None
+            return_type = Identifier(self.current_token.value)
         if not self.expect_peek('LBRACE'):
             return None
         body = self.parse_block_statement()
-        return FunctionDefinition(name, params, body)
+        return FunctionDefinition(name, params, body, return_type)
 
     def parse_function_parameters(self):
         """Parses a list of identifiers for a function definition."""
@@ -149,7 +155,16 @@ class Parser:
         if self.current_token.type != 'ID':
             self.errors.append(f"Expected parameter name to be an identifier, got {self.current_token.type}")
             return None # Error case
-        identifiers.append(Identifier(self.current_token.value))
+
+        param_name = self.current_token.value
+        if self.peek_token.type == 'COLON':
+            self.next_token()
+            if not self.expect_peek('ID'):
+                return None
+            param_type = self.current_token.value
+            identifiers.append(TypedIdentifier(param_name, param_type))
+        else:
+            identifiers.append(Identifier(param_name))
 
         # Consume subsequent parameters
         while self.peek_token.type == 'COMMA':
@@ -158,7 +173,16 @@ class Parser:
             if self.current_token.type != 'ID':
                 self.errors.append(f"Expected parameter name to be an identifier, got {self.current_token.type}")
                 return None # Error case
-            identifiers.append(Identifier(self.current_token.value))
+
+            param_name = self.current_token.value
+            if self.peek_token.type == 'COLON':
+                self.next_token()
+                if not self.expect_peek('ID'):
+                    return None
+                param_type = self.current_token.value
+                identifiers.append(TypedIdentifier(param_name, param_type))
+            else:
+                identifiers.append(Identifier(param_name))
 
         # Expect the closing parenthesis
         if not self.expect_peek('RPAREN'):

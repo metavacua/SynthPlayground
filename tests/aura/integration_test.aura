@@ -1,0 +1,9 @@
+// tests/aura/integration_test.aura
+
+let result = agent_call_tool("hello_world", "Jules");
+
+if (result == "Hello, Jules!!") {
+    return "Success!";
+} else {
+    return "Failure!";
+}

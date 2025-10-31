@@ -1,0 +1,11 @@
+# /aura_build_config.yaml
+
+build_groups:
+  all:
+    - lint
+
+targets:
+  lint:
+    command: "python3 tooling/aura/aura_linter.py"
+    description: "Lint all .aura files in the repository."
+    type: command

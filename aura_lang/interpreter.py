@@ -127,9 +127,13 @@ def eval_if_statement(node, env):
                 is_truthy = True
 
     if is_truthy:
-        return evaluate(node.consequence, env)
+        result = evaluate(node.consequence, env)
+        if isinstance(result, ReturnValue):
+            return result
     elif node.alternative:
-        return evaluate(node.alternative, env)
+        result = evaluate(node.alternative, env)
+        if isinstance(result, ReturnValue):
+            return result
 
 def eval_for_statement(node, env):
     iterable_obj = evaluate(node.iterable, env)
