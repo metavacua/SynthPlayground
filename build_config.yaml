@@ -2,16 +2,22 @@
 
 build_groups:
   all:
+    - agents-md
     - protocols
     - knowledge-integrate
-    - agents-md
   knowledge:
     - knowledge-integrate
 
 targets:
   agents-md:
-    command: "python3 tooling/master_agents_md_generator.py --build-config build_config.yaml --knowledge-file knowledge_core/integrated_knowledge.jsonld --output-file AGENTS.md"
+    command: "python3 tooling/generate_agents_md.py"
     description: Generate the master AGENTS.md file.
+    type: command
+    dependencies:
+      - lint-protocols
+  lint-protocols:
+    command: "python3 tooling/lint_chc_protocols.py"
+    description: "Lint all CHC protocols to ensure they are well-formed."
     type: command
   ast-generate:
     command: "python3 tooling/ast_generator.py"

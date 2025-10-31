@@ -1425,3 +1425,4 @@ The agent's behavior is governed by the following set of formal protocols, which
     - experimental
   version: 1.0.0
 ```
+\n\n---\n## CHC-Verified Protocols\n\nThe following protocols have been migrated to the new, verifiable CHC framework.\n\n- **AGENT-BOOTSTRAP-001**\n- **DEVELOPMENT-CYCLE-001**\n- **STANDING-ORDERS-001**\n- **TDD-PROTOCOL-001**\n- **TESTING-PROTOCOL-001**\n
