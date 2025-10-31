@@ -128,17 +128,13 @@ def main():
         enriched_protocols=enriched_protocols,
     )
 
-    # --- Update all AGENTS.md files ---
-    for root, _, files in os.walk("."):
-        for file in files:
-            if file == "AGENTS.md":
-                filepath = os.path.join(root, file)
-                with open(filepath, "w") as f:
-                    f.write(final_content.strip())
-                    f.write("\n\n```yaml\n")
-                    f.write(yaml_ld_string)
-                    f.write("```\n")
-                print(f"Successfully generated AGENTS.md at '{filepath}'")
+    # --- Write to output file ---
+    with open(args.output_file, "w") as f:
+        f.write(final_content.strip())
+        f.write("\n\n```yaml\n")
+        f.write(yaml_ld_string)
+        f.write("```\n")
+    print(f"Successfully generated AGENTS.md at '{args.output_file}'")
 
 
 if __name__ == "__main__":
