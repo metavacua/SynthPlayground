@@ -225,3 +225,15 @@ def generate_tooling_readme_content(
         parts.append(f"\n---\n\n## `{filename}`\n\n{docstring}\n")
 
     return "".join(parts)
+
+
+def generate_main_readme_content(
+    template_content: str, witness_docs: Dict[str, str]
+) -> str:
+    """Generates the content for the main README.md file."""
+    witness_parts = []
+    for filename, docstring in sorted(witness_docs.items()):
+        witness_parts.append(f"\n---\n\n## `{filename}`\n\n{docstring}\n")
+        witness_parts.append(f"### How to Run\n```bash\npython {filename}\n```\n")
+
+    return template_content.format(witness_docs="".join(witness_parts))

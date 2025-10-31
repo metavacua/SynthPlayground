@@ -18,6 +18,7 @@ from tooling.doc_builder_logic import (
     generate_pages_content,
     generate_tool_readme_content,
     generate_tooling_readme_content,
+    generate_main_readme_content,
 )
 
 # --- Configuration ---
@@ -120,12 +121,38 @@ def generate_tooling_readme(source_dir: str, output_file: str):
     print(f"--> Tooling README written to {output_file}")
 
 
+def generate_main_readme(output_file: str, witness_files: List[str]):
+    """Generates the main README.md file."""
+    print("--> Finding witness files for main README...")
+    print(f"--> Found {len(witness_files)} witness files.")
+
+    witness_docs = {}
+    for f in witness_files:
+        filepath = os.path.join(ROOT_DIR, f)
+        with open(filepath, "r", encoding="utf-8") as file:
+            content = file.read()
+        module_doc = parse_file_for_docs(f, content)
+        if module_doc and module_doc.docstring:
+            witness_docs[f] = module_doc.docstring
+        else:
+            witness_docs[f] = "No docstring found."
+
+    template_path = os.path.join(ROOT_DIR, "README.md.template")
+    with open(template_path, "r", encoding="utf-8") as f:
+        template_content = f.read()
+
+    final_content = generate_main_readme_content(template_content, witness_docs)
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write(final_content)
+    print(f"--> Main README written to {output_file}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Unified documentation builder.")
     parser.add_argument(
         "--format",
         required=True,
-        choices=["system", "pages", "tooling-readme"],
+        choices=["system", "pages", "tooling-readme", "main-readme"],
     )
     parser.add_argument(
         "--source-file", help="Source file for 'readme' or 'pages' format."
@@ -135,6 +162,11 @@ def main():
         "--source-dir",
         action="append",
         help="Source directory for 'system' or 'tooling-readme' format. Can be specified multiple times.",
+    )
+    parser.add_argument(
+        "--witness-file",
+        action="append",
+        help="Witness file for 'main-readme' format. Can be specified multiple times.",
     )
     args = parser.parse_args()
 
@@ -157,8 +189,13 @@ def main():
     elif args.format == "tooling-readme":
         if not args.source_dir:
             parser.error("--source-dir is required for 'tooling-readme' format.")
-        output_file = args.output_file or os.path.join(args.source_dir, "README.md")
-        generate_tooling_readme(args.source_dir, output_file)
+        output_file = args.output_file or os.path.join(args.source_dir[0], "README.md")
+        generate_tooling_readme(args.source_dir[0], output_file)
+    elif args.format == "main-readme":
+        if not args.witness_file:
+            parser.error("--witness-file is required for 'main-readme' format.")
+        output_file = args.output_file or os.path.join(ROOT_DIR, "README.md")
+        generate_main_readme(output_file, args.witness_file)
     print("--- Documentation Builder Finished ---")
 
 
