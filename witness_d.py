@@ -1,97 +1,132 @@
 """
-Executable Witness for a Proposition in L_D.
+Executable Witness for a Decidable Diagonalization Theory.
 
-L_D corresponds to the theorems of a complete, decidable extension (T*)
-of an inessentially undecidable theory like IΔ₀ + Ω₁.
-
-The executable witness for a proposition in this language is a program that
-leverages the "oracle-like" completing axioms of the decidable theory.
-The proof often reduces to a lookup in this set of hardcoded truths.
+This program serves as a constructive proof (a "witness") for the existence of
+a decidable formal language that includes a diagonalization function. The key
+to its decidability is its limited expressive power; specifically, it lacks
+the features (like universal quantification and the full arithmetic signature)
+that would allow it to state the Diagonalization Lemma and thus fall into
+Gödelian incompleteness.
 """
 
-# This dictionary represents the "oracle" or the set of completing axioms
-# that were added to the base theory T to make it complete and decidable (T*).
-# For any proposition that was undecidable in T, T* provides the answer
-# axiomatically.
-COMPLETING_AXIOMS = {
-    "is_consistent('IΔ₀ + Ω₁')": True,
-    "halts('unhalting_program_on_any_input')": False,
-    "has_even_number_of_prime_factors(1337)": True, # A hypothetical undecidable number theory problem
-    # ... and so on for all other previously undecidable statements.
-}
+import hashlib
 
-def is_derivable_from_base_theory(proposition_string):
+def godel_number(s):
     """
-    Placeholder function to simulate checking for provability in the
-    base theory (e.g., IΔ₀ + Ω₁). In a real implementation, this would
-    be a complex theorem prover. For this example, we'll keep it simple.
+    A simple Gödel numbering function that assigns a unique integer to any string.
     """
-    # Example simple derivable statement
-    if "forall x. x+0 = x" in proposition_string:
-        return True
-    return False
+    return int(hashlib.sha256(s.encode('utf-8')).hexdigest(), 16)
 
-def prove_in_L_D(proposition_string):
+def diagonalization_function(formula_godel_number):
     """
-    This function is the executable witness for a proposition in L_D.
-    It proves the proposition by derivation, which may include consulting
-    the oracle of completing axioms. Its execution is the proof.
+    The computable diagonalization function, d(x).
+
+    This function takes the Gödel number of a formula A(x) with one free
+    variable 'x' and returns the Gödel number of the formula A(n), where n
+    is the numeral for the Gödel number of A(x) itself.
+
+    For simplicity in this witness, we represent formulas as strings.
     """
-    # Step 1: Check if the proposition is one of the hardcoded truths from the oracle.
-    # This is the computational equivalent of citing a completing axiom.
-    if proposition_string in COMPLETING_AXIOMS:
-        is_true = COMPLETING_AXIOMS[proposition_string]
-        if is_true:
-            return {
-                "proven": True,
-                "proposition": proposition_string,
-                "proof_method": "Axiomatic Oracle Lookup",
-                "justification": "The proposition is a completing axiom of T*."
-            }
-        else:
-            # The axiom could be the negation of the proposition.
-            return {
-                "proven": False,
-                "proposition": proposition_string,
-                "proof_method": "Axiomatic Oracle Lookup",
-                "justification": "The negation of the proposition is a completing axiom of T*."
-            }
+    # In a real system, we'd need a way to reconstruct the formula from its
+    # Gödel number. Here, we'll simulate this by keeping a lookup table.
+    # This is a concession to simplicity for this example.
+    formula_string = GODEL_LOOKUP.get(formula_godel_number)
+    if not formula_string:
+        raise ValueError(f"No formula found for Gödel number: {formula_godel_number}")
 
-    # Step 2: If not in the oracle, try to prove it from the base axioms.
-    if is_derivable_from_base_theory(proposition_string):
-        return {
-            "proven": True,
-            "proposition": proposition_string,
-            "proof_method": "Standard Derivation",
-            "justification": "Derivable from the axioms of the base theory."
-        }
+    # Substitute the Gödel number into the formula string.
+    # The convention is that the free variable is always 'x'.
+    substituted_formula = formula_string.replace('x', str(formula_godel_number))
 
-    # If no proof is found, the proposition is false in this complete theory.
+    return godel_number(substituted_formula)
+
+def decide(formula_string):
+    """
+    A decider for our simple, quantifier-free first-order language.
+
+    The language consists of:
+    - Constants (integers)
+    - A single variable ('x')
+    - A binary equality predicate ('=')
+    - A unary function symbol ('d') for the diagonalization function.
+
+    A formula is an expression of the form 'term = term', where a term
+    can be a constant, the variable 'x', or the application of 'd' to a term.
+    """
+    # This is a very simple parser and evaluator. It only handles formulas of
+    # the form 'd(n) = m'.
+    if '=' not in formula_string:
+        return {"decided": False, "reason": "Invalid formula: missing '='"}
+
+    lhs, rhs = [s.strip() for s in formula_string.split('=', 1)]
+
+    # Evaluate the right-hand side (must be a constant).
+    try:
+        m = int(rhs)
+    except ValueError:
+        return {"decided": False, "reason": f"RHS is not a valid integer: {rhs}"}
+
+    # Evaluate the left-hand side.
+    if not (lhs.startswith('d(') and lhs.endswith(')')):
+        return {"decided": False, "reason": "LHS is not a valid function call"}
+
+    try:
+        n = int(lhs[2:-1])
+    except ValueError:
+        return {"decided": False, "reason": f"Argument to d() is not a valid integer: {lhs[2:-1]}"}
+
+    # Apply the diagonalization function and check for equality.
+    result = diagonalization_function(n)
     return {
-        "proven": False,
-        "proposition": proposition_string,
-        "proof_method": "None",
-        "justification": "No proof could be constructed from the axioms of T*."
-        }
+        "decided": True,
+        "value": result == m,
+        "LHS_eval": result,
+        "RHS_eval": m
+    }
+
+# --- Witness Demonstration ---
+
+# We need a lookup table to go from Gödel numbers back to formulas for the
+# diagonalization function.
+GODEL_LOOKUP = {}
+
+def register_formula(formula_string):
+    """Helper to populate the Gödel lookup table."""
+    num = godel_number(formula_string)
+    GODEL_LOOKUP[num] = formula_string
+    return num
 
 if __name__ == "__main__":
-    print("--- Constructing Executable Witness for L_D ---")
+    print("--- Constructing Executable Witness for a Decidable Diagonalization Theory ---")
 
-    # Example 1: A proposition whose truth is given by the oracle.
-    # This would correspond to a Gödel sentence, undecidable in the base theory.
-    godel_sentence = "is_consistent('IΔ₀ + Ω₁')"
-    print(f"\nProving: '{godel_sentence}'")
-    certificate1 = prove_in_L_D(godel_sentence)
-    print(certificate1)
+    # 1. Define a simple formula with one free variable, 'x'.
+    formula_A = "x = x"
+    godel_A = register_formula(formula_A)
+    print(f"\nFormula A(x): '{formula_A}'")
+    print(f"Gödel number for A(x): {godel_A}")
 
-    # Example 2: A proposition that is provable in the base theory.
-    base_theorem = "forall x. x+0 = x"
-    print(f"\nProving: '{base_theorem}'")
-    certificate2 = prove_in_L_D(base_theorem)
-    print(certificate2)
+    # 2. Compute the result of the diagonalization function d(⌈A(x)⌉).
+    # This gives us the Gödel number of the sentence A(⌈A(x)⌉).
+    d_of_godel_A = diagonalization_function(godel_A)
+    print(f"d(⌈A(x)⌉) = {d_of_godel_A}")
 
-    # Example 3: A proposition that is axiomatically false.
-    halting_problem_instance = "halts('unhalting_program_on_any_input')"
-    print(f"\nProving: '{halting_problem_instance}'")
-    certificate3 = prove_in_L_D(halting_problem_instance)
-    print(certificate3)
+    # The substituted sentence is "⌈A(x)⌉ = ⌈A(x)⌉"
+    expected_substituted_sentence = f"{godel_A} = {godel_A}"
+    print(f"The sentence A(⌈A(x)⌉) is: '{expected_substituted_sentence}'")
+    print(f"The Gödel number of this sentence is: {godel_number(expected_substituted_sentence)}")
+    assert d_of_godel_A == godel_number(expected_substituted_sentence)
+
+    # 3. Use the decider to prove a true statement in the theory.
+    # We will test the truth of the sentence: d(⌈A(x)⌉) = ⌈A(⌈A(x)⌉)⌉
+    true_statement = f"d({godel_A}) = {d_of_godel_A}"
+    print(f"\nDeciding the truth of the statement: '{true_statement}'")
+    decision = decide(true_statement)
+    print(f"Decision: {decision}")
+    assert decision["value"] is True
+
+    # 4. Use the decider to prove a false statement in the theory.
+    false_statement = f"d({godel_A}) = 12345" # An arbitrary incorrect value
+    print(f"\nDeciding the truth of the statement: '{false_statement}'")
+    decision = decide(false_statement)
+    print(f"Decision: {decision}")
+    assert decision["value"] is False
