@@ -21,6 +21,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".
 
 from dbpedia_client import get_abstract
 
+
 class CodeAnalyzer:
     """
     A class to analyze a Python AST and classify its components.
@@ -49,16 +50,17 @@ class CodeAnalyzer:
         # Enrich the analysis with DBPedia definitions
         enrichment = {}
         if recursion_type == "primitive":
-            enrichment["dbpedia_uri"] = "http://dbpedia.org/resource/Primitive_recursive_function"
+            enrichment["dbpedia_uri"] = (
+                "http://dbpedia.org/resource/Primitive_recursive_function"
+            )
             enrichment["abstract"] = get_abstract("Primitive_recursive_function")
         elif recursion_type == "general":
-            enrichment["dbpedia_uri"] = "http://dbpedia.org/resource/General_recursive_function"
+            enrichment["dbpedia_uri"] = (
+                "http://dbpedia.org/resource/General_recursive_function"
+            )
             enrichment["abstract"] = get_abstract("General_recursive_function")
 
-        return {
-            "recursion_type": recursion_type,
-            "enrichment": enrichment
-        }
+        return {"recursion_type": recursion_type, "enrichment": enrichment}
 
     def _check_recursion(self, func_node):
         """
@@ -92,7 +94,11 @@ class CodeAnalyzer:
         """
         # 1. Check for nested recursive calls
         for arg in call_node.args:
-            if isinstance(arg, ast.Call) and isinstance(arg.func, ast.Name) and arg.func.id == func_node.name:
+            if (
+                isinstance(arg, ast.Call)
+                and isinstance(arg.func, ast.Name)
+                and arg.func.id == func_node.name
+            ):
                 return False  # Found a nested call, so not primitive.
 
         # 2. Check for a structurally smaller argument

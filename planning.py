@@ -2,7 +2,7 @@
 
 from typing import Set, List
 from tooling.aal.parser import parse_aal
-from tooling.aal.domain import Domain, Fluent, Action
+from tooling.aal.domain import Domain, Fluent
 from tooling.aal.interpreter import Interpreter as AALInterpreter
 
 # --- Module-level state ---

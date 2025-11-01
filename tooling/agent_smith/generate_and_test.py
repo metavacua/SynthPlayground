@@ -15,6 +15,7 @@ This script automates the following workflow:
 This allows for automated, repeatable testing of the compiler's behavior
 under various source conditions.
 """
+
 import os
 import shutil
 import subprocess

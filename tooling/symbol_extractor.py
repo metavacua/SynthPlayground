@@ -2,15 +2,20 @@ import os
 import json
 import argparse
 
+
 class SymbolExtractor:
-    def __init__(self, ast_dir='knowledge_core/asts', symbol_map_file='knowledge_core/symbol_map.json'):
+    def __init__(
+        self,
+        ast_dir="knowledge_core/asts",
+        symbol_map_file="knowledge_core/symbol_map.json",
+    ):
         self.ast_dir = ast_dir
         self.symbol_map_file = symbol_map_file
         self.symbol_map = self._load_symbol_map()
 
     def _load_symbol_map(self):
         if os.path.exists(self.symbol_map_file):
-            with open(self.symbol_map_file, 'r') as f:
+            with open(self.symbol_map_file, "r") as f:
                 return json.load(f)
         return {}
 
@@ -19,7 +24,7 @@ class SymbolExtractor:
         if not os.path.exists(ast_path):
             return []
 
-        with open(ast_path, 'r') as f:
+        with open(ast_path, "r") as f:
             ast_data = json.load(f)
 
         return self._find_definitions_in_ast(ast_data)
@@ -31,24 +36,26 @@ class SymbolExtractor:
         definitions = []
 
         def find_in_node(node):
-            node_type = node.get('type')
-            if node_type in ('function_definition', 'class_definition'):
+            node_type = node.get("type")
+            if node_type in ("function_definition", "class_definition"):
                 name_node = None
-                for child in node.get('children', []):
-                    if child.get('field') == 'name':
+                for child in node.get("children", []):
+                    if child.get("type") == "identifier":
                         name_node = child
                         break
 
                 if name_node:
-                    symbol_name = name_node.get('text')
-                    definitions.append({
-                        'name': symbol_name,
-                        'type': node_type,
-                        'start_point': node.get('start_point'),
-                        'end_point': node.get('end_point'),
-                    })
+                    symbol_name = name_node.get("text")
+                    definitions.append(
+                        {
+                            "name": symbol_name,
+                            "type": node_type,
+                            "start_point": node.get("start_point"),
+                            "end_point": node.get("end_point"),
+                        }
+                    )
 
-            for child in node.get('children', []):
+            for child in node.get("children", []):
                 find_in_node(child)
 
         find_in_node(ast_data)
@@ -64,7 +71,9 @@ class SymbolExtractor:
             for file in files:
                 if file.endswith(".json"):
                     filepath = os.path.join(root, file)
-                    original_filepath = os.path.relpath(filepath, self.ast_dir).replace('.json', '')
+                    original_filepath = os.path.relpath(filepath, self.ast_dir).replace(
+                        ".json", ""
+                    )
 
                     with open(filepath, "r") as f:
                         try:
@@ -76,16 +85,18 @@ class SymbolExtractor:
                     definitions = self._find_definitions_in_ast(ast_data)
 
                     for definition in definitions:
-                        symbol_name = definition['name']
+                        symbol_name = definition["name"]
                         if symbol_name not in symbol_map:
                             symbol_map[symbol_name] = []
 
-                        symbol_map[symbol_name].append({
-                            'filepath': original_filepath,
-                            'type': definition['type'],
-                            'start_point': definition['start_point'],
-                            'end_point': definition['end_point'],
-                        })
+                        symbol_map[symbol_name].append(
+                            {
+                                "filepath": original_filepath,
+                                "type": definition["type"],
+                                "start_point": definition["start_point"],
+                                "end_point": definition["end_point"],
+                            }
+                        )
 
         output_dir = os.path.dirname(self.symbol_map_file)
         if not os.path.exists(output_dir):
@@ -117,5 +128,6 @@ def main():
     extractor = SymbolExtractor(ast_dir=args.asts_dir, symbol_map_file=args.output_file)
     extractor.generate_symbol_map()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

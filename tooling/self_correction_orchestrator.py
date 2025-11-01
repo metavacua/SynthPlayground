@@ -46,18 +46,22 @@ def run_command(command: list) -> bool:
 def apply_merge_diff(filepath, merge_diff):
     """Applies a git-style merge diff to a file."""
     try:
-        lines = merge_diff.split('\n')
+        lines = merge_diff.split("\n")
 
         # A simple validation for the merge diff format
-        if not (lines[0] == '<<<<<<< SEARCH' and '=======' in lines and lines[-1] == '>>>>>>> REPLACE'):
+        if not (
+            lines[0] == "<<<<<<< SEARCH"
+            and "=======" in lines
+            and lines[-1] == ">>>>>>> REPLACE"
+        ):
             print("Error: Invalid merge diff format.")
             return False
 
-        separator_index = lines.index('=======')
-        search_block = '\n'.join(lines[1:separator_index])
-        replace_block = '\n'.join(lines[separator_index+1:-1])
+        separator_index = lines.index("=======")
+        search_block = "\n".join(lines[1:separator_index])
+        replace_block = "\n".join(lines[separator_index + 1 : -1])
 
-        with open(filepath, 'r') as f:
+        with open(filepath, "r") as f:
             original_content = f.read()
 
         if search_block not in original_content:
@@ -68,7 +72,7 @@ def apply_merge_diff(filepath, merge_diff):
 
         new_content = original_content.replace(search_block, replace_block, 1)
 
-        with open(filepath, 'w') as f:
+        with open(filepath, "w") as f:
             f.write(new_content)
 
         print(f"Successfully applied patch to {filepath}")
@@ -199,7 +203,9 @@ def process_lessons(lessons: list, protocols_dir: str) -> bool:
 
             # We must ensure the file path is within the tooling directory for safety
             if not filepath.startswith("tooling/"):
-                print(f"Error: MODIFY_TOOLING is restricted to the 'tooling/' directory. Attempted path: {filepath}")
+                print(
+                    f"Error: MODIFY_TOOLING is restricted to the 'tooling/' directory. Attempted path: {filepath}"
+                )
                 lesson["status"] = "failed"
                 changes_made = True
                 continue

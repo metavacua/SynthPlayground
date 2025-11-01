@@ -1,7 +1,9 @@
 import argparse
 import glob
 import os
+import sys
 import yaml
+
 
 def compile_protocols(output_file):
     """
@@ -27,14 +29,18 @@ def compile_protocols(output_file):
         with open(context_file, "r") as f:
             # Here we assume the context is a JSON object, so we load it as such
             import json
+
             try:
                 all_protocols["@context"] = json.load(f)
             except json.JSONDecodeError as e:
-                print(f"Error parsing context JSON from {context_file}: {e}", file=sys.stderr)
-
+                print(
+                    f"Error parsing context JSON from {context_file}: {e}",
+                    file=sys.stderr,
+                )
 
     with open(output_file, "w") as f:
         yaml.dump(all_protocols, f, default_flow_style=False)
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -48,6 +54,7 @@ def main():
     args = parser.parse_args()
     compile_protocols(args.output_file)
     print(f"Successfully compiled protocols to {args.output_file}")
+
 
 if __name__ == "__main__":
     main()

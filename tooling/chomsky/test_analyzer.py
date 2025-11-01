@@ -6,6 +6,7 @@ import unittest
 from unittest.mock import patch
 from tooling.chomsky.analyzer import CodeAnalyzer
 
+
 class TestCodeAnalyzer(unittest.TestCase):
 
     def setUp(self):
@@ -28,7 +29,7 @@ def ackermann(m, n):
         return ackermann(m - 1, ackermann(m, n - 1))
 """
 
-    @patch('tooling.chomsky.analyzer.get_abstract')
+    @patch("tooling.chomsky.analyzer.get_abstract")
     def test_analyze(self, mock_get_abstract):
         # Mock the DBPedia client to avoid network calls
         mock_get_abstract.return_value = "Mocked abstract"
@@ -44,6 +45,7 @@ def ackermann(m, n):
         self.assertIn("enrichment", analysis["factorial"])
         self.assertIn("enrichment", analysis["ackermann"])
         self.assertEqual(mock_get_abstract.call_count, 2)
+
 
 if __name__ == "__main__":
     unittest.main()

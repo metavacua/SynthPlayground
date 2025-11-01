@@ -2,30 +2,35 @@ import subprocess
 import sys
 import os
 
+
 def get_staged_files():
     """Returns a dictionary of staged files and their status."""
     try:
-        output = subprocess.check_output(['git', 'diff', '--cached', '--name-status']).decode('utf-8')
+        output = subprocess.check_output(
+            ["git", "diff", "--cached", "--name-status"]
+        ).decode("utf-8")
     except subprocess.CalledProcessError:
         return {}
 
     files = {}
     for line in output.splitlines():
-        parts = line.split('\t')
+        parts = line.split("\t")
         status = parts[0]
         filepath = parts[1]
         files[filepath] = status
     return files
+
 
 def is_source_file(filepath):
     """
     Checks if a file is a source file that should be covered by TDD.
     """
     return (
-        filepath.endswith('.py') and
-        not filepath.startswith('tests/') and
-        'validate_tdd.py' not in filepath
+        filepath.endswith(".py")
+        and not filepath.startswith("tests/")
+        and "validate_tdd.py" not in filepath
     )
+
 
 def find_corresponding_test_file(source_filepath, all_files):
     """
@@ -35,17 +40,17 @@ def find_corresponding_test_file(source_filepath, all_files):
     test_filename = f"test_{filename}"
 
     for file in all_files:
-        if file.startswith('tests/') and file.endswith(test_filename):
+        if file.startswith("tests/") and file.endswith(test_filename):
             return file
     return None
+
 
 def main():
     staged_files = get_staged_files()
     all_repo_files = []
-    for root, _, files in os.walk('.'):
+    for root, _, files in os.walk("."):
         for file in files:
-            all_repo_files.append(os.path.join(root, file).lstrip('./'))
-
+            all_repo_files.append(os.path.join(root, file).lstrip("./"))
 
     errors = []
     warnings = []
@@ -54,7 +59,7 @@ def main():
         if is_source_file(filepath):
             test_filepath = find_corresponding_test_file(filepath, all_repo_files)
 
-            if status == 'A':  # Added file
+            if status == "A":  # Added file
                 if not test_filepath:
                     errors.append(
                         f"ERROR: New source file '{filepath}' added without a corresponding test file."
@@ -63,11 +68,11 @@ def main():
                     errors.append(
                         f"ERROR: New source file '{filepath}' added, but the corresponding test file '{test_filepath}' is not staged."
                     )
-                elif staged_files.get(test_filepath) != 'A':
+                elif staged_files.get(test_filepath) != "A":
                     errors.append(
                         f"ERROR: New source file '{filepath}' added, but the corresponding test file '{test_filepath}' was not added in the same commit."
                     )
-            elif status == 'M':  # Modified file
+            elif status == "M":  # Modified file
                 if not test_filepath:
                     warnings.append(
                         f"WARNING: Source file '{filepath}' was modified, but no corresponding test file was found."
@@ -89,5 +94,6 @@ def main():
     print("TDD validation successful.")
     sys.exit(0)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

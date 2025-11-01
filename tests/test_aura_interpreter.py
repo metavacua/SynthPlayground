@@ -1,5 +1,5 @@
 import unittest
-from aura_lang import ast, lexer, parser, interpreter
+from aura_lang import lexer, parser, interpreter
 
 class TestAuraInterpreter(unittest.TestCase):
 

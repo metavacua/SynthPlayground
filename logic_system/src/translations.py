@@ -1,9 +1,7 @@
-from . import lj
 from . import lk
 from . import ill
 from .proof import ProofTree, Rule
-from .formulas import Formula, Prop, And, Or, Implies, Not, Tensor, Par, LinImplies, OfCourse, With, Plus
-from .sequents import Sequent
+from .formulas import Formula, Prop, And, Or, Implies, Not, LinImplies, OfCourse, With, Plus
 from .synthesizer import Synthesizer
 from collections import Counter
 

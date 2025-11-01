@@ -33,8 +33,6 @@ class LogicValue(Enum):
 class InterpretationError(Exception):
     """Custom exception for errors during interpretation."""
 
-    pass
-
 
 class FourValuedInterpreter:
     """
@@ -225,11 +223,10 @@ def create_context_from_string(s):
             "B": LogicValue.BOTH,
             "N": LogicValue.NEITHER,
         }
-        logic_value = value_map[value_char]
+        value_map[value_char]
 
         # The _evaluate function needs to know the value, so we pass it in the atom node
         # The context just needs to know that the unique atom exists.
-        atom_tuple = (logic_value, atom_counts[name])  # e.g. (LogicValue.TRUE, 1)
         context[(name, atom_counts[name])] = True
     return Counter(context)
 
@@ -250,7 +247,7 @@ def patch_atom_values(node, context_values):
                 # Get the logic value from the original atom tuple
                 logic_value = [
                     k[0]
-                    for k in interpreter.pda_parser_context
+                    for k in FourValuedInterpreter.pda_parser_context
                     if k[1] == name and k[2] == id
                 ][0]
                 return ("atom", (logic_value, id))

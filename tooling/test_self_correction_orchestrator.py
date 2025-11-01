@@ -2,7 +2,7 @@ import unittest
 import os
 import json
 import shutil
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch
 from tooling.self_correction_orchestrator import (
     load_lessons,
     save_lessons,

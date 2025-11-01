@@ -11,6 +11,7 @@ of "targets." Each target specifies:
 - The `type` of target: "compiler" or "command".
 - For "compiler" types: `compiler` script, `output`, `sources`, and `options`.
 - For "command" types: the `command` to execute.
+- An optional `dependencies` list of other targets that must be run first.
 
 The configuration also defines "build_groups", which are ordered collections of
 targets (e.g., "all", "quality").
@@ -43,30 +44,44 @@ from tooling.build_logic import (
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 CONFIG_FILE = os.path.join(ROOT_DIR, "build_config.yaml")
 
+# A set to keep track of targets that have already been executed in this run.
+executed_targets = set()
+
 
 def execute_build(target_name, config, extra_args):
-    """Executes the build process for a specific target."""
+    """Executes the build process for a specific target, including its dependencies."""
+    if target_name in executed_targets:
+        print(f"--- Skipping Target: {target_name.upper()} (already executed) ---")
+        return
+
     if target_name not in config["targets"]:
         raise ValueError(f"Target '{target_name}' not found in build configuration.")
 
     target_config = config["targets"][target_name]
+
+    # --- Execute Dependencies First ---
+    if "dependencies" in target_config:
+        for dep_name in target_config["dependencies"]:
+            print(
+                f"--- '{target_name}' depends on '{dep_name}'. Executing dependency first. ---"
+            )
+            execute_build(dep_name, config, [])  # Dependencies don't receive extra args
+
+    # --- Execute the Target ---
     target_type = target_config.get("type", "compiler")  # Default to compiler
 
     print(f"--- Building Target: {target_name.upper()} ---")
     print(f"  - Type:     {target_type}")
     print(f"  - Desc:     {target_config.get('description', 'N/A')}")
 
-    command = None
     command_str = ""
-    shell = False
 
     if target_type == "compiler":
-        command, command_str = generate_compiler_command(
+        _, command_str = generate_compiler_command(
             target_name, target_config, ROOT_DIR
         )
     elif target_type == "command":
-        command, command_str = generate_command(target_name, target_config)
-        shell = True  # Shell commands run with shell=True
+        _, command_str = generate_command(target_name, target_config)
     else:
         raise ValueError(
             f"Unknown target type '{target_type}' for target '{target_name}'"
@@ -101,10 +116,17 @@ def execute_build(target_name, config, extra_args):
     except subprocess.CalledProcessError as e:
         print("  - Status:   FAILURE")
         print(f"  - Error:    Build failed with exit code {e.returncode}.")
-        print("  - STDERR:")
-        for line in e.stderr.strip().split("\n"):
-            print(f"    {line}")
+        if e.stdout:
+            print("  - STDOUT:")
+            for line in e.stdout.strip().split("\n"):
+                print(f"    {line}")
+        if e.stderr:
+            print("  - STDERR:")
+            for line in e.stderr.strip().split("\n"):
+                print(f"    {line}")
         raise
+
+    executed_targets.add(target_name)
 
 
 def main():
@@ -125,7 +147,7 @@ def main():
     )
 
     args, extra_args = parser.parse_known_args()
-    if extra_args and extra_args[0] == '--':
+    if extra_args and extra_args[0] == "--":
         extra_args.pop(0)
 
     config = load_config(CONFIG_FILE)
@@ -133,7 +155,12 @@ def main():
     if args.list:
         print("--- Available Build Targets ---")
         for name, details in sorted(config["targets"].items()):
-            print(f"  - {name}: {details.get('description', 'N/A')}")
+            deps = (
+                f" (depends on: {', '.join(details.get('dependencies', []))})"
+                if details.get("dependencies")
+                else ""
+            )
+            print(f"  - {name}: {details.get('description', 'N/A')}{deps}")
         print("\n--- Available Build Groups ---")
         for name, members in sorted(config["build_groups"].items()):
             print(f"  - {name}: (runs {', '.join(members)})")

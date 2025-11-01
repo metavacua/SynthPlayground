@@ -15,7 +15,10 @@ DISCLAIMER_TEMPLATE = """\
 # ---
 """
 
-def generate_agents_md_content(module_name, md_files_content, yaml_files_content, schema):
+
+def generate_agents_md_content(
+    module_name, md_files_content, yaml_files_content, schema
+):
     """
     Generates the content for an AGENTS.md file.
     """
@@ -30,11 +33,16 @@ def generate_agents_md_content(module_name, md_files_content, yaml_files_content
     for protocol_data in yaml_files_content:
         try:
             jsonschema.validate(instance=protocol_data, schema=schema)
-            yaml_string = yaml.dump(protocol_data, indent=2, sort_keys=False, default_flow_style=False)
+            yaml_string = yaml.dump(
+                protocol_data, indent=2, sort_keys=False, default_flow_style=False
+            )
             md_yaml_block = f"```yaml\n{yaml_string}\n```\n"
             final_content.append(md_yaml_block)
             final_content.append("\n---\n")
         except jsonschema.ValidationError as e:
-            print(f"Warning: Schema validation failed for a protocol: {e.message}", file=sys.stderr)
+            print(
+                f"Warning: Schema validation failed for a protocol: {e.message}",
+                file=sys.stderr,
+            )
 
     return "\n".join(final_content)

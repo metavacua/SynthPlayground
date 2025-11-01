@@ -9,9 +9,7 @@ def parse_package_json_content(content, path):
     """
     try:
         data = json.loads(content)
-        package_name = data.get(
-            "name", os.path.basename(os.path.dirname(path))
-        )
+        package_name = data.get("name", os.path.basename(os.path.dirname(path)))
         dependencies = list(data.get("dependencies", {}).keys())
         dev_dependencies = list(data.get("devDependencies", {}).keys())
 

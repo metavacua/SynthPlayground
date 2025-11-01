@@ -9,6 +9,7 @@ leverages the "oracle-like" completing axioms of the decidable theory.
 The proof often reduces to a lookup in this set of hardcoded truths.
 """
 
+
 # This dictionary represents the "oracle" or the set of completing axioms
 # that were added to the base theory T to make it complete and decidable (T*).
 # For any proposition that was undecidable in T, T* provides the answer
@@ -16,9 +17,10 @@ The proof often reduces to a lookup in this set of hardcoded truths.
 COMPLETING_AXIOMS = {
     "is_consistent('IΔ₀ + Ω₁')": True,
     "halts('unhalting_program_on_any_input')": False,
-    "has_even_number_of_prime_factors(1337)": True, # A hypothetical undecidable number theory problem
+    "has_even_number_of_prime_factors(1337)": True,  # A hypothetical undecidable number theory problem
     # ... and so on for all other previously undecidable statements.
 }
+
 
 def is_derivable_from_base_theory(proposition_string):
     """
@@ -30,6 +32,7 @@ def is_derivable_from_base_theory(proposition_string):
     if "forall x. x+0 = x" in proposition_string:
         return True
     return False
+
 
 def prove_in_L_D(proposition_string):
     """
@@ -73,6 +76,7 @@ def prove_in_L_D(proposition_string):
         "proof_method": "None",
         "justification": "No proof could be constructed from the axioms of T*."
         }
+
 
 if __name__ == "__main__":
     print("--- Constructing Executable Witness for L_D ---")

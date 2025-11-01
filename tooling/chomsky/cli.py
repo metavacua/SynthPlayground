@@ -23,6 +23,7 @@ from tooling.chomsky.lba_validator import LBAValidator
 from tooling.chomsky import refactor_cs_to_cf, refactor_cf_to_r
 from tooling.fdc_cli import analyze_plan
 
+
 def analyze_file(filepath):
     """
     Analyzes a Python file and prints the results.
@@ -34,6 +35,7 @@ def analyze_file(filepath):
     analysis = analyzer.analyze()
 
     print(json.dumps(analysis, indent=2))
+
 
 def refactor_file(filepath, strategy):
     """
@@ -53,6 +55,7 @@ def refactor_file(filepath, strategy):
         print(f"Error: Unknown refactoring strategy '{strategy}'", file=sys.stderr)
         sys.exit(1)
 
+
 def validate_plan_file(filepath, model, complexity):
     """
     Validates a plan file against a CSDC model and complexity.
@@ -63,17 +66,23 @@ def validate_plan_file(filepath, model, complexity):
     analysis_results = analyze_plan(filepath, return_results=True)
 
     if analysis_results["complexity_class"] != complexity:
-        print(f"Validation failed: Plan complexity mismatch. Expected '{complexity}', but found '{analysis_results['complexity_class']}'.", file=sys.stderr)
+        print(
+            f"Validation failed: Plan complexity mismatch. Expected '{complexity}', but found '{analysis_results['complexity_class']}'.",
+            file=sys.stderr,
+        )
         sys.exit(1)
 
     validator = LBAValidator()
     is_valid, error_message = validator.validate(plan_content, model)
 
     if is_valid:
-        print("Validation successful! Plan is valid for the specified model and complexity.")
+        print(
+            "Validation successful! Plan is valid for the specified model and complexity."
+        )
     else:
         print(f"Validation failed: {error_message}", file=sys.stderr)
         sys.exit(1)
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -83,18 +92,40 @@ def main():
 
     # 'analyze' command
     parser_analyze = subparsers.add_parser("analyze", help="Analyze a Python file.")
-    parser_analyze.add_argument("filepath", help="The path to the Python file to analyze.")
+    parser_analyze.add_argument(
+        "filepath", help="The path to the Python file to analyze."
+    )
 
     # 'refactor' command
-    parser_refactor = subparsers.add_parser("refactor", help="Refactor a Python file using a specific strategy.")
-    parser_refactor.add_argument("filepath", help="The path to the Python file to refactor.")
-    parser_refactor.add_argument("--strategy", required=True, choices=["general-to-primitive", "cs-to-cf", "cf-to-r"], help="The refactoring strategy to use.")
+    parser_refactor = subparsers.add_parser(
+        "refactor", help="Refactor a Python file using a specific strategy."
+    )
+    parser_refactor.add_argument(
+        "filepath", help="The path to the Python file to refactor."
+    )
+    parser_refactor.add_argument(
+        "--strategy",
+        required=True,
+        choices=["general-to-primitive", "cs-to-cf", "cf-to-r"],
+        help="The refactoring strategy to use.",
+    )
 
     # 'validate-plan' command
-    parser_validate = subparsers.add_parser("validate-plan", help="Validate a plan against a CSDC model.")
-    parser_validate.add_argument("filepath", help="The path to the plan file to validate.")
-    parser_validate.add_argument("--model", required=True, choices=["A", "B"], help="The CSDC model to use.")
-    parser_validate.add_argument("--complexity", required=True, choices=["P", "EXP"], help="The expected complexity class.")
+    parser_validate = subparsers.add_parser(
+        "validate-plan", help="Validate a plan against a CSDC model."
+    )
+    parser_validate.add_argument(
+        "filepath", help="The path to the plan file to validate."
+    )
+    parser_validate.add_argument(
+        "--model", required=True, choices=["A", "B"], help="The CSDC model to use."
+    )
+    parser_validate.add_argument(
+        "--complexity",
+        required=True,
+        choices=["P", "EXP"],
+        help="The expected complexity class.",
+    )
 
     args = parser.parse_args()
 
@@ -104,6 +135,7 @@ def main():
         refactor_file(args.filepath, args.strategy)
     elif args.command == "validate-plan":
         validate_plan_file(args.filepath, args.model, args.complexity)
+
 
 if __name__ == "__main__":
     main()

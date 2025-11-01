@@ -8,12 +8,14 @@ from tooling.state import AgentState
 
 SESSION_FILE = "agent_session.json"
 
+
 def save_session(agent_state: AgentState):
     """
     Saves the agent's session to a file.
     """
     with open(SESSION_FILE, "w") as f:
         json.dump(agent_state.to_dict(), f)
+
 
 def load_session() -> AgentState:
     """

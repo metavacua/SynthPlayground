@@ -3,7 +3,7 @@ import json
 import sys
 import os
 import importlib.util
-from rdflib import Graph, Namespace, URIRef, Literal
+from rdflib import Graph, Namespace
 from rdflib.plugins.sparql import prepareQuery
 
 # Add the root directory to the Python path

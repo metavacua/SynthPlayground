@@ -1,6 +1,6 @@
 import ply.yacc as yacc
-from lfi_ill.lexer import tokens
 from lfi_ill.ast import *
+from lfi_ill.lexer import tokens
 
 # Operator Precedence
 precedence = (

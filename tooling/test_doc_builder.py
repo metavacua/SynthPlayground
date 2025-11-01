@@ -1,13 +1,8 @@
 import unittest
-import os
 from tooling.doc_builder_logic import (
     parse_file_for_docs,
-    generate_system_docs_content,
-    generate_readme_content,
-    generate_pages_content,
-    generate_tool_readme_content,
-    generate_tooling_readme_content,
 )
+
 
 class TestDocBuilder(unittest.TestCase):
     def test_parse_file_for_docs(self):
@@ -29,5 +24,6 @@ def my_function():
         self.assertEqual(module_doc.classes[0].name, "MyClass")
         self.assertEqual(module_doc.functions[0].name, "my_function")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

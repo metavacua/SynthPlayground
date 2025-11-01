@@ -171,7 +171,9 @@ def main():
     # 1. Analyze Planning Efficiency
     inefficient_tasks = analyze_planning_efficiency(args.log_file)
     if inefficient_tasks:
-        print("\n[Analysis] Found tasks with multiple plan revisions (potential inefficiency):")
+        print(
+            "\n[Analysis] Found tasks with multiple plan revisions (potential inefficiency):"
+        )
         for task_id, count in inefficient_tasks.items():
             print(f"  - Task: {task_id}, Plan Updates: {count}")
     else:
@@ -191,7 +193,9 @@ def main():
     # 3. Analyze Protocol Violations
     violations = analyze_protocol_violations(args.log_file)
     if violations:
-        print("\n[Analysis] CRITICAL: Found tasks with protocol violations (use of `reset_all`):")
+        print(
+            "\n[Analysis] CRITICAL: Found tasks with protocol violations (use of `reset_all`):"
+        )
         for task_id in violations:
             print(f"  - Task: {task_id}")
     else:

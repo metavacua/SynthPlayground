@@ -7,6 +7,7 @@ import ast
 import os
 import sys
 
+
 def is_pure(node):
     """
     Determines if a function definition node is pure.
@@ -21,6 +22,7 @@ def is_pure(node):
                 if sub_node.func.value.id in ["os", "sys", "subprocess", "requests"]:
                     return False
     return True
+
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
@@ -77,6 +79,7 @@ def main(argv=None):
         for node in impure_functions:
             f.write(ast.unparse(node))
             f.write("\n\n")
+
 
 if __name__ == "__main__":
     main()

@@ -74,7 +74,12 @@ def main():
 
     # Now, we run the knowledge compiler to process the new post-mortem.
     knowledge_compiler_result = subprocess.run(
-        [sys.executable, "tooling/knowledge_compiler.py", "--source-dir", "postmortems/"],
+        [
+            sys.executable,
+            "tooling/knowledge_compiler.py",
+            "--source-dir",
+            "postmortems/",
+        ],
         capture_output=True,
         text=True,
     )

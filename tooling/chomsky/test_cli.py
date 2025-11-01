@@ -12,6 +12,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".
 
 from tooling.chomsky.cli import main as chomsky_main
 
+
 class TestCli(unittest.TestCase):
 
     def setUp(self):
@@ -30,7 +31,19 @@ class TestCli(unittest.TestCase):
         mock_validate.return_value = (True, "")
 
         # Call the CLI with the validate-plan command
-        with patch.object(sys, "argv", ["cli.py", "validate-plan", self.test_plan_file, "--model", "A", "--complexity", "P"]):
+        with patch.object(
+            sys,
+            "argv",
+            [
+                "cli.py",
+                "validate-plan",
+                self.test_plan_file,
+                "--model",
+                "A",
+                "--complexity",
+                "P",
+            ],
+        ):
             chomsky_main()
 
         mock_validate.assert_called_once_with("plan_step_complete: Test step", "A")
@@ -43,7 +56,9 @@ class TestCli(unittest.TestCase):
             f.write("print('hello')")
 
         # Call the CLI with the refactor command
-        with patch.object(sys, "argv", ["cli.py", "refactor", test_file, "--strategy", "cs-to-cf"]):
+        with patch.object(
+            sys, "argv", ["cli.py", "refactor", test_file, "--strategy", "cs-to-cf"]
+        ):
             chomsky_main()
 
         mock_refactor_main.assert_called_once_with([test_file])
@@ -58,12 +73,15 @@ class TestCli(unittest.TestCase):
             f.write("print('hello')")
 
         # Call the CLI with the refactor command
-        with patch.object(sys, "argv", ["cli.py", "refactor", test_file, "--strategy", "cf-to-r"]):
+        with patch.object(
+            sys, "argv", ["cli.py", "refactor", test_file, "--strategy", "cf-to-r"]
+        ):
             chomsky_main()
 
         mock_refactor_main.assert_called_once_with([test_file])
 
         os.remove(test_file)
+
 
 if __name__ == "__main__":
     unittest.main()

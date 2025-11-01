@@ -1,8 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
 
 # C extensions
 *.so
@@ -46,6 +45,7 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
+*.py,cover
 .hypothesis/
 .pytest_cache/
 
@@ -55,9 +55,9 @@ coverage.xml
 
 # Django stuff:
 *.log
-logs/
 local_settings.py
 db.sqlite3
+db.sqlite3-journal
 
 # Flask stuff:
 instance/
@@ -75,11 +75,16 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# IPython
+profile_default/
+ipython_config.py
+
 # pyenv
 .python-version
 
-# celery beat schedule file
+# celery
 celerybeat-schedule
+celerybeat.pid
 
 # SageMath parsed files
 *.sage.py
@@ -111,23 +116,12 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Generated Documentation
-# Reconciliation artifacts
-AGENTS.md.reconciled
-reconciliation_report.md
+# VS Code
+.vscode/
 
-# Ply-generated files
-parser.out
-parsetab.py
+# Tree-sitter
+tree-sitter-python/
 
-# Agent Smith experimental sandbox
-agent_smith_sandbox/
-
-# Test artifacts
-test.ttl
-
-# Generated knowledge artifacts
-knowledge_core/context_outputs/
-knowledge_core/knowledge_graph.jsonld
-knowledge_core/asts/
-knowledge_core/symbol_map.json
+# Build artifacts
+knowledge_core/
+protocols.yaml-ld

@@ -3,10 +3,12 @@ import json
 import subprocess
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from tooling.plan_parser import parse_plan
 from tooling.plan_generator import generate_plan
 from tooling.autonomous_agent_logic import generate_command_from_plan_step
+
 
 class AutonomousAgent:
     def __init__(self, task):
@@ -48,7 +50,7 @@ class AutonomousAgent:
                     for key, value in output_json.items():
                         outputs[key] = value
                 except json.JSONDecodeError:
-                    pass # Not all tools will output JSON.
+                    pass  # Not all tools will output JSON.
 
                 print(result.stdout.strip())
             if result.stderr:
@@ -61,13 +63,17 @@ class AutonomousAgent:
         self.execute_plan()
         print("Agent has completed its task.")
 
+
 def main():
-    parser = argparse.ArgumentParser(description="An autonomous agent for repository development.")
+    parser = argparse.ArgumentParser(
+        description="An autonomous agent for repository development."
+    )
     parser.add_argument("task", help="The high-level task for the agent to perform.")
     args = parser.parse_args()
 
     agent = AutonomousAgent(args.task)
     agent.run()
+
 
 if __name__ == "__main__":
     main()

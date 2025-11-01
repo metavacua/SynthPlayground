@@ -30,7 +30,7 @@ import re
 import argparse
 from datetime import datetime
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from tooling.auditor_logic import (
     analyze_protocol_completeness,
     analyze_tool_centrality,
@@ -290,7 +290,9 @@ def run_knowledge_audit():
             f"- ⚠️ **Dead Links Found:** {len(dead_links)} knowledge entries point to non-existent symbols."
         )
         for link in dead_links:
-            report.append(f"  - Lesson: `{link['lesson_id']}` -> Symbol: `{link['symbol']}`")
+            report.append(
+                f"  - Lesson: `{link['lesson_id']}` -> Symbol: `{link['symbol']}`"
+            )
     return report
 
 
@@ -299,14 +301,16 @@ def run_health_audit(session_start_time_iso: str) -> list[str]:
     Performs a system health audit, checking for "absence of evidence" anomalies.
     """
     if not os.path.exists(LOG_FILE):
-        return ["- ❌ **Log Staleness Detected:** Log file not found. The agent's logging system may be broken."]
+        return [
+            "- ❌ **Log Staleness Detected:** Log file not found. The agent's logging system may be broken."
+        ]
 
     with open(LOG_FILE, "r") as f:
         log_content = f.readlines()
 
     return analyze_system_health(
         log_content, POSTMORTEM_DIR, session_start_time_iso
-    ).split('\n')
+    ).split("\n")
 
 
 # --- Main ---
@@ -330,7 +334,11 @@ def main():
         " - health: Audit system health for 'absence of evidence' anomalies.\n"
         " - knowledge: Audit the knowledge base for dead links.",
     )
-    parser.add_argument("--session-start-time", help="The start time of the current session.", default=datetime.now().isoformat())
+    parser.add_argument(
+        "--session-start-time",
+        help="The start time of the current session.",
+        default=datetime.now().isoformat(),
+    )
     args = parser.parse_args()
 
     print(
@@ -345,7 +353,10 @@ def main():
         "plans": ("Plan Registry Audit", run_plan_registry_audit),
         "docs": ("Documentation Audit", run_doc_audit),
         "knowledge": ("Knowledge Base Audit", run_knowledge_audit),
-        "health": ("System Health Audit", lambda: run_health_audit(args.session_start_time)),
+        "health": (
+            "System Health Audit",
+            lambda: run_health_audit(args.session_start_time),
+        ),
     }
 
     selected_audits = []

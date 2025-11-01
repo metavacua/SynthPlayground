@@ -5,6 +5,7 @@ AGENT_REPOSITORY_PATH = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "agent_repository.yaml")
 )
 
+
 def find_agent_that_produces(resource_name):
     """Finds an agent in the repository that produces the given resource."""
     with open(AGENT_REPOSITORY_PATH, "r") as f:
@@ -16,6 +17,7 @@ def find_agent_that_produces(resource_name):
             if postcondition["name"] == resource_name:
                 return manifest
     return None
+
 
 def generate_plan(goal):
     """

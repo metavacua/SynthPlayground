@@ -2,7 +2,7 @@ import argparse
 import json
 import os
 import subprocess
-import sys
+
 
 def classify_ast(ast_file):
     """Classifies a single AST file and returns the result."""
@@ -16,6 +16,7 @@ def classify_ast(ast_file):
         if line.startswith("Result:"):
             return line.split(":", 1)[1].strip()
     return "Classification not found"
+
 
 def main():
     """
@@ -41,7 +42,9 @@ def main():
         for file in files:
             if file.endswith(".json"):
                 ast_path = os.path.join(root, file)
-                source_path = os.path.relpath(ast_path, args.ast_dir)[:-5] # Remove .json
+                source_path = os.path.relpath(ast_path, args.ast_dir)[
+                    :-5
+                ]  # Remove .json
                 classification = classify_ast(ast_path)
                 report[source_path] = classification
 
@@ -49,6 +52,7 @@ def main():
         json.dump(report, f, indent=2)
 
     print(f"Classification report generated at {args.output_file}")
+
 
 if __name__ == "__main__":
     main()

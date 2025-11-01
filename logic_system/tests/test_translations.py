@@ -2,7 +2,7 @@ import unittest
 from collections import Counter
 from logic_system.src.formulas import Prop, Implies, And, Or, Not, OfCourse, LinImplies, With, Plus
 from logic_system.src.sequents import Sequent
-from logic_system.src.ill import contraction as ill_contraction, ILLSequent, axiom as ill_axiom
+from logic_system.src.ill import contraction as ill_contraction, ILLSequent
 from logic_system.src import lj
 from logic_system.src.translations import lj_to_lk, translate_formula_lj_to_ill, lj_to_ill_proof
 from logic_system.src.proof import ProofTree, Rule

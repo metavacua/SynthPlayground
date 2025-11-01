@@ -81,9 +81,7 @@ def main():
         symbol["references"] = find_references(symbol["name"], search_path)
 
     # 4. Generate the report
-    report = generate_report(
-        target_file, content, defined_symbols, imported_symbols
-    )
+    report = generate_report(target_file, content, defined_symbols, imported_symbols)
 
     output_filename = f"{os.path.basename(target_file)}.json"
     with open(output_filename, "w") as f:

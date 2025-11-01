@@ -5,6 +5,7 @@ This tool is designed to be idempotent and handle nested while loops.
 
 import argparse
 import os
+import sys
 import ast
 
 

@@ -57,8 +57,7 @@ class Logger:
         # Create an empty log file if it does not exist, to prevent the auditor
         # from flagging a fresh environment as a broken system.
         if not os.path.exists(self.log_path):
-            with open(self.log_path, "a") as f:
-                pass
+            open(self.log_path, "a").close()
 
     def _load_schema(self, schema_path):
         """

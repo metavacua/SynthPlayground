@@ -67,7 +67,7 @@ class UDCOrchestrator:
         """
         Parses and runs the UDC plan until it halts or a limit is exceeded.
         """
-        print(f"--- UDC Orchestrator Initializing ---")
+        print("--- UDC Orchestrator Initializing ---")
         print(f"Plan: {self.plan_path}")
         print(
             f"Limits: {self.max_instructions} instructions, {self.max_memory_cells} memory cells, {self.max_time_s}s wall-clock time."

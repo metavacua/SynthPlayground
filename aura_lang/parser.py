@@ -1,10 +1,8 @@
-from aura_lang.lexer import Lexer, Token
 from aura_lang.ast import (
-    Program, Statement, Expression, LetStatement, ReturnStatement,
-    ExpressionStatement, Identifier, IntegerLiteral, StringLiteral,
-    InfixExpression, CallExpression, FunctionDefinition, BlockStatement,
-    IfStatement, ForStatement, ListLiteral, MemberAccess, UseStatement,
-    PrintStatement
+    Program, LetStatement, ReturnStatement, ExpressionStatement, Identifier,
+    IntegerLiteral, StringLiteral, InfixExpression, CallExpression,
+    FunctionDefinition, BlockStatement, IfStatement, ForStatement,
+    ListLiteral, MemberAccess, PrintStatement
 )
 
 # Operator precedence levels

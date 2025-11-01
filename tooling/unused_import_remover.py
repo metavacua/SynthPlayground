@@ -1,13 +1,14 @@
 import argparse
 import subprocess
 
+
 def main():
     parser = argparse.ArgumentParser(
         description="Detects and removes unused imports from Python files."
     )
     parser.add_argument(
         "file",
-        nargs='*',
+        nargs="*",
         help="The file to process.",
     )
     parser.add_argument(
@@ -24,6 +25,7 @@ def main():
     command.extend(args.file)
 
     subprocess.run(command)
+
 
 if __name__ == "__main__":
     main()

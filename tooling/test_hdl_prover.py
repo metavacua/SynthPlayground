@@ -1,8 +1,7 @@
 import unittest
 from tooling.hdl_parser import parse_sequent
 from tooling.hdl_prover import prove_sequent
-from logic_system.src.formulas import Prop, LinImplies
-from logic_system.src.sequents import Sequent
+
 
 class TestHDLProver(unittest.TestCase):
     def test_prove_sequent_axiom(self):
@@ -20,5 +19,6 @@ class TestHDLProver(unittest.TestCase):
         sequent = parse_sequent(s)
         self.assertFalse(prove_sequent(sequent))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

@@ -1,9 +1,8 @@
 import rdflib
-from rdflib.namespace import RDF, RDFS
+from rdflib.namespace import RDFS
 from dbpedia_client import get_relevant_links
 import argparse
 import json
-import re
 import sys
 import os
 

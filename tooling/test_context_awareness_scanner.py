@@ -1,6 +1,6 @@
 import unittest
-import os
 from tooling.context_awareness_scanner_logic import analyze_python_file
+
 
 class TestContextAwarenessScanner(unittest.TestCase):
     def test_analyze_python_file(self):
@@ -29,5 +29,6 @@ def my_function():
         self.assertIn("os", import_names)
         self.assertIn("sys", import_names)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

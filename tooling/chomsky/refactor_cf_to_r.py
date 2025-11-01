@@ -7,6 +7,7 @@ import ast
 import os
 import sys
 
+
 def is_lexer_like(node):
     """
     Determines if a function definition node is lexer-like.
@@ -25,6 +26,7 @@ def is_lexer_like(node):
             has_yield = True
 
     return has_loop and has_yield
+
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
@@ -72,6 +74,7 @@ def main(argv=None):
         for node in other_nodes:
             f.write(ast.unparse(node))
             f.write("\n\n")
+
 
 if __name__ == "__main__":
     main()

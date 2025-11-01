@@ -1,10 +1,10 @@
 import unittest
-import os
 from tooling.dependency_graph_generator_logic import (
     parse_package_json_content,
     parse_requirements_txt_content,
     generate_dependency_graph_from_projects,
 )
+
 
 class TestDependencyGraphGenerator(unittest.TestCase):
     def test_parse_package_json_content(self):
@@ -25,7 +25,9 @@ class TestDependencyGraphGenerator(unittest.TestCase):
 requests==2.25.1
 numpy
 """
-        info = parse_requirements_txt_content(content, "/path/to/requirements.txt", "/path")
+        info = parse_requirements_txt_content(
+            content, "/path/to/requirements.txt", "/path"
+        )
         self.assertEqual(info["project_name"], "to")
         self.assertEqual(info["dependencies"], ["requests", "numpy"])
 
@@ -48,5 +50,6 @@ numpy
         self.assertEqual(len(graph["nodes"]), 4)
         self.assertEqual(len(graph["edges"]), 3)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

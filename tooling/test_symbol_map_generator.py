@@ -55,29 +55,24 @@ class TestSymbolMapGenerator(unittest.TestCase):
     @patch("tooling.symbol_map_generator.subprocess.run")
     def test_generate_with_ctags_success(self, mock_subprocess_run):
         """Test successful symbol generation using a mocked ctags call."""
-
-        # Mock the ctags command to "create" a file with dummy JSON-lines output
-        def side_effect(*args, **kwargs):
-            ctags_output_path = args[0][args[0].index("-f") + 1]
-            with open(ctags_output_path, "w") as f:
-                f.write(
-                    '{"_type": "tag", "name": "MyClass", "path": "module.py", "kind": "class"}\n'
-                )
-                f.write(
-                    '{"_type": "tag", "name": "my_method", "path": "module.py", "kind": "method"}\n'
-                )
-            return subprocess.CompletedProcess(args=args, returncode=0)
-
-        mock_subprocess_run.side_effect = side_effect
+        ctags_output = (
+            '{"_type": "tag", "name": "MyClass", "path": "module.py", "kind": "class"}\n'
+            '{"_type": "tag", "name": "my_method", "path": "module.py", "kind": "method"}\n'
+        )
+        mock_subprocess_run.return_value = subprocess.CompletedProcess(
+            args=[], returncode=0, stdout=ctags_output
+        )
 
         original_cwd = os.getcwd()
         os.chdir(self.test_dir)
         try:
-            result = generate_symbols_with_ctags(".")
+            output_path = "knowledge_core/symbols.json"
+            result = generate_symbols_with_ctags(output_path)
             self.assertTrue(result)
-            self.assertTrue(os.path.exists("knowledge_core/symbols.json"))
 
-            with open("knowledge_core/symbols.json", "r") as f:
+            self.assertTrue(os.path.exists(output_path))
+
+            with open(output_path, "r") as f:
                 data = json.load(f)
 
             self.assertIn("symbols", data)

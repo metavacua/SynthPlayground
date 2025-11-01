@@ -6,29 +6,29 @@ from tree_sitter import Language, Parser
 
 # Mapping from file extensions to tree-sitter language names
 LANGUAGE_MAPPING = {
-    '.py': 'python',
-    '.js': 'javascript',
-    '.ts': 'typescript',
-    '.tsx': 'tsx',
-    '.rb': 'ruby',
-    '.go': 'go',
-    '.rs': 'rust',
+    ".py": "python",
+    ".js": "javascript",
+    ".ts": "typescript",
+    ".tsx": "tsx",
+    ".rb": "ruby",
+    ".go": "go",
+    ".rs": "rust",
 }
 
 # Mapping from language name to the grammar module
 LANGUAGE_GRAMMARS = {
-    'python': 'tree_sitter_python',
-    'javascript': 'tree_sitter_javascript',
-    'typescript': 'tree_sitter_typescript',
-    'tsx': 'tree_sitter_typescript',  # tsx is handled by the typescript parser
-    'ruby': 'tree_sitter_ruby',
-    'go': 'tree_sitter_go',
-    'rust': 'tree_sitter_rust',
+    "python": "tree_sitter_python",
+    "javascript": "tree_sitter_javascript",
+    "typescript": "tree_sitter_typescript",
+    "tsx": "tree_sitter_typescript",  # tsx is handled by the typescript parser
+    "ruby": "tree_sitter_ruby",
+    "go": "tree_sitter_go",
+    "rust": "tree_sitter_rust",
 }
 
 
 # Directories to exclude from AST generation
-EXCLUDE_DIRS = {'.git', 'knowledge_core', 'node_modules', '.venv'}
+EXCLUDE_DIRS = {".git", "knowledge_core", "node_modules", ".venv"}
 
 
 def node_to_dict(node):
@@ -37,11 +37,11 @@ def node_to_dict(node):
     including field names for children.
     """
     result = {
-        'type': node.type,
-        'start_byte': node.start_byte,
-        'end_byte': node.end_byte,
-        'start_point': node.start_point,
-        'end_point': node.end_point,
+        "type": node.type,
+        "start_byte": node.start_byte,
+        "end_byte": node.end_byte,
+        "start_point": node.start_point,
+        "end_point": node.end_point,
     }
 
     children = []
@@ -49,13 +49,13 @@ def node_to_dict(node):
         child_dict = node_to_dict(child_node)
         field_name = node.field_name_for_child(i)
         if field_name:
-            child_dict['field'] = field_name
+            child_dict["field"] = field_name
         children.append(child_dict)
 
-    result['children'] = children
+    result["children"] = children
 
     if not node.children:
-        result['text'] = node.text.decode('utf8')
+        result["text"] = node.text.decode("utf8")
     return result
 
 
@@ -73,7 +73,7 @@ def get_parser_for_language(language_name):
         # We can dynamically import them.
         grammar_module = importlib.import_module(grammar_module_name)
 
-        if language_name == 'tsx':
+        if language_name == "tsx":
             language = Language(grammar_module.language_tsx())
         else:
             language = Language(grammar_module.language())
@@ -85,7 +85,7 @@ def get_parser_for_language(language_name):
         return None
 
 
-def generate_asts_for_repo(root_dir='.', output_dir='knowledge_core/asts'):
+def generate_asts_for_repo(root_dir=".", output_dir="knowledge_core/asts"):
     """
     Traverses a repository, generates ASTs for supported files, and saves them.
     """
@@ -109,7 +109,7 @@ def generate_asts_for_repo(root_dir='.', output_dir='knowledge_core/asts'):
                 file_path = os.path.join(root, file_name)
 
                 try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
+                    with open(file_path, "r", encoding="utf-8") as f:
                         code = f.read()
 
                     tree = parser.parse(bytes(code, "utf8"))
@@ -118,14 +118,13 @@ def generate_asts_for_repo(root_dir='.', output_dir='knowledge_core/asts'):
 
                     # Create the mirrored directory structure in the output directory
                     relative_path = os.path.relpath(file_path, root_dir)
-                    output_file_path = os.path.join(
-                        output_dir, f"{relative_path}.json")
+                    output_file_path = os.path.join(output_dir, f"{relative_path}.json")
                     output_file_dir = os.path.dirname(output_file_path)
 
                     if not os.path.exists(output_file_dir):
                         os.makedirs(output_file_dir)
 
-                    with open(output_file_path, 'w', encoding='utf-8') as f:
+                    with open(output_file_path, "w", encoding="utf-8") as f:
                         json.dump(ast_dict, f, indent=2)
 
                     print(f"Successfully generated AST for: {file_path}")

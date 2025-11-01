@@ -22,12 +22,12 @@ automation scripts for the agent.
 # when the script is executed directly.
 import sys
 from pathlib import Path
+
 # Add the project root directory (the parent of 'tooling') to the path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 # --- End Path Correction ---
 
 import argparse
-import subprocess
 from tooling.aura_logic import dynamic_agent_call_tool
 
 
@@ -52,8 +52,8 @@ def main():
         sys.exit(1)
 
     print(f"Executing Aura script: {args.filepath}")
-    l = Lexer(source_code)
-    p = Parser(l)
+    lexer = Lexer(source_code)
+    p = Parser(lexer)
     program = p.parse_program()
 
     if p.errors:

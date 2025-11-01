@@ -1,7 +1,6 @@
 import unittest
 import planning
 from tooling.aal.domain import Domain, Fluent, Action, CausalLaw
-from typing import FrozenSet
 
 class TestPlanning(unittest.TestCase):
     def setUp(self):

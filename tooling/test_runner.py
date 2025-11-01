@@ -7,6 +7,7 @@ import sys
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(ROOT_DIR)
 
+
 def run_tests(test_dir):
     """
     Discovers and runs all tests in the specified directory.
@@ -23,10 +24,9 @@ def run_tests(test_dir):
     if not result.wasSuccessful():
         sys.exit(1)
 
+
 def main():
-    parser = argparse.ArgumentParser(
-        description="Run all tests in the repository."
-    )
+    parser = argparse.ArgumentParser(description="Run all tests in the repository.")
     parser.add_argument(
         "--test-dir",
         default="tests",
@@ -34,6 +34,7 @@ def main():
     )
     args = parser.parse_args()
     run_tests(args.test_dir)
+
 
 if __name__ == "__main__":
     main()

@@ -1,10 +1,7 @@
 import unittest
 import os
 import tempfile
-from unittest.mock import patch, MagicMock
 from rdflib import Graph, Literal, URIRef
-
-from tooling import knowledge_integrator
 
 
 class TestKnowledgeIntegrator(unittest.TestCase):
@@ -29,6 +26,7 @@ class TestKnowledgeIntegrator(unittest.TestCase):
     def tearDown(self):
         """Clean up the temporary directory."""
         self.test_dir.cleanup()
+
 
 if __name__ == "__main__":
     unittest.main()

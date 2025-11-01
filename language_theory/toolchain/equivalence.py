@@ -1,6 +1,3 @@
-import argparse
-import sys
-import importlib.util
 import itertools
 
 def check_equivalence(original_func, controller_func, input_ranges, fuel_factor=1.5):

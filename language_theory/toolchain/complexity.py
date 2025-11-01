@@ -1,6 +1,5 @@
 import sys
 import argparse
-import importlib.util
 import os
 
 class ComplexityTracer:

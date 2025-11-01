@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 from tooling.master_control_cli import main as master_control_main
 from tooling.state import AgentState
 
@@ -15,7 +15,9 @@ class TestMasterControlCli(unittest.TestCase):
 
         master_control_main()
 
-        mock_run_agent_loop.assert_called_once_with(task_description="Test task", tools=unittest.mock.ANY)
+        mock_run_agent_loop.assert_called_once_with(
+            task_description="Test task", tools=unittest.mock.ANY
+        )
 
 
 if __name__ == "__main__":

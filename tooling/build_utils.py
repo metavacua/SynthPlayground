@@ -2,7 +2,6 @@ import os
 import sys
 import json
 import re
-import jsonschema
 
 
 def find_files(pattern, base_dir=".", recursive=True):

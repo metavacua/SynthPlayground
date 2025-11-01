@@ -7,16 +7,50 @@ from tooling.self_improvement_cli import (
     analyze_protocol_violations,
 )
 
+
 class TestSelfImprovementCli(unittest.TestCase):
 
     def setUp(self):
         self.log_file = "test_activity.log.jsonl"
         with open(self.log_file, "w") as f:
-            f.write(json.dumps({"task_id": "task-1", "action": {"type": "PLAN_UPDATE"}}) + "\n")
-            f.write(json.dumps({"task_id": "task-1", "action": {"type": "PLAN_UPDATE"}}) + "\n")
-            f.write(json.dumps({"task_id": "task-2", "action": {"type": "TOOL_EXEC"}, "outcome": {"status": "SUCCESS"}}) + "\n")
-            f.write(json.dumps({"task_id": "task-3", "action": {"type": "TOOL_EXEC"}, "outcome": {"status": "FAILURE"}}) + "\n")
-            f.write(json.dumps({"task_id": "task-4", "action": {"type": "SYSTEM_FAILURE"}, "outcome": {"message": "reset_all"}}) + "\n")
+            f.write(
+                json.dumps({"task_id": "task-1", "action": {"type": "PLAN_UPDATE"}})
+                + "\n"
+            )
+            f.write(
+                json.dumps({"task_id": "task-1", "action": {"type": "PLAN_UPDATE"}})
+                + "\n"
+            )
+            f.write(
+                json.dumps(
+                    {
+                        "task_id": "task-2",
+                        "action": {"type": "TOOL_EXEC"},
+                        "outcome": {"status": "SUCCESS"},
+                    }
+                )
+                + "\n"
+            )
+            f.write(
+                json.dumps(
+                    {
+                        "task_id": "task-3",
+                        "action": {"type": "TOOL_EXEC"},
+                        "outcome": {"status": "FAILURE"},
+                    }
+                )
+                + "\n"
+            )
+            f.write(
+                json.dumps(
+                    {
+                        "task_id": "task-4",
+                        "action": {"type": "SYSTEM_FAILURE"},
+                        "outcome": {"message": "reset_all"},
+                    }
+                )
+                + "\n"
+            )
 
     def tearDown(self):
         os.remove(self.log_file)
@@ -34,6 +68,7 @@ class TestSelfImprovementCli(unittest.TestCase):
     def test_analyze_protocol_violations(self):
         violations = analyze_protocol_violations(self.log_file)
         self.assertEqual(violations, ["task-4"])
+
 
 if __name__ == "__main__":
     unittest.main()

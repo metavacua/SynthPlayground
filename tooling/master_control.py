@@ -30,14 +30,11 @@ import json
 import os
 from datetime import datetime
 import subprocess
-import tempfile
 import time
 import yaml
 
 from tooling.state import AgentState, PlanContext
-from tooling.research import execute_research_protocol
 from tooling.plan_parser import parse_plan, Command
-from tooling.document_scanner import scan_documents
 from tooling.chomsky.lba_validator import LBAValidator
 from utils.logger import Logger
 
@@ -123,7 +120,15 @@ class MasterControlGraph:
         try:
             # Run the system health audit
             audit_report_path = "audit_report.md"
-            subprocess.run(["python", "tooling/auditor.py", "health", f"--session-start-time={agent_state.session_start_time}"], check=True)
+            subprocess.run(
+                [
+                    "python",
+                    "tooling/auditor.py",
+                    "health",
+                    f"--session-start-time={agent_state.session_start_time}",
+                ],
+                check=True,
+            )
             with open(audit_report_path, "r") as f:
                 audit_report = f.read()
 
@@ -134,7 +139,9 @@ class MasterControlGraph:
                         "content": f"CRITICAL: System health audit failed. Halting current task to address the following issues:\n{audit_report}",
                     }
                 )
-                agent_state.current_thought = "System health audit failed. Must address issues before proceeding."
+                agent_state.current_thought = (
+                    "System health audit failed. Must address issues before proceeding."
+                )
                 return self.get_trigger("ORIENTING", "ERROR")
 
             # Use the provided list_files tool to scan the directory
@@ -171,7 +178,9 @@ class MasterControlGraph:
             # Consult knowledge core artifacts
             knowledge_core_path = "knowledge_core"
             symbols_path = os.path.join(knowledge_core_path, "symbols.json")
-            dependency_graph_path = os.path.join(knowledge_core_path, "dependency_graph.json")
+            dependency_graph_path = os.path.join(
+                knowledge_core_path, "dependency_graph.json"
+            )
 
             if os.path.exists(symbols_path):
                 with open(symbols_path, "r") as f:
@@ -194,7 +203,9 @@ class MasterControlGraph:
                         "content": f"Loaded dependency graph from {dependency_graph_path}",
                     }
                 )
-                agent_state.current_thought = "Loaded dependency graph from knowledge core."
+                agent_state.current_thought = (
+                    "Loaded dependency graph from knowledge core."
+                )
                 agent_state.dependency_graph = dependency_graph
 
             # Analyze the most recent post-mortem report
@@ -775,12 +786,15 @@ class MasterControlGraph:
                     )
 
             # Pre-Submission "Clock-Out" Verification
-            post_mortem_exists = os.path.exists(final_path) and os.path.getsize(final_path) > 0
+            post_mortem_exists = (
+                os.path.exists(final_path) and os.path.getsize(final_path) > 0
+            )
 
             logs = logger.get_logs()
             tool_exec_after_session_start = any(
-                log.get("action", {}).get("type") == "TOOL_EXEC" and
-                datetime.fromisoformat(log["timestamp"]) > datetime.fromisoformat(agent_state.session_start_time)
+                log.get("action", {}).get("type") == "TOOL_EXEC"
+                and datetime.fromisoformat(log["timestamp"])
+                > datetime.fromisoformat(agent_state.session_start_time)
                 for log in logs
             )
 

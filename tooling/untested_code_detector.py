@@ -1,5 +1,6 @@
 import os
 
+
 def find_untested_code(source_dir, test_dir):
     untested_files = []
     source_files = set()
@@ -7,7 +8,11 @@ def find_untested_code(source_dir, test_dir):
 
     for root, _, files in os.walk(source_dir):
         for file in files:
-            if file.endswith(".py") and not file.startswith("test_") and not file.startswith("__init__"):
+            if (
+                file.endswith(".py")
+                and not file.startswith("test_")
+                and not file.startswith("__init__")
+            ):
                 source_files.add(os.path.join(root, file))
 
     for root, _, files in os.walk(test_dir):
@@ -22,6 +27,7 @@ def find_untested_code(source_dir, test_dir):
             untested_files.append(source_file)
 
     return untested_files, source_files, test_files
+
 
 def main():
     source_dir = "tooling"
@@ -44,6 +50,7 @@ def main():
     if coverage < threshold:
         print(f"Test coverage is below the required threshold of {threshold}%.")
         exit(1)
+
 
 if __name__ == "__main__":
     main()

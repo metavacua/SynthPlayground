@@ -19,8 +19,8 @@ MEDIUM, HIGH) and the specific loops that were identified.
 import argparse
 import json
 import re
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple
+from dataclasses import dataclass
+from typing import Dict, List, Optional
 
 
 # A simple representation of a parsed instruction
@@ -67,11 +67,11 @@ class HaltingHeuristicAnalyzer:
             if not analyzed_loops:
                 reason = "No loops detected. Termination risk is considered low."
             else:
-                if any(l.risk == "HIGH" for l in analyzed_loops):
+                if any(loop.risk == "HIGH" for loop in analyzed_loops):
                     overall_risk = "HIGH"
-                elif any(l.risk == "MEDIUM" for l in analyzed_loops):
+                elif any(loop.risk == "MEDIUM" for loop in analyzed_loops):
                     overall_risk = "MEDIUM"
-                elif any(l.risk == "UNKNOWN" for l in analyzed_loops):
+                elif any(loop.risk == "UNKNOWN" for loop in analyzed_loops):
                     overall_risk = "UNKNOWN"
 
                 reason = f"Analysis complete. Found {len(analyzed_loops)} loop(s)."

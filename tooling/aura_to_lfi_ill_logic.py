@@ -1,20 +1,4 @@
-from aura_lang.ast import (
-    LetStatement,
-    IntegerLiteral,
-    StringLiteral,
-    InfixExpression,
-    Identifier,
-    CallExpression,
-    PrintStatement,
-    IfStatement,
-    ForStatement,
-    ReturnStatement,
-    FunctionDefinition,
-    BlockStatement,
-    ExpressionStatement,
-)
 from lfi_ill import (
-    LetTensor,
     Int,
     Var,
     Fun,
@@ -22,13 +6,11 @@ from lfi_ill import (
     TensorPair,
     Promotion,
     Dereliction,
-    LetWhyNot,
-    WhyNot,
-    Par,
-    LetPar,
     Unit,
     Case,
     String,
+    TFun,
+    TUnit,
 )
 
 

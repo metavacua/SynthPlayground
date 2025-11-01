@@ -24,11 +24,16 @@ that membership in the language `L_V` is decidable.
 """
 import re
 
-# The Z-combinator is a version of the Y-combinator that works in
-# strictly-evaluated languages like Python by delaying evaluation.
-# It takes a non-recursive function generator and returns a recursive function,
-# providing a mechanism for self-reference without explicit self-naming.
-Z = lambda f: (lambda x: f(lambda *args: x(x)(*args)))(lambda x: f(lambda *args: x(x)(*args)))
+
+def Z(f):
+    """
+    The Z-combinator is a version of the Y-combinator that works in
+    strictly-evaluated languages like Python by delaying evaluation.
+    It takes a non-recursive function generator and returns a recursive function,
+    providing a mechanism for self-reference without explicit self-naming.
+    """
+    return (lambda x: f(lambda *args: x(x)(*args)))(lambda x: f(lambda *args: x(x)(*args)))
+
 
 def decider_generator(self):
     """
@@ -66,11 +71,13 @@ def decider_generator(self):
 
     return decider_logic
 
+
 # Use the Z-combinator to construct the final, recursive decider.
 # V_Decider is now a total recursive function that decides membership in L_V.
 # Its existence and successful execution for any input is the computational
 # witness to the decidability of the self-defining language L_V.
 V_Decider = Z(decider_generator)
+
 
 if __name__ == "__main__":
     print("--- Computational Witness for a Decidable, Self-Defining Theory (V) ---")
@@ -82,7 +89,7 @@ if __name__ == "__main__":
         "abc",          # Base case (Axiom), False
         "IsInL(xy)",    # Recursive case (Inference), inner is True
         "IsInL(xyz)",   # Recursive case (Inference), inner is False
-        "IsInL(IsInL(zz))" # Doubly recursive case, inner is True
+        "IsInL(IsInL(zz))"  # Doubly recursive case, inner is True
     ]
 
     for s in test_strings:

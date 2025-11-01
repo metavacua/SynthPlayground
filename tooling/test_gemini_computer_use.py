@@ -6,7 +6,7 @@ from tooling.gemini_computer_use import main
 class TestGeminiComputerUse(unittest.TestCase):
 
     @patch("tooling.gemini_computer_use.sync_playwright")
-    @patch("tooling.gemini_computer_use.GeminiApiClient")
+    @patch("utils.gemini_api.client.GeminiApiClient")
     @patch("tooling.gemini_computer_use.genai.GenerativeModel")
     def test_main(
         self, mock_generative_model, mock_gemini_api_client, mock_sync_playwright

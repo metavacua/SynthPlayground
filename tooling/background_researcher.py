@@ -6,7 +6,6 @@ to a temporary file that the main agent can poll.
 
 import time
 import sys
-import os
 from tooling.background_researcher_logic import generate_research_result
 
 

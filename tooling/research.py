@@ -4,15 +4,24 @@ constraints. It acts as a dispatcher, calling the appropriate tool (e.g.,
 read_file, google_search) based on the specified target and scope.
 """
 
-import time
 
 # These tools are expected to be available in the global scope where this
 # module is executed, injected by the agent's runtime environment.
 # We define them here as placeholders to avoid linting errors.
-read_file = lambda filepath: None
-list_files = lambda path: None
-google_search = lambda query: None
-view_text_website = lambda url: None
+def read_file(filepath):
+    pass
+
+
+def list_files(path):
+    pass
+
+
+def google_search(query):
+    pass
+
+
+def view_text_website(url):
+    pass
 
 
 def execute_research_protocol(constraints: dict) -> str:

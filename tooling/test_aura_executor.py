@@ -1,7 +1,7 @@
 import unittest
 import os
 import shutil
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch, MagicMock
 from tooling.aura_executor import main as aura_main
 
 
@@ -29,7 +29,7 @@ class TestAuraExecutor(unittest.TestCase):
             "test_aura_executor_dir/test.aura",
         ],
     )
-    @patch("tooling.aura_executor.subprocess.run")
+    @patch("tooling.aura_logic.subprocess.run")
     def test_successful_execution(self, mock_subprocess_run, mock_argv):
         """Tests that a valid Aura script executes successfully."""
         with open(self.aura_file_path, "w") as f:

@@ -23,8 +23,6 @@ def execute_plan(filepath: str):
         with open(filepath, "r") as f:
             plan_content = f.read()
 
-        from tooling.plan_parser import Command
-
         commands = parse_plan(plan_content)
 
         for cmd in commands:

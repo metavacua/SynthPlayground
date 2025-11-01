@@ -1,5 +1,4 @@
 import json
-from collections import defaultdict
 import os
 
 class Grammar:
@@ -48,7 +47,6 @@ class Grammar:
                     self._traverse_ast(ast_root)
             except (json.JSONDecodeError, FileNotFoundError) as e:
                 print(f"Error parsing AST file {self.filepath}: {e}", file=sys.stderr)
-                pass
         else:
             # Legacy grammar file parsing
             try:

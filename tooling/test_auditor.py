@@ -2,9 +2,9 @@ import unittest
 import os
 import sys
 import json
-from unittest.mock import patch, mock_open
+from unittest.mock import patch
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from tooling.auditor import (
     run_protocol_audit,
     run_plan_registry_audit,
@@ -106,8 +106,8 @@ class TestUnifiedAuditor(unittest.TestCase):
     )
     def test_knowledge_audit(self, mock_path, mock_extractor):
         # Mock the SymbolExtractor to return no references for a specific symbol
-        mock_extractor.return_value.find_all_references.side_effect = (
-            lambda symbol: [] if symbol == "dead_symbol" else ["ref1"]
+        mock_extractor.return_value.find_all_references.side_effect = lambda symbol: (
+            [] if symbol == "dead_symbol" else ["ref1"]
         )
 
         with open(self.knowledge_lessons, "w") as f:
@@ -205,7 +205,10 @@ class TestHealthAuditor(unittest.TestCase):
                 log_entry = {
                     "task_id": "suspicious-task",
                     "timestamp": fresh_time,
-                    "action": {"type": "TOOL_EXEC", "details": {"tool_name": f"test_{i}"}},
+                    "action": {
+                        "type": "TOOL_EXEC",
+                        "details": {"tool_name": f"test_{i}"},
+                    },
                     "outcome": {"status": "SUCCESS"},
                 }
                 f.write(json.dumps(log_entry) + "\n")
@@ -278,4 +281,6 @@ class TestHealthAuditor(unittest.TestCase):
             f.write("# Post-Mortem\nThis is a complete post-mortem.")
 
         report = run_health_audit(self.session_start_time.isoformat())
-        self.assertIn("✅ **No new critical or warning level issues found.**", report[0])
+        self.assertIn(
+            "✅ **No new critical or warning level issues found.**", report[0]
+        )

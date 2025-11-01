@@ -6,6 +6,7 @@ import unittest
 import ast
 from tooling.chomsky.refactor import CodeRefactorer
 
+
 class TestCodeRefactorer(unittest.TestCase):
 
     def setUp(self):
@@ -35,7 +36,10 @@ def ackermann(m, n):
         return ackermann(m - 1, ackermann(m, n - 1, fuel - 1), fuel - 1)"""
 
         # We'll compare the ASTs to avoid issues with formatting differences
-        self.assertEqual(ast.dump(ast.parse(new_source)), ast.dump(ast.parse(expected_source)))
+        self.assertEqual(
+            ast.dump(ast.parse(new_source)), ast.dump(ast.parse(expected_source))
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

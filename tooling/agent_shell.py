@@ -17,12 +17,12 @@ import json
 import importlib.util
 import atexit
 import subprocess
+import argparse
 
 # Add the root directory to the path to allow for absolute imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from tooling.master_control import MasterControlGraph
-from tooling.state import AgentState
 from utils.logger import Logger
 from tooling.udc_orchestrator import UDCOrchestrator
 from tooling.session_manager import load_session, save_session
@@ -66,9 +66,6 @@ def load_tools_from_manifest(manifest_path="tooling/tool_manifest.json"):
     return tools
 
 
-
-
-
 def run_agent_loop(
     task_description: str, tools: dict, model: str = None, plan_content: str = None
 ):
@@ -86,7 +83,6 @@ def run_agent_loop(
     schema_path = os.path.join(os.path.dirname(__file__), "..", "LOGGING_SCHEMA.md")
     logger = Logger(schema_path=schema_path)
     mcg = MasterControlGraph()
-    planning_attempts = 0
 
     print(f"--- Starting Agent Task: {task_description} ({agent_state.task}) ---")
     if model:

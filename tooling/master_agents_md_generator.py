@@ -1,4 +1,3 @@
-
 import argparse
 import json
 import os
@@ -77,10 +76,13 @@ def generate_enriched_protocols(knowledge_path: str) -> str:
             if "rules" in protocol and protocol["rules"]:
                 protocol_contents.append("**Rules:**\n")
                 for rule in protocol["rules"]:
-                    protocol_contents.append(f"- **`{rule['rule_id']}`**: {rule['description']}")
+                    protocol_contents.append(
+                        f"- **`{rule['rule_id']}`**: {rule['description']}"
+                    )
             protocol_contents.append("\n---")
 
     return "\n".join(protocol_contents)
+
 
 def generate_yaml_ld_string(knowledge_path: str) -> str:
     """
@@ -96,9 +98,7 @@ def generate_yaml_ld_string(knowledge_path: str) -> str:
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description="Generates the master AGENTS.md file."
-    )
+    parser = argparse.ArgumentParser(description="Generates the master AGENTS.md file.")
     parser.add_argument(
         "--build-config",
         required=True,

@@ -1,7 +1,5 @@
 import ast
 import os
-import re
-import json
 import markdown
 from typing import List, Dict, Optional
 
@@ -214,9 +212,7 @@ def generate_tool_readme_content(filename: str, docstring: str) -> str:
     return f"# Tool: `{filename}`\n\n{docstring}"
 
 
-def generate_tooling_readme_content(
-    docstrings: Dict[str, str]
-) -> str:
+def generate_tooling_readme_content(docstrings: Dict[str, str]) -> str:
     parts = [
         "# Tooling Directory Documentation\n\nThis document provides an overview of the tools available in the `tooling/` directory. It is automatically generated from the docstrings of the tools.\n"
     ]

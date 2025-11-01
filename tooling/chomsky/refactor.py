@@ -10,6 +10,7 @@ recursion into provably terminating versions.
 import ast
 from tooling.chomsky.analyzer import CodeAnalyzer
 
+
 class GeneralToPrimitiveTransformer(ast.NodeTransformer):
     """
     An AST transformer that converts a general recursive function to a
@@ -54,6 +55,7 @@ class GeneralToPrimitiveTransformer(ast.NodeTransformer):
                 )
             )
         return node
+
 
 class CodeRefactorer:
     """

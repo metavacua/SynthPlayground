@@ -4,14 +4,15 @@ Tests for the session_manager tool.
 
 import unittest
 import os
-import json
 from tooling.state import AgentState
 from tooling.session_manager import save_session, load_session
+
 
 class TestSessionManager(unittest.TestCase):
     def setUp(self):
         self.session_file = "test_session.json"
         import tooling.session_manager
+
         tooling.session_manager.SESSION_FILE = self.session_file
 
     def tearDown(self):
@@ -44,5 +45,6 @@ class TestSessionManager(unittest.TestCase):
         self.assertIsInstance(loaded_state, AgentState)
         self.assertIsNone(loaded_state.task)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

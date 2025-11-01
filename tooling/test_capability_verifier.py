@@ -1,7 +1,7 @@
 import unittest
 import os
 import shutil
-from unittest.mock import patch, MagicMock, call
+from unittest.mock import patch, MagicMock
 from tooling.capability_verifier import main as capability_verifier_main
 
 
@@ -33,7 +33,7 @@ class TestCapabilityVerifier(unittest.TestCase):
         """Tests the full successful workflow of the capability verifier."""
         mock_subprocess_run.side_effect = [
             MagicMock(returncode=1, stderr="Initial failure"),  # Step 1
-            MagicMock(returncode=0, stdout="Knowledge compiler success"), # Step 2a
+            MagicMock(returncode=0, stdout="Knowledge compiler success"),  # Step 2a
             MagicMock(returncode=0, stdout="Orchestrator success"),  # Step 2b
             MagicMock(returncode=0, stdout="Final success"),  # Step 3
             MagicMock(returncode=0, stdout="Regression success"),  # Step 4

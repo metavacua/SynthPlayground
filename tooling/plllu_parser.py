@@ -13,7 +13,7 @@ The main function `parse_formula` takes a string and returns a simple AST
 import sys
 import os
 import ply.yacc as yacc
-from tooling.plllu_lexer import tokens, lexer
+from tooling.plllu_lexer import lexer
 
 # Ensure the project root is in the Python path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))

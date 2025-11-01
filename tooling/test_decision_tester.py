@@ -1,7 +1,7 @@
 import unittest
 import os
 import subprocess
-from unittest.mock import patch, mock_open
+
 
 class TestDecisionTester(unittest.TestCase):
 
@@ -25,22 +25,34 @@ class TestDecisionTester(unittest.TestCase):
 
     def test_run_test_pass(self):
         result = subprocess.run(
-            ["python3", "tooling/decision_tester.py", self.test_file_path, "a_tool", '{"arg1": "value1"}'],
+            [
+                "python3",
+                "tooling/decision_tester.py",
+                self.test_file_path,
+                "a_tool",
+                '{"arg1": "value1"}',
+            ],
             capture_output=True,
-            text=True
+            text=True,
         )
         self.assertEqual(result.returncode, 0)
         self.assertIn("--- Test DMT-001 Passed ---", result.stdout)
 
     def test_run_test_fail(self):
         result = subprocess.run(
-            ["python3", "tooling/decision_tester.py", self.test_file_path, "a_tool", '{"arg1": "wrong_value"}'],
+            [
+                "python3",
+                "tooling/decision_tester.py",
+                self.test_file_path,
+                "a_tool",
+                '{"arg1": "wrong_value"}',
+            ],
             capture_output=True,
-            text=True
+            text=True,
         )
         self.assertEqual(result.returncode, 0)
         self.assertIn("--- Test DMT-001 Failed ---", result.stdout)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

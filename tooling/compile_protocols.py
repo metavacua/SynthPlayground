@@ -1,4 +1,3 @@
-
 import os
 import sys
 import yaml
@@ -30,14 +29,28 @@ def compile_module(module_dir):
         with open(CONTEXT_FILE, "r") as f:
             context_data = json.load(f).get("@context")
         if not context_data:
-            print(f"Warning: Could not find '@context' in {CONTEXT_FILE}", file=sys.stderr)
+            print(
+                f"Warning: Could not find '@context' in {CONTEXT_FILE}", file=sys.stderr
+            )
             context_data = {}
     except (IOError, json.JSONDecodeError) as e:
-        print(f"Warning: Could not load context from {CONTEXT_FILE}: {e}", file=sys.stderr)
+        print(
+            f"Warning: Could not load context from {CONTEXT_FILE}: {e}", file=sys.stderr
+        )
         context_data = {}
 
-    all_md_files = sorted([os.path.join(module_dir, f) for f in find_files(".protocol.md", base_dir=module_dir, recursive=False)])
-    all_yaml_files = sorted([os.path.join(module_dir, f) for f in find_files(".protocol.yaml", base_dir=module_dir, recursive=False)])
+    all_md_files = sorted(
+        [
+            os.path.join(module_dir, f)
+            for f in find_files(".protocol.md", base_dir=module_dir, recursive=False)
+        ]
+    )
+    all_yaml_files = sorted(
+        [
+            os.path.join(module_dir, f)
+            for f in find_files(".protocol.yaml", base_dir=module_dir, recursive=False)
+        ]
+    )
 
     md_files_content = []
     for file_path in all_md_files:
@@ -49,26 +62,36 @@ def compile_module(module_dir):
         try:
             with open(file_path, "r") as f:
                 protocol_data = yaml.safe_load(f)
-                protocol_data['@context'] = context_data
+                protocol_data["@context"] = context_data
                 for rule in protocol_data.get("rules", []):
                     if "executable_code" in rule:
-                        execute_code(rule["executable_code"], protocol_data["protocol_id"], rule["rule_id"])
+                        execute_code(
+                            rule["executable_code"],
+                            protocol_data["protocol_id"],
+                            rule["rule_id"],
+                        )
                 yaml_files_content.append(protocol_data)
         except yaml.YAMLError as e:
-            print(f"Warning: Could not decode YAML from {file_path}: {e}", file=sys.stderr)
+            print(
+                f"Warning: Could not decode YAML from {file_path}: {e}", file=sys.stderr
+            )
 
-    final_output_string = generate_agents_md_content(module_name, md_files_content, yaml_files_content, schema)
+    final_output_string = generate_agents_md_content(
+        module_name, md_files_content, yaml_files_content, schema
+    )
     temp_target_file = target_file + ".tmp"
     with open(temp_target_file, "w") as f:
         f.write(final_output_string)
     os.rename(temp_target_file, target_file)
     print(f"Successfully compiled AGENTS.md for {module_name} module at {target_file}")
 
+
 def main():
     """Main function to find and compile all protocol modules."""
     for root, dirs, files in os.walk(PROTOCOLS_DIR):
         if "module.json" in files:
             compile_module(root)
+
 
 if __name__ == "__main__":
     main()

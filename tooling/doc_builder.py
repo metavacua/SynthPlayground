@@ -14,7 +14,6 @@ from utils.file_system_utils import find_files
 from tooling.doc_builder_logic import (
     parse_file_for_docs,
     generate_system_docs_content,
-    generate_readme_content,
     generate_pages_content,
     generate_tool_readme_content,
     generate_tooling_readme_content,
@@ -79,7 +78,6 @@ def generate_tool_readme(source_file: str, output_file: str):
     print(f"Current working directory: {os.getcwd()}")
     print(f"Source file: {source_file}")
     print(f"Output file: {output_file}")
-    original_dir = os.getcwd()
     try:
         with open(source_file, "r", encoding="utf-8") as f:
             content = f.read()

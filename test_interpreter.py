@@ -22,7 +22,6 @@ from appl_ast import (
     TString,
 )
 from interpreter import interpret, InterpError, Closure
-from planning import PlanningError
 
 
 class TestInterpreter(unittest.TestCase):

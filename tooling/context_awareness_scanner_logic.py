@@ -1,5 +1,4 @@
 import ast
-import json
 
 
 def analyze_python_file(content):

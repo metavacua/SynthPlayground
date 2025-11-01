@@ -25,7 +25,6 @@ and understand the structure of the repository without having to read every file
 import argparse
 import os
 import json
-import glob
 import subprocess
 import ast
 import sys
@@ -60,11 +59,14 @@ def generate_symbols_with_ctags(output_path, root_dir="."):
     ]
 
     try:
-        subprocess.run(command, check=True, capture_output=True, text=True)
+        result = subprocess.run(
+            command, check=True, capture_output=True, text=True
+        )
         print(f"ctags ran successfully. Symbol map generated at {output_path}")
+
         # ctags output is not a single JSON object, but one per line. We need to wrap it.
-        with open(output_path, "r") as f:
-            lines = f.readlines()
+        # If the command was successful but there's no output, result.stdout will be empty.
+        lines = result.stdout.strip().split("\n") if result.stdout else []
 
         # Check if the file is empty
         if not lines:
@@ -72,7 +74,8 @@ def generate_symbols_with_ctags(output_path, root_dir="."):
             symbols_data = {"symbols": []}
         else:
             # Parse each line as JSON and wrap in a list
-            json_lines = [json.loads(line) for line in lines]
+            # It's possible for a line to be empty if the stdout is just whitespace
+            json_lines = [json.loads(line) for line in lines if line]
             symbols_data = {"symbols": json_lines}
 
         with open(output_path, "w") as f:

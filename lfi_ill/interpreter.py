@@ -1,5 +1,4 @@
 import enum
-from lfi_ill.ast import *
 
 class ParaconsistentTruth(enum.Enum):
     """

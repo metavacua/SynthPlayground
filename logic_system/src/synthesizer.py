@@ -1,7 +1,7 @@
 from . import ill
-from .proof import ProofTree, Rule
+from .proof import ProofTree
 from .sequents import Sequent
-from .formulas import Formula, LinImplies, OfCourse, With, Plus, Tensor
+from .formulas import LinImplies, OfCourse, Tensor
 from collections import Counter
 from itertools import combinations
 

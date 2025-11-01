@@ -11,6 +11,7 @@ This script currently includes the following checks:
 
 The script is designed to be easily extensible with additional checks.
 """
+
 import subprocess
 import sys
 import os
@@ -45,8 +46,9 @@ def check_docstrings():
                             if not ast.get_docstring(tree):
                                 missing_docstrings.append(filepath)
                         except (SyntaxError, UnicodeDecodeError) as e:
-                            print(f"Warning: Could not parse {filepath}. Skipping. Error: {e}")
-
+                            print(
+                                f"Warning: Could not parse {filepath}. Skipping. Error: {e}"
+                            )
 
     if missing_docstrings:
         print("--- Failure: Docstring Enforcement failed. ---")
@@ -76,25 +78,35 @@ def main():
     # run_command("make test", "Unit Tests")
 
     print("--- Checking for Guardian Protocol Review Document ---")
-    find_review_files_command = "git diff --name-only --cached | grep 'reviews/.*\\.md' || true"
+    find_review_files_command = (
+        "git diff --name-only --cached | grep 'reviews/.*\\.md' || true"
+    )
 
     # We need a different run_command that returns the output
     try:
-        result = subprocess.run(find_review_files_command, check=True, shell=True, text=True, capture_output=True)
+        result = subprocess.run(
+            find_review_files_command,
+            check=True,
+            shell=True,
+            text=True,
+            capture_output=True,
+        )
         review_files_output = result.stdout.strip()
         if review_files_output:
-            review_files = review_files_output.split('\n')
+            review_files = review_files_output.split("\n")
             for review_file in review_files:
                 if review_file:
-                    run_command(f"python3 tooling/guardian.py {review_file}", f"Validating review file: {review_file}")
+                    run_command(
+                        f"python3 tooling/guardian.py {review_file}",
+                        f"Validating review file: {review_file}",
+                    )
         else:
             print("--- No review file found. Skipping validation. ---")
     except subprocess.CalledProcessError as e:
-        print(f"--- Failure: Could not find review files. ---")
+        print("--- Failure: Could not find review files. ---")
         print(f"--- STDOUT ---\n{e.stdout}")
         print(f"--- STDERR ---\n{e.stderr}")
         sys.exit(1)
-
 
     print("--- All Pre-Submission Checks Passed Successfully! ---")
 

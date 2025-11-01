@@ -59,7 +59,9 @@ def extract_lessons_from_postmortem(postmortem_content: str) -> list:
                 # The lesson is whatever comes before "**Action:**"
                 lesson = item[: action_match.start()].strip()
                 # If there's an explicit **Lesson:**, prefer that.
-                lesson_explicit_match = re.search(r"\*\*Lesson:\*\*(.*)", lesson, re.DOTALL)
+                lesson_explicit_match = re.search(
+                    r"\*\*Lesson:\*\*(.*)", lesson, re.DOTALL
+                )
                 if lesson_explicit_match:
                     lesson = lesson_explicit_match.group(1).strip()
             else:
@@ -92,7 +94,10 @@ def extract_lessons_from_postmortem(postmortem_content: str) -> list:
             return []  # Ignore placeholder lessons
 
         action_text = "No specific action was proposed."
-        if analysis_section == placeholder_text or action_text == "No specific action was proposed.":
+        if (
+            analysis_section == placeholder_text
+            or action_text == "No specific action was proposed."
+        ):
             return []
 
         return [
@@ -243,7 +248,7 @@ def main():
             for line in f:
                 try:
                     lesson = json.loads(line)
-                    existing_lessons.add(lesson['lesson'])
+                    existing_lessons.add(lesson["lesson"])
                 except json.JSONDecodeError:
                     continue
 
@@ -256,12 +261,14 @@ def main():
                 if lessons:
                     unique_lessons = []
                     for lesson in lessons:
-                        if lesson['lesson'] not in existing_lessons:
+                        if lesson["lesson"] not in existing_lessons:
                             unique_lessons.append(lesson)
-                            existing_lessons.add(lesson['lesson'])
+                            existing_lessons.add(lesson["lesson"])
 
                     if unique_lessons:
-                        print(f"Found {len(unique_lessons)} new, unique lesson(s) in '{filepath}'.")
+                        print(
+                            f"Found {len(unique_lessons)} new, unique lesson(s) in '{filepath}'."
+                        )
                         for entry in unique_lessons:
                             f.write(json.dumps(entry) + "\n")
                         new_lessons_added += len(unique_lessons)

@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 
+
 def run_command(command):
     """Runs a command and prints its output."""
     print(f"Running command: {' '.join(command)}")
@@ -12,6 +13,7 @@ def run_command(command):
     if result.stderr:
         print(result.stderr, file=sys.stderr)
     result.check_returncode()
+
 
 def main():
     """
@@ -45,13 +47,22 @@ def main():
     # 4. Refactor (if applicable)
     if witness_name == "v_theory_decider":
         print("\n--- Refactoring ---")
-        run_command(["python3", "-m", "language_theory.toolchain.refactor", witness_file, "decider_generator"])
+        run_command(
+            [
+                "python3",
+                "-m",
+                "language_theory.toolchain.refactor",
+                witness_file,
+                "decider_generator",
+            ]
+        )
 
     # --- Knowledge Management Toolchain ---
     print("\n--- Running Knowledge Management Toolchain ---")
     run_command(["python3", "tooling/builder.py", "--target", "knowledge-integrate"])
 
     print("\n--- Witness Processing Complete ---")
+
 
 if __name__ == "__main__":
     main()
