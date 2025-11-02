@@ -1,0 +1,17 @@
+{
+  "file_path": "poc/unbounded_loop.py",
+  "content": "def infinite_loop():\n    i = 0\n    while True:\n        i += 1\n",
+  "defined_symbols": [
+    {
+      "type": "function",
+      "name": "infinite_loop",
+      "lineno": 1,
+      "references": [
+        "./poc/unbounded_loop.py",
+        "./tooling/halting_heuristic_analyzer.py",
+        "./tooling/proof_synthesizer.py"
+      ]
+    }
+  ],
+  "imported_symbols": []
+}

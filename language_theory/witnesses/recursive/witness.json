@@ -1,0 +1,18 @@
+{
+    "name": "Recursive Languages",
+    "chomsky_type": "N/A (Subset of Type-0)",
+    "description": "The class of languages for which a Turing Machine exists that halts on all inputs (a decider). This represents all theoretically solvable problems.",
+    "recognizer": {
+        "type": "Halting Turing Machine"
+    },
+    "structural_witnesses": [
+        {
+            "description": "Provably terminating loops",
+            "example": "for i in range(n): ..."
+        },
+        {
+            "description": "Recursion with a well-founded ordering (e.g., primitive recursion)",
+            "example": "def f(n): if n == 0: return 1; return f(n-1)"
+        }
+    ]
+}

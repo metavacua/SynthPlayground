@@ -1,0 +1,7 @@
+tooling/problem_classifier.py: --file poc/unbounded_loop.py
+---
+tooling/refactoring_engine.py: --file poc/unbounded_loop.py --source-class RE --target-class Recursive
+---
+tooling/proof_synthesizer.py: --file poc/bounded_loop.py --property termination
+---
+message_user: The non-terminating function in poc/unbounded_loop.py has been refactored. The terminating version is in poc/bounded_loop.py, and a formal proof of termination is in poc/termination_proof.json
