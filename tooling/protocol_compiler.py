@@ -8,8 +8,23 @@ import yaml
 def compile_protocols(output_file):
     """
     Compiles all protocol source files in the 'protocols/' directory into a single
-    YAML-LD file.
+    YAML-LD file, preserving the header and any intermediate content of the output file.
     """
+    header = ""
+    intermediate_content = ""
+    in_header = True
+    if os.path.exists(output_file):
+        with open(output_file, "r") as f:
+            for line in f:
+                if in_header:
+                    header += line
+                    if line.strip() == "---":
+                        in_header = False
+                elif line.strip() == "```yaml":
+                    break
+                else:
+                    intermediate_content += line
+
     all_protocols = {"@graph": []}
 
     # Use glob to find all protocol YAML files
@@ -39,7 +54,11 @@ def compile_protocols(output_file):
                 )
 
     with open(output_file, "w") as f:
+        f.write(header)
+        f.write(intermediate_content)
+        f.write("```yaml\n")
         yaml.dump(all_protocols, f, default_flow_style=False)
+        f.write("```\n")
 
 
 def main():
