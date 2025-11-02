@@ -456,7 +456,32 @@ The agent's behavior is governed by the following set of formal protocols, which
 ---
 
 ```yaml
-'@context': protocols/protocol.context.jsonld
+'@context':
+  '@context':
+    agents: proto:agents
+    associated_tools:
+      '@id': proto:associatedTool
+      '@type': '@id'
+    dct: http://purl.org/dc/terms/
+    description: schema:description
+    details: rdfs:comment
+    enforcement: proto:enforcement
+    files: proto:files
+    flags: proto:flags
+    implementation: proto:implementation
+    name: schema:name
+    patterns: proto:hasPattern
+    proto: https://factory.ai/ns/protocol/
+    protocol_id: '@id'
+    rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#
+    rdfs: http://www.w3.org/2000/01/rdf-schema#
+    rule_id: '@id'
+    rules: proto:hasRule
+    schema: https://schema.org/
+    scope: proto:scope
+    type: '@type'
+    version: schema:version
+    xsd: http://www.w3.org/2001/XMLSchema#
 '@graph':
 - description: A protocol for greeting the world.
   protocol_id: HELLO-WORLD-001
@@ -550,6 +575,15 @@ The agent's behavior is governed by the following set of formal protocols, which
     tags:
     - testing
     validation_command: python3 tooling/validate_tdd.py
+  - description: A TDD enforcement tool must be used to ensure that all new code is
+      developed using TDD.
+    enforcement: The agent must verify that a TDD enforcement tool is configured in
+      the repository.
+    rule_id: tdd-enforcement-tool
+    tags:
+    - testing
+    - tooling
+    validation_command: ls .claude/tdd-guard/settings.json
   version: 1.0.0
 - associated_tools:
   - tooling/guardian.py
@@ -724,19 +758,6 @@ The agent's behavior is governed by the following set of formal protocols, which
       occurs.
     rule_id: agents-md-self-awareness
   version: 1.0.0
-- associated_tools:
-  - tooling/self_correction_orchestrator.py
-  description: A protocol that empowers the agent to modify its own core tooling,
-    enabling a recursive self-improvement cycle.
-  protocol_id: meta-mutation-001
-  rules:
-  - description: The agent is authorized to use the 'modify_tooling' action within
-      the self_correction_orchestrator.py to apply patches to its own source code
-      or other tools in the tooling/ directory. This action must be triggered by a
-      structured lesson in knowledge_core/lessons.jsonl.
-    enforcement: The self_correction_orchestrator.py must validate that the 'modify_tooling'
-      action is well-formed and targets a valid file within the tooling/ directory.
-    rule_id: authorize-tooling-modification
 - associated_tools:
   - reset_all
   description: A specific, high-priority protocol that forbids the Code Review Critic
@@ -1414,6 +1435,19 @@ The agent's behavior is governed by the following set of formal protocols, which
     tags:
     - self_improvement
   version: 1.0.0
+- associated_tools:
+  - tooling/self_correction_orchestrator.py
+  description: A protocol that empowers the agent to modify its own core tooling,
+    enabling a recursive self-improvement cycle.
+  protocol_id: meta-mutation-001
+  rules:
+  - description: The agent is authorized to use the 'modify_tooling' action within
+      the self_correction_orchestrator.py to apply patches to its own source code
+      or other tools in the tooling/ directory. This action must be triggered by a
+      structured lesson in knowledge_core/lessons.jsonl.
+    enforcement: The self_correction_orchestrator.py must validate that the 'modify_tooling'
+      action is well-formed and targets a valid file within the tooling/ directory.
+    rule_id: authorize-tooling-modification
 - description: A demonstration of a protocol with executable code.
   protocol_id: executable-demo-001
   rules:
@@ -1425,4 +1459,3 @@ The agent's behavior is governed by the following set of formal protocols, which
     - experimental
   version: 1.0.0
 ```
-\n\n---\n## CHC-Verified Protocols\n\nThe following protocols have been migrated to the new, verifiable CHC framework.\n\n- **AGENT-BOOTSTRAP-001**\n- **DEVELOPMENT-CYCLE-001**\n- **STANDING-ORDERS-001**\n- **TDD-PROTOCOL-001**\n- **TESTING-PROTOCOL-001**\n
