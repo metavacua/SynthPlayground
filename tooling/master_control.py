@@ -696,7 +696,7 @@ class MasterControlGraph:
             # Here, we'll just populate it with placeholder data.
             report_content = template.replace("[TASK_ID]", task_id)
             report_content = report_content.replace(
-                "[COMPLETION_DATE]", str(datetime.date.today())
+                "[COMPLETION_DATE]", str(datetime.now().date())
             )
             report_content = report_content.replace(
                 "[SUCCESS | FAILURE]", "SUCCESS"
@@ -730,7 +730,7 @@ class MasterControlGraph:
                 "| 2 | `another_tool` | *...* | *...* |", ""
             )
 
-            final_path = f"postmortems/{datetime.date.today()}-{task_id}.md"
+            final_path = f"postmortems/{datetime.now().date()}-{task_id}.md"
             os.makedirs(os.path.dirname(final_path), exist_ok=True)
             with open(final_path, "w") as f:
                 f.write(report_content)

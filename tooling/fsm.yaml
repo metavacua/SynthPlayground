@@ -51,6 +51,21 @@ transitions:
   trigger: result_failed
 - dest: EXECUTING
   source: EXECUTING
+  trigger: read_op
+- dest: EXECUTING
+  source: EXECUTING
+  trigger: write_op
+- dest: EXECUTING
+  source: EXECUTING
+  trigger: delete_op
+- dest: EXECUTING
+  source: EXECUTING
+  trigger: move_op
+- dest: EXECUTING
+  source: EXECUTING
+  trigger: tool_exec
+- dest: EXECUTING
+  source: EXECUTING
   trigger: step_op
 - dest: GENERATING_CODE
   source: EXECUTING
