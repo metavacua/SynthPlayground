@@ -14,10 +14,12 @@ import uuid
 import os
 import sys
 import json
+import yaml
 import importlib.util
 import atexit
 import subprocess
 import argparse
+import time
 
 # Add the root directory to the path to allow for absolute imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -30,7 +32,7 @@ from tooling.goal_generator import find_best_plan
 from tooling.agent_logic import find_fsm_transition
 
 
-def load_tools_from_manifest(manifest_path="tooling/tool_manifest.json"):
+def load_tools_from_manifest(manifest_path="tooling/tool_manifest.yaml"):
     """Loads tools from the tool manifest."""
     tools = {}
     if not os.path.exists(manifest_path):
@@ -38,7 +40,7 @@ def load_tools_from_manifest(manifest_path="tooling/tool_manifest.json"):
         return tools
 
     with open(manifest_path, "r") as f:
-        manifest = json.load(f)
+        manifest = yaml.safe_load(f)
 
     for tool_def in manifest.get("tools", []):
         tool_name = tool_def.get("name")
@@ -175,19 +177,40 @@ The research findings have been integrated.
 
                 tool_function = tools.get(tool_name)
                 if tool_function:
-                    try:
-                        # This is a simplified approach to argument parsing.
-                        # A more robust solution would inspect the tool's signature.
-                        if tool_args:
-                            step_result = tool_function(tool_args)
-                        else:
-                            step_result = tool_function()
-                        trigger = mcg.do_execution(
-                            agent_state, str(step_result) if step_result else "", logger
-                        )
-                    except Exception as e:
-                        agent_state.error = f"Error executing tool '{tool_name}': {e}"
-                        mcg.current_state = "ERROR"
+                    max_retries = 3
+                    retry_delay = 2  # in seconds
+                    for attempt in range(max_retries):
+                        try:
+                            # This is a simplified approach to argument parsing.
+                            # A more robust solution would inspect the tool's signature.
+                            if tool_args:
+                                step_result = tool_function(tool_args)
+                            else:
+                                step_result = tool_function()
+                            trigger = mcg.do_execution(
+                                agent_state,
+                                str(step_result) if step_result else "",
+                                logger,
+                            )
+                            break  # If successful, exit the retry loop
+                        except (
+                            TimeoutError,
+                            ConnectionResetError,
+                        ) as e:  # Specify retryable errors
+                            print(
+                                f"[AgentShell] Tool '{tool_name}' failed with a transient error: {e}. Retrying ({attempt + 1}/{max_retries})..."
+                            )
+                            if attempt + 1 == max_retries:
+                                agent_state.error = f"Error executing tool '{tool_name}' after {max_retries} attempts: {e}"
+                                mcg.current_state = "ERROR"
+                            time.sleep(retry_delay)
+                        except Exception as e:  # Non-retryable errors
+                            agent_state.error = (
+                                f"Error executing tool '{tool_name}': {e}"
+                            )
+                            mcg.current_state = "ERROR"
+                            break  # Exit loop immediately on fatal error
+                    if mcg.current_state == "ERROR":
                         continue
                 else:
                     agent_state.error = f"Tool '{tool_name}' not found."
