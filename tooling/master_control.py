@@ -112,7 +112,7 @@ class MasterControlGraph:
             "Phase 1",
             agent_state.task,
             -1,
-            "SESSION_START",
+            "TASK_START",
             {"state": "ORIENTING"},
             "SUCCESS",
             context=_get_log_context(agent_state),
