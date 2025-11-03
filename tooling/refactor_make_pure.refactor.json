@@ -1,0 +1,7 @@
+{
+    "name": "Refactor to Pure Function",
+    "source": "Regular Languages",
+    "target": "Pure Functions",
+    "description": "Transforms a function with side effects (e.g., logging) into a pure function by extracting the side effect.",
+    "tool": "tooling/refactor_make_pure.py"
+}

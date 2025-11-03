@@ -1,0 +1,7 @@
+{
+    "name": "Decidable Refactoring (Add Fuel)",
+    "source": "Recursively Enumerable Languages",
+    "target": "Recursive Languages",
+    "description": "Transforms a program with a potentially non-terminating loop into a provably terminating one by introducing a 'fuel' parameter.",
+    "tool": "tooling/refactor_add_fuel.py"
+}

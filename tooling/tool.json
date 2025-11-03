@@ -1,0 +1,6 @@
+{
+    "name": "LLM Service",
+    "capability": "Natural Language Processing",
+    "description": "Delegates a task that requires natural language understanding or creative code generation to an external LLM.",
+    "tool": "tooling/llm_service.py"
+}

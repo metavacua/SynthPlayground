@@ -9,6 +9,12 @@ of how an agent would execute a plan.
 
 import subprocess
 import sys
+import os
+import shlex
+
+# Add the repository root to the Python path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from tooling.plan_parser import parse_plan
 
 
@@ -29,14 +35,14 @@ def execute_plan(filepath: str):
             tool_name = cmd.tool_name
             arguments = cmd.args_text
 
+            print(f"Executing tool: {tool_name} with args: {arguments}")
             if tool_name == "message_user":
                 print(f"[USER MESSAGE]\n{arguments}")
-            elif tool_name == "run_in_bash_session":
-                command_to_run = arguments
-                print(f"$ {command_to_run}")
+            else:
+                command_to_run = [sys.executable, tool_name] + shlex.split(arguments)
+                print(f"$ {' '.join(command_to_run)}")
                 result = subprocess.run(
                     command_to_run,
-                    shell=True,
                     capture_output=True,
                     text=True,
                     encoding="utf-8",
@@ -45,8 +51,6 @@ def execute_plan(filepath: str):
                     print(result.stdout.strip())
                 if result.stderr:
                     print(f"[STDERR]\n{result.stderr.strip()}")
-            else:
-                print(f"Unknown tool: {tool_name}")
 
     except FileNotFoundError:
         print(f"Error: Plan file not found at '{filepath}'")

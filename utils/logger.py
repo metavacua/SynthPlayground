@@ -39,7 +39,10 @@ class Logger:
     """
 
     def __init__(
-        self, schema_path="LOGGING_SCHEMA.md", log_path="logs/activity.log.jsonl"
+        self,
+        schema_path="LOGGING_SCHEMA.md",
+        log_path="logs/activity.log.jsonl",
+        session_id=None,
     ):
         """
         Initializes the Logger, loading the schema and setting up the session.
@@ -47,10 +50,11 @@ class Logger:
         Args:
             schema_path (str): The path to the Markdown file containing the logging schema.
             log_path (str): The path to the log file to be written.
+            session_id (str, optional): An existing session ID to use. If None, a new one is generated.
         """
         self.log_path = log_path
         self.schema = self._load_schema(schema_path)
-        self.session_id = str(uuid.uuid4())
+        self.session_id = session_id if session_id else str(uuid.uuid4())
         # Ensure the log directory exists
         os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
 

@@ -30,82 +30,24 @@ KNOWLEDGE_CORE_PATH = "knowledge_core/lessons.jsonl"
 def extract_lessons_from_postmortem(postmortem_content: str) -> list:
     """
     Parses a post-mortem report to extract lessons learned.
-    Handles multiple possible section headers and formats.
+    Handles the new, more structured format.
     """
-    # Look for the primary "Lessons Learned" section first
-    lessons_section_match = re.search(
-        r"## (?:3\.\s+Corrective Actions & Lessons Learned|5\.\s+Proposed Corrective Actions)\n(.+?)(?:\n---|\Z)",
-        postmortem_content,
-        re.DOTALL,
+    lesson_match = re.search(
+        r"\*\*Lesson:\*\*\s*(.+?)\n", postmortem_content, re.DOTALL
+    )
+    action_match = re.search(
+        r"\*\*Action:\*\*\s*(.+?)\n", postmortem_content, re.DOTALL
     )
 
-    if lessons_section_match:
-        lessons_section = lessons_section_match.group(1)
-        # Pattern to capture each numbered list item
-        item_pattern = re.compile(
-            r"^\d\.\s+(.*?)(?=\n^\d\.\s+|\Z)", re.DOTALL | re.MULTILINE
-        )
-        items = item_pattern.findall(lessons_section)
+    if lesson_match and action_match:
+        lesson = lesson_match.group(1).strip()
+        action = action_match.group(1).strip()
 
-        cleaned_lessons = []
-        for item in items:
-            lesson = ""
-            action = ""
-
-            action_match = re.search(r"\*\*Action:\*\*(.*)", item, re.DOTALL)
-
-            if action_match:
-                action = action_match.group(1).strip()
-                # The lesson is whatever comes before "**Action:**"
-                lesson = item[: action_match.start()].strip()
-                # If there's an explicit **Lesson:**, prefer that.
-                lesson_explicit_match = re.search(
-                    r"\*\*Lesson:\*\*(.*)", lesson, re.DOTALL
-                )
-                if lesson_explicit_match:
-                    lesson = lesson_explicit_match.group(1).strip()
-            else:
-                # No "**Action:**" found, so the whole item is the action.
-                action = item.strip()
-
-            # If we failed to find a lesson text, generate one.
-            if not lesson:
-                lesson = f"A corrective action was proposed: {action}"
-
-            if lesson or action:
-                cleaned_lessons.append(
-                    {
-                        "lesson": lesson.replace("\n", " "),
-                        "action": action.replace("\n", " "),
-                    }
-                )
-        return cleaned_lessons
-
-    # If the primary section is not found, look for the "Agent Analysis" section
-    analysis_section_match = re.search(
-        r"## Agent Analysis\n(.+?)(?:\n---|\Z)",
-        postmortem_content,
-        re.DOTALL,
-    )
-    if analysis_section_match:
-        analysis_section = analysis_section_match.group(1).strip()
-        placeholder_text = "The task was a test run to verify the new logging and artifact generation. It completed successfully."
-        if analysis_section == placeholder_text:
-            return []  # Ignore placeholder lessons
-
-        action_text = "No specific action was proposed."
-        if (
-            analysis_section == placeholder_text
-            or action_text == "No specific action was proposed."
-        ):
+        # Ignore placeholder content
+        if "N/A" in lesson or "N/A" in action:
             return []
 
-        return [
-            {
-                "lesson": analysis_section,
-                "action": action_text,
-            }
-        ]
+        return [{"lesson": lesson, "action": action}]
 
     return []
 
@@ -224,58 +166,84 @@ def process_postmortem_file(filepath):
     return formatted_lessons
 
 
+def make_hashable(obj):
+    if isinstance(obj, dict):
+        return tuple(sorted((k, make_hashable(v)) for k, v in obj.items()))
+    if isinstance(obj, list):
+        return tuple(make_hashable(elem) for elem in obj)
+    return obj
+
+
+def get_lesson_key(lesson_data: dict) -> tuple:
+    """
+    Creates a unique, hashable key for a lesson based on its content,
+    ignoring metadata like IDs and dates.
+    """
+    key_content = {
+        "lesson": lesson_data.get("lesson"),
+        "action": lesson_data.get("action"),
+    }
+    return make_hashable(key_content)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Parses post-mortem reports and compiles lessons into a knowledge base."
     )
     parser.add_argument(
-        "--source-dir",
+        "--source-path",
         required=True,
-        help="Directory containing the post-mortem markdown files.",
+        help="Path to a post-mortem markdown file or a directory containing them.",
     )
     args = parser.parse_args()
-
-    if not os.path.isdir(args.source_dir):
-        print(f"Error: Source directory not found at '{args.source_dir}'")
-        return
+    source_path = args.source_path
 
     # Ensure the knowledge_core directory exists
     os.makedirs(os.path.dirname(KNOWLEDGE_CORE_PATH), exist_ok=True)
 
-    existing_lessons = set()
+    existing_lesson_keys = set()
     if os.path.exists(KNOWLEDGE_CORE_PATH):
         with open(KNOWLEDGE_CORE_PATH, "r") as f:
             for line in f:
                 try:
                     lesson = json.loads(line)
-                    existing_lessons.add(lesson["lesson"])
-                except json.JSONDecodeError:
+                    existing_lesson_keys.add(get_lesson_key(lesson))
+                except (json.JSONDecodeError, AttributeError):
                     continue
+
+    files_to_process = []
+    if os.path.isdir(source_path):
+        files_to_process = [
+            os.path.join(source_path, f)
+            for f in os.listdir(source_path)
+            if f.endswith(".md")
+        ]
+    elif os.path.isfile(source_path):
+        if source_path.endswith(".md"):
+            files_to_process.append(source_path)
+    else:
+        print(f"Error: The path '{source_path}' is not a valid file or directory.")
+        return
+
+    if not files_to_process:
+        print(f"No markdown files found at '{source_path}'.")
+        return
 
     new_lessons_added = 0
     with open(KNOWLEDGE_CORE_PATH, "a") as f:
-        for filename in os.listdir(args.source_dir):
-            if filename.endswith(".md"):
-                filepath = os.path.join(args.source_dir, filename)
-                lessons = process_postmortem_file(filepath)
-                if lessons:
-                    unique_lessons = []
-                    for lesson in lessons:
-                        if lesson["lesson"] not in existing_lessons:
-                            unique_lessons.append(lesson)
-                            existing_lessons.add(lesson["lesson"])
-
-                    if unique_lessons:
-                        print(
-                            f"Found {len(unique_lessons)} new, unique lesson(s) in '{filepath}'."
-                        )
-                        for entry in unique_lessons:
-                            f.write(json.dumps(entry) + "\n")
-                        new_lessons_added += len(unique_lessons)
+        for filepath in files_to_process:
+            lessons = process_postmortem_file(filepath)
+            for lesson_data in lessons:
+                lesson_key = get_lesson_key(lesson_data)
+                if lesson_key not in existing_lesson_keys:
+                    print(f"Found new, unique lesson in '{filepath}'.")
+                    f.write(json.dumps(lesson_data) + "\n")
+                    existing_lesson_keys.add(lesson_key)
+                    new_lessons_added += 1
 
     if new_lessons_added > 0:
         print(
-            f"Successfully compiled a total of {new_lessons_added} new lesson(s) into '{KNOWLEDGE_CORE_PATH}'."
+            f"Successfully compiled {new_lessons_added} new lesson(s) into '{KNOWLEDGE_CORE_PATH}'."
         )
     else:
         print("No new lessons found to compile.")

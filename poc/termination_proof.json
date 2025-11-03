@@ -1,0 +1,27 @@
+{
+  "conclusion": "The function `infinite_loop` terminates.",
+  "rule": "Loop Variant",
+  "premises": [
+    {
+      "conclusion": "The `fuel` variable is a loop variant.",
+      "rule": "Definition of Loop Variant",
+      "premises": [
+        {
+          "conclusion": "`fuel` is an integer that is always non-negative.",
+          "rule": "Code Inspection",
+          "premises": []
+        },
+        {
+          "conclusion": "`fuel` decreases with each iteration of the loop.",
+          "rule": "Code Inspection",
+          "premises": []
+        }
+      ]
+    },
+    {
+      "conclusion": "The loop terminates when `fuel` reaches 0.",
+      "rule": "Loop Condition",
+      "premises": []
+    }
+  ]
+}

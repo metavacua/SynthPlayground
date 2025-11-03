@@ -1,0 +1,18 @@
+{
+    "name": "Pure Functions",
+    "description": "The class of functions that have no side effects (e.g., no I/O, no modification of external state) and whose output depends only on their input.",
+    "structural_witnesses": [
+        {
+            "description": "No file I/O operations (e.g., open(), print())",
+            "example": null
+        },
+        {
+            "description": "No modification of global or non-local variables",
+            "example": null
+        },
+        {
+            "description": "Return value depends only on arguments",
+            "example": "def add(a, b): return a + b"
+        }
+    ]
+}

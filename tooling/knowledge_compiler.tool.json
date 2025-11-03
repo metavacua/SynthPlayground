@@ -1,0 +1,6 @@
+{
+    "name": "Knowledge Compiler",
+    "capability": "Extract Lesson from Failure",
+    "description": "Analyzes a post-mortem report to extract a machine-readable lesson from a task failure.",
+    "tool": "tooling/knowledge_compiler.py"
+}

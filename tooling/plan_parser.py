@@ -49,7 +49,7 @@ def parse_plan(plan_content: str) -> List[Command]:
             args_text = "\n".join(lines[1:]).strip()
         else:
             parts = first_line.split(":", 1)
-            tool_name = parts[0]
+            tool_name = parts[0].strip()
             args_text = ""
 
             if len(parts) > 1:

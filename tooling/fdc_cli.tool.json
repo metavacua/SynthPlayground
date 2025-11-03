@@ -1,0 +1,7 @@
+{
+    "name": "FDC Closer",
+    "capability": "Generate Post-Mortem",
+    "description": "Formally closes a Finite Development Cycle task, generating a post-mortem report upon failure.",
+    "tool": "tooling/fdc_cli.py",
+    "subcommand": "close"
+}
