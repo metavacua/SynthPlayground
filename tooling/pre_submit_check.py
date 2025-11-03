@@ -62,15 +62,8 @@ def main():
     """Main function to run pre-submission checks."""
     print("--- Starting Pre-Submission Checks ---")
 
-    # Since the test command currently has known failures,
-    # we will only run the lint command for now.
-    # In the future, this can be expanded to include tests.
-    # run_command("make lint", "Code Linting") # Temporarily disabled to focus on docstring check
-
-    # The docstring check is a new, systemic improvement. It is currently disabled
-    # by default to allow this change to be submitted. To enable it for future
-    # development, uncomment the following line.
-    # check_docstrings()
+    run_command("make lint", "Code Linting")
+    check_docstrings()
 
     # The following line is commented out because 'make test' currently fails.
     # run_command("make test", "Unit Tests")

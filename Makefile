@@ -33,10 +33,10 @@ install:
 	pip install -r requirements.txt
 
 format:
-	python3 -m black .
+	python3 tooling/lint.py --fix
 
 lint:
-	python3 -m flake8 .
+	python3 tooling/lint.py
 
 test:
 	python3 -m pytest

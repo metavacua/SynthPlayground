@@ -39,5 +39,5 @@ tree-sitter-typescript
 tree-sitter-ruby
 tree-sitter-go
 tree-sitter-rust
-pyflakes
-autoflake
+pyflakes==3.4.0
+autoflake==2.3.1
