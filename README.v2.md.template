@@ -1,0 +1,42 @@
+# Autonomous Agent Protocol System
+
+This repository contains a sophisticated, protocol-driven framework for the development and operation of autonomous AI agents. The system is designed to ensure that agent behavior is predictable, verifiable, and aligned with a set of core principles, which are encoded in a series of formal protocols.
+
+## Key Features
+
+- **Protocol-Driven Architecture**: The agent's behavior is governed by a set of formal protocols, which are defined in the `protocols/` directory. These protocols are compiled into a single, machine-readable `AGENTS.md` file, which serves as the agent's primary operational guide.
+- **Comprehensive Tooling**: The `tooling/` directory contains a rich set of tools for building, testing, and maintaining the agent and its protocols. This includes a protocol compiler, a documentation builder, a test runner, and a variety of other utilities.
+- **Self-Improvement Capabilities**: The agent is designed to be self-improving, with protocols that allow it to modify its own tooling and even its own protocols. This is a core feature of the system, and it is governed by a strict set of safeguards.
+- **Formal Verification**: The system is designed to be formally verifiable, with a focus on decidability and computational tractability. This is a key aspect of the project, and it is reflected in the design of the agent's planning and execution language.
+
+## Getting Started
+
+To get started with this project, you will need to have Python 3 installed. You can then install the necessary dependencies by running the following command:
+
+```bash
+pip install -r tooling/requirements.txt
+```
+
+Once the dependencies are installed, you can build the project by running the following command:
+
+```bash
+python3 tooling/builder.py --target all
+```
+
+This will compile the protocols, integrate the knowledge sources, and generate the `AGENTS.md` file.
+
+## The Protocol System
+
+The protocol system is the heart of this project. It is designed to ensure that the agent's behavior is predictable, verifiable, and aligned with a set of core principles. The protocols are defined in the `protocols/` directory, and they are compiled into a single, machine-readable `AGENTS.md` file, which serves as the agent's primary operational guide.
+
+The following protocols are currently defined:
+
+{protocol_docs}
+
+## The Tooling System
+
+The tooling system is a rich set of tools for building, testing, and maintaining the agent and its protocols. The tools are located in the `tooling/` directory, and they are designed to be used in a variety of contexts, from local development to continuous integration.
+
+The following tools are currently available:
+
+{tool_docs}
