@@ -4685,7 +4685,7 @@
       "name": "find_python_files",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 28,
+      "line": 30,
       "kind": "function",
       "docstring": null
     },
@@ -4694,7 +4694,7 @@
       "name": "generate_system_docs",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 38,
+      "line": 40,
       "kind": "function",
       "docstring": "Generates the detailed SYSTEM_DOCUMENTATION.md."
     },
@@ -4703,7 +4703,7 @@
       "name": "generate_pages",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 58,
+      "line": 60,
       "kind": "function",
       "docstring": "Generates the index.html for GitHub Pages."
     },
@@ -4712,7 +4712,7 @@
       "name": "generate_tool_readme",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 78,
+      "line": 80,
       "kind": "function",
       "docstring": "Generates a README.md for a single tool from its docstring."
     },
@@ -4721,7 +4721,7 @@
       "name": "generate_tooling_readme",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 101,
+      "line": 103,
       "kind": "function",
       "docstring": "Generates a single README.md for the tooling directory."
     },
@@ -4730,16 +4730,34 @@
       "name": "generate_main_readme",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 124,
+      "line": 126,
       "kind": "function",
       "docstring": "Generates the main README.md file."
+    },
+    {
+      "_type": "tag",
+      "name": "find_yaml_files",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 152,
+      "kind": "function",
+      "docstring": null
+    },
+    {
+      "_type": "tag",
+      "name": "generate_main_readme_v2",
+      "path": "./tooling/doc_builder.py",
+      "language": "Python",
+      "line": 164,
+      "kind": "function",
+      "docstring": "Generates the v2 README.md file."
     },
     {
       "_type": "tag",
       "name": "main",
       "path": "./tooling/doc_builder.py",
       "language": "Python",
-      "line": 150,
+      "line": 202,
       "kind": "function",
       "docstring": null
     },
@@ -5003,6 +5021,24 @@
       "line": 230,
       "kind": "function",
       "docstring": "Generates the content for the main README.md file."
+    },
+    {
+      "_type": "tag",
+      "name": "get_protocol_description",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 242,
+      "kind": "function",
+      "docstring": "Extracts the protocol description from a YAML file."
+    },
+    {
+      "_type": "tag",
+      "name": "generate_main_readme_v2_content",
+      "path": "./tooling/doc_builder_logic.py",
+      "language": "Python",
+      "line": 255,
+      "kind": "function",
+      "docstring": "Generates the content for the v2 README.md file."
     },
     {
       "_type": "tag",
