@@ -19,6 +19,8 @@ from tooling.doc_builder_logic import (
     generate_tool_readme_content,
     generate_tooling_readme_content,
     generate_main_readme_content,
+    get_protocol_description,
+    generate_main_readme_v2_content,
 )
 
 # --- Configuration ---
@@ -147,12 +149,62 @@ def generate_main_readme(output_file: str, witness_files: List[str]):
     print(f"--> Main README written to {output_file}")
 
 
+def find_yaml_files(directories: List[str]) -> List[str]:
+    yaml_files = []
+    for directory in directories:
+        # Ensure the directory path is absolute
+        abs_dir = os.path.join(ROOT_DIR, directory)
+        files = [
+            os.path.join(abs_dir, f) for f in find_files("*.yaml", base_dir=abs_dir)
+        ]
+        yaml_files.extend(files)
+    return sorted([f for f in yaml_files if not os.path.basename(f).startswith("test_")])
+
+
+def generate_main_readme_v2(output_file: str):
+    """Generates the v2 README.md file."""
+    print("--> Finding protocol files for v2 README...")
+    protocol_files = find_yaml_files([os.path.join(ROOT_DIR, "protocols/")])
+    print(f"--> Found {len(protocol_files)} protocol files.")
+
+    protocol_docs = {}
+    for f in protocol_files:
+        description = get_protocol_description(f)
+        if description:
+            protocol_docs[os.path.basename(f)] = description
+
+    print("--> Finding tool files for v2 README...")
+    tool_files = find_python_files([os.path.join(ROOT_DIR, "tooling/")])
+    print(f"--> Found {len(tool_files)} tool files.")
+
+    tool_docs = {}
+    for f in tool_files:
+        with open(f, "r", encoding="utf-8") as file:
+            content = file.read()
+        module_doc = parse_file_for_docs(f, content)
+        if module_doc and module_doc.docstring:
+            tool_docs[os.path.basename(f)] = module_doc.docstring
+        else:
+            tool_docs[os.path.basename(f)] = "No docstring found."
+
+    template_path = os.path.join(ROOT_DIR, "README.v2.md.template")
+    with open(template_path, "r", encoding="utf-8") as f:
+        template_content = f.read()
+
+    final_content = generate_main_readme_v2_content(
+        template_content, protocol_docs, tool_docs
+    )
+    with open(output_file, "w", encoding="utf-8") as f:
+        f.write(final_content)
+    print(f"--> V2 README written to {output_file}")
+
+
 def main():
     parser = argparse.ArgumentParser(description="Unified documentation builder.")
     parser.add_argument(
         "--format",
         required=True,
-        choices=["system", "pages", "tooling-readme", "main-readme"],
+        choices=["system", "pages", "tooling-readme", "main-readme", "main-readme-v2"],
     )
     parser.add_argument(
         "--source-file", help="Source file for 'readme' or 'pages' format."
@@ -196,6 +248,9 @@ def main():
             parser.error("--witness-file is required for 'main-readme' format.")
         output_file = args.output_file or os.path.join(ROOT_DIR, "README.md")
         generate_main_readme(output_file, args.witness_file)
+    elif args.format == "main-readme-v2":
+        output_file = args.output_file or os.path.join(ROOT_DIR, "README.md")
+        generate_main_readme_v2(output_file)
     print("--- Documentation Builder Finished ---")
 
 

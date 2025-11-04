@@ -237,3 +237,36 @@ def generate_main_readme_content(
         witness_parts.append(f"### How to Run\n```bash\npython {filename}\n```\n")
 
     return template_content.format(witness_docs="".join(witness_parts))
+
+
+def get_protocol_description(file_path: str) -> Optional[str]:
+    """Extracts the protocol description from a YAML file."""
+    import yaml
+
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            data = yaml.safe_load(f)
+        return data.get("description")
+    except (IOError, yaml.YAMLError) as e:
+        print(f"    -! Error processing {file_path}: {e}")
+        return None
+
+
+def generate_main_readme_v2_content(
+    template_content: str,
+    protocol_docs: Dict[str, str],
+    tool_docs: Dict[str, str],
+) -> str:
+    """Generates the content for the v2 README.md file."""
+    protocol_parts = []
+    for filename, description in sorted(protocol_docs.items()):
+        protocol_parts.append(f"- **`{filename}`**: {description}")
+
+    tool_parts = []
+    for filename, docstring in sorted(tool_docs.items()):
+        tool_parts.append(f"- **`{filename}`**: {docstring}")
+
+    return template_content.format(
+        protocol_docs="\n".join(protocol_parts),
+        tool_docs="\n".join(tool_parts),
+    )
