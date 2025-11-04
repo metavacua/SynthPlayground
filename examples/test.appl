@@ -1,4 +1,0 @@
-let !domain = load_domain "examples/test.aal" in
-let !initial_state = create_state (Cons("has_key", Nil(String))) in
-let !next_state = apply_action "use_key" in
-is_goal (Cons("unlocked", Nil(String)))

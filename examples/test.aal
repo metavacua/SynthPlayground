@@ -1,5 +1,0 @@
-fluent has_key
-fluent unlocked
-action use_key
-
-use_key causes unlocked if has_key
