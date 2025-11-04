@@ -1,5 +1,0 @@
-# This plan executes an exponential-time workload.
-for_each_file tests/appl/complexity/*.appl
-  for_each_file tests/appl/*.appl
-    run_in_bash_session
-      python tooling/appl_runner.py {file}

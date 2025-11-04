@@ -1,4 +1,0 @@
-# This plan executes a polynomial-time workload.
-for_each_file tests/appl/complexity/*.appl
-  run_in_bash_session
-    python tooling/appl_runner.py {file}
