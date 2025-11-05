@@ -1,6 +1,6 @@
 # AGENTS.md (Dynamically Generated)
 
-**Last Generated:** 2025-10-30 19:44:57 UTC
+**Last Generated:** 2025-11-05 03:21:45 UTC
 
 ## Objective
 
@@ -14,12 +14,13 @@ The following build targets are the primary way to test, build, and maintain thi
 
 ### Build Groups
 
-- **`all`**: Runs the following targets: `protocols, knowledge-integrate, agents-md`
+- **`all`**: Runs the following targets: `agents-md, protocols, knowledge-integrate`
 - **`knowledge`**: Runs the following targets: `knowledge-integrate`
 
 ### Individual Targets
 
 - **`agents-md`**: Generate the master AGENTS.md file.
+- **`lint-protocols`**: Lint all CHC protocols to ensure they are well-formed.
 - **`ast-generate`**: Generate ASTs for all supported source files.
 - **`extract-symbols`**: Extract symbols from ASTs to create a symbol map.
 - **`remove-unused-imports`**: Remove unused imports from all Python files.
@@ -75,6 +76,7 @@ The agent's behavior is governed by the following set of formal protocols, which
 **Rules:**
 
 - **`tdd-writing-new-code`**: When writing any new function or class, a corresponding test must be written first. The test should fail before the new code is implemented, and pass after.
+- **`tdd-enforcement-tool`**: A TDD enforcement tool must be used to ensure that all new code is developed using TDD.
 
 ---
 ### Protocol: `guardian-protocol-001`
@@ -550,6 +552,15 @@ The agent's behavior is governed by the following set of formal protocols, which
     tags:
     - testing
     validation_command: python3 tooling/validate_tdd.py
+  - description: A TDD enforcement tool must be used to ensure that all new code is
+      developed using TDD.
+    enforcement: The agent must verify that a TDD enforcement tool is configured in
+      the repository.
+    rule_id: tdd-enforcement-tool
+    tags:
+    - testing
+    - tooling
+    validation_command: ls .claude/tdd-guard/settings.json
   version: 1.0.0
 - associated_tools:
   - tooling/guardian.py
