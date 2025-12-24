@@ -1,0 +1,68 @@
+protocol_id: semantic-protocol-001
+version: 1.0.0
+description: A protocol for semantic interoperability and knowledge representation based on semantic web standards (RDF, OWL, JSON-LD).
+
+rules:
+  - rule_id: rdf-representation
+    description: |
+      All protocol data structures must be representable in RDF (Resource Description Framework).
+      This ensures that protocol elements can be integrated into the semantic web and
+      enables automated reasoning about protocol properties and relationships.
+    enforcement: |
+      Protocol specifications must include RDF schemas or JSON-LD contexts that define
+      the semantic mapping of all protocol elements.
+    tags:
+      - semantic-web
+      - rdf
+
+  - rule_id: ontology-alignment
+    description: |
+      Protocol ontologies must align with established semantic web vocabularies
+      (schema.org, Dublin Core, FOAF) where applicable. This promotes interoperability
+      and reuse of existing semantic infrastructure.
+    enforcement: |
+      Protocol ontologies must document their alignment with standard vocabularies
+      and provide mappings for equivalent concepts.
+    tags:
+      - semantic-web
+      - ontology
+
+  - rule_id: linked-data-principles
+    description: |
+      Protocol resources must follow linked data principles: use URIs as names,
+      use HTTP URIs for lookups, provide useful information via URIs, and include
+      links to other URIs for discovery.
+    enforcement: |
+      All protocol resources must be identified by HTTP URIs that resolve to
+      machine-readable descriptions in standard formats (RDF/XML, Turtle, JSON-LD).
+    tags:
+      - semantic-web
+      - linked-data
+
+  - rule_id: reasoning-support
+    description: |
+      Protocol specifications must support automated reasoning through formal
+      semantics. This enables validation, inference, and consistency checking
+      of protocol implementations.
+    enforcement: |
+      Protocol ontologies must be expressed in OWL or similar formal languages
+      that support automated reasoning and validation.
+    tags:
+      - semantic-web
+      - reasoning
+
+  - rule_id: context-preservation
+    description: |
+      All protocol messages must preserve semantic context through explicit
+      context declarations (e.g., JSON-LD @context). This ensures that the
+      meaning of protocol elements is unambiguous and machine-interpretable.
+    enforcement: |
+      Protocol messages must include context declarations that map all terms
+      to their semantic definitions in the protocol ontology.
+    tags:
+      - semantic-web
+      - context
+
+associated_tools:
+  - tooling/protocol_compiler.py
+  - protocols/protocol.context.jsonld
