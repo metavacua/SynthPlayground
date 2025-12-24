@@ -1,0 +1,47 @@
+# Plan: Repository Reorganization and Cleanup
+# Issue #263: Prepare CoPilot_Experiment_0 and CatCleanup as candidates for replacing main
+# This plan outlines the work needed to reorganize the repository and prepare experimental approaches
+
+# Phase 1: Assessment and Documentation
+# Step 1: Analyze current main entry points and workflows
+run_in_bash_session
+python tooling/context_awareness_scanner.py run.py > /tmp/main_analysis.json
+
+# Step 2: Analyze the self_improvement_project/main.py
+run_in_bash_session
+python tooling/context_awareness_scanner.py self_improvement_project/main.py > /tmp/self_improvement_analysis.json
+
+# Step 3: Document current architecture
+message_user
+Analyzing current main entry points and documenting architecture...
+
+# Phase 2: Create Experimental Approaches
+# Step 4: Create CoPilot_Experiment_0 directory structure
+run_in_bash_session
+mkdir -p experiments/copilot_experiment_0
+
+# Step 5: Create CatCleanup directory structure
+run_in_bash_session
+mkdir -p experiments/cat_cleanup
+
+# Step 6: Generate initial experimental files
+message_user
+Creating experimental approach directories and initial files...
+
+# Phase 3: Cleanup and Organization
+# Step 7: Run full system audit to identify cleanup targets
+call_plan
+full-system-audit
+
+# Step 8: Identify duplicate and obsolete files
+run_in_bash_session
+python tooling/filesystem_lister.py --output /tmp/file_inventory.txt
+
+# Step 9: Create cleanup checklist
+message_user
+Generating cleanup checklist based on audit results...
+
+# Phase 4: Documentation
+# Step 10: Update documentation with reorganization plan
+message_user
+Reorganization and cleanup plan execution complete. Review experimental directories and cleanup checklist.
