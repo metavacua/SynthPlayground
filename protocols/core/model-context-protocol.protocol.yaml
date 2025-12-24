@@ -1,0 +1,89 @@
+protocol_id: model-context-protocol-001
+version: 1.0.0
+description: Implementation of the Model Context Protocol (MCP) standard for structured context exchange between AI agents and their environments.
+rules:
+  - rule_id: mcp-context-structure
+    description: All context exchanges must follow the MCP standard structure with metadata, content, and provenance fields.
+    enforcement: Context objects must be validated against the MCP schema before processing.
+    tags:
+      - mcp
+      - context
+  - rule_id: mcp-versioning
+    description: MCP messages must include version information to ensure compatibility across different implementations.
+    enforcement: All MCP messages must include a 'mcp_version' field following semantic versioning.
+    tags:
+      - mcp
+      - versioning
+  - rule_id: mcp-context-types
+    description: MCP supports multiple context types including task, environment, knowledge, and temporal contexts.
+    enforcement: Context type must be specified in the 'context_type' field and must be one of the supported types.
+    tags:
+      - mcp
+      - context
+  - rule_id: mcp-provenance-tracking
+    description: All context must include provenance information tracking its source, creation time, and modification history.
+    enforcement: Provenance metadata must be attached to all context objects and updated on modification.
+    tags:
+      - mcp
+      - provenance
+  - rule_id: mcp-context-serialization
+    description: MCP contexts must be serializable to JSON-LD format for semantic interoperability.
+    enforcement: All context objects must implement JSON-LD serialization with appropriate @context definitions.
+    tags:
+      - mcp
+      - serialization
+  - rule_id: mcp-context-validation
+    description: Context objects must be validated against their declared schema before use.
+    enforcement: A validation step must be performed before context is consumed by any agent process.
+    tags:
+      - mcp
+      - validation
+  - rule_id: mcp-context-lifecycle
+    description: Context objects have a defined lifecycle including creation, activation, suspension, and termination states.
+    enforcement: Context state transitions must follow the MCP lifecycle state machine.
+    tags:
+      - mcp
+      - lifecycle
+  - rule_id: mcp-context-composition
+    description: Complex contexts can be composed from simpler contexts through well-defined composition operators.
+    enforcement: Context composition must preserve provenance and maintain semantic consistency.
+    tags:
+      - mcp
+      - composition
+  - rule_id: mcp-context-query
+    description: MCP provides a standard query interface for retrieving relevant context based on semantic criteria.
+    enforcement: Context queries must use the MCP query language and return results with relevance scores.
+    tags:
+      - mcp
+      - query
+  - rule_id: mcp-context-security
+    description: Context objects must include security metadata indicating access controls and sensitivity levels.
+    enforcement: Security checks must be performed before context is shared across security boundaries.
+    tags:
+      - mcp
+      - security
+  - rule_id: mcp-backward-compatibility
+    description: MCP implementations must maintain backward compatibility with previous protocol versions.
+    enforcement: Version negotiation must occur at protocol initialization to ensure compatible communication.
+    tags:
+      - mcp
+      - compatibility
+  - rule_id: mcp-extension-mechanism
+    description: MCP provides a standardized extension mechanism for domain-specific context types.
+    enforcement: Extensions must be registered in the MCP extension registry and follow the extension schema.
+    tags:
+      - mcp
+      - extensibility
+associated_tools:
+  - tooling/mcp_validator.py
+  - tooling/mcp_context_manager.py
+  - tooling/mcp_serializer.py
+associated_artifacts:
+  - knowledge_core/mcp_schema.json
+  - knowledge_core/mcp_extensions.json
+  - protocols/core/mcp_context.jsonld
+references:
+  - title: Model Context Protocol Specification
+    url: https://modelcontextprotocol.io/
+  - title: JSON-LD 1.1 Specification
+    url: https://www.w3.org/TR/json-ld11/
