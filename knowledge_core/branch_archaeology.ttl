@@ -1,0 +1,2426 @@
+@prefix branch: <http://metavacua.io/ontology/branch#> .
+@prefix git: <http://metavacua.io/ontology/git#> .
+@prefix schema: <http://schema.org/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://metavacua.io/resource/branch-archaeology>
+    a branch:BranchKnowledgeGraph ;
+    schema:dateCreated "2025-12-25T21:52:36.627499"^^xsd:dateTime ;
+    branch:totalBranches 260 ;
+    schema:description "Archaeological analysis of repository branches documenting development history" .
+
+<http://metavacua.io/resource/branch/CatCleanup>
+    a git:Branch ;
+    schema:name "CatCleanup" ;
+    git:commitHash "083394cf03f7746f403a2e0e415c038ca982fa5e" ;
+    git:status "archived" ;
+    schema:dateCreated "2025-11-04 14:29:59 -0800" ;
+    schema:keywords "cleanup" ;
+    schema:keywords "deletion" ;
+    .
+
+<http://metavacua.io/resource/branch/CoPilot_Experiment_0>
+    a git:Branch ;
+    schema:name "CoPilot_Experiment_0" ;
+    git:commitHash "083394cf03f7746f403a2e0e415c038ca982fa5e" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-11-04 14:29:59 -0800" ;
+    schema:keywords "experimental" ;
+    schema:keywords "deletion" ;
+    .
+
+<http://metavacua.io/resource/branch/origin>
+    a git:Branch ;
+    schema:name "origin" ;
+    git:commitHash "14d0ffa5b8eef267766a9bdf4b37699a6e9e4dfd" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-11-04 04:16:04 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/LOL>
+    a git:Branch ;
+    schema:name "LOL" ;
+    git:commitHash "384e4305838eb119b99982cccb2f52bb6c0a3068" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-12 22:58:09 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/add-conceptual-foundations>
+    a git:Branch ;
+    schema:name "add-conceptual-foundations" ;
+    git:commitHash "b78ae1533d2a7771890779ebd98c3a30a0e389a7" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-11 21:25:10 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/add-docstring-to-pre-submit-check>
+    a git:Branch ;
+    schema:name "add-docstring-to-pre-submit-check" ;
+    git:commitHash "761af006312225eb977ce3e73d81df006d28142e" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-18 04:18:02 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/add-docstrings-to-tooling>
+    a git:Branch ;
+    schema:name "add-docstrings-to-tooling" ;
+    git:commitHash "a04a20494d57386e28d7e06f04e63872d0de0ae0" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 04:32:11 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/add-logging-verification-protocol>
+    a git:Branch ;
+    schema:name "add-logging-verification-protocol" ;
+    git:commitHash "eb33c385a4896f22177be3232f5ddcd9afaf8c0e" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-18 15:30:00 -0700" ;
+    schema:keywords "core" ;
+    schema:keywords "merge" ;
+    schema:keywords "addition" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/add-protocol-validation>
+    a git:Branch ;
+    schema:name "add-protocol-validation" ;
+    git:commitHash "2636937e8f80986cf97546f9f99fc9f3c47eb497" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-08 08:30:23 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/agent-shell-improvements>
+    a git:Branch ;
+    schema:name "agent-shell-improvements" ;
+    git:commitHash "309a0741e0a3affad02744a4fad58471b3206eea" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 22:57:31 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/agent-smith-framework>
+    a git:Branch ;
+    schema:name "agent-smith-framework" ;
+    git:commitHash "551942864c27f50c1a24b7ea5c3bd0eab87be447" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-18 06:51:00 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/agentic-research-experiments>
+    a git:Branch ;
+    schema:name "agentic-research-experiments" ;
+    git:commitHash "ab705fd742577026b4190f23a6ab7566d34b12af" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-12 23:16:31 -0700" ;
+    schema:keywords "experimental" ;
+    schema:keywords "fix" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/agentic-self-improvement-theory>
+    a git:Branch ;
+    schema:name "agentic-self-improvement-theory" ;
+    git:commitHash "ad89463a405a4389efcbc15e0bd4682ad98fce16" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 03:35:16 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/aura-interpreter-witness>
+    a git:Branch ;
+    schema:name "aura-interpreter-witness" ;
+    git:commitHash "d5ccaf5ae8cc2d5ca4375b8683020b1db32edeeb" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 23:56:58 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/automated-logic-construction-poc>
+    a git:Branch ;
+    schema:name "automated-logic-construction-poc" ;
+    git:commitHash "13ee2998acbb816f19eec7115d1154bbfe575264" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 00:18:59 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/bugfix-resilient-error-handling>
+    a git:Branch ;
+    schema:name "bugfix-resilient-error-handling" ;
+    git:commitHash "975ada802507e7b67b3bf39cf9c813acbf5a74fa" ;
+    git:status "active" ;
+    schema:dateCreated "2025-11-03 06:32:26 +0000" ;
+    schema:keywords "fix" ;
+    schema:keywords "refactor" ;
+    schema:keywords "bugfix" ;
+    .
+
+<http://metavacua.io/resource/branch/bugfix-fix-protocol-compiler-and-restore-protocols>
+    a git:Branch ;
+    schema:name "bugfix/fix-protocol-compiler-and-restore-protocols" ;
+    git:commitHash "2db5cf4f279a2e21692cc4078cb8f5739bdd822b" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-18 22:33:05 +0000" ;
+    schema:keywords "addition" ;
+    schema:keywords "bugfix" ;
+    .
+
+<http://metavacua.io/resource/branch/chore-delete-firebase-key>
+    a git:Branch ;
+    schema:name "chore/delete-firebase-key" ;
+    git:commitHash "a7eab368640be96248da84e5e4f2703404d8d809" ;
+    git:status "archived" ;
+    schema:dateCreated "2025-10-15 03:20:09 +0000" ;
+    schema:keywords "deletion" ;
+    schema:keywords "maintenance" ;
+    .
+
+<http://metavacua.io/resource/branch/code-health-supervisor>
+    a git:Branch ;
+    schema:name "code-health-supervisor" ;
+    git:commitHash "c5b044a9ac69331450de6ad00d33d7a97de71be5" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 23:47:58 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/code-quality-improvements>
+    a git:Branch ;
+    schema:name "code-quality-improvements" ;
+    git:commitHash "60ca572d36c6c8905141b2f4c4ec9d14d05faa42" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 17:45:13 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/dbpedia-client>
+    a git:Branch ;
+    schema:name "dbpedia-client" ;
+    git:commitHash "69bfa2c7248749c0ab2be9d5601d127541f31e9d" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-22 23:37:01 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/decision-making-test-framework>
+    a git:Branch ;
+    schema:name "decision-making-test-framework" ;
+    git:commitHash "a0e6705adfad40c348d5c6d7999fb6782c2446c3" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-30 19:36:53 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/delete-jsx-lsp-files>
+    a git:Branch ;
+    schema:name "delete-jsx-lsp-files" ;
+    git:commitHash "acd4379307447d85c14bdd701afe9e806d1902b0" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-11-04 21:58:15 +0000" ;
+    schema:keywords "deletion" ;
+    .
+
+<http://metavacua.io/resource/branch/dependabot-pip-pip-05067b9523>
+    a git:Branch ;
+    schema:name "dependabot/pip/pip-05067b9523" ;
+    git:commitHash "e317ac96603ac0384668f5e69c5868d0cd6c5855" ;
+    git:status "automated" ;
+    schema:dateCreated "2025-11-24 22:58:28 +0000" ;
+    schema:keywords "automated" ;
+    schema:keywords "dependencies" ;
+    .
+
+<http://metavacua.io/resource/branch/docs-improve-agents-md>
+    a git:Branch ;
+    schema:name "docs-improve-agents-md" ;
+    git:commitHash "5a512ec2e4b88e56a2afbb495c75254c23e28141" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-20 02:16:59 +0000" ;
+    schema:keywords "documentation" ;
+    .
+
+<http://metavacua.io/resource/branch/docs-appl-implementation-deviations>
+    a git:Branch ;
+    schema:name "docs/appl-implementation-deviations" ;
+    git:commitHash "0bb5ef8cf2afa80c87c6fd0e893c6b6962b37176" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-16 02:10:09 +0000" ;
+    schema:keywords "documentation" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/docs-complete-documentation>
+    a git:Branch ;
+    schema:name "docs/complete-documentation" ;
+    git:commitHash "40c4da741a3c3aa757b875346e17501c81761165" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-15 02:58:56 +0000" ;
+    schema:keywords "documentation" ;
+    .
+
+<http://metavacua.io/resource/branch/docs-development-cycles>
+    a git:Branch ;
+    schema:name "docs/development-cycles" ;
+    git:commitHash "0862277d662fb43e4b2d3162f804c1da25326759" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-16 02:44:30 +0000" ;
+    schema:keywords "documentation" ;
+    .
+
+<http://metavacua.io/resource/branch/docs-tooling-readme>
+    a git:Branch ;
+    schema:name "docs/tooling-readme" ;
+    git:commitHash "a2485d4f1eb28d3e905a0279b379eca66f23865b" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-13 21:37:03 +0000" ;
+    schema:keywords "documentation" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/document-git-capabilities>
+    a git:Branch ;
+    schema:name "document-git-capabilities" ;
+    git:commitHash "6ad3990da1e35a4e0da96aea3423de3bb092119a" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 10:11:39 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/enforce-docstrings>
+    a git:Branch ;
+    schema:name "enforce-docstrings" ;
+    git:commitHash "374f95015c3328fb2733c02527b35364614269a5" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-23 03:43:46 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/enrich-protocol-knowledge>
+    a git:Branch ;
+    schema:name "enrich-protocol-knowledge" ;
+    git:commitHash "1fd737df96e29cbce557e0a9512ec78e00c0312c" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-23 00:52:01 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/executable-agents-md>
+    a git:Branch ;
+    schema:name "executable-agents-md" ;
+    git:commitHash "bdbfe95d001936f29617f7c78f64d8d757b5cf7a" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-19 18:49:17 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-add-ratchet-lesson-and-fix-integrator>
+    a git:Branch ;
+    schema:name "feat-add-ratchet-lesson-and-fix-integrator" ;
+    git:commitHash "a109d2f5e389752e45eac79bb99f768ccc7b3eb8" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-22 22:33:02 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "fix" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-ai-agent-protocols>
+    a git:Branch ;
+    schema:name "feat-ai-agent-protocols" ;
+    git:commitHash "8f13e6a4c080ac1c1702da7ed23eaf5f9627c254" ;
+    git:status "active" ;
+    schema:dateCreated "2025-10-26 00:05:41 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-categorical-reasoning-engine-formal>
+    a git:Branch ;
+    schema:name "feat-categorical-reasoning-engine-formal" ;
+    git:commitHash "c0b5ad0a6d92a2d7fe1b2fcd092f61355bf7816b" ;
+    git:status "active" ;
+    schema:dateCreated "2025-11-02 22:46:23 -0800" ;
+    schema:keywords "feature" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-chc-protocol-framework>
+    a git:Branch ;
+    schema:name "feat-chc-protocol-framework" ;
+    git:commitHash "99cbce7bff4d8208e0c7dabd3a4246c4e4ccfc86" ;
+    git:status "active" ;
+    schema:dateCreated "2025-10-31 08:49:33 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-chc-protocol-framework-total>
+    a git:Branch ;
+    schema:name "feat-chc-protocol-framework-total" ;
+    git:commitHash "8eba1f43ba275f2011781999336a2336dfe8c9bd" ;
+    git:status "active" ;
+    schema:dateCreated "2025-10-31 12:08:13 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-chc-protocol-framework-total-v1>
+    a git:Branch ;
+    schema:name "feat-chc-protocol-framework-total-v1" ;
+    git:commitHash "eafa7aa120bf67ce5c9448caf58e09824d63370f" ;
+    git:status "active" ;
+    schema:dateCreated "2025-11-01 01:46:15 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-chomsky-toolchain>
+    a git:Branch ;
+    schema:name "feat-chomsky-toolchain" ;
+    git:commitHash "7191db344a20eb8f6286c5ef46d5b90830da3263" ;
+    git:status "active" ;
+    schema:dateCreated "2025-10-26 00:25:03 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-goal-oriented-self-improvement>
+    a git:Branch ;
+    schema:name "feat-goal-oriented-self-improvement" ;
+    git:commitHash "025a11666eebd4344c49ddfe64d83c2959bddb03" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-15 06:23:09 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-meta-mutation>
+    a git:Branch ;
+    schema:name "feat-meta-mutation" ;
+    git:commitHash "59a7464390a422571e4060c2d455f6b4f98b1715" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-20 20:28:41 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-python-witness-implementation>
+    a git:Branch ;
+    schema:name "feat-python-witness-implementation" ;
+    git:commitHash "da8b5c2c964e1f495c45606340f5d46399e907c6" ;
+    git:status "active" ;
+    schema:dateCreated "2025-10-30 01:10:07 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-regular-language-ontology>
+    a git:Branch ;
+    schema:name "feat-regular-language-ontology" ;
+    git:commitHash "a99b0de4f894138270939b7df9b1f614fe0edc29" ;
+    git:status "active" ;
+    schema:dateCreated "2025-10-30 20:54:05 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-research-ambiguity-report>
+    a git:Branch ;
+    schema:name "feat-research-ambiguity-report" ;
+    git:commitHash "56f77268f3fb5057dbacbd53fd9e45abfc90fcbb" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-14 07:02:18 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-session-persistence>
+    a git:Branch ;
+    schema:name "feat-session-persistence" ;
+    git:commitHash "5e4212f80d2447d6e5d1ec49413342c8757cffd6" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-21 03:27:15 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-temporal-integrity-system>
+    a git:Branch ;
+    schema:name "feat-temporal-integrity-system" ;
+    git:commitHash "512daf20e503f403e4c25e5ef3ce1d36f8b96a02" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-22 17:09:47 -0700" ;
+    schema:keywords "feature" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-v-theory-decider-witness>
+    a git:Branch ;
+    schema:name "feat-v-theory-decider-witness" ;
+    git:commitHash "71bdef10887f02e8798415bfdca262885aee6be2" ;
+    git:status "active" ;
+    schema:dateCreated "2025-10-30 03:21:49 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-v1-categorical-reasoning-engine-formal>
+    a git:Branch ;
+    schema:name "feat-v1-categorical-reasoning-engine-formal" ;
+    git:commitHash "af41ec177fca164089d520779f04789a9f94129b" ;
+    git:status "active" ;
+    schema:dateCreated "2025-11-03 07:32:38 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-yaml-ld-poc>
+    a git:Branch ;
+    schema:name "feat-yaml-ld-poc" ;
+    git:commitHash "a6b456b72195890e93efe4ac64a9a465a87c027c" ;
+    git:status "active" ;
+    schema:dateCreated "2025-10-26 02:31:57 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-99_self_mod>
+    a git:Branch ;
+    schema:name "feat/99_self_mod" ;
+    git:commitHash "11c0a0500fa337324e88a63b9e29bed372f58c1f" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-18 21:21:06 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-APPL>
+    a git:Branch ;
+    schema:name "feat/APPL" ;
+    git:commitHash "f21420b7dd70a299750d74d6a91b7ed7210e8373" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-15 17:14:28 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-FDC-aorp-v1-integration>
+    a git:Branch ;
+    schema:name "feat/FDC-aorp-v1-integration" ;
+    git:commitHash "3424ac3bfff8da80b55a241de71f5d4ad976e2e0" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-07 20:13:30 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-aal-protocol-system>
+    a git:Branch ;
+    schema:name "feat/aal-protocol-system" ;
+    git:commitHash "f8470ad540abbdddc46e42d94917ec838c00efe5" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-18 03:36:13 -0700" ;
+    schema:keywords "feature" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-add-plan-registry-auditor>
+    a git:Branch ;
+    schema:name "feat/add-plan-registry-auditor" ;
+    git:commitHash "48dea6e6954661586f1eae646e7b64b0efd5990c" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-14 16:22:32 -0700" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-agent-research-and-poc>
+    a git:Branch ;
+    schema:name "feat/agent-research-and-poc" ;
+    git:commitHash "12b795df9705bff80a4e558535bf555d9305b4b8" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-20 07:52:45 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-agent-shell-protocol>
+    a git:Branch ;
+    schema:name "feat/agent-shell-protocol" ;
+    git:commitHash "80bfce04531b045c44c01401c1840a2a41602fae" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-13 20:38:20 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-agent-smith-framework>
+    a git:Branch ;
+    schema:name "feat/agent-smith-framework" ;
+    git:commitHash "1fa3535bf85a598b2ed9f1c8d17c5d2ceba1ebfc" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-18 08:16:49 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-agents-patch>
+    a git:Branch ;
+    schema:name "feat/agents-patch" ;
+    git:commitHash "81202d134dfb9838a6645ecf5a52c52703f72ac9" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-08 05:07:38 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-aorp-v2-integration>
+    a git:Branch ;
+    schema:name "feat/aorp-v2-integration" ;
+    git:commitHash "908f459a869ccf486c87a990404afa77e6318bbf" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-07 04:24:09 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-aorp-v3-integration>
+    a git:Branch ;
+    schema:name "feat/aorp-v3-integration" ;
+    git:commitHash "ee434bb57aca03c5a6faf56c16ebafaa890d1bfa" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-07 09:25:13 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-aorp-v4-integration>
+    a git:Branch ;
+    schema:name "feat/aorp-v4-integration" ;
+    git:commitHash "dbec5aa3fc1575ba5d03015e764bb2abb3a5ee41" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-07 09:50:11 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-archive-agent-files>
+    a git:Branch ;
+    schema:name "feat/archive-agent-files" ;
+    git:commitHash "07c380f708aed427979e4d94bd9b92e73c223de9" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-10 18:09:53 -0700" ;
+    schema:keywords "feature" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-axiomatic-schema>
+    a git:Branch ;
+    schema:name "feat/axiomatic-schema" ;
+    git:commitHash "96cc0266aa89c0b99eb88bb33a0dbefce43fca9c" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-12 22:09:58 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-axiomatic-schema-v1>
+    a git:Branch ;
+    schema:name "feat/axiomatic-schema-v1" ;
+    git:commitHash "7c0648f46316b230f4a2a5b2d31266585b6f304e" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-12 22:20:42 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-axiomatic-schema-v2>
+    a git:Branch ;
+    schema:name "feat/axiomatic-schema-v2" ;
+    git:commitHash "6cea7f92ba1a194f756c887fde47c07d6219bb5b" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-12 22:31:37 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-backward-chaining-agent>
+    a git:Branch ;
+    schema:name "feat/backward-chaining-agent" ;
+    git:commitHash "78a84b5316555a2bd7ee4faf1242ca55ad9fa74e" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-20 07:53:52 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-bootstrap-protocol-structure>
+    a git:Branch ;
+    schema:name "feat/bootstrap-protocol-structure" ;
+    git:commitHash "9fb3d20a7d4fc72172e4133322465f5d2a9aa16c" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-05 21:48:33 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-calculus-integration>
+    a git:Branch ;
+    schema:name "feat/calculus-integration" ;
+    git:commitHash "1a947d0b1cb2640ea68f2b8b49b7941b21da7ad8" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-13 06:20:32 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-chc-bootstrap-protocol>
+    a git:Branch ;
+    schema:name "feat/chc-bootstrap-protocol" ;
+    git:commitHash "6a038ad261e1df994bf39fe8923d734b980216ed" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-20 02:09:17 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-context-awareness-experiment>
+    a git:Branch ;
+    schema:name "feat/context-awareness-experiment" ;
+    git:commitHash "8ff1cae52d57f9b350359aee657dab01f31c4944" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-11 00:50:36 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-decentral>
+    a git:Branch ;
+    schema:name "feat/decentral" ;
+    git:commitHash "af23891aa129a95825a42e0f91b24a7218bcfd2c" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-18 14:35:55 -0700" ;
+    schema:keywords "feature" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-fdc-cli-overhaul>
+    a git:Branch ;
+    schema:name "feat/fdc-cli-overhaul" ;
+    git:commitHash "fb6e88b3476c6da4947eff07d5d387e634c4d2a8" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-15 13:03:04 -0700" ;
+    schema:keywords "feature" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-fdc-cli-part1>
+    a git:Branch ;
+    schema:name "feat/fdc-cli-part1" ;
+    git:commitHash "83bdf302afd102fa13e2ee8612af392e0320c477" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-06 17:14:42 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-formal-theory-document>
+    a git:Branch ;
+    schema:name "feat/formal-theory-document" ;
+    git:commitHash "f38059b77e0cf46a1423a4327596f78f3dd90e08" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-16 02:46:13 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-fsm-toolchain-with-research-suite>
+    a git:Branch ;
+    schema:name "feat/fsm-toolchain-with-research-suite" ;
+    git:commitHash "27d7f27141d1e7587cf8f5ec6051ccd03f398110" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-08 08:25:43 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-hierarchical-agents-md-build>
+    a git:Branch ;
+    schema:name "feat/hierarchical-agents-md-build" ;
+    git:commitHash "169e37854e54e60c6e25e18036382a9c463a85c4" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-12 08:59:20 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-hierarchical-protocols>
+    a git:Branch ;
+    schema:name "feat/hierarchical-protocols" ;
+    git:commitHash "4405b935ce0be6cf73add2072a7d6b48957512ee" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-18 08:38:22 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-implement-compiled-docs-scheme>
+    a git:Branch ;
+    schema:name "feat/implement-compiled-docs-scheme" ;
+    git:commitHash "b7e51f3b80e0320ebd2cb2e2c7567cf488ebf947" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-11 21:42:00 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "fix" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-lba-validator>
+    a git:Branch ;
+    schema:name "feat/lba-validator" ;
+    git:commitHash "c0519fcfb865b436048c99398bcd887554f293fb" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-16 02:11:26 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-modular-agent-protocols>
+    a git:Branch ;
+    schema:name "feat/modular-agent-protocols" ;
+    git:commitHash "93bca5f191edb6d6e1b054b675a9cb50ae82d423" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-18 03:36:03 -0700" ;
+    schema:keywords "feature" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-pLLL-prover-implementation>
+    a git:Branch ;
+    schema:name "feat/pLLL-prover-implementation" ;
+    git:commitHash "2d8bfdf4dac25bfc3c95fe4bbfc34575c2ee71d8" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-17 20:08:59 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-paraconsistent-toolchain>
+    a git:Branch ;
+    schema:name "feat/paraconsistent-toolchain" ;
+    git:commitHash "d8ce0d145298cf909d45658539327ffcc8abc0e7" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-08 04:51:18 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-paraconsistent-toolchain-lint-failure-report>
+    a git:Branch ;
+    schema:name "feat/paraconsistent-toolchain-lint-failure-report" ;
+    git:commitHash "6936c8c4ccf811d262e799ac8e622812463bf84d" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-08 07:18:10 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-proof-theoretic-build-system>
+    a git:Branch ;
+    schema:name "feat/proof-theoretic-build-system" ;
+    git:commitHash "abba027c9fcd15585e9a849a75bb716401df1574" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-13 06:22:58 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-protocol-aorp-v2>
+    a git:Branch ;
+    schema:name "feat/protocol-aorp-v2" ;
+    git:commitHash "9331b080048e543e54259c288d2826556cc6dadb" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-08 04:57:01 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-protocol-aorp-v2.1.0>
+    a git:Branch ;
+    schema:name "feat/protocol-aorp-v2.1.0" ;
+    git:commitHash "048d9a30be84e31596121ccd9c35c162cc581e4b" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-08 07:50:28 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-protocol-build-system>
+    a git:Branch ;
+    schema:name "feat/protocol-build-system" ;
+    git:commitHash "f3a8d6473cbc7c72625cdadfce3b8c49a3af9ddd" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-08 09:29:02 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-protocol-build-system-AGENTS-regression>
+    a git:Branch ;
+    schema:name "feat/protocol-build-system-AGENTS-regression" ;
+    git:commitHash "6975571eecece0b2940761afc78ed15eef8f0abb" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-08 20:08:23 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-protocol-management>
+    a git:Branch ;
+    schema:name "feat/protocol-management" ;
+    git:commitHash "ba069491bda4d8c78c2bfbd01e629dadb313dba4" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-18 21:40:45 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-protocol_oracle>
+    a git:Branch ;
+    schema:name "feat/protocol_oracle" ;
+    git:commitHash "468117eb46b17371b61b3cf3b8a8950c97bac936" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-18 14:33:38 -0700" ;
+    schema:keywords "feature" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-recover-aal-protocol-branch-history-report>
+    a git:Branch ;
+    schema:name "feat/recover-aal-protocol-branch-history-report" ;
+    git:commitHash "4d4d9d1ad28cd6a2d6f17fae1d84925923eafaf5" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-18 21:32:27 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-self-improvement-loop>
+    a git:Branch ;
+    schema:name "feat/self-improvement-loop" ;
+    git:commitHash "4150a1a6aef5b7132878e17839068e13df322f6b" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-06 07:09:22 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-semantic-compression-of-agents-md>
+    a git:Branch ;
+    schema:name "feat/semantic-compression-of-agents-md" ;
+    git:commitHash "58227c8b1ac89a15f943e9dec278b168f1a34f49" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-18 05:08:25 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-speculative_UDC>
+    a git:Branch ;
+    schema:name "feat/speculative_UDC" ;
+    git:commitHash "0250576528a69c290b47be78f5933804fbb0cb36" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-18 14:37:44 -0700" ;
+    schema:keywords "feature" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-symbiont-architecture>
+    a git:Branch ;
+    schema:name "feat/symbiont-architecture" ;
+    git:commitHash "2a1cccfc711bdba1fe208eef1402a2fe7052a109" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-08 03:46:25 +0000" ;
+    schema:keywords "feature" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-unrestricted-dev-cycle>
+    a git:Branch ;
+    schema:name "feat/unrestricted-dev-cycle" ;
+    git:commitHash "31b899d58eff4f1f5d9eb3970e38ada766a6ff6c" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-17 21:17:52 +0000" ;
+    schema:keywords "feature" ;
+    .
+
+<http://metavacua.io/resource/branch/feat-update-hierarchical-tooling>
+    a git:Branch ;
+    schema:name "feat/update-hierarchical-tooling" ;
+    git:commitHash "db55c5d3605b0174fd2ac4ac87e1818be2a0854f" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-13 00:42:36 -0700" ;
+    schema:keywords "feature" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-a-star-planner>
+    a git:Branch ;
+    schema:name "feature-a-star-planner" ;
+    git:commitHash "9262e1874046e919f3c8539367fd5a7e8b38eaf2" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-20 21:47:20 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-agent-toolchains>
+    a git:Branch ;
+    schema:name "feature-agent-toolchains" ;
+    git:commitHash "f6124334059e7f54078cc5ad5da37ec6089b7cdc" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-25 17:22:01 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-architectural-review>
+    a git:Branch ;
+    schema:name "feature-architectural-review" ;
+    git:commitHash "c50ab82a0481e910b17b1405e0a6d874ead5187b" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-11-05 04:57:23 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-ast-generator-integration>
+    a git:Branch ;
+    schema:name "feature-ast-generator-integration" ;
+    git:commitHash "779b1022ffa44590eef2c81d9a5ecb4cb1599030" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-29 09:46:34 +0000" ;
+    schema:keywords "deletion" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-aura-language>
+    a git:Branch ;
+    schema:name "feature-aura-language" ;
+    git:commitHash "9df2e96e45999ef9e839cc26d68a4df6cdb24969" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-31 11:07:00 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-collatz-witness>
+    a git:Branch ;
+    schema:name "feature-collatz-witness" ;
+    git:commitHash "63025ecea95546ae0c7ae926b1a7c5df290ac85a" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-26 08:15:58 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-correct-witness-d>
+    a git:Branch ;
+    schema:name "feature-correct-witness-d" ;
+    git:commitHash "a9678ad8c591b838a8ad25d19de61712a4d8c599" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-31 08:57:30 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-dynamic-readme>
+    a git:Branch ;
+    schema:name "feature-dynamic-readme" ;
+    git:commitHash "a204aa864f3af8251092dfb849597c8811bc0d6b" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-31 08:46:30 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-expand-witness-examples>
+    a git:Branch ;
+    schema:name "feature-expand-witness-examples" ;
+    git:commitHash "feec1c5e7afc6dfe33ce75a0acc65fa856502e7e" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-30 02:07:00 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-extract-json-from-md>
+    a git:Branch ;
+    schema:name "feature-extract-json-from-md" ;
+    git:commitHash "e1a17b844cc5d8d105c9abb7a248961b1a0a0798" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-26 09:45:50 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-filesystem-knowledge-graph>
+    a git:Branch ;
+    schema:name "feature-filesystem-knowledge-graph" ;
+    git:commitHash "9ade0cb37b709bfb4c549c877be40fba1fedefff" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-26 05:16:51 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-goal-generation-layer>
+    a git:Branch ;
+    schema:name "feature-goal-generation-layer" ;
+    git:commitHash "2ce41bb7a94112805479b10109ca77c18684f581" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-20 21:46:37 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-improve-test-coverage>
+    a git:Branch ;
+    schema:name "feature-improve-test-coverage" ;
+    git:commitHash "0485606e156ef5d03c1ac1e34fde5ab98f007d8b" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-11-03 06:45:18 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-langstruct-collatz-witness>
+    a git:Branch ;
+    schema:name "feature-langstruct-collatz-witness" ;
+    git:commitHash "3adef621ade89ab458232747a900f7b5905dea82" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-30 21:35:34 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-language-classification>
+    a git:Branch ;
+    schema:name "feature-language-classification" ;
+    git:commitHash "b8b220eaedecd6cbcc09bb683b8af71b5dffe906" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-24 00:22:50 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-language-theory-toolchain>
+    a git:Branch ;
+    schema:name "feature-language-theory-toolchain" ;
+    git:commitHash "d309479cdfe0ecda2fa23bdd769d33eef329b427" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-26 00:04:08 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-new-readme-generator>
+    a git:Branch ;
+    schema:name "feature-new-readme-generator" ;
+    git:commitHash "5afbaea51c078a2b89acf358350751e4e5e08aa2" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-11-04 04:15:35 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-orientation-cascade-protocol>
+    a git:Branch ;
+    schema:name "feature-orientation-cascade-protocol" ;
+    git:commitHash "fbf8529fa0e525bc1f951bb0a83e003c7622bbe9" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-26 04:03:44 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "addition" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-program-decomposition-and-analysis>
+    a git:Branch ;
+    schema:name "feature-program-decomposition-and-analysis" ;
+    git:commitHash "b5b97dde3fbd8ab204f019f95a432255fd2aac7b" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-25 16:06:25 -0700" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-research-toc>
+    a git:Branch ;
+    schema:name "feature-research-toc" ;
+    git:commitHash "0b1ff2f109229d633d0e63983a15dbfd71ab02bb" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-29 11:13:45 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-toolchain-improvements>
+    a git:Branch ;
+    schema:name "feature-toolchain-improvements" ;
+    git:commitHash "048e8526dca6323a56d7286aa6e63b0b6a47bec6" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-26 08:05:20 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-yaml-ld-migration>
+    a git:Branch ;
+    schema:name "feature-yaml-ld-migration" ;
+    git:commitHash "5d89a81b84fbc0587ba1e8ef06cf34e3782c9376" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-26 04:47:26 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-add-fdc-start-command>
+    a git:Branch ;
+    schema:name "feature/add-fdc-start-command" ;
+    git:commitHash "85e20ba0a51329e0665ca33b388e2f3916a72fa1" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-10 23:45:08 -0700" ;
+    schema:keywords "addition" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-add-planning-component>
+    a git:Branch ;
+    schema:name "feature/add-planning-component" ;
+    git:commitHash "b0a4e9399b1dc7859a3ca71a8db22031f05f1a19" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-20 08:24:48 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-add-verification-adherence-check>
+    a git:Branch ;
+    schema:name "feature/add-verification-adherence-check" ;
+    git:commitHash "32222a92d536e8fec096ec0f0757506021262fa6" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 00:18:47 -0700" ;
+    schema:keywords "addition" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-add-watch-mode>
+    a git:Branch ;
+    schema:name "feature/add-watch-mode" ;
+    git:commitHash "e509c8f2e4ef09ea39cb619d379a29dd5a96cf00" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 02:49:27 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-agent-protocol-refactor>
+    a git:Branch ;
+    schema:name "feature/agent-protocol-refactor" ;
+    git:commitHash "174e6184d3137530838f8cc94d475a6e52b59a3e" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-20 04:07:55 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "refactor" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-agents-md-management>
+    a git:Branch ;
+    schema:name "feature/agents-md-management" ;
+    git:commitHash "cec64987329f34bf9e5a487fad17e654c619fd57" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-31 06:55:43 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-appl-evaluation-framework-final>
+    a git:Branch ;
+    schema:name "feature/appl-evaluation-framework-final" ;
+    git:commitHash "12712fe989896557322a05d26f44a158f20ff83d" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 19:11:03 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-aura-maturity>
+    a git:Branch ;
+    schema:name "feature/aura-maturity" ;
+    git:commitHash "1cdacba61396b19628a6ff8c9017a4036dfa60a4" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-17 18:16:46 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-blum-complexity-analyzer>
+    a git:Branch ;
+    schema:name "feature/blum-complexity-analyzer" ;
+    git:commitHash "bd2547e692af36e9a63745c37bbe527bcb10e2ac" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 06:22:27 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-catastrophic-lint-error>
+    a git:Branch ;
+    schema:name "feature/catastrophic-lint-error" ;
+    git:commitHash "8bb42ed6f265ef0329910b52acdf8e65c64b4596" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-07 00:16:50 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-catastrophic-lint-error-0>
+    a git:Branch ;
+    schema:name "feature/catastrophic-lint-error-0" ;
+    git:commitHash "fe4abc7ee27804d0a9b9d0491f4f171031c5ad9d" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-08 08:08:16 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-comprehensive-repo-audit>
+    a git:Branch ;
+    schema:name "feature/comprehensive-repo-audit" ;
+    git:commitHash "c43675975447dd1f6432c8cf63fd7a4ff088918c" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 19:40:53 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-context-sensitive-dev-cycle>
+    a git:Branch ;
+    schema:name "feature/context-sensitive-dev-cycle" ;
+    git:commitHash "c1440fb29902c024b0e505bfeb57daaadc79b1f3" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 08:47:42 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-csdc-extension>
+    a git:Branch ;
+    schema:name "feature/csdc-extension" ;
+    git:commitHash "c9b369ec3f962c0961d757998903c3466e7a0f65" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 21:55:25 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-define-agents-md-protocol-schema-v2>
+    a git:Branch ;
+    schema:name "feature/define-agents-md-protocol-schema-v2" ;
+    git:commitHash "507085edc186dc5ca95ddf51602a129d301a3d3f" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-12 22:06:26 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "addition" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-documentation-protocol>
+    a git:Branch ;
+    schema:name "feature/documentation-protocol" ;
+    git:commitHash "b9682398388e221f75091e29d689712900dbe5cf" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 02:39:15 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "addition" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-dynamic-readme>
+    a git:Branch ;
+    schema:name "feature/dynamic-readme" ;
+    git:commitHash "811b0ba2fc4cce65b8818dfb55dcf4a600c1587b" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-31 08:46:33 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-enforce-prohibitions>
+    a git:Branch ;
+    schema:name "feature/enforce-prohibitions" ;
+    git:commitHash "9715fec2b4d73865c06bf106d37260cdc93cbafe" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 07:03:48 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-enrich-symbol-map>
+    a git:Branch ;
+    schema:name "feature/enrich-symbol-map" ;
+    git:commitHash "090d03d8a4a69d005f5496930964e43cd2b43ccd" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 16:17:53 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-executable-agents-md>
+    a git:Branch ;
+    schema:name "feature/executable-agents-md" ;
+    git:commitHash "28dbccc62f1d099001495c6d0e4f3ba870a5ba59" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-19 18:51:53 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-formalize-dev-cycle>
+    a git:Branch ;
+    schema:name "feature/formalize-dev-cycle" ;
+    git:commitHash "73eaee33b21d6c2d1741ed4b87b07a9c1683bcb6" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-06 22:16:10 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-formalize-dev-cycle-bugged>
+    a git:Branch ;
+    schema:name "feature/formalize-dev-cycle-bugged" ;
+    git:commitHash "2dd089d6e0045561f009034d501e61247f7d76fb" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-07 00:18:04 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-formalize-dev-cycle-post-submission>
+    a git:Branch ;
+    schema:name "feature/formalize-dev-cycle-post-submission" ;
+    git:commitHash "ddd45b34a420beea489f62d8a9d5df3cdb5b33f5" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-07 02:20:56 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-formalize-dev-cycle-termination>
+    a git:Branch ;
+    schema:name "feature/formalize-dev-cycle-termination" ;
+    git:commitHash "9c5126f86e831c9c7aaaffd68262111bd5486355" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-07 02:01:14 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-hierarchical-agents-md>
+    a git:Branch ;
+    schema:name "feature/hierarchical-agents-md" ;
+    git:commitHash "8c65c732d503b421d486d9ed3cf2631ccdf02c4e" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 04:43:40 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-hierarchical-agents-md-v1>
+    a git:Branch ;
+    schema:name "feature/hierarchical-agents-md-v1" ;
+    git:commitHash "b84ff8a34dcbe1efbf1de869ff47f42024f2663b" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 05:16:40 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-hierarchical-agents-md-v2>
+    a git:Branch ;
+    schema:name "feature/hierarchical-agents-md-v2" ;
+    git:commitHash "654e6437d3689f27efeb0cc3cc49ecab1a102495" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 06:24:54 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-hierarchical-protocols-and-mutation-framework>
+    a git:Branch ;
+    schema:name "feature/hierarchical-protocols-and-mutation-framework" ;
+    git:commitHash "a5b3764be7efca1bf3775700ca785fb82fc96afe" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-20 04:05:17 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "addition" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-implement-placeholders>
+    a git:Branch ;
+    schema:name "feature/implement-placeholders" ;
+    git:commitHash "155ea7ad6463c3047ac1ca787af659d387d176a5" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-06 23:11:33 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-implement-placeholders-policy>
+    a git:Branch ;
+    schema:name "feature/implement-placeholders-policy" ;
+    git:commitHash "5847a2ef069a35bc356dc1d1563e015796953870" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-06 23:34:13 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-improve-prooftree-parser>
+    a git:Branch ;
+    schema:name "feature/improve-prooftree-parser" ;
+    git:commitHash "fd2844ec7a9be793d1e4de57431ba3018e0ec8e3" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-11 23:46:27 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-integrate-logic-aura-tooling>
+    a git:Branch ;
+    schema:name "feature/integrate-logic-aura-tooling" ;
+    git:commitHash "9316a6c9ac87b760c235feea3468759f5c4215e0" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 20:00:40 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-integrate-systems>
+    a git:Branch ;
+    schema:name "feature/integrate-systems" ;
+    git:commitHash "52438d0d71cb3970d4643a01960a2a3ea1ef59ae" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 02:58:22 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-integrated-systems>
+    a git:Branch ;
+    schema:name "feature/integrated-systems" ;
+    git:commitHash "9bbc20a78a2f0e0f713331daab33273aeaefff82" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 19:43:09 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-interactive-fsm-planning>
+    a git:Branch ;
+    schema:name "feature/interactive-fsm-planning" ;
+    git:commitHash "b0ca9495d5384a2cf067e6ccd136ed0a6405c2f4" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-07 21:07:23 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-interactive-fsm-planning-0>
+    a git:Branch ;
+    schema:name "feature/interactive-fsm-planning-0" ;
+    git:commitHash "848f919cce8b04fb587e6b680cc9d725a155d931" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-08 04:58:28 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-language-modularization>
+    a git:Branch ;
+    schema:name "feature/language-modularization" ;
+    git:commitHash "b3bb3461e50357fafc3be20b141af3ac5186ce63" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-20 01:44:10 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-latex-to-html-converter>
+    a git:Branch ;
+    schema:name "feature/latex-to-html-converter" ;
+    git:commitHash "ec330476b008eddcda9e302088d0493f7aaa2c22" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-08 20:32:01 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-lfi-ill-maturity>
+    a git:Branch ;
+    schema:name "feature/lfi-ill-maturity" ;
+    git:commitHash "4f62dcc454ff3df2d4b6bc5948f25ff17836eccf" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-17 06:19:23 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-major-refactor-aura-engine>
+    a git:Branch ;
+    schema:name "feature/major-refactor-aura-engine" ;
+    git:commitHash "d1463b2e8f62990439cf7900965e1607f2acf2ec" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-16 00:38:15 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-mature-readme>
+    a git:Branch ;
+    schema:name "feature/mature-readme" ;
+    git:commitHash "38bb37652a880a4f0c134793fe1d9c46ed711b9e" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-11 21:05:05 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-multiset-sequents-and-lj-ill-translation>
+    a git:Branch ;
+    schema:name "feature/multiset-sequents-and-lj-ill-translation" ;
+    git:commitHash "22f95640d020f034b5adb3477c73741bbe461218" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 08:10:44 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-pdf-reading-capability>
+    a git:Branch ;
+    schema:name "feature/pdf-reading-capability" ;
+    git:commitHash "494afd8c865ce6251b7d85d1255e41c10f7c8e71" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 11:02:28 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-plan-complexity-analysis>
+    a git:Branch ;
+    schema:name "feature/plan-complexity-analysis" ;
+    git:commitHash "10bd67013451accff027bdc41fa6de2a11d160c6" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 05:26:01 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-post-mortem-of-submission-behaviors>
+    a git:Branch ;
+    schema:name "feature/post-mortem-of-submission-behaviors" ;
+    git:commitHash "cddffe4b54ec58ccd218ed6692c0731ef705cc6e" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-08 04:52:40 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-post-mortem-research-and-improvement>
+    a git:Branch ;
+    schema:name "feature/post-mortem-research-and-improvement" ;
+    git:commitHash "6e55ed1ee9d8bd3f981074580b746949fd4c46a0" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 08:39:00 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-protocol-evolution>
+    a git:Branch ;
+    schema:name "feature/protocol-evolution" ;
+    git:commitHash "e26fa1611f8ad9ee459972e50a169f5242ec7364" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-18 14:15:29 -0700" ;
+    schema:keywords "core" ;
+    schema:keywords "merge" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-refactoring-tool>
+    a git:Branch ;
+    schema:name "feature/refactoring-tool" ;
+    git:commitHash "a5aa1a2a7d431a8fdf38445c1845969f70166ff7" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 20:11:20 +0000" ;
+    schema:keywords "refactor" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-reflection-audit>
+    a git:Branch ;
+    schema:name "feature/reflection-audit" ;
+    git:commitHash "0e218bb544c1ce501a1505517f35dc0a4669f0d5" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 03:22:52 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-restore-temporal-orientation>
+    a git:Branch ;
+    schema:name "feature/restore-temporal-orientation" ;
+    git:commitHash "22967d6f392b2596c40e9014dd1fd0fd64d52783" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 00:44:23 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-self-contained-compiler>
+    a git:Branch ;
+    schema:name "feature/self-contained-compiler" ;
+    git:commitHash "a736a12ab47646bb6db2f52b5bbfcf2c8f846b0a" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 21:57:48 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/feature-standard-agents-md>
+    a git:Branch ;
+    schema:name "feature/standard-agents-md" ;
+    git:commitHash "274f31e746f514b356a933a7e482c6e41925c36f" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-12 16:05:09 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-agent-lifecycle>
+    a git:Branch ;
+    schema:name "fix-agent-lifecycle" ;
+    git:commitHash "f59a6c1605f9fa254fc00ed64449d23efb1a7a99" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-18 09:38:35 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-broken-tests-and-refactor>
+    a git:Branch ;
+    schema:name "fix-broken-tests-and-refactor" ;
+    git:commitHash "dc14e72f1e9a5682c6f3dc95abd106cca01e9436" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-16 01:42:36 +0000" ;
+    schema:keywords "fix" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-browser-crash-on-large-output>
+    a git:Branch ;
+    schema:name "fix-browser-crash-on-large-output" ;
+    git:commitHash "d44683c94ebd835c6ff5d266357d901eb2dc9975" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-08 06:13:30 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-build-system>
+    a git:Branch ;
+    schema:name "fix-build-system" ;
+    git:commitHash "fe84dd9756430fe00341657c6b5c3239c9466ac0" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-21 20:57:21 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-build-toolchain>
+    a git:Branch ;
+    schema:name "fix-build-toolchain" ;
+    git:commitHash "06a13211067de1237056ce70c05146e1bf27c8c6" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-30 01:25:34 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-file-extensions>
+    a git:Branch ;
+    schema:name "fix-file-extensions" ;
+    git:commitHash "334e76cc26d253fab0e1f5b6baa37ae9297d2b61" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 06:14:41 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-integer-comparison>
+    a git:Branch ;
+    schema:name "fix-integer-comparison" ;
+    git:commitHash "3e010524fe3ecd673c8982e4e36fc4d41c7e38c2" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-18 04:39:32 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-lba-validator-import>
+    a git:Branch ;
+    schema:name "fix-lba-validator-import" ;
+    git:commitHash "1c18848393686a14ddd15f1809e3a947f10b524b" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-26 04:58:17 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-lessons-overwrite>
+    a git:Branch ;
+    schema:name "fix-lessons-overwrite" ;
+    git:commitHash "ed2679f75b12897664573d8b6b9dcc44cef1cf3b" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-23 01:16:21 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-linting-and-test-errors>
+    a git:Branch ;
+    schema:name "fix-linting-and-test-errors" ;
+    git:commitHash "b41bb1a56be3486cdd52c045a096c684f389cb0b" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-21 02:55:38 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-protocol-build-system>
+    a git:Branch ;
+    schema:name "fix-protocol-build-system" ;
+    git:commitHash "6a1fcd3e3d0603947311fac60e23c7c19dfce30e" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-30 04:11:24 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "addition" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-protocol-compiler>
+    a git:Branch ;
+    schema:name "fix-protocol-compiler" ;
+    git:commitHash "a694c4212fa1f00b25723e8efdcafa24c6d8ac42" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-11-02 23:59:30 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "fix" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-test-protocol-auditor>
+    a git:Branch ;
+    schema:name "fix-test-protocol-auditor" ;
+    git:commitHash "a57eeae72eda385883c950b3d40591f9074494ed" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 01:01:25 -0700" ;
+    schema:keywords "core" ;
+    schema:keywords "merge" ;
+    schema:keywords "fix" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-unmapped-tools>
+    a git:Branch ;
+    schema:name "fix-unmapped-tools" ;
+    git:commitHash "53ded7fc3bb27b39f467956fb0c9068c4c552152" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-18 04:37:05 +0000" ;
+    schema:keywords "fix" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-update-github-pages-workflow>
+    a git:Branch ;
+    schema:name "fix-update-github-pages-workflow" ;
+    git:commitHash "7acd344bdbf2a838e15e78747f32b339690549c9" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-30 00:25:49 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-appl-docs-and-cli>
+    a git:Branch ;
+    schema:name "fix/appl-docs-and-cli" ;
+    git:commitHash "4a11287b6c26d0c9a9258cce32e1cb7ac30ab071" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-17 07:40:07 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-clarify-reset-all-protocols>
+    a git:Branch ;
+    schema:name "fix/clarify-reset-all-protocols" ;
+    git:commitHash "2ede1970db3a84f71a77b2154754a34eff470877" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 00:54:10 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "fix" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-correct-agent-md-references>
+    a git:Branch ;
+    schema:name "fix/correct-agent-md-references" ;
+    git:commitHash "02460c5741d91c8e1c08f923341152d95173fbc8" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-08 06:55:59 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-enforce-reset-all-prohibition>
+    a git:Branch ;
+    schema:name "fix/enforce-reset-all-prohibition" ;
+    git:commitHash "d3e292038dd79ec299f231ef5b59b0fdd52f17b5" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 07:09:45 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-filesystem-lister>
+    a git:Branch ;
+    schema:name "fix/filesystem-lister" ;
+    git:commitHash "f75e3a18419dc9ea525b8672c79132b05f0477ef" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 12:06:19 -0700" ;
+    schema:keywords "fix" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-hierarchical-build-system>
+    a git:Branch ;
+    schema:name "fix/hierarchical-build-system" ;
+    git:commitHash "483c5be1b530503f204070d0831022d399efe29d" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-12 09:31:14 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-hierarchical-compiler-logic>
+    a git:Branch ;
+    schema:name "fix/hierarchical-compiler-logic" ;
+    git:commitHash "71b1b863771dc808d60c9367591c1eec640456b6" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 07:06:01 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-illusion-of-omniscience>
+    a git:Branch ;
+    schema:name "fix/illusion-of-omniscience" ;
+    git:commitHash "69e36324b9b7f869b4e1728c6df9fc94876d0c1b" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 19:38:51 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-linter-toolchain>
+    a git:Branch ;
+    schema:name "fix/linter-toolchain" ;
+    git:commitHash "9f87f41ef55446c75a8eaeacb63fb8e98c652a1c" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-11-03 07:36:38 +0000" ;
+    schema:keywords "fix" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-postmortem-generation>
+    a git:Branch ;
+    schema:name "fix/postmortem-generation" ;
+    git:commitHash "4dd6e8c2ad3b0abe2894f7877c77864a7696f5d9" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-20 02:45:29 +0000" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-protocol-auditor-overhaul>
+    a git:Branch ;
+    schema:name "fix/protocol-auditor-overhaul" ;
+    git:commitHash "fa6cbcb88aed45424c6ac74a2c97c09487a6392c" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-12 23:02:39 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "addition" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-protocol-contradiction>
+    a git:Branch ;
+    schema:name "fix/protocol-contradiction" ;
+    git:commitHash "d6687815acefc7c52507e755cf551622f7f82824" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-12 22:50:23 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "addition" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-protocol-ttl-deletion-bug>
+    a git:Branch ;
+    schema:name "fix/protocol-ttl-deletion-bug" ;
+    git:commitHash "ebd9c20f9cf9c747824e85a8b9fda9184b76b213" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 00:56:51 -0700" ;
+    schema:keywords "core" ;
+    schema:keywords "merge" ;
+    schema:keywords "fix" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-self-executing-agents-md>
+    a git:Branch ;
+    schema:name "fix/self-executing-agents-md" ;
+    git:commitHash "b885cb23d0315c244887edd9ed65845035fd04a6" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-20 05:08:14 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/fix-standardize-filenames>
+    a git:Branch ;
+    schema:name "fix/standardize-filenames" ;
+    git:commitHash "5c58b2a3a27794ae4bdfe4cba3832aaef2eaca42" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-12 09:07:16 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/fizzbuzz-codegolf>
+    a git:Branch ;
+    schema:name "fizzbuzz-codegolf" ;
+    git:commitHash "375db86e069b1284b6dea15bfe221e514162c3a8" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 00:14:52 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/gemini-api-integration>
+    a git:Branch ;
+    schema:name "gemini-api-integration" ;
+    git:commitHash "e14947389cec780a293d4baaddb7802268058afa" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-19 21:11:26 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/gitauto-issue-261-20251224-214857-OoyM>
+    a git:Branch ;
+    schema:name "gitauto/issue-261-20251224-214857-OoyM" ;
+    git:commitHash "168b80e74e79f9e2b08de1751546a6d96dfdd595" ;
+    git:status "automated" ;
+    schema:dateCreated "2025-12-24 21:53:10 +0000" ;
+    schema:keywords "automated" ;
+    .
+
+<http://metavacua.io/resource/branch/gitauto-issue-263-20251224-221333-GebK>
+    a git:Branch ;
+    schema:name "gitauto/issue-263-20251224-221333-GebK" ;
+    git:commitHash "4a09c13a4ab89b4599349a6f58c2683b1bf0ea78" ;
+    git:status "automated" ;
+    schema:dateCreated "2025-12-24 22:17:29 +0000" ;
+    schema:keywords "automated" ;
+    .
+
+<http://metavacua.io/resource/branch/grammar-research>
+    a git:Branch ;
+    schema:name "grammar-research" ;
+    git:commitHash "5125f9556c9b0d5c7544aa4333fb06e417986308" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 04:01:25 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/guardian-protocol>
+    a git:Branch ;
+    schema:name "guardian-protocol" ;
+    git:commitHash "09a14018a4bb13bb6dab708d512b7d2bb6327d41" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-20 08:58:13 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/improve-agent-processes>
+    a git:Branch ;
+    schema:name "improve-agent-processes" ;
+    git:commitHash "297c9f744c5492057bf0af7b81350dc896574454" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 04:08:13 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/improve-git-workflow-protocol>
+    a git:Branch ;
+    schema:name "improve-git-workflow-protocol" ;
+    git:commitHash "4de427cec5e9c694eb71e89b1ae60b55382d6c8b" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-30 04:29:05 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/improve-test-coverage>
+    a git:Branch ;
+    schema:name "improve-test-coverage" ;
+    git:commitHash "7f956d11d992c7324256f3e1cd306242ef14bace" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-18 04:40:23 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/improve-testing-protocols>
+    a git:Branch ;
+    schema:name "improve-testing-protocols" ;
+    git:commitHash "f9088f9c887ca1484b2508be58019f4574925ec8" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-30 08:29:11 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/improve-testing-protocols-1>
+    a git:Branch ;
+    schema:name "improve-testing-protocols-1" ;
+    git:commitHash "ce84424ac351346a134dd51d77a04218663f289b" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-30 13:39:46 -0700" ;
+    schema:keywords "core" ;
+    schema:keywords "merge" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/integration-v1.5-release-candidate-1>
+    a git:Branch ;
+    schema:name "integration/v1.5-release-candidate-1" ;
+    git:commitHash "a4b5edc1bda78a5a9b5fd6f6335eb03b3df651cf" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-06 21:58:42 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/integration-v1.5-release-candidate-2>
+    a git:Branch ;
+    schema:name "integration/v1.5-release-candidate-2" ;
+    git:commitHash "4abca37f4473a4af726dbfb67b132bfbd4dda3d8" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-06 22:27:01 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/integration-v2-release-candidate>
+    a git:Branch ;
+    schema:name "integration/v2-release-candidate" ;
+    git:commitHash "181bcfa03c7d6c2dca37b4224773f68d192ef41b" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-08 04:55:36 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/json-to-yaml-ld-migration>
+    a git:Branch ;
+    schema:name "json-to-yaml-ld-migration" ;
+    git:commitHash "d45f02ec5078d6a186d70e86be8409e01c6b4a4a" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-26 04:01:51 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/jules-consolidation-refactor>
+    a git:Branch ;
+    schema:name "jules-consolidation-refactor" ;
+    git:commitHash "02e33900483626ffcab19ad1cc0320182d806b64" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-31 11:59:41 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/jules-agent-md-experiment>
+    a git:Branch ;
+    schema:name "jules/agent-md-experiment" ;
+    git:commitHash "aa03036f9a44f20d957d4b4d9c6fcf3621ae2a5f" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-18 15:54:50 -0700" ;
+    schema:keywords "experimental" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/language-theory-framework>
+    a git:Branch ;
+    schema:name "language-theory-framework" ;
+    git:commitHash "46b2b88d10c2222af89376f6c84f4d7d765af699" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 07:08:42 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/language-theory-framework-0>
+    a git:Branch ;
+    schema:name "language-theory-framework-0" ;
+    git:commitHash "322965fc4f19e8829cc8eb001072934765cead2e" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 08:12:27 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/logic-construction-system>
+    a git:Branch ;
+    schema:name "logic-construction-system" ;
+    git:commitHash "3a346475b55d283bb9d4a55018a6973b6bd59221" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 23:04:53 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/main>
+    a git:Branch ;
+    schema:name "main" ;
+    git:commitHash "14d0ffa5b8eef267766a9bdf4b37699a6e9e4dfd" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-11-04 04:16:04 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/major-refactor-and-standardization>
+    a git:Branch ;
+    schema:name "major-refactor-and-standardization" ;
+    git:commitHash "6722c6450f348056afaa06c63b01184e340048aa" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 06:57:21 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/major-refactor-unified-toolchain>
+    a git:Branch ;
+    schema:name "major-refactor-unified-toolchain" ;
+    git:commitHash "a331733e2653552194764074b11edf4dfe058363" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 04:33:59 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/major-stabilization-refactor>
+    a git:Branch ;
+    schema:name "major-stabilization-refactor" ;
+    git:commitHash "c6359c25f67e2a69e3b49b6a516bc6176cb4aaa4" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 20:47:03 -0700" ;
+    schema:keywords "refactor" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/optimize-dependency-graph-generator>
+    a git:Branch ;
+    schema:name "optimize-dependency-graph-generator" ;
+    git:commitHash "fa6ce739bae321b0c053d8af86381a838d8d14c4" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 09:01:26 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/organize-repo-structure>
+    a git:Branch ;
+    schema:name "organize-repo-structure" ;
+    git:commitHash "3d3f80ba57bd546ac75b6dbfc6a04b065972e50a" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 23:52:45 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/paraconsistent-logic-lang>
+    a git:Branch ;
+    schema:name "paraconsistent-logic-lang" ;
+    git:commitHash "2bd0a2130d4dbaa42ac2b48582f1a89293ba604a" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 22:16:08 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/postmortem-analysis>
+    a git:Branch ;
+    schema:name "postmortem-analysis" ;
+    git:commitHash "90e433e5d0b16675ee2128ab2f157bb49a44c17c" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-20 21:28:40 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/python-prover-refuter>
+    a git:Branch ;
+    schema:name "python-prover-refuter" ;
+    git:commitHash "2a51b91ce803fe75b7741ba3e53bb17f4a6361d4" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-12 06:29:26 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/reduce-deploy-frequency>
+    a git:Branch ;
+    schema:name "reduce-deploy-frequency" ;
+    git:commitHash "357c5d4a2f24553652078bce3e6cdcd6d30cb76e" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-13 21:30:17 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-build-process>
+    a git:Branch ;
+    schema:name "refactor-build-process" ;
+    git:commitHash "296dee654388c082810a8776b427ef571679442d" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-13 20:28:54 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-build-system-and-protocols-v2>
+    a git:Branch ;
+    schema:name "refactor-build-system-and-protocols-v2" ;
+    git:commitHash "b20e254d74733e03290d24b58340921b5e425eb0" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-20 13:28:07 -0700" ;
+    schema:keywords "refactor" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-build-system-yamld>
+    a git:Branch ;
+    schema:name "refactor-build-system-yamld" ;
+    git:commitHash "6060c10d986191bef14f6fc81c7da8e25e3145e9" ;
+    git:status "active" ;
+    schema:dateCreated "2025-10-26 05:16:09 +0000" ;
+    schema:keywords "refactor" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-consolidate-features>
+    a git:Branch ;
+    schema:name "refactor-consolidate-features" ;
+    git:commitHash "83ac37d9a13d70715cc561d7d435c28099e7e1be" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-21 20:10:11 -0700" ;
+    schema:keywords "refactor" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-filesystem-tooling>
+    a git:Branch ;
+    schema:name "refactor-filesystem-tooling" ;
+    git:commitHash "f282e2082170642770acb94080e38ea638ab72ad" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-15 19:40:36 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-instructional-agents-md>
+    a git:Branch ;
+    schema:name "refactor-instructional-agents-md" ;
+    git:commitHash "1da0123d0c055c184337d3d84d1ef9f06c4ac3a3" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-23 05:52:18 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-protocol-docs>
+    a git:Branch ;
+    schema:name "refactor-protocol-docs" ;
+    git:commitHash "5f44fdcbd2636007502fc6b3261fb8dc451bb8fe" ;
+    git:status "active" ;
+    schema:dateCreated "2025-10-30 21:33:41 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-yaml-ld-context>
+    a git:Branch ;
+    schema:name "refactor-yaml-ld-context" ;
+    git:commitHash "303b2f0d186f39c426dde01f5fc9d05e7884a41f" ;
+    git:status "active" ;
+    schema:dateCreated "2025-10-26 04:39:40 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-api-driven-architecture>
+    a git:Branch ;
+    schema:name "refactor/api-driven-architecture" ;
+    git:commitHash "2d803462263032e2da0a5c3edadb5bc80895ed07" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-13 13:21:32 -0700" ;
+    schema:keywords "refactor" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-consolidate-plllu>
+    a git:Branch ;
+    schema:name "refactor/consolidate-plllu" ;
+    git:commitHash "2d71740dddb67a70b7ed260baa10277195f1d326" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-17 09:47:27 +0000" ;
+    schema:keywords "refactor" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-consolidate-repository>
+    a git:Branch ;
+    schema:name "refactor/consolidate-repository" ;
+    git:commitHash "69207561838847de7d445399e29503a5f611c5b0" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-17 18:12:38 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-consolidate-tooling>
+    a git:Branch ;
+    schema:name "refactor/consolidate-tooling" ;
+    git:commitHash "1d70a3feca3802ff01b05c7278368ca5f5208021" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-16 01:40:36 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-deprecate-hierarchical-compiler>
+    a git:Branch ;
+    schema:name "refactor/deprecate-hierarchical-compiler" ;
+    git:commitHash "bdae1036b04c5b8ccac15276f734c557d09e822b" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-15 08:30:00 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-integrate-audit-into-build-system>
+    a git:Branch ;
+    schema:name "refactor/integrate-audit-into-build-system" ;
+    git:commitHash "6c4169eb95e602a222eca96316a68d29f601e062" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-13 20:34:31 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/refactor-reorganize-archives>
+    a git:Branch ;
+    schema:name "refactor/reorganize-archives" ;
+    git:commitHash "1079dd5695f5fccc80344ab29a0cf5c3bed5eb66" ;
+    git:status "stalled" ;
+    schema:dateCreated "2025-10-11 09:18:02 +0000" ;
+    schema:keywords "refactor" ;
+    .
+
+<http://metavacua.io/resource/branch/refine-dbpedia-enrichment-v2>
+    a git:Branch ;
+    schema:name "refine-dbpedia-enrichment-v2" ;
+    git:commitHash "260fd867b62477d92f3bd2b339ad3465885aeca6" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-26 07:53:34 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/refine-theory-falsifiability>
+    a git:Branch ;
+    schema:name "refine-theory-falsifiability" ;
+    git:commitHash "f32edc8a1e59715f38bca227300d4a079e3fe5c2" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-26 00:00:37 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/remove-dual-operator>
+    a git:Branch ;
+    schema:name "remove-dual-operator" ;
+    git:commitHash "ace6d6e4ae9330f8e5053d8e730f12afe1dc36a5" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-12 05:01:01 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/remove-reconciliation-tool>
+    a git:Branch ;
+    schema:name "remove-reconciliation-tool" ;
+    git:commitHash "3a7187832464084a6632991116a9e68b3cc88ddf" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-10 23:44:05 -0700" ;
+    schema:keywords "deletion" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/repo-cleanup>
+    a git:Branch ;
+    schema:name "repo-cleanup" ;
+    git:commitHash "4c1523c3c8864b046fcc5efa8f885324de9441b2" ;
+    git:status "archived" ;
+    schema:dateCreated "2025-10-11 22:47:06 +0000" ;
+    schema:keywords "cleanup" ;
+    schema:keywords "fix" ;
+    .
+
+<http://metavacua.io/resource/branch/repobird-agent-4f92f62b>
+    a git:Branch ;
+    schema:name "repobird/agent-4f92f62b" ;
+    git:commitHash "1087c1dc4fa850e5d8e3f1f4c1784b528c69d3d8" ;
+    git:status "automated" ;
+    schema:dateCreated "2025-12-24 22:54:15 +0000" ;
+    schema:keywords "addition" ;
+    schema:keywords "automated" ;
+    .
+
+<http://metavacua.io/resource/branch/review-org-principles-proposals-meta-math>
+    a git:Branch ;
+    schema:name "review-org-principles-proposals-meta-math" ;
+    git:commitHash "dea68ae037507e7c3f654b03fd257ca07b211857" ;
+    git:status "active" ;
+    schema:dateCreated "2025-12-25 21:02:31 +0000" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/self-improvement-architecture>
+    a git:Branch ;
+    schema:name "self-improvement-architecture" ;
+    git:commitHash "a80be2cd42c74003baaf7b417979d5e4cad6c5a8" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-15 08:13:00 +0000" ;
+    .
+
+<http://metavacua.io/resource/branch/speculative-execution-protocol>
+    a git:Branch ;
+    schema:name "speculative-execution-protocol" ;
+    git:commitHash "6df94b8627e6056181f5551c2bb796b7e9b6c1f3" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-14 23:46:35 +0000" ;
+    schema:keywords "core" ;
+    schema:keywords "addition" ;
+    schema:keywords "protocol" ;
+    .
+
+<http://metavacua.io/resource/branch/stability-improvements>
+    a git:Branch ;
+    schema:name "stability-improvements" ;
+    git:commitHash "8dca78c0203c7cc2c36b927335e9a0b4d448669e" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-18 15:05:21 -0700" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/test-tooling-coverage>
+    a git:Branch ;
+    schema:name "test-tooling-coverage" ;
+    git:commitHash "a4652cc3f587e133b5e487ef62ae6d8340596fc4" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-15 13:01:15 -0700" ;
+    schema:keywords "testing" ;
+    schema:keywords "merge" ;
+    .
+
+<http://metavacua.io/resource/branch/testing-protocol-1>
+    a git:Branch ;
+    schema:name "testing-protocol-1" ;
+    git:commitHash "45fa6a6ac6b56000e4c25c3ba04c1c3227b25556" ;
+    git:status "experimental" ;
+    schema:dateCreated "2025-10-30 00:19:35 +0000" ;
+    schema:keywords "testing" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/update-build-process-for-yaml-ld-and-json-ld-standards>
+    a git:Branch ;
+    schema:name "update-build-process-for-yaml-ld-and-json-ld-standards" ;
+    git:commitHash "620b92243ea8cabbe8fbc99434727a11bb690c34" ;
+    git:status "inactive" ;
+    schema:dateCreated "2025-10-26 04:57:14 +0000" ;
+    schema:keywords "refactor" ;
+    schema:keywords "addition" ;
+    .
+
+<http://metavacua.io/resource/branch/CatCleanup> git:convergesTo <http://metavacua.io/resource/branch/CoPilot_Experiment_0> .
+<http://metavacua.io/resource/branch/origin> git:convergesTo <http://metavacua.io/resource/branch/main> .

@@ -1,0 +1,209 @@
+'@context':
+  '@vocab': 'http://metavacua.io/ontology/meta#'
+  schema: 'http://schema.org/'
+  dcterms: 'http://purl.org/dc/terms/'
+
+'@type': KnowledgeArtifactMetadata
+
+artifact_id: branch-archaeology
+version: '1.0.0'
+generated: '2025-12-25T21:48:54Z'
+
+title: Repository Branch Archaeology
+description: |
+  Comprehensive semantic knowledge graph documenting 260 repository branches,
+  including their relationships, status, themes, and development history.
+  Serves as machine-readable institutional memory for agents to query and
+  learn from past work, both successful and failed attempts.
+
+purpose: institutional-memory
+scope: repository-wide
+coverage: all-branches
+
+# Linked outputs - machine-readable formats
+machine_readable_formats:
+  - format: JSON-LD
+    location: knowledge_core/branch_archaeology.jsonld
+    mime_type: application/ld+json
+    size_bytes: 158720
+    lines: 4184
+    use_cases:
+      - JSON parsers
+      - JavaScript/TypeScript applications
+      - RESTful API integration
+    example_query: |
+      const kg = require("./knowledge_core/branch_archaeology.jsonld");
+      const protocolBranches = kg.branches.filter(b => b.tags.includes("protocol"));
+
+  - format: YAML-LD
+    location: knowledge_core/branch_archaeology.yaml
+    mime_type: application/x-yaml
+    size_bytes: 125952
+    lines: 3218
+    use_cases:
+      - YAML parsers
+      - Configuration management
+      - Human-readable scripting
+    example_query: |
+      import yaml
+      with open("knowledge_core/branch_archaeology.yaml") as f:
+          kg = yaml.safe_load(f)
+      stalled = [b for b in kg["branches"] if b["status"] == "stalled"]
+
+  - format: Turtle (TTL)
+    location: knowledge_core/branch_archaeology.ttl
+    mime_type: text/turtle
+    size_bytes: 124928
+    lines: 2809
+    use_cases:
+      - SPARQL queries
+      - RDF triple stores
+      - Semantic reasoners
+      - Knowledge graph applications
+    example_query: |
+      PREFIX git: <http://metavacua.io/ontology/git#>
+      PREFIX schema: <http://schema.org/>
+      
+      SELECT ?branch ?status
+      WHERE {
+        ?branch a git:Branch ;
+                schema:name ?name ;
+                git:status ?status .
+        FILTER(CONTAINS(?name, "protocol"))
+      }
+
+# Human-readable documentation
+human_readable_format:
+  format: Markdown
+  location: docs/BRANCH_ARCHAEOLOGY.md
+  size_bytes: 19456
+  lines: 512
+  sections:
+    - Executive Summary
+    - Key Statistics
+    - Investigation of Anomalies
+    - Branch Convergences
+    - Thematic Organization
+    - Version Series
+    - Machine-Readable Outputs
+    - Agent Use Cases
+    - Integration with Knowledge Core
+    - Ontology Reference
+    - Maintenance Instructions
+
+# Statistics
+statistics:
+  total_branches: 260
+  by_status:
+    stalled: 185
+    experimental: 70
+    archived: 3
+    automated: 2
+  by_theme:
+    addition: 85
+    feature: 65
+    merge: 43
+    refactor: 37
+    fix: 34
+    core: 21
+    protocol: 21
+  relationships_identified: 134
+  convergences_found: 2
+  version_series: 8
+
+# Anomalies investigated
+anomalies:
+  - id: copilot-catcleanup-convergence
+    branches: [CoPilot_Experiment_0, CatCleanup]
+    commit_hash: 083394cf03f7746f403a2e0e415c038ca982fa5e
+    finding: Intentional convergence - both branches diverge from same cleanup commit
+    type: deliberate-branching-strategy
+    resolved: true
+
+# Integration points
+integrates_with:
+  - artifact: integrated_knowledge.json
+    relationship: provides-historical-context
+  - artifact: symbols.json
+    relationship: can-cross-reference-entities
+  - artifact: dependency_graph.json
+    relationship: correlates-architectural-changes
+  - artifact: lessons.jsonl
+    relationship: links-lessons-to-branches
+  - artifact: plan_registry.json
+    relationship: references-historical-plans
+
+# Discovery during agent initialization
+discovery:
+  during_l1_self_awareness: false
+  during_l2_repository_sync: true
+  during_l3_environmental_probing: false
+  during_l4_deep_research: true
+  
+  access_patterns:
+    - Load during repository sync to understand development history
+    - Query when investigating specific features or protocols
+    - Reference when analyzing failed attempts to avoid repetition
+    - Use for discovery of related prior work
+
+# Maintenance
+maintenance:
+  regeneration_script: tooling/branch_archaeologist.py
+  recommended_frequency:
+    active_development: weekly
+    maintenance_periods: monthly
+    on_demand: after-major-refactorings
+  
+  regeneration_command: |
+    git branch -r --format='%(refname:short)|%(objectname)|%(authordate:iso8601)|%(committerdate:iso8601)|%(subject)' > /tmp/all_branches.txt
+    python3 tooling/branch_archaeologist.py
+
+# Ontology
+ontology:
+  namespaces:
+    branch: 'http://metavacua.io/ontology/branch#'
+    git: 'http://metavacua.io/ontology/git#'
+    schema: 'http://schema.org/'
+    dcterms: 'http://purl.org/dc/terms/'
+  
+  status_values:
+    - active: Recent activity (< 30 days)
+    - inactive: No recent activity (30-90 days)
+    - stalled: Long period without updates (> 90 days)
+    - experimental: Explicitly experimental branches
+    - archived: Completed/abandoned cleanup branches
+    - automated: Created by automated tools
+  
+  relationship_types:
+    - converges_to: Two branches point to same commit
+    - supersedes: One version replaces another
+    - thematic_group: Branch belongs to a development theme
+  
+  uri_patterns:
+    branch: 'http://metavacua.io/resource/branch/{name}'
+    theme: 'http://metavacua.io/resource/theme/{name}'
+    graph: 'http://metavacua.io/resource/branch-archaeology'
+
+# Quality metrics
+quality:
+  completeness: 100%  # All 260 branches analyzed
+  classification_confidence: high
+  relationship_discovery: automated
+  human_validation: required-for-anomalies
+  
+# Provenance
+provenance:
+  generated_by: branch_archaeologist.py
+  source_data: git branch metadata
+  extraction_method: automated
+  analysis_method: pattern-matching and inference
+  validation_method: git-log cross-reference
+  
+tags:
+  - institutional-memory
+  - development-history
+  - branch-analysis
+  - semantic-knowledge-graph
+  - archaeological-study
+  - agent-learning
+  - prior-work-discovery
