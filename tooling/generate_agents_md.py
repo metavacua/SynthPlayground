@@ -1,7 +1,13 @@
 # tooling/generate_agents_md.py
 import os
+import sys
 import importlib
 import logging
+
+# Add project root to path to enable protocol imports
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
 # Configure logging to provide clear output about the script's execution.
 logging.basicConfig(

@@ -1,4 +1,11 @@
 import sys
+import os
+
+# Add project root to path to enable imports
+project_root = os.path.abspath(os.path.dirname(__file__))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 from parser import parse
 from type_checker import type_check
 from interpreter import interpret

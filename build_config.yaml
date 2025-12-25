@@ -40,7 +40,7 @@ targets:
     description: Compile the guardian protocol.
     type: command
   install:
-    command: "pip install -r requirements.txt"
+    command: "pip install -r requirements.txt --break-system-packages"
     description: Install Python dependencies.
     type: command
   knowledge-integrate:
