@@ -1,0 +1,4210 @@
+{
+  "@context": {
+    "@vocab": "http://metavacua.io/ontology/branch#",
+    "git": "http://metavacua.io/ontology/git#",
+    "schema": "http://schema.org/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "name": "schema:name",
+    "description": "schema:description",
+    "dateCreated": "schema:dateCreated",
+    "commitHash": "git:commitHash",
+    "status": "git:status",
+    "tags": "schema:keywords",
+    "purpose": "dcterms:purpose",
+    "convergesTo": "git:convergesTo",
+    "supersedes": "git:supersedes",
+    "thematicGroup": "git:thematicGroup"
+  },
+  "@type": "BranchKnowledgeGraph",
+  "dateGenerated": "2025-12-25T21:52:36.627499",
+  "totalBranches": 260,
+  "statistics": {
+    "byStatus": {
+      "archived": 3,
+      "experimental": 59,
+      "inactive": 160,
+      "active": 16,
+      "stalled": 18,
+      "automated": 4
+    },
+    "byTag": {
+      "cleanup": 2,
+      "deletion": 6,
+      "experimental": 3,
+      "merge": 43,
+      "addition": 85,
+      "fix": 34,
+      "core": 21,
+      "protocol": 21,
+      "refactor": 37,
+      "bugfix": 2,
+      "maintenance": 1,
+      "automated": 4,
+      "dependencies": 1,
+      "documentation": 5,
+      "feature": 65,
+      "testing": 2
+    }
+  },
+  "branches": [
+    {
+      "name": "CatCleanup",
+      "full_name": "origin/CatCleanup",
+      "commit_hash": "083394cf03f7746f403a2e0e415c038ca982fa5e",
+      "author_date": "2025-11-04 14:29:59 -0800",
+      "committer_date": "2025-11-04 14:29:59 -0800",
+      "subject": "Delete tests/test_hdl_prover.py",
+      "status": "archived",
+      "tags": [
+        "cleanup",
+        "deletion"
+      ],
+      "purpose": "Delete tests/test_hdl_prover.py"
+    },
+    {
+      "name": "CoPilot_Experiment_0",
+      "full_name": "origin/CoPilot_Experiment_0",
+      "commit_hash": "083394cf03f7746f403a2e0e415c038ca982fa5e",
+      "author_date": "2025-11-04 14:29:59 -0800",
+      "committer_date": "2025-11-04 14:29:59 -0800",
+      "subject": "Delete tests/test_hdl_prover.py",
+      "status": "experimental",
+      "tags": [
+        "experimental",
+        "deletion"
+      ],
+      "purpose": "Delete tests/test_hdl_prover.py"
+    },
+    {
+      "name": "origin",
+      "full_name": "origin",
+      "commit_hash": "14d0ffa5b8eef267766a9bdf4b37699a6e9e4dfd",
+      "author_date": "2025-11-04 04:16:04 +0000",
+      "committer_date": "2025-11-04 04:16:04 +0000",
+      "subject": "chore(knowledge): Automatically update Knowledge Core artifacts",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "chore(knowledge): Automatically update Knowledge Core artifacts"
+    },
+    {
+      "name": "LOL",
+      "full_name": "origin/LOL",
+      "commit_hash": "384e4305838eb119b99982cccb2f52bb6c0a3068",
+      "author_date": "2025-10-12 22:58:09 -0700",
+      "committer_date": "2025-10-12 22:58:09 -0700",
+      "subject": "Merge pull request #53 from metavacua/main",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge pull request #53 from metavacua/main"
+    },
+    {
+      "name": "add-conceptual-foundations",
+      "full_name": "origin/add-conceptual-foundations",
+      "commit_hash": "b78ae1533d2a7771890779ebd98c3a30a0e389a7",
+      "author_date": "2025-10-11 21:25:10 +0000",
+      "committer_date": "2025-10-11 21:25:10 +0000",
+      "subject": "feat(docs): Add conceptual foundations documentation",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat(docs): Add conceptual foundations documentation"
+    },
+    {
+      "name": "add-docstring-to-pre-submit-check",
+      "full_name": "origin/add-docstring-to-pre-submit-check",
+      "commit_hash": "761af006312225eb977ce3e73d81df006d28142e",
+      "author_date": "2025-10-18 04:18:02 +0000",
+      "committer_date": "2025-10-18 04:18:02 +0000",
+      "subject": "This commit fixes all outstanding flake8 linting errors in the repository.",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "This commit fixes all outstanding flake8 linting errors in the repository."
+    },
+    {
+      "name": "add-docstrings-to-tooling",
+      "full_name": "origin/add-docstrings-to-tooling",
+      "commit_hash": "a04a20494d57386e28d7e06f04e63872d0de0ae0",
+      "author_date": "2025-10-15 04:32:11 +0000",
+      "committer_date": "2025-10-15 04:32:11 +0000",
+      "subject": "fix: Delegate fdc_cli.py to agent_shell.py to fix infinite loop",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "fix: Delegate fdc_cli.py to agent_shell.py to fix infinite loop"
+    },
+    {
+      "name": "add-logging-verification-protocol",
+      "full_name": "origin/add-logging-verification-protocol",
+      "commit_hash": "eb33c385a4896f22177be3232f5ddcd9afaf8c0e",
+      "author_date": "2025-10-18 15:30:00 -0700",
+      "committer_date": "2025-10-18 15:30:00 -0700",
+      "subject": "Merge branch 'main' into add-logging-verification-protocol",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "merge",
+        "addition",
+        "protocol"
+      ],
+      "purpose": "Merge branch 'main' into add-logging-verification-protocol"
+    },
+    {
+      "name": "add-protocol-validation",
+      "full_name": "origin/add-protocol-validation",
+      "commit_hash": "2636937e8f80986cf97546f9f99fc9f3c47eb497",
+      "author_date": "2025-10-08 08:30:23 +0000",
+      "committer_date": "2025-10-08 08:30:23 +0000",
+      "subject": "This commit introduces a robust validation system to prevent critical environmental errors, specifically the misnaming of the `AGENTS.md` protocol file.",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "protocol"
+      ],
+      "purpose": "This commit introduces a robust validation system to prevent critical environmental errors, specifically the misnaming of the `AGENTS.md` protocol file."
+    },
+    {
+      "name": "agent-shell-improvements",
+      "full_name": "origin/agent-shell-improvements",
+      "commit_hash": "309a0741e0a3affad02744a4fad58471b3206eea",
+      "author_date": "2025-10-14 22:57:31 +0000",
+      "committer_date": "2025-10-14 22:57:31 +0000",
+      "subject": "Refactor agent_shell.py for async research and learning",
+      "status": "inactive",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor agent_shell.py for async research and learning"
+    },
+    {
+      "name": "agent-smith-framework",
+      "full_name": "origin/agent-smith-framework",
+      "commit_hash": "551942864c27f50c1a24b7ea5c3bd0eab87be447",
+      "author_date": "2025-10-18 06:51:00 +0000",
+      "committer_date": "2025-10-18 06:51:00 +0000",
+      "subject": "feat: Enhance Agent Smith with inheritance and polymorphism",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Enhance Agent Smith with inheritance and polymorphism"
+    },
+    {
+      "name": "agentic-research-experiments",
+      "full_name": "origin/agentic-research-experiments",
+      "commit_hash": "ab705fd742577026b4190f23a6ab7566d34b12af",
+      "author_date": "2025-10-12 23:16:31 -0700",
+      "committer_date": "2025-10-12 23:16:31 -0700",
+      "subject": "Merge pull request #56 from metavacua/fix-file-extensions",
+      "status": "experimental",
+      "tags": [
+        "experimental",
+        "fix",
+        "merge"
+      ],
+      "purpose": "Merge pull request #56 from metavacua/fix-file-extensions"
+    },
+    {
+      "name": "agentic-self-improvement-theory",
+      "full_name": "origin/agentic-self-improvement-theory",
+      "commit_hash": "ad89463a405a4389efcbc15e0bd4682ad98fce16",
+      "author_date": "2025-10-15 03:35:16 +0000",
+      "committer_date": "2025-10-15 03:35:16 +0000",
+      "subject": "feat(tooling): Add capability_verifier.py tool",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat(tooling): Add capability_verifier.py tool"
+    },
+    {
+      "name": "aura-interpreter-witness",
+      "full_name": "origin/aura-interpreter-witness",
+      "commit_hash": "d5ccaf5ae8cc2d5ca4375b8683020b1db32edeeb",
+      "author_date": "2025-10-14 23:56:58 +0000",
+      "committer_date": "2025-10-14 23:56:58 +0000",
+      "subject": "feat: Create Aura-zero interpreter as a constructive witness",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Create Aura-zero interpreter as a constructive witness"
+    },
+    {
+      "name": "automated-logic-construction-poc",
+      "full_name": "origin/automated-logic-construction-poc",
+      "commit_hash": "13ee2998acbb816f19eec7115d1154bbfe575264",
+      "author_date": "2025-10-15 00:18:59 +0000",
+      "committer_date": "2025-10-15 00:18:59 +0000",
+      "subject": "feat: Add framework for automated logic construction",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add framework for automated logic construction"
+    },
+    {
+      "name": "bugfix-resilient-error-handling",
+      "full_name": "origin/bugfix-resilient-error-handling",
+      "commit_hash": "975ada802507e7b67b3bf39cf9c813acbf5a74fa",
+      "author_date": "2025-11-03 06:32:26 +0000",
+      "committer_date": "2025-11-03 06:32:26 +0000",
+      "subject": "Refactor: Improve agent error handling and fix critical bugs",
+      "status": "active",
+      "tags": [
+        "fix",
+        "refactor",
+        "bugfix"
+      ],
+      "purpose": "Refactor: Improve agent error handling and fix critical bugs"
+    },
+    {
+      "name": "bugfix/fix-protocol-compiler-and-restore-protocols",
+      "full_name": "origin/bugfix/fix-protocol-compiler-and-restore-protocols",
+      "commit_hash": "2db5cf4f279a2e21692cc4078cb8f5739bdd822b",
+      "author_date": "2025-10-18 22:33:05 +0000",
+      "committer_date": "2025-10-18 22:33:05 +0000",
+      "subject": "Feat: Add Protocol API and enhance toolchain tests",
+      "status": "stalled",
+      "tags": [
+        "addition",
+        "bugfix"
+      ],
+      "purpose": "Feat: Add Protocol API and enhance toolchain tests"
+    },
+    {
+      "name": "chore/delete-firebase-key",
+      "full_name": "origin/chore/delete-firebase-key",
+      "commit_hash": "a7eab368640be96248da84e5e4f2703404d8d809",
+      "author_date": "2025-10-15 03:20:09 +0000",
+      "committer_date": "2025-10-15 03:20:09 +0000",
+      "subject": "Delete GeminiAPIAppFireBaseKey.jsx",
+      "status": "archived",
+      "tags": [
+        "deletion",
+        "maintenance"
+      ],
+      "purpose": "Delete GeminiAPIAppFireBaseKey.jsx"
+    },
+    {
+      "name": "code-health-supervisor",
+      "full_name": "origin/code-health-supervisor",
+      "commit_hash": "c5b044a9ac69331450de6ad00d33d7a97de71be5",
+      "author_date": "2025-10-14 23:47:58 +0000",
+      "committer_date": "2025-10-14 23:47:58 +0000",
+      "subject": "Implement Code Health Supervisor",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "Implement Code Health Supervisor"
+    },
+    {
+      "name": "code-quality-improvements",
+      "full_name": "origin/code-quality-improvements",
+      "commit_hash": "60ca572d36c6c8905141b2f4c4ec9d14d05faa42",
+      "author_date": "2025-10-13 17:45:13 -0700",
+      "committer_date": "2025-10-13 17:45:13 -0700",
+      "subject": "Merge branch 'main' into code-quality-improvements",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into code-quality-improvements"
+    },
+    {
+      "name": "dbpedia-client",
+      "full_name": "origin/dbpedia-client",
+      "commit_hash": "69bfa2c7248749c0ab2be9d5601d127541f31e9d",
+      "author_date": "2025-10-22 23:37:01 +0000",
+      "committer_date": "2025-10-22 23:37:01 +0000",
+      "subject": "feat: Enhance DBPedia client and overhaul test suite",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Enhance DBPedia client and overhaul test suite"
+    },
+    {
+      "name": "decision-making-test-framework",
+      "full_name": "origin/decision-making-test-framework",
+      "commit_hash": "a0e6705adfad40c348d5c6d7999fb6782c2446c3",
+      "author_date": "2025-10-30 19:36:53 +0000",
+      "committer_date": "2025-10-30 19:36:53 +0000",
+      "subject": "feat: Add decision-making test framework",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add decision-making test framework"
+    },
+    {
+      "name": "delete-jsx-lsp-files",
+      "full_name": "origin/delete-jsx-lsp-files",
+      "commit_hash": "acd4379307447d85c14bdd701afe9e806d1902b0",
+      "author_date": "2025-11-04 21:58:15 +0000",
+      "committer_date": "2025-11-04 21:58:15 +0000",
+      "subject": "Delete all JSX and LSP files",
+      "status": "inactive",
+      "tags": [
+        "deletion"
+      ],
+      "purpose": "Delete all JSX and LSP files"
+    },
+    {
+      "name": "dependabot/pip/pip-05067b9523",
+      "full_name": "origin/dependabot/pip/pip-05067b9523",
+      "commit_hash": "e317ac96603ac0384668f5e69c5868d0cd6c5855",
+      "author_date": "2025-11-24 22:58:28 +0000",
+      "committer_date": "2025-11-24 22:58:28 +0000",
+      "subject": "chore(deps): Bump the pip group across 2 directories with 1 update",
+      "status": "automated",
+      "tags": [
+        "automated",
+        "dependencies"
+      ],
+      "purpose": "chore(deps): Bump the pip group across 2 directories with 1 update"
+    },
+    {
+      "name": "docs-improve-agents-md",
+      "full_name": "origin/docs-improve-agents-md",
+      "commit_hash": "5a512ec2e4b88e56a2afbb495c75254c23e28141",
+      "author_date": "2025-10-20 02:16:59 +0000",
+      "committer_date": "2025-10-20 02:16:59 +0000",
+      "subject": "docs: Improve AGENTS.md with Jules API documentation",
+      "status": "stalled",
+      "tags": [
+        "documentation"
+      ],
+      "purpose": "docs: Improve AGENTS.md with Jules API documentation"
+    },
+    {
+      "name": "docs/appl-implementation-deviations",
+      "full_name": "origin/docs/appl-implementation-deviations",
+      "commit_hash": "0bb5ef8cf2afa80c87c6fd0e893c6b6962b37176",
+      "author_date": "2025-10-16 02:10:09 +0000",
+      "committer_date": "2025-10-16 02:10:09 +0000",
+      "subject": "doc: Add APPL implementation deviations report",
+      "status": "stalled",
+      "tags": [
+        "documentation",
+        "addition"
+      ],
+      "purpose": "doc: Add APPL implementation deviations report"
+    },
+    {
+      "name": "docs/complete-documentation",
+      "full_name": "origin/docs/complete-documentation",
+      "commit_hash": "40c4da741a3c3aa757b875346e17501c81761165",
+      "author_date": "2025-10-15 02:58:56 +0000",
+      "committer_date": "2025-10-15 02:58:56 +0000",
+      "subject": "docs: complete system documentation",
+      "status": "stalled",
+      "tags": [
+        "documentation"
+      ],
+      "purpose": "docs: complete system documentation"
+    },
+    {
+      "name": "docs/development-cycles",
+      "full_name": "origin/docs/development-cycles",
+      "commit_hash": "0862277d662fb43e4b2d3162f804c1da25326759",
+      "author_date": "2025-10-16 02:44:30 +0000",
+      "committer_date": "2025-10-16 02:44:30 +0000",
+      "subject": "docs: Create comprehensive documentation for development cycles",
+      "status": "stalled",
+      "tags": [
+        "documentation"
+      ],
+      "purpose": "docs: Create comprehensive documentation for development cycles"
+    },
+    {
+      "name": "docs/tooling-readme",
+      "full_name": "origin/docs/tooling-readme",
+      "commit_hash": "a2485d4f1eb28d3e905a0279b379eca66f23865b",
+      "author_date": "2025-10-13 21:37:03 +0000",
+      "committer_date": "2025-10-13 21:37:03 +0000",
+      "subject": "fix: Correct build tool and update core FDC protocol",
+      "status": "stalled",
+      "tags": [
+        "documentation",
+        "fix"
+      ],
+      "purpose": "fix: Correct build tool and update core FDC protocol"
+    },
+    {
+      "name": "document-git-capabilities",
+      "full_name": "origin/document-git-capabilities",
+      "commit_hash": "6ad3990da1e35a4e0da96aea3423de3bb092119a",
+      "author_date": "2025-10-15 10:11:39 +0000",
+      "committer_date": "2025-10-15 10:11:39 +0000",
+      "subject": "This change introduces a new protocol and toolchain to improve the git workflow within this environment. It includes a formal GIT_WORKFLOW_PROTOCOL.md, a pre-submission check script, and updates to the Makefile.",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "This change introduces a new protocol and toolchain to improve the git workflow within this environment. It includes a formal GIT_WORKFLOW_PROTOCOL.md, a pre-submission check script, and updates to the Makefile."
+    },
+    {
+      "name": "enforce-docstrings",
+      "full_name": "origin/enforce-docstrings",
+      "commit_hash": "374f95015c3328fb2733c02527b35364614269a5",
+      "author_date": "2025-10-23 03:43:46 +0000",
+      "committer_date": "2025-10-23 03:43:46 +0000",
+      "subject": "feat: Add docstring enforcement to pre-submit checks",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add docstring enforcement to pre-submit checks"
+    },
+    {
+      "name": "enrich-protocol-knowledge",
+      "full_name": "origin/enrich-protocol-knowledge",
+      "commit_hash": "1fd737df96e29cbce557e0a9512ec78e00c0312c",
+      "author_date": "2025-10-23 00:52:01 +0000",
+      "committer_date": "2025-10-23 00:52:01 +0000",
+      "subject": "feat: Enrich protocols with DBPedia knowledge",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "protocol"
+      ],
+      "purpose": "feat: Enrich protocols with DBPedia knowledge"
+    },
+    {
+      "name": "executable-agents-md",
+      "full_name": "origin/executable-agents-md",
+      "commit_hash": "bdbfe95d001936f29617f7c78f64d8d757b5cf7a",
+      "author_date": "2025-10-19 18:49:17 -0700",
+      "committer_date": "2025-10-19 18:49:17 -0700",
+      "subject": "Merge branch 'main' into executable-agents-md",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into executable-agents-md"
+    },
+    {
+      "name": "feat-add-ratchet-lesson-and-fix-integrator",
+      "full_name": "origin/feat-add-ratchet-lesson-and-fix-integrator",
+      "commit_hash": "a109d2f5e389752e45eac79bb99f768ccc7b3eb8",
+      "author_date": "2025-10-22 22:33:02 +0000",
+      "committer_date": "2025-10-22 22:33:02 +0000",
+      "subject": "feat: Add 'ratchet' lesson and fix knowledge integrator",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "fix",
+        "addition"
+      ],
+      "purpose": "feat: Add 'ratchet' lesson and fix knowledge integrator"
+    },
+    {
+      "name": "feat-ai-agent-protocols",
+      "full_name": "origin/feat-ai-agent-protocols",
+      "commit_hash": "8f13e6a4c080ac1c1702da7ed23eaf5f9627c254",
+      "author_date": "2025-10-26 00:05:41 +0000",
+      "committer_date": "2025-10-26 00:05:41 +0000",
+      "subject": "feat: Implement and demonstrate AI agent toolchain",
+      "status": "active",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement and demonstrate AI agent toolchain"
+    },
+    {
+      "name": "feat-categorical-reasoning-engine-formal",
+      "full_name": "origin/feat-categorical-reasoning-engine-formal",
+      "commit_hash": "c0b5ad0a6d92a2d7fe1b2fcd092f61355bf7816b",
+      "author_date": "2025-11-02 22:46:23 -0800",
+      "committer_date": "2025-11-02 22:46:23 -0800",
+      "subject": "Merge pull request #251 from metavacua/feature-improve-test-coverage",
+      "status": "active",
+      "tags": [
+        "feature",
+        "merge"
+      ],
+      "purpose": "Merge pull request #251 from metavacua/feature-improve-test-coverage"
+    },
+    {
+      "name": "feat-chc-protocol-framework",
+      "full_name": "origin/feat-chc-protocol-framework",
+      "commit_hash": "99cbce7bff4d8208e0c7dabd3a4246c4e4ccfc86",
+      "author_date": "2025-10-31 08:49:33 +0000",
+      "committer_date": "2025-10-31 08:49:33 +0000",
+      "subject": "feat: Introduce CHC Protocol Framework",
+      "status": "active",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat: Introduce CHC Protocol Framework"
+    },
+    {
+      "name": "feat-chc-protocol-framework-total",
+      "full_name": "origin/feat-chc-protocol-framework-total",
+      "commit_hash": "8eba1f43ba275f2011781999336a2336dfe8c9bd",
+      "author_date": "2025-10-31 12:08:13 +0000",
+      "committer_date": "2025-10-31 12:08:13 +0000",
+      "subject": "feat: Complete Migration to CHC Protocol Framework",
+      "status": "active",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat: Complete Migration to CHC Protocol Framework"
+    },
+    {
+      "name": "feat-chc-protocol-framework-total-v1",
+      "full_name": "origin/feat-chc-protocol-framework-total-v1",
+      "commit_hash": "eafa7aa120bf67ce5c9448caf58e09824d63370f",
+      "author_date": "2025-11-01 01:46:15 +0000",
+      "committer_date": "2025-11-01 01:46:15 +0000",
+      "subject": "feat: Consolidate and refactor protocol system to CHC",
+      "status": "active",
+      "tags": [
+        "feature",
+        "refactor"
+      ],
+      "purpose": "feat: Consolidate and refactor protocol system to CHC"
+    },
+    {
+      "name": "feat-chomsky-toolchain",
+      "full_name": "origin/feat-chomsky-toolchain",
+      "commit_hash": "7191db344a20eb8f6286c5ef46d5b90830da3263",
+      "author_date": "2025-10-26 00:25:03 +0000",
+      "committer_date": "2025-10-26 00:25:03 +0000",
+      "subject": "feat: Create consolidated Chomsky toolchain",
+      "status": "active",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat: Create consolidated Chomsky toolchain"
+    },
+    {
+      "name": "feat-goal-oriented-self-improvement",
+      "full_name": "origin/feat-goal-oriented-self-improvement",
+      "commit_hash": "025a11666eebd4344c49ddfe64d83c2959bddb03",
+      "author_date": "2025-10-15 06:23:09 +0000",
+      "committer_date": "2025-10-15 06:23:09 +0000",
+      "subject": "docs(self-improvement): Update README to match project's purpose",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "docs(self-improvement): Update README to match project's purpose"
+    },
+    {
+      "name": "feat-meta-mutation",
+      "full_name": "origin/feat-meta-mutation",
+      "commit_hash": "59a7464390a422571e4060c2d455f6b4f98b1715",
+      "author_date": "2025-10-20 20:28:41 +0000",
+      "committer_date": "2025-10-20 20:28:41 +0000",
+      "subject": "feat: Introduce meta-mutation capability for self-correction",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat: Introduce meta-mutation capability for self-correction"
+    },
+    {
+      "name": "feat-python-witness-implementation",
+      "full_name": "origin/feat-python-witness-implementation",
+      "commit_hash": "da8b5c2c964e1f495c45606340f5d46399e907c6",
+      "author_date": "2025-10-30 01:10:07 +0000",
+      "committer_date": "2025-10-30 01:10:07 +0000",
+      "subject": "feat: Implement executable witnesses for three classes of recursive languages",
+      "status": "active",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement executable witnesses for three classes of recursive languages"
+    },
+    {
+      "name": "feat-regular-language-ontology",
+      "full_name": "origin/feat-regular-language-ontology",
+      "commit_hash": "a99b0de4f894138270939b7df9b1f614fe0edc29",
+      "author_date": "2025-10-30 20:54:05 +0000",
+      "committer_date": "2025-10-30 20:54:05 +0000",
+      "subject": "feat(ontology): create regular language ontology",
+      "status": "active",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat(ontology): create regular language ontology"
+    },
+    {
+      "name": "feat-research-ambiguity-report",
+      "full_name": "origin/feat-research-ambiguity-report",
+      "commit_hash": "56f77268f3fb5057dbacbd53fd9e45abfc90fcbb",
+      "author_date": "2025-10-14 07:02:18 +0000",
+      "committer_date": "2025-10-14 07:02:18 +0000",
+      "subject": "feat: Add research report on planning ambiguity",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Add research report on planning ambiguity"
+    },
+    {
+      "name": "feat-session-persistence",
+      "full_name": "origin/feat-session-persistence",
+      "commit_hash": "5e4212f80d2447d6e5d1ec49413342c8757cffd6",
+      "author_date": "2025-10-21 03:27:15 +0000",
+      "committer_date": "2025-10-21 03:27:15 +0000",
+      "subject": "feat: Add session persistence for agent state",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Add session persistence for agent state"
+    },
+    {
+      "name": "feat-temporal-integrity-system",
+      "full_name": "origin/feat-temporal-integrity-system",
+      "commit_hash": "512daf20e503f403e4c25e5ef3ce1d36f8b96a02",
+      "author_date": "2025-10-22 17:09:47 -0700",
+      "committer_date": "2025-10-22 17:09:47 -0700",
+      "subject": "Merge branch 'main' into feat-temporal-integrity-system",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feat-temporal-integrity-system"
+    },
+    {
+      "name": "feat-v-theory-decider-witness",
+      "full_name": "origin/feat-v-theory-decider-witness",
+      "commit_hash": "71bdef10887f02e8798415bfdca262885aee6be2",
+      "author_date": "2025-10-30 03:21:49 +0000",
+      "committer_date": "2025-10-30 03:21:49 +0000",
+      "subject": "feat: Create v_theory_decider.py as a computational witness",
+      "status": "active",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat: Create v_theory_decider.py as a computational witness"
+    },
+    {
+      "name": "feat-v1-categorical-reasoning-engine-formal",
+      "full_name": "origin/feat-v1-categorical-reasoning-engine-formal",
+      "commit_hash": "af41ec177fca164089d520779f04789a9f94129b",
+      "author_date": "2025-11-03 07:32:38 +0000",
+      "committer_date": "2025-11-03 07:32:38 +0000",
+      "subject": "feat: Implement Structured Post-Mortem Generation",
+      "status": "active",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement Structured Post-Mortem Generation"
+    },
+    {
+      "name": "feat-yaml-ld-poc",
+      "full_name": "origin/feat-yaml-ld-poc",
+      "commit_hash": "a6b456b72195890e93efe4ac64a9a465a87c027c",
+      "author_date": "2025-10-26 02:31:57 +0000",
+      "committer_date": "2025-10-26 02:31:57 +0000",
+      "subject": "feat: Migrate protocol definitions from JSON to YAML-LD",
+      "status": "active",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat: Migrate protocol definitions from JSON to YAML-LD"
+    },
+    {
+      "name": "feat/99_self_mod",
+      "full_name": "origin/feat/99_self_mod",
+      "commit_hash": "11c0a0500fa337324e88a63b9e29bed372f58c1f",
+      "author_date": "2025-10-18 21:21:06 +0000",
+      "committer_date": "2025-10-18 21:21:06 +0000",
+      "subject": "Refactor the AGENTS.md system into a robust, verifiable build process.",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "refactor"
+      ],
+      "purpose": "Refactor the AGENTS.md system into a robust, verifiable build process."
+    },
+    {
+      "name": "feat/APPL",
+      "full_name": "origin/feat/APPL",
+      "commit_hash": "f21420b7dd70a299750d74d6a91b7ed7210e8373",
+      "author_date": "2025-10-15 17:14:28 +0000",
+      "committer_date": "2025-10-15 17:14:28 +0000",
+      "subject": "This commit introduces the Agentic Plan Programming Language (APPL), a new language designed for writing agentic plans. The language is based on light linear logic and is intended for use by both AI agents and humans.",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "This commit introduces the Agentic Plan Programming Language (APPL), a new language designed for writing agentic plans. The language is based on light linear logic and is intended for use by both AI agents and humans."
+    },
+    {
+      "name": "feat/FDC-aorp-v1-integration",
+      "full_name": "origin/feat/FDC-aorp-v1-integration",
+      "commit_hash": "3424ac3bfff8da80b55a241de71f5d4ad976e2e0",
+      "author_date": "2025-10-07 20:13:30 +0000",
+      "committer_date": "2025-10-07 20:13:30 +0000",
+      "subject": "feat: Harden protocol and integrate FDC analysis",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat: Harden protocol and integrate FDC analysis"
+    },
+    {
+      "name": "feat/aal-protocol-system",
+      "full_name": "origin/feat/aal-protocol-system",
+      "commit_hash": "f8470ad540abbdddc46e42d94917ec838c00efe5",
+      "author_date": "2025-10-18 03:36:13 -0700",
+      "committer_date": "2025-10-18 03:36:13 -0700",
+      "subject": "Merge pull request #155 from metavacua/feat/modular-agent-protocols",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "merge"
+      ],
+      "purpose": "Merge pull request #155 from metavacua/feat/modular-agent-protocols"
+    },
+    {
+      "name": "feat/add-plan-registry-auditor",
+      "full_name": "origin/feat/add-plan-registry-auditor",
+      "commit_hash": "48dea6e6954661586f1eae646e7b64b0efd5990c",
+      "author_date": "2025-10-14 16:22:32 -0700",
+      "committer_date": "2025-10-14 16:22:32 -0700",
+      "subject": "Merge branch 'main' into feat/add-plan-registry-auditor",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feat/add-plan-registry-auditor"
+    },
+    {
+      "name": "feat/agent-research-and-poc",
+      "full_name": "origin/feat/agent-research-and-poc",
+      "commit_hash": "12b795df9705bff80a4e558535bf555d9305b4b8",
+      "author_date": "2025-10-20 07:52:45 +0000",
+      "committer_date": "2025-10-20 07:52:45 +0000",
+      "subject": "feat(agent): Conduct research and build proof-of-concept agent",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat(agent): Conduct research and build proof-of-concept agent"
+    },
+    {
+      "name": "feat/agent-shell-protocol",
+      "full_name": "origin/feat/agent-shell-protocol",
+      "commit_hash": "80bfce04531b045c44c01401c1840a2a41602fae",
+      "author_date": "2025-10-13 20:38:20 +0000",
+      "committer_date": "2025-10-13 20:38:20 +0000",
+      "subject": "feat: Develop AGENTS.md protocol for agent shell",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat: Develop AGENTS.md protocol for agent shell"
+    },
+    {
+      "name": "feat/agent-smith-framework",
+      "full_name": "origin/feat/agent-smith-framework",
+      "commit_hash": "1fa3535bf85a598b2ed9f1c8d17c5d2ceba1ebfc",
+      "author_date": "2025-10-18 08:16:49 +0000",
+      "committer_date": "2025-10-18 08:16:49 +0000",
+      "subject": "Refactor agent protocol system and correct agent identity.",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "refactor"
+      ],
+      "purpose": "Refactor agent protocol system and correct agent identity."
+    },
+    {
+      "name": "feat/agents-patch",
+      "full_name": "origin/feat/agents-patch",
+      "commit_hash": "81202d134dfb9838a6645ecf5a52c52703f72ac9",
+      "author_date": "2025-10-08 05:07:38 +0000",
+      "committer_date": "2025-10-08 05:07:38 +0000",
+      "subject": "chore: Harden protocol, integrate FDC, and rename Agent.md",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "chore: Harden protocol, integrate FDC, and rename Agent.md"
+    },
+    {
+      "name": "feat/aorp-v2-integration",
+      "full_name": "origin/feat/aorp-v2-integration",
+      "commit_hash": "908f459a869ccf486c87a990404afa77e6318bbf",
+      "author_date": "2025-10-07 04:24:09 +0000",
+      "committer_date": "2025-10-07 04:24:09 +0000",
+      "subject": "feat: Develop deep research toolchain",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat: Develop deep research toolchain"
+    },
+    {
+      "name": "feat/aorp-v3-integration",
+      "full_name": "origin/feat/aorp-v3-integration",
+      "commit_hash": "ee434bb57aca03c5a6faf56c16ebafaa890d1bfa",
+      "author_date": "2025-10-07 09:25:13 +0000",
+      "committer_date": "2025-10-07 09:25:13 +0000",
+      "subject": "feat: Implement Self-Enforcing FSM-based Protocol (v3.0)",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement Self-Enforcing FSM-based Protocol (v3.0)"
+    },
+    {
+      "name": "feat/aorp-v4-integration",
+      "full_name": "origin/feat/aorp-v4-integration",
+      "commit_hash": "dbec5aa3fc1575ba5d03015e764bb2abb3a5ee41",
+      "author_date": "2025-10-07 09:50:11 +0000",
+      "committer_date": "2025-10-07 09:50:11 +0000",
+      "subject": "feat: Implement Interactive and Resource-Bounded Protocol (v4.0)",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement Interactive and Resource-Bounded Protocol (v4.0)"
+    },
+    {
+      "name": "feat/archive-agent-files",
+      "full_name": "origin/feat/archive-agent-files",
+      "commit_hash": "07c380f708aed427979e4d94bd9b92e73c223de9",
+      "author_date": "2025-10-10 18:09:53 -0700",
+      "committer_date": "2025-10-10 18:09:53 -0700",
+      "subject": "Merge pull request #28 from IDMclean/yologigo",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "merge"
+      ],
+      "purpose": "Merge pull request #28 from IDMclean/yologigo"
+    },
+    {
+      "name": "feat/axiomatic-schema",
+      "full_name": "origin/feat/axiomatic-schema",
+      "commit_hash": "96cc0266aa89c0b99eb88bb33a0dbefce43fca9c",
+      "author_date": "2025-10-12 22:09:58 +0000",
+      "committer_date": "2025-10-12 22:09:58 +0000",
+      "subject": "Define an axiomatic schema for AGENTS.md based on sequent calculus.",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "Define an axiomatic schema for AGENTS.md based on sequent calculus."
+    },
+    {
+      "name": "feat/axiomatic-schema-v1",
+      "full_name": "origin/feat/axiomatic-schema-v1",
+      "commit_hash": "7c0648f46316b230f4a2a5b2d31266585b6f304e",
+      "author_date": "2025-10-12 22:20:42 +0000",
+      "committer_date": "2025-10-12 22:20:42 +0000",
+      "subject": "feat: Implement Top-Down Inheritance for AGENTS.md Protocols",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement Top-Down Inheritance for AGENTS.md Protocols"
+    },
+    {
+      "name": "feat/axiomatic-schema-v2",
+      "full_name": "origin/feat/axiomatic-schema-v2",
+      "commit_hash": "6cea7f92ba1a194f756c887fde47c07d6219bb5b",
+      "author_date": "2025-10-12 22:31:37 +0000",
+      "committer_date": "2025-10-12 22:31:37 +0000",
+      "subject": "feat: Implement Top-Down Inheritance for AGENTS.md Protocols",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement Top-Down Inheritance for AGENTS.md Protocols"
+    },
+    {
+      "name": "feat/backward-chaining-agent",
+      "full_name": "origin/feat/backward-chaining-agent",
+      "commit_hash": "78a84b5316555a2bd7ee4faf1242ca55ad9fa74e",
+      "author_date": "2025-10-20 07:53:52 +0000",
+      "committer_date": "2025-10-20 07:53:52 +0000",
+      "subject": "feat: Implement backward-chaining planner in autonomous agent",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement backward-chaining planner in autonomous agent"
+    },
+    {
+      "name": "feat/bootstrap-protocol-structure",
+      "full_name": "origin/feat/bootstrap-protocol-structure",
+      "commit_hash": "9fb3d20a7d4fc72172e4133322465f5d2a9aa16c",
+      "author_date": "2025-10-05 21:48:33 +0000",
+      "committer_date": "2025-10-05 21:48:33 +0000",
+      "subject": "docs: Improve onboarding and automate repo initialization",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "docs: Improve onboarding and automate repo initialization"
+    },
+    {
+      "name": "feat/calculus-integration",
+      "full_name": "origin/feat/calculus-integration",
+      "commit_hash": "1a947d0b1cb2640ea68f2b8b49b7941b21da7ad8",
+      "author_date": "2025-10-13 06:20:32 +0000",
+      "committer_date": "2025-10-13 06:20:32 +0000",
+      "subject": "feat: Integrate sequent calculi into knowledge graph",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat: Integrate sequent calculi into knowledge graph"
+    },
+    {
+      "name": "feat/chc-bootstrap-protocol",
+      "full_name": "origin/feat/chc-bootstrap-protocol",
+      "commit_hash": "6a038ad261e1df994bf39fe8923d734b980216ed",
+      "author_date": "2025-10-20 02:09:17 +0000",
+      "committer_date": "2025-10-20 02:09:17 +0000",
+      "subject": "feat: Implement CHC-based bootstrap protocol",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement CHC-based bootstrap protocol"
+    },
+    {
+      "name": "feat/context-awareness-experiment",
+      "full_name": "origin/feat/context-awareness-experiment",
+      "commit_hash": "8ff1cae52d57f9b350359aee657dab01f31c4944",
+      "author_date": "2025-10-11 00:50:36 +0000",
+      "committer_date": "2025-10-11 00:50:36 +0000",
+      "subject": "feat: Implement context awareness experiment and tooling",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement context awareness experiment and tooling"
+    },
+    {
+      "name": "feat/decentral",
+      "full_name": "origin/feat/decentral",
+      "commit_hash": "af23891aa129a95825a42e0f91b24a7218bcfd2c",
+      "author_date": "2025-10-18 14:35:55 -0700",
+      "committer_date": "2025-10-18 14:35:55 -0700",
+      "subject": "Merge branch 'main' into feat/decentral",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feat/decentral"
+    },
+    {
+      "name": "feat/fdc-cli-overhaul",
+      "full_name": "origin/feat/fdc-cli-overhaul",
+      "commit_hash": "fb6e88b3476c6da4947eff07d5d387e634c4d2a8",
+      "author_date": "2025-10-15 13:03:04 -0700",
+      "committer_date": "2025-10-15 13:03:04 -0700",
+      "subject": "Merge branch 'main' into feat/fdc-cli-overhaul",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feat/fdc-cli-overhaul"
+    },
+    {
+      "name": "feat/fdc-cli-part1",
+      "full_name": "origin/feat/fdc-cli-part1",
+      "commit_hash": "83bdf302afd102fa13e2ee8612af392e0320c477",
+      "author_date": "2025-10-06 17:14:42 +0000",
+      "committer_date": "2025-10-06 17:14:42 +0000",
+      "subject": "feat: Implement FDC CLI skeleton and standard start command",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement FDC CLI skeleton and standard start command"
+    },
+    {
+      "name": "feat/formal-theory-document",
+      "full_name": "origin/feat/formal-theory-document",
+      "commit_hash": "f38059b77e0cf46a1423a4327596f78f3dd90e08",
+      "author_date": "2025-10-16 02:46:13 +0000",
+      "committer_date": "2025-10-16 02:46:13 +0000",
+      "subject": "feat(docs): Create formal theory of agent operation",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat(docs): Create formal theory of agent operation"
+    },
+    {
+      "name": "feat/fsm-toolchain-with-research-suite",
+      "full_name": "origin/feat/fsm-toolchain-with-research-suite",
+      "commit_hash": "27d7f27141d1e7587cf8f5ec6051ccd03f398110",
+      "author_date": "2025-10-08 08:25:43 +0000",
+      "committer_date": "2025-10-08 08:25:43 +0000",
+      "subject": "feat: Integrate automated intelligence gathering into FSM",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat: Integrate automated intelligence gathering into FSM"
+    },
+    {
+      "name": "feat/hierarchical-agents-md-build",
+      "full_name": "origin/feat/hierarchical-agents-md-build",
+      "commit_hash": "169e37854e54e60c6e25e18036382a9c463a85c4",
+      "author_date": "2025-10-12 08:59:20 +0000",
+      "committer_date": "2025-10-12 08:59:20 +0000",
+      "subject": "feat: Implement hierarchical AGENTS.md and README.md compilation",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement hierarchical AGENTS.md and README.md compilation"
+    },
+    {
+      "name": "feat/hierarchical-protocols",
+      "full_name": "origin/feat/hierarchical-protocols",
+      "commit_hash": "4405b935ce0be6cf73add2072a7d6b48957512ee",
+      "author_date": "2025-10-18 08:38:22 +0000",
+      "committer_date": "2025-10-18 08:38:22 +0000",
+      "subject": "This commit unifies the documentation and knowledge generation systems under a single, configuration-driven build orchestrator.",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "This commit unifies the documentation and knowledge generation systems under a single, configuration-driven build orchestrator."
+    },
+    {
+      "name": "feat/implement-compiled-docs-scheme",
+      "full_name": "origin/feat/implement-compiled-docs-scheme",
+      "commit_hash": "b7e51f3b80e0320ebd2cb2e2c7567cf488ebf947",
+      "author_date": "2025-10-11 21:42:00 +0000",
+      "committer_date": "2025-10-11 21:42:00 +0000",
+      "subject": "feat: Add GitHub Pages deployment workflow and fix artifact tracking",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "fix",
+        "addition"
+      ],
+      "purpose": "feat: Add GitHub Pages deployment workflow and fix artifact tracking"
+    },
+    {
+      "name": "feat/lba-validator",
+      "full_name": "origin/feat/lba-validator",
+      "commit_hash": "c0519fcfb865b436048c99398bcd887554f293fb",
+      "author_date": "2025-10-16 02:11:26 +0000",
+      "committer_date": "2025-10-16 02:11:26 +0000",
+      "subject": "feat: Replace FSM with LBA for CSDC validation",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat: Replace FSM with LBA for CSDC validation"
+    },
+    {
+      "name": "feat/modular-agent-protocols",
+      "full_name": "origin/feat/modular-agent-protocols",
+      "commit_hash": "93bca5f191edb6d6e1b054b675a9cb50ae82d423",
+      "author_date": "2025-10-18 03:36:03 -0700",
+      "committer_date": "2025-10-18 03:36:03 -0700",
+      "subject": "Merge branch 'feat/aal-protocol-system' into feat/modular-agent-protocols",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "merge"
+      ],
+      "purpose": "Merge branch 'feat/aal-protocol-system' into feat/modular-agent-protocols"
+    },
+    {
+      "name": "feat/pLLL-prover-implementation",
+      "full_name": "origin/feat/pLLL-prover-implementation",
+      "commit_hash": "2d8bfdf4dac25bfc3c95fe4bbfc34575c2ee71d8",
+      "author_date": "2025-10-17 20:08:59 +0000",
+      "committer_date": "2025-10-17 20:08:59 +0000",
+      "subject": "feat: Implement Theorem Prover for pLLL",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement Theorem Prover for pLLL"
+    },
+    {
+      "name": "feat/paraconsistent-toolchain",
+      "full_name": "origin/feat/paraconsistent-toolchain",
+      "commit_hash": "d8ce0d145298cf909d45658539327ffcc8abc0e7",
+      "author_date": "2025-10-08 04:51:18 +0000",
+      "committer_date": "2025-10-08 04:51:18 +0000",
+      "subject": "This commit renames the core protocol file from `Agent.md` to `AGENTS.md`.",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "This commit renames the core protocol file from `Agent.md` to `AGENTS.md`."
+    },
+    {
+      "name": "feat/paraconsistent-toolchain-lint-failure-report",
+      "full_name": "origin/feat/paraconsistent-toolchain-lint-failure-report",
+      "commit_hash": "6936c8c4ccf811d262e799ac8e622812463bf84d",
+      "author_date": "2025-10-08 07:18:10 +0000",
+      "committer_date": "2025-10-08 07:18:10 +0000",
+      "subject": "This commit resolves the catastrophic failure loop encountered during the previous pre-commit phase by refactoring the entire project into a proper, installable Python package.",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "refactor"
+      ],
+      "purpose": "This commit resolves the catastrophic failure loop encountered during the previous pre-commit phase by refactoring the entire project into a proper, installable Python package."
+    },
+    {
+      "name": "feat/proof-theoretic-build-system",
+      "full_name": "origin/feat/proof-theoretic-build-system",
+      "commit_hash": "abba027c9fcd15585e9a849a75bb716401df1574",
+      "author_date": "2025-10-13 06:22:58 +0000",
+      "committer_date": "2025-10-13 06:22:58 +0000",
+      "subject": "feat: Implement proof-theoretic build system",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement proof-theoretic build system"
+    },
+    {
+      "name": "feat/protocol-aorp-v2",
+      "full_name": "origin/feat/protocol-aorp-v2",
+      "commit_hash": "9331b080048e543e54259c288d2826556cc6dadb",
+      "author_date": "2025-10-08 04:57:01 +0000",
+      "committer_date": "2025-10-08 04:57:01 +0000",
+      "subject": "feat(protocol): Implement AORP and rename Agent.md to AGENTS.md",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat(protocol): Implement AORP and rename Agent.md to AGENTS.md"
+    },
+    {
+      "name": "feat/protocol-aorp-v2.1.0",
+      "full_name": "origin/feat/protocol-aorp-v2.1.0",
+      "commit_hash": "048d9a30be84e31596121ccd9c35c162cc581e4b",
+      "author_date": "2025-10-08 07:50:28 +0000",
+      "committer_date": "2025-10-08 07:50:28 +0000",
+      "subject": "feat(protocol): Implement unified versioning and active AORP L2 sync",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat(protocol): Implement unified versioning and active AORP L2 sync"
+    },
+    {
+      "name": "feat/protocol-build-system",
+      "full_name": "origin/feat/protocol-build-system",
+      "commit_hash": "f3a8d6473cbc7c72625cdadfce3b8c49a3af9ddd",
+      "author_date": "2025-10-08 09:29:02 +0000",
+      "committer_date": "2025-10-08 09:29:02 +0000",
+      "subject": "feat: Implement automated build system for AGENTS.md",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement automated build system for AGENTS.md"
+    },
+    {
+      "name": "feat/protocol-build-system-AGENTS-regression",
+      "full_name": "origin/feat/protocol-build-system-AGENTS-regression",
+      "commit_hash": "6975571eecece0b2940761afc78ed15eef8f0abb",
+      "author_date": "2025-10-08 20:08:23 +0000",
+      "committer_date": "2025-10-08 20:08:23 +0000",
+      "subject": "feat: Implement resilient, automated build system for AGENTS.md",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement resilient, automated build system for AGENTS.md"
+    },
+    {
+      "name": "feat/protocol-management",
+      "full_name": "origin/feat/protocol-management",
+      "commit_hash": "ba069491bda4d8c78c2bfbd01e629dadb313dba4",
+      "author_date": "2025-10-18 21:40:45 +0000",
+      "committer_date": "2025-10-18 21:40:45 +0000",
+      "subject": "Evolve the AGENTS.md system with advanced features",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "Evolve the AGENTS.md system with advanced features"
+    },
+    {
+      "name": "feat/protocol_oracle",
+      "full_name": "origin/feat/protocol_oracle",
+      "commit_hash": "468117eb46b17371b61b3cf3b8a8950c97bac936",
+      "author_date": "2025-10-18 14:33:38 -0700",
+      "committer_date": "2025-10-18 14:33:38 -0700",
+      "subject": "Merge branch 'main' into feat/protocol_oracle",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feat/protocol_oracle"
+    },
+    {
+      "name": "feat/recover-aal-protocol-branch-history-report",
+      "full_name": "origin/feat/recover-aal-protocol-branch-history-report",
+      "commit_hash": "4d4d9d1ad28cd6a2d6f17fae1d84925923eafaf5",
+      "author_date": "2025-10-18 21:32:27 +0000",
+      "committer_date": "2025-10-18 21:32:27 +0000",
+      "subject": "doc: Create report on recovered branch history",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "doc: Create report on recovered branch history"
+    },
+    {
+      "name": "feat/self-improvement-loop",
+      "full_name": "origin/feat/self-improvement-loop",
+      "commit_hash": "4150a1a6aef5b7132878e17839068e13df322f6b",
+      "author_date": "2025-10-06 07:09:22 +0000",
+      "committer_date": "2025-10-06 07:09:22 +0000",
+      "subject": "feat(core): Establish stable and verified logging utility",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat(core): Establish stable and verified logging utility"
+    },
+    {
+      "name": "feat/semantic-compression-of-agents-md",
+      "full_name": "origin/feat/semantic-compression-of-agents-md",
+      "commit_hash": "58227c8b1ac89a15f943e9dec278b168f1a34f49",
+      "author_date": "2025-10-18 05:08:25 +0000",
+      "committer_date": "2025-10-18 05:08:25 +0000",
+      "subject": "feat: Semantically compress AGENTS.md",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "feat: Semantically compress AGENTS.md"
+    },
+    {
+      "name": "feat/speculative_UDC",
+      "full_name": "origin/feat/speculative_UDC",
+      "commit_hash": "0250576528a69c290b47be78f5933804fbb0cb36",
+      "author_date": "2025-10-18 14:37:44 -0700",
+      "committer_date": "2025-10-18 14:37:44 -0700",
+      "subject": "Merge branch 'main' into feat/speculative_UDC",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feat/speculative_UDC"
+    },
+    {
+      "name": "feat/symbiont-architecture",
+      "full_name": "origin/feat/symbiont-architecture",
+      "commit_hash": "2a1cccfc711bdba1fe208eef1402a2fe7052a109",
+      "author_date": "2025-10-08 03:46:25 +0000",
+      "committer_date": "2025-10-08 03:46:25 +0000",
+      "subject": "feat: Implement Functional Symbiont Architecture",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "addition"
+      ],
+      "purpose": "feat: Implement Functional Symbiont Architecture"
+    },
+    {
+      "name": "feat/unrestricted-dev-cycle",
+      "full_name": "origin/feat/unrestricted-dev-cycle",
+      "commit_hash": "31b899d58eff4f1f5d9eb3970e38ada766a6ff6c",
+      "author_date": "2025-10-17 21:17:52 +0000",
+      "committer_date": "2025-10-17 21:17:52 +0000",
+      "subject": "Extend Paradefinite Light Linear Logic language",
+      "status": "experimental",
+      "tags": [
+        "feature"
+      ],
+      "purpose": "Extend Paradefinite Light Linear Logic language"
+    },
+    {
+      "name": "feat/update-hierarchical-tooling",
+      "full_name": "origin/feat/update-hierarchical-tooling",
+      "commit_hash": "db55c5d3605b0174fd2ac4ac87e1818be2a0854f",
+      "author_date": "2025-10-13 00:42:36 -0700",
+      "committer_date": "2025-10-13 00:42:36 -0700",
+      "subject": "Merge branch 'main' into feat/update-hierarchical-tooling",
+      "status": "experimental",
+      "tags": [
+        "feature",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feat/update-hierarchical-tooling"
+    },
+    {
+      "name": "feature-a-star-planner",
+      "full_name": "origin/feature-a-star-planner",
+      "commit_hash": "9262e1874046e919f3c8539367fd5a7e8b38eaf2",
+      "author_date": "2025-10-20 21:47:20 +0000",
+      "committer_date": "2025-10-20 21:47:20 +0000",
+      "subject": "feat: Replace BFS planner with A* search",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Replace BFS planner with A* search"
+    },
+    {
+      "name": "feature-agent-toolchains",
+      "full_name": "origin/feature-agent-toolchains",
+      "commit_hash": "f6124334059e7f54078cc5ad5da37ec6089b7cdc",
+      "author_date": "2025-10-25 17:22:01 -0700",
+      "committer_date": "2025-10-25 17:22:01 -0700",
+      "subject": "Merge branch 'main' into feature-agent-toolchains",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feature-agent-toolchains"
+    },
+    {
+      "name": "feature-architectural-review",
+      "full_name": "origin/feature-architectural-review",
+      "commit_hash": "c50ab82a0481e910b17b1405e0a6d874ead5187b",
+      "author_date": "2025-11-05 04:57:23 +0000",
+      "committer_date": "2025-11-05 04:57:23 +0000",
+      "subject": "feat: Add architectural review of AGENTS.md system",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add architectural review of AGENTS.md system"
+    },
+    {
+      "name": "feature-ast-generator-integration",
+      "full_name": "origin/feature-ast-generator-integration",
+      "commit_hash": "779b1022ffa44590eef2c81d9a5ecb4cb1599030",
+      "author_date": "2025-10-29 09:46:34 +0000",
+      "committer_date": "2025-10-29 09:46:34 +0000",
+      "subject": "feat: Add unused import remover tool",
+      "status": "inactive",
+      "tags": [
+        "deletion",
+        "addition"
+      ],
+      "purpose": "feat: Add unused import remover tool"
+    },
+    {
+      "name": "feature-aura-language",
+      "full_name": "origin/feature-aura-language",
+      "commit_hash": "9df2e96e45999ef9e839cc26d68a4df6cdb24969",
+      "author_date": "2025-10-31 11:07:00 +0000",
+      "committer_date": "2025-10-31 11:07:00 +0000",
+      "subject": "feat: Stage the Aura agent programming language and API",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Stage the Aura agent programming language and API"
+    },
+    {
+      "name": "feature-collatz-witness",
+      "full_name": "origin/feature-collatz-witness",
+      "commit_hash": "63025ecea95546ae0c7ae926b1a7c5df290ac85a",
+      "author_date": "2025-10-26 08:15:58 +0000",
+      "committer_date": "2025-10-26 08:15:58 +0000",
+      "subject": "feat: Implement Collatz conjecture witness",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Implement Collatz conjecture witness"
+    },
+    {
+      "name": "feature-correct-witness-d",
+      "full_name": "origin/feature-correct-witness-d",
+      "commit_hash": "a9678ad8c591b838a8ad25d19de61712a4d8c599",
+      "author_date": "2025-10-31 08:57:30 +0000",
+      "committer_date": "2025-10-31 08:57:30 +0000",
+      "subject": "feat: Correct Witness D Implementation",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Correct Witness D Implementation"
+    },
+    {
+      "name": "feature-dynamic-readme",
+      "full_name": "origin/feature-dynamic-readme",
+      "commit_hash": "a204aa864f3af8251092dfb849597c8811bc0d6b",
+      "author_date": "2025-10-31 08:46:30 +0000",
+      "committer_date": "2025-10-31 08:46:30 +0000",
+      "subject": "Fix: Make README.md dynamically generated",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix: Make README.md dynamically generated"
+    },
+    {
+      "name": "feature-expand-witness-examples",
+      "full_name": "origin/feature-expand-witness-examples",
+      "commit_hash": "feec1c5e7afc6dfe33ce75a0acc65fa856502e7e",
+      "author_date": "2025-10-30 02:07:00 +0000",
+      "committer_date": "2025-10-30 02:07:00 +0000",
+      "subject": "This commit expands the \"Witness Neither\" concept into three distinct examples: classical propositional logic, Presburger Arithmetic, and Skolem Arithmetic. Each example is implemented in its own file with a corresponding test file to ensure correctness and modularity.",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "This commit expands the \"Witness Neither\" concept into three distinct examples: classical propositional logic, Presburger Arithmetic, and Skolem Arithmetic. Each example is implemented in its own file with a corresponding test file to ensure correctness and modularity."
+    },
+    {
+      "name": "feature-extract-json-from-md",
+      "full_name": "origin/feature-extract-json-from-md",
+      "commit_hash": "e1a17b844cc5d8d105c9abb7a248961b1a0a0798",
+      "author_date": "2025-10-26 09:45:50 +0000",
+      "committer_date": "2025-10-26 09:45:50 +0000",
+      "subject": "feat: Create script to extract JSON from Markdown files",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Create script to extract JSON from Markdown files"
+    },
+    {
+      "name": "feature-filesystem-knowledge-graph",
+      "full_name": "origin/feature-filesystem-knowledge-graph",
+      "commit_hash": "9ade0cb37b709bfb4c549c877be40fba1fedefff",
+      "author_date": "2025-10-26 05:16:51 +0000",
+      "committer_date": "2025-10-26 05:16:51 +0000",
+      "subject": "feat: Add filesystem knowledge graph",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add filesystem knowledge graph"
+    },
+    {
+      "name": "feature-goal-generation-layer",
+      "full_name": "origin/feature-goal-generation-layer",
+      "commit_hash": "2ce41bb7a94112805479b10109ca77c18684f581",
+      "author_date": "2025-10-20 21:46:37 +0000",
+      "committer_date": "2025-10-20 21:46:37 +0000",
+      "subject": "feat: Add goal-generation layer to master control",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add goal-generation layer to master control"
+    },
+    {
+      "name": "feature-improve-test-coverage",
+      "full_name": "origin/feature-improve-test-coverage",
+      "commit_hash": "0485606e156ef5d03c1ac1e34fde5ab98f007d8b",
+      "author_date": "2025-11-03 06:45:18 +0000",
+      "committer_date": "2025-11-03 06:45:18 +0000",
+      "subject": "feat: Improve test coverage for MasterControlGraph",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Improve test coverage for MasterControlGraph"
+    },
+    {
+      "name": "feature-langstruct-collatz-witness",
+      "full_name": "origin/feature-langstruct-collatz-witness",
+      "commit_hash": "3adef621ade89ab458232747a900f7b5905dea82",
+      "author_date": "2025-10-30 21:35:34 +0000",
+      "committer_date": "2025-10-30 21:35:34 +0000",
+      "subject": "feat: Demonstrate Regular Languages as Initial Object",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Demonstrate Regular Languages as Initial Object"
+    },
+    {
+      "name": "feature-language-classification",
+      "full_name": "origin/feature-language-classification",
+      "commit_hash": "b8b220eaedecd6cbcc09bb683b8af71b5dffe906",
+      "author_date": "2025-10-24 00:22:50 +0000",
+      "committer_date": "2025-10-24 00:22:50 +0000",
+      "subject": "feat: Create language classification reports",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Create language classification reports"
+    },
+    {
+      "name": "feature-language-theory-toolchain",
+      "full_name": "origin/feature-language-theory-toolchain",
+      "commit_hash": "d309479cdfe0ecda2fa23bdd769d33eef329b427",
+      "author_date": "2025-10-26 00:04:08 +0000",
+      "committer_date": "2025-10-26 00:04:08 +0000",
+      "subject": "feat: Develop comprehensive language theory toolchain",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Develop comprehensive language theory toolchain"
+    },
+    {
+      "name": "feature-new-readme-generator",
+      "full_name": "origin/feature-new-readme-generator",
+      "commit_hash": "5afbaea51c078a2b89acf358350751e4e5e08aa2",
+      "author_date": "2025-11-04 04:15:35 +0000",
+      "committer_date": "2025-11-04 04:15:35 +0000",
+      "subject": "feat: Create new README generation system",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Create new README generation system"
+    },
+    {
+      "name": "feature-orientation-cascade-protocol",
+      "full_name": "origin/feature-orientation-cascade-protocol",
+      "commit_hash": "fbf8529fa0e525bc1f951bb0a83e003c7622bbe9",
+      "author_date": "2025-10-26 04:03:44 +0000",
+      "committer_date": "2025-10-26 04:03:44 +0000",
+      "subject": "feat: Implement Orientation Cascade Protocol and document build system failures",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "addition",
+        "protocol"
+      ],
+      "purpose": "feat: Implement Orientation Cascade Protocol and document build system failures"
+    },
+    {
+      "name": "feature-program-decomposition-and-analysis",
+      "full_name": "origin/feature-program-decomposition-and-analysis",
+      "commit_hash": "b5b97dde3fbd8ab204f019f95a432255fd2aac7b",
+      "author_date": "2025-10-25 16:06:25 -0700",
+      "committer_date": "2025-10-25 16:06:25 -0700",
+      "subject": "Add files via upload",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "Add files via upload"
+    },
+    {
+      "name": "feature-research-toc",
+      "full_name": "origin/feature-research-toc",
+      "commit_hash": "0b1ff2f109229d633d0e63983a15dbfd71ab02bb",
+      "author_date": "2025-10-29 11:13:45 +0000",
+      "committer_date": "2025-10-29 11:13:45 +0000",
+      "subject": "feat: Add research Table of Contents to GitHub Pages site",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add research Table of Contents to GitHub Pages site"
+    },
+    {
+      "name": "feature-toolchain-improvements",
+      "full_name": "origin/feature-toolchain-improvements",
+      "commit_hash": "048e8526dca6323a56d7286aa6e63b0b6a47bec6",
+      "author_date": "2025-10-26 08:05:20 +0000",
+      "committer_date": "2025-10-26 08:05:20 +0000",
+      "subject": "feat: Enhance browser and DBpedia toolchains",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Enhance browser and DBpedia toolchains"
+    },
+    {
+      "name": "feature-yaml-ld-migration",
+      "full_name": "origin/feature-yaml-ld-migration",
+      "commit_hash": "5d89a81b84fbc0587ba1e8ef06cf34e3782c9376",
+      "author_date": "2025-10-26 04:47:26 +0000",
+      "committer_date": "2025-10-26 04:47:26 +0000",
+      "subject": "feat: Add JSON to YAML-LD conversion tool",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add JSON to YAML-LD conversion tool"
+    },
+    {
+      "name": "feature/add-fdc-start-command",
+      "full_name": "origin/feature/add-fdc-start-command",
+      "commit_hash": "85e20ba0a51329e0665ca33b388e2f3916a72fa1",
+      "author_date": "2025-10-10 23:45:08 -0700",
+      "committer_date": "2025-10-10 23:45:08 -0700",
+      "subject": "Merge branch 'main' into feature/add-fdc-start-command",
+      "status": "inactive",
+      "tags": [
+        "addition",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feature/add-fdc-start-command"
+    },
+    {
+      "name": "feature/add-planning-component",
+      "full_name": "origin/feature/add-planning-component",
+      "commit_hash": "b0a4e9399b1dc7859a3ca71a8db22031f05f1a19",
+      "author_date": "2025-10-20 08:24:48 +0000",
+      "committer_date": "2025-10-20 08:24:48 +0000",
+      "subject": "feat: Implement planning component for goal finding",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Implement planning component for goal finding"
+    },
+    {
+      "name": "feature/add-verification-adherence-check",
+      "full_name": "origin/feature/add-verification-adherence-check",
+      "commit_hash": "32222a92d536e8fec096ec0f0757506021262fa6",
+      "author_date": "2025-10-13 00:18:47 -0700",
+      "committer_date": "2025-10-13 00:18:47 -0700",
+      "subject": "Merge branch 'main' into feature/add-verification-adherence-check",
+      "status": "inactive",
+      "tags": [
+        "addition",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feature/add-verification-adherence-check"
+    },
+    {
+      "name": "feature/add-watch-mode",
+      "full_name": "origin/feature/add-watch-mode",
+      "commit_hash": "e509c8f2e4ef09ea39cb619d379a29dd5a96cf00",
+      "author_date": "2025-10-15 02:49:27 +0000",
+      "committer_date": "2025-10-15 02:49:27 +0000",
+      "subject": "feat: Add --watch mode to protocol_compiler.py",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add --watch mode to protocol_compiler.py"
+    },
+    {
+      "name": "feature/agent-protocol-refactor",
+      "full_name": "origin/feature/agent-protocol-refactor",
+      "commit_hash": "174e6184d3137530838f8cc94d475a6e52b59a3e",
+      "author_date": "2025-10-20 04:07:55 +0000",
+      "committer_date": "2025-10-20 04:07:55 +0000",
+      "subject": "feat: Refactor agent protocols and integrate Gemini API",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "refactor",
+        "protocol"
+      ],
+      "purpose": "feat: Refactor agent protocols and integrate Gemini API"
+    },
+    {
+      "name": "feature/agents-md-management",
+      "full_name": "origin/feature/agents-md-management",
+      "commit_hash": "cec64987329f34bf9e5a487fad17e654c619fd57",
+      "author_date": "2025-10-31 06:55:43 +0000",
+      "committer_date": "2025-10-31 06:55:43 +0000",
+      "subject": "feat: Add script to manage AGENTS.md lifecycle",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add script to manage AGENTS.md lifecycle"
+    },
+    {
+      "name": "feature/appl-evaluation-framework-final",
+      "full_name": "origin/feature/appl-evaluation-framework-final",
+      "commit_hash": "12712fe989896557322a05d26f44a158f20ff83d",
+      "author_date": "2025-10-15 19:11:03 -0700",
+      "committer_date": "2025-10-15 19:11:03 -0700",
+      "subject": "Merge branch 'main' into feature/appl-evaluation-framework-final",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feature/appl-evaluation-framework-final"
+    },
+    {
+      "name": "feature/aura-maturity",
+      "full_name": "origin/feature/aura-maturity",
+      "commit_hash": "1cdacba61396b19628a6ff8c9017a4036dfa60a4",
+      "author_date": "2025-10-17 18:16:46 +0000",
+      "committer_date": "2025-10-17 18:16:46 +0000",
+      "subject": "Fix: Stabilize and document the Aura language",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix: Stabilize and document the Aura language"
+    },
+    {
+      "name": "feature/blum-complexity-analyzer",
+      "full_name": "origin/feature/blum-complexity-analyzer",
+      "commit_hash": "bd2547e692af36e9a63745c37bbe527bcb10e2ac",
+      "author_date": "2025-10-15 06:22:27 +0000",
+      "committer_date": "2025-10-15 06:22:27 +0000",
+      "subject": "feat: Implement Blum-Axiomatic Complexity Analyzer",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Implement Blum-Axiomatic Complexity Analyzer"
+    },
+    {
+      "name": "feature/catastrophic-lint-error",
+      "full_name": "origin/feature/catastrophic-lint-error",
+      "commit_hash": "8bb42ed6f265ef0329910b52acdf8e65c64b4596",
+      "author_date": "2025-10-07 00:16:50 +0000",
+      "committer_date": "2025-10-07 00:16:50 +0000",
+      "subject": "protocol: Add standing orders for irreversible actions and failure handling",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "protocol: Add standing orders for irreversible actions and failure handling"
+    },
+    {
+      "name": "feature/catastrophic-lint-error-0",
+      "full_name": "origin/feature/catastrophic-lint-error-0",
+      "commit_hash": "fe4abc7ee27804d0a9b9d0491f4f171031c5ad9d",
+      "author_date": "2025-10-08 08:08:16 +0000",
+      "committer_date": "2025-10-08 08:08:16 +0000",
+      "subject": "chore: Rename Agent.md to AGENTS.md",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "chore: Rename Agent.md to AGENTS.md"
+    },
+    {
+      "name": "feature/comprehensive-repo-audit",
+      "full_name": "origin/feature/comprehensive-repo-audit",
+      "commit_hash": "c43675975447dd1f6432c8cf63fd7a4ff088918c",
+      "author_date": "2025-10-14 19:40:53 -0700",
+      "committer_date": "2025-10-14 19:40:53 -0700",
+      "subject": "Merge branch 'main' into feature/comprehensive-repo-audit",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feature/comprehensive-repo-audit"
+    },
+    {
+      "name": "feature/context-sensitive-dev-cycle",
+      "full_name": "origin/feature/context-sensitive-dev-cycle",
+      "commit_hash": "c1440fb29902c024b0e505bfeb57daaadc79b1f3",
+      "author_date": "2025-10-15 08:47:42 +0000",
+      "committer_date": "2025-10-15 08:47:42 +0000",
+      "subject": "refactor: Major project restructuring and tooling consolidation",
+      "status": "inactive",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "refactor: Major project restructuring and tooling consolidation"
+    },
+    {
+      "name": "feature/csdc-extension",
+      "full_name": "origin/feature/csdc-extension",
+      "commit_hash": "c9b369ec3f962c0961d757998903c3466e7a0f65",
+      "author_date": "2025-10-14 21:55:25 -0700",
+      "committer_date": "2025-10-14 21:55:25 -0700",
+      "subject": "Merge branch 'main' into feature/csdc-extension",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feature/csdc-extension"
+    },
+    {
+      "name": "feature/define-agents-md-protocol-schema-v2",
+      "full_name": "origin/feature/define-agents-md-protocol-schema-v2",
+      "commit_hash": "507085edc186dc5ca95ddf51602a129d301a3d3f",
+      "author_date": "2025-10-12 22:06:26 +0000",
+      "committer_date": "2025-10-12 22:06:26 +0000",
+      "subject": "feat: Define and Implement Formal AGENTS.md Schema",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "addition",
+        "protocol"
+      ],
+      "purpose": "feat: Define and Implement Formal AGENTS.md Schema"
+    },
+    {
+      "name": "feature/documentation-protocol",
+      "full_name": "origin/feature/documentation-protocol",
+      "commit_hash": "b9682398388e221f75091e29d689712900dbe5cf",
+      "author_date": "2025-10-15 02:39:15 +0000",
+      "committer_date": "2025-10-15 02:39:15 +0000",
+      "subject": "feat: Add documentation audit protocol and tool",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "addition",
+        "protocol"
+      ],
+      "purpose": "feat: Add documentation audit protocol and tool"
+    },
+    {
+      "name": "feature/dynamic-readme",
+      "full_name": "origin/feature/dynamic-readme",
+      "commit_hash": "811b0ba2fc4cce65b8818dfb55dcf4a600c1587b",
+      "author_date": "2025-10-31 08:46:33 +0000",
+      "committer_date": "2025-10-31 08:46:33 +0000",
+      "subject": "Fix: Make README.md dynamically generated",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix: Make README.md dynamically generated"
+    },
+    {
+      "name": "feature/enforce-prohibitions",
+      "full_name": "origin/feature/enforce-prohibitions",
+      "commit_hash": "9715fec2b4d73865c06bf106d37260cdc93cbafe",
+      "author_date": "2025-10-13 07:03:48 +0000",
+      "committer_date": "2025-10-13 07:03:48 +0000",
+      "subject": "feat: Add automated enforcement check for protocol prohibitions",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add automated enforcement check for protocol prohibitions"
+    },
+    {
+      "name": "feature/enrich-symbol-map",
+      "full_name": "origin/feature/enrich-symbol-map",
+      "commit_hash": "090d03d8a4a69d005f5496930964e43cd2b43ccd",
+      "author_date": "2025-10-14 16:17:53 -0700",
+      "committer_date": "2025-10-14 16:17:53 -0700",
+      "subject": "Merge branch 'main' into feature/enrich-symbol-map",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feature/enrich-symbol-map"
+    },
+    {
+      "name": "feature/executable-agents-md",
+      "full_name": "origin/feature/executable-agents-md",
+      "commit_hash": "28dbccc62f1d099001495c6d0e4f3ba870a5ba59",
+      "author_date": "2025-10-19 18:51:53 -0700",
+      "committer_date": "2025-10-19 18:51:53 -0700",
+      "subject": "Merge branch 'main' into feature/executable-agents-md",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feature/executable-agents-md"
+    },
+    {
+      "name": "feature/formalize-dev-cycle",
+      "full_name": "origin/feature/formalize-dev-cycle",
+      "commit_hash": "73eaee33b21d6c2d1741ed4b87b07a9c1683bcb6",
+      "author_date": "2025-10-06 22:16:10 +0000",
+      "committer_date": "2025-10-06 22:16:10 +0000",
+      "subject": "feat: Implement a robust, modality-aware FDC toolchain.",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Implement a robust, modality-aware FDC toolchain."
+    },
+    {
+      "name": "feature/formalize-dev-cycle-bugged",
+      "full_name": "origin/feature/formalize-dev-cycle-bugged",
+      "commit_hash": "2dd089d6e0045561f009034d501e61247f7d76fb",
+      "author_date": "2025-10-07 00:18:04 +0000",
+      "committer_date": "2025-10-07 00:18:04 +0000",
+      "subject": "feat: Implement the definitive, value-aware FDC toolchain.",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Implement the definitive, value-aware FDC toolchain."
+    },
+    {
+      "name": "feature/formalize-dev-cycle-post-submission",
+      "full_name": "origin/feature/formalize-dev-cycle-post-submission",
+      "commit_hash": "ddd45b34a420beea489f62d8a9d5df3cdb5b33f5",
+      "author_date": "2025-10-07 02:20:56 +0000",
+      "committer_date": "2025-10-07 02:20:56 +0000",
+      "subject": "This commit adds a new standing order to `Agent.md` to correct a recent process failure where the agent incorrectly waited for submission confirmation.",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "This commit adds a new standing order to `Agent.md` to correct a recent process failure where the agent incorrectly waited for submission confirmation."
+    },
+    {
+      "name": "feature/formalize-dev-cycle-termination",
+      "full_name": "origin/feature/formalize-dev-cycle-termination",
+      "commit_hash": "9c5126f86e831c9c7aaaffd68262111bd5486355",
+      "author_date": "2025-10-07 02:01:14 +0000",
+      "committer_date": "2025-10-07 02:01:14 +0000",
+      "subject": "This commit formalizes the Finite Development Cycle (FDC) termination process to resolve inconsistencies observed during meta-analysis.",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "This commit formalizes the Finite Development Cycle (FDC) termination process to resolve inconsistencies observed during meta-analysis."
+    },
+    {
+      "name": "feature/hierarchical-agents-md",
+      "full_name": "origin/feature/hierarchical-agents-md",
+      "commit_hash": "8c65c732d503b421d486d9ed3cf2631ccdf02c4e",
+      "author_date": "2025-10-13 04:43:40 +0000",
+      "committer_date": "2025-10-13 04:43:40 +0000",
+      "subject": "Refactor: Decompose AGENTS.md and introduce 'open'/'closed' branches.",
+      "status": "inactive",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor: Decompose AGENTS.md and introduce 'open'/'closed' branches."
+    },
+    {
+      "name": "feature/hierarchical-agents-md-v1",
+      "full_name": "origin/feature/hierarchical-agents-md-v1",
+      "commit_hash": "b84ff8a34dcbe1efbf1de869ff47f42024f2663b",
+      "author_date": "2025-10-13 05:16:40 +0000",
+      "committer_date": "2025-10-13 05:16:40 +0000",
+      "subject": "Feat: Add proof tree validator and integrate into build process.",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "Feat: Add proof tree validator and integrate into build process."
+    },
+    {
+      "name": "feature/hierarchical-agents-md-v2",
+      "full_name": "origin/feature/hierarchical-agents-md-v2",
+      "commit_hash": "654e6437d3689f27efeb0cc3cc49ecab1a102495",
+      "author_date": "2025-10-13 06:24:54 +0000",
+      "committer_date": "2025-10-13 06:24:54 +0000",
+      "subject": "Feat: Implement machine-readable semantic compression for AGENTS.md.",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "Feat: Implement machine-readable semantic compression for AGENTS.md."
+    },
+    {
+      "name": "feature/hierarchical-protocols-and-mutation-framework",
+      "full_name": "origin/feature/hierarchical-protocols-and-mutation-framework",
+      "commit_hash": "a5b3764be7efca1bf3775700ca785fb82fc96afe",
+      "author_date": "2025-10-20 04:05:17 +0000",
+      "committer_date": "2025-10-20 04:05:17 +0000",
+      "subject": "feat: Implement hierarchical protocol system and mutation framework",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "addition",
+        "protocol"
+      ],
+      "purpose": "feat: Implement hierarchical protocol system and mutation framework"
+    },
+    {
+      "name": "feature/implement-placeholders",
+      "full_name": "origin/feature/implement-placeholders",
+      "commit_hash": "155ea7ad6463c3047ac1ca787af659d387d176a5",
+      "author_date": "2025-10-06 23:11:33 +0000",
+      "committer_date": "2025-10-06 23:11:33 +0000",
+      "subject": "feat: Add self-improvement CLI for performance analysis",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add self-improvement CLI for performance analysis"
+    },
+    {
+      "name": "feature/implement-placeholders-policy",
+      "full_name": "origin/feature/implement-placeholders-policy",
+      "commit_hash": "5847a2ef069a35bc356dc1d1563e015796953870",
+      "author_date": "2025-10-06 23:34:13 +0000",
+      "committer_date": "2025-10-06 23:34:13 +0000",
+      "subject": "feat: Add protocol and tooling for placeholder management",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add protocol and tooling for placeholder management"
+    },
+    {
+      "name": "feature/improve-prooftree-parser",
+      "full_name": "origin/feature/improve-prooftree-parser",
+      "commit_hash": "fd2844ec7a9be793d1e4de57431ba3018e0ec8e3",
+      "author_date": "2025-10-11 23:46:27 -0700",
+      "committer_date": "2025-10-11 23:46:27 -0700",
+      "subject": "Merge pull request #42 from metavacua/python-prover-refuter",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge pull request #42 from metavacua/python-prover-refuter"
+    },
+    {
+      "name": "feature/integrate-logic-aura-tooling",
+      "full_name": "origin/feature/integrate-logic-aura-tooling",
+      "commit_hash": "9316a6c9ac87b760c235feea3468759f5c4215e0",
+      "author_date": "2025-10-14 20:00:40 -0700",
+      "committer_date": "2025-10-14 20:00:40 -0700",
+      "subject": "Merge branch 'main' into feature/integrate-logic-aura-tooling",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feature/integrate-logic-aura-tooling"
+    },
+    {
+      "name": "feature/integrate-systems",
+      "full_name": "origin/feature/integrate-systems",
+      "commit_hash": "52438d0d71cb3970d4643a01960a2a3ea1ef59ae",
+      "author_date": "2025-10-15 02:58:22 +0000",
+      "committer_date": "2025-10-15 02:58:22 +0000",
+      "subject": "Integrate logic system, Aura language, and tooling",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "Integrate logic system, Aura language, and tooling"
+    },
+    {
+      "name": "feature/integrated-systems",
+      "full_name": "origin/feature/integrated-systems",
+      "commit_hash": "9bbc20a78a2f0e0f713331daab33273aeaefff82",
+      "author_date": "2025-10-14 19:43:09 -0700",
+      "committer_date": "2025-10-14 19:43:09 -0700",
+      "subject": "Merge branch 'main' into feature/integrated-systems",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feature/integrated-systems"
+    },
+    {
+      "name": "feature/interactive-fsm-planning",
+      "full_name": "origin/feature/interactive-fsm-planning",
+      "commit_hash": "b0ca9495d5384a2cf067e6ccd136ed0a6405c2f4",
+      "author_date": "2025-10-07 21:07:23 +0000",
+      "committer_date": "2025-10-07 21:07:23 +0000",
+      "subject": "This commit represents a major integration of the repository's core components, unifying the interactive FSM execution engine with the formal validation and management toolchain.",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "This commit represents a major integration of the repository's core components, unifying the interactive FSM execution engine with the formal validation and management toolchain."
+    },
+    {
+      "name": "feature/interactive-fsm-planning-0",
+      "full_name": "origin/feature/interactive-fsm-planning-0",
+      "commit_hash": "848f919cce8b04fb587e6b680cc9d725a155d931",
+      "author_date": "2025-10-08 04:58:28 +0000",
+      "committer_date": "2025-10-08 04:58:28 +0000",
+      "subject": "This commit introduces a new, automated system for closing the protocol's learning loop, ensuring that lessons learned from each task are systematically preserved.",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "This commit introduces a new, automated system for closing the protocol's learning loop, ensuring that lessons learned from each task are systematically preserved."
+    },
+    {
+      "name": "feature/language-modularization",
+      "full_name": "origin/feature/language-modularization",
+      "commit_hash": "b3bb3461e50357fafc3be20b141af3ac5186ce63",
+      "author_date": "2025-10-20 01:44:10 +0000",
+      "committer_date": "2025-10-20 01:44:10 +0000",
+      "subject": "feat: Modularize Aura, APPL, and AAL languages",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Modularize Aura, APPL, and AAL languages"
+    },
+    {
+      "name": "feature/latex-to-html-converter",
+      "full_name": "origin/feature/latex-to-html-converter",
+      "commit_hash": "ec330476b008eddcda9e302088d0493f7aaa2c22",
+      "author_date": "2025-10-08 20:32:01 +0000",
+      "committer_date": "2025-10-08 20:32:01 +0000",
+      "subject": "feat: Add LaTeX converter, deployment workflow, and update protocol",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add LaTeX converter, deployment workflow, and update protocol"
+    },
+    {
+      "name": "feature/lfi-ill-maturity",
+      "full_name": "origin/feature/lfi-ill-maturity",
+      "commit_hash": "4f62dcc454ff3df2d4b6bc5948f25ff17836eccf",
+      "author_date": "2025-10-17 06:19:23 +0000",
+      "committer_date": "2025-10-17 06:19:23 +0000",
+      "subject": "feat(lfi_ill): Implement paraconsistent operators and runner",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat(lfi_ill): Implement paraconsistent operators and runner"
+    },
+    {
+      "name": "feature/major-refactor-aura-engine",
+      "full_name": "origin/feature/major-refactor-aura-engine",
+      "commit_hash": "d1463b2e8f62990439cf7900965e1607f2acf2ec",
+      "author_date": "2025-10-16 00:38:15 +0000",
+      "committer_date": "2025-10-16 00:38:15 +0000",
+      "subject": "Refactor: Overhaul Aura Engine and Tooling Foundation",
+      "status": "inactive",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor: Overhaul Aura Engine and Tooling Foundation"
+    },
+    {
+      "name": "feature/mature-readme",
+      "full_name": "origin/feature/mature-readme",
+      "commit_hash": "38bb37652a880a4f0c134793fe1d9c46ed711b9e",
+      "author_date": "2025-10-11 21:05:05 +0000",
+      "committer_date": "2025-10-11 21:05:05 +0000",
+      "subject": "feat: Mature README.md and add CONTRIBUTING.md",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Mature README.md and add CONTRIBUTING.md"
+    },
+    {
+      "name": "feature/multiset-sequents-and-lj-ill-translation",
+      "full_name": "origin/feature/multiset-sequents-and-lj-ill-translation",
+      "commit_hash": "22f95640d020f034b5adb3477c73741bbe461218",
+      "author_date": "2025-10-15 08:10:44 +0000",
+      "committer_date": "2025-10-15 08:10:44 +0000",
+      "subject": "feat: Complete LJ to ILL proof translation and fix core logic",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "feat: Complete LJ to ILL proof translation and fix core logic"
+    },
+    {
+      "name": "feature/pdf-reading-capability",
+      "full_name": "origin/feature/pdf-reading-capability",
+      "commit_hash": "494afd8c865ce6251b7d85d1255e41c10f7c8e71",
+      "author_date": "2025-10-14 11:02:28 +0000",
+      "committer_date": "2025-10-14 11:02:28 +0000",
+      "subject": "feat: Add PDF reading capability for research",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add PDF reading capability for research"
+    },
+    {
+      "name": "feature/plan-complexity-analysis",
+      "full_name": "origin/feature/plan-complexity-analysis",
+      "commit_hash": "10bd67013451accff027bdc41fa6de2a11d160c6",
+      "author_date": "2025-10-13 05:26:01 +0000",
+      "committer_date": "2025-10-13 05:26:01 +0000",
+      "subject": "feat: Implement Plan Complexity Analysis and Protocol",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Implement Plan Complexity Analysis and Protocol"
+    },
+    {
+      "name": "feature/post-mortem-of-submission-behaviors",
+      "full_name": "origin/feature/post-mortem-of-submission-behaviors",
+      "commit_hash": "cddffe4b54ec58ccd218ed6692c0731ef705cc6e",
+      "author_date": "2025-10-08 04:52:40 +0000",
+      "committer_date": "2025-10-08 04:52:40 +0000",
+      "subject": "This commit renames the primary protocol file from `Agent.md` to `AGENTS.md` to conform to a common convention for agent-related instructions.",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "This commit renames the primary protocol file from `Agent.md` to `AGENTS.md` to conform to a common convention for agent-related instructions."
+    },
+    {
+      "name": "feature/post-mortem-research-and-improvement",
+      "full_name": "origin/feature/post-mortem-research-and-improvement",
+      "commit_hash": "6e55ed1ee9d8bd3f981074580b746949fd4c46a0",
+      "author_date": "2025-10-15 08:39:00 +0000",
+      "committer_date": "2025-10-15 08:39:00 +0000",
+      "subject": "feat: Research, develop, and standardize post-mortem process",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Research, develop, and standardize post-mortem process"
+    },
+    {
+      "name": "feature/protocol-evolution",
+      "full_name": "origin/feature/protocol-evolution",
+      "commit_hash": "e26fa1611f8ad9ee459972e50a169f5242ec7364",
+      "author_date": "2025-10-18 14:15:29 -0700",
+      "committer_date": "2025-10-18 14:15:29 -0700",
+      "subject": "Merge branch 'main' into feature/protocol-evolution",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "merge",
+        "protocol"
+      ],
+      "purpose": "Merge branch 'main' into feature/protocol-evolution"
+    },
+    {
+      "name": "feature/refactoring-tool",
+      "full_name": "origin/feature/refactoring-tool",
+      "commit_hash": "a5aa1a2a7d431a8fdf38445c1845969f70166ff7",
+      "author_date": "2025-10-13 20:11:20 +0000",
+      "committer_date": "2025-10-13 20:11:20 +0000",
+      "subject": "feat(tooling): add a new refactoring tool",
+      "status": "inactive",
+      "tags": [
+        "refactor",
+        "addition"
+      ],
+      "purpose": "feat(tooling): add a new refactoring tool"
+    },
+    {
+      "name": "feature/reflection-audit",
+      "full_name": "origin/feature/reflection-audit",
+      "commit_hash": "0e218bb544c1ce501a1505517f35dc0a4669f0d5",
+      "author_date": "2025-10-15 03:22:52 +0000",
+      "committer_date": "2025-10-15 03:22:52 +0000",
+      "subject": "feat: Add error rate analysis to self-improvement CLI",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Add error rate analysis to self-improvement CLI"
+    },
+    {
+      "name": "feature/restore-temporal-orientation",
+      "full_name": "origin/feature/restore-temporal-orientation",
+      "commit_hash": "22967d6f392b2596c40e9014dd1fd0fd64d52783",
+      "author_date": "2025-10-13 00:44:23 -0700",
+      "committer_date": "2025-10-13 00:44:23 -0700",
+      "subject": "Merge branch 'main' into feature/restore-temporal-orientation",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feature/restore-temporal-orientation"
+    },
+    {
+      "name": "feature/self-contained-compiler",
+      "full_name": "origin/feature/self-contained-compiler",
+      "commit_hash": "a736a12ab47646bb6db2f52b5bbfcf2c8f846b0a",
+      "author_date": "2025-10-13 21:57:48 +0000",
+      "committer_date": "2025-10-13 21:57:48 +0000",
+      "subject": "feat(protocol_compiler): Make script self-contained",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat(protocol_compiler): Make script self-contained"
+    },
+    {
+      "name": "feature/standard-agents-md",
+      "full_name": "origin/feature/standard-agents-md",
+      "commit_hash": "274f31e746f514b356a933a7e482c6e41925c36f",
+      "author_date": "2025-10-12 16:05:09 -0700",
+      "committer_date": "2025-10-12 16:05:09 -0700",
+      "subject": "Merge branch 'main' into feature/standard-agents-md",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into feature/standard-agents-md"
+    },
+    {
+      "name": "fix-agent-lifecycle",
+      "full_name": "origin/fix-agent-lifecycle",
+      "commit_hash": "f59a6c1605f9fa254fc00ed64449d23efb1a7a99",
+      "author_date": "2025-10-18 09:38:35 +0000",
+      "committer_date": "2025-10-18 09:38:35 +0000",
+      "subject": "Fix agent lifecycle and logging",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix agent lifecycle and logging"
+    },
+    {
+      "name": "fix-broken-tests-and-refactor",
+      "full_name": "origin/fix-broken-tests-and-refactor",
+      "commit_hash": "dc14e72f1e9a5682c6f3dc95abd106cca01e9436",
+      "author_date": "2025-10-16 01:42:36 +0000",
+      "committer_date": "2025-10-16 01:42:36 +0000",
+      "subject": "Refactor: Clean up tooling and fix broken test suite",
+      "status": "inactive",
+      "tags": [
+        "fix",
+        "refactor"
+      ],
+      "purpose": "Refactor: Clean up tooling and fix broken test suite"
+    },
+    {
+      "name": "fix-browser-crash-on-large-output",
+      "full_name": "origin/fix-browser-crash-on-large-output",
+      "commit_hash": "d44683c94ebd835c6ff5d266357d901eb2dc9975",
+      "author_date": "2025-10-08 06:13:30 +0000",
+      "committer_date": "2025-10-08 06:13:30 +0000",
+      "subject": "Fix browser crash by logging full agent state to a file",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix browser crash by logging full agent state to a file"
+    },
+    {
+      "name": "fix-build-system",
+      "full_name": "origin/fix-build-system",
+      "commit_hash": "fe84dd9756430fe00341657c6b5c3239c9466ac0",
+      "author_date": "2025-10-21 20:57:21 +0000",
+      "committer_date": "2025-10-21 20:57:21 +0000",
+      "subject": "Fix: Build System and Documentation",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix: Build System and Documentation"
+    },
+    {
+      "name": "fix-build-toolchain",
+      "full_name": "origin/fix-build-toolchain",
+      "commit_hash": "06a13211067de1237056ce70c05146e1bf27c8c6",
+      "author_date": "2025-10-30 01:25:34 +0000",
+      "committer_date": "2025-10-30 01:25:34 +0000",
+      "subject": "fix: Repair build toolchain and protocol parsing",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "fix: Repair build toolchain and protocol parsing"
+    },
+    {
+      "name": "fix-file-extensions",
+      "full_name": "origin/fix-file-extensions",
+      "commit_hash": "334e76cc26d253fab0e1f5b6baa37ae9297d2b61",
+      "author_date": "2025-10-13 06:14:41 +0000",
+      "committer_date": "2025-10-13 06:14:41 +0000",
+      "subject": "Correct file extensions for JS and JSX files",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "Correct file extensions for JS and JSX files"
+    },
+    {
+      "name": "fix-integer-comparison",
+      "full_name": "origin/fix-integer-comparison",
+      "commit_hash": "3e010524fe3ecd673c8982e4e36fc4d41c7e38c2",
+      "author_date": "2025-10-18 04:39:32 +0000",
+      "committer_date": "2025-10-18 04:39:32 +0000",
+      "subject": "feat: Implement integer comparison operators",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Implement integer comparison operators"
+    },
+    {
+      "name": "fix-lba-validator-import",
+      "full_name": "origin/fix-lba-validator-import",
+      "commit_hash": "1c18848393686a14ddd15f1809e3a947f10b524b",
+      "author_date": "2025-10-26 04:58:17 +0000",
+      "committer_date": "2025-10-26 04:58:17 +0000",
+      "subject": "fix: Correct LBAValidator import path and ensure log file creation",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "fix: Correct LBAValidator import path and ensure log file creation"
+    },
+    {
+      "name": "fix-lessons-overwrite",
+      "full_name": "origin/fix-lessons-overwrite",
+      "commit_hash": "ed2679f75b12897664573d8b6b9dcc44cef1cf3b",
+      "author_date": "2025-10-23 01:16:21 +0000",
+      "committer_date": "2025-10-23 01:16:21 +0000",
+      "subject": "Fix: Prevent overwriting of lessons.jsonl in capability verifier",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix: Prevent overwriting of lessons.jsonl in capability verifier"
+    },
+    {
+      "name": "fix-linting-and-test-errors",
+      "full_name": "origin/fix-linting-and-test-errors",
+      "commit_hash": "b41bb1a56be3486cdd52c045a096c684f389cb0b",
+      "author_date": "2025-10-21 02:55:38 +0000",
+      "committer_date": "2025-10-21 02:55:38 +0000",
+      "subject": "Fix linting errors and test failures",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix linting errors and test failures"
+    },
+    {
+      "name": "fix-protocol-build-system",
+      "full_name": "origin/fix-protocol-build-system",
+      "commit_hash": "6a1fcd3e3d0603947311fac60e23c7c19dfce30e",
+      "author_date": "2025-10-30 04:11:24 +0000",
+      "committer_date": "2025-10-30 04:11:24 +0000",
+      "subject": "feat: Implement and test repository source code classifier",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "addition",
+        "protocol"
+      ],
+      "purpose": "feat: Implement and test repository source code classifier"
+    },
+    {
+      "name": "fix-protocol-compiler",
+      "full_name": "origin/fix-protocol-compiler",
+      "commit_hash": "a694c4212fa1f00b25723e8efdcafa24c6d8ac42",
+      "author_date": "2025-11-02 23:59:30 +0000",
+      "committer_date": "2025-11-02 23:59:30 +0000",
+      "subject": "fix(tooling): Preserve header in protocol compiler",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "fix",
+        "protocol"
+      ],
+      "purpose": "fix(tooling): Preserve header in protocol compiler"
+    },
+    {
+      "name": "fix-test-protocol-auditor",
+      "full_name": "origin/fix-test-protocol-auditor",
+      "commit_hash": "a57eeae72eda385883c950b3d40591f9074494ed",
+      "author_date": "2025-10-13 01:01:25 -0700",
+      "committer_date": "2025-10-13 01:01:25 -0700",
+      "subject": "Merge branch 'main' into fix-test-protocol-auditor",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "merge",
+        "fix",
+        "protocol"
+      ],
+      "purpose": "Merge branch 'main' into fix-test-protocol-auditor"
+    },
+    {
+      "name": "fix-unmapped-tools",
+      "full_name": "origin/fix-unmapped-tools",
+      "commit_hash": "53ded7fc3bb27b39f467956fb0c9068c4c552152",
+      "author_date": "2025-10-18 04:37:05 +0000",
+      "committer_date": "2025-10-18 04:37:05 +0000",
+      "subject": "Fix: Add missing tool mappings to FSM validator",
+      "status": "inactive",
+      "tags": [
+        "fix",
+        "addition"
+      ],
+      "purpose": "Fix: Add missing tool mappings to FSM validator"
+    },
+    {
+      "name": "fix-update-github-pages-workflow",
+      "full_name": "origin/fix-update-github-pages-workflow",
+      "commit_hash": "7acd344bdbf2a838e15e78747f32b339690549c9",
+      "author_date": "2025-10-30 00:25:49 +0000",
+      "committer_date": "2025-10-30 00:25:49 +0000",
+      "subject": "Fix: Update GitHub Pages deployment workflow",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix: Update GitHub Pages deployment workflow"
+    },
+    {
+      "name": "fix/appl-docs-and-cli",
+      "full_name": "origin/fix/appl-docs-and-cli",
+      "commit_hash": "4a11287b6c26d0c9a9258cce32e1cb7ac30ab071",
+      "author_date": "2025-10-17 07:40:07 +0000",
+      "committer_date": "2025-10-17 07:40:07 +0000",
+      "subject": "fix: Correct APPL documentation and fix self-improvement CLI",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "fix: Correct APPL documentation and fix self-improvement CLI"
+    },
+    {
+      "name": "fix/clarify-reset-all-protocols",
+      "full_name": "origin/fix/clarify-reset-all-protocols",
+      "commit_hash": "2ede1970db3a84f71a77b2154754a34eff470877",
+      "author_date": "2025-10-14 00:54:10 +0000",
+      "committer_date": "2025-10-14 00:54:10 +0000",
+      "subject": "fix(protocols): Clarify reset protocols by removing permissive rules",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "fix",
+        "protocol"
+      ],
+      "purpose": "fix(protocols): Clarify reset protocols by removing permissive rules"
+    },
+    {
+      "name": "fix/correct-agent-md-references",
+      "full_name": "origin/fix/correct-agent-md-references",
+      "commit_hash": "02460c5741d91c8e1c08f923341152d95173fbc8",
+      "author_date": "2025-10-08 06:55:59 +0000",
+      "committer_date": "2025-10-08 06:55:59 +0000",
+      "subject": "Fix: Correct all references from agent.md to AGENTS.md",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix: Correct all references from agent.md to AGENTS.md"
+    },
+    {
+      "name": "fix/enforce-reset-all-prohibition",
+      "full_name": "origin/fix/enforce-reset-all-prohibition",
+      "commit_hash": "d3e292038dd79ec299f231ef5b59b0fdd52f17b5",
+      "author_date": "2025-10-13 07:09:45 +0000",
+      "committer_date": "2025-10-13 07:09:45 +0000",
+      "subject": "Fix: Correct broken test for hierarchical protocol auditor",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix: Correct broken test for hierarchical protocol auditor"
+    },
+    {
+      "name": "fix/filesystem-lister",
+      "full_name": "origin/fix/filesystem-lister",
+      "commit_hash": "f75e3a18419dc9ea525b8672c79132b05f0477ef",
+      "author_date": "2025-10-15 12:06:19 -0700",
+      "committer_date": "2025-10-15 12:06:19 -0700",
+      "subject": "Merge branch 'main' into fix/filesystem-lister",
+      "status": "inactive",
+      "tags": [
+        "fix",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into fix/filesystem-lister"
+    },
+    {
+      "name": "fix/hierarchical-build-system",
+      "full_name": "origin/fix/hierarchical-build-system",
+      "commit_hash": "483c5be1b530503f204070d0831022d399efe29d",
+      "author_date": "2025-10-12 09:31:14 +0000",
+      "committer_date": "2025-10-12 09:31:14 +0000",
+      "subject": "Fix: Ensure hierarchical build system handles errors and generates content correctly.",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix: Ensure hierarchical build system handles errors and generates content correctly."
+    },
+    {
+      "name": "fix/hierarchical-compiler-logic",
+      "full_name": "origin/fix/hierarchical-compiler-logic",
+      "commit_hash": "71b1b863771dc808d60c9367591c1eec640456b6",
+      "author_date": "2025-10-15 07:06:01 +0000",
+      "committer_date": "2025-10-15 07:06:01 +0000",
+      "subject": "Fix(tooling): Correct hierarchical compiler loop logic",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix(tooling): Correct hierarchical compiler loop logic"
+    },
+    {
+      "name": "fix/illusion-of-omniscience",
+      "full_name": "origin/fix/illusion-of-omniscience",
+      "commit_hash": "69e36324b9b7f869b4e1728c6df9fc94876d0c1b",
+      "author_date": "2025-10-15 19:38:51 +0000",
+      "committer_date": "2025-10-15 19:38:51 +0000",
+      "subject": "Refactor file system tools to use a centralized lister",
+      "status": "inactive",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor file system tools to use a centralized lister"
+    },
+    {
+      "name": "fix/linter-toolchain",
+      "full_name": "origin/fix/linter-toolchain",
+      "commit_hash": "9f87f41ef55446c75a8eaeacb63fb8e98c652a1c",
+      "author_date": "2025-11-03 07:36:38 +0000",
+      "committer_date": "2025-11-03 07:36:38 +0000",
+      "subject": "Fix: Refactor and Centralize Linter Toolchain",
+      "status": "inactive",
+      "tags": [
+        "fix",
+        "refactor"
+      ],
+      "purpose": "Fix: Refactor and Centralize Linter Toolchain"
+    },
+    {
+      "name": "fix/postmortem-generation",
+      "full_name": "origin/fix/postmortem-generation",
+      "commit_hash": "4dd6e8c2ad3b0abe2894f7877c77864a7696f5d9",
+      "author_date": "2025-10-20 02:45:29 +0000",
+      "committer_date": "2025-10-20 02:45:29 +0000",
+      "subject": "Fix postmortem generation and improve agent architecture",
+      "status": "inactive",
+      "tags": [
+        "fix"
+      ],
+      "purpose": "Fix postmortem generation and improve agent architecture"
+    },
+    {
+      "name": "fix/protocol-auditor-overhaul",
+      "full_name": "origin/fix/protocol-auditor-overhaul",
+      "commit_hash": "fa6cbcb88aed45424c6ac74a2c97c09487a6392c",
+      "author_date": "2025-10-12 23:02:39 +0000",
+      "committer_date": "2025-10-12 23:02:39 +0000",
+      "subject": "Add meta-protocol for toolchain review on schema change",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "addition",
+        "protocol"
+      ],
+      "purpose": "Add meta-protocol for toolchain review on schema change"
+    },
+    {
+      "name": "fix/protocol-contradiction",
+      "full_name": "origin/fix/protocol-contradiction",
+      "commit_hash": "d6687815acefc7c52507e755cf551622f7f82824",
+      "author_date": "2025-10-12 22:50:23 +0000",
+      "committer_date": "2025-10-12 22:50:23 +0000",
+      "subject": "Add dependency management protocol and requirements.txt",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "addition",
+        "protocol"
+      ],
+      "purpose": "Add dependency management protocol and requirements.txt"
+    },
+    {
+      "name": "fix/protocol-ttl-deletion-bug",
+      "full_name": "origin/fix/protocol-ttl-deletion-bug",
+      "commit_hash": "ebd9c20f9cf9c747824e85a8b9fda9184b76b213",
+      "author_date": "2025-10-13 00:56:51 -0700",
+      "committer_date": "2025-10-13 00:56:51 -0700",
+      "subject": "Merge branch 'main' into fix/protocol-ttl-deletion-bug",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "merge",
+        "fix",
+        "protocol"
+      ],
+      "purpose": "Merge branch 'main' into fix/protocol-ttl-deletion-bug"
+    },
+    {
+      "name": "fix/self-executing-agents-md",
+      "full_name": "origin/fix/self-executing-agents-md",
+      "commit_hash": "b885cb23d0315c244887edd9ed65845035fd04a6",
+      "author_date": "2025-10-20 05:08:14 +0000",
+      "committer_date": "2025-10-20 05:08:14 +0000",
+      "subject": "feat: Implement self-executing AGENTS.md and unified build system",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Implement self-executing AGENTS.md and unified build system"
+    },
+    {
+      "name": "fix/standardize-filenames",
+      "full_name": "origin/fix/standardize-filenames",
+      "commit_hash": "5c58b2a3a27794ae4bdfe4cba3832aaef2eaca42",
+      "author_date": "2025-10-12 09:07:16 +0000",
+      "committer_date": "2025-10-12 09:07:16 +0000",
+      "subject": "This commit standardizes all filenames in the repository to use kebab-case (lowercase with hyphens). This change improves consistency and cross-platform compatibility.",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "This commit standardizes all filenames in the repository to use kebab-case (lowercase with hyphens). This change improves consistency and cross-platform compatibility."
+    },
+    {
+      "name": "fizzbuzz-codegolf",
+      "full_name": "origin/fizzbuzz-codegolf",
+      "commit_hash": "375db86e069b1284b6dea15bfe221e514162c3a8",
+      "author_date": "2025-10-15 00:14:52 +0000",
+      "committer_date": "2025-10-15 00:14:52 +0000",
+      "subject": "Refactor the fizzbuzz function to be more concise.",
+      "status": "inactive",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor the fizzbuzz function to be more concise."
+    },
+    {
+      "name": "gemini-api-integration",
+      "full_name": "origin/gemini-api-integration",
+      "commit_hash": "e14947389cec780a293d4baaddb7802268058afa",
+      "author_date": "2025-10-19 21:11:26 -0700",
+      "committer_date": "2025-10-19 21:11:26 -0700",
+      "subject": "Merge branch 'main' into gemini-api-integration",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into gemini-api-integration"
+    },
+    {
+      "name": "gitauto/issue-261-20251224-214857-OoyM",
+      "full_name": "origin/gitauto/issue-261-20251224-214857-OoyM",
+      "commit_hash": "168b80e74e79f9e2b08de1751546a6d96dfdd595",
+      "author_date": "2025-12-24 21:53:10 +0000",
+      "committer_date": "2025-12-24 21:53:10 +0000",
+      "subject": "Empty commit to trigger final tests",
+      "status": "automated",
+      "tags": [
+        "automated"
+      ],
+      "purpose": "Empty commit to trigger final tests"
+    },
+    {
+      "name": "gitauto/issue-263-20251224-221333-GebK",
+      "full_name": "origin/gitauto/issue-263-20251224-221333-GebK",
+      "commit_hash": "4a09c13a4ab89b4599349a6f58c2683b1bf0ea78",
+      "author_date": "2025-12-24 22:17:29 +0000",
+      "committer_date": "2025-12-24 22:17:29 +0000",
+      "subject": "Empty commit to trigger final tests",
+      "status": "automated",
+      "tags": [
+        "automated"
+      ],
+      "purpose": "Empty commit to trigger final tests"
+    },
+    {
+      "name": "grammar-research",
+      "full_name": "origin/grammar-research",
+      "commit_hash": "5125f9556c9b0d5c7544aa4333fb06e417986308",
+      "author_date": "2025-10-15 04:01:25 +0000",
+      "committer_date": "2025-10-15 04:01:25 +0000",
+      "subject": "Create a markdown file to document the distinctions between context-sensitive and context-free grammars, with a focus on ambiguity.",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "Create a markdown file to document the distinctions between context-sensitive and context-free grammars, with a focus on ambiguity."
+    },
+    {
+      "name": "guardian-protocol",
+      "full_name": "origin/guardian-protocol",
+      "commit_hash": "09a14018a4bb13bb6dab708d512b7d2bb6327d41",
+      "author_date": "2025-10-20 08:58:13 +0000",
+      "committer_date": "2025-10-20 08:58:13 +0000",
+      "subject": "feat: Introduce Guardian Protocol for auditable autonomy",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "protocol"
+      ],
+      "purpose": "feat: Introduce Guardian Protocol for auditable autonomy"
+    },
+    {
+      "name": "improve-agent-processes",
+      "full_name": "origin/improve-agent-processes",
+      "commit_hash": "297c9f744c5492057bf0af7b81350dc896574454",
+      "author_date": "2025-10-15 04:08:13 +0000",
+      "committer_date": "2025-10-15 04:08:13 +0000",
+      "subject": "Refactor: Improve Logging, Post-Mortem, and Research Processes",
+      "status": "inactive",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor: Improve Logging, Post-Mortem, and Research Processes"
+    },
+    {
+      "name": "improve-git-workflow-protocol",
+      "full_name": "origin/improve-git-workflow-protocol",
+      "commit_hash": "4de427cec5e9c694eb71e89b1ae60b55382d6c8b",
+      "author_date": "2025-10-30 04:29:05 +0000",
+      "committer_date": "2025-10-30 04:29:05 +0000",
+      "subject": "feat: Improve Charter and GIT workflow protocol",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "protocol"
+      ],
+      "purpose": "feat: Improve Charter and GIT workflow protocol"
+    },
+    {
+      "name": "improve-test-coverage",
+      "full_name": "origin/improve-test-coverage",
+      "commit_hash": "7f956d11d992c7324256f3e1cd306242ef14bace",
+      "author_date": "2025-10-18 04:40:23 +0000",
+      "committer_date": "2025-10-18 04:40:23 +0000",
+      "subject": "Improve test coverage for interpreter and planning modules.",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "Improve test coverage for interpreter and planning modules."
+    },
+    {
+      "name": "improve-testing-protocols",
+      "full_name": "origin/improve-testing-protocols",
+      "commit_hash": "f9088f9c887ca1484b2508be58019f4574925ec8",
+      "author_date": "2025-10-30 08:29:11 +0000",
+      "committer_date": "2025-10-30 08:29:11 +0000",
+      "subject": "feat: Improve testing protocols and tooling",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "protocol"
+      ],
+      "purpose": "feat: Improve testing protocols and tooling"
+    },
+    {
+      "name": "improve-testing-protocols-1",
+      "full_name": "origin/improve-testing-protocols-1",
+      "commit_hash": "ce84424ac351346a134dd51d77a04218663f289b",
+      "author_date": "2025-10-30 13:39:46 -0700",
+      "committer_date": "2025-10-30 13:39:46 -0700",
+      "subject": "Merge branch 'main' into improve-testing-protocols-1",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "merge",
+        "protocol"
+      ],
+      "purpose": "Merge branch 'main' into improve-testing-protocols-1"
+    },
+    {
+      "name": "integration/v1.5-release-candidate-1",
+      "full_name": "origin/integration/v1.5-release-candidate-1",
+      "commit_hash": "a4b5edc1bda78a5a9b5fd6f6335eb03b3df651cf",
+      "author_date": "2025-10-06 21:58:42 +0000",
+      "committer_date": "2025-10-06 21:58:42 +0000",
+      "subject": "This commit represents the successful integration of three key feature branches into a single, cohesive release candidate. The goal of this integration is to unify the foundational, self-improvement, and process-rigor features of the agent into a single, stable baseline.",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "This commit represents the successful integration of three key feature branches into a single, cohesive release candidate. The goal of this integration is to unify the foundational, self-improvement, and process-rigor features of the agent into a single, stable baseline."
+    },
+    {
+      "name": "integration/v1.5-release-candidate-2",
+      "full_name": "origin/integration/v1.5-release-candidate-2",
+      "commit_hash": "4abca37f4473a4af726dbfb67b132bfbd4dda3d8",
+      "author_date": "2025-10-06 22:27:01 +0000",
+      "committer_date": "2025-10-06 22:27:01 +0000",
+      "subject": "This commit formalizes the agent's self-improvement cycle by introducing a new command-line tool for performance analysis.",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "This commit formalizes the agent's self-improvement cycle by introducing a new command-line tool for performance analysis."
+    },
+    {
+      "name": "integration/v2-release-candidate",
+      "full_name": "origin/integration/v2-release-candidate",
+      "commit_hash": "181bcfa03c7d6c2dca37b4224773f68d192ef41b",
+      "author_date": "2025-10-08 04:55:36 +0000",
+      "committer_date": "2025-10-08 04:55:36 +0000",
+      "subject": "refactor: Rename Agent.md to AGENTS.md",
+      "status": "inactive",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "refactor: Rename Agent.md to AGENTS.md"
+    },
+    {
+      "name": "json-to-yaml-ld-migration",
+      "full_name": "origin/json-to-yaml-ld-migration",
+      "commit_hash": "d45f02ec5078d6a186d70e86be8409e01c6b4a4a",
+      "author_date": "2025-10-26 04:01:51 +0000",
+      "committer_date": "2025-10-26 04:01:51 +0000",
+      "subject": "Migrate tooling from JSON to YAML-LD",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "Migrate tooling from JSON to YAML-LD"
+    },
+    {
+      "name": "jules-consolidation-refactor",
+      "full_name": "origin/jules-consolidation-refactor",
+      "commit_hash": "02e33900483626ffcab19ad1cc0320182d806b64",
+      "author_date": "2025-10-31 11:59:41 +0000",
+      "committer_date": "2025-10-31 11:59:41 +0000",
+      "subject": "feat: Consolidate and refactor the agent framework",
+      "status": "inactive",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "feat: Consolidate and refactor the agent framework"
+    },
+    {
+      "name": "jules/agent-md-experiment",
+      "full_name": "origin/jules/agent-md-experiment",
+      "commit_hash": "aa03036f9a44f20d957d4b4d9c6fcf3621ae2a5f",
+      "author_date": "2025-10-18 15:54:50 -0700",
+      "committer_date": "2025-10-18 15:54:50 -0700",
+      "subject": "Merge branch 'main' into jules/agent-md-experiment",
+      "status": "experimental",
+      "tags": [
+        "experimental",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into jules/agent-md-experiment"
+    },
+    {
+      "name": "language-theory-framework",
+      "full_name": "origin/language-theory-framework",
+      "commit_hash": "46b2b88d10c2222af89376f6c84f4d7d765af699",
+      "author_date": "2025-10-15 07:08:42 +0000",
+      "committer_date": "2025-10-15 07:08:42 +0000",
+      "subject": "feat: Develop Blum-compliant complexity analyzer tool",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Develop Blum-compliant complexity analyzer tool"
+    },
+    {
+      "name": "language-theory-framework-0",
+      "full_name": "origin/language-theory-framework-0",
+      "commit_hash": "322965fc4f19e8829cc8eb001072934765cead2e",
+      "author_date": "2025-10-15 08:12:27 +0000",
+      "committer_date": "2025-10-15 08:12:27 +0000",
+      "subject": "feat: Complete language theory analysis framework",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Complete language theory analysis framework"
+    },
+    {
+      "name": "logic-construction-system",
+      "full_name": "origin/logic-construction-system",
+      "commit_hash": "3a346475b55d283bb9d4a55018a6973b6bd59221",
+      "author_date": "2025-10-14 23:04:53 +0000",
+      "committer_date": "2025-10-14 23:04:53 +0000",
+      "subject": "feat: Implement automated logic construction system",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat: Implement automated logic construction system"
+    },
+    {
+      "name": "main",
+      "full_name": "origin/main",
+      "commit_hash": "14d0ffa5b8eef267766a9bdf4b37699a6e9e4dfd",
+      "author_date": "2025-11-04 04:16:04 +0000",
+      "committer_date": "2025-11-04 04:16:04 +0000",
+      "subject": "chore(knowledge): Automatically update Knowledge Core artifacts",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "chore(knowledge): Automatically update Knowledge Core artifacts"
+    },
+    {
+      "name": "major-refactor-and-standardization",
+      "full_name": "origin/major-refactor-and-standardization",
+      "commit_hash": "6722c6450f348056afaa06c63b01184e340048aa",
+      "author_date": "2025-10-14 06:57:21 +0000",
+      "committer_date": "2025-10-14 06:57:21 +0000",
+      "subject": "feat: Major refactor and standardization of the agent development environment",
+      "status": "inactive",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "feat: Major refactor and standardization of the agent development environment"
+    },
+    {
+      "name": "major-refactor-unified-toolchain",
+      "full_name": "origin/major-refactor-unified-toolchain",
+      "commit_hash": "a331733e2653552194764074b11edf4dfe058363",
+      "author_date": "2025-10-15 04:33:59 +0000",
+      "committer_date": "2025-10-15 04:33:59 +0000",
+      "subject": "Refactor: Unify and strengthen the core development toolchain.",
+      "status": "inactive",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor: Unify and strengthen the core development toolchain."
+    },
+    {
+      "name": "major-stabilization-refactor",
+      "full_name": "origin/major-stabilization-refactor",
+      "commit_hash": "c6359c25f67e2a69e3b49b6a516bc6176cb4aaa4",
+      "author_date": "2025-10-14 20:47:03 -0700",
+      "committer_date": "2025-10-14 20:47:03 -0700",
+      "subject": "Merge branch 'main' into major-stabilization-refactor",
+      "status": "inactive",
+      "tags": [
+        "refactor",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into major-stabilization-refactor"
+    },
+    {
+      "name": "optimize-dependency-graph-generator",
+      "full_name": "origin/optimize-dependency-graph-generator",
+      "commit_hash": "fa6ce739bae321b0c053d8af86381a838d8d14c4",
+      "author_date": "2025-10-15 09:01:26 +0000",
+      "committer_date": "2025-10-15 09:01:26 +0000",
+      "subject": "feat: Optimize dependency graph generator script",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Optimize dependency graph generator script"
+    },
+    {
+      "name": "organize-repo-structure",
+      "full_name": "origin/organize-repo-structure",
+      "commit_hash": "3d3f80ba57bd546ac75b6dbfc6a04b065972e50a",
+      "author_date": "2025-10-14 23:52:45 +0000",
+      "committer_date": "2025-10-14 23:52:45 +0000",
+      "subject": "feat: Organize repository structure for clarity",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Organize repository structure for clarity"
+    },
+    {
+      "name": "paraconsistent-logic-lang",
+      "full_name": "origin/paraconsistent-logic-lang",
+      "commit_hash": "2bd0a2130d4dbaa42ac2b48582f1a89293ba604a",
+      "author_date": "2025-10-14 22:16:08 +0000",
+      "committer_date": "2025-10-14 22:16:08 +0000",
+      "subject": "feat(logic): Implement correct resource-sensitive logic and extensions",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "feat(logic): Implement correct resource-sensitive logic and extensions"
+    },
+    {
+      "name": "postmortem-analysis",
+      "full_name": "origin/postmortem-analysis",
+      "commit_hash": "90e433e5d0b16675ee2128ab2f157bb49a44c17c",
+      "author_date": "2025-10-20 21:28:40 +0000",
+      "committer_date": "2025-10-20 21:28:40 +0000",
+      "subject": "feat: Conduct post-mortem analysis and define new protocol",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Conduct post-mortem analysis and define new protocol"
+    },
+    {
+      "name": "python-prover-refuter",
+      "full_name": "origin/python-prover-refuter",
+      "commit_hash": "2a51b91ce803fe75b7741ba3e53bb17f4a6361d4",
+      "author_date": "2025-10-12 06:29:26 +0000",
+      "committer_date": "2025-10-12 06:29:26 +0000",
+      "subject": "Feat: Convert Lisp logic to Python and finalize architecture",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "Feat: Convert Lisp logic to Python and finalize architecture"
+    },
+    {
+      "name": "reduce-deploy-frequency",
+      "full_name": "origin/reduce-deploy-frequency",
+      "commit_hash": "357c5d4a2f24553652078bce3e6cdcd6d30cb76e",
+      "author_date": "2025-10-13 21:30:17 +0000",
+      "committer_date": "2025-10-13 21:30:17 +0000",
+      "subject": "feat: Reduce deploy workflow trigger frequency",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat: Reduce deploy workflow trigger frequency"
+    },
+    {
+      "name": "refactor-build-process",
+      "full_name": "origin/refactor-build-process",
+      "commit_hash": "296dee654388c082810a8776b427ef571679442d",
+      "author_date": "2025-10-13 20:28:54 +0000",
+      "committer_date": "2025-10-13 20:28:54 +0000",
+      "subject": "Refactor the build process to be unified and data-driven.",
+      "status": "stalled",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor the build process to be unified and data-driven."
+    },
+    {
+      "name": "refactor-build-system-and-protocols-v2",
+      "full_name": "origin/refactor-build-system-and-protocols-v2",
+      "commit_hash": "b20e254d74733e03290d24b58340921b5e425eb0",
+      "author_date": "2025-10-20 13:28:07 -0700",
+      "committer_date": "2025-10-20 13:28:07 -0700",
+      "subject": "Merge branch 'main' into refactor-build-system-and-protocols-v2",
+      "status": "stalled",
+      "tags": [
+        "refactor",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into refactor-build-system-and-protocols-v2"
+    },
+    {
+      "name": "refactor-build-system-yamld",
+      "full_name": "origin/refactor-build-system-yamld",
+      "commit_hash": "6060c10d986191bef14f6fc81c7da8e25e3145e9",
+      "author_date": "2025-10-26 05:16:09 +0000",
+      "committer_date": "2025-10-26 05:16:09 +0000",
+      "subject": "Refactor: Implement YAML-LD knowledge pipeline and subdirectory AGENTS.md updates",
+      "status": "active",
+      "tags": [
+        "refactor",
+        "addition"
+      ],
+      "purpose": "Refactor: Implement YAML-LD knowledge pipeline and subdirectory AGENTS.md updates"
+    },
+    {
+      "name": "refactor-consolidate-features",
+      "full_name": "origin/refactor-consolidate-features",
+      "commit_hash": "83ac37d9a13d70715cc561d7d435c28099e7e1be",
+      "author_date": "2025-10-21 20:10:11 -0700",
+      "committer_date": "2025-10-21 20:10:11 -0700",
+      "subject": "Merge branch 'main' into refactor-consolidate-features",
+      "status": "stalled",
+      "tags": [
+        "refactor",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into refactor-consolidate-features"
+    },
+    {
+      "name": "refactor-filesystem-tooling",
+      "full_name": "origin/refactor-filesystem-tooling",
+      "commit_hash": "f282e2082170642770acb94080e38ea638ab72ad",
+      "author_date": "2025-10-15 19:40:36 +0000",
+      "committer_date": "2025-10-15 19:40:36 +0000",
+      "subject": "Refactor filesystem tooling to use a centralized utility.",
+      "status": "stalled",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor filesystem tooling to use a centralized utility."
+    },
+    {
+      "name": "refactor-instructional-agents-md",
+      "full_name": "origin/refactor-instructional-agents-md",
+      "commit_hash": "1da0123d0c055c184337d3d84d1ef9f06c4ac3a3",
+      "author_date": "2025-10-23 05:52:18 +0000",
+      "committer_date": "2025-10-23 05:52:18 +0000",
+      "subject": "refactor: Generate AGENTS.md from Enriched Knowledge Core",
+      "status": "stalled",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "refactor: Generate AGENTS.md from Enriched Knowledge Core"
+    },
+    {
+      "name": "refactor-protocol-docs",
+      "full_name": "origin/refactor-protocol-docs",
+      "commit_hash": "5f44fdcbd2636007502fc6b3261fb8dc451bb8fe",
+      "author_date": "2025-10-30 21:33:41 +0000",
+      "committer_date": "2025-10-30 21:33:41 +0000",
+      "subject": "refactor: separate protocol docs from machine code",
+      "status": "active",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "refactor: separate protocol docs from machine code"
+    },
+    {
+      "name": "refactor-yaml-ld-context",
+      "full_name": "origin/refactor-yaml-ld-context",
+      "commit_hash": "303b2f0d186f39c426dde01f5fc9d05e7884a41f",
+      "author_date": "2025-10-26 04:39:40 +0000",
+      "committer_date": "2025-10-26 04:39:40 +0000",
+      "subject": "Refactor: Centralize JSON-LD context for protocols",
+      "status": "active",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor: Centralize JSON-LD context for protocols"
+    },
+    {
+      "name": "refactor/api-driven-architecture",
+      "full_name": "origin/refactor/api-driven-architecture",
+      "commit_hash": "2d803462263032e2da0a5c3edadb5bc80895ed07",
+      "author_date": "2025-10-13 13:21:32 -0700",
+      "committer_date": "2025-10-13 13:21:32 -0700",
+      "subject": "Merge branch 'main' into refactor/api-driven-architecture",
+      "status": "stalled",
+      "tags": [
+        "refactor",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into refactor/api-driven-architecture"
+    },
+    {
+      "name": "refactor/consolidate-plllu",
+      "full_name": "origin/refactor/consolidate-plllu",
+      "commit_hash": "2d71740dddb67a70b7ed260baa10277195f1d326",
+      "author_date": "2025-10-17 09:47:27 +0000",
+      "committer_date": "2025-10-17 09:47:27 +0000",
+      "subject": "Refactor: Consolidate repository around pLLLU implementation",
+      "status": "stalled",
+      "tags": [
+        "refactor",
+        "addition"
+      ],
+      "purpose": "Refactor: Consolidate repository around pLLLU implementation"
+    },
+    {
+      "name": "refactor/consolidate-repository",
+      "full_name": "origin/refactor/consolidate-repository",
+      "commit_hash": "69207561838847de7d445399e29503a5f611c5b0",
+      "author_date": "2025-10-17 18:12:38 +0000",
+      "committer_date": "2025-10-17 18:12:38 +0000",
+      "subject": "Refactor: Consolidate repository into agent_core library",
+      "status": "stalled",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor: Consolidate repository into agent_core library"
+    },
+    {
+      "name": "refactor/consolidate-tooling",
+      "full_name": "origin/refactor/consolidate-tooling",
+      "commit_hash": "1d70a3feca3802ff01b05c7278368ca5f5208021",
+      "author_date": "2025-10-16 01:40:36 +0000",
+      "committer_date": "2025-10-16 01:40:36 +0000",
+      "subject": "Refactor: Consolidate and simplify the tooling directory.",
+      "status": "stalled",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor: Consolidate and simplify the tooling directory."
+    },
+    {
+      "name": "refactor/deprecate-hierarchical-compiler",
+      "full_name": "origin/refactor/deprecate-hierarchical-compiler",
+      "commit_hash": "bdae1036b04c5b8ccac15276f734c557d09e822b",
+      "author_date": "2025-10-15 08:30:00 +0000",
+      "committer_date": "2025-10-15 08:30:00 +0000",
+      "subject": "Refactor: Consolidate and update agent protocols",
+      "status": "stalled",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor: Consolidate and update agent protocols"
+    },
+    {
+      "name": "refactor/integrate-audit-into-build-system",
+      "full_name": "origin/refactor/integrate-audit-into-build-system",
+      "commit_hash": "6c4169eb95e602a222eca96316a68d29f601e062",
+      "author_date": "2025-10-13 20:34:31 +0000",
+      "committer_date": "2025-10-13 20:34:31 +0000",
+      "subject": "Refactor: Integrate Audit Command into Unified Build System",
+      "status": "stalled",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "Refactor: Integrate Audit Command into Unified Build System"
+    },
+    {
+      "name": "refactor/reorganize-archives",
+      "full_name": "origin/refactor/reorganize-archives",
+      "commit_hash": "1079dd5695f5fccc80344ab29a0cf5c3bed5eb66",
+      "author_date": "2025-10-11 09:18:02 +0000",
+      "committer_date": "2025-10-11 09:18:02 +0000",
+      "subject": "refactor: Reorganize archive directories using divide and conquer",
+      "status": "stalled",
+      "tags": [
+        "refactor"
+      ],
+      "purpose": "refactor: Reorganize archive directories using divide and conquer"
+    },
+    {
+      "name": "refine-dbpedia-enrichment-v2",
+      "full_name": "origin/refine-dbpedia-enrichment-v2",
+      "commit_hash": "260fd867b62477d92f3bd2b339ad3465885aeca6",
+      "author_date": "2025-10-26 07:53:34 +0000",
+      "committer_date": "2025-10-26 07:53:34 +0000",
+      "subject": "Refine DBPedia protocol enrichment for contextual relevance",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "Refine DBPedia protocol enrichment for contextual relevance"
+    },
+    {
+      "name": "refine-theory-falsifiability",
+      "full_name": "origin/refine-theory-falsifiability",
+      "commit_hash": "f32edc8a1e59715f38bca227300d4a079e3fe5c2",
+      "author_date": "2025-10-26 00:00:37 +0000",
+      "committer_date": "2025-10-26 00:00:37 +0000",
+      "subject": "feat(docs): Refine THEORY.md with dual interpretation and falsifiability",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "feat(docs): Refine THEORY.md with dual interpretation and falsifiability"
+    },
+    {
+      "name": "remove-dual-operator",
+      "full_name": "origin/remove-dual-operator",
+      "commit_hash": "ace6d6e4ae9330f8e5053d8e730f12afe1dc36a5",
+      "author_date": "2025-10-12 05:01:01 +0000",
+      "committer_date": "2025-10-12 05:01:01 +0000",
+      "subject": "Feat: Add documentation for specialized duality logic",
+      "status": "inactive",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "Feat: Add documentation for specialized duality logic"
+    },
+    {
+      "name": "remove-reconciliation-tool",
+      "full_name": "origin/remove-reconciliation-tool",
+      "commit_hash": "3a7187832464084a6632991116a9e68b3cc88ddf",
+      "author_date": "2025-10-10 23:44:05 -0700",
+      "committer_date": "2025-10-10 23:44:05 -0700",
+      "subject": "Merge branch 'main' into remove-reconciliation-tool",
+      "status": "inactive",
+      "tags": [
+        "deletion",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into remove-reconciliation-tool"
+    },
+    {
+      "name": "repo-cleanup",
+      "full_name": "origin/repo-cleanup",
+      "commit_hash": "4c1523c3c8864b046fcc5efa8f885324de9441b2",
+      "author_date": "2025-10-11 22:47:06 +0000",
+      "committer_date": "2025-10-11 22:47:06 +0000",
+      "subject": "Clean up repository by removing archive and fixing linting errors",
+      "status": "archived",
+      "tags": [
+        "cleanup",
+        "fix"
+      ],
+      "purpose": "Clean up repository by removing archive and fixing linting errors"
+    },
+    {
+      "name": "repobird/agent-4f92f62b",
+      "full_name": "origin/repobird/agent-4f92f62b",
+      "commit_hash": "1087c1dc4fa850e5d8e3f1f4c1784b528c69d3d8",
+      "author_date": "2025-12-24 22:54:15 +0000",
+      "committer_date": "2025-12-24 22:54:15 +0000",
+      "subject": "feat(REORGANIZATION_ANALYSIS.md): add repository reorganization analysis document",
+      "status": "automated",
+      "tags": [
+        "addition",
+        "automated"
+      ],
+      "purpose": "feat(REORGANIZATION_ANALYSIS.md): add repository reorganization analysis document"
+    },
+    {
+      "name": "review-org-principles-proposals-meta-math",
+      "full_name": "origin/review-org-principles-proposals-meta-math",
+      "commit_hash": "dea68ae037507e7c3f654b03fd257ca07b211857",
+      "author_date": "2025-12-25 21:02:31 +0000",
+      "committer_date": "2025-12-25 21:02:31 +0000",
+      "subject": "docs: add comprehensive response to PR review request",
+      "status": "active",
+      "tags": [
+        "addition"
+      ],
+      "purpose": "docs: add comprehensive response to PR review request"
+    },
+    {
+      "name": "self-improvement-architecture",
+      "full_name": "origin/self-improvement-architecture",
+      "commit_hash": "a80be2cd42c74003baaf7b417979d5e4cad6c5a8",
+      "author_date": "2025-10-15 08:13:00 +0000",
+      "committer_date": "2025-10-15 08:13:00 +0000",
+      "subject": "Update the top-level README.md for the self_improvement_project.",
+      "status": "inactive",
+      "tags": [],
+      "purpose": "Update the top-level README.md for the self_improvement_project."
+    },
+    {
+      "name": "speculative-execution-protocol",
+      "full_name": "origin/speculative-execution-protocol",
+      "commit_hash": "6df94b8627e6056181f5551c2bb796b7e9b6c1f3",
+      "author_date": "2025-10-14 23:46:35 +0000",
+      "committer_date": "2025-10-14 23:46:35 +0000",
+      "subject": "feat: Add Speculative Execution Protocol in response to \"Dream deep\"",
+      "status": "inactive",
+      "tags": [
+        "core",
+        "addition",
+        "protocol"
+      ],
+      "purpose": "feat: Add Speculative Execution Protocol in response to \"Dream deep\""
+    },
+    {
+      "name": "stability-improvements",
+      "full_name": "origin/stability-improvements",
+      "commit_hash": "8dca78c0203c7cc2c36b927335e9a0b4d448669e",
+      "author_date": "2025-10-18 15:05:21 -0700",
+      "committer_date": "2025-10-18 15:05:21 -0700",
+      "subject": "Merge branch 'main' into stability-improvements",
+      "status": "inactive",
+      "tags": [
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into stability-improvements"
+    },
+    {
+      "name": "test-tooling-coverage",
+      "full_name": "origin/test-tooling-coverage",
+      "commit_hash": "a4652cc3f587e133b5e487ef62ae6d8340596fc4",
+      "author_date": "2025-10-15 13:01:15 -0700",
+      "committer_date": "2025-10-15 13:01:15 -0700",
+      "subject": "Merge branch 'main' into test-tooling-coverage",
+      "status": "experimental",
+      "tags": [
+        "testing",
+        "merge"
+      ],
+      "purpose": "Merge branch 'main' into test-tooling-coverage"
+    },
+    {
+      "name": "testing-protocol-1",
+      "full_name": "origin/testing-protocol-1",
+      "commit_hash": "45fa6a6ac6b56000e4c25c3ba04c1c3227b25556",
+      "author_date": "2025-10-30 00:19:35 +0000",
+      "committer_date": "2025-10-30 00:19:35 +0000",
+      "subject": "feat: Implement comprehensive testing protocol and suite",
+      "status": "experimental",
+      "tags": [
+        "testing",
+        "addition"
+      ],
+      "purpose": "feat: Implement comprehensive testing protocol and suite"
+    },
+    {
+      "name": "update-build-process-for-yaml-ld-and-json-ld-standards",
+      "full_name": "origin/update-build-process-for-yaml-ld-and-json-ld-standards",
+      "commit_hash": "620b92243ea8cabbe8fbc99434727a11bb690c34",
+      "author_date": "2025-10-26 04:57:14 +0000",
+      "committer_date": "2025-10-26 04:57:14 +0000",
+      "subject": "Update build process to YAML-LD and JSON-LD standards. This commit refactors the build process to use a YAML-based configuration (`build_config.yaml`) and introduces a new protocol compiler for handling JSON-LD and YAML-LD standards. The changes include updating the build logic to support YAML, creating a new `build_config.yaml`, and removing the old `build_config.json` file. Additionally, a placeholder `protocol_compiler.py` has been added to support the new build process.",
+      "status": "inactive",
+      "tags": [
+        "refactor",
+        "addition"
+      ],
+      "purpose": "Update build process to YAML-LD and JSON-LD standards. This commit refactors the build process to use a YAML-based configuration (`build_config.yaml`) and introduces a new protocol compiler for handling JSON-LD and YAML-LD standards. The changes include updating the build logic to support YAML, creating a new `build_config.yaml`, and removing the old `build_config.json` file. Additionally, a placeholder `protocol_compiler.py` has been added to support the new build process."
+    }
+  ],
+  "relationships": [
+    {
+      "type": "converges_to",
+      "source": "CatCleanup",
+      "target": "CoPilot_Experiment_0",
+      "commit_hash": "083394cf03f7746f403a2e0e415c038ca982fa5e",
+      "explanation": "Both branches point to the same commit"
+    },
+    {
+      "type": "converges_to",
+      "source": "origin",
+      "target": "main",
+      "commit_hash": "14d0ffa5b8eef267766a9bdf4b37699a6e9e4dfd",
+      "explanation": "Both branches point to the same commit"
+    },
+    {
+      "type": "supersedes",
+      "source": "feat/aorp-v3-integration",
+      "target": "feat/aorp-v2-integration",
+      "explanation": "Version progression in feat/aorp series"
+    },
+    {
+      "type": "supersedes",
+      "source": "feat/aorp-v4-integration",
+      "target": "feat/aorp-v3-integration",
+      "explanation": "Version progression in feat/aorp series"
+    },
+    {
+      "type": "supersedes",
+      "source": "feat/axiomatic-schema-v2",
+      "target": "feat/axiomatic-schema-v1",
+      "explanation": "Version progression in feat/axiomatic-schema series"
+    },
+    {
+      "type": "supersedes",
+      "source": "feat/protocol-aorp-v2.1.0",
+      "target": "feat/protocol-aorp-v2",
+      "explanation": "Version progression in feat/protocol-aorp series"
+    },
+    {
+      "type": "supersedes",
+      "source": "feature/hierarchical-agents-md-v2",
+      "target": "feature/hierarchical-agents-md-v1",
+      "explanation": "Version progression in feature/hierarchical-agents-md series"
+    },
+    {
+      "type": "thematic_group",
+      "source": "add-docstring-to-pre-submit-check",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "add-docstrings-to-tooling",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "docs-improve-agents-md",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "docs/appl-implementation-deviations",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "docs/complete-documentation",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "docs/development-cycles",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "docs/tooling-readme",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "document-git-capabilities",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "enforce-docstrings",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/formal-theory-document",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/implement-compiled-docs-scheme",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature/documentation-protocol",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "fix/appl-docs-and-cli",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor-protocol-docs",
+      "target": "doc",
+      "explanation": "Part of doc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "add-logging-verification-protocol",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "add-protocol-validation",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "bugfix/fix-protocol-compiler-and-restore-protocols",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "enrich-protocol-knowledge",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat-ai-agent-protocols",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat-chc-protocol-framework",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat-chc-protocol-framework-total",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat-chc-protocol-framework-total-v1",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/aal-protocol-system",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/agent-shell-protocol",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/bootstrap-protocol-structure",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/chc-bootstrap-protocol",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/hierarchical-protocols",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/modular-agent-protocols",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/protocol-aorp-v2",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/protocol-aorp-v2.1.0",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/protocol-build-system",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/protocol-build-system-AGENTS-regression",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/protocol-management",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/protocol_oracle",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/recover-aal-protocol-branch-history-report",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature-orientation-cascade-protocol",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature/agent-protocol-refactor",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature/define-agents-md-protocol-schema-v2",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature/documentation-protocol",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature/hierarchical-protocols-and-mutation-framework",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature/protocol-evolution",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "fix-protocol-build-system",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "fix-protocol-compiler",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "fix-test-protocol-auditor",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "fix/clarify-reset-all-protocols",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "fix/protocol-auditor-overhaul",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "fix/protocol-contradiction",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "fix/protocol-ttl-deletion-bug",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "guardian-protocol",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "improve-git-workflow-protocol",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "improve-testing-protocols",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "improve-testing-protocols-1",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor-build-system-and-protocols-v2",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor-protocol-docs",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "speculative-execution-protocol",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "testing-protocol-1",
+      "target": "protocol",
+      "explanation": "Part of protocol development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "agentic-research-experiments",
+      "target": "research",
+      "explanation": "Part of research development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat-research-ambiguity-report",
+      "target": "research",
+      "explanation": "Part of research development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/agent-research-and-poc",
+      "target": "research",
+      "explanation": "Part of research development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/fsm-toolchain-with-research-suite",
+      "target": "research",
+      "explanation": "Part of research development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature-research-toc",
+      "target": "research",
+      "explanation": "Part of research development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature/post-mortem-research-and-improvement",
+      "target": "research",
+      "explanation": "Part of research development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "grammar-research",
+      "target": "research",
+      "explanation": "Part of research development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "agentic-self-improvement-theory",
+      "target": "self-improvement",
+      "explanation": "Part of self-improvement development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat-goal-oriented-self-improvement",
+      "target": "self-improvement",
+      "explanation": "Part of self-improvement development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/self-improvement-loop",
+      "target": "self-improvement",
+      "explanation": "Part of self-improvement development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "self-improvement-architecture",
+      "target": "self-improvement",
+      "explanation": "Part of self-improvement development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "dbpedia-client",
+      "target": "dbpedia",
+      "explanation": "Part of dbpedia development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refine-dbpedia-enrichment-v2",
+      "target": "dbpedia",
+      "explanation": "Part of dbpedia development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "decision-making-test-framework",
+      "target": "test",
+      "explanation": "Part of test development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature-improve-test-coverage",
+      "target": "test",
+      "explanation": "Part of test development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "fix-broken-tests-and-refactor",
+      "target": "test",
+      "explanation": "Part of test development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "fix-linting-and-test-errors",
+      "target": "test",
+      "explanation": "Part of test development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "fix-test-protocol-auditor",
+      "target": "test",
+      "explanation": "Part of test development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "improve-test-coverage",
+      "target": "test",
+      "explanation": "Part of test development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "improve-testing-protocols",
+      "target": "test",
+      "explanation": "Part of test development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "improve-testing-protocols-1",
+      "target": "test",
+      "explanation": "Part of test development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "test-tooling-coverage",
+      "target": "test",
+      "explanation": "Part of test development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "testing-protocol-1",
+      "target": "test",
+      "explanation": "Part of test development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat-chc-protocol-framework",
+      "target": "chc",
+      "explanation": "Part of chc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat-chc-protocol-framework-total",
+      "target": "chc",
+      "explanation": "Part of chc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat-chc-protocol-framework-total-v1",
+      "target": "chc",
+      "explanation": "Part of chc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/chc-bootstrap-protocol",
+      "target": "chc",
+      "explanation": "Part of chc development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat-yaml-ld-poc",
+      "target": "yaml-ld",
+      "explanation": "Part of yaml-ld development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature-yaml-ld-migration",
+      "target": "yaml-ld",
+      "explanation": "Part of yaml-ld development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "json-to-yaml-ld-migration",
+      "target": "yaml-ld",
+      "explanation": "Part of yaml-ld development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor-yaml-ld-context",
+      "target": "yaml-ld",
+      "explanation": "Part of yaml-ld development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "update-build-process-for-yaml-ld-and-json-ld-standards",
+      "target": "yaml-ld",
+      "explanation": "Part of yaml-ld development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/FDC-aorp-v1-integration",
+      "target": "aorp",
+      "explanation": "Part of aorp development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/aorp-v2-integration",
+      "target": "aorp",
+      "explanation": "Part of aorp development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/aorp-v3-integration",
+      "target": "aorp",
+      "explanation": "Part of aorp development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/aorp-v4-integration",
+      "target": "aorp",
+      "explanation": "Part of aorp development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/protocol-aorp-v2",
+      "target": "aorp",
+      "explanation": "Part of aorp development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feat/protocol-aorp-v2.1.0",
+      "target": "aorp",
+      "explanation": "Part of aorp development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature/agent-protocol-refactor",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature/major-refactor-aura-engine",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "feature/refactoring-tool",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "fix-broken-tests-and-refactor",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "jules-consolidation-refactor",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "major-refactor-and-standardization",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "major-refactor-unified-toolchain",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "major-stabilization-refactor",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor-build-process",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor-build-system-and-protocols-v2",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor-build-system-yamld",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor-consolidate-features",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor-filesystem-tooling",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor-instructional-agents-md",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor-protocol-docs",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor-yaml-ld-context",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor/api-driven-architecture",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor/consolidate-plllu",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor/consolidate-repository",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor/consolidate-tooling",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor/deprecate-hierarchical-compiler",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor/integrate-audit-into-build-system",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    },
+    {
+      "type": "thematic_group",
+      "source": "refactor/reorganize-archives",
+      "target": "refactor",
+      "explanation": "Part of refactor development theme"
+    }
+  ]
+}
