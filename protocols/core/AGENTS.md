@@ -1,55 +1,57 @@
 # AGENTS.md
 
-**Directory:** `/protocols`
+**Directory:** `/protocols/core`
 **Generated:** 2025-12-27 01:58:32 UTC
 
 ## Description
 
-Protocols directory - protocol management and compilation
+Core protocols - foundational agent operation and decidability
 
 ## Protocols
 
-This AGENTS.md file contains 9 operational protocols for this directory.
+This AGENTS.md file contains 10 operational protocols for this directory.
 
 ```yaml
 '@context': protocols/protocol.context.jsonld
 '@type': AgentContext
-description: Protocols directory - protocol management and compilation
-directory: /protocols
-generatedAt: '2025-12-27T01:58:32.601310Z'
+description: Core protocols - foundational agent operation and decidability
+directory: /protocols/core
+generatedAt: '2025-12-27T01:58:32.655670Z'
 protocols:
-- associated_tools:
-  - read_file
-  description: A foundational protocol that dictates the agent's initial actions upon
-    starting any task.
-  protocol_id: agent-bootstrap-001
+- description: Defines the identity and versioning of the Advanced Orientation and
+    Research Protocol (AORP).
+  protocol_id: aorp-header
   rules:
-  - description: Upon initialization for any task, the agent's first and highest-priority
-      action must be to locate, read, and parse the AGENTS.md file in the repository
-      root. This ensures the agent is properly contextualized before any planning
-      or execution begins.
-    enforcement: This rule is enforced by the agent's core startup logic. The agent
-      must verify the load of AGENTS.md before proceeding to the planning phase.
-    rule_id: bootstrap-load-agents-md
-    tags:
-    - compliance
+  - description: The governing protocol set is identified as the Advanced Orientation
+      and Research Protocol (AORP).
+    enforcement: Protocol is identified by its name in documentation and compiled
+      artifacts.
+    rule_id: aorp-identity
+  - description: The official protocol version is tracked in the VERSION file in the
+      repository root, following Semantic Versioning (SemVer).
+    enforcement: Build or validation scripts should verify the presence and format
+      of the VERSION file.
+    rule_id: aorp-versioning
   version: 1.0.0
 - associated_tools:
-  - tooling/agent_shell.py
-  description: A protocol governing the use of the interactive agent shell as the
-    primary entry point for all tasks.
-  protocol_id: agent-shell-001
+  - tooling/master_control.py
+  - tooling/fdc_cli.py
+  description: Defines the Context-Free Development Cycle (CFDC), a hierarchical planning
+    and execution model.
+  protocol_id: cfdc-protocol-001
   rules:
-  - description: All agent tasks must be initiated through the `agent_shell.py` script.
-      This script is the designated, API-driven entry point that ensures proper initialization
-      of the MasterControlGraph FSM, centralized logging, and programmatic lifecycle
-      management. Direct execution of other tools or scripts is forbidden for task
-      initiation.
-    enforcement: This is a procedural rule. The agent's operational framework should
-      only expose the agent_shell.py as the means of starting a new task.
-    rule_id: shell-is-primary-entry-point
-    tags:
-    - core
+  - description: Plans may execute other plans as sub-routines using the 'call_plan
+      <path_to_plan>' directive. This enables a modular, hierarchical workflow.
+    enforcement: The plan validator must be able to parse this directive and recursively
+      validate sub-plans. The execution engine must implement a plan execution stack
+      to manage the context of nested calls.
+    rule_id: hierarchical-planning-via-call-plan
+  - description: To ensure decidability, the plan execution stack must not exceed
+      a system-wide constant, MAX_RECURSION_DEPTH. This prevents infinite recursion
+      and guarantees all processes will terminate.
+    enforcement: The execution engine must check the stack depth before every 'call_plan'
+      execution and terminate with a fatal error if the limit would be exceeded.
+    rule_id: max-recursion-depth
   version: 1.0.0
 - description: A meta-protocol that governs the behavior and evaluation criteria of
     the Code Review Critic agent.
@@ -78,19 +80,68 @@ protocols:
     rule_id: functional-change-definition
   version: 1.0.0
 - associated_tools:
-  - run_in_bash_session
-  description: A protocol for ensuring a reliable execution environment through formal
-    dependency management.
-  protocol_id: dependency-management-001
+  - tooling/fdc_cli.py
+  - tooling/fdc_fsm.json
+  description: Ensures all development processes are formally decidable and computationally
+    tractable.
+  protocol_id: decidability-constraints-001
   rules:
-  - description: Upon starting a task, after loading AGENTS.md, the agent MUST install
-      all required Python packages listed in the `requirements.txt` file. This ensures
-      the environment is correctly configured before any other tools are executed.
-    enforcement: The agent's core startup logic should be designed to execute `pip
-      install -r requirements.txt` as one of its initial actions.
-    rule_id: dependency-install-on-start
-    tags:
-    - compliance
+  - description: The agent's planning and execution language is, by design, not Turing-complete.
+      This is a fundamental constraint to guarantee that all processes will terminate.
+    enforcement: Enforced by the design of the plan runner and validated by the `lint`
+      command in the FDC toolchain.
+    rule_id: non-turing-completeness
+  - description: The agent MUST NOT generate plans that involve recursion or self-invocation.
+      A plan cannot trigger another FDC or a sub-plan, with the sole exception of
+      the 'Deep Research Cycle'.
+    enforcement: The `lint` command in `tooling/fdc_cli.py` scans plans for disallowed
+      recursive calls.
+    rule_id: bounded-recursion
+  - description: All plans must be valid strings in the language defined by the tooling/fdc_fsm.json
+      Finite State Machine.
+    enforcement: The `lint` command in `tooling/fdc_cli.py` validates the plan against
+      the FSM definition.
+    rule_id: fsm-adherence
+  version: 1.0.0
+- associated_tools:
+  - tooling/fdc_cli.py
+  - tooling/fdc_fsm.json
+  - knowledge_core/symbols.json
+  - knowledge_core/dependency_graph.json
+  - LOGGING_SCHEMA.md
+  - set_plan
+  - message_user
+  description: Defines the Finite Development Cycle (FDC), a formally defined process
+    for executing a single, coherent task.
+  protocol_id: fdc-protocol-001
+  rules:
+  - description: The AORP cascade is the mandatory entry point to every FDC.
+    enforcement: Enforced by the `start` command in `tooling/fdc_cli.py`.
+    rule_id: fdc-entry-point
+  - description: The FDC is a Finite State Machine (FSM) formally defined in `tooling/fdc_fsm.json`.
+      Plans must be valid strings in the language defined by this FSM.
+    enforcement: Validated by the `lint` command in `tooling/fdc_cli.py`.
+    rule_id: fdc-state-transitions
+  - description: 'Phase 1 (Deconstruction & Contextualization): The agent must ingest
+      the task, query historical logs, identify entities using the symbol map, and
+      analyze impact using the dependency graph.'
+    enforcement: Procedural step guided by the agent's core logic, using artifacts
+      in `logs/` and `knowledge_core/`.
+    rule_id: phase1-deconstruction
+  - description: 'Phase 2 (Planning & Self-Correction): The agent must generate a
+      granular plan, lint it using the FDC toolchain, cite evidence for its steps,
+      and perform a critical review.'
+    enforcement: The `lint` command in `tooling/fdc_cli.py` is a mandatory pre-flight
+      check.
+    rule_id: phase2-planning
+  - description: 'Phase 3 (Execution & Structured Logging): The agent must execute
+      the validated plan and log every action according to the `LOGGING_SCHEMA.md`.'
+    enforcement: Logging is performed by the agent's action execution wrapper.
+    rule_id: phase3-execution
+  - description: 'Phase 4 (Pre-Submission Post-Mortem): The agent must formally close
+      the task using the `close` command and complete the generated post-mortem report.'
+    enforcement: The `close` command in `tooling/fdc_cli.py` initiates this phase.
+    rule_id: phase4-post-mortem
   version: 1.0.0
 - associated_tools:
   - run_in_bash_session
@@ -234,21 +285,23 @@ protocols:
 
 ## Protocol Summary
 
-### AGENT-BOOTSTRAP-001
+### AORP-HEADER
 
-A foundational protocol that dictates the agent's initial actions upon starting any task.
-
-**Rules:**
-
-- `bootstrap-load-agents-md`: Upon initialization for any task, the agent's first and highest-priority action must be to locate, r...
-
-### AGENT-SHELL-001
-
-A protocol governing the use of the interactive agent shell as the primary entry point for all tasks.
+Defines the identity and versioning of the Advanced Orientation and Research Protocol (AORP).
 
 **Rules:**
 
-- `shell-is-primary-entry-point`: All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated...
+- `aorp-identity`: The governing protocol set is identified as the Advanced Orientation and Research Protocol (AORP)....
+- `aorp-versioning`: The official protocol version is tracked in the VERSION file in the repository root, following Seman...
+
+### CFDC-PROTOCOL-001
+
+Defines the Context-Free Development Cycle (CFDC), a hierarchical planning and execution model.
+
+**Rules:**
+
+- `hierarchical-planning-via-call-plan`: Plans may execute other plans as sub-routines using the 'call_plan <path_to_plan>' directive. This e...
+- `max-recursion-depth`: To ensure decidability, the plan execution stack must not exceed a system-wide constant, MAX_RECURSI...
 
 ### CRITIC-META-PROTOCOL-001
 
@@ -260,13 +313,26 @@ A meta-protocol that governs the behavior and evaluation criteria of the Code Re
 - `built-in-tools-are-valid`: The agent's execution environment provides a set of built-in tools (e.g., `read_file`, `delete_file`...
 - `functional-change-definition`: A change is considered 'functional' if it correctly modifies the agent's operational rules or capabi...
 
-### DEPENDENCY-MANAGEMENT-001
+### DECIDABILITY-CONSTRAINTS-001
 
-A protocol for ensuring a reliable execution environment through formal dependency management.
+Ensures all development processes are formally decidable and computationally tractable.
 
 **Rules:**
 
-- `dependency-install-on-start`: Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages l...
+- `non-turing-completeness`: The agent's planning and execution language is, by design, not Turing-complete. This is a fundamenta...
+- `bounded-recursion`: The agent MUST NOT generate plans that involve recursion or self-invocation. A plan cannot trigger a...
+- `fsm-adherence`: All plans must be valid strings in the language defined by the tooling/fdc_fsm.json Finite State Mac...
+
+### FDC-PROTOCOL-001
+
+Defines the Finite Development Cycle (FDC), a formally defined process for executing a single, coherent task.
+
+**Rules:**
+
+- `fdc-entry-point`: The AORP cascade is the mandatory entry point to every FDC....
+- `fdc-state-transitions`: The FDC is a Finite State Machine (FSM) formally defined in `tooling/fdc_fsm.json`. Plans must be va...
+- `phase1-deconstruction`: Phase 1 (Deconstruction & Contextualization): The agent must ingest the task, query historical logs,...
+- ... and 3 more rules
 
 ### META-PROTOCOL-001
 

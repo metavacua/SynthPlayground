@@ -1,6 +1,6 @@
 # AGENTS.md
 
-**Directory:** `/protocols/experimental`
+**Directory:** `/protocols/manual_protocol`
 **Generated:** 2025-12-27 01:58:32 UTC
 
 ## Description
@@ -15,8 +15,8 @@ This AGENTS.md file contains 6 operational protocols for this directory.
 '@context': protocols/protocol.context.jsonld
 '@type': AgentContext
 description: Default protocol set for unmapped directories
-directory: /protocols/experimental
-generatedAt: '2025-12-27T01:58:32.683968Z'
+directory: /protocols/manual_protocol
+generatedAt: '2025-12-27T01:58:32.709899Z'
 protocols:
 - associated_tools:
   - create_file_with_block
