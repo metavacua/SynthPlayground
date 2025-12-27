@@ -1,22 +1,22 @@
 # AGENTS.md
 
-**Directory:** `/protocols`
+**Directory:** `/tooling`
 **Generated:** 2025-12-27 01:58:32 UTC
 
 ## Description
 
-Protocols directory - protocol management and compilation
+Tooling directory - agent development and build tools
 
 ## Protocols
 
-This AGENTS.md file contains 9 operational protocols for this directory.
+This AGENTS.md file contains 11 operational protocols for this directory.
 
 ```yaml
 '@context': protocols/protocol.context.jsonld
 '@type': AgentContext
-description: Protocols directory - protocol management and compilation
-directory: /protocols
-generatedAt: '2025-12-27T01:58:32.601310Z'
+description: Tooling directory - agent development and build tools
+directory: /tooling
+generatedAt: '2025-12-27T01:58:32.742535Z'
 protocols:
 - associated_tools:
   - read_file
@@ -51,31 +51,20 @@ protocols:
     tags:
     - core
   version: 1.0.0
-- description: A meta-protocol that governs the behavior and evaluation criteria of
-    the Code Review Critic agent.
-  protocol_id: critic-meta-protocol-001
+- associated_tools:
+  - tooling/capability_verifier.py
+  description: A protocol for using the capability verifier tool to empirically test
+    the agent's monotonic improvement.
+  protocol_id: capability-verification-001
   rules:
-  - description: The `protocols/` directory and all its contents (`.md`, `.json` files)
-      MUST be treated as functional source code. Changes to these files directly alter
-      the agent's operational capabilities and governing rules.
-    enforcement: The Code Review Critic must analyze changes in this directory with
-      the same rigor as changes to `.py` files.
-    rule_id: protocol-as-source-code
-  - description: The agent's execution environment provides a set of built-in tools
-      (e.g., `read_file`, `delete_file`, `pre_commit_instructions`). The implementation
-      of these tools does not reside within the repository. A protocol change that
-      adds a built-in tool to the `associated_tools` list is a valid and complete
-      functional change.
-    enforcement: The Code Review Critic must not flag a change as 'incomplete' or
-      'non-functional' solely because the implementation of a built-in tool is not
-      present in the repository.
-    rule_id: built-in-tools-are-valid
-  - description: A change is considered 'functional' if it correctly modifies the
-      agent's operational rules or capabilities, as defined by the combination of
-      Python source code and the protocol source files in `protocols/`.
-    enforcement: The Code Review Critic's evaluation of 'functionality' must encompass
-      both traditional code and protocol definitions.
-    rule_id: functional-change-definition
+  - description: The `capability_verifier.py` tool should be used to test the agent's
+      ability to acquire a new capability defined by a failing test file. The tool
+      orchestrates the failure, self-correction, and verification process.
+    enforcement: The tool is used by invoking it from the command line with the path
+      to the target test file.
+    rule_id: verify-capability-acquisition
+    tags:
+    - core
   version: 1.0.0
 - associated_tools:
   - run_in_bash_session
@@ -92,21 +81,34 @@ protocols:
     tags:
     - compliance
   version: 1.0.0
-- associated_tools:
-  - run_in_bash_session
-  description: A meta-protocol governing the agent's awareness and maintenance of
-    its own core protocol files.
-  protocol_id: meta-protocol-001
+- associated_tools: []
+  description: A protocol for maintaining an up-to-date file index to accelerate tool
+    performance.
+  protocol_id: file-indexing-001
   rules:
-  - description: The AGENTS.md file is a build artifact generated from source files
-      in the 'protocols/' directory. Before relying on AGENTS.md, the agent should
-      ensure it is up-to-date by running 'make AGENTS.md'. This ensures the agent
-      is operating with the latest set of protocols.
-    enforcement: The agent should incorporate this check into its standard operating
-      procedure, particularly at the beginning of a task or when unexpected behavior
-      occurs.
-    rule_id: agents-md-self-awareness
+  - description: Before submitting any changes that alter the file structure (create,
+      delete, rename), the agent MUST rebuild the repository's file index. This ensures
+      that tools relying on the index, such as the FDC validator, have an accurate
+      view of the filesystem.
+    enforcement: This is a procedural rule. The agent's pre-submission checklist should
+      include a step to run 'python tooling/some_indexer.py build'.
+    rule_id: update-index-before-submit
+    tags:
+    - core
   version: 1.0.0
+- associated_tools:
+  - tooling/self_correction_orchestrator.py
+  description: A protocol that empowers the agent to modify its own core tooling,
+    enabling a recursive self-improvement cycle.
+  protocol_id: meta-mutation-001
+  rules:
+  - description: The agent is authorized to use the 'modify_tooling' action within
+      the self_correction_orchestrator.py to apply patches to its own source code
+      or other tools in the tooling/ directory. This action must be triggered by a
+      structured lesson in knowledge_core/lessons.jsonl.
+    enforcement: The self_correction_orchestrator.py must validate that the 'modify_tooling'
+      action is well-formed and targets a valid file within the tooling/ directory.
+    rule_id: authorize-tooling-modification
 - associated_tools:
   - tooling/environmental_probe.py
   - google_search
@@ -139,52 +141,6 @@ protocols:
     enforcement: This is a special case of recursion, explicitly allowed and managed
       by the FDC toolchain.
     rule_id: l4-deep-research-cycle
-  version: 1.0.0
-- associated_tools:
-  - tooling/self_improvement_cli.py
-  - tooling/protocol_compiler.py
-  - tooling/pre_submit_check.py
-  description: A formal protocol for the agent to propose, validate, and implement
-    improvements to its own operational protocols and tools.
-  protocol_id: self-improvement-protocol-001
-  rules:
-  - description: Proposals for self-improvement must be initiated via the `self_improvement_cli.py`
-      tool.
-    enforcement: The `self_improvement_cli.py` tool will create a new branch and a
-      proposal markdown file in the `proposals/` directory.
-    rule_id: sip-001
-    tags:
-    - self_improvement
-  - description: Improvement proposals must be formally structured, including sections
-      for 'Problem Statement', 'Proposed Solution', 'Success Criteria', and 'Impact
-      Analysis'.
-    enforcement: The `self_improvement_cli.py` tool will generate a template with
-      these required sections.
-    rule_id: sip-002
-    tags:
-    - self_improvement
-  - description: Any proposed changes to protocols must be implemented in the relevant
-      source files within the `protocols/` subdirectories, not directly in the generated
-      AGENTS.md files.
-    enforcement: Pre-submit checks will fail if generated AGENTS.md files are modified
-      directly.
-    rule_id: sip-003
-    tags:
-    - self_improvement
-  - description: After protocol source files are modified, the `protocol_compiler.py`
-      must be executed to re-compile the protocols and validate the changes.
-    enforcement: A pre-submit git hook will trigger the compiler and block the commit
-      if compilation fails.
-    rule_id: sip-004
-    tags:
-    - self_improvement
-  - description: The success of an improvement must be verified by running relevant
-      tests or a new, specific verification script.
-    enforcement: The improvement proposal must reference the specific tests or scripts
-      used for verification.
-    rule_id: sip-005
-    tags:
-    - self_improvement
   version: 1.0.0
 - associated_tools:
   - tooling/fdc_cli.py
@@ -229,6 +185,36 @@ protocols:
     tags:
     - core
   version: 1.0.0
+- associated_tools:
+  - tooling/auditor.py
+  description: A protocol for the unified repository auditing tool, which combines
+    multiple health and compliance checks into a single interface.
+  protocol_id: unified-auditor-001
+  rules:
+  - description: The `auditor.py` script should be used to run comprehensive checks
+      on the repository's health. It can be run with 'all' to check protocols, plans,
+      and documentation completeness.
+    enforcement: The tool is invoked via the command line, typically through the `make
+      audit` target.
+    rule_id: run-all-audits
+    tags:
+    - core
+  version: 1.0.0
+- associated_tools:
+  - tooling/doc_builder.py
+  description: A protocol for the unified documentation builder, which generates various
+    documentation artifacts from the repository's sources of truth.
+  protocol_id: unified-doc-builder-001
+  rules:
+  - description: The `doc_builder.py` script is the single entry point for generating
+      all user-facing documentation, including system-level docs, README files, and
+      GitHub Pages. It should be called with the appropriate '--format' argument.
+    enforcement: The tool is invoked via the command line, typically through the `make
+      docs`, `make readme`, or `make pages` targets.
+    rule_id: use-doc-builder-for-all-docs
+    tags:
+    - core
+  version: 1.0.0
 
 ```
 
@@ -250,15 +236,13 @@ A protocol governing the use of the interactive agent shell as the primary entry
 
 - `shell-is-primary-entry-point`: All agent tasks must be initiated through the `agent_shell.py` script. This script is the designated...
 
-### CRITIC-META-PROTOCOL-001
+### CAPABILITY-VERIFICATION-001
 
-A meta-protocol that governs the behavior and evaluation criteria of the Code Review Critic agent.
+A protocol for using the capability verifier tool to empirically test the agent's monotonic improvement.
 
 **Rules:**
 
-- `protocol-as-source-code`: The `protocols/` directory and all its contents (`.md`, `.json` files) MUST be treated as functional...
-- `built-in-tools-are-valid`: The agent's execution environment provides a set of built-in tools (e.g., `read_file`, `delete_file`...
-- `functional-change-definition`: A change is considered 'functional' if it correctly modifies the agent's operational rules or capabi...
+- `verify-capability-acquisition`: The `capability_verifier.py` tool should be used to test the agent's ability to acquire a new capabi...
 
 ### DEPENDENCY-MANAGEMENT-001
 
@@ -268,13 +252,21 @@ A protocol for ensuring a reliable execution environment through formal dependen
 
 - `dependency-install-on-start`: Upon starting a task, after loading AGENTS.md, the agent MUST install all required Python packages l...
 
-### META-PROTOCOL-001
+### FILE-INDEXING-001
 
-A meta-protocol governing the agent's awareness and maintenance of its own core protocol files.
+A protocol for maintaining an up-to-date file index to accelerate tool performance.
 
 **Rules:**
 
-- `agents-md-self-awareness`: The AGENTS.md file is a build artifact generated from source files in the 'protocols/' directory. Be...
+- `update-index-before-submit`: Before submitting any changes that alter the file structure (create, delete, rename), the agent MUST...
+
+### META-MUTATION-001
+
+A protocol that empowers the agent to modify its own core tooling, enabling a recursive self-improvement cycle.
+
+**Rules:**
+
+- `authorize-tooling-modification`: The agent is authorized to use the 'modify_tooling' action within the self_correction_orchestrator.p...
 
 ### ORIENTATION-CASCADE-001
 
@@ -286,17 +278,6 @@ Defines the mandatory, four-tiered orientation cascade that must be executed at 
 - `l2-repository-sync`: Level 2 (Repository Sync): The agent must understand the current state of the local repository by lo...
 - `l3-environmental-probing`: Level 3 (Environmental Probing & Targeted RAG): The agent must discover the rules and constraints of...
 - ... and 1 more rules
-
-### SELF-IMPROVEMENT-PROTOCOL-001
-
-A formal protocol for the agent to propose, validate, and implement improvements to its own operational protocols and tools.
-
-**Rules:**
-
-- `sip-001`: Proposals for self-improvement must be initiated via the `self_improvement_cli.py` tool....
-- `sip-002`: Improvement proposals must be formally structured, including sections for 'Problem Statement', 'Prop...
-- `sip-003`: Any proposed changes to protocols must be implemented in the relevant source files within the `proto...
-- ... and 2 more rules
 
 ### STANDING-ORDERS-001
 
@@ -315,6 +296,22 @@ A meta-protocol to ensure the agent's toolchain remains synchronized with the ar
 **Rules:**
 
 - `toolchain-audit-on-schema-change`: If a change is made to the core protocol schema (`protocol.schema.json`) or to the compilers that pr...
+
+### UNIFIED-AUDITOR-001
+
+A protocol for the unified repository auditing tool, which combines multiple health and compliance checks into a single interface.
+
+**Rules:**
+
+- `run-all-audits`: The `auditor.py` script should be used to run comprehensive checks on the repository's health. It ca...
+
+### UNIFIED-DOC-BUILDER-001
+
+A protocol for the unified documentation builder, which generates various documentation artifacts from the repository's sources of truth.
+
+**Rules:**
+
+- `use-doc-builder-for-all-docs`: The `doc_builder.py` script is the single entry point for generating all user-facing documentation, ...
 
 ## Notes
 

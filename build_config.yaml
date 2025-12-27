@@ -10,11 +10,12 @@ build_groups:
 
 targets:
   agents-md:
-    command: "python3 tooling/generate_agents_md.py"
-    description: Generate the master AGENTS.md file.
+    command: "python3 tooling/polymorphic_agents_md_generator.py"
+    description: "Generate polymorphic AGENTS.md files for all directories using W3C semantic web standards."
     type: command
     dependencies:
       - lint-protocols
+      - protocols
   lint-protocols:
     command: "python3 tooling/lint_chc_protocols.py"
     description: "Lint all CHC protocols to ensure they are well-formed."
@@ -40,7 +41,7 @@ targets:
     description: Compile the guardian protocol.
     type: command
   install:
-    command: "pip install -r requirements.txt"
+    command: "pip install -r requirements.txt --break-system-packages"
     description: Install Python dependencies.
     type: command
   knowledge-integrate:

@@ -1,0 +1,130 @@
+# AGENTS.md Generation Mapping Configuration
+# This file defines which protocols apply to which directories
+# Based on logical function, not physical protocol location
+
+# Root directory - minimal bootstrap context (ONLY essential protocols)
+"/":
+  description: "Repository root - essential agent bootstrap and operational protocols"
+  protocols:
+    - "agent-bootstrap-001"
+    - "orientation-cascade-001"
+    - "standing-orders-001"
+    - "agent-shell-001"
+    - "dependency-management-001"
+  inherits: false  # Root does not inherit from parent (none exists)
+
+# Core operational directories
+"/tooling":
+  description: "Tooling directory - agent development and build tools"
+  protocols:
+    - "toolchain-review-on-schema-change-001"
+    - "unified-doc-builder-001"
+    - "unified-auditor-001"
+    - "capability-verification-001"
+    - "meta-mutation-001"
+    - "file-indexing-001"
+  inherits: true  # Inherits from root
+
+"/protocols":
+  description: "Protocols directory - protocol management and compilation"
+  protocols:
+    - "meta-protocol-001"
+    - "critic-meta-protocol-001"
+    - "self-improvement-protocol-001"
+    - "toolchain-review-on-schema-change-001"
+  inherits: true
+
+"/knowledge_core":
+  description: "Knowledge core directory - repository knowledge and state"
+  protocols:
+    - "plan-registry-001"
+    - "file-indexing-001"
+  inherits: true
+
+"/plans":
+  description: "Plans directory - hierarchical plan storage and execution"
+  protocols:
+    - "plan-registry-001"
+    - "fdc-protocol-001"
+  inherits: true
+
+"/tests":
+  description: "Tests directory - testing protocols and quality assurance"
+  protocols:
+    - "testing-protocol-001"
+    - "test-driven-development-001"
+    - "pre-commit-protocol-001"
+    - "best-practices-001"
+  inherits: true
+
+# Domain-specific protocol directories
+"/protocols/self_improvement":
+  description: "Self-improvement protocols - agent self-modification and learning"
+  protocols:
+    - "self-improvement-protocol-001"
+    - "meta-mutation-001"
+    - "self-correction-protocol-001"
+    - "capability-verification-001"
+  inherits: true
+
+"/protocols/testing":
+  description: "Testing protocols - quality assurance and testing standards"
+  protocols:
+    - "testing-protocol-001"
+    - "test-driven-development-001"
+    - "pre-commit-protocol-001"
+  inherits: true
+
+"/protocols/security":
+  description: "Security protocols - vulnerability management and secure practices"
+  protocols:
+    - "security-vuln-reporting-001"
+    - "security-header"
+  inherits: true
+
+"/protocols/external_apis":
+  description: "External API protocols - API integration and management"
+  protocols:
+    - "external-api-integration-001"
+    - "gemini-api-integration-001"
+  inherits: true
+
+"/protocols/core":
+  description: "Core protocols - foundational agent operation and decidability"
+  protocols:
+    - "cfdc-protocol-001"
+    - "fdc-protocol-001"
+    - "decidability-constraints-001"
+    - "standing-orders-001"
+    - "orientation-cascade-001"
+    - "aorp-header"
+  inherits: true
+
+# Development and research directories
+"/language_theory":
+  description: "Language theory directory - formal language research and tooling"
+  protocols:
+    - "plllu-execution-001"
+    - "csdc-001"
+    - "hdl-proving-001"
+  inherits: true
+
+"/logic_system":
+  description: "Logic systems directory - formal logic and proof systems"
+  protocols:
+    - "hdl-proving-001"
+  inherits: true
+
+"/utils":
+  description: "Utilities directory - utility functions and helpers"
+  protocols:
+    - "best-practices-001"
+  inherits: true
+
+# Catch-all for subdirectories without explicit mapping
+"__default__":
+  description: "Default protocol set for unmapped directories"
+  protocols:
+    - "best-practices-001"
+    - "non-compliance-protocol-001"
+  inherits: true
