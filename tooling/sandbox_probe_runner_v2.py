@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Sandbox Probe Runner - Enhanced Version v3
+Sandbox Probe Runner - Enhanced Version
 
-Simplified parser that correctly handles both filesystem and network probe outputs.
+Enhanced to handle both filesystem and network probes correctly.
 """
 
 import argparse
@@ -22,7 +22,7 @@ JAVA = JAVA_HOME / "bin" / "java"
 
 
 class ProbeResult:
-    """Represents a result of a single test within a probe."""
+    """Represents the result of a single test within a probe."""
 
     def __init__(
         self,
@@ -167,46 +167,51 @@ class SandboxProbeRunner:
             objective=objectives.get(probe_name, f"Probe {probe_name}"),
         )
 
-        # Track the current test being parsed
         current_test_name = None
-        test_lines = []
+        current_test_lines = []
 
         for line in output.split("\n"):
             line_stripped = line.strip()
 
-            if not line_stripped:
-                continue
-
             # Network probe format: TEST: test_name
             if line_stripped.startswith("TEST:"):
                 # Save previous test if exists
-                if current_test_name and test_lines:
-                    self._add_parsed_test(execution, current_test_name, test_lines)
+                if current_test_name:
+                    self._add_test_to_execution(
+                        execution, current_test_name, current_test_lines
+                    )
 
-                # Extract test name
-                parts = line_stripped.split(":", 1)
+                # Extract test name from TEST: line
+                parts = line_stripped.split(" ", 1)
                 current_test_name = parts[1].strip() if len(parts) > 1 else ""
-                test_lines = []
+                current_test_lines = []
 
-            # Result line (both probe types)
-            elif line_stripped.startswith("✓") or line_stripped.startswith("✗"):
+            # Result line (filesystem probe)
+            elif (
+                line_stripped.startswith("✓") or line_stripped.startswith("✗")
+            ) and not line_stripped.startswith("TEST"):
                 # Save previous test if exists
-                if current_test_name and test_lines:
-                    self._add_parsed_test(execution, current_test_name, test_lines)
-                    test_lines = []
+                if current_test_name:
+                    self._add_test_to_execution(
+                        execution, current_test_name, current_test_lines
+                    )
+                    current_test_lines = []
 
-                # This line starts a new test result
-                test_lines.append(line_stripped)
-
-            # Detail lines
-            elif current_test_name and test_lines:
-                test_lines.append(line_stripped)
+                # This is a result line
+                current_test_lines.append(line_stripped)
+            # Detail line
+            elif current_test_name:
+                # Accumulate details for current test
+                if line_stripped:
+                    current_test_lines.append(line_stripped)
 
         # Don't forget the last test
-        if current_test_name and test_lines:
-            self._add_parsed_test(execution, current_test_name, test_lines)
+        if current_test_name:
+            self._add_test_to_execution(
+                execution, current_test_name, current_test_lines
+            )
 
-        # Generate conclusions
+        # Generate conclusions based on results
         execution.conclusions = self._generate_conclusions(execution, probe_name)
 
         # Suggest next probe
@@ -214,54 +219,42 @@ class SandboxProbeRunner:
 
         return execution
 
-    def _add_parsed_test(
+    def _add_test_to_execution(
         self, execution: ProbeExecution, test_name: str, lines: List[str]
     ):
-        """Parse a test from its lines and add to execution."""
-        if not lines:
-            return
-
-        # Determine success
-        success = any(line.startswith("✓") for line in lines)
-
-        # Extract error
-        error = None
-        for line in lines:
-            if line.startswith("Error:"):
-                error = line[6:].strip()
-                break
-
-        # Extract observation
+        """Add a test to the execution by parsing its lines."""
+        # Determine if success or failure
+        success = False
         observation = None
-        for line in lines:
-            if line.startswith("Content:"):
-                observation = line[8:].strip()
-            elif line.startswith("Observation:") or line.startswith("Observation:"):
-                idx = line.index(":") + 1
-                observation = line[idx:].strip()
-            elif "resolved:" in line and "→" in line:
-                # Handle DNS resolution
-                idx = line.index("→") + 1
-                observation = line[idx:].strip()
-                break
-
-        # If no explicit observation, use the test context
-        if not observation:
-            # For network probes with Target:, Operation: details
-            for line in lines:
-                if "resolved:" in line:
-                    observation = line.strip()
-                    break
-
-        # Generate interpretation and constraint for failures
+        error = None
         interpretation = None
         constraint = None
 
+        for line in lines:
+            if line.startswith("✓"):
+                success = True
+            elif line.startswith("✗"):
+                success = False
+            elif line.startswith("Error:"):
+                error = line[6:].strip()
+            elif line.startswith("Content:"):
+                observation = line[8:].strip()
+            elif line.startswith("Observation:") or line.startswith("Observation:"):
+                # Handle both spellings
+                idx = line.index(":") + 1
+                observation = line[idx:].strip()
+            elif line.startswith("Operation:"):
+                # Extract operation type for network probes
+                idx = line.index(":") + 1
+                operation = line[idx:].strip()
+                if not observation and operation:
+                    observation = operation
+
+        # Generate interpretation and constraint for failures
         if not success and error:
             interpretation = self._interpret_failure(test_name, error)
             constraint = self._infer_constraint(test_name, error)
 
-        # Add the test
         execution.add_test(
             ProbeResult(
                 test_name=test_name,
@@ -350,7 +343,7 @@ class SandboxProbeRunner:
                 )
 
             cwd_test = [
-                t for t in execution.tests if "WORKING_DIRECTORY" in t.test_name
+                t for t in execution.tests if t.test_name == "WORKING_DIRECTORY"
             ]
             if cwd_test:
                 conclusions.append(
